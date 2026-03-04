@@ -13,6 +13,7 @@ import { DashboardPage } from './components/Dashboard/DashboardPage';
 import { BoardTestPage } from './components/BoardTest/BoardTestPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
+import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -51,7 +52,7 @@ export function App(): JSX.Element {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/puzzles" element={<PlaceholderPage title="Puzzles" />} />
+          <Route path="/puzzles" element={<PuzzleTrainerPage />} />
           <Route path="/openings" element={<OpeningExplorerPage />} />
           <Route path="/openings/:id" element={<OpeningDetailPage />} />
           <Route path="/flashcards" element={<PlaceholderPage title="Flashcards" />} />
