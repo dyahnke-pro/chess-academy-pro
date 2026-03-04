@@ -14,6 +14,8 @@ import { BoardTestPage } from './components/BoardTest/BoardTestPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
+import { FlashcardStudyPage } from './components/Flashcards/FlashcardStudyPage';
+import { AnalysisBoardPage } from './components/Analysis/AnalysisBoardPage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -55,9 +57,9 @@ export function App(): JSX.Element {
           <Route path="/puzzles" element={<PuzzleTrainerPage />} />
           <Route path="/openings" element={<OpeningExplorerPage />} />
           <Route path="/openings/:id" element={<OpeningDetailPage />} />
-          <Route path="/flashcards" element={<PlaceholderPage title="Flashcards" />} />
+          <Route path="/flashcards" element={<FlashcardStudyPage />} />
           <Route path="/games" element={<PlaceholderPage title="Games" />} />
-          <Route path="/analysis" element={<PlaceholderPage title="Analysis Board" />} />
+          <Route path="/analysis" element={<AnalysisBoardPage />} />
           <Route path="/stats" element={<PlaceholderPage title="Stats" />} />
           <Route path="/kid" element={<PlaceholderPage title="Kid Mode" />} />
           <Route

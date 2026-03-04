@@ -1,0 +1,73 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '../../test/utils';
+import { CoachPanel } from './CoachPanel';
+import type { CoachContext } from '../../types';
+
+const MOCK_CONTEXT: CoachContext = {
+  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  lastMoveSan: null,
+  moveNumber: 0,
+  pgn: '',
+  openingName: null,
+  stockfishAnalysis: null,
+  playerMove: null,
+  moveClassification: null,
+  playerProfile: { rating: 1200, style: 'danya', weaknesses: [] },
+};
+
+vi.mock('../../services/coachApi', () => ({
+  getCoachCommentary: vi.fn().mockResolvedValue('Great move! You found the fork.'),
+}));
+
+vi.mock('../../stores/appStore', () => ({
+  useAppStore: vi.fn((selector: (s: Record<string, unknown>) => unknown) =>
+    selector({
+      activeProfile: {
+        id: 'main',
+        name: 'Test User',
+        coachPersonality: 'danya',
+        currentRating: 1200,
+        badHabits: [],
+        preferences: { apiKeyEncrypted: 'test-key' },
+      },
+    }),
+  ),
+}));
+
+vi.mock('../../services/speechService', () => ({
+  speechService: { speak: vi.fn(), stopSpeaking: vi.fn() },
+}));
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+describe('CoachPanel', () => {
+  it('renders the ask button initially', () => {
+    render(<CoachPanel context={MOCK_CONTEXT} />);
+    expect(screen.getByTestId('coach-ask-btn')).toBeInTheDocument();
+  });
+
+  it('shows personality name on button', () => {
+    render(<CoachPanel context={MOCK_CONTEXT} />);
+    expect(screen.getByTestId('coach-ask-btn')).toHaveTextContent('Ask Coach Danya');
+  });
+
+  it('shows coach panel after clicking ask', async () => {
+    render(<CoachPanel context={MOCK_CONTEXT} />);
+    fireEvent.click(screen.getByTestId('coach-ask-btn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('coach-panel')).toBeInTheDocument();
+    });
+  });
+
+  it('displays coach response', async () => {
+    render(<CoachPanel context={MOCK_CONTEXT} />);
+    fireEvent.click(screen.getByTestId('coach-ask-btn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('coach-message')).toHaveTextContent('Great move! You found the fork.');
+    });
+  });
+});
