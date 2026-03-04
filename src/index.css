@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Default theme variables (Dark Premium) ─────────────────────────────── */
+:root {
+  --color-bg: #0f0f0f;
+  --color-bg-secondary: #1a1a1a;
+  --color-surface: #242424;
+  --color-border: #333333;
+  --color-text: #f0f0f0;
+  --color-text-muted: #888888;
+  --color-accent: #c9a84c;
+  --color-accent-hover: #e0bf70;
+  --color-success: #4caf74;
+  --color-error: #e05252;
+  --color-warning: #e0a030;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  /* Safe area support for iPhone notch / home indicator */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Scrollbar styling ───────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ─── Focus ring ──────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Selection ───────────────────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ─── Kid Mode overrides ──────────────────────────────────────────────────── */
+[data-theme="kid-mode"] body {
+  font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+}
