@@ -41,7 +41,32 @@ beforeAll(() => {
     writable: true,
   });
 
-  // Stub Web Crypto (needed for cryptoService)
+  // Stub Web Speech Recognition API
+  class MockSpeechRecognition {
+    continuous = false;
+    interimResults = false;
+    lang = 'en-US';
+    onresult: ((event: unknown) => void) | null = null;
+    onend: (() => void) | null = null;
+    onerror: ((event: unknown) => void) | null = null;
+    start = vi.fn();
+    stop = vi.fn();
+    abort = vi.fn();
+  }
+
+  Object.defineProperty(window, 'SpeechRecognition', {
+    value: MockSpeechRecognition,
+    writable: true,
+  });
+
+  Object.defineProperty(window, 'webkitSpeechRecognition', {
+    value: MockSpeechRecognition,
+    writable: true,
+  });
+
+  // Stub Web Crypto (needed for cryptoService) — full encrypt/decrypt round-trip
+  const cryptoKeyStore = new Map<string, CryptoKey>();
+
   Object.defineProperty(window, 'crypto', {
     value: {
       getRandomValues: (arr: Uint8Array) => {
@@ -51,12 +76,132 @@ beforeAll(() => {
         return arr;
       },
       subtle: {
-        importKey: vi.fn(),
-        deriveKey: vi.fn(),
-        encrypt: vi.fn(),
-        decrypt: vi.fn(),
+        importKey: vi.fn().mockImplementation(
+          async (_format: string, _keyData: unknown, _algo: unknown, _extractable: boolean, _usages: string[]) => {
+            const key = { type: 'secret', algorithm: { name: 'PBKDF2' } } as CryptoKey;
+            return key;
+          },
+        ),
+        deriveKey: vi.fn().mockImplementation(
+          async (_algo: unknown, _baseKey: CryptoKey, _derivedAlgo: unknown, _extractable: boolean, _usages: string[]) => {
+            const key = { type: 'secret', algorithm: { name: 'AES-GCM', length: 256 } } as CryptoKey;
+            const id = `key_${cryptoKeyStore.size}`;
+            cryptoKeyStore.set(id, key);
+            return key;
+          },
+        ),
+        encrypt: vi.fn().mockImplementation(
+          async (_algo: unknown, _key: CryptoKey, data: ArrayBuffer) => {
+            // Simple "encryption": XOR with 0x42 to make it reversible
+            const input = new Uint8Array(data);
+            const output = new Uint8Array(input.length);
+            for (let i = 0; i < input.length; i++) {
+              output[i] = input[i] ^ 0x42;
+            }
+            return output.buffer;
+          },
+        ),
+        decrypt: vi.fn().mockImplementation(
+          async (_algo: unknown, _key: CryptoKey, data: ArrayBuffer) => {
+            // Reverse: XOR with 0x42 again
+            const input = new Uint8Array(data);
+            const output = new Uint8Array(input.length);
+            for (let i = 0; i < input.length; i++) {
+              output[i] = input[i] ^ 0x42;
+            }
+            return output.buffer;
+          },
+        ),
       },
     },
     writable: true,
   });
+
+  // Stub AudioContext (needed for voiceService / soundService)
+  const mockAudioBuffer = {
+    duration: 1.0,
+    length: 44100,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    getChannelData: vi.fn(() => new Float32Array(44100)),
+    copyFromChannel: vi.fn(),
+    copyToChannel: vi.fn(),
+  };
+
+  const mockBufferSource = {
+    buffer: null as unknown,
+    connect: vi.fn(),
+    start: vi.fn(),
+    stop: vi.fn(),
+    disconnect: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    onended: null as (() => void) | null,
+    loop: false,
+    playbackRate: { value: 1 },
+  };
+
+  class MockAudioContext {
+    state: AudioContextState = 'running';
+    sampleRate = 44100;
+    destination = {} as AudioDestinationNode;
+    currentTime = 0;
+
+    decodeAudioData = vi.fn().mockResolvedValue(mockAudioBuffer);
+    createBufferSource = vi.fn(() => ({ ...mockBufferSource }));
+    createOscillator = vi.fn(() => ({
+      type: '' as OscillatorType,
+      frequency: { setValueAtTime: vi.fn() },
+      connect: vi.fn(),
+      start: vi.fn(),
+      stop: vi.fn(),
+    }));
+    createGain = vi.fn(() => ({
+      gain: {
+        value: 1,
+        setValueAtTime: vi.fn(),
+        linearRampToValueAtTime: vi.fn(),
+        exponentialRampToValueAtTime: vi.fn(),
+      },
+      connect: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+    createBuffer = vi.fn((_channels: number, length: number, rate: number) => ({
+      getChannelData: vi.fn(() => new Float32Array(Math.floor(rate * length))),
+    }));
+    close = vi.fn().mockResolvedValue(undefined);
+    resume = vi.fn().mockResolvedValue(undefined);
+    suspend = vi.fn().mockResolvedValue(undefined);
+  }
+
+  // Only set AudioContext if not already defined (allows tests to override with vi.stubGlobal)
+  if (typeof globalThis.AudioContext === 'undefined') {
+    (globalThis as Record<string, unknown>).AudioContext = MockAudioContext;
+  }
+  if (typeof (window as Record<string, unknown>).webkitAudioContext === 'undefined') {
+    Object.defineProperty(window, 'webkitAudioContext', {
+      value: MockAudioContext,
+      writable: true,
+      configurable: true,
+    });
+  }
+
+  // Stub URL.createObjectURL / revokeObjectURL
+  if (!URL.createObjectURL) {
+    URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+  }
+  if (!URL.revokeObjectURL) {
+    URL.revokeObjectURL = vi.fn();
+  }
+
+  // Make navigator.onLine mockable
+  let _onLine = true;
+  Object.defineProperty(navigator, 'onLine', {
+    get: () => _onLine,
+    configurable: true,
+  });
+  // Expose setter for tests via global
+  (globalThis as Record<string, unknown>).__setNavigatorOnLine = (value: boolean) => {
+    _onLine = value;
+  };
 });

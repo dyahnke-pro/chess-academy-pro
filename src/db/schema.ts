@@ -39,6 +39,44 @@ class ChessAcademyDB extends Dexie {
       sessions: 'id, date, profileId',
       meta: 'key',
     });
+
+    this.version(3).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+    }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (!('elevenlabsKeyEncrypted' in prefs)) {
+          prefs.elevenlabsKeyEncrypted = null;
+          prefs.elevenlabsKeyIv = null;
+          prefs.voiceIdDanya = 'pNInz6obpgDQGcFmaJgB';
+          prefs.voiceIdKasparov = 'VR6AewLTigWG4xSOukaG';
+          prefs.voiceIdFischer = 'TxGEqnHWrfWFTfGW9XjX';
+        }
+      });
+    });
+
+    this.version(4).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+    }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (!('voiceSpeed' in prefs)) {
+          prefs.voiceSpeed = 1.0;
+        }
+      });
+    });
   }
 }
 

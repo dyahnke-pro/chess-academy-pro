@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import type { UserProfile, SessionRecord, CoachPersonality, AppTheme } from '../types';
+import type {
+  UserProfile, SessionRecord, CoachPersonality, AppTheme, Achievement,
+  CoachExpression, CoachGameState, ChatMessage,
+} from '../types';
 
 interface AppState {
   // Auth / Profile
@@ -15,13 +18,25 @@ interface AppState {
   // UI state
   activeTheme: AppTheme | null;
   sidebarOpen: boolean;
-  coachMessageVisible: boolean;
-  coachMessage: string;
   coachPersonality: CoachPersonality;
+
+  // Gamification
+  pendingAchievement: Achievement | null;
 
   // Engine
   engineEnabled: boolean;
   evalBarVisible: boolean;
+
+  // Coach system
+  coachExpression: CoachExpression;
+  coachSpeaking: boolean;
+  coachGameState: CoachGameState | null;
+  chatMessages: ChatMessage[];
+
+  // Coach overlay
+  coachBubbleVisible: boolean;
+  coachBubbleText: string;
+  coachVoiceOn: boolean;
 }
 
 interface AppActions {
@@ -33,11 +48,19 @@ interface AppActions {
   tickSessionTimer: () => void;
   setActiveTheme: (theme: AppTheme) => void;
   setSidebarOpen: (open: boolean) => void;
-  showCoachMessage: (message: string) => void;
-  hideCoachMessage: () => void;
   setCoachPersonality: (personality: CoachPersonality) => void;
+  setPendingAchievement: (achievement: Achievement | null) => void;
   toggleEngine: () => void;
   toggleEvalBar: () => void;
+  setCoachExpression: (expression: CoachExpression) => void;
+  setCoachSpeaking: (speaking: boolean) => void;
+  setCoachGameState: (state: CoachGameState | null) => void;
+  setChatMessages: (messages: ChatMessage[]) => void;
+  addChatMessage: (message: ChatMessage) => void;
+  clearChatMessages: () => void;
+  toggleCoachBubble: () => void;
+  setCoachBubbleText: (text: string) => void;
+  toggleCoachVoice: () => void;
   reset: () => void;
 }
 
@@ -48,12 +71,18 @@ const DEFAULT_STATE: AppState = {
   sessionTimerActive: false,
   sessionElapsedSeconds: 0,
   activeTheme: null,
+  pendingAchievement: null,
   sidebarOpen: false,
-  coachMessageVisible: false,
-  coachMessage: '',
   coachPersonality: 'danya',
   engineEnabled: true,
   evalBarVisible: true,
+  coachExpression: 'neutral',
+  coachSpeaking: false,
+  coachGameState: null,
+  chatMessages: [],
+  coachBubbleVisible: true,
+  coachBubbleText: '',
+  coachVoiceOn: true,
 };
 
 export const useAppStore = create<AppState & AppActions>()(
@@ -81,16 +110,32 @@ export const useAppStore = create<AppState & AppActions>()(
 
     setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
-    showCoachMessage: (message) =>
-      set({ coachMessage: message, coachMessageVisible: true }),
-
-    hideCoachMessage: () => set({ coachMessageVisible: false }),
-
     setCoachPersonality: (personality) => set({ coachPersonality: personality }),
+
+    setPendingAchievement: (achievement) => set({ pendingAchievement: achievement }),
 
     toggleEngine: () => set((state) => ({ engineEnabled: !state.engineEnabled })),
 
     toggleEvalBar: () => set((state) => ({ evalBarVisible: !state.evalBarVisible })),
+
+    setCoachExpression: (expression) => set({ coachExpression: expression }),
+
+    setCoachSpeaking: (speaking) => set({ coachSpeaking: speaking }),
+
+    setCoachGameState: (state) => set({ coachGameState: state }),
+
+    setChatMessages: (messages) => set({ chatMessages: messages }),
+
+    addChatMessage: (message) =>
+      set((state) => ({ chatMessages: [...state.chatMessages, message] })),
+
+    clearChatMessages: () => set({ chatMessages: [] }),
+
+    toggleCoachBubble: () => set((state) => ({ coachBubbleVisible: !state.coachBubbleVisible })),
+
+    setCoachBubbleText: (text) => set({ coachBubbleText: text }),
+
+    toggleCoachVoice: () => set((state) => ({ coachVoiceOn: !state.coachVoiceOn })),
 
     reset: () => set(DEFAULT_STATE),
   })),

@@ -29,6 +29,8 @@ export interface ChessBoardProps {
   onUndo?: () => void;
   onReset?: () => void;
   className?: string;
+  /** Color controlled by the computer ('w' | 'b'). When set, that side moves automatically. */
+  computerColor?: 'w' | 'b';
 }
 
 export function ChessBoard({
@@ -46,8 +48,9 @@ export function ChessBoard({
   onUndo,
   onReset,
   className = '',
+  computerColor,
 }: ChessBoardProps): JSX.Element {
-  const game = useChessGame(initialFen, initialOrientation);
+  const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
 
   // ─── Move handlers ───────────────────────────────────────────────────────────
@@ -109,7 +112,13 @@ export function ChessBoard({
   const customSquareStyles = useMemo((): Record<string, React.CSSProperties> => {
     const styles: Record<string, React.CSSProperties> = {};
 
-    // Last-move yellow highlight (lowest priority)
+    // Center squares — subtle persistent highlight (lowest priority, overridden by everything else)
+    const centerSquares = ['e4', 'd4', 'e5', 'd5'];
+    for (const sq of centerSquares) {
+      styles[sq] = { boxShadow: 'inset 0 0 8px 2px rgba(255, 215, 0, 0.15)' };
+    }
+
+    // Last-move yellow highlight
     if (lastMove) {
       styles[lastMove.from] = { background: 'rgba(255, 255, 0, 0.4)' };
       styles[lastMove.to] = { background: 'rgba(255, 255, 0, 0.4)' };

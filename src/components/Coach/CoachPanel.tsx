@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachCommentary } from '../../services/coachApi';
 import { MessageSquare, Loader, X, Volume2 } from 'lucide-react';
-import { speechService } from '../../services/speechService';
+import { voiceService } from '../../services/voiceService';
 import type { CoachTask, CoachContext, CoachPersonality } from '../../types';
 
 interface CoachPanelProps {
@@ -24,9 +24,15 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
   const [visible, setVisible] = useState(false);
 
   const handleAsk = useCallback(async (): Promise<void> => {
-    setLoading(true);
     setVisible(true);
     setMessage('');
+
+    if (!activeProfile?.preferences.apiKeyEncrypted) {
+      setMessage('To enable AI coaching, add your Anthropic API key in Settings → Coach tab. The coach will respond once your key is saved.');
+      return;
+    }
+
+    setLoading(true);
 
     const result = await getCoachCommentary(task, context, personality, (chunk) => {
       setMessage((prev) => prev + chunk);
@@ -34,13 +40,13 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
 
     setMessage(result);
     setLoading(false);
-  }, [task, context, personality]);
+  }, [task, context, personality, activeProfile]);
 
   const handleSpeak = useCallback((): void => {
     if (message) {
-      speechService.speak(message);
+      void voiceService.speak(message, personality);
     }
-  }, [message]);
+  }, [message, personality]);
 
   if (!visible) {
     return (

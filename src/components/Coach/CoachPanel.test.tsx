@@ -34,8 +34,8 @@ vi.mock('../../stores/appStore', () => ({
   ),
 }));
 
-vi.mock('../../services/speechService', () => ({
-  speechService: { speak: vi.fn(), stopSpeaking: vi.fn() },
+vi.mock('../../services/voiceService', () => ({
+  voiceService: { speak: vi.fn().mockResolvedValue(undefined), stop: vi.fn(), isPlaying: vi.fn().mockReturnValue(false) },
 }));
 
 beforeEach(() => {

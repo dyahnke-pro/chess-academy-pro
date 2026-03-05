@@ -93,6 +93,77 @@ export async function getWeeklyReport(
   return getCoachCommentary('weekly_report', context, personality, onStream);
 }
 
+// ─── Bad Habit Detection from Coach Game ────────────────────────────────────
+
+export async function detectBadHabitsFromGame(
+  moves: { classification: string | null; san: string }[],
+  profile: UserProfile,
+): Promise<BadHabit[]> {
+  const habits = [...profile.badHabits];
+  const today = new Date().toISOString().split('T')[0];
+
+  // Count mistakes and blunders
+  const blunders = moves.filter((m) => m.classification === 'blunder').length;
+  const mistakes = moves.filter((m) => m.classification === 'mistake').length;
+  const inaccuracies = moves.filter((m) => m.classification === 'inaccuracy').length;
+
+  // Detect time pressure blunders (blunders in last 10 moves)
+  const lastMoves = moves.slice(-10);
+  const lateBlunders = lastMoves.filter((m) => m.classification === 'blunder' || m.classification === 'mistake').length;
+  if (lateBlunders >= 2) {
+    const existingIdx = habits.findIndex((h) => h.id === 'game-time-pressure');
+    if (existingIdx >= 0) {
+      habits[existingIdx] = {
+        ...habits[existingIdx],
+        occurrences: habits[existingIdx].occurrences + 1,
+        lastSeen: today,
+        isResolved: false,
+      };
+    } else {
+      habits.push({
+        id: 'game-time-pressure',
+        description: 'Tends to blunder in the later stages of the game (possible time pressure)',
+        occurrences: 1,
+        lastSeen: today,
+        isResolved: false,
+      });
+    }
+  }
+
+  // Detect consistently inaccurate play
+  if (blunders + mistakes >= 3) {
+    const existingIdx = habits.findIndex((h) => h.id === 'game-calculation');
+    if (existingIdx >= 0) {
+      habits[existingIdx] = {
+        ...habits[existingIdx],
+        occurrences: habits[existingIdx].occurrences + 1,
+        lastSeen: today,
+        isResolved: false,
+      };
+    } else {
+      habits.push({
+        id: 'game-calculation',
+        description: `Frequent calculation errors (${blunders} blunders, ${mistakes} mistakes in last game)`,
+        occurrences: 1,
+        lastSeen: today,
+        isResolved: false,
+      });
+    }
+  }
+
+  // Mark improvement — if no blunders at all, mark calculation habit as resolved
+  if (blunders === 0 && mistakes === 0 && inaccuracies <= 1) {
+    for (const habit of habits) {
+      if (habit.id === 'game-calculation' && !habit.isResolved) {
+        habit.isResolved = true;
+      }
+    }
+  }
+
+  await db.profiles.update(profile.id, { badHabits: habits });
+  return habits;
+}
+
 // ─── Build Context from Profile ─────────────────────────────────────────────
 
 export function buildProfileContext(profile: UserProfile): CoachContext {

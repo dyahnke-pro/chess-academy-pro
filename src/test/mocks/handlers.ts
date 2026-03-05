@@ -13,8 +13,19 @@ export const handlers = [
     });
   }),
 
-  // Anthropic Claude API
-  http.post('https://api.anthropic.com/v1/messages', () => {
+  // Anthropic Claude API — single message
+  http.post('https://api.anthropic.com/v1/messages', ({ request }) => {
+    const url = new URL(request.url);
+    // Check if streaming is requested via header
+    const isStream = url.searchParams.get('stream') === 'true';
+
+    if (isStream) {
+      return HttpResponse.text(
+        'event: content_block_delta\ndata: {"type":"content_block_delta","delta":{"type":"text_delta","text":"Great move!"}}\n\n',
+        { headers: { 'Content-Type': 'text/event-stream' } },
+      );
+    }
+
     return HttpResponse.json({
       id: 'msg_mock',
       type: 'message',
@@ -23,6 +34,56 @@ export const handlers = [
       model: 'claude-haiku-4-5-20251001',
       stop_reason: 'end_turn',
       usage: { input_tokens: 100, output_tokens: 20 },
+    });
+  }),
+
+  // ElevenLabs TTS API
+  http.post('https://api.elevenlabs.io/v1/text-to-speech/:voiceId', () => {
+    // Return a fake audio ArrayBuffer (44 bytes WAV header)
+    const buffer = new ArrayBuffer(44);
+    const view = new DataView(buffer);
+    // RIFF header
+    view.setUint32(0, 0x52494646, false); // "RIFF"
+    view.setUint32(4, 36, true);          // file size - 8
+    view.setUint32(8, 0x57415645, false); // "WAVE"
+    return HttpResponse.arrayBuffer(buffer, {
+      headers: { 'Content-Type': 'audio/mpeg' },
+    });
+  }),
+
+  // ElevenLabs TTS streaming
+  http.post('https://api.elevenlabs.io/v1/text-to-speech/:voiceId/stream', () => {
+    const buffer = new ArrayBuffer(44);
+    return HttpResponse.arrayBuffer(buffer, {
+      headers: { 'Content-Type': 'audio/mpeg' },
+    });
+  }),
+
+  // Supabase Storage — list objects
+  http.get('https://:project.supabase.co/storage/v1/object/list/:bucket', () => {
+    return HttpResponse.json([
+      {
+        name: 'backup-2024-01-01.json',
+        id: 'file_1',
+        created_at: '2024-01-01T00:00:00.000Z',
+        updated_at: '2024-01-01T00:00:00.000Z',
+        metadata: { size: 1024 },
+      },
+    ]);
+  }),
+
+  // Supabase Storage — upload
+  http.post('https://:project.supabase.co/storage/v1/object/:bucket/*', () => {
+    return HttpResponse.json({ Key: 'backups/backup.json' });
+  }),
+
+  // Supabase Storage — download
+  http.get('https://:project.supabase.co/storage/v1/object/:bucket/*', () => {
+    return HttpResponse.json({
+      profiles: [],
+      sessions: [],
+      openings: [],
+      flashcards: [],
     });
   }),
 ];

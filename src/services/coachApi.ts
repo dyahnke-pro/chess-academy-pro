@@ -2,18 +2,25 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { db } from '../db/schema';
 import { SYSTEM_PROMPTS, buildChessContextMessage } from './coachPrompts';
+import { recordApiUsage } from './coachCostService';
 import type { CoachTask, CoachPersonality, CoachContext } from '../types';
 
 const MODEL_MAP: Record<CoachTask, string> = {
-  move_commentary:    'claude-haiku-4-5-20251001',
-  hint:               'claude-haiku-4-5-20251001',
-  puzzle_feedback:    'claude-haiku-4-5-20251001',
-  post_game_analysis: 'claude-sonnet-4-5-20250514',
-  daily_lesson:       'claude-sonnet-4-5-20250514',
-  bad_habit_report:   'claude-sonnet-4-5-20250514',
-  weekly_report:      'claude-opus-4-5-20250514',
-  deep_analysis:      'claude-opus-4-5-20250514',
-  opening_overview:   'claude-sonnet-4-5-20250514',
+  move_commentary:         'claude-haiku-4-5-20251001',
+  hint:                    'claude-haiku-4-5-20251001',
+  puzzle_feedback:         'claude-haiku-4-5-20251001',
+  game_commentary:         'claude-haiku-4-5-20251001',
+  game_opening_line:       'claude-haiku-4-5-20251001',
+  post_game_analysis:      'claude-sonnet-4-5-20250514',
+  daily_lesson:            'claude-sonnet-4-5-20250514',
+  bad_habit_report:        'claude-sonnet-4-5-20250514',
+  opening_overview:        'claude-sonnet-4-5-20250514',
+  chat_response:           'claude-sonnet-4-5-20250514',
+  game_post_review:        'claude-sonnet-4-5-20250514',
+  position_analysis_chat:  'claude-sonnet-4-5-20250514',
+  session_plan_generation: 'claude-sonnet-4-5-20250514',
+  weekly_report:           'claude-opus-4-5-20250514',
+  deep_analysis:           'claude-opus-4-5-20250514',
 };
 
 // Offline fallback templates per personality
@@ -52,6 +59,94 @@ async function getDecryptedApiKey(): Promise<string | null> {
   }
 }
 
+export async function getCoachChatResponse(
+  messages: { role: 'user' | 'assistant'; content: string }[],
+  personality: CoachPersonality,
+  systemPromptAddition: string,
+  onStream?: (chunk: string) => void,
+): Promise<string> {
+  const apiKey = await getDecryptedApiKey();
+
+  if (!apiKey) {
+    const fallbacks = OFFLINE_FALLBACKS[personality];
+    return fallbacks.default;
+  }
+
+  try {
+    const client = new Anthropic({
+      apiKey,
+      dangerouslyAllowBrowser: true,
+    });
+
+    const systemPrompt = SYSTEM_PROMPTS[personality] + '\n\n' + systemPromptAddition;
+    const model = MODEL_MAP.chat_response;
+
+    if (onStream) {
+      let fullText = '';
+
+      const stream = client.messages.stream({
+        model,
+        max_tokens: 1024,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' },
+          },
+        ],
+        messages,
+      });
+
+      for await (const chunk of stream) {
+        if (
+          chunk.type === 'content_block_delta' &&
+          chunk.delta.type === 'text_delta'
+        ) {
+          fullText += chunk.delta.text;
+          onStream(chunk.delta.text);
+        }
+      }
+
+      const finalMsg = await stream.finalMessage();
+      void recordApiUsage(
+        'chat_response',
+        model,
+        finalMsg.usage.input_tokens,
+        finalMsg.usage.output_tokens,
+      );
+
+      return fullText;
+    } else {
+      const response = await client.messages.create({
+        model,
+        max_tokens: 1024,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' },
+          },
+        ],
+        messages,
+      });
+
+      void recordApiUsage(
+        'chat_response',
+        model,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+      );
+
+      const content = response.content[0];
+      return content.type === 'text' ? content.text : '';
+    }
+  } catch (error) {
+    console.error('Coach chat API error:', error);
+    const fallbacks = OFFLINE_FALLBACKS[personality];
+    return fallbacks.default;
+  }
+}
+
 export async function getCoachCommentary(
   task: CoachTask,
   context: CoachContext,
@@ -86,7 +181,6 @@ export async function getCoachCommentary(
           {
             type: 'text',
             text: systemPrompt,
-            // @ts-expect-error — cache_control is a valid Anthropic extension
             cache_control: { type: 'ephemeral' },
           },
         ],
@@ -103,6 +197,14 @@ export async function getCoachCommentary(
         }
       }
 
+      const finalMsg = await stream.finalMessage();
+      void recordApiUsage(
+        task,
+        model,
+        finalMsg.usage.input_tokens,
+        finalMsg.usage.output_tokens,
+      );
+
       return fullText;
     } else {
       // Non-streaming response
@@ -113,12 +215,18 @@ export async function getCoachCommentary(
           {
             type: 'text',
             text: systemPrompt,
-            // @ts-expect-error — cache_control is a valid Anthropic extension
             cache_control: { type: 'ephemeral' },
           },
         ],
         messages: [{ role: 'user', content: userMessage }],
       });
+
+      void recordApiUsage(
+        task,
+        model,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+      );
 
       const content = response.content[0];
       return content.type === 'text' ? content.text : '';

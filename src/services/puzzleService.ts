@@ -116,7 +116,7 @@ export function updatePuzzleRating(
 
 // ─── Theme Skill Tracking ───────────────────────────────────────────────────
 
-interface ThemeSkill {
+export interface ThemeSkill {
   theme: string;
   accuracy: number;
   attempts: number;

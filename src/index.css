@@ -79,6 +79,22 @@ body {
   color: var(--color-bg);
 }
 
+/* ─── Page fade-in animation ──────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
 /* ─── Kid Mode overrides ──────────────────────────────────────────────────── */
 [data-theme="kid-mode"] body {
   font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;

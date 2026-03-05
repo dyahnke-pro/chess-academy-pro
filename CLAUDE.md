@@ -100,12 +100,28 @@ npm run typecheck     # tsc --noEmit
 ```
 
 ### Mocking Conventions
-- **Stockfish:** Mock via `src/test/mocks/stockfish-worker.ts` — returns canned UCI responses
-- **IndexedDB:** Auto-mocked via `fake-indexeddb/auto` in vitest setup
-- **External APIs:** MSW handlers in `src/test/mocks/handlers.ts`
-- **Web Speech API:** Stubbed in `src/test/setup.ts`
+- **Stockfish:** Mock via `src/test/mocks/stockfish-worker.ts` — returns canned UCI responses. For `stockfishEngine.ts` tests, use `vi.stubGlobal('Worker', ...)` with a class mock.
+- **IndexedDB:** Auto-mocked via `fake-indexeddb/auto` in vitest setup. Use `db.delete(); db.open()` in `beforeEach` for test isolation.
+- **External APIs:** MSW handlers in `src/test/mocks/handlers.ts`. Use `server.use()` for per-test handler overrides.
+- **Web Speech API:** Stubbed in `src/test/setup.ts`. When using `vi.resetModules()`, re-stub `SpeechSynthesisUtterance` as a class (not a function) to preserve constructor behavior.
+- **AudioContext:** Conditionally stubbed in `src/test/setup.ts` using `if (typeof globalThis.AudioContext === 'undefined')` so test-level stubs take precedence.
 - **chess.js:** Do NOT mock — use the real library in tests
 - **Framer Motion:** Wrap with `<MotionConfig transition={{ duration: 0 }}>` in test utils
+
+### Test Data Factories
+Use `src/test/factories.ts` for all test data. Available builders:
+- `buildUserProfile()`, `buildPuzzleRecord()`, `buildOpeningRecord()`, `buildGameRecord()`
+- `buildFlashcardRecord()`, `buildSessionRecord()`, `buildCoachGameState()`, `buildChatMessage()`, `buildBadHabit()`
+- Each accepts `Partial<T>` overrides and returns valid defaults with auto-incrementing IDs.
+- Call `resetFactoryCounter()` in `beforeEach` if test relies on predictable IDs.
+
+### Testing Best Practices
+- **Component tests:** Mock service imports with `vi.mock()`, use `renderWithProviders` (or `render` from `src/test/utils.tsx`), use `waitFor` for async state updates.
+- **Zustand store tests:** Test directly via `useAppStore.getState()` + action calls. Call `reset()` in `beforeEach` for isolation. No React rendering needed.
+- **DB integration tests:** Use real fake-indexeddb, not mocks. Test index queries (`where().equals()`, `where().between()`) against actual Dexie operations.
+- **Module isolation:** Use `vi.resetModules()` + dynamic `await import()` only when testing singleton modules that need fresh instances per test (e.g., `speechService`).
+- **Accessibility tests:** Use `vitest-axe` for automated checks (`axe(container)` returns `{ violations }`) + manual ARIA attribute assertions. Keep axe tests focused on simple components to avoid timeouts.
+- **E2E tests:** Playwright config in `playwright.config.ts`. Tests in `e2e/` directory. Use `data-testid` selectors for reliability.
 
 ## Git Conventions
 

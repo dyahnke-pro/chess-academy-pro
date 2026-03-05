@@ -6,14 +6,25 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   server: {
     androidScheme: 'https',
+    hostname: 'app.chessacademy.pro',
   },
   ios: {
-    contentInset: 'automatic',
+    contentInset: 'always',
     scrollEnabled: false,
+    backgroundColor: '#0f0f0f',
+    allowsLinkPreview: false,
   },
   plugins: {
     SplashScreen: {
-      launchAutoHide: false,
+      launchShowDuration: 1000,
+      launchAutoHide: true,
+      launchFadeOutDuration: 300,
+      backgroundColor: '#0f0f0f',
+      androidSplashResourceName: 'splash',
+      androidScaleType: 'CENTER_CROP',
+      showSpinner: false,
+      splashFullScreen: true,
+      splashImmersive: true,
     },
   },
 };

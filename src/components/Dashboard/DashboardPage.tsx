@@ -4,21 +4,33 @@ import { useAppStore } from '../../stores/appStore';
 import { createSession, updateStreak, getRecentSessions } from '../../services/sessionGenerator';
 import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
-import { Flame, Star, Brain, Clock, Play, Target, BookOpen } from 'lucide-react';
-import type { SessionRecord } from '../../types';
+import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
+import { SkillBar } from '../ui/SkillBar';
+import { Flame, Star, Brain, Clock, Play, Target, BookOpen, X } from 'lucide-react';
+import { BETA_MODE } from '../../utils/constants';
+import { db } from '../../db/schema';
+import type { SessionRecord, Achievement } from '../../types';
 import type { PuzzleStats } from '../../services/puzzleService';
 
 export function DashboardPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
+  const setPendingAchievement = useAppStore((s) => s.setPendingAchievement);
   const navigate = useNavigate();
   const [puzzleStats, setPuzzleStats] = useState<PuzzleStats | null>(null);
   const [recentSessions, setRecentSessions] = useState<SessionRecord[]>([]);
+  const [betaBannerVisible, setBetaBannerVisible] = useState(false);
 
   useEffect(() => {
     void seedDatabase();
     void getPuzzleStats().then(setPuzzleStats);
     void getRecentSessions(5).then(setRecentSessions);
+
+    if (BETA_MODE) {
+      void db.meta.get('beta_banner_dismissed').then((record) => {
+        if (!record) setBetaBannerVisible(true);
+      });
+    }
 
     // Update streak on dashboard load
     if (activeProfile) {
@@ -27,8 +39,24 @@ export function DashboardPage(): JSX.Element {
           setActiveProfile({ ...activeProfile, currentStreak, longestStreak });
         }
       });
+
+      // Check for new achievements
+      void checkAndAwardAchievements(activeProfile).then((newAchievements) => {
+        if (newAchievements.length > 0) {
+          queueAchievementToasts(newAchievements, setPendingAchievement);
+          const totalXp = newAchievements.reduce((sum, a) => sum + a.xpReward, 0);
+          const updatedXp = activeProfile.xp + totalXp;
+          const updatedLevel = Math.floor(updatedXp / 500) + 1;
+          setActiveProfile({
+            ...activeProfile,
+            achievements: [...activeProfile.achievements, ...newAchievements.map((a) => a.id)],
+            xp: updatedXp,
+            level: updatedLevel,
+          });
+        }
+      });
     }
-  }, [activeProfile, setActiveProfile]);
+  }, [activeProfile, setActiveProfile, setPendingAchievement]);
 
   const handleStartSession = useCallback(async (): Promise<void> => {
     if (!activeProfile) return;
@@ -41,6 +69,7 @@ export function DashboardPage(): JSX.Element {
   if (!activeProfile) return <></>;
 
   const { currentStreak, xp, level, puzzleRating, skillRadar } = activeProfile;
+  const xpProgress = getXpToNextLevel(xp);
 
   return (
     <div
@@ -48,6 +77,29 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
+      {betaBannerVisible && (
+        <div
+          className="rounded-xl p-3 text-sm flex items-center justify-between"
+          style={{ background: 'var(--color-warning)', color: '#000' }}
+          data-testid="beta-banner"
+        >
+          <span>
+            <strong>Chess Academy Pro — Beta</strong> · You&apos;re testing an early version. Found a bug?{' '}
+            <a href="mailto:feedback@chessacademy.pro" style={{ textDecoration: 'underline' }}>Send feedback</a>
+          </span>
+          <button
+            onClick={() => {
+              setBetaBannerVisible(false);
+              void db.meta.put({ key: 'beta_banner_dismissed', value: 'true' });
+            }}
+            className="ml-3 shrink-0 p-0.5 rounded hover:opacity-70"
+            aria-label="Dismiss beta banner"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -68,7 +120,7 @@ export function DashboardPage(): JSX.Element {
 
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <StatCard label="Level" value={`${level}`} icon={<Star size={18} />} />
+        <StatCard label={getLevelTitle(level)} value={`Lv ${level}`} icon={<Star size={18} />} xpProgress={xpProgress} />
         <StatCard label="XP" value={xp.toLocaleString()} icon={<Star size={18} />} />
         <StatCard label="Puzzle Rating" value={`${puzzleRating}`} icon={<Brain size={18} />} />
         <StatCard label="ELO" value={`${activeProfile.currentRating}`} icon={<Clock size={18} />} />
@@ -166,14 +218,25 @@ export function DashboardPage(): JSX.Element {
   );
 }
 
+function queueAchievementToasts(
+  achievements: Achievement[],
+  setPending: (a: Achievement | null) => void,
+): void {
+  achievements.forEach((achievement, i) => {
+    setTimeout(() => setPending(achievement), i * 3500);
+  });
+}
+
 function StatCard({
   label,
   value,
   icon,
+  xpProgress,
 }: {
   label: string;
   value: string;
   icon: React.ReactNode;
+  xpProgress?: { current: number; needed: number; percent: number };
 }): JSX.Element {
   return (
     <div
@@ -185,6 +248,20 @@ function StatCard({
       <div className="text-xs capitalize" style={{ color: 'var(--color-text-muted)' }}>
         {label}
       </div>
+      {xpProgress && (
+        <div className="mt-1">
+          <div className="h-1.5 rounded-full" style={{ background: 'var(--color-border)' }}>
+            <div
+              className="h-1.5 rounded-full transition-all"
+              style={{ width: `${xpProgress.percent}%`, background: 'var(--color-accent)' }}
+              data-testid="xp-progress-bar"
+            />
+          </div>
+          <div className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+            {xpProgress.current}/{xpProgress.needed} XP
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -208,25 +285,6 @@ function QuickAction({
       <div style={{ color: 'var(--color-accent)' }}>{icon}</div>
       <span className="text-xs font-medium">{label}</span>
     </button>
-  );
-}
-
-function SkillBar({ label, value }: { label: string; value: number }): JSX.Element {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="text-sm capitalize w-24 shrink-0" style={{ color: 'var(--color-text-muted)' }}>
-        {label}
-      </span>
-      <div className="flex-1 rounded-full h-2" style={{ background: 'var(--color-border)' }}>
-        <div
-          className="h-2 rounded-full transition-all"
-          style={{ width: `${value}%`, background: 'var(--color-accent)' }}
-        />
-      </div>
-      <span className="text-xs w-8 text-right" style={{ color: 'var(--color-text-muted)' }}>
-        {value}
-      </span>
-    </div>
   );
 }
 

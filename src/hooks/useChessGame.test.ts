@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { useChessGame } from './useChessGame';
+import { useChessGame, type MoveResult } from './useChessGame';
 
 // Fool's mate: white king on e1 is checkmated
 const FOOLS_MATE_FEN = 'rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3';
@@ -48,13 +48,13 @@ describe('useChessGame', () => {
   describe('makeMove', () => {
     it('returns a MoveResult for a valid move', () => {
       const { result } = renderHook(() => useChessGame());
-      let moveResult = null;
+      let moveResult: MoveResult | null = null;
       act(() => {
         moveResult = result.current.makeMove('e2', 'e4');
       });
       expect(moveResult).not.toBeNull();
       expect(moveResult).toMatchObject({ from: 'e2', to: 'e4', san: 'e4' });
-      expect(typeof (moveResult as NonNullable<typeof moveResult>).fen).toBe('string');
+      expect(typeof (moveResult as unknown as MoveResult).fen).toBe('string');
     });
 
     it('returns null for an illegal move', () => {
@@ -105,12 +105,12 @@ describe('useChessGame', () => {
       // White pawn on e7, black king on h8 (queen on e8 will give check along rank 8)
       const promotionFen = '7k/4P3/8/8/8/8/8/4K3 w - - 0 1';
       const { result } = renderHook(() => useChessGame(promotionFen));
-      let moveResult = null;
+      let moveResult: MoveResult | null = null;
       act(() => {
         moveResult = result.current.makeMove('e7', 'e8', 'q');
       });
       expect(moveResult).not.toBeNull();
-      expect((moveResult as NonNullable<typeof moveResult>).san).toBe('e8=Q+');
+      expect((moveResult as unknown as MoveResult).san).toBe('e8=Q+');
     });
   });
 
@@ -447,7 +447,7 @@ describe('useChessGame', () => {
 
     it('returns null when just selecting (no move)', () => {
       const { result } = renderHook(() => useChessGame());
-      let clickResult: ReturnType<typeof result.current.onSquareClick> = undefined;
+      let clickResult: ReturnType<typeof result.current.onSquareClick> = null;
 
       act(() => {
         clickResult = result.current.onSquareClick('e2');

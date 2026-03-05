@@ -39,6 +39,14 @@ export function CoachAnalysisView(): JSX.Element {
     setLoading(false);
   }, [activeProfile]);
 
+  if (!activeProfile) {
+    return (
+      <div className="space-y-4" data-testid="coach-analysis-view">
+        <p className="text-sm text-theme-text-muted p-4">Set up your profile to use the AI coach.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4" data-testid="coach-analysis-view">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">

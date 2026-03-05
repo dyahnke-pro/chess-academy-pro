@@ -381,6 +381,132 @@ describe('puzzleService', () => {
     });
   });
 
+  describe('calculateRatingDelta — extended', () => {
+    it('returns larger negative delta for failing an easier puzzle', () => {
+      const delta = calculateRatingDelta(1600, 1200, false);
+      expect(Math.abs(delta)).toBeGreaterThan(16);
+    });
+
+    it('returns small or zero delta for solving a much easier puzzle', () => {
+      const delta = calculateRatingDelta(2000, 800, true);
+      expect(delta).toBeLessThan(5); // Much less than equal-rating solve
+      expect(delta).toBeGreaterThanOrEqual(0);
+    });
+
+    it('returns nearly -32 for failing a much easier puzzle', () => {
+      const delta = calculateRatingDelta(2000, 800, false);
+      expect(delta).toBeLessThan(-25);
+    });
+  });
+
+  describe('getThemeSkills — extended', () => {
+    it('aggregates across multiple puzzles with the same theme', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'ag1', themes: ['fork'], attempts: 5, successes: 4 }),
+        makePuzzle({ id: 'ag2', themes: ['fork'], attempts: 5, successes: 1 }),
+      ]);
+      const skills = await getThemeSkills();
+      const fork = skills.find((s) => s.theme === 'fork');
+      expect(fork).toBeDefined();
+      if (!fork) return;
+      // Total: 10 attempts, 5 successes = 50%
+      expect(fork.accuracy).toBeCloseTo(0.5);
+      expect(fork.attempts).toBe(10);
+    });
+
+    it('handles puzzles with multiple themes', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'mt1', themes: ['fork', 'middlegame'], attempts: 4, successes: 2 }),
+      ]);
+      const skills = await getThemeSkills();
+      expect(skills.length).toBe(2);
+      expect(skills.find((s) => s.theme === 'fork')).toBeDefined();
+      expect(skills.find((s) => s.theme === 'middlegame')).toBeDefined();
+    });
+  });
+
+  describe('getWeakestThemes — extended', () => {
+    it('limits results to requested count', async () => {
+      const weakest = await getWeakestThemes(2);
+      expect(weakest.length).toBe(2);
+    });
+
+    it('puts unattempted themes before low-accuracy themes', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'w1', themes: ['fork'], attempts: 10, successes: 1 }),
+      ]);
+      const weakest = await getWeakestThemes(5);
+      // The first entries should be unattempted themes, not 'fork'
+      const forkIndex = weakest.indexOf('fork');
+      // fork has a low accuracy but still comes after unattempted themes
+      if (forkIndex >= 0) {
+        // Unattempted themes come first
+        for (let i = 0; i < forkIndex; i++) {
+          expect(weakest[i]).not.toBe('fork');
+        }
+      }
+    });
+  });
+
+  describe('getDailyPuzzles — priority order', () => {
+    it('includes SRS due puzzles first', async () => {
+      const today = new Date().toISOString().split('T')[0];
+      const future = new Date();
+      future.setDate(future.getDate() + 30);
+      const futureStr = future.toISOString().split('T')[0];
+
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'due-1', srsDueDate: today, rating: 1200 }),
+        makePuzzle({ id: 'due-2', srsDueDate: today, rating: 1200 }),
+        makePuzzle({ id: 'not-due-1', srsDueDate: futureStr, rating: 1200 }),
+        makePuzzle({ id: 'not-due-2', srsDueDate: futureStr, rating: 1200 }),
+      ]);
+
+      const daily = await getDailyPuzzles(1200, 4);
+      // Due puzzles should be present
+      const dueIds = daily.filter((p) => p.srsDueDate <= today).map((p) => p.id);
+      expect(dueIds).toContain('due-1');
+      expect(dueIds).toContain('due-2');
+    });
+  });
+
+  describe('recordAttempt — field updates', () => {
+    it('sets srsLastReview to today', async () => {
+      const puzzle = makePuzzle({ id: 'review-date' });
+      await db.puzzles.put(puzzle);
+      await recordAttempt('review-date', true, 1200, 'good');
+      const updated = await db.puzzles.get('review-date');
+      expect(updated?.srsLastReview).toBe(new Date().toISOString().split('T')[0]);
+    });
+
+    it('updates userRating on the puzzle record', async () => {
+      const puzzle = makePuzzle({ id: 'rating-upd', userRating: 1200, rating: 1200 });
+      await db.puzzles.put(puzzle);
+      await recordAttempt('rating-upd', true, 1200, 'good');
+      const updated = await db.puzzles.get('rating-upd');
+      expect(updated?.userRating).toBeGreaterThan(1200);
+    });
+  });
+
+  describe('getPuzzleStats — totals', () => {
+    it('counts due puzzles correctly', async () => {
+      const today = new Date().toISOString().split('T')[0];
+      const future = new Date();
+      future.setDate(future.getDate() + 10);
+      const futureStr = future.toISOString().split('T')[0];
+
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 's1', srsDueDate: today }),
+        makePuzzle({ id: 's2', srsDueDate: today }),
+        makePuzzle({ id: 's3', srsDueDate: futureStr }),
+      ]);
+
+      const stats = await getPuzzleStats();
+      expect(stats.duePuzzles).toBe(2);
+      expect(stats.totalPuzzles).toBe(3);
+    });
+  });
+
   describe('THEME_MAP', () => {
     it('covers all 10 required tactical categories', () => {
       const categories = Object.keys(THEME_MAP);

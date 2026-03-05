@@ -9,3 +9,5 @@ android
 coverage
 playwright-report
 test-results
+*.tsbuildinfo
+.claude/

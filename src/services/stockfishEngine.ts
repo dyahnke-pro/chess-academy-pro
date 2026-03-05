@@ -10,14 +10,18 @@ interface PendingAnalysis {
   depth: number;
 }
 
-function getStockfishBuild(): string {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+function createStockfishWorker(): Worker {
   const hasSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined';
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   if (isMobile || !hasSharedArrayBuffer) {
-    return '/stockfish/stockfish-nnue-16-single.js';
+    return new Worker(
+      new URL('../../node_modules/stockfish/bin/stockfish-18-single.js', import.meta.url),
+    );
   }
-  return '/stockfish/stockfish-nnue-16-multi.js';
+  return new Worker(
+    new URL('../../node_modules/stockfish/bin/stockfish-18.js', import.meta.url),
+  );
 }
 
 class StockfishEngine {
@@ -32,7 +36,7 @@ class StockfishEngine {
 
     this.initPromise = new Promise((resolve, reject) => {
       try {
-        this.worker = new Worker(getStockfishBuild());
+        this.worker = createStockfishWorker();
 
         this.worker.onmessage = (event: MessageEvent<string>) => {
           this.handleMessage(event.data);
@@ -70,8 +74,14 @@ class StockfishEngine {
     await this.initialize();
 
     return new Promise((resolve, reject) => {
+      // If a previous analysis is pending, stop it and wait for bestmove
+      // before starting the new one
       if (this.pending) {
+        const oldPending = this.pending;
+        this.pending = null;
         this.send('stop');
+        // Reject the old pending so callers don't hang
+        oldPending.reject(new Error('Analysis interrupted by new request'));
       }
 
       this.pending = {
@@ -83,8 +93,17 @@ class StockfishEngine {
       };
 
       this.send('ucinewgame');
-      this.send(`position fen ${fen}`);
-      this.send(`go depth ${depth}`);
+      this.send('isready');
+
+      // Wait for readyok before starting new analysis to avoid race with stop
+      const readyHandler = (event: MessageEvent<string>): void => {
+        if (event.data === 'readyok') {
+          this.worker?.removeEventListener('message', readyHandler);
+          this.send(`position fen ${fen}`);
+          this.send(`go depth ${depth}`);
+        }
+      };
+      this.worker?.addEventListener('message', readyHandler);
     });
   }
 

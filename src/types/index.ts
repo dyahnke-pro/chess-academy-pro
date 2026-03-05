@@ -80,7 +80,7 @@ export interface MoveAnnotation {
   comment: string | null;
 }
 
-export type GameSource = 'lichess' | 'chesscom' | 'master' | 'import';
+export type GameSource = 'lichess' | 'chesscom' | 'master' | 'import' | 'coach';
 export type GameResult = '1-0' | '0-1' | '1/2-1/2' | '*';
 
 export interface GameRecord {
@@ -158,6 +158,12 @@ export interface UserPreferences {
   };
   monthlyBudgetCap: number | null;
   estimatedSpend: number;
+  elevenlabsKeyEncrypted: string | null;
+  elevenlabsKeyIv: string | null;
+  voiceIdDanya: string;
+  voiceIdKasparov: string;
+  voiceIdFischer: string;
+  voiceSpeed: number;
 }
 
 export interface UserProfile {
@@ -249,6 +255,58 @@ export interface StockfishAnalysis {
 
 // ─── Coach ───────────────────────────────────────────────────────────────────
 
+export type CoachDifficulty = 'easy' | 'medium' | 'hard';
+
+export type CoachExpression = 'neutral' | 'encouraging' | 'excited' | 'disappointed' | 'thinking';
+
+export type HintLevel = 0 | 1 | 2 | 3;
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
+  metadata?: {
+    actions?: { type: string; id: string }[];
+    expression?: CoachExpression;
+  };
+}
+
+export type CoachGameStatus = 'pregame' | 'playing' | 'postgame';
+export type CoachGameResult = 'win' | 'loss' | 'draw' | 'ongoing';
+
+export interface CoachGameMove {
+  moveNumber: number;
+  san: string;
+  fen: string;
+  isCoachMove: boolean;
+  commentary: string;
+  evaluation: number | null;
+  classification: MoveClassification | null;
+  expanded: boolean;
+}
+
+export interface KeyMoment {
+  moveNumber: number;
+  fen: string;
+  explanation: string;
+  type: 'blunder' | 'brilliant' | 'turning_point';
+}
+
+export interface CoachGameState {
+  gameId: string;
+  playerColor: 'white' | 'black';
+  coachPersonality: CoachPersonality;
+  targetStrength: number;
+  moves: CoachGameMove[];
+  hintsUsed: number;
+  currentHintLevel: HintLevel;
+  takebacksUsed: number;
+  status: CoachGameStatus;
+  result: CoachGameResult;
+  keyMoments: KeyMoment[];
+}
+
 export type CoachTask =
   | 'move_commentary'
   | 'hint'
@@ -258,7 +316,13 @@ export type CoachTask =
   | 'bad_habit_report'
   | 'weekly_report'
   | 'deep_analysis'
-  | 'opening_overview';
+  | 'opening_overview'
+  | 'chat_response'
+  | 'game_commentary'
+  | 'game_opening_line'
+  | 'game_post_review'
+  | 'position_analysis_chat'
+  | 'session_plan_generation';
 
 export interface CoachContext {
   fen: string;

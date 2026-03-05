@@ -50,6 +50,12 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
       },
       monthlyBudgetCap: null,
       estimatedSpend: 0,
+      elevenlabsKeyEncrypted: null,
+      elevenlabsKeyIv: null,
+      voiceIdDanya: 'pNInz6obpgDQGcFmaJgB',
+      voiceIdKasparov: 'VR6AewLTigWG4xSOukaG',
+      voiceIdFischer: 'TxGEqnHWrfWFTfGW9XjX',
+      voiceSpeed: 1.0,
     },
   };
 
@@ -150,12 +156,15 @@ export async function generateFlashcardsForOpening(
   const cards: FlashcardRecord[] = opening.variations.map((variation, i) => ({
     id: `${openingId}-card-${i}`,
     openingId,
-    type: 'best_move',
+    type: 'best_move' as const,
     questionFen: opening.fen,
     questionText: `What is the key idea in the ${variation.name}?`,
     answerMove: null,
     answerText: variation.explanation,
-    ...srsDefaults,
+    srsInterval: srsDefaults.interval,
+    srsEaseFactor: srsDefaults.easeFactor,
+    srsRepetitions: srsDefaults.repetitions,
+    srsDueDate: srsDefaults.dueDate,
     srsLastReview: null,
   }));
 

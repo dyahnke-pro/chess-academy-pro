@@ -133,3 +133,49 @@ export async function getRecentSessions(limit: number = 7): Promise<SessionRecor
     .limit(limit)
     .toArray();
 }
+
+export async function generateCoachSession(
+  profile: UserProfile,
+  coachNotes?: string,
+): Promise<SessionPlan> {
+  const basePlan = await generateDailySession(profile);
+
+  if (!coachNotes) return basePlan;
+
+  // Apply coach adjustments — simple heuristics for pushback
+  const lower = coachNotes.toLowerCase();
+  const blocks = [...basePlan.blocks];
+
+  // If user wants more puzzles
+  if (lower.includes('more puzzle') || lower.includes('more tactic')) {
+    const puzzleBlock = blocks.find((b) => b.type === 'puzzle_drill');
+    const otherBlock = blocks.find((b) => b.type === 'endgame_drill' || b.type === 'flashcards');
+    if (puzzleBlock && otherBlock) {
+      const transfer = Math.round(otherBlock.targetMinutes * 0.5);
+      puzzleBlock.targetMinutes += transfer;
+      otherBlock.targetMinutes -= transfer;
+    }
+  }
+
+  // If user wants more openings
+  if (lower.includes('more opening') || lower.includes('opening practice')) {
+    const openingBlock = blocks.find((b) => b.type === 'opening_review');
+    const otherBlock = blocks.find((b) => b.type === 'endgame_drill' || b.type === 'flashcards');
+    if (openingBlock && otherBlock) {
+      const transfer = Math.round(otherBlock.targetMinutes * 0.5);
+      openingBlock.targetMinutes += transfer;
+      otherBlock.targetMinutes -= transfer;
+    }
+  }
+
+  // If user wants shorter session
+  if (lower.includes('shorter') || lower.includes('less time') || lower.includes('quick')) {
+    const scaleFactor = 0.6;
+    for (const block of blocks) {
+      block.targetMinutes = Math.max(3, Math.round(block.targetMinutes * scaleFactor));
+    }
+  }
+
+  const totalMinutes = blocks.reduce((sum, b) => sum + b.targetMinutes, 0);
+  return { blocks, totalMinutes };
+}

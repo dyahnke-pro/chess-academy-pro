@@ -122,6 +122,11 @@ describe('Profiles CRUD', () => {
         },
         monthlyBudgetCap: null,
         estimatedSpend: 0,
+        elevenlabsKeyEncrypted: null,
+        elevenlabsKeyIv: null,
+        voiceIdDanya: 'pNInz6obpgDQGcFmaJgB',
+        voiceIdKasparov: 'VR6AewLTigWG4xSOukaG',
+        voiceIdFischer: 'TxGEqnHWrfWFTfGW9XjX',
       },
     };
 

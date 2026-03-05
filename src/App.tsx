@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
+import { db } from './db/schema';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 // Page-level imports
 import { DashboardPage } from './components/Dashboard/DashboardPage';
@@ -16,10 +18,23 @@ import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
 import { FlashcardStudyPage } from './components/Flashcards/FlashcardStudyPage';
 import { AnalysisBoardPage } from './components/Analysis/AnalysisBoardPage';
+import { CoachPage } from './components/Coach/CoachPage';
+import { CoachChatPage } from './components/Coach/CoachChatPage';
+import { CoachGamePage } from './components/Coach/CoachGamePage';
+import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
+import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
+import { StatsPage } from './components/Stats/StatsPage';
+import { KidModePage } from './components/Kid/KidModePage';
+import { KidPiecePage } from './components/Kid/KidPiecePage';
+import { SettingsPage } from './components/Settings/SettingsPage';
+import { OnboardingPage } from './components/Settings/OnboardingPage';
+import { GameDatabasePage } from './components/Games/GameDatabasePage';
+import { ImportPage } from './components/Games/ImportPage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
     useAppStore();
+  const [onboardingSkipped, setOnboardingSkipped] = useState(false);
 
   useEffect(() => {
     async function init(): Promise<void> {
@@ -29,6 +44,10 @@ export function App(): JSX.Element {
         applyTheme(theme);
         setActiveTheme(theme);
         setActiveProfile(profile);
+
+        const skippedMeta = await db.meta.get('onboarding_skipped');
+        setOnboardingSkipped(skippedMeta?.value === 'true');
+
         // Seed data in background (no-op if already seeded)
         void seedDatabase();
         void seedPuzzles();
@@ -46,48 +65,44 @@ export function App(): JSX.Element {
     return <LoadingScreen />;
   }
 
-  // First-run: redirect to onboarding if no API key set
+  // First-run: redirect to onboarding if no API key and user hasn't completed/skipped it
   const hasApiKey = Boolean(activeProfile?.preferences.apiKeyEncrypted);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<AppLayout />}>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/puzzles" element={<PuzzleTrainerPage />} />
-          <Route path="/openings" element={<OpeningExplorerPage />} />
-          <Route path="/openings/:id" element={<OpeningDetailPage />} />
-          <Route path="/flashcards" element={<FlashcardStudyPage />} />
-          <Route path="/games" element={<PlaceholderPage title="Games" />} />
-          <Route path="/analysis" element={<AnalysisBoardPage />} />
-          <Route path="/stats" element={<PlaceholderPage title="Stats" />} />
-          <Route path="/kid" element={<PlaceholderPage title="Kid Mode" />} />
+          <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
+          <Route path="/puzzles" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
+          <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
+          <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
+          <Route path="/flashcards" element={<ErrorBoundary><FlashcardStudyPage /></ErrorBoundary>} />
+          <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
+          <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
+          <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
+          <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
+          <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
+          <Route path="/games" element={<ErrorBoundary><GameDatabasePage /></ErrorBoundary>} />
+          <Route path="/games/import" element={<ErrorBoundary><ImportPage /></ErrorBoundary>} />
+          <Route path="/analysis" element={<ErrorBoundary><AnalysisBoardPage /></ErrorBoundary>} />
+          <Route path="/stats" element={<ErrorBoundary><StatsPage /></ErrorBoundary>} />
+          <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
+          <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
           <Route
             path="/settings"
             element={
-              hasApiKey
-                ? <PlaceholderPage title="Settings" />
-                : <Navigate to="/settings/onboarding" replace />
+              <ErrorBoundary>
+                {hasApiKey || onboardingSkipped
+                  ? <SettingsPage />
+                  : <Navigate to="/settings/onboarding" replace />}
+              </ErrorBoundary>
             }
           />
-          <Route path="/settings/onboarding" element={<PlaceholderPage title="Setup" />} />
-          <Route path="/board" element={<BoardTestPage />} />
+          <Route path="/settings/onboarding" element={<ErrorBoundary><OnboardingPage /></ErrorBoundary>} />
+          <Route path="/board" element={<ErrorBoundary><BoardTestPage /></ErrorBoundary>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  );
-}
-
-// Temporary placeholder — replaced by real pages in subsequent work orders
-function PlaceholderPage({ title }: { title: string }): JSX.Element {
-  return (
-    <div className="flex flex-1 items-center justify-center p-8">
-      <div className="text-center">
-        <div className="text-4xl mb-4">♛</div>
-        <h1 className="text-2xl font-bold text-theme-text mb-2">{title}</h1>
-        <p className="text-theme-text-muted">Coming soon — check the work orders.</p>
-      </div>
-    </div>
   );
 }
