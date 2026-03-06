@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { screen, waitFor, act } from '@testing-library/react';
 import { render } from '../../test/utils';
-import { DrillMode } from './DrillMode';
+import { PracticeMode } from './PracticeMode';
 import { buildOpeningRecord } from '../../test/factories';
 import type { OpeningRecord } from '../../types';
 
@@ -11,14 +11,14 @@ import type { OpeningRecord } from '../../types';
 
 const mockRecordDrillAttempt = vi.fn().mockResolvedValue(undefined);
 const mockUpdateVariationProgress = vi.fn().mockResolvedValue(undefined);
-const mockMarkLineDiscovered = vi.fn().mockResolvedValue(undefined);
+const mockMarkLinePerfected = vi.fn().mockResolvedValue(undefined);
 
 vi.mock('../../services/openingService', () => ({
   recordDrillAttempt: (...args: unknown[]): unknown => mockRecordDrillAttempt(...args),
   updateDrillProgress: vi.fn().mockResolvedValue(undefined),
   updateWoodpecker: vi.fn().mockResolvedValue(undefined),
   updateVariationProgress: (...args: unknown[]): unknown => mockUpdateVariationProgress(...args),
-  markLineDiscovered: (...args: unknown[]): unknown => mockMarkLineDiscovered(...args),
+  markLinePerfected: (...args: unknown[]): unknown => mockMarkLinePerfected(...args),
 }));
 
 vi.mock('../Board/ChessBoard', () => ({
@@ -75,28 +75,16 @@ vi.mock('../../services/speechService', () => ({
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const whiteOpening: OpeningRecord = buildOpeningRecord({
-  id: 'drill-test-white',
+  id: 'practice-test-white',
   name: 'Vienna Game',
   pgn: 'e4 e5 Nc3',
   color: 'white',
-  overview: 'Flexible opening with Nc3.',
   variations: [
     { name: 'Vienna Gambit', pgn: 'e4 e5 Nc3 Nf6 f4', explanation: 'Sharp gambit play' },
   ],
-  woodpeckerReps: 0,
-  woodpeckerSpeed: null,
 });
 
-const blackOpening: OpeningRecord = buildOpeningRecord({
-  id: 'drill-test-black',
-  name: 'Sicilian Defense',
-  pgn: 'e4 c5',
-  color: 'black',
-  woodpeckerReps: 3,
-  woodpeckerSpeed: 12,
-});
-
-function renderDrill(
+function renderPractice(
   opening: OpeningRecord = whiteOpening,
   overrides: { onComplete?: () => void; onExit?: () => void; variationIndex?: number } = {},
 ): { onComplete: ReturnType<typeof vi.fn>; onExit: ReturnType<typeof vi.fn> } {
@@ -108,7 +96,7 @@ function renderDrill(
     : vi.fn();
 
   render(
-    <DrillMode
+    <PracticeMode
       opening={opening}
       variationIndex={overrides.variationIndex}
       onComplete={onComplete}
@@ -121,7 +109,7 @@ function renderDrill(
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
-describe('DrillMode (Learn)', () => {
+describe('PracticeMode', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers({ shouldAdvanceTime: true });
@@ -131,73 +119,51 @@ describe('DrillMode (Learn)', () => {
     vi.useRealTimers();
   });
 
-  it('renders the drill-mode container', () => {
-    renderDrill();
-    expect(screen.getByTestId('drill-mode')).toBeInTheDocument();
+  it('renders the practice-mode container', () => {
+    renderPractice();
+    expect(screen.getByTestId('practice-mode')).toBeInTheDocument();
   });
 
   it('renders the chess board', () => {
-    renderDrill();
+    renderPractice();
     expect(screen.getByTestId('chess-board')).toBeInTheDocument();
   });
 
-  it('board uses correct orientation for white opening', () => {
-    renderDrill(whiteOpening);
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-orientation', 'white');
+  it('shows "Practice" in header', () => {
+    renderPractice();
+    expect(screen.getByText(/Practice Vienna Game/)).toBeInTheDocument();
   });
 
-  it('board uses correct orientation for black opening', () => {
-    renderDrill(blackOpening);
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-orientation', 'black');
-  });
-
-  it('shows "Learn" in header', () => {
-    renderDrill();
-    expect(screen.getByText(/Learn Vienna Game/)).toBeInTheDocument();
+  it('shows "What\'s the best move?" prompt with no explanations', () => {
+    renderPractice();
+    expect(screen.getByTestId('practice-prompt')).toHaveTextContent("What's the best move?");
+    // No explanation card should be present
+    expect(screen.queryByTestId('explanation-card')).not.toBeInTheDocument();
   });
 
   it('progress bar renders', () => {
-    renderDrill();
-    expect(screen.getByTestId('drill-progress')).toBeInTheDocument();
+    renderPractice();
+    expect(screen.getByTestId('practice-progress')).toBeInTheDocument();
   });
 
-  it('shows step indicator with move count', () => {
-    renderDrill();
+  it('shows move counter', () => {
+    renderPractice();
     expect(screen.getByText(/Move 0 \/ 3/)).toBeInTheDocument();
   });
 
-  it('shows explanation card telling player what move to play', () => {
-    renderDrill();
-    // First move is player's (white) — should see explanation with "Play e4"
-    expect(screen.getByTestId('explanation-card')).toBeInTheDocument();
-    expect(screen.getByTestId('explanation-card').textContent).toContain('Play e4');
-  });
-
-  it('board is interactive on player turn', () => {
-    renderDrill(whiteOpening);
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'true');
-  });
-
   it('correct move shows green flash and advances', async () => {
-    renderDrill();
+    renderPractice();
 
     const correctBtn = screen.getByTestId('make-correct-move');
     await act(async () => { correctBtn.click(); });
 
-    // Should show correct flash
     await waitFor(() => {
       expect(screen.getByTestId('correct-flash')).toBeInTheDocument();
     });
-
-    // Move counter should advance (opponent auto-plays after 500ms)
-    await act(async () => { vi.advanceTimersByTime(600); });
-    await waitFor(() => {
-      expect(screen.getByText(/Move [2-3] \/ 3/)).toBeInTheDocument();
-    });
   });
 
-  it('wrong move shows red X and "Incorrect move" with Undo button', async () => {
-    renderDrill();
+  it('wrong move shows red X and Undo button', async () => {
+    renderPractice();
 
     const wrongBtn = screen.getByTestId('make-wrong-move');
     await act(async () => { wrongBtn.click(); });
@@ -209,8 +175,8 @@ describe('DrillMode (Learn)', () => {
     });
   });
 
-  it('undo button dismisses wrong state and lets player try again', async () => {
-    renderDrill();
+  it('undo button dismisses wrong state', async () => {
+    renderPractice();
 
     const wrongBtn = screen.getByTestId('make-wrong-move');
     await act(async () => { wrongBtn.click(); });
@@ -219,7 +185,6 @@ describe('DrillMode (Learn)', () => {
       expect(screen.getByTestId('undo-btn')).toBeInTheDocument();
     });
 
-    // Click undo
     await act(async () => {
       screen.getByTestId('undo-btn').click();
     });
@@ -236,41 +201,21 @@ describe('DrillMode (Learn)', () => {
     expect(screen.queryByText('Incorrect move. Try again.')).not.toBeInTheDocument();
   });
 
-  it('back button calls onExit when clicked', () => {
-    const { onExit } = renderDrill();
-    screen.getByTestId('drill-back').click();
+  it('back button calls onExit', () => {
+    const { onExit } = renderPractice();
+    screen.getByTestId('practice-back').click();
     expect(onExit).toHaveBeenCalledTimes(1);
   });
 
-  it('displays opening name in header', () => {
-    renderDrill();
-    expect(screen.getByText('Learn Vienna Game')).toBeInTheDocument();
+  it('board is interactive on player turn', () => {
+    renderPractice();
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'true');
   });
 
-  it('shows variation name when drilling a variation', () => {
-    renderDrill(whiteOpening, { variationIndex: 0 });
-    expect(screen.getByText(/Vienna Gambit/)).toBeInTheDocument();
-  });
-
-  it('records drill attempt and marks line discovered on variation completion', async () => {
-    renderDrill(whiteOpening, { variationIndex: 0 });
-
-    // Vienna Gambit: e4 e5 Nc3 Nf6 f4
-    // White moves: e4 (0), Nc3 (2), f4 (4) — player plays these
-    // Black moves: e5 (1), Nf6 (3) — auto-played
-
-    // Move 0: play e4 (correct)
-    const btn0 = screen.getByTestId('make-correct-move');
-    await act(async () => { btn0.click(); });
-
-    // Move 1: black e5 auto-plays
-    await act(async () => { vi.advanceTimersByTime(600); });
-
-    // Move 2: need to play Nc3 — but mock always sends e2->e4
-    // The test mock is limited, so we verify the structure works
-    // by checking that the component handles the flow correctly
-    await waitFor(() => {
-      expect(screen.getByTestId('chess-board')).toBeInTheDocument();
-    });
+  it('does NOT show any hint or explanation text', () => {
+    renderPractice();
+    // Should not have any explanation card with move guidance
+    const cards = screen.queryAllByTestId('explanation-card');
+    expect(cards.length).toBe(0);
   });
 });

@@ -7,7 +7,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import {
   recordDrillAttempt,
   updateVariationProgress,
-  markLineDiscovered,
+  markLinePerfected,
 } from '../../services/openingService';
 import { speechService } from '../../services/speechService';
 import type { OpeningRecord } from '../../types';
@@ -18,9 +18,10 @@ import {
   Undo2,
   CheckCircle,
   XCircle,
+  Trophy,
 } from 'lucide-react';
 
-export interface DrillModeProps {
+export interface PracticeModeProps {
   opening: OpeningRecord;
   variationIndex?: number;
   onComplete: (correct: boolean) => void;
@@ -33,11 +34,10 @@ interface MoveInfo {
   to: string;
 }
 
-export function DrillMode({ opening, variationIndex, onComplete, onExit }: DrillModeProps): JSX.Element {
+export function PracticeMode({ opening, variationIndex, onComplete, onExit }: PracticeModeProps): JSX.Element {
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = isVariation ? opening.variations?.[variationIndex] : undefined;
   const activePgn = variation ? variation.pgn : opening.pgn;
-  const activeExplanation = variation ? variation.explanation : opening.overview ?? '';
 
   // Parse PGN into move list
   const expectedMoves = useMemo((): MoveInfo[] => {
@@ -60,7 +60,6 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
   const [boardKey, setBoardKey] = useState(0);
   const [showWrongMove, setShowWrongMove] = useState(false);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
-  const [correctSquare, setCorrectSquare] = useState<string | null>(null);
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
   const [lineComplete, setLineComplete] = useState(false);
   const [totalMistakes, setTotalMistakes] = useState(0);
@@ -93,51 +92,12 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
 
-  // Generate explanation for current move (what player should play)
-  const currentExplanation = useMemo((): string => {
-    if (currentMoveIndex >= expectedMoves.length) return '';
-    if (!isPlayerTurn(currentMoveIndex)) return '';
-
-    const move = expectedMoves[currentMoveIndex];
-    const moveNumber = Math.floor(currentMoveIndex / 2) + 1;
-
-    // For the first player move, use the opening/variation explanation
-    if (currentMoveIndex <= 1) {
-      if (activeExplanation) {
-        return `${activeExplanation} *Play ${move.san}.*`;
-      }
-    }
-
-    // Generate contextual explanation based on move
-    const piece = move.san.replace(/[x+#=]/g, '');
-    if (piece.startsWith('O-O')) {
-      return `Castle to safety. *Play ${move.san}.*`;
-    }
-    if (piece.startsWith('N')) {
-      return `Develop your knight. *Play ${move.san}.*`;
-    }
-    if (piece.startsWith('B')) {
-      return `Develop your bishop. *Play ${move.san}.*`;
-    }
-    if (piece.startsWith('Q')) {
-      return `Bring your queen out. *Play ${move.san}.*`;
-    }
-    if (piece.startsWith('R')) {
-      return `Activate your rook. *Play ${move.san}.*`;
-    }
-    if (piece[0] === piece[0].toLowerCase()) {
-      return `Continue with the plan. Move ${moveNumber}. *Play ${move.san}.*`;
-    }
-    return `Move ${moveNumber}. *Play ${move.san}.*`;
-  }, [currentMoveIndex, expectedMoves, isPlayerTurn, activeExplanation]);
-
   // Auto-play opponent moves
   useEffect(() => {
     if (lineComplete || showWrongMove) return;
     if (currentMoveIndex >= expectedMoves.length) return;
     if (isPlayerTurn(currentMoveIndex)) return;
 
-    // Opponent move — auto-play after delay
     const timer = setTimeout(() => {
       setCurrentMoveIndex((prev) => prev + 1);
       setBoardKey((k) => k + 1);
@@ -152,28 +112,24 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
       playCelebration();
 
       const timeSeconds = (Date.now() - startTimeRef.current) / 1000;
-      void recordDrillAttempt(opening.id, totalMistakes === 0, timeSeconds);
+      const perfect = totalMistakes === 0;
+      void recordDrillAttempt(opening.id, perfect, timeSeconds);
       if (isVariation) {
-        void updateVariationProgress(opening.id, variationIndex, totalMistakes === 0);
-        void markLineDiscovered(opening.id, variationIndex);
+        void updateVariationProgress(opening.id, variationIndex, perfect);
+        if (perfect) {
+          void markLinePerfected(opening.id, variationIndex);
+        }
       }
 
       const lineName = variation ? variation.name : opening.name;
-      speechService.speak(`Line discovered! You've learned the ${lineName}.`);
-      onComplete(totalMistakes === 0);
+      if (perfect) {
+        speechService.speak(`Line perfected! You know the ${lineName} by heart.`);
+      } else {
+        speechService.speak(`Good attempt on the ${lineName}. ${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}.`);
+      }
+      onComplete(perfect);
     }
   }, [currentMoveIndex, expectedMoves.length, lineComplete, totalMistakes, opening.id, isVariation, variationIndex, variation, opening.name, playCelebration, onComplete]);
-
-  // Speech for current explanation
-  useEffect(() => {
-    if (lineComplete || showWrongMove) return;
-    if (!isPlayerTurn(currentMoveIndex)) return;
-    if (currentExplanation) {
-      // Strip the italic markers for speech
-      const speechText = currentExplanation.replace(/\*/g, '');
-      speechService.speak(speechText);
-    }
-  }, [currentMoveIndex, currentExplanation, isPlayerTurn, lineComplete, showWrongMove]);
 
   // Handle player move
   const handleMove = useCallback(
@@ -183,19 +139,15 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
 
       const expected = expectedMoves[currentMoveIndex];
       if (result.from === expected.from && result.to === expected.to) {
-        // Correct move!
-        setCorrectSquare(expected.to);
+        // Correct
         setShowCorrectFlash(true);
         setShowWrongMove(false);
         setWrongSquare(null);
-        setTimeout(() => {
-          setShowCorrectFlash(false);
-          setCorrectSquare(null);
-        }, 400);
+        setTimeout(() => setShowCorrectFlash(false), 400);
         setCurrentMoveIndex((prev) => prev + 1);
         setBoardKey((k) => k + 1);
       } else {
-        // Wrong move
+        // Wrong
         setTotalMistakes((prev) => prev + 1);
         setWrongSquare(result.to);
         setShowWrongMove(true);
@@ -217,7 +169,6 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
     setBoardKey((k) => k + 1);
     setShowWrongMove(false);
     setShowCorrectFlash(false);
-    setCorrectSquare(null);
     setWrongSquare(null);
     setLineComplete(false);
     setTotalMistakes(0);
@@ -233,25 +184,29 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
   const lineLabel = isVariation
     ? `Line ${variationIndex + 1} / ${opening.variations?.length ?? 1}`
     : opening.name;
+  const perfect = totalMistakes === 0;
 
   // ─── Line complete screen ───────────────────────────────────────────────
   if (lineComplete) {
     return (
-      <div className="flex flex-col flex-1 p-4 md:p-6 items-center justify-center" data-testid="learn-complete">
+      <div className="flex flex-col flex-1 p-4 md:p-6 items-center justify-center" data-testid="practice-complete">
         <div className="w-full max-w-sm space-y-6">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 mb-4">
-              <CheckCircle size={32} className="text-green-500" />
+            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${perfect ? 'bg-yellow-500/20' : 'bg-green-500/20'}`}>
+              {perfect
+                ? <Trophy size={32} className="text-yellow-500" />
+                : <CheckCircle size={32} className="text-green-500" />
+              }
             </div>
-            <h2 className="text-xl font-bold text-theme-text">Line Discovered!</h2>
-            <p className="text-sm text-theme-text-muted mt-1">
-              {title}
-            </p>
+            <h2 className="text-xl font-bold text-theme-text">
+              {perfect ? 'Line Perfected!' : 'Line Complete'}
+            </h2>
+            <p className="text-sm text-theme-text-muted mt-1">{title}</p>
           </div>
 
           {totalMistakes > 0 && (
             <p className="text-sm text-theme-text-muted text-center">
-              {totalMistakes} mistake{totalMistakes !== 1 ? 's' : ''} — try again to perfect it!
+              {totalMistakes} mistake{totalMistakes !== 1 ? 's' : ''} — practice again to perfect it!
             </p>
           )}
 
@@ -259,7 +214,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
             <button
               onClick={handleRetry}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
-              data-testid="learn-retry"
+              data-testid="practice-retry"
             >
               <RotateCcw size={16} />
               Again
@@ -267,7 +222,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
             <button
               onClick={onExit}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold hover:bg-theme-border transition-colors"
-              data-testid="learn-exit"
+              data-testid="practice-exit"
             >
               <ArrowRight size={16} />
               Done
@@ -280,19 +235,19 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
 
   // ─── Board screen ──────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="drill-mode">
+    <div className="flex flex-col flex-1 overflow-hidden" data-testid="practice-mode">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
         <div className="flex items-center gap-3">
           <button
             onClick={onExit}
             className="p-1.5 rounded-lg hover:bg-theme-surface"
-            data-testid="drill-back"
+            data-testid="practice-back"
           >
             <ArrowRight size={16} className="text-theme-text rotate-180" />
           </button>
           <div>
-            <p className="text-sm font-semibold text-theme-text">Learn {title}</p>
+            <p className="text-sm font-semibold text-theme-text">Practice {title}</p>
             <p className="text-xs text-theme-text-muted">{lineLabel}</p>
           </div>
         </div>
@@ -310,7 +265,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
             className="h-full bg-theme-accent rounded-full"
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
-            data-testid="drill-progress"
+            data-testid="practice-progress"
           />
         </div>
       </div>
@@ -331,7 +286,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
             />
             {/* Green checkmark overlay */}
             <AnimatePresence>
-              {showCorrectFlash && correctSquare && (
+              {showCorrectFlash && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -346,7 +301,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
                 </motion.div>
               )}
             </AnimatePresence>
-            {/* Red X overlay on wrong move */}
+            {/* Red X overlay */}
             <AnimatePresence>
               {showWrongMove && wrongSquare && (
                 <motion.div
@@ -367,9 +322,8 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
         </div>
       </div>
 
-      {/* Bottom: explanation + controls */}
+      {/* Bottom: prompt + controls */}
       <div className="px-4 pb-4 space-y-3">
-        {/* Wrong move message + undo */}
         {showWrongMove ? (
           <div className="space-y-2">
             <ExplanationCard
@@ -387,12 +341,12 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
             </button>
           </div>
         ) : (
-          /* Explanation card telling player what to play */
           isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
-            <ExplanationCard
-              text={currentExplanation}
-              visible={true}
-            />
+            <div className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg">
+              <p className="text-sm text-theme-text text-center font-medium" data-testid="practice-prompt">
+                What's the best move?
+              </p>
+            </div>
           )
         )}
       </div>

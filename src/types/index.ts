@@ -70,6 +70,9 @@ export interface OpeningRecord {
   variationAccuracy?: number[];
   // Last 10 drill attempts for rolling mastery calculation
   drillHistory?: DrillAttempt[];
+  // Chess Reps-style line tracking (indices into variations array)
+  linesDiscovered?: number[];
+  linesPerfected?: number[];
 }
 
 // ─── DB Meta ──────────────────────────────────────────────────────────────────

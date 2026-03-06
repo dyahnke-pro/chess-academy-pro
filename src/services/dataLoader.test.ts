@@ -64,7 +64,7 @@ describe('isDatabaseSeeded', () => {
   });
 
   it('returns true after seeding', async () => {
-    await db.meta.put({ key: 'db_seeded_v1', value: 'true' });
+    await db.meta.put({ key: 'db_seeded_v2', value: 'true' });
     const seeded = await isDatabaseSeeded();
     expect(seeded).toBe(true);
   });
@@ -74,15 +74,16 @@ describe('loadEcoData', () => {
   it('loads ECO data into the openings table', async () => {
     await loadEcoData();
     const count = await db.openings.count();
-    expect(count).toBeGreaterThan(0);
-  });
+    // Lichess chess-openings database has ~3,641 entries
+    expect(count).toBeGreaterThan(3000);
+  }, 30000);
 
   it('marks all loaded ECO entries as isRepertoire: false', async () => {
     await loadEcoData();
     const all = await db.openings.toArray();
     const nonRepertoire = all.filter((o) => !o.isRepertoire);
     expect(nonRepertoire.length).toBe(all.length);
-  });
+  }, 30000);
 
   it('each entry has a non-empty eco code', async () => {
     await loadEcoData();
@@ -90,7 +91,7 @@ describe('loadEcoData', () => {
     for (const opening of all) {
       expect(opening.eco).toBeTruthy();
     }
-  });
+  }, 30000);
 
   it('is idempotent — second run does not duplicate records', async () => {
     await loadEcoData();
@@ -98,7 +99,7 @@ describe('loadEcoData', () => {
     await loadEcoData();
     const countSecond = await db.openings.count();
     expect(countSecond).toBe(countFirst);
-  });
+  }, 120000);
 });
 
 describe('loadRepertoireData', () => {
@@ -106,20 +107,20 @@ describe('loadRepertoireData', () => {
     await loadRepertoireData();
     const count = await db.openings.count();
     expect(count).toBeGreaterThan(0);
-  });
+  }, 30000);
 
   it('marks all repertoire entries as isRepertoire: true', async () => {
     await loadRepertoireData();
     const all = await db.openings.toArray();
     const repertoire = all.filter((o) => o.isRepertoire);
     expect(repertoire.length).toBe(all.length);
-  });
+  }, 30000);
 
   it('loads exactly 40 repertoire openings', async () => {
     await loadRepertoireData();
     const count = await db.openings.count();
     expect(count).toBe(40);
-  });
+  }, 30000);
 
   it('each repertoire opening has overview and keyIdeas', async () => {
     await loadRepertoireData();
@@ -128,7 +129,7 @@ describe('loadRepertoireData', () => {
       expect(opening.overview).toBeTruthy();
       expect(opening.keyIdeas?.length).toBeGreaterThan(0);
     }
-  });
+  }, 30000);
 
   it('includes both white and black openings', async () => {
     await loadRepertoireData();
@@ -136,7 +137,7 @@ describe('loadRepertoireData', () => {
     const blacks = await db.openings.where('color').equals('black').toArray();
     expect(whites.length).toBe(20);
     expect(blacks.length).toBe(20);
-  });
+  }, 30000);
 
   it('is idempotent — second run does not duplicate records', async () => {
     await loadRepertoireData();
@@ -144,7 +145,7 @@ describe('loadRepertoireData', () => {
     await loadRepertoireData();
     const countSecond = await db.openings.count();
     expect(countSecond).toBe(countFirst);
-  });
+  }, 30000);
 });
 
 describe('seedDatabase', () => {
@@ -152,7 +153,7 @@ describe('seedDatabase', () => {
     await seedDatabase();
     const seeded = await isDatabaseSeeded();
     expect(seeded).toBe(true);
-  });
+  }, 60000);
 
   it('second call is a no-op (does not double-seed)', async () => {
     await seedDatabase();
@@ -160,19 +161,18 @@ describe('seedDatabase', () => {
     await seedDatabase();
     const countAfterSecond = await db.openings.count();
     expect(countAfterSecond).toBe(countAfterFirst);
-  });
+  }, 60000);
 
   it('seeds both ECO and repertoire data', async () => {
     await seedDatabase();
     const total = await db.openings.count();
-    // ECO entries + repertoire entries (repertoire are bulkPut on top of eco entries)
-    // Exact count depends on overlap but should be > 40
-    expect(total).toBeGreaterThan(40);
-  });
+    // Lichess entries (~3,641) + repertoire entries (40, some overlap via bulkPut)
+    expect(total).toBeGreaterThan(3000);
+  }, 60000);
 
   it('generates flashcards for repertoire openings', async () => {
     await seedDatabase();
     const flashcardCount = await db.flashcards.count();
     expect(flashcardCount).toBeGreaterThan(0);
-  });
+  }, 60000);
 });

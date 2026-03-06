@@ -41,6 +41,21 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
   );
 }
 
+/** Returns all openings (both repertoire and ECO reference), sorted by ECO code. */
+export async function getAllOpenings(): Promise<OpeningRecord[]> {
+  const all = await db.openings.toArray();
+  return all.sort((a, b) => a.eco.localeCompare(b.eco) || a.name.localeCompare(b.name));
+}
+
+/** Returns openings whose ECO code starts with the given letter (A, B, C, D, or E). */
+export async function getOpeningsByEcoLetter(letter: string): Promise<OpeningRecord[]> {
+  const upper = letter.toUpperCase();
+  const all = await db.openings.toArray();
+  return all
+    .filter((o) => o.eco.startsWith(upper))
+    .sort((a, b) => a.eco.localeCompare(b.eco) || a.name.localeCompare(b.name));
+}
+
 // ─── Progress ─────────────────────────────────────────────────────────────────
 
 /**
@@ -182,6 +197,51 @@ export async function recordDrillAttempt(
   await db.openings.update(id, { drillHistory: history });
   // Also update legacy drillAccuracy/drillAttempts for backward compat
   await updateDrillProgress(id, correct);
+}
+
+// ─── Line Tracking (Chess Reps style) ────────────────────────────────────────
+
+/** Marks a variation as "discovered" (learned). Idempotent. */
+export async function markLineDiscovered(
+  id: string,
+  variationIndex: number,
+): Promise<void> {
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const discovered = opening.linesDiscovered ? [...opening.linesDiscovered] : [];
+  if (!discovered.includes(variationIndex)) {
+    discovered.push(variationIndex);
+    await db.openings.update(id, { linesDiscovered: discovered });
+  }
+}
+
+/** Marks a variation as "perfected" (practiced without errors). Idempotent. */
+export async function markLinePerfected(
+  id: string,
+  variationIndex: number,
+): Promise<void> {
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const perfected = opening.linesPerfected ? [...opening.linesPerfected] : [];
+  if (!perfected.includes(variationIndex)) {
+    perfected.push(variationIndex);
+    await db.openings.update(id, { linesPerfected: perfected });
+  }
+}
+
+/** Returns count of discovered lines for an opening. */
+export function getLinesDiscovered(opening: OpeningRecord): number {
+  return opening.linesDiscovered?.length ?? 0;
+}
+
+/** Returns count of perfected lines for an opening. */
+export function getLinesPerfected(opening: OpeningRecord): number {
+  return opening.linesPerfected?.length ?? 0;
+}
+
+/** Returns total number of lines (variations) for an opening. */
+export function getTotalLines(opening: OpeningRecord): number {
+  return opening.variations?.length ?? 0;
 }
 
 /**

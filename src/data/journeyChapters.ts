@@ -69,7 +69,7 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
       {
         id: 'pawn-puzzle-3',
         fen: '4k3/P7/8/8/8/8/8/4K3 w - - 0 1',
-        solution: ['a8=Q'],
+        solution: ['a8=Q+'],
         hint: 'When a pawn reaches the other side, it becomes a queen!',
         successMessage:
           'The pawn made it all the way across and became a mighty queen! This is called promotion.',
@@ -142,7 +142,7 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
       {
         id: 'rook-puzzle-2',
         fen: '4k3/8/8/4n3/8/8/8/4R1K1 w - - 0 1',
-        solution: ['Rxe5'],
+        solution: ['Rxe5+'],
         hint: 'Look for an undefended piece the rook can capture!',
         successMessage:
           'You captured the knight! Always look for undefended pieces your rook can grab.',

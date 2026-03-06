@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { createDefaultSrsFields } from './srsEngine';
-import ecoData from '../data/openings-eco.json';
+import ecoData from '../data/openings-lichess.json';
 import repertoireData from '../data/repertoire.json';
 import type { OpeningRecord, FlashcardRecord } from '../types';
 
@@ -72,7 +72,7 @@ function slugify(name: string): string {
 
 // ─── Seeding State ────────────────────────────────────────────────────────────
 
-const SEED_KEY = 'db_seeded_v1';
+const SEED_KEY = 'db_seeded_v2';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
   const record = await db.meta.get(SEED_KEY);

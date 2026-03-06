@@ -15,10 +15,15 @@ vi.mock('../../services/openingService', () => ({
   getOpeningById: (...args: unknown[]): unknown => mockGetOpeningById(...args),
   getMasteryPercent: (o: OpeningRecord) => Math.round(o.drillAccuracy * 100),
   needsReview: (o: OpeningRecord) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
+  getLinesDiscovered: (o: OpeningRecord) => o.linesDiscovered?.length ?? 0,
+  getLinesPerfected: (o: OpeningRecord) => o.linesPerfected?.length ?? 0,
+  getTotalLines: (o: OpeningRecord) => o.variations?.length ?? 0,
   updateDrillProgress: vi.fn().mockResolvedValue(undefined),
   updateWoodpecker: vi.fn().mockResolvedValue(undefined),
   recordDrillAttempt: vi.fn().mockResolvedValue(undefined),
   updateVariationProgress: vi.fn().mockResolvedValue(undefined),
+  markLineDiscovered: vi.fn().mockResolvedValue(undefined),
+  markLinePerfected: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('../Board/ChessBoard', () => ({
@@ -69,6 +74,8 @@ const testOpening: OpeningRecord = buildOpeningRecord({
   woodpeckerReps: 7,
   woodpeckerSpeed: 18,
   woodpeckerLastDate: '2026-03-03',
+  linesDiscovered: [0],
+  linesPerfected: [],
 });
 
 function renderWithRoute(openingId: string = 'test-opening'): void {
@@ -112,18 +119,26 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('shows DRILL and PLAY buttons', async () => {
+  it('shows LEARN, PRACTICE, and PLAY buttons', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByTestId('drill-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('learn-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('practice-btn')).toBeInTheDocument();
       expect(screen.getByTestId('play-btn')).toBeInTheDocument();
     });
   });
 
-  it('DRILL button has correct text', async () => {
+  it('LEARN button has correct text', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByTestId('drill-btn')).toHaveTextContent('Drill');
+      expect(screen.getByTestId('learn-btn')).toHaveTextContent('Learn');
+    });
+  });
+
+  it('PRACTICE button has correct text', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('practice-btn')).toHaveTextContent('Practice');
     });
   });
 
@@ -131,6 +146,20 @@ describe('OpeningDetailPage', () => {
     renderWithRoute();
     await waitFor(() => {
       expect(screen.getByTestId('play-btn')).toHaveTextContent('Play');
+    });
+  });
+
+  it('shows lines discovered count', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('lines-discovered')).toHaveTextContent('1/2 lines discovered');
+    });
+  });
+
+  it('shows lines perfected count', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('lines-perfected')).toHaveTextContent('0/2 lines perfected');
     });
   });
 
@@ -167,14 +196,22 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('shows variations list with mastery rings', async () => {
+  it('shows variations list labeled as Lines', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('Variations')).toBeInTheDocument();
+      expect(screen.getByText('Lines (2)')).toBeInTheDocument();
       expect(screen.getByTestId('variation-0')).toBeInTheDocument();
       expect(screen.getByTestId('variation-1')).toBeInTheDocument();
       expect(screen.getByText('Vienna Gambit')).toBeInTheDocument();
       expect(screen.getByText('Copycat')).toBeInTheDocument();
+    });
+  });
+
+  it('variation rows have learn and practice buttons', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('variation-learn-0')).toBeInTheDocument();
+      expect(screen.getByTestId('variation-practice-0')).toBeInTheDocument();
     });
   });
 
@@ -211,23 +248,34 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('clicking DRILL enters drill mode', async () => {
+  it('clicking LEARN enters learn/drill mode', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByTestId('drill-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('learn-btn')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('drill-btn'));
+    fireEvent.click(screen.getByTestId('learn-btn'));
     await waitFor(() => {
       expect(screen.getByTestId('drill-mode')).toBeInTheDocument();
     });
   });
 
-  it('clicking a variation enters variation drill', async () => {
+  it('clicking PRACTICE enters practice mode', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByTestId('variation-0')).toBeInTheDocument();
+      expect(screen.getByTestId('practice-btn')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('variation-0'));
+    fireEvent.click(screen.getByTestId('practice-btn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('practice-mode')).toBeInTheDocument();
+    });
+  });
+
+  it('clicking variation learn button enters variation learn mode', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('variation-learn-0')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByTestId('variation-learn-0'));
     await waitFor(() => {
       expect(screen.getByTestId('drill-mode')).toBeInTheDocument();
     });

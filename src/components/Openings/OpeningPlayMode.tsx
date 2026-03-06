@@ -30,6 +30,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const [voiceOn, setVoiceOn] = useState(true);
   const [deviationCard, setDeviationCard] = useState<string | null>(null);
   const [result, setResult] = useState<OpeningPlayResult | null>(null);
+  const [boardKey, setBoardKey] = useState(0);
   const isComputerThinking = useRef(false);
   const moveCountRef = useRef(0);
   const { playCelebration } = usePieceSound();
@@ -145,6 +146,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
         const result = game.makeMove(expected.from, expected.to);
         if (result) {
           moveCountRef.current += 1;
+          setBoardKey((k) => k + 1);
           // Check if opening phase just ended
           if (moveCountRef.current >= openingPhaseLength) {
             setPlayPhase('middlegame');
@@ -163,13 +165,17 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           }
           if (result) {
             moveCountRef.current += 1;
+            setBoardKey((k) => k + 1);
           }
         } catch {
           if (isCancelled()) return;
           const randomMove = getRandomLegalMove(game.fen);
           if (randomMove) {
             const result = tryMakeMove(randomMove);
-            if (result) moveCountRef.current += 1;
+            if (result) {
+              moveCountRef.current += 1;
+              setBoardKey((k) => k + 1);
+            }
           }
         }
       }
@@ -188,6 +194,9 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const handlePlayerMove = useCallback((moveResult: MoveResult): void => {
     const currentMoveIdx = moveCountRef.current;
     moveCountRef.current += 1;
+
+    // Sync move to parent game state so turn flips and computer move effect triggers
+    game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
     const inOpeningPhase = currentMoveIdx < openingPhaseLength && !deviatedRef.current;
 
@@ -212,7 +221,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
         setPlayPhase('middlegame');
       }
     }
-  }, [openingMoves, openingPhaseLength, firstDeviation]);
+  }, [openingMoves, openingPhaseLength, firstDeviation, game]);
 
   // ─── Postgame report ─────────────────────────────────────────────────────
   if (playPhase === 'postgame' && result) {
@@ -265,6 +274,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
                 setResult(null);
                 setDeviationCard(null);
                 setPlayPhase('pregame');
+                setBoardKey((k) => k + 1);
               }}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
               data-testid="play-again"
@@ -334,6 +344,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       <div className="flex-1 flex flex-col items-center justify-center px-2 py-2">
         <div className="w-full max-w-[360px]">
           <ChessBoard
+            key={boardKey}
             initialFen={game.fen}
             orientation={playerColor}
             interactive={

@@ -7,6 +7,7 @@ import { OpeningExplorerPage } from './OpeningExplorerPage';
 // Capture mock references
 const mockGetRepertoireOpenings = vi.fn();
 const mockSearchOpenings = vi.fn();
+const mockGetOpeningsByEcoLetter = vi.fn();
 
 const whiteOpening = {
   id: 'vienna-game',
@@ -54,9 +55,33 @@ const blackOpening = {
   woodpeckerLastDate: null,
 };
 
+const ecoOpening = {
+  id: 'a00-amar-opening',
+  eco: 'A00',
+  name: 'Amar Opening',
+  pgn: 'Nh3',
+  uci: 'g1h3',
+  fen: 'rnbqkbnr/pppppppp/8/8/8/7N/PPPPPPPP/RNBQKB1R b KQkq - 1 1',
+  color: 'white' as const,
+  style: '',
+  isRepertoire: false,
+  overview: null,
+  keyIdeas: null,
+  traps: null,
+  warnings: null,
+  variations: null,
+  drillAccuracy: 0,
+  drillAttempts: 0,
+  lastStudied: null,
+  woodpeckerReps: 0,
+  woodpeckerSpeed: null,
+  woodpeckerLastDate: null,
+};
+
 vi.mock('../../services/openingService', () => ({
   getRepertoireOpenings: (...args: unknown[]): unknown => mockGetRepertoireOpenings(...args),
   searchOpenings: (...args: unknown[]): unknown => mockSearchOpenings(...args),
+  getOpeningsByEcoLetter: (...args: unknown[]): unknown => mockGetOpeningsByEcoLetter(...args),
   getMasteryPercent: (o: typeof whiteOpening) => Math.round(o.drillAccuracy * 100),
   needsReview: (o: typeof whiteOpening) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
 }));
@@ -70,12 +95,16 @@ describe('OpeningExplorerPage', () => {
     vi.clearAllMocks();
     mockGetRepertoireOpenings.mockResolvedValue([whiteOpening, blackOpening]);
     mockSearchOpenings.mockResolvedValue([]);
+    mockGetOpeningsByEcoLetter.mockImplementation((letter: string) => {
+      if (letter === 'A') return Promise.resolve([ecoOpening]);
+      return Promise.resolve([]);
+    });
   });
 
   it('renders the page title', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('My Openings')).toBeInTheDocument();
+      expect(screen.getByText('Openings')).toBeInTheDocument();
     });
   });
 
@@ -122,7 +151,7 @@ describe('OpeningExplorerPage', () => {
     expect(screen.getByText('Loading openings...')).toBeInTheDocument();
   });
 
-  it('shows "No openings found" when list is empty', async () => {
+  it('shows "No openings found" when repertoire is empty', async () => {
     mockGetRepertoireOpenings.mockResolvedValue([]);
     render(<OpeningExplorerPage />);
     await waitFor(() => {
@@ -202,6 +231,60 @@ describe('OpeningExplorerPage', () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
       expect(screen.getByText('Not studied')).toBeInTheDocument();
+    });
+  });
+
+  // ─── Tab toggle tests ──────────────────────────────────────────────────────
+
+  it('shows tab toggle with "My Repertoire" and "All Openings"', async () => {
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByTestId('tab-repertoire')).toBeInTheDocument();
+      expect(screen.getByTestId('tab-all')).toBeInTheDocument();
+    });
+  });
+
+  it('defaults to Repertoire tab', async () => {
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByText('My White Openings')).toBeInTheDocument();
+    });
+  });
+
+  it('switches to All Openings tab and shows ECO groups', async () => {
+    const user = userEvent.setup();
+    render(<OpeningExplorerPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tab-all')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('tab-all'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eco-group-A')).toBeInTheDocument();
+      expect(screen.getByText('Flank Openings')).toBeInTheDocument();
+    });
+  });
+
+  it('ECO group toggle expands to show openings', async () => {
+    const user = userEvent.setup();
+    render(<OpeningExplorerPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tab-all')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('tab-all'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eco-toggle-A')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('eco-toggle-A'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Amar Opening')).toBeInTheDocument();
     });
   });
 });

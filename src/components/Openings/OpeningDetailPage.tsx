@@ -1,23 +1,34 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DrillMode } from './DrillMode';
+import { PracticeMode } from './PracticeMode';
 import { OpeningPlayMode } from './OpeningPlayMode';
 import { MasteryRing } from './MasteryRing';
-import { getOpeningById, getMasteryPercent } from '../../services/openingService';
+import {
+  getOpeningById,
+  getMasteryPercent,
+  getLinesDiscovered,
+  getLinesPerfected,
+  getTotalLines,
+} from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
 import {
   ArrowLeft,
-  Target,
+  BookOpen as LearnIcon,
+  Brain,
   Swords,
   AlertTriangle,
   Lightbulb,
   BookOpen,
   Repeat,
   Clock,
+  Target,
   ChevronRight,
+  CheckCircle,
+  Trophy,
 } from 'lucide-react';
 
-type ViewMode = 'detail' | 'drill' | 'play' | 'variation-drill';
+type ViewMode = 'detail' | 'learn' | 'practice' | 'play' | 'variation-learn' | 'variation-practice';
 
 export function OpeningDetailPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
@@ -38,20 +49,24 @@ export function OpeningDetailPage(): JSX.Element {
     void loadOpening();
   }, [loadOpening]);
 
-  const handleDrillComplete = useCallback((): void => {
-    // Refresh opening data after drill to show updated stats
+  const handleComplete = useCallback((): void => {
     void loadOpening();
   }, [loadOpening]);
 
-  const handleExitDrill = useCallback((): void => {
+  const handleExit = useCallback((): void => {
     setViewMode('detail');
     setActiveVariationIndex(-1);
     void loadOpening();
   }, [loadOpening]);
 
-  const handleStartVariationDrill = useCallback((index: number): void => {
+  const handleStartVariationLearn = useCallback((index: number): void => {
     setActiveVariationIndex(index);
-    setViewMode('variation-drill');
+    setViewMode('variation-learn');
+  }, []);
+
+  const handleStartVariationPractice = useCallback((index: number): void => {
+    setActiveVariationIndex(index);
+    setViewMode('variation-practice');
   }, []);
 
   if (loading) {
@@ -70,14 +85,26 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Drill mode (main line or variation)
-  if (viewMode === 'drill' || viewMode === 'variation-drill') {
+  // Learn mode (main line or variation)
+  if (viewMode === 'learn' || viewMode === 'variation-learn') {
     return (
       <DrillMode
         opening={opening}
-        variationIndex={viewMode === 'variation-drill' ? activeVariationIndex : undefined}
-        onComplete={handleDrillComplete}
-        onExit={handleExitDrill}
+        variationIndex={viewMode === 'variation-learn' ? activeVariationIndex : undefined}
+        onComplete={handleComplete}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Practice mode (main line or variation)
+  if (viewMode === 'practice' || viewMode === 'variation-practice') {
+    return (
+      <PracticeMode
+        opening={opening}
+        variationIndex={viewMode === 'variation-practice' ? activeVariationIndex : undefined}
+        onComplete={handleComplete}
+        onExit={handleExit}
       />
     );
   }
@@ -87,13 +114,16 @@ export function OpeningDetailPage(): JSX.Element {
     return (
       <OpeningPlayMode
         opening={opening}
-        onExit={handleExitDrill}
+        onExit={handleExit}
       />
     );
   }
 
   // Detail view
   const mastery = getMasteryPercent(opening);
+  const totalLines = getTotalLines(opening);
+  const discovered = getLinesDiscovered(opening);
+  const perfected = getLinesPerfected(opening);
 
   return (
     <div className="flex flex-col flex-1 p-4 md:p-6 overflow-y-auto" data-testid="opening-detail">
@@ -124,19 +154,35 @@ export function OpeningDetailPage(): JSX.Element {
         <MasteryRing percent={mastery} size={48} />
       </div>
 
-      {/* DRILL and PLAY buttons */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      {/* Line stats */}
+      {totalLines > 0 && (
+        <div className="flex gap-4 mb-4 text-sm text-theme-text-muted">
+          <span data-testid="lines-discovered">{discovered}/{totalLines} lines discovered</span>
+          <span data-testid="lines-perfected">{perfected}/{totalLines} lines perfected</span>
+        </div>
+      )}
+
+      {/* LEARN, PRACTICE, PLAY buttons */}
+      <div className="grid grid-cols-3 gap-2 mb-6">
         <button
-          onClick={() => setViewMode('drill')}
-          className="flex items-center justify-center gap-2 py-4 rounded-xl bg-theme-accent text-white font-semibold text-base hover:opacity-90 transition-opacity"
-          data-testid="drill-btn"
+          onClick={() => setViewMode('learn')}
+          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-accent text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+          data-testid="learn-btn"
         >
-          <Target size={20} />
-          Drill
+          <LearnIcon size={20} />
+          Learn
+        </button>
+        <button
+          onClick={() => setViewMode('practice')}
+          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-sm hover:bg-theme-border transition-colors"
+          data-testid="practice-btn"
+        >
+          <Brain size={20} />
+          Practice
         </button>
         <button
           onClick={() => setViewMode('play')}
-          className="flex items-center justify-center gap-2 py-4 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-base hover:bg-theme-border transition-colors"
+          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-sm hover:bg-theme-border transition-colors"
           data-testid="play-btn"
         >
           <Swords size={20} />
@@ -203,30 +249,50 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
-      {/* Variations */}
+      {/* Variations (lines) */}
       {opening.variations && opening.variations.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4">
-          <h3 className="text-sm font-semibold text-theme-text mb-3">Variations</h3>
+          <h3 className="text-sm font-semibold text-theme-text mb-3">
+            Lines ({opening.variations.length})
+          </h3>
           <div className="space-y-1">
             {opening.variations.map((variation, i) => {
-              const varAccuracy = opening.variationAccuracy?.[i];
-              const varMastery = varAccuracy !== undefined ? Math.round(varAccuracy * 100) : 0;
+              const isDiscovered = opening.linesDiscovered?.includes(i) ?? false;
+              const isPerfected = opening.linesPerfected?.includes(i) ?? false;
               return (
-                <button
+                <div
                   key={i}
-                  onClick={() => handleStartVariationDrill(i)}
                   className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-theme-border/50 transition-colors group"
                   data-testid={`variation-${i}`}
                 >
                   <div className="flex-1 min-w-0">
-                    <span className="text-sm font-medium text-theme-text">{variation.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-theme-text">{variation.name}</span>
+                      {isPerfected && <Trophy size={12} className="text-yellow-500" />}
+                      {isDiscovered && !isPerfected && <CheckCircle size={12} className="text-green-500" />}
+                    </div>
                     <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                   </div>
-                  <div className="flex items-center gap-2 ml-2">
-                    <MasteryRing percent={varMastery} size={32} strokeWidth={2.5} />
+                  <div className="flex items-center gap-1 ml-2">
+                    <button
+                      onClick={() => handleStartVariationLearn(i)}
+                      className="p-1.5 rounded-lg hover:bg-theme-accent/20 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Learn ${variation.name}`}
+                      data-testid={`variation-learn-${i}`}
+                    >
+                      <LearnIcon size={14} />
+                    </button>
+                    <button
+                      onClick={() => handleStartVariationPractice(i)}
+                      className="p-1.5 rounded-lg hover:bg-theme-accent/20 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Practice ${variation.name}`}
+                      data-testid={`variation-practice-${i}`}
+                    >
+                      <Brain size={14} />
+                    </button>
                     <ChevronRight size={14} className="text-theme-text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                </button>
+                </div>
               );
             })}
           </div>
