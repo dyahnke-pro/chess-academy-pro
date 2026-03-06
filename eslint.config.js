@@ -13,9 +13,10 @@ export default tseslint.config(
       'node_modules',
       'capacitor.config.ts',
       'tailwind.config.js',
-
       'vite.config.ts',
       'vitest.config.ts',
+      'e2e',
+      'playwright.config.ts',
     ],
   },
   {

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { render } from '../../test/utils';
 import { OpeningExplorerPage } from './OpeningExplorerPage';
 
-// Capture mock references so we can manipulate them per-test
+// Capture mock references
 const mockGetRepertoireOpenings = vi.fn();
 const mockSearchOpenings = vi.fn();
 
@@ -25,10 +25,10 @@ const whiteOpening = {
   variations: [],
   drillAccuracy: 0.75,
   drillAttempts: 10,
-  lastStudied: null,
-  woodpeckerReps: 0,
-  woodpeckerSpeed: null,
-  woodpeckerLastDate: null,
+  lastStudied: new Date().toISOString(),
+  woodpeckerReps: 3,
+  woodpeckerSpeed: 25,
+  woodpeckerLastDate: '2026-03-01',
 };
 
 const blackOpening = {
@@ -46,18 +46,19 @@ const blackOpening = {
   traps: [],
   warnings: [],
   variations: [],
-  drillAccuracy: 0,
-  drillAttempts: 0,
+  drillAccuracy: 0.4,
+  drillAttempts: 5,
   lastStudied: null,
   woodpeckerReps: 0,
   woodpeckerSpeed: null,
   woodpeckerLastDate: null,
 };
 
-// Mock the service and data loader
 vi.mock('../../services/openingService', () => ({
-  getRepertoireOpenings: (...args: unknown[]) => mockGetRepertoireOpenings(...args),
-  searchOpenings: (...args: unknown[]) => mockSearchOpenings(...args),
+  getRepertoireOpenings: (...args: unknown[]): unknown => mockGetRepertoireOpenings(...args),
+  searchOpenings: (...args: unknown[]): unknown => mockSearchOpenings(...args),
+  getMasteryPercent: (o: typeof whiteOpening) => Math.round(o.drillAccuracy * 100),
+  needsReview: (o: typeof whiteOpening) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
 }));
 
 vi.mock('../../services/dataLoader', () => ({
@@ -74,7 +75,7 @@ describe('OpeningExplorerPage', () => {
   it('renders the page title', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('Opening Explorer')).toBeInTheDocument();
+      expect(screen.getByText('My Openings')).toBeInTheDocument();
     });
   });
 
@@ -93,48 +94,65 @@ describe('OpeningExplorerPage', () => {
     });
   });
 
-  it('shows color filter buttons', async () => {
+  it('shows mastery ring with percentage on drilled openings', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByTestId('filter-all')).toBeInTheDocument();
-      expect(screen.getByTestId('filter-white')).toBeInTheDocument();
-      expect(screen.getByTestId('filter-black')).toBeInTheDocument();
+      const percents = screen.getAllByTestId('mastery-percent');
+      const values = percents.map((el) => el.textContent);
+      expect(values).toContain('75');
     });
   });
 
-  it('shows accuracy for openings that have been drilled', async () => {
+  it('shows needs-review indicator for weak openings', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('75%')).toBeInTheDocument();
+      expect(screen.getByTestId('needs-review')).toBeInTheDocument();
     });
   });
 
-  it('shows opening count', async () => {
+  it('shows woodpecker reps on card when reps > 0', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('2 openings')).toBeInTheDocument();
+      expect(screen.getByText('3 reps')).toBeInTheDocument();
     });
   });
 
-  it('search input renders with correct placeholder', async () => {
+  it('shows loading state initially', () => {
+    render(<OpeningExplorerPage />);
+    expect(screen.getByText('Loading openings...')).toBeInTheDocument();
+  });
+
+  it('shows "No openings found" when list is empty', async () => {
+    mockGetRepertoireOpenings.mockResolvedValue([]);
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      const searchInput = screen.getByTestId('opening-search');
-      expect(searchInput).toBeInTheDocument();
-      expect(searchInput).toHaveAttribute('type', 'text');
-      expect(searchInput).toHaveAttribute(
-        'placeholder',
-        'Search openings by name or ECO code...',
-      );
+      expect(screen.getByText('No openings found.')).toBeInTheDocument();
     });
   });
 
-  it('color filter buttons render with correct labels', async () => {
+  it('shows My White Openings and My Black Openings section headings', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByTestId('filter-all')).toHaveTextContent('All');
-      expect(screen.getByTestId('filter-white')).toHaveTextContent('White');
-      expect(screen.getByTestId('filter-black')).toHaveTextContent('Black');
+      expect(screen.getByText('My White Openings')).toBeInTheDocument();
+      expect(screen.getByText('My Black Openings')).toBeInTheDocument();
+    });
+  });
+
+  it('displays ECO code and opening name in each card', async () => {
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByText('C25')).toBeInTheDocument();
+      expect(screen.getByText('Vienna Game')).toBeInTheDocument();
+      expect(screen.getByText('B90')).toBeInTheDocument();
+      expect(screen.getByText('Sicilian Najdorf')).toBeInTheDocument();
+    });
+  });
+
+  it('displays style tag in opening cards', async () => {
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByText('Classical, Flexible')).toBeInTheDocument();
+      expect(screen.getByText('Aggressive, Tactical')).toBeInTheDocument();
     });
   });
 
@@ -143,7 +161,6 @@ describe('OpeningExplorerPage', () => {
     mockSearchOpenings.mockResolvedValue([whiteOpening]);
 
     render(<OpeningExplorerPage />);
-
     await waitFor(() => {
       expect(screen.getByTestId('opening-search')).toBeInTheDocument();
     });
@@ -161,10 +178,8 @@ describe('OpeningExplorerPage', () => {
     mockSearchOpenings.mockResolvedValue([whiteOpening]);
 
     render(<OpeningExplorerPage />);
-
     await waitFor(() => {
       expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-      expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
     });
 
     const searchInput = screen.getByTestId('opening-search');
@@ -176,77 +191,17 @@ describe('OpeningExplorerPage', () => {
     });
   });
 
-  it('clicking White filter hides black openings', async () => {
+  it('displays last studied date on card', async () => {
     render(<OpeningExplorerPage />);
-
     await waitFor(() => {
-      expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('filter-white'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-      expect(screen.queryByTestId('opening-card-sicilian-najdorf')).not.toBeInTheDocument();
+      expect(screen.getByText('Today')).toBeInTheDocument();
     });
   });
 
-  it('clicking Black filter hides white openings', async () => {
+  it('shows "Not studied" when lastStudied is null', async () => {
     render(<OpeningExplorerPage />);
-
     await waitFor(() => {
-      expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('filter-black'));
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('opening-card-vienna-game')).not.toBeInTheDocument();
-      expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
-    });
-  });
-
-  it('shows loading state initially', () => {
-    render(<OpeningExplorerPage />);
-    expect(screen.getByText('Loading openings...')).toBeInTheDocument();
-  });
-
-  it('shows "No openings found" when list is empty', async () => {
-    mockGetRepertoireOpenings.mockResolvedValue([]);
-
-    render(<OpeningExplorerPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('No openings found.')).toBeInTheDocument();
-    });
-  });
-
-  it('shows White Repertoire and Black Repertoire section headings', async () => {
-    render(<OpeningExplorerPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText(/White Repertoire/)).toBeInTheDocument();
-      expect(screen.getByText(/Black Repertoire/)).toBeInTheDocument();
-    });
-  });
-
-  it('displays ECO code and opening name in each card', async () => {
-    render(<OpeningExplorerPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('C25')).toBeInTheDocument();
-      expect(screen.getByText('Vienna Game')).toBeInTheDocument();
-      expect(screen.getByText('B90')).toBeInTheDocument();
-      expect(screen.getByText('Sicilian Najdorf')).toBeInTheDocument();
-    });
-  });
-
-  it('displays style info in opening cards', async () => {
-    render(<OpeningExplorerPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Classical, Flexible')).toBeInTheDocument();
-      expect(screen.getByText('Aggressive, Tactical')).toBeInTheDocument();
+      expect(screen.getByText('Not studied')).toBeInTheDocument();
     });
   });
 });

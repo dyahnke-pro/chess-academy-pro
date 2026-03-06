@@ -322,6 +322,9 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
+    // Sync the page's game instance with the board's move so game.turn
+    // flips to the coach's color and triggers the coach move useEffect.
+    game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
     moveCountRef.current += 1;
 
     // Analyze the player's move
@@ -371,7 +374,7 @@ export function CoachGamePage(): JSX.Element {
 
     coachSay(commentary);
     setTimeout(() => setCoachExpression('neutral'), 3000);
-  }, [personality, setCoachExpression, coachSay]);
+  }, [personality, setCoachExpression, coachSay, game]);
 
   // Hint request
   const handleHint = useCallback(async () => {
@@ -522,7 +525,7 @@ export function CoachGamePage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col max-w-2xl mx-auto w-full" data-testid="coach-game-page">
+    <div className="flex flex-col max-w-2xl mx-auto w-full h-dvh overflow-hidden" data-testid="coach-game-page">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-theme-border">
         <div className="flex items-center gap-3">
@@ -551,14 +554,17 @@ export function CoachGamePage(): JSX.Element {
       </div>
 
       {/* Board */}
-      <div className="p-4">
-        <ChessBoard
-          initialFen={game.fen}
-          orientation={playerColor}
-          interactive={gameState.status === 'playing' && !isCoachThinking.current}
-          onMove={(moveResult) => void handlePlayerMove(moveResult)}
-          showEvalBar={false}
-        />
+      <div className="px-2 py-1 flex justify-center">
+        <div className="w-full max-w-[300px] sm:max-w-[360px]">
+          <ChessBoard
+            initialFen={game.fen}
+            orientation={playerColor}
+            interactive={gameState.status === 'playing' && !isCoachThinking.current}
+            onMove={(moveResult) => void handlePlayerMove(moveResult)}
+            showEvalBar={false}
+            showFlipButton={false}
+          />
+        </div>
       </div>
 
       {/* Controls */}
@@ -604,7 +610,7 @@ export function CoachGamePage(): JSX.Element {
       )}
 
       {/* Commentary feed */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4 max-h-[200px]">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4">
         {commentaries.slice().reverse().map((c, i) => (
           <div key={i} className="border-b border-theme-border/50 py-2">
             <button

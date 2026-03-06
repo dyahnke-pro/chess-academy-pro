@@ -15,16 +15,16 @@ const mockGetRecentSessions = vi.fn();
 const mockDetectBadHabits = vi.fn();
 
 vi.mock('../../services/puzzleService', () => ({
-  getPuzzleStats: (...args: unknown[]) => mockGetPuzzleStats(...args),
-  getThemeSkills: (...args: unknown[]) => mockGetThemeSkills(...args),
+  getPuzzleStats: (...args: unknown[]): unknown => mockGetPuzzleStats(...args),
+  getThemeSkills: (...args: unknown[]): unknown => mockGetThemeSkills(...args),
 }));
 
 vi.mock('../../services/sessionGenerator', () => ({
-  getRecentSessions: (...args: unknown[]) => mockGetRecentSessions(...args),
+  getRecentSessions: (...args: unknown[]): unknown => mockGetRecentSessions(...args),
 }));
 
 vi.mock('../../services/coachFeatureService', () => ({
-  detectBadHabits: (...args: unknown[]) => mockDetectBadHabits(...args),
+  detectBadHabits: (...args: unknown[]): unknown => mockDetectBadHabits(...args),
 }));
 
 vi.mock('../../services/themeService', async () => {

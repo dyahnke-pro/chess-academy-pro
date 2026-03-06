@@ -1,17 +1,31 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import { render } from '../../test/utils';
 import { DrillMode } from './DrillMode';
 import { buildOpeningRecord } from '../../test/factories';
 import type { OpeningRecord } from '../../types';
 
+/* eslint-disable @typescript-eslint/require-await */
+
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 
+const mockRecordDrillAttempt = vi.fn().mockResolvedValue(undefined);
+const mockUpdateWoodpecker = vi.fn().mockResolvedValue(undefined);
+const mockUpdateVariationProgress = vi.fn().mockResolvedValue(undefined);
+
+vi.mock('../../services/openingService', () => ({
+  recordDrillAttempt: (...args: unknown[]): unknown => mockRecordDrillAttempt(...args),
+  updateDrillProgress: vi.fn().mockResolvedValue(undefined),
+  updateWoodpecker: (...args: unknown[]): unknown => mockUpdateWoodpecker(...args),
+  updateVariationProgress: (...args: unknown[]): unknown => mockUpdateVariationProgress(...args),
+}));
+
 vi.mock('../Board/ChessBoard', () => ({
-  ChessBoard: ({ initialFen, orientation, interactive }: {
+  ChessBoard: ({ initialFen, orientation, interactive, onMove }: {
     initialFen?: string;
     orientation?: string;
     interactive?: boolean;
+    onMove?: (result: { from: string; to: string; san: string; fen: string }) => void;
   }) => (
     <div
       data-testid="chess-board"
@@ -20,13 +34,24 @@ vi.mock('../Board/ChessBoard', () => ({
       data-interactive={String(interactive)}
     >
       Board
+      {interactive && onMove && (
+        <>
+          <button
+            data-testid="make-correct-move"
+            onClick={() => onMove({ from: 'e2', to: 'e4', san: 'e4', fen: '' })}
+          >
+            Correct
+          </button>
+          <button
+            data-testid="make-wrong-move"
+            onClick={() => onMove({ from: 'a2', to: 'a3', san: 'a3', fen: '' })}
+          >
+            Wrong
+          </button>
+        </>
+      )}
     </div>
   ),
-}));
-
-vi.mock('../../services/openingService', () => ({
-  updateDrillProgress: vi.fn().mockResolvedValue(undefined),
-  updateWoodpecker: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('../../hooks/usePieceSound', () => ({
@@ -53,12 +78,16 @@ const whiteOpening: OpeningRecord = buildOpeningRecord({
   name: 'Vienna Game',
   pgn: 'e4 e5 Nc3',
   color: 'white',
+  overview: 'Flexible opening with Nc3.',
+  variations: [
+    { name: 'Vienna Gambit', pgn: 'e4 e5 Nc3 Nf6 f4', explanation: 'Sharp gambit play' },
+  ],
   woodpeckerReps: 0,
   woodpeckerSpeed: null,
 });
 
-const blackOpening: OpeningRecord = buildOpeningRecord({
-  id: 'drill-test-black',
+const drilledOpening: OpeningRecord = buildOpeningRecord({
+  id: 'drill-test-drilled',
   name: 'Sicilian Defense',
   pgn: 'e4 c5',
   color: 'black',
@@ -68,7 +97,7 @@ const blackOpening: OpeningRecord = buildOpeningRecord({
 
 function renderDrill(
   opening: OpeningRecord = whiteOpening,
-  overrides: { onComplete?: () => void; onExit?: () => void } = {},
+  overrides: { onComplete?: () => void; onExit?: () => void; variationIndex?: number } = {},
 ): { onComplete: ReturnType<typeof vi.fn>; onExit: ReturnType<typeof vi.fn> } {
   const onComplete = overrides.onComplete
     ? (vi.fn(overrides.onComplete) as ReturnType<typeof vi.fn>)
@@ -78,7 +107,12 @@ function renderDrill(
     : vi.fn();
 
   render(
-    <DrillMode opening={opening} onComplete={onComplete} onExit={onExit} />,
+    <DrillMode
+      opening={opening}
+      variationIndex={overrides.variationIndex}
+      onComplete={onComplete}
+      onExit={onExit}
+    />,
   );
 
   return { onComplete, onExit };
@@ -112,39 +146,13 @@ describe('DrillMode', () => {
   });
 
   it('board uses correct orientation for black opening', () => {
-    renderDrill(blackOpening);
+    renderDrill(drilledOpening);
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-orientation', 'black');
   });
 
-  it('shows "Play the correct move" prompt initially', () => {
+  it('starts in demonstration phase with "Watch & Learn" label', () => {
     renderDrill();
-    expect(screen.getByTestId('drill-message')).toHaveTextContent('Play the correct move');
-  });
-
-  it('exit button renders', () => {
-    renderDrill();
-    expect(screen.getByTestId('drill-exit')).toBeInTheDocument();
-  });
-
-  it('exit button calls onExit when clicked', () => {
-    const { onExit } = renderDrill();
-    screen.getByTestId('drill-exit').click();
-    expect(onExit).toHaveBeenCalledTimes(1);
-  });
-
-  it('exit button shows "Back to Explorer" text initially', () => {
-    renderDrill();
-    expect(screen.getByTestId('drill-exit')).toHaveTextContent('Back to Explorer');
-  });
-
-  it('timer element renders', () => {
-    renderDrill();
-    expect(screen.getByTestId('drill-timer')).toBeInTheDocument();
-  });
-
-  it('timer starts at 0:00', () => {
-    renderDrill();
-    expect(screen.getByTestId('drill-timer')).toHaveTextContent('0:00');
+    expect(screen.getByText('Watch & Learn')).toBeInTheDocument();
   });
 
   it('progress bar renders', () => {
@@ -152,24 +160,208 @@ describe('DrillMode', () => {
     expect(screen.getByTestId('drill-progress')).toBeInTheDocument();
   });
 
-  it('progress bar starts at 0%', () => {
+  it('shows step indicator with move count', () => {
     renderDrill();
-    const bar = screen.getByTestId('drill-progress');
-    expect(bar.style.width).toBe('0%');
+    expect(screen.getByText(/Move 0 \/ 3/)).toBeInTheDocument();
   });
 
-  it('shows woodpecker stats when reps > 0', () => {
-    renderDrill(blackOpening);
-    expect(screen.getByTestId('woodpecker-reps')).toHaveTextContent('3 reps');
+  it('demonstration auto-advances moves and shows explanation', async () => {
+    renderDrill();
+
+    // First move auto-plays after 800ms
+    await act(async () => {
+      vi.advanceTimersByTime(900);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/Move 1 \/ 3/)).toBeInTheDocument();
+    });
+
+    // Should show explanation card
+    await waitFor(() => {
+      expect(screen.getByTestId('explanation-card')).toBeInTheDocument();
+    });
   });
 
-  it('does not show woodpecker stats when reps is 0', () => {
+  it('shows Next Move button during demonstration explanation', async () => {
+    renderDrill();
+
+    await act(async () => {
+      vi.advanceTimersByTime(900);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('explanation-action')).toHaveTextContent('Next Move');
+    });
+  });
+
+  it('back button calls onExit when clicked', () => {
+    const { onExit } = renderDrill();
+    screen.getByTestId('drill-back').click();
+    expect(onExit).toHaveBeenCalledTimes(1);
+  });
+
+  it('transitions to natural play phase after demonstration completes', async () => {
+    renderDrill();
+
+    // Fast-forward through all demo moves (3 moves × ~800ms each + user click)
+    for (let i = 0; i < 3; i++) {
+      await act(async () => {
+        vi.advanceTimersByTime(900);
+      });
+      // Click "Next Move" to advance
+      await waitFor(() => {
+        const actionBtn = screen.queryByTestId('explanation-action');
+        if (actionBtn) actionBtn.click();
+      });
+    }
+
+    // Wait for transition delay
+    await act(async () => {
+      vi.advanceTimersByTime(700);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Play From Memory')).toBeInTheDocument();
+    });
+  });
+
+  it('shows timer during natural play phase', async () => {
+    renderDrill();
+
+    // Skip through demo
+    for (let i = 0; i < 3; i++) {
+      await act(async () => { vi.advanceTimersByTime(900); });
+      await waitFor(() => {
+        const btn = screen.queryByTestId('explanation-action');
+        if (btn) btn.click();
+      });
+    }
+    await act(async () => { vi.advanceTimersByTime(700); });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('drill-timer')).toBeInTheDocument();
+    });
+  });
+
+  it('wrong move triggers shake and explanation without revealing correct move', async () => {
+    renderDrill();
+
+    // Skip to natural play
+    for (let i = 0; i < 3; i++) {
+      await act(async () => { vi.advanceTimersByTime(900); });
+      await waitFor(() => {
+        const btn = screen.queryByTestId('explanation-action');
+        if (btn) btn.click();
+      });
+    }
+    await act(async () => { vi.advanceTimersByTime(700); });
+
+    await waitFor(() => {
+      expect(screen.getByText('Play From Memory')).toBeInTheDocument();
+    });
+
+    // Make wrong move
+    const wrongBtn = screen.queryByTestId('make-wrong-move');
+    if (wrongBtn) {
+      await act(async () => { wrongBtn.click(); });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('explanation-card')).toBeInTheDocument();
+        // Should NOT contain the correct move
+        expect(screen.getByTestId('explanation-card').textContent).not.toContain('e4');
+      });
+    }
+  });
+
+  it('Ask For Help only appears after 2 failed attempts', async () => {
+    renderDrill();
+
+    // Skip to natural play
+    for (let i = 0; i < 3; i++) {
+      await act(async () => { vi.advanceTimersByTime(900); });
+      await waitFor(() => {
+        const btn = screen.queryByTestId('explanation-action');
+        if (btn) btn.click();
+      });
+    }
+    await act(async () => { vi.advanceTimersByTime(700); });
+
+    await waitFor(() => {
+      expect(screen.getByText('Play From Memory')).toBeInTheDocument();
+    });
+
+    // First wrong attempt — no Ask For Help
+    const wrongBtn = screen.queryByTestId('make-wrong-move');
+    if (wrongBtn) {
+      await act(async () => { wrongBtn.click(); });
+      expect(screen.queryByTestId('ask-help-btn')).not.toBeInTheDocument();
+
+      // Dismiss the explanation
+      const dismissBtn = screen.queryByLabelText('Dismiss');
+      if (dismissBtn) {
+        await act(async () => { dismissBtn.click(); });
+      }
+
+      // Re-query after dismiss since board re-renders with new key
+      await waitFor(() => {
+        expect(screen.getByTestId('make-wrong-move')).toBeInTheDocument();
+      });
+
+      // Second wrong attempt — Ask For Help should appear
+      const wrongBtn2 = screen.getByTestId('make-wrong-move');
+      await act(async () => { wrongBtn2.click(); });
+
+      // Dismiss card first to see the button
+      const dismissBtn2 = screen.queryByLabelText('Dismiss');
+      if (dismissBtn2) {
+        await act(async () => { dismissBtn2.click(); });
+      }
+
+      await waitFor(() => {
+        expect(screen.getByTestId('ask-help-btn')).toBeInTheDocument();
+      });
+    }
+  });
+
+  it('shows woodpecker reps when reps > 0', async () => {
+    renderDrill(drilledOpening);
+
+    // Skip to natural play where woodpecker stats show
+    for (let i = 0; i < 2; i++) {
+      await act(async () => { vi.advanceTimersByTime(900); });
+      await waitFor(() => {
+        const btn = screen.queryByTestId('explanation-action');
+        if (btn) btn.click();
+      });
+    }
+    await act(async () => { vi.advanceTimersByTime(700); });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('woodpecker-reps')).toHaveTextContent('3');
+    });
+  });
+
+  it('does not show woodpecker stats when reps is 0', async () => {
     renderDrill(whiteOpening);
-    expect(screen.queryByTestId('woodpecker-reps')).not.toBeInTheDocument();
+
+    // Skip to natural play
+    for (let i = 0; i < 3; i++) {
+      await act(async () => { vi.advanceTimersByTime(900); });
+      await waitFor(() => {
+        const btn = screen.queryByTestId('explanation-action');
+        if (btn) btn.click();
+      });
+    }
+    await act(async () => { vi.advanceTimersByTime(700); });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('woodpecker-reps')).not.toBeInTheDocument();
+    });
   });
 
-  it('does not show retry button when in playing state', () => {
+  it('displays opening name in header', () => {
     renderDrill();
-    expect(screen.queryByTestId('drill-retry')).not.toBeInTheDocument();
+    expect(screen.getByText('Vienna Game')).toBeInTheDocument();
   });
 });

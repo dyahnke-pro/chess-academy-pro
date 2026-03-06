@@ -27,6 +27,7 @@ describe('voiceService', () => {
       // No profile in DB at all
       await voiceService.speak('Hello world', 'danya');
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Hello world',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -44,6 +45,7 @@ describe('voiceService', () => {
 
       // When voiceEnabled is false, the service returns early without speaking
       // speechService.speak should NOT be called because it returns before fallback
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).not.toHaveBeenCalled();
     });
 
@@ -60,6 +62,7 @@ describe('voiceService', () => {
 
       await voiceService.speak('Fallback test', 'danya');
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Fallback test',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -90,6 +93,7 @@ describe('voiceService', () => {
 
       await voiceService.speak('Error fallback', 'danya');
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Error fallback',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -115,6 +119,7 @@ describe('voiceService', () => {
 
       await voiceService.speak('Network fail', 'danya');
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Network fail',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -162,6 +167,7 @@ describe('voiceService', () => {
 
     it('calls speechService.stop on stop', () => {
       voiceService.stop();
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.stop).toHaveBeenCalled();
     });
 
@@ -170,6 +176,7 @@ describe('voiceService', () => {
       voiceService.stop();
       voiceService.stop();
       expect(voiceService.isPlaying()).toBe(false);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.stop).toHaveBeenCalledTimes(3);
     });
   });

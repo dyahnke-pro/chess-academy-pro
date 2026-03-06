@@ -77,39 +77,39 @@ beforeAll(() => {
       },
       subtle: {
         importKey: vi.fn().mockImplementation(
-          async (_format: string, _keyData: unknown, _algo: unknown, _extractable: boolean, _usages: string[]) => {
+          () => {
             const key = { type: 'secret', algorithm: { name: 'PBKDF2' } } as CryptoKey;
-            return key;
+            return Promise.resolve(key);
           },
         ),
         deriveKey: vi.fn().mockImplementation(
-          async (_algo: unknown, _baseKey: CryptoKey, _derivedAlgo: unknown, _extractable: boolean, _usages: string[]) => {
+          () => {
             const key = { type: 'secret', algorithm: { name: 'AES-GCM', length: 256 } } as CryptoKey;
             const id = `key_${cryptoKeyStore.size}`;
             cryptoKeyStore.set(id, key);
-            return key;
+            return Promise.resolve(key);
           },
         ),
         encrypt: vi.fn().mockImplementation(
-          async (_algo: unknown, _key: CryptoKey, data: ArrayBuffer) => {
+          (_algo: unknown, _key: CryptoKey, data: ArrayBuffer) => {
             // Simple "encryption": XOR with 0x42 to make it reversible
             const input = new Uint8Array(data);
             const output = new Uint8Array(input.length);
             for (let i = 0; i < input.length; i++) {
               output[i] = input[i] ^ 0x42;
             }
-            return output.buffer;
+            return Promise.resolve(output.buffer);
           },
         ),
         decrypt: vi.fn().mockImplementation(
-          async (_algo: unknown, _key: CryptoKey, data: ArrayBuffer) => {
+          (_algo: unknown, _key: CryptoKey, data: ArrayBuffer) => {
             // Reverse: XOR with 0x42 again
             const input = new Uint8Array(data);
             const output = new Uint8Array(input.length);
             for (let i = 0; i < input.length; i++) {
               output[i] = input[i] ^ 0x42;
             }
-            return output.buffer;
+            return Promise.resolve(output.buffer);
           },
         ),
       },
@@ -187,12 +187,8 @@ beforeAll(() => {
   }
 
   // Stub URL.createObjectURL / revokeObjectURL
-  if (!URL.createObjectURL) {
-    URL.createObjectURL = vi.fn(() => 'blob:mock-url');
-  }
-  if (!URL.revokeObjectURL) {
-    URL.revokeObjectURL = vi.fn();
-  }
+  URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+  URL.revokeObjectURL = vi.fn();
 
   // Make navigator.onLine mockable
   let _onLine = true;

@@ -61,8 +61,8 @@ describe('gamificationService', () => {
   });
 
   describe('ACHIEVEMENTS', () => {
-    it('has 17 achievements', () => {
-      expect(ACHIEVEMENTS).toHaveLength(17);
+    it('has 19 achievements', () => {
+      expect(ACHIEVEMENTS).toHaveLength(19);
     });
 
     it('all achievements have required fields', () => {

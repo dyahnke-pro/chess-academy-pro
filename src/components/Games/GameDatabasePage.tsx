@@ -209,7 +209,7 @@ async function importPgnText(text: string): Promise<void> {
   }
 }
 
-function extractHeaders(pgn: string): Record<string, string> {
+function extractHeaders(pgn: string): Partial<Record<string, string>> {
   const headers: Record<string, string> = {};
   const regex = /\[(\w+)\s+"([^"]*)"\]/g;
   let match: RegExpExecArray | null;

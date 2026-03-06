@@ -37,13 +37,14 @@ export function KidPiecePage(): JSX.Element {
   const [voiceOn, setVoiceOn] = useState(true);
 
   useEffect(() => {
+    const savedThemeId = previousThemeId.current;
     const kidTheme = getThemeById('kid-mode');
     applyTheme(kidTheme);
     setActiveTheme(kidTheme);
 
     return () => {
       voiceService.stop();
-      const prevTheme = getThemeById(previousThemeId.current);
+      const prevTheme = getThemeById(savedThemeId);
       applyTheme(prevTheme);
       setActiveTheme(prevTheme);
     };

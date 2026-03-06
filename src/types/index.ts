@@ -28,6 +28,22 @@ export interface OpeningVariation {
   explanation: string;
 }
 
+export interface DrillAttempt {
+  correct: boolean;
+  time: number;
+  date: string;
+}
+
+export interface OpeningPlayResult {
+  openingId: string;
+  openingMovesTotal: number;
+  openingMovesCorrect: number;
+  firstDeviationMove: number | null;
+  correctMoveAtDeviation: string | null;
+  finalEval: number | null;
+  recommendation: string;
+}
+
 export interface OpeningRecord {
   id: string;
   eco: string;
@@ -50,6 +66,10 @@ export interface OpeningRecord {
   woodpeckerReps: number;
   woodpeckerSpeed: number | null;   // avg seconds to complete main line
   woodpeckerLastDate: string | null; // ISO date of last Woodpecker drill
+  // Per-variation mastery (parallel array to variations)
+  variationAccuracy?: number[];
+  // Last 10 drill attempts for rolling mastery calculation
+  drillHistory?: DrillAttempt[];
 }
 
 // ─── DB Meta ──────────────────────────────────────────────────────────────────
@@ -381,4 +401,73 @@ export interface KidLesson {
   description: string;
   fen: string;
   highlightSquares: string[];
+}
+
+// ─── Pawn's Journey ──────────────────────────────────────────────────────────
+
+export type JourneyChapterId =
+  | 'pawn'
+  | 'rook'
+  | 'bishop'
+  | 'knight'
+  | 'queen'
+  | 'king'
+  | 'tactics'
+  | 'first-game';
+
+export const JOURNEY_CHAPTER_ORDER: readonly JourneyChapterId[] = [
+  'pawn',
+  'rook',
+  'bishop',
+  'knight',
+  'queen',
+  'king',
+  'tactics',
+  'first-game',
+] as const;
+
+export interface JourneyLesson {
+  id: string;
+  title: string;
+  story: string;
+  fen: string;
+  highlightSquares: string[];
+  instruction: string;
+}
+
+export interface JourneyPuzzle {
+  id: string;
+  fen: string;
+  solution: string[];
+  hint: string;
+  successMessage: string;
+}
+
+export interface JourneyChapter {
+  id: JourneyChapterId;
+  title: string;
+  subtitle: string;
+  icon: string;
+  lessons: JourneyLesson[];
+  puzzles: JourneyPuzzle[];
+  storyIntro: string;
+  storyOutro: string;
+  requiredPuzzleScore: number;
+}
+
+export interface JourneyChapterProgress {
+  chapterId: JourneyChapterId;
+  lessonsCompleted: number;
+  puzzlesCompleted: number;
+  puzzlesCorrect: number;
+  completed: boolean;
+  bestScore: number;
+  completedAt: string | null;
+}
+
+export interface JourneyProgress {
+  chapters: Partial<Record<JourneyChapterId, JourneyChapterProgress>>;
+  currentChapterId: JourneyChapterId;
+  startedAt: string;
+  completedAt: string | null;
 }

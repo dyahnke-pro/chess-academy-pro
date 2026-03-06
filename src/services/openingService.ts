@@ -1,15 +1,15 @@
 import { db } from '../db/schema';
-import type { OpeningRecord } from '../types';
+import type { OpeningRecord, DrillAttempt } from '../types';
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
-/** Returns all repertoire openings, optionally filtered by color. */
+/** Returns all repertoire openings, optionally filtered by color, sorted by mastery (weakest first). */
 export async function getRepertoireOpenings(
   color?: 'white' | 'black',
 ): Promise<OpeningRecord[]> {
   const all = await db.openings.filter((o) => o.isRepertoire).toArray();
-  if (!color) return all;
-  return all.filter((o) => o.color === color);
+  const filtered = color ? all.filter((o) => o.color === color) : all;
+  return filtered.sort((a, b) => getMasteryPercent(a) - getMasteryPercent(b));
 }
 
 /** Returns a single opening by its ID. */
@@ -135,4 +135,79 @@ export async function getWoodpeckerDue(
     (o) =>
       o.woodpeckerLastDate === null || o.woodpeckerLastDate <= cutoffStr,
   );
+}
+
+// ─── Mastery ─────────────────────────────────────────────────────────────────
+
+/**
+ * Calculates mastery percentage (0-100) from the last 10 drill attempts.
+ * Falls back to drillAccuracy if no drillHistory exists.
+ * Returns 0 if never drilled.
+ */
+export function getMasteryPercent(opening: OpeningRecord): number {
+  if (opening.drillHistory && opening.drillHistory.length > 0) {
+    const recent = opening.drillHistory.slice(-10);
+    const correct = recent.filter((a) => a.correct).length;
+    return Math.round((correct / recent.length) * 100);
+  }
+  if (opening.drillAttempts === 0) return 0;
+  return Math.round(opening.drillAccuracy * 100);
+}
+
+/** Returns true when mastery is below 70%. */
+export function needsReview(opening: OpeningRecord): boolean {
+  if (opening.drillAttempts === 0) return false;
+  return getMasteryPercent(opening) < 70;
+}
+
+/**
+ * Records a drill attempt to the rolling drillHistory (max 10 entries).
+ */
+export async function recordDrillAttempt(
+  id: string,
+  correct: boolean,
+  timeSeconds: number,
+): Promise<void> {
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+
+  const entry: DrillAttempt = {
+    correct,
+    time: timeSeconds,
+    date: new Date().toISOString(),
+  };
+
+  const history = [...(opening.drillHistory ?? []), entry].slice(-10);
+
+  await db.openings.update(id, { drillHistory: history });
+  // Also update legacy drillAccuracy/drillAttempts for backward compat
+  await updateDrillProgress(id, correct);
+}
+
+/**
+ * Updates per-variation mastery tracking.
+ */
+export async function updateVariationProgress(
+  id: string,
+  variationIndex: number,
+  correct: boolean,
+): Promise<void> {
+  const opening = await db.openings.get(id);
+  if (!opening || !opening.variations) return;
+  if (variationIndex < 0 || variationIndex >= opening.variations.length) return;
+
+  const accuracy = opening.variationAccuracy
+    ? [...opening.variationAccuracy]
+    : new Array<number>(opening.variations.length).fill(0);
+
+  // Ensure array is long enough
+  while (accuracy.length < opening.variations.length) {
+    accuracy.push(0);
+  }
+
+  // Rolling update: weight previous value 80%, new result 20%
+  const prev = accuracy[variationIndex];
+  accuracy[variationIndex] = prev * 0.8 + (correct ? 1 : 0) * 0.2;
+
+  await db.openings.update(id, { variationAccuracy: accuracy });
 }

@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import { getJourneyProgress, getCompletedChapterCount, isJourneyComplete } from './journeyService';
 import type { Achievement, UserProfile } from '../types';
 
 export const ACHIEVEMENTS: Achievement[] = [
@@ -131,6 +132,22 @@ export const ACHIEVEMENTS: Achievement[] = [
     xpReward: 100,
   },
   {
+    id: 'journey_first_chapter',
+    name: 'Quest Begun',
+    description: "Complete your first Pawn's Journey chapter",
+    icon: '🗺️',
+    condition: () => false, // checked via journey progress
+    xpReward: 75,
+  },
+  {
+    id: 'journey_complete',
+    name: 'Journey Master',
+    description: "Complete all 8 chapters of Pawn's Journey",
+    icon: '🏰',
+    condition: () => false, // checked via journey progress
+    xpReward: 300,
+  },
+  {
     id: 'all_themes',
     name: 'Theme Collector',
     description: 'Earn 5 or more achievements',
@@ -174,6 +191,11 @@ export async function checkAndAwardAchievements(profile: UserProfile): Promise<A
   const sessions = await db.sessions.toArray();
   const hasPerfectSession = sessions.some((s) => s.puzzleAccuracy === 100 && s.puzzlesSolved > 0);
 
+  // Journey progress
+  const journeyProgress = await getJourneyProgress();
+  const journeyCompletedCount = journeyProgress ? getCompletedChapterCount(journeyProgress) : 0;
+  const journeyDone = journeyProgress ? isJourneyComplete(journeyProgress) : false;
+
   // Coach game stats
   const coachGames = await db.games.filter((g) => g.source === 'coach').toArray();
   const coachWins = coachGames.filter((g) => g.result === '1-0').length;
@@ -210,6 +232,12 @@ export async function checkAndAwardAchievements(profile: UserProfile): Promise<A
         break;
       case 'no_hints':
         earned = hasNoHintWin;
+        break;
+      case 'journey_first_chapter':
+        earned = journeyCompletedCount >= 1;
+        break;
+      case 'journey_complete':
+        earned = journeyDone;
         break;
       default:
         earned = achievement.condition(profile);

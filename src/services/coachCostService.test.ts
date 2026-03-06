@@ -57,7 +57,7 @@ describe('coachCostService', () => {
       const usageEntries = allMeta.filter((m) => m.key.startsWith('api_usage_'));
       expect(usageEntries).toHaveLength(1);
 
-      const entry = JSON.parse(usageEntries[0].value);
+      const entry = JSON.parse(usageEntries[0].value) as { task: string; model: string; inputTokens: number; outputTokens: number; estimatedCost: number };
       expect(entry.task).toBe('move_commentary');
       expect(entry.model).toBe('claude-haiku-4-5-20251001');
       expect(entry.inputTokens).toBe(100);

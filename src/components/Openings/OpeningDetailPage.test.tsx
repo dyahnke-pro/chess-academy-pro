@@ -12,9 +12,13 @@ import type { OpeningRecord } from '../../types';
 const mockGetOpeningById = vi.fn();
 
 vi.mock('../../services/openingService', () => ({
-  getOpeningById: (...args: unknown[]) => mockGetOpeningById(...args),
+  getOpeningById: (...args: unknown[]): unknown => mockGetOpeningById(...args),
+  getMasteryPercent: (o: OpeningRecord) => Math.round(o.drillAccuracy * 100),
+  needsReview: (o: OpeningRecord) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
   updateDrillProgress: vi.fn().mockResolvedValue(undefined),
   updateWoodpecker: vi.fn().mockResolvedValue(undefined),
+  recordDrillAttempt: vi.fn().mockResolvedValue(undefined),
+  updateVariationProgress: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('../Board/ChessBoard', () => ({
@@ -57,10 +61,14 @@ const testOpening: OpeningRecord = buildOpeningRecord({
   warnings: ['Watch for early d5 break'],
   variations: [
     { name: 'Vienna Gambit', pgn: 'e4 e5 Nc3 Nf6 f4', explanation: 'Sharp gambit play' },
+    { name: 'Copycat', pgn: 'e4 e5 Nc3 Nc6', explanation: 'Mirror variation' },
   ],
   drillAccuracy: 0.8,
   drillAttempts: 5,
   lastStudied: '2026-03-01',
+  woodpeckerReps: 7,
+  woodpeckerSpeed: 18,
+  woodpeckerLastDate: '2026-03-03',
 });
 
 function renderWithRoute(openingId: string = 'test-opening'): void {
@@ -85,7 +93,7 @@ describe('OpeningDetailPage', () => {
   });
 
   it('renders loading state initially', () => {
-    mockGetOpeningById.mockReturnValue(new Promise(() => {})); // never resolves
+    mockGetOpeningById.mockReturnValue(new Promise(() => {}));
     renderWithRoute();
     expect(screen.getByText('Loading opening...')).toBeInTheDocument();
   });
@@ -104,10 +112,25 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('renders the opening color', async () => {
+  it('shows DRILL and PLAY buttons', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('white')).toBeInTheDocument();
+      expect(screen.getByTestId('drill-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('play-btn')).toBeInTheDocument();
+    });
+  });
+
+  it('DRILL button has correct text', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('drill-btn')).toHaveTextContent('Drill');
+    });
+  });
+
+  it('PLAY button has correct text', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('play-btn')).toHaveTextContent('Play');
     });
   });
 
@@ -131,7 +154,7 @@ describe('OpeningDetailPage', () => {
   it('shows traps panel', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('Traps to Know')).toBeInTheDocument();
+      expect(screen.getByText('Traps & Pitfalls')).toBeInTheDocument();
       expect(screen.getByText('Vienna Gambit trap')).toBeInTheDocument();
     });
   });
@@ -139,12 +162,40 @@ describe('OpeningDetailPage', () => {
   it('shows warnings panel', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('Watch Out')).toBeInTheDocument();
+      expect(screen.getByText('Watch Out For')).toBeInTheDocument();
       expect(screen.getByText('Watch for early d5 break')).toBeInTheDocument();
     });
   });
 
-  it('back navigation element renders', async () => {
+  it('shows variations list with mastery rings', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByText('Variations')).toBeInTheDocument();
+      expect(screen.getByTestId('variation-0')).toBeInTheDocument();
+      expect(screen.getByTestId('variation-1')).toBeInTheDocument();
+      expect(screen.getByText('Vienna Gambit')).toBeInTheDocument();
+      expect(screen.getByText('Copycat')).toBeInTheDocument();
+    });
+  });
+
+  it('shows woodpecker stats when reps > 0', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByText('Woodpecker Stats')).toBeInTheDocument();
+      expect(screen.getByTestId('wp-reps')).toHaveTextContent('7');
+      expect(screen.getByTestId('wp-speed')).toHaveTextContent('18s');
+    });
+  });
+
+  it('shows mastery ring in header', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      const percents = screen.getAllByTestId('mastery-percent');
+      expect(percents.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('back button renders', async () => {
     renderWithRoute();
     await waitFor(() => {
       expect(screen.getByTestId('back-button')).toBeInTheDocument();
@@ -152,32 +203,7 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('renders study and drill mode toggle buttons', async () => {
-    renderWithRoute();
-    await waitFor(() => {
-      expect(screen.getByTestId('study-mode-btn')).toBeInTheDocument();
-      expect(screen.getByTestId('drill-mode-btn')).toBeInTheDocument();
-    });
-  });
-
-  it('renders chess board in study mode', async () => {
-    renderWithRoute();
-    await waitFor(() => {
-      expect(screen.getByTestId('chess-board')).toBeInTheDocument();
-    });
-  });
-
-  it('renders navigation controls in study mode', async () => {
-    renderWithRoute();
-    await waitFor(() => {
-      expect(screen.getByTestId('nav-first')).toBeInTheDocument();
-      expect(screen.getByTestId('nav-prev')).toBeInTheDocument();
-      expect(screen.getByTestId('nav-next')).toBeInTheDocument();
-      expect(screen.getByTestId('nav-last')).toBeInTheDocument();
-    });
-  });
-
-  it('shows "Opening not found" when the opening does not exist', async () => {
+  it('shows "Opening not found" when opening does not exist', async () => {
     mockGetOpeningById.mockResolvedValue(undefined);
     renderWithRoute('nonexistent-id');
     await waitFor(() => {
@@ -185,11 +211,25 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('displays drill progress stats when drillAttempts > 0', async () => {
+  it('clicking DRILL enters drill mode', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('Accuracy: 80%')).toBeInTheDocument();
-      expect(screen.getByText('Attempts: 5')).toBeInTheDocument();
+      expect(screen.getByTestId('drill-btn')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByTestId('drill-btn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('drill-mode')).toBeInTheDocument();
+    });
+  });
+
+  it('clicking a variation enters variation drill', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('variation-0')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByTestId('variation-0'));
+    await waitFor(() => {
+      expect(screen.getByTestId('drill-mode')).toBeInTheDocument();
     });
   });
 

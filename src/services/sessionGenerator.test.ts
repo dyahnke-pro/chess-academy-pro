@@ -73,6 +73,12 @@ function createMockProfile(overrides: Partial<UserProfile> = {}): UserProfile {
   } as UserProfile;
 }
 
+function getBlock(plan: { blocks: Array<{ type: string; targetMinutes: number }> }, type: string): { type: string; targetMinutes: number } {
+  const block = plan.blocks.find(b => b.type === type);
+  if (!block) throw new Error(`No block of type "${type}"`);
+  return block;
+}
+
 describe('sessionGenerator', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -258,10 +264,10 @@ describe('sessionGenerator', () => {
     it('increases puzzle allocation with "more puzzles" note', async () => {
       const profile = createMockProfile();
       const basePlan = await generateCoachSession(profile);
-      const basePuzzleMinutes = basePlan.blocks.find(b => b.type === 'puzzle_drill')!.targetMinutes;
+      const basePuzzleMinutes = getBlock(basePlan, 'puzzle_drill').targetMinutes;
 
       const adjustedPlan = await generateCoachSession(profile, 'more puzzles please');
-      const adjustedPuzzleMinutes = adjustedPlan.blocks.find(b => b.type === 'puzzle_drill')!.targetMinutes;
+      const adjustedPuzzleMinutes = getBlock(adjustedPlan, 'puzzle_drill').targetMinutes;
 
       expect(adjustedPuzzleMinutes).toBeGreaterThan(basePuzzleMinutes);
     });
@@ -269,10 +275,10 @@ describe('sessionGenerator', () => {
     it('increases puzzle allocation with "more tactics" note', async () => {
       const profile = createMockProfile();
       const basePlan = await generateCoachSession(profile);
-      const basePuzzleMinutes = basePlan.blocks.find(b => b.type === 'puzzle_drill')!.targetMinutes;
+      const basePuzzleMinutes = getBlock(basePlan, 'puzzle_drill').targetMinutes;
 
       const adjustedPlan = await generateCoachSession(profile, 'I want more tactics');
-      const adjustedPuzzleMinutes = adjustedPlan.blocks.find(b => b.type === 'puzzle_drill')!.targetMinutes;
+      const adjustedPuzzleMinutes = getBlock(adjustedPlan, 'puzzle_drill').targetMinutes;
 
       expect(adjustedPuzzleMinutes).toBeGreaterThan(basePuzzleMinutes);
     });
@@ -280,10 +286,10 @@ describe('sessionGenerator', () => {
     it('transfers time from flashcards block when adding more puzzles', async () => {
       const profile = createMockProfile();
       const basePlan = await generateCoachSession(profile);
-      const baseFlashcards = basePlan.blocks.find(b => b.type === 'flashcards')!.targetMinutes;
+      const baseFlashcards = getBlock(basePlan, 'flashcards').targetMinutes;
 
       const adjustedPlan = await generateCoachSession(profile, 'more puzzles');
-      const adjustedFlashcards = adjustedPlan.blocks.find(b => b.type === 'flashcards')!.targetMinutes;
+      const adjustedFlashcards = getBlock(adjustedPlan, 'flashcards').targetMinutes;
 
       // blocks.find iterates in array order: flashcards comes before endgame_drill,
       // so flashcards is the donor block
@@ -293,10 +299,10 @@ describe('sessionGenerator', () => {
     it('increases opening allocation with "more openings" note', async () => {
       const profile = createMockProfile();
       const basePlan = await generateCoachSession(profile);
-      const baseOpeningMinutes = basePlan.blocks.find(b => b.type === 'opening_review')!.targetMinutes;
+      const baseOpeningMinutes = getBlock(basePlan, 'opening_review').targetMinutes;
 
       const adjustedPlan = await generateCoachSession(profile, 'more openings');
-      const adjustedOpeningMinutes = adjustedPlan.blocks.find(b => b.type === 'opening_review')!.targetMinutes;
+      const adjustedOpeningMinutes = getBlock(adjustedPlan, 'opening_review').targetMinutes;
 
       expect(adjustedOpeningMinutes).toBeGreaterThan(baseOpeningMinutes);
     });
@@ -304,10 +310,10 @@ describe('sessionGenerator', () => {
     it('increases opening allocation with "opening practice" note', async () => {
       const profile = createMockProfile();
       const basePlan = await generateCoachSession(profile);
-      const baseOpeningMinutes = basePlan.blocks.find(b => b.type === 'opening_review')!.targetMinutes;
+      const baseOpeningMinutes = getBlock(basePlan, 'opening_review').targetMinutes;
 
       const adjustedPlan = await generateCoachSession(profile, 'I need opening practice');
-      const adjustedOpeningMinutes = adjustedPlan.blocks.find(b => b.type === 'opening_review')!.targetMinutes;
+      const adjustedOpeningMinutes = getBlock(adjustedPlan, 'opening_review').targetMinutes;
 
       expect(adjustedOpeningMinutes).toBeGreaterThan(baseOpeningMinutes);
     });
@@ -345,7 +351,7 @@ describe('sessionGenerator', () => {
       // "more puzzles" transfers half of endgame (3) to puzzles: puzzle=14, endgame=4
       // Then "shorter" scales everything by 0.6 with min of 3
       // After combined: puzzle minutes should be >= 3
-      const puzzleBlock = adjustedPlan.blocks.find(b => b.type === 'puzzle_drill')!;
+      const puzzleBlock = getBlock(adjustedPlan, 'puzzle_drill');
       expect(puzzleBlock.targetMinutes).toBeGreaterThanOrEqual(3);
     });
 
@@ -355,7 +361,7 @@ describe('sessionGenerator', () => {
 
       expect(adjustedPlan.totalMinutes).toBeLessThan(30);
 
-      const openingBlock = adjustedPlan.blocks.find(b => b.type === 'opening_review')!;
+      const openingBlock = getBlock(adjustedPlan, 'opening_review');
       expect(openingBlock.targetMinutes).toBeGreaterThanOrEqual(3);
     });
 

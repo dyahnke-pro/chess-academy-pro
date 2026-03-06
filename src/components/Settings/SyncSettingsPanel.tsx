@@ -8,20 +8,21 @@ export function SyncSettingsPanel(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
 
-  const [supabaseUrl, setSupabaseUrl] = useState(
-    () => ((activeProfile?.preferences as unknown as Record<string, unknown>)?.supabaseUrl as string) ?? '',
-  );
-  const [supabaseAnonKey, setSupabaseAnonKey] = useState(
-    () => ((activeProfile?.preferences as unknown as Record<string, unknown>)?.supabaseAnonKey as string) ?? '',
-  );
-  const [syncUserId, setSyncUserId] = useState(
-    () => ((activeProfile?.preferences as unknown as Record<string, unknown>)?.syncUserId as string) ?? '',
-  );
+  const getSyncPref = (key: string): string => {
+    if (!activeProfile) return '';
+    const prefs = activeProfile.preferences as unknown as Record<string, unknown>;
+    const val: unknown = prefs[key];
+    return typeof val === 'string' ? val : '';
+  };
+
+  const [supabaseUrl, setSupabaseUrl] = useState(() => getSyncPref('supabaseUrl'));
+  const [supabaseAnonKey, setSupabaseAnonKey] = useState(() => getSyncPref('supabaseAnonKey'));
+  const [syncUserId, setSyncUserId] = useState(() => getSyncPref('syncUserId'));
 
   const [status, setStatus] = useState<string | null>(null);
   const [confirmRestore, setConfirmRestore] = useState(false);
 
-  const lastSyncDate = ((activeProfile?.preferences as unknown as Record<string, unknown>)?.lastSyncDate as string) ?? null;
+  const lastSyncDate = getSyncPref('lastSyncDate') || null;
 
   const handleSaveConfig = async (): Promise<void> => {
     if (!activeProfile) return;

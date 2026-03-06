@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '../../test/utils';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../test/utils';
 import { CoachChatPage } from './CoachChatPage';
 import { useAppStore } from '../../stores/appStore';
 import type { UserProfile, ChatMessage as ChatMessageType } from '../../types';

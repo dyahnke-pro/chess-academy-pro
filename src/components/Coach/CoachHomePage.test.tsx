@@ -7,7 +7,7 @@ import { buildUserProfile, buildSessionRecord } from '../../test/factories';
 const mockGetRecentSessions = vi.fn();
 
 vi.mock('../../services/sessionGenerator', () => ({
-  getRecentSessions: (...args: unknown[]) => mockGetRecentSessions(...args),
+  getRecentSessions: (...args: unknown[]): unknown => mockGetRecentSessions(...args),
 }));
 
 vi.mock('../../services/voiceService', () => ({

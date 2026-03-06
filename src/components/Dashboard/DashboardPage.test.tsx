@@ -17,13 +17,13 @@ const mockCheckAndAwardAchievements = vi.fn();
 const mockNavigate = vi.fn();
 
 vi.mock('../../services/puzzleService', () => ({
-  getPuzzleStats: (...args: unknown[]) => mockGetPuzzleStats(...args),
+  getPuzzleStats: (...args: unknown[]): unknown => mockGetPuzzleStats(...args),
 }));
 
 vi.mock('../../services/sessionGenerator', () => ({
-  getRecentSessions: (...args: unknown[]) => mockGetRecentSessions(...args),
-  updateStreak: (...args: unknown[]) => mockUpdateStreak(...args),
-  createSession: (...args: unknown[]) => mockCreateSession(...args),
+  getRecentSessions: (...args: unknown[]): unknown => mockGetRecentSessions(...args),
+  updateStreak: (...args: unknown[]): unknown => mockUpdateStreak(...args),
+  createSession: (...args: unknown[]): unknown => mockCreateSession(...args),
 }));
 
 vi.mock('../../services/gamificationService', async () => {
@@ -32,7 +32,7 @@ vi.mock('../../services/gamificationService', async () => {
   );
   return {
     ...actual,
-    checkAndAwardAchievements: (...args: unknown[]) => mockCheckAndAwardAchievements(...args),
+    checkAndAwardAchievements: (...args: unknown[]): unknown => mockCheckAndAwardAchievements(...args),
   };
 });
 

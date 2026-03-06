@@ -258,7 +258,7 @@ describe('dbService', () => {
       await db.flashcards.put(buildFlashcardRecord({ id: 'exp-f1' }));
 
       const json = await exportUserData();
-      const data = JSON.parse(json);
+      const data = JSON.parse(json) as { profiles: unknown[]; sessions: unknown[]; openings: unknown[]; flashcards: unknown[] };
       expect(data.profiles).toBeDefined();
       expect(data.sessions).toBeDefined();
       expect(data.openings).toBeDefined();
@@ -273,7 +273,7 @@ describe('dbService', () => {
       ]);
 
       const json = await exportUserData();
-      const data = JSON.parse(json);
+      const data = JSON.parse(json) as { openings: Array<{ id: string }> };
       expect(data.openings.length).toBe(1);
       expect(data.openings[0].id).toBe('rep');
     });
@@ -466,7 +466,7 @@ describe('dbService', () => {
 
       // Export includes everything
       const json = await exportUserData();
-      const data = JSON.parse(json);
+      const data = JSON.parse(json) as { profiles: unknown[]; sessions: Array<{ completed: boolean }> };
       expect(data.profiles).toHaveLength(1);
       expect(data.sessions).toHaveLength(1);
       expect(data.sessions[0].completed).toBe(true);

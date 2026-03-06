@@ -78,6 +78,7 @@ beforeEach(() => {
   // Use a class so `new Worker(...)` works properly
   vi.stubGlobal(
     'Worker',
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     class MockWorkerClass {
       constructor() {
         workerConstructorCallCount++;
@@ -169,6 +170,7 @@ function emitAnalysisResponse(options?: {
 function scheduleAnalysisResponse(
   options?: Parameters<typeof emitAnalysisResponse>[0],
 ): void {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
   pmMock.mockImplementation((msg: string) => {
     mockWorker.postMessageCalls.push(msg);
@@ -513,6 +515,7 @@ describe('StockfishEngine', () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const pmMock = mockWorker.instance.postMessage as ReturnType<
         typeof vi.fn
       >;
@@ -534,6 +537,7 @@ describe('StockfishEngine', () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const pmMock = mockWorker.instance.postMessage as ReturnType<
         typeof vi.fn
       >;
@@ -555,6 +559,7 @@ describe('StockfishEngine', () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const pmMock = mockWorker.instance.postMessage as ReturnType<
         typeof vi.fn
       >;
@@ -574,6 +579,7 @@ describe('StockfishEngine', () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const pmMock = mockWorker.instance.postMessage as ReturnType<
         typeof vi.fn
       >;
@@ -616,6 +622,7 @@ describe('StockfishEngine', () => {
 
       stockfishEngine.stop();
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(mockWorker.instance.postMessage).not.toHaveBeenCalled();
     });
   });
@@ -630,6 +637,7 @@ describe('StockfishEngine', () => {
 
       stockfishEngine.destroy();
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(mockWorker.instance.terminate).toHaveBeenCalled();
     });
 
@@ -655,6 +663,7 @@ describe('StockfishEngine', () => {
       const newMockWorker = createMockWorker();
       vi.stubGlobal(
         'Worker',
+        // eslint-disable-next-line @typescript-eslint/no-extraneous-class
         class ReInitMockWorker {
           constructor() {
             workerConstructorCallCount++;
@@ -679,6 +688,7 @@ describe('StockfishEngine', () => {
       stockfishEngine.destroy();
 
       expect(mockWorker.postMessageCalls).toContain('stop');
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(mockWorker.instance.terminate).toHaveBeenCalled();
     });
   });
@@ -692,6 +702,7 @@ describe('StockfishEngine', () => {
       await initEngine(stockfishEngine);
 
       // First analysis: respond to isready but let "go" hang
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const pmMock = mockWorker.instance.postMessage as ReturnType<
         typeof vi.fn
       >;
@@ -735,6 +746,7 @@ describe('StockfishEngine', () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const pmMock = mockWorker.instance.postMessage as ReturnType<
         typeof vi.fn
       >;

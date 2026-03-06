@@ -47,7 +47,7 @@ class SpeechService {
         }
 
         // Warm up to prevent first-word clipping on iOS/macOS
-        if (synthesis && this.preferredVoice) {
+        if (this.preferredVoice) {
           const warmup = new SpeechSynthesisUtterance('\u00A0');
           warmup.voice = this.preferredVoice;
           warmup.volume = 0;

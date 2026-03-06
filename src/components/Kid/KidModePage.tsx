@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, ArrowLeft, Map } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { applyTheme, getThemeById } from '../../services/themeService';
 import { voiceService } from '../../services/voiceService';
+import { getJourneyProgress, getCompletedChapterCount } from '../../services/journeyService';
 import { ChessBoard } from '../Board/ChessBoard';
-import { ArrowLeft } from 'lucide-react';
-import type { ChessPiece } from '../../types';
+import type { ChessPiece, JourneyProgress } from '../../types';
 
 interface PieceLesson {
   piece: ChessPiece;
@@ -48,15 +48,21 @@ export function KidModePage(): JSX.Element {
   const [findKingScore, setFindKingScore] = useState(0);
   const [findKingResult, setFindKingResult] = useState<'correct' | 'wrong' | null>(null);
   const [voiceOn, setVoiceOn] = useState(true);
+  const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
 
   useEffect(() => {
+    void getJourneyProgress().then((p) => setJourneyProgress(p));
+  }, []);
+
+  useEffect(() => {
+    const savedThemeId = previousThemeId.current;
     const kidTheme = getThemeById('kid-mode');
     applyTheme(kidTheme);
     setActiveTheme(kidTheme);
 
     return () => {
       voiceService.stop();
-      const prevTheme = getThemeById(previousThemeId.current);
+      const prevTheme = getThemeById(savedThemeId);
       applyTheme(prevTheme);
       setActiveTheme(prevTheme);
     };
@@ -139,6 +145,29 @@ export function KidModePage(): JSX.Element {
               {activeProfile.xp} XP earned
             </p>
           </div>
+
+          {/* Pawn's Journey card */}
+          <button
+            onClick={() => void navigate('/kid/journey')}
+            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+            style={{
+              background: 'var(--color-surface)',
+              borderColor: 'var(--color-accent)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+            }}
+            data-testid="journey-card"
+          >
+            <Map size={32} style={{ color: 'var(--color-accent)' }} />
+            <div className="flex-1">
+              <div className="font-bold text-lg">Pawn's Journey</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                {journeyProgress
+                  ? `Chapter ${getCompletedChapterCount(journeyProgress) + 1} of 8`
+                  : 'Start your quest!'}
+              </div>
+            </div>
+            <span className="text-2xl">🗺️</span>
+          </button>
 
           {/* Piece lesson cards */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
