@@ -112,7 +112,8 @@ class VoiceService {
     return this.playing;
   }
 
-  isSupportedPersonality(_: CoachPersonality): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isSupportedPersonality(_personality: CoachPersonality): boolean {
     return true;
   }
 

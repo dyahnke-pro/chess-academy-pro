@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Volume2, VolumeX, ArrowLeft, Map } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
-import { getJourneyProgress, getCompletedChapterCount } from '../../services/journeyService';
+import { getGameProgress, getGameCompletedChapterCount } from '../../services/journeyService';
+import { PAWNS_JOURNEY_CONFIG, FAIRY_TALE_CONFIG } from '../../data/kidGameConfigs';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { ChessPiece, JourneyProgress } from '../../types';
 
@@ -45,9 +46,11 @@ export function KidModePage(): JSX.Element {
   const [findKingResult, setFindKingResult] = useState<'correct' | 'wrong' | null>(null);
   const [voiceOn, setVoiceOn] = useState(true);
   const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
+  const [fairyTaleProgress, setFairyTaleProgress] = useState<JourneyProgress | null>(null);
 
   useEffect(() => {
-    void getJourneyProgress().then((p) => setJourneyProgress(p));
+    void getGameProgress('pawns-journey').then((p) => setJourneyProgress(p));
+    void getGameProgress('fairy-tale').then((p) => setFairyTaleProgress(p));
   }, []);
 
   const kidSpeak = useCallback((text: string): void => {
@@ -125,7 +128,7 @@ export function KidModePage(): JSX.Element {
 
           {/* Pawn's Journey card */}
           <button
-            onClick={() => void navigate('/kid/journey')}
+            onClick={() => void navigate(PAWNS_JOURNEY_CONFIG.routePrefix)}
             className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
             style={{
               background: 'var(--color-surface)',
@@ -136,14 +139,37 @@ export function KidModePage(): JSX.Element {
           >
             <Map size={32} style={{ color: 'var(--color-accent)' }} />
             <div className="flex-1">
-              <div className="font-bold text-lg">Pawn's Journey</div>
+              <div className="font-bold text-lg">{PAWNS_JOURNEY_CONFIG.title}</div>
               <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
                 {journeyProgress
-                  ? `Chapter ${getCompletedChapterCount(journeyProgress) + 1} of 8`
+                  ? `Chapter ${getGameCompletedChapterCount(journeyProgress, PAWNS_JOURNEY_CONFIG.chapterOrder) + 1} of ${PAWNS_JOURNEY_CONFIG.chapters.length}`
                   : 'Start your quest!'}
               </div>
             </div>
-            <span className="text-2xl">🗺️</span>
+            <span className="text-2xl">{PAWNS_JOURNEY_CONFIG.icon}</span>
+          </button>
+
+          {/* Fairy Tale Quest card */}
+          <button
+            onClick={() => void navigate(FAIRY_TALE_CONFIG.routePrefix)}
+            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+            style={{
+              background: 'var(--color-surface)',
+              borderColor: 'var(--color-accent)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+            }}
+            data-testid="fairy-tale-card"
+          >
+            <span className="text-3xl">{FAIRY_TALE_CONFIG.icon}</span>
+            <div className="flex-1">
+              <div className="font-bold text-lg">{FAIRY_TALE_CONFIG.title}</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                {fairyTaleProgress
+                  ? `Chapter ${getGameCompletedChapterCount(fairyTaleProgress, FAIRY_TALE_CONFIG.chapterOrder) + 1} of ${FAIRY_TALE_CONFIG.chapters.length}`
+                  : 'Begin your fairy tale!'}
+              </div>
+            </div>
+            <span className="text-2xl">{FAIRY_TALE_CONFIG.icon}</span>
           </button>
 
           {/* Piece lesson cards */}

@@ -4,9 +4,18 @@ import {
   type JourneyChapterId,
   type JourneyChapterProgress,
   type JourneyProgress,
+  type KidGameId,
 } from '../types';
 
-const JOURNEY_PROGRESS_KEY = 'journey_progress';
+// ─── Meta Key Mapping ────────────────────────────────────────────────────────
+
+function gameMetaKey(gameId: KidGameId): string {
+  // Backward compat: 'pawns-journey' maps to existing 'journey_progress'
+  if (gameId === 'pawns-journey') return 'journey_progress';
+  return `${gameId}_progress`;
+}
+
+// ─── Shared Helpers ──────────────────────────────────────────────────────────
 
 function createDefaultChapterProgress(chapterId: JourneyChapterId): JourneyChapterProgress {
   return {
@@ -20,43 +29,52 @@ function createDefaultChapterProgress(chapterId: JourneyChapterId): JourneyChapt
   };
 }
 
-export async function getJourneyProgress(): Promise<JourneyProgress | null> {
-  const record = await db.meta.get(JOURNEY_PROGRESS_KEY);
+// ─── Game-Aware Functions ────────────────────────────────────────────────────
+
+export async function getGameProgress(gameId: KidGameId): Promise<JourneyProgress | null> {
+  const record = await db.meta.get(gameMetaKey(gameId));
   if (!record) return null;
   return JSON.parse(record.value) as JourneyProgress;
 }
 
-export async function initJourneyProgress(): Promise<JourneyProgress> {
-  const existing = await getJourneyProgress();
+export async function initGameProgress(
+  gameId: KidGameId,
+  chapterOrder: readonly JourneyChapterId[],
+): Promise<JourneyProgress> {
+  const existing = await getGameProgress(gameId);
   if (existing) return existing;
 
   const progress: JourneyProgress = {
     chapters: {},
-    currentChapterId: 'pawn',
+    currentChapterId: chapterOrder[0],
     startedAt: new Date().toISOString(),
     completedAt: null,
   };
 
-  await db.meta.put({ key: JOURNEY_PROGRESS_KEY, value: JSON.stringify(progress) });
+  await db.meta.put({ key: gameMetaKey(gameId), value: JSON.stringify(progress) });
   return progress;
 }
 
-export async function saveJourneyProgress(progress: JourneyProgress): Promise<void> {
-  await db.meta.put({ key: JOURNEY_PROGRESS_KEY, value: JSON.stringify(progress) });
+export async function saveGameProgress(
+  gameId: KidGameId,
+  progress: JourneyProgress,
+): Promise<void> {
+  await db.meta.put({ key: gameMetaKey(gameId), value: JSON.stringify(progress) });
 }
 
-export async function resetJourneyProgress(): Promise<void> {
-  await db.meta.delete(JOURNEY_PROGRESS_KEY);
+export async function resetGameProgress(gameId: KidGameId): Promise<void> {
+  await db.meta.delete(gameMetaKey(gameId));
 }
 
 export function isChapterUnlocked(
   chapterId: JourneyChapterId,
   progress: JourneyProgress,
+  chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
 ): boolean {
-  const index = JOURNEY_CHAPTER_ORDER.indexOf(chapterId);
+  const index = chapterOrder.indexOf(chapterId);
   if (index === 0) return true;
 
-  const previousChapterId = JOURNEY_CHAPTER_ORDER[index - 1];
+  const previousChapterId = chapterOrder[index - 1];
   const previousProgress = progress.chapters[previousChapterId];
   return previousProgress?.completed === true;
 }
@@ -68,30 +86,34 @@ export function getChapterProgress(
   return progress.chapters[chapterId] ?? createDefaultChapterProgress(chapterId);
 }
 
-export async function completeLesson(
+export async function completeGameLesson(
+  gameId: KidGameId,
   chapterId: JourneyChapterId,
   lessonIndex: number,
+  chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
 ): Promise<JourneyProgress> {
-  let progress = await getJourneyProgress();
+  let progress = await getGameProgress(gameId);
   if (!progress) {
-    progress = await initJourneyProgress();
+    progress = await initGameProgress(gameId, chapterOrder);
   }
 
   const chapter = progress.chapters[chapterId] ?? createDefaultChapterProgress(chapterId);
   chapter.lessonsCompleted = Math.max(chapter.lessonsCompleted, lessonIndex + 1);
   progress.chapters[chapterId] = chapter;
 
-  await saveJourneyProgress(progress);
+  await saveGameProgress(gameId, progress);
   return progress;
 }
 
-export async function recordPuzzleAttempt(
+export async function recordGamePuzzleAttempt(
+  gameId: KidGameId,
   chapterId: JourneyChapterId,
   correct: boolean,
+  chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
 ): Promise<JourneyProgress> {
-  let progress = await getJourneyProgress();
+  let progress = await getGameProgress(gameId);
   if (!progress) {
-    progress = await initJourneyProgress();
+    progress = await initGameProgress(gameId, chapterOrder);
   }
 
   const chapter = progress.chapters[chapterId] ?? createDefaultChapterProgress(chapterId);
@@ -101,16 +123,18 @@ export async function recordPuzzleAttempt(
   }
   progress.chapters[chapterId] = chapter;
 
-  await saveJourneyProgress(progress);
+  await saveGameProgress(gameId, progress);
   return progress;
 }
 
-export async function completeChapter(
+export async function completeGameChapter(
+  gameId: KidGameId,
   chapterId: JourneyChapterId,
+  chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
 ): Promise<JourneyProgress> {
-  let progress = await getJourneyProgress();
+  let progress = await getGameProgress(gameId);
   if (!progress) {
-    progress = await initJourneyProgress();
+    progress = await initGameProgress(gameId, chapterOrder);
   }
 
   const chapter = progress.chapters[chapterId] ?? createDefaultChapterProgress(chapterId);
@@ -119,18 +143,21 @@ export async function completeChapter(
   chapter.bestScore = chapter.puzzlesCorrect;
   progress.chapters[chapterId] = chapter;
 
-  const currentIndex = JOURNEY_CHAPTER_ORDER.indexOf(chapterId);
-  if (currentIndex < JOURNEY_CHAPTER_ORDER.length - 1) {
-    progress.currentChapterId = JOURNEY_CHAPTER_ORDER[currentIndex + 1];
+  const currentIndex = chapterOrder.indexOf(chapterId);
+  if (currentIndex < chapterOrder.length - 1) {
+    progress.currentChapterId = chapterOrder[currentIndex + 1];
   }
 
-  await saveJourneyProgress(progress);
+  await saveGameProgress(gameId, progress);
   return progress;
 }
 
-export function getCompletedChapterCount(progress: JourneyProgress): number {
+export function getGameCompletedChapterCount(
+  progress: JourneyProgress,
+  chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
+): number {
   let count = 0;
-  for (const chapterId of JOURNEY_CHAPTER_ORDER) {
+  for (const chapterId of chapterOrder) {
     if (progress.chapters[chapterId]?.completed) {
       count += 1;
     }
@@ -138,6 +165,55 @@ export function getCompletedChapterCount(progress: JourneyProgress): number {
   return count;
 }
 
+export function isGameComplete(
+  progress: JourneyProgress,
+  chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
+): boolean {
+  return getGameCompletedChapterCount(progress, chapterOrder) === chapterOrder.length;
+}
+
+// ─── Backward-Compatible Wrappers (Pawn's Journey) ──────────────────────────
+
+export async function getJourneyProgress(): Promise<JourneyProgress | null> {
+  return getGameProgress('pawns-journey');
+}
+
+export async function initJourneyProgress(): Promise<JourneyProgress> {
+  return initGameProgress('pawns-journey', JOURNEY_CHAPTER_ORDER);
+}
+
+export async function saveJourneyProgress(progress: JourneyProgress): Promise<void> {
+  return saveGameProgress('pawns-journey', progress);
+}
+
+export async function resetJourneyProgress(): Promise<void> {
+  return resetGameProgress('pawns-journey');
+}
+
+export async function completeLesson(
+  chapterId: JourneyChapterId,
+  lessonIndex: number,
+): Promise<JourneyProgress> {
+  return completeGameLesson('pawns-journey', chapterId, lessonIndex);
+}
+
+export async function recordPuzzleAttempt(
+  chapterId: JourneyChapterId,
+  correct: boolean,
+): Promise<JourneyProgress> {
+  return recordGamePuzzleAttempt('pawns-journey', chapterId, correct);
+}
+
+export async function completeChapter(
+  chapterId: JourneyChapterId,
+): Promise<JourneyProgress> {
+  return completeGameChapter('pawns-journey', chapterId);
+}
+
+export function getCompletedChapterCount(progress: JourneyProgress): number {
+  return getGameCompletedChapterCount(progress);
+}
+
 export function isJourneyComplete(progress: JourneyProgress): boolean {
-  return getCompletedChapterCount(progress) === JOURNEY_CHAPTER_ORDER.length;
+  return isGameComplete(progress);
 }

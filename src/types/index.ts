@@ -499,3 +499,16 @@ export interface JourneyProgress {
   startedAt: string;
   completedAt: string | null;
 }
+
+// ─── Kid Game Config ─────────────────────────────────────────────────────────
+
+export type KidGameId = 'pawns-journey' | 'fairy-tale';
+
+export interface KidGameConfig {
+  gameId: KidGameId;
+  title: string;
+  icon: string;
+  routePrefix: string;
+  chapters: JourneyChapter[];
+  chapterOrder: readonly JourneyChapterId[];
+}

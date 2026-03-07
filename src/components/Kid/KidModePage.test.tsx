@@ -10,6 +10,23 @@ vi.mock('../Board/ChessBoard', () => ({
   ),
 }));
 
+vi.mock('../../services/journeyService', () => ({
+  getGameProgress: vi.fn().mockResolvedValue(null),
+  getGameCompletedChapterCount: vi.fn().mockReturnValue(0),
+}));
+
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    speak: vi.fn().mockResolvedValue(undefined),
+    stop: vi.fn(),
+  },
+}));
+
+vi.mock('../../services/themeService', () => ({
+  applyTheme: vi.fn(),
+  getThemeById: vi.fn().mockReturnValue({ id: 'kid-mode', name: 'Kid Mode', colors: {} }),
+}));
+
 function createProfile(): UserProfile {
   return {
     id: 'main',
@@ -136,6 +153,21 @@ describe('KidModePage', () => {
 
     expect(screen.getByTestId('journey-card')).toBeInTheDocument();
     expect(screen.getByText("Pawn's Journey")).toBeInTheDocument();
+  });
+
+  it('renders fairy tale card', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    expect(screen.getByTestId('fairy-tale-card')).toBeInTheDocument();
+    expect(screen.getByText('Fairy Tale Quest')).toBeInTheDocument();
+  });
+
+  it('fairy tale card shows start text when no progress', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    expect(screen.getByText('Begin your fairy tale!')).toBeInTheDocument();
   });
 
   it('renders empty when no profile', () => {

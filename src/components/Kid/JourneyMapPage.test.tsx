@@ -7,30 +7,8 @@ import type { JourneyProgress } from '../../types';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
-const mockGetJourneyProgress = vi.fn<() => Promise<JourneyProgress | null>>();
-const mockIsChapterUnlocked = vi.fn<(chapterId: string, progress: JourneyProgress) => boolean>();
-const mockGetChapterProgress = vi.fn<(chapterId: string) => import('../../types').JourneyChapterProgress>();
-
-vi.mock('../../services/journeyService', () => ({
-  getJourneyProgress: (...args: unknown[]) => mockGetJourneyProgress(...(args as [])),
-  isChapterUnlocked: (...args: unknown[]) => mockIsChapterUnlocked(...(args as [string, JourneyProgress])),
-  getChapterProgress: (...args: unknown[]) => mockGetChapterProgress(...(args as [string])),
-}));
-
-vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: vi.fn().mockResolvedValue(undefined),
-    stop: vi.fn(),
-  },
-}));
-
-vi.mock('../../services/themeService', () => ({
-  applyTheme: vi.fn(),
-  getThemeById: vi.fn().mockReturnValue({ id: 'kid-mode', name: 'Kid Mode', colors: {} }),
-}));
-
-vi.mock('../../data/journeyChapters', () => ({
-  JOURNEY_CHAPTERS: [
+const { mockGetGameProgress, mockIsChapterUnlocked, mockGetChapterProgress, testChapters } = vi.hoisted(() => {
+  const chapters = [
     {
       id: 'pawn',
       title: 'The Brave Pawn',
@@ -53,7 +31,43 @@ vi.mock('../../data/journeyChapters', () => ({
       storyOutro: '',
       requiredPuzzleScore: 2,
     },
-  ],
+  ];
+
+  return {
+    mockGetGameProgress: vi.fn(),
+    mockIsChapterUnlocked: vi.fn(),
+    mockGetChapterProgress: vi.fn(),
+    testChapters: chapters,
+  };
+});
+
+vi.mock('../../services/journeyService', () => ({
+  getGameProgress: (...args: unknown[]) => mockGetGameProgress(...(args as [])) as unknown,
+  isChapterUnlocked: (...args: unknown[]) => mockIsChapterUnlocked(...(args as [string, JourneyProgress])) as unknown,
+  getChapterProgress: (...args: unknown[]) => mockGetChapterProgress(...(args as [string])) as unknown,
+}));
+
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    speak: vi.fn().mockResolvedValue(undefined),
+    stop: vi.fn(),
+  },
+}));
+
+vi.mock('../../services/themeService', () => ({
+  applyTheme: vi.fn(),
+  getThemeById: vi.fn().mockReturnValue({ id: 'kid-mode', name: 'Kid Mode', colors: {} }),
+}));
+
+vi.mock('../../data/kidGameConfigs', () => ({
+  PAWNS_JOURNEY_CONFIG: {
+    gameId: 'pawns-journey',
+    title: "Pawn's Journey",
+    icon: '\uD83D\uDDFA\uFE0F',
+    routePrefix: '/kid/journey',
+    chapters: testChapters,
+    chapterOrder: ['pawn', 'rook'],
+  },
 }));
 
 const mockNavigate = vi.fn();
@@ -77,7 +91,7 @@ describe('JourneyMapPage', () => {
     );
 
     // Default: no progress yet
-    mockGetJourneyProgress.mockResolvedValue(null);
+    mockGetGameProgress.mockResolvedValue(null);
     mockIsChapterUnlocked.mockReturnValue(false);
     mockGetChapterProgress.mockReturnValue({
       chapterId: 'pawn',
@@ -92,7 +106,7 @@ describe('JourneyMapPage', () => {
 
   it('shows loading state initially', () => {
     // Never resolve the promise so we stay in loading
-    mockGetJourneyProgress.mockReturnValue(new Promise(() => {}));
+    mockGetGameProgress.mockReturnValue(new Promise(() => {}));
     render(<JourneyMapPage />);
 
     expect(screen.getByTestId('journey-loading')).toBeInTheDocument();
@@ -100,7 +114,7 @@ describe('JourneyMapPage', () => {
   });
 
   it('renders chapter cards after loading', async () => {
-    mockGetJourneyProgress.mockResolvedValue(null);
+    mockGetGameProgress.mockResolvedValue(null);
     render(<JourneyMapPage />);
 
     await waitFor(() => {
@@ -114,7 +128,7 @@ describe('JourneyMapPage', () => {
   });
 
   it('first chapter (pawn) is clickable when no progress exists', async () => {
-    mockGetJourneyProgress.mockResolvedValue(null);
+    mockGetGameProgress.mockResolvedValue(null);
     render(<JourneyMapPage />);
 
     await waitFor(() => {
@@ -132,7 +146,7 @@ describe('JourneyMapPage', () => {
       startedAt: new Date().toISOString(),
       completedAt: null,
     };
-    mockGetJourneyProgress.mockResolvedValue(progressData);
+    mockGetGameProgress.mockResolvedValue(progressData);
     mockIsChapterUnlocked.mockImplementation((chapterId) => chapterId === 'pawn');
 
     render(<JourneyMapPage />);
@@ -162,7 +176,7 @@ describe('JourneyMapPage', () => {
       startedAt: new Date().toISOString(),
       completedAt: null,
     };
-    mockGetJourneyProgress.mockResolvedValue(progressData);
+    mockGetGameProgress.mockResolvedValue(progressData);
     mockIsChapterUnlocked.mockReturnValue(true);
     mockGetChapterProgress.mockImplementation((chapterId: string) => {
       if (chapterId === 'pawn' && progressData.chapters.pawn) {
@@ -187,7 +201,7 @@ describe('JourneyMapPage', () => {
   });
 
   it('back button navigates to /kid', async () => {
-    mockGetJourneyProgress.mockResolvedValue(null);
+    mockGetGameProgress.mockResolvedValue(null);
     render(<JourneyMapPage />);
 
     await waitFor(() => {
@@ -199,7 +213,7 @@ describe('JourneyMapPage', () => {
   });
 
   it('voice toggle button is rendered', async () => {
-    mockGetJourneyProgress.mockResolvedValue(null);
+    mockGetGameProgress.mockResolvedValue(null);
     render(<JourneyMapPage />);
 
     await waitFor(() => {
@@ -229,7 +243,7 @@ describe('JourneyMapPage', () => {
       startedAt: new Date().toISOString(),
       completedAt: null,
     };
-    mockGetJourneyProgress.mockResolvedValue(progressData);
+    mockGetGameProgress.mockResolvedValue(progressData);
     mockIsChapterUnlocked.mockReturnValue(true);
     mockGetChapterProgress.mockReturnValue({
       chapterId: 'pawn',

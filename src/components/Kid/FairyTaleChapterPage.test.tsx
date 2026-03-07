@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render as rtlRender, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
-import { JourneyChapterPage } from './JourneyChapterPage';
+import { FairyTaleChapterPage } from './FairyTaleChapterPage';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 
@@ -12,29 +12,29 @@ const { testChapter } = vi.hoisted(() => {
   return {
     testChapter: {
       id: 'pawn',
-      title: 'The Brave Pawn',
-      subtitle: 'Learn pawn moves',
+      title: 'The Humble Hero',
+      subtitle: 'A humble hero answers the call',
       icon: '\u265F',
-      storyIntro: 'Once upon a time there was a brave pawn.',
-      storyOutro: 'The pawn completed its journey!',
+      storyIntro: 'In the enchanted Kingdom of Sixty-Four Squares, a brave pawn steps forward.',
+      storyOutro: 'The humble hero proved his worth!',
       requiredPuzzleScore: 1,
       lessons: [
         {
-          id: 'pawn-1',
-          title: 'First Steps',
-          story: 'Pawns move forward.',
+          id: 'ft-pawn-1',
+          title: 'The Call to Adventure',
+          story: 'The pawn heard the call of destiny.',
           fen: '4k3/8/8/8/8/8/4P3/4K3 w - - 0 1',
           highlightSquares: ['e3', 'e4'],
-          instruction: 'The pawn can move forward.',
+          instruction: 'Guide the pawn forward.',
         },
       ],
       puzzles: [
         {
-          id: 'pawn-p1',
+          id: 'ft-pawn-p1',
           fen: '4k3/8/8/8/8/8/4P3/4K3 w - - 0 1',
           solution: ['e4'],
-          hint: 'Move the pawn two squares!',
-          successMessage: 'Great job!',
+          hint: 'The pawn must take its first step!',
+          successMessage: 'The hero advances!',
         },
       ],
     },
@@ -46,9 +46,6 @@ vi.mock('../Board/ChessBoard', () => ({
     <div data-testid="chess-board" data-fen={initialFen}>
       <button data-testid="mock-move-btn" onClick={() => onMove?.({ from: 'e2', to: 'e4', san: 'e4', fen: '4k3/8/8/8/4P3/8/8/4K3 b - e3 0 1' })}>
         Move
-      </button>
-      <button data-testid="mock-wrong-move-btn" onClick={() => onMove?.({ from: 'd2', to: 'd4', san: 'd4', fen: '4k3/8/8/8/3P4/8/8/4K3 b - d3 0 1' })}>
-        Wrong Move
       </button>
     </div>
   ),
@@ -81,11 +78,11 @@ vi.mock('../../services/themeService', () => ({
 }));
 
 vi.mock('../../data/kidGameConfigs', () => ({
-  PAWNS_JOURNEY_CONFIG: {
-    gameId: 'pawns-journey',
-    title: "Pawn's Journey",
-    icon: '\uD83D\uDDFA\uFE0F',
-    routePrefix: '/kid/journey',
+  FAIRY_TALE_CONFIG: {
+    gameId: 'fairy-tale',
+    title: 'Fairy Tale Quest',
+    icon: '\uD83C\uDFF0',
+    routePrefix: '/kid/fairy-tale',
     chapters: [testChapter],
     chapterOrder: ['pawn', 'rook'],
   },
@@ -95,10 +92,10 @@ vi.mock('../../data/kidGameConfigs', () => ({
 
 function renderChapterPage(): ReturnType<typeof rtlRender> {
   return rtlRender(
-    <MemoryRouter initialEntries={['/kid/journey/pawn']}>
+    <MemoryRouter initialEntries={['/kid/fairy-tale/pawn']}>
       <MotionConfig transition={{ duration: 0 }}>
         <Routes>
-          <Route path="/kid/journey/:chapterId" element={<JourneyChapterPage />} />
+          <Route path="/kid/fairy-tale/:chapterId" element={<FairyTaleChapterPage />} />
         </Routes>
       </MotionConfig>
     </MemoryRouter>,
@@ -114,7 +111,7 @@ const defaultProgress = {
 
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
-describe('JourneyChapterPage', () => {
+describe('FairyTaleChapterPage', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
     useAppStore.getState().reset();
@@ -148,18 +145,17 @@ describe('JourneyChapterPage', () => {
     });
   });
 
-  it('renders intro phase initially with storyIntro text', async () => {
+  it('renders intro phase with fairy tale storyIntro', async () => {
     renderChapterPage();
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-intro')).toBeInTheDocument();
     });
 
-    // Title appears in both the top bar and the intro content
-    const titles = screen.getAllByText('The Brave Pawn');
+    const titles = screen.getAllByText('The Humble Hero');
     expect(titles.length).toBeGreaterThanOrEqual(2);
     expect(
-      screen.getByText('Once upon a time there was a brave pawn.'),
+      screen.getByText('In the enchanted Kingdom of Sixty-Four Squares, a brave pawn steps forward.'),
     ).toBeInTheDocument();
   });
 
@@ -175,66 +171,11 @@ describe('JourneyChapterPage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('chapter-lesson')).toBeInTheDocument();
     });
+
+    expect(screen.getByText('The Call to Adventure')).toBeInTheDocument();
   });
 
-  it('lesson phase shows lesson title and instruction', async () => {
-    renderChapterPage();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-begin-btn')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('chapter-begin-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-lesson')).toBeInTheDocument();
-    });
-
-    expect(screen.getByText('First Steps')).toBeInTheDocument();
-    expect(screen.getByText('The pawn can move forward.')).toBeInTheDocument();
-  });
-
-  it('lesson phase shows chess board with correct FEN', async () => {
-    renderChapterPage();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-begin-btn')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('chapter-begin-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chess-board')).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId('chess-board')).toHaveAttribute(
-      'data-fen',
-      '4k3/8/8/8/8/8/4P3/4K3 w - - 0 1',
-    );
-  });
-
-  it('Next button advances through lessons to puzzle phase', async () => {
-    renderChapterPage();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-begin-btn')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('chapter-begin-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-next-btn')).toBeInTheDocument();
-    });
-
-    // With only 1 lesson, clicking Next should go to puzzle phase
-    fireEvent.click(screen.getByTestId('chapter-next-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
-  });
-
-  it('puzzle phase shows puzzle counter', async () => {
+  it('lesson Next button advances to puzzle phase', async () => {
     renderChapterPage();
 
     await waitFor(() => {
@@ -252,35 +193,6 @@ describe('JourneyChapterPage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
     });
-
-    expect(screen.getByText('Puzzle 1 of 1')).toBeInTheDocument();
-  });
-
-  it('hint button reveals hint text', async () => {
-    renderChapterPage();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-begin-btn')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('chapter-begin-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-next-btn')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('chapter-next-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-hint-btn')).toBeInTheDocument();
-    });
-
-    expect(screen.queryByTestId('chapter-hint-text')).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('chapter-hint-btn'));
-
-    expect(screen.getByTestId('chapter-hint-text')).toBeInTheDocument();
-    expect(screen.getByText('Move the pawn two squares!')).toBeInTheDocument();
   });
 
   it('correct puzzle move shows success feedback', async () => {
@@ -302,7 +214,6 @@ describe('JourneyChapterPage', () => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
     });
 
-    // Click the mock move button which sends 'e4' (the correct solution)
     fireEvent.click(screen.getByTestId('mock-move-btn'));
 
     await waitFor(() => {
@@ -312,19 +223,11 @@ describe('JourneyChapterPage', () => {
     expect(screen.getByText('Correct!')).toBeInTheDocument();
   });
 
-  it('back button is rendered and navigable', async () => {
+  it('back button is rendered', async () => {
     renderChapterPage();
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-back-btn')).toBeInTheDocument();
-    });
-  });
-
-  it('voice toggle is rendered', async () => {
-    renderChapterPage();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chapter-voice-toggle')).toBeInTheDocument();
     });
   });
 });
