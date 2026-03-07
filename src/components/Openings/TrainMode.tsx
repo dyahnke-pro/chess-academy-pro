@@ -5,13 +5,8 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { ExplanationCard } from './ExplanationCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
-import {
-  recordDrillAttempt,
-  updateVariationProgress,
-  markLinePerfected,
-} from '../../services/openingService';
 import { speechService } from '../../services/speechService';
-import type { OpeningRecord } from '../../types';
+import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import {
@@ -20,13 +15,14 @@ import {
   Undo2,
   CheckCircle,
   XCircle,
-  Trophy,
+  ChevronLeft,
+  ChevronRight as ChevronRightIcon,
 } from 'lucide-react';
 
-export interface PracticeModeProps {
+export interface TrainModeProps {
   opening: OpeningRecord;
-  variationIndex?: number;
-  onComplete: (correct: boolean) => void;
+  lines: OpeningVariation[];
+  sectionLabel: string;
   onExit: () => void;
 }
 
@@ -36,26 +32,25 @@ interface MoveInfo {
   to: string;
 }
 
-export function PracticeMode({ opening, variationIndex, onComplete, onExit }: PracticeModeProps): JSX.Element {
-  const isVariation = variationIndex !== undefined && variationIndex >= 0;
-  const variation = isVariation ? opening.variations?.[variationIndex] : undefined;
-  const activePgn = variation ? variation.pgn : opening.pgn;
-
-  // Parse PGN into move list
-  const expectedMoves = useMemo((): MoveInfo[] => {
-    const tokens = activePgn.trim().split(/\s+/).filter(Boolean);
-    const chess = new Chess();
-    const moves: MoveInfo[] = [];
-    for (const san of tokens) {
-      try {
-        const move = chess.move(san);
-        moves.push({ san, from: move.from, to: move.to });
-      } catch {
-        break;
-      }
+function parseLineMoves(pgn: string): MoveInfo[] {
+  const tokens = pgn.trim().split(/\s+/).filter(Boolean);
+  const chess = new Chess();
+  const moves: MoveInfo[] = [];
+  for (const san of tokens) {
+    try {
+      const move = chess.move(san);
+      moves.push({ san, from: move.from, to: move.to });
+    } catch {
+      break;
     }
-    return moves;
-  }, [activePgn]);
+  }
+  return moves;
+}
+
+export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModeProps): JSX.Element {
+  const [currentLineIndex, setCurrentLineIndex] = useState(0);
+  const currentLine = lines[currentLineIndex];
+  const expectedMoves = useMemo(() => parseLineMoves(currentLine.pgn), [currentLine.pgn]);
 
   const playerColor = opening.color;
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
@@ -64,9 +59,9 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
   const [lineComplete, setLineComplete] = useState(false);
-  const [totalMistakes, setTotalMistakes] = useState(0);
+  const [showHintAfterUndo, setShowHintAfterUndo] = useState(false);
   const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
-  const startTimeRef = useRef<number>(Date.now());
+  const completedLinesRef = useRef<Set<number>>(new Set());
 
   const { settings } = useSettings();
   const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
@@ -79,7 +74,6 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
     [playerColor],
   );
 
-  // Compute FEN at a given move index
   const fenAtIndex = useCallback(
     (idx: number): string => {
       const chess = new Chess();
@@ -117,26 +111,10 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
     if (currentMoveIndex >= expectedMoves.length && expectedMoves.length > 0 && !lineComplete) {
       setLineComplete(true);
       playCelebration();
-
-      const timeSeconds = (Date.now() - startTimeRef.current) / 1000;
-      const perfect = totalMistakes === 0;
-      void recordDrillAttempt(opening.id, perfect, timeSeconds);
-      if (isVariation) {
-        void updateVariationProgress(opening.id, variationIndex, perfect);
-        if (perfect) {
-          void markLinePerfected(opening.id, variationIndex);
-        }
-      }
-
-      const lineName = variation ? variation.name : opening.name;
-      if (perfect) {
-        speechService.speak(`Line perfected! You know the ${lineName} by heart.`);
-      } else {
-        speechService.speak(`Good attempt on the ${lineName}. ${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}.`);
-      }
-      onComplete(perfect);
+      completedLinesRef.current.add(currentLineIndex);
+      speechService.speak(`Well done! You've completed the ${currentLine.name} line.`);
     }
-  }, [currentMoveIndex, expectedMoves.length, lineComplete, totalMistakes, opening.id, isVariation, variationIndex, variation, opening.name, playCelebration, onComplete]);
+  }, [currentMoveIndex, expectedMoves.length, lineComplete, currentLineIndex, currentLine.name, playCelebration]);
 
   // Handle player move
   const handleMove = useCallback(
@@ -150,6 +128,7 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
         setComputerLastMove(null);
         setShowCorrectFlash(true);
         setShowWrongMove(false);
+        setShowHintAfterUndo(false);
         setWrongSquare(null);
         if (settings.moveQualityFlash) {
           setMoveFlash('good');
@@ -159,8 +138,7 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
         setCurrentMoveIndex((prev) => prev + 1);
         setBoardKey((k) => k + 1);
       } else {
-        // Wrong
-        setTotalMistakes((prev) => prev + 1);
+        // Wrong — reset to start of line after undo
         setWrongSquare(result.to);
         setShowWrongMove(true);
         if (settings.moveQualityFlash) {
@@ -175,8 +153,12 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
   );
 
   const handleUndo = useCallback((): void => {
+    // On mistake, reset to start of line per WO spec
     setShowWrongMove(false);
     setWrongSquare(null);
+    setComputerLastMove(null);
+    setShowHintAfterUndo(true);
+    setCurrentMoveIndex(0);
     setBoardKey((k) => k + 1);
   }, []);
 
@@ -185,65 +167,82 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
     setBoardKey((k) => k + 1);
     setShowWrongMove(false);
     setShowCorrectFlash(false);
+    setShowHintAfterUndo(false);
     setWrongSquare(null);
     setComputerLastMove(null);
     setLineComplete(false);
-    setTotalMistakes(0);
-    startTimeRef.current = Date.now();
     speechService.stop();
   }, []);
+
+  const handleNextLine = useCallback((): void => {
+    if (currentLineIndex < lines.length - 1) {
+      setCurrentLineIndex((prev) => prev + 1);
+      handleRetry();
+    }
+  }, [currentLineIndex, lines.length, handleRetry]);
+
+  const handlePrevLine = useCallback((): void => {
+    if (currentLineIndex > 0) {
+      setCurrentLineIndex((prev) => prev - 1);
+      handleRetry();
+    }
+  }, [currentLineIndex, handleRetry]);
 
   const progress = expectedMoves.length > 0
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
     : 0;
 
-  const title = variation ? variation.name : opening.name;
-  const lineLabel = isVariation
-    ? `Line ${variationIndex + 1} / ${opening.variations?.length ?? 1}`
-    : opening.name;
-  const perfect = totalMistakes === 0;
+  // Generate hint text showing what move to play
+  const hintText = useMemo((): string => {
+    if (currentMoveIndex >= expectedMoves.length) return '';
+    const move = expectedMoves[currentMoveIndex];
+    return `${currentLine.explanation} Play ${move.san}.`;
+  }, [currentMoveIndex, expectedMoves, currentLine.explanation]);
 
   // ─── Line complete screen ───────────────────────────────────────────────
   if (lineComplete) {
+    const allDone = completedLinesRef.current.size >= lines.length;
     return (
-      <div className="flex flex-col flex-1 p-4 md:p-6 items-center justify-center" data-testid="practice-complete">
+      <div className="flex flex-col flex-1 p-4 md:p-6 items-center justify-center" data-testid="train-complete">
         <div className="w-full max-w-sm space-y-6">
           <div className="text-center">
-            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${perfect ? 'bg-yellow-500/20' : 'bg-green-500/20'}`}>
-              {perfect
-                ? <Trophy size={32} className="text-yellow-500" />
-                : <CheckCircle size={32} className="text-green-500" />
-              }
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 mb-4">
+              <CheckCircle size={32} className="text-green-500" />
             </div>
             <h2 className="text-xl font-bold text-theme-text">
-              {perfect ? 'Line Perfected!' : 'Line Complete'}
+              {allDone ? 'All Lines Complete!' : 'Line Complete!'}
             </h2>
-            <p className="text-sm text-theme-text-muted mt-1">{title}</p>
+            <p className="text-sm text-theme-text-muted mt-1">{currentLine.name}</p>
           </div>
-
-          {totalMistakes > 0 && (
-            <p className="text-sm text-theme-text-muted text-center">
-              {totalMistakes} mistake{totalMistakes !== 1 ? 's' : ''} — practice again to perfect it!
-            </p>
-          )}
 
           <div className="flex gap-3">
             <button
               onClick={handleRetry}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
-              data-testid="practice-retry"
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold hover:bg-theme-border transition-colors"
+              data-testid="train-retry"
             >
               <RotateCcw size={16} />
               Again
             </button>
-            <button
-              onClick={onExit}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold hover:bg-theme-border transition-colors"
-              data-testid="practice-exit"
-            >
-              <ArrowRight size={16} />
-              Done
-            </button>
+            {currentLineIndex < lines.length - 1 ? (
+              <button
+                onClick={handleNextLine}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
+                data-testid="train-next"
+              >
+                Next Line
+                <ArrowRight size={16} />
+              </button>
+            ) : (
+              <button
+                onClick={onExit}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
+                data-testid="train-exit"
+              >
+                <ArrowRight size={16} />
+                Done
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -252,21 +251,42 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
 
   // ─── Board screen ──────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="practice-mode">
+    <div className="flex flex-col flex-1 overflow-hidden" data-testid="train-mode">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
         <div className="flex items-center gap-3">
           <button
             onClick={onExit}
             className="p-1.5 rounded-lg hover:bg-theme-surface"
-            data-testid="practice-back"
+            data-testid="train-back"
           >
             <ArrowRight size={16} className="text-theme-text rotate-180" />
           </button>
           <div>
-            <p className="text-sm font-semibold text-theme-text">Practice {title}</p>
-            <p className="text-xs text-theme-text-muted">{lineLabel}</p>
+            <p className="text-sm font-semibold text-theme-text">Train: {currentLine.name}</p>
+            <p className="text-xs text-theme-text-muted">
+              {sectionLabel} · Line {currentLineIndex + 1} / {lines.length}
+            </p>
           </div>
+        </div>
+        {/* Line navigation */}
+        <div className="flex items-center gap-1">
+          <button
+            onClick={handlePrevLine}
+            disabled={currentLineIndex === 0}
+            className="p-1.5 rounded-lg hover:bg-theme-surface disabled:opacity-30"
+            aria-label="Previous line"
+          >
+            <ChevronLeft size={16} className="text-theme-text" />
+          </button>
+          <button
+            onClick={handleNextLine}
+            disabled={currentLineIndex >= lines.length - 1}
+            className="p-1.5 rounded-lg hover:bg-theme-surface disabled:opacity-30"
+            aria-label="Next line"
+          >
+            <ChevronRightIcon size={16} className="text-theme-text" />
+          </button>
         </div>
       </div>
 
@@ -279,10 +299,10 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
         </div>
         <div className="w-full h-1.5 bg-theme-surface rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-theme-accent rounded-full"
+            className="h-full bg-yellow-500 rounded-full"
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
-            data-testid="practice-progress"
+            data-testid="train-progress"
           />
         </div>
       </div>
@@ -347,7 +367,7 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
         {showWrongMove ? (
           <div className="space-y-2">
             <ExplanationCard
-              text="Incorrect move. Try again."
+              text="You made an incorrect move. You'll restart this line from the beginning."
               visible={true}
               variant="error"
             />
@@ -360,10 +380,16 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
               Undo
             </button>
           </div>
+        ) : showHintAfterUndo && isPlayerTurn(currentMoveIndex) ? (
+          <ExplanationCard
+            text={hintText}
+            visible={true}
+            variant="info"
+          />
         ) : (
           isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
             <div className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg">
-              <p className="text-sm text-theme-text text-center font-medium" data-testid="practice-prompt">
+              <p className="text-sm text-theme-text text-center font-medium" data-testid="train-prompt">
                 What's the best move?
               </p>
             </div>

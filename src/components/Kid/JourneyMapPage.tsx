@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
-import { applyTheme, getThemeById } from '../../services/themeService';
 import { voiceService } from '../../services/voiceService';
 import { JOURNEY_CHAPTERS } from '../../data/journeyChapters';
 import { getJourneyProgress, isChapterUnlocked, getChapterProgress } from '../../services/journeyService';
@@ -11,29 +10,11 @@ import type { JourneyProgress, JourneyChapter } from '../../types';
 
 export function JourneyMapPage(): JSX.Element {
   const navigate = useNavigate();
-  const activeTheme = useAppStore((s) => s.activeTheme);
-  const setActiveTheme = useAppStore((s) => s.setActiveTheme);
   const personality = useAppStore((s) => s.coachPersonality);
-  const previousThemeId = useRef<string>(activeTheme?.id ?? 'dark-premium');
 
   const [progress, setProgress] = useState<JourneyProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const [voiceOn, setVoiceOn] = useState(true);
-
-  // Theme save/restore
-  useEffect(() => {
-    const savedThemeId = previousThemeId.current;
-    const kidTheme = getThemeById('kid-mode');
-    applyTheme(kidTheme);
-    setActiveTheme(kidTheme);
-
-    return () => {
-      voiceService.stop();
-      const prevTheme = getThemeById(savedThemeId);
-      applyTheme(prevTheme);
-      setActiveTheme(prevTheme);
-    };
-  }, [setActiveTheme]);
 
   // Voice helper
   const kidSpeak = useCallback((text: string): void => {

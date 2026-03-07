@@ -52,6 +52,17 @@ function buildDefaultPreferences(overrides?: Partial<UserPreferences>): UserPref
     voiceIdKasparov: 'VR6AewLTigWG4xSOukaG',
     voiceIdFischer: 'TxGEqnHWrfWFTfGW9XjX',
     voiceSpeed: 1.0,
+    highlightLastMove: true,
+    showLegalMoves: true,
+    showCoordinates: true,
+    pieceAnimationSpeed: 'medium',
+    boardOrientation: true,
+    moveQualityFlash: false,
+    showHints: true,
+    moveMethod: 'both',
+    moveConfirmation: false,
+    autoPromoteQueen: true,
+    masterAllOff: false,
     ...overrides,
   };
 }
@@ -141,6 +152,7 @@ export function buildOpeningRecord(overrides?: Partial<OpeningRecord>): OpeningR
     woodpeckerReps: 0,
     woodpeckerSpeed: null,
     woodpeckerLastDate: null,
+    isFavorite: false,
     ...overrides,
   };
 }

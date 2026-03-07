@@ -1,11 +1,12 @@
 import { MasteryRing } from './MasteryRing';
 import { getMasteryPercent, needsReview } from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
-import { Repeat, AlertCircle } from 'lucide-react';
+import { Repeat, AlertCircle, Heart } from 'lucide-react';
 
 interface OpeningCardProps {
   opening: OpeningRecord;
   onClick: () => void;
+  onToggleFavorite?: (e: React.MouseEvent) => void;
 }
 
 function formatRelativeDate(iso: string | null): string {
@@ -19,14 +20,17 @@ function formatRelativeDate(iso: string | null): string {
   return `${months}mo ago`;
 }
 
-export function OpeningCard({ opening, onClick }: OpeningCardProps): JSX.Element {
+export function OpeningCard({ opening, onClick, onToggleFavorite }: OpeningCardProps): JSX.Element {
   const mastery = getMasteryPercent(opening);
   const flagged = needsReview(opening);
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
-      className="w-full text-left bg-theme-surface hover:bg-theme-border rounded-xl p-3.5 transition-colors group relative"
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+      className="w-full text-left bg-theme-surface hover:bg-theme-border rounded-xl p-3.5 transition-colors group relative cursor-pointer"
       data-testid={`opening-card-${opening.id}`}
     >
       <div className="flex items-center gap-3">
@@ -63,7 +67,25 @@ export function OpeningCard({ opening, onClick }: OpeningCardProps): JSX.Element
             )}
           </div>
         </div>
+
+        {/* Favorite button */}
+        {onToggleFavorite && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleFavorite(e);
+            }}
+            className="p-1.5 rounded-lg hover:bg-theme-border/50 transition-colors shrink-0"
+            aria-label={opening.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            data-testid={`favorite-toggle-${opening.id}`}
+          >
+            <Heart
+              size={16}
+              className={opening.isFavorite ? 'text-red-500 fill-red-500' : 'text-theme-text-muted'}
+            />
+          </button>
+        )}
       </div>
-    </button>
+    </div>
   );
 }

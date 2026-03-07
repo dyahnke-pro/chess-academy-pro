@@ -77,6 +77,50 @@ class ChessAcademyDB extends Dexie {
         }
       });
     });
+
+    this.version(5).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+    }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (!('highlightLastMove' in prefs)) {
+          prefs.highlightLastMove = true;
+          prefs.showLegalMoves = true;
+          prefs.showCoordinates = true;
+          prefs.pieceAnimationSpeed = 'medium';
+          prefs.boardOrientation = true;
+          prefs.moveQualityFlash = false;
+          prefs.showHints = true;
+          prefs.moveMethod = 'both';
+          prefs.moveConfirmation = false;
+          prefs.autoPromoteQueen = true;
+          prefs.masterAllOff = false;
+        }
+      });
+    });
+
+    this.version(6).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+    }).upgrade(async (tx) => {
+      await tx.table('openings').toCollection().modify((opening: OpeningRecord) => {
+        const rec = opening as unknown as Record<string, unknown>;
+        if (!('isFavorite' in rec)) {
+          rec.isFavorite = false;
+        }
+      });
+    });
   }
 }
 

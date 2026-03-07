@@ -1,15 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Chess } from 'chess.js';
 import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
 import { OpeningPlayMode } from './OpeningPlayMode';
+import { TrainMode } from './TrainMode';
 import { MasteryRing } from './MasteryRing';
+import { MiniBoard } from '../Board/MiniBoard';
 import {
   getOpeningById,
   getMasteryPercent,
   getLinesDiscovered,
   getLinesPerfected,
   getTotalLines,
+  toggleFavorite,
 } from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
 import {
@@ -23,12 +27,36 @@ import {
   Repeat,
   Clock,
   Target,
-  ChevronRight,
   CheckCircle,
   Trophy,
+  Volume2,
+  Square as StopIcon,
+  Crosshair,
+  Heart,
 } from 'lucide-react';
 
-type ViewMode = 'detail' | 'learn' | 'practice' | 'play' | 'variation-learn' | 'variation-practice';
+type ViewMode =
+  | 'detail'
+  | 'learn'
+  | 'practice'
+  | 'play'
+  | 'variation-learn'
+  | 'variation-practice'
+  | 'train-traps'
+  | 'train-warnings';
+
+function computeFenFromPgn(pgn: string): string {
+  const tokens = pgn.trim().split(/\s+/).filter(Boolean);
+  const chess = new Chess();
+  for (const san of tokens) {
+    try {
+      chess.move(san);
+    } catch {
+      break;
+    }
+  }
+  return chess.fen();
+}
 
 export function OpeningDetailPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +65,8 @@ export function OpeningDetailPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('detail');
   const [activeVariationIndex, setActiveVariationIndex] = useState(-1);
+  const [narratingSection, setNarratingSection] = useState<string | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -48,6 +78,13 @@ export function OpeningDetailPage(): JSX.Element {
   useEffect(() => {
     void loadOpening();
   }, [loadOpening]);
+
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   const handleComplete = useCallback((): void => {
     void loadOpening();
@@ -68,6 +105,46 @@ export function OpeningDetailPage(): JSX.Element {
     setActiveVariationIndex(index);
     setViewMode('variation-practice');
   }, []);
+
+  const handleToggleFavorite = useCallback(async (): Promise<void> => {
+    if (!opening) return;
+    const newVal = await toggleFavorite(opening.id);
+    setOpening({ ...opening, isFavorite: newVal });
+  }, [opening]);
+
+  // ─── Voice narration ──────────────────────────────────────────────────────
+  const toggleNarration = useCallback((sectionId: string, text: string): void => {
+    if (narratingSection === sectionId) {
+      // Stop
+      window.speechSynthesis.cancel();
+      setNarratingSection(null);
+      utteranceRef.current = null;
+      return;
+    }
+
+    // Stop any current narration
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.onend = () => {
+      setNarratingSection(null);
+      utteranceRef.current = null;
+    };
+    utterance.onerror = () => {
+      setNarratingSection(null);
+      utteranceRef.current = null;
+    };
+    utteranceRef.current = utterance;
+    setNarratingSection(sectionId);
+    window.speechSynthesis.speak(utterance);
+  }, [narratingSection]);
+
+  // Precompute variation FENs for thumbnails
+  const variationFens = useMemo((): string[] => {
+    if (!opening?.variations) return [];
+    return opening.variations.map((v) => computeFenFromPgn(v.pgn));
+  }, [opening?.variations]);
 
   if (loading) {
     return (
@@ -119,11 +196,48 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Train mode (traps or warnings)
+  if (viewMode === 'train-traps' && opening.trapLines && opening.trapLines.length > 0) {
+    return (
+      <TrainMode
+        opening={opening}
+        lines={opening.trapLines}
+        sectionLabel="Traps & Pitfalls"
+        onExit={handleExit}
+      />
+    );
+  }
+
+  if (viewMode === 'train-warnings' && opening.warningLines && opening.warningLines.length > 0) {
+    return (
+      <TrainMode
+        opening={opening}
+        lines={opening.warningLines}
+        sectionLabel="Watch Out For"
+        onExit={handleExit}
+      />
+    );
+  }
+
   // Detail view
   const mastery = getMasteryPercent(opening);
   const totalLines = getTotalLines(opening);
   const discovered = getLinesDiscovered(opening);
   const perfected = getLinesPerfected(opening);
+
+  const NarrationButton = ({ sectionId, text }: { sectionId: string; text: string }): JSX.Element => {
+    const isNarrating = narratingSection === sectionId;
+    return (
+      <button
+        onClick={() => toggleNarration(sectionId, text)}
+        className="ml-auto p-1.5 rounded-lg hover:bg-theme-border/50 text-theme-text-muted hover:text-theme-accent transition-colors"
+        aria-label={isNarrating ? 'Stop narration' : 'Narrate section'}
+        data-testid={`narrate-${sectionId}`}
+      >
+        {isNarrating ? <StopIcon size={14} /> : <Volume2 size={14} />}
+      </button>
+    );
+  };
 
   return (
     <div className="flex flex-col flex-1 p-4 md:p-6 overflow-y-auto" data-testid="opening-detail">
@@ -151,6 +265,17 @@ export function OpeningDetailPage(): JSX.Element {
             )}
           </div>
         </div>
+        <button
+          onClick={() => void handleToggleFavorite()}
+          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
+          aria-label={opening.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          data-testid="favorite-btn"
+        >
+          <Heart
+            size={20}
+            className={opening.isFavorite ? 'text-red-500 fill-red-500' : 'text-theme-text-muted'}
+          />
+        </button>
         <MasteryRing percent={mastery} size={48} />
       </div>
 
@@ -196,6 +321,7 @@ export function OpeningDetailPage(): JSX.Element {
           <div className="flex items-center gap-2 mb-2">
             <BookOpen size={14} className="text-theme-accent" />
             <h3 className="text-sm font-semibold text-theme-text">Overview</h3>
+            <NarrationButton sectionId="overview" text={opening.overview} />
           </div>
           <p className="text-sm text-theme-text-muted leading-relaxed">{opening.overview}</p>
         </div>
@@ -207,6 +333,7 @@ export function OpeningDetailPage(): JSX.Element {
           <div className="flex items-center gap-2 mb-2">
             <Lightbulb size={14} className="text-yellow-500" />
             <h3 className="text-sm font-semibold text-theme-text">Key Ideas</h3>
+            <NarrationButton sectionId="keyIdeas" text={opening.keyIdeas.join('. ')} />
           </div>
           <ul className="space-y-1.5">
             {opening.keyIdeas.map((idea, i) => (
@@ -225,6 +352,18 @@ export function OpeningDetailPage(): JSX.Element {
           <div className="flex items-center gap-2 mb-2">
             <Target size={14} className="text-green-500" />
             <h3 className="text-sm font-semibold text-theme-text">Traps & Pitfalls</h3>
+            <NarrationButton sectionId="traps" text={opening.traps.join('. ')} />
+            {opening.trapLines && opening.trapLines.length > 0 && (
+              <button
+                onClick={() => setViewMode('train-traps')}
+                className="p-1.5 rounded-lg hover:bg-theme-border/50 text-theme-text-muted hover:text-green-500 transition-colors"
+                aria-label="Train traps"
+                title="Train"
+                data-testid="train-traps-btn"
+              >
+                <Crosshair size={14} />
+              </button>
+            )}
           </div>
           <ul className="space-y-2">
             {opening.traps.map((trap, i) => (
@@ -240,6 +379,18 @@ export function OpeningDetailPage(): JSX.Element {
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle size={14} className="text-amber-500" />
             <h3 className="text-sm font-semibold text-theme-text">Watch Out For</h3>
+            <NarrationButton sectionId="warnings" text={opening.warnings.join('. ')} />
+            {opening.warningLines && opening.warningLines.length > 0 && (
+              <button
+                onClick={() => setViewMode('train-warnings')}
+                className="p-1.5 rounded-lg hover:bg-theme-border/50 text-theme-text-muted hover:text-amber-500 transition-colors"
+                aria-label="Train warnings"
+                title="Train"
+                data-testid="train-warnings-btn"
+              >
+                <Crosshair size={14} />
+              </button>
+            )}
           </div>
           <ul className="space-y-2">
             {opening.warnings.map((warning, i) => (
@@ -262,9 +413,15 @@ export function OpeningDetailPage(): JSX.Element {
               return (
                 <div
                   key={i}
-                  className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-theme-border/50 transition-colors group"
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-theme-border/50 transition-colors group"
                   data-testid={`variation-${i}`}
                 >
+                  {/* Board thumbnail */}
+                  <MiniBoard
+                    fen={variationFens[i]}
+                    size={52}
+                    orientation={opening.color}
+                  />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-theme-text">{variation.name}</span>
@@ -273,24 +430,25 @@ export function OpeningDetailPage(): JSX.Element {
                     </div>
                     <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                   </div>
-                  <div className="flex items-center gap-1 ml-2">
+                  <div className="flex items-center gap-1.5 ml-2">
                     <button
                       onClick={() => handleStartVariationLearn(i)}
-                      className="p-1.5 rounded-lg hover:bg-theme-accent/20 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2.5 rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Learn ${variation.name}`}
+                      title="Learn"
                       data-testid={`variation-learn-${i}`}
                     >
-                      <LearnIcon size={14} />
+                      <LearnIcon size={20} />
                     </button>
                     <button
                       onClick={() => handleStartVariationPractice(i)}
-                      className="p-1.5 rounded-lg hover:bg-theme-accent/20 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2.5 rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Practice ${variation.name}`}
+                      title="Practice"
                       data-testid={`variation-practice-${i}`}
                     >
-                      <Brain size={14} />
+                      <Brain size={20} />
                     </button>
-                    <ChevronRight size={14} className="text-theme-text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
               );

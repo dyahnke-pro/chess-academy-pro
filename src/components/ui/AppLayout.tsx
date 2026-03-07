@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
-  Puzzle,
   BookOpen,
   FlipHorizontal,
   Database,
@@ -28,14 +27,13 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
   { to: '/openings', label: 'Openings', icon: BookOpen },
   { to: '/flashcards', label: 'Flashcards', icon: FlipHorizontal },
   { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/games', label: 'Games', icon: Database },
   { to: '/analysis', label: 'Analysis', icon: Search },
   { to: '/stats', label: 'Stats', icon: BarChart3 },
-  { to: '/kid', label: 'Kid Mode', icon: Baby },
+  { to: '/kid', label: 'Chess Quest', icon: Baby },
 ];
 
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);

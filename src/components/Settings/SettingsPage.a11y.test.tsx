@@ -98,10 +98,10 @@ describe('SettingsPage a11y', () => {
     expect(input).toHaveAttribute('type', 'text');
   });
 
-  it('appearance tab has checkbox toggles with labels', () => {
+  it('board tab has checkbox toggles with labels', () => {
     render(<SettingsPage />);
-    fireEvent.click(screen.getByTestId('tab-appearance'));
-    expect(screen.getByText('Sound')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('tab-board'));
+    expect(screen.getByText('Sound Effects')).toBeInTheDocument();
     expect(screen.getByText('Eval Bar')).toBeInTheDocument();
     expect(screen.getByText('Engine Lines')).toBeInTheDocument();
   });

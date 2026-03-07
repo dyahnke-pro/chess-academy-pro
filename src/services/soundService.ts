@@ -7,9 +7,19 @@ export type SoundType = 'move' | 'capture' | 'castle' | 'check';
 export function pieceSetToSoundSet(pieceSet: string, isKidMode: boolean): SoundSet {
   if (isKidMode) return 'cartoon';
   switch (pieceSet) {
+    case 'staunton':
+    case 'neo':
     case 'classic':    return 'classic';
+    case 'alpha':
+    case 'merida':
+    case 'california':
+    case 'cardinal':
+    case 'tatiana':
     case 'modern':
     case 'minimalist': return 'metallic';
+    case 'pixel':
+    case 'horsey':
+    case 'letter':
     case '3d':         return 'marble';
     case 'cartoon':    return 'cartoon';
     default:           return 'classic';
@@ -56,13 +66,21 @@ export class SoundService {
       const c = this.getCtx();
       if (c.state === 'suspended') void c.resume();
       const mv = (p.v ?? 0.7) * this.volume, n = c.currentTime;
+
+      // Low-pass filter to soften harsh overtones and reduce graininess
+      const lpf = c.createBiquadFilter();
+      lpf.type = 'lowpass';
+      lpf.frequency.setValueAtTime(Math.min(p.freq * 4, 6000), n);
+      lpf.Q.setValueAtTime(0.7, n);
+      lpf.connect(c.destination);
+
       const play = (freq: number, gain: number): void => {
         const o = c.createOscillator(), g = c.createGain();
         o.type = p.tp; o.frequency.setValueAtTime(freq, n);
         g.gain.setValueAtTime(0, n);
-        g.gain.linearRampToValueAtTime(gain, n + 0.005);
+        g.gain.linearRampToValueAtTime(gain, n + 0.008);
         g.gain.exponentialRampToValueAtTime(0.001, n + p.dur);
-        o.connect(g); g.connect(c.destination); o.start(n); o.stop(n + p.dur);
+        o.connect(g); g.connect(lpf); o.start(n); o.stop(n + p.dur);
       };
       play(p.freq, mv);
       if (p.freq2) play(p.freq2, mv * 0.6);
@@ -71,9 +89,9 @@ export class SoundService {
         const d = nb.getChannelData(0); for (let i = 0; i < bs; i++) d[i] = Math.random() * 2 - 1;
         const ns = c.createBufferSource(), ng = c.createGain();
         ns.buffer = nb; ng.gain.setValueAtTime(0, n);
-        ng.gain.linearRampToValueAtTime(mv * p.ns, n + 0.003);
-        ng.gain.exponentialRampToValueAtTime(0.001, n + p.dur * 0.4);
-        ns.connect(ng); ng.connect(c.destination); ns.start(n); ns.stop(n + p.dur);
+        ng.gain.linearRampToValueAtTime(mv * p.ns * 0.6, n + 0.005);
+        ng.gain.exponentialRampToValueAtTime(0.001, n + p.dur * 0.3);
+        ns.connect(ng); ng.connect(lpf); ns.start(n); ns.stop(n + p.dur);
       }
     } catch { /* swallow – AudioContext unavailable or suspended */ }
   }

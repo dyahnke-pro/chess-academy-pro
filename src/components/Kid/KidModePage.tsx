@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Volume2, VolumeX, ArrowLeft, Map } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
-import { applyTheme, getThemeById } from '../../services/themeService';
 import { voiceService } from '../../services/voiceService';
 import { getJourneyProgress, getCompletedChapterCount } from '../../services/journeyService';
 import { ChessBoard } from '../Board/ChessBoard';
@@ -37,11 +36,8 @@ type KidView = 'menu' | 'findKing';
 
 export function KidModePage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
-  const activeTheme = useAppStore((s) => s.activeTheme);
-  const setActiveTheme = useAppStore((s) => s.setActiveTheme);
   const personality = useAppStore((s) => s.coachPersonality);
   const navigate = useNavigate();
-  const previousThemeId = useRef<string>(activeTheme?.id ?? 'dark-premium');
 
   const [view, setView] = useState<KidView>('menu');
   const [findKingIdx, setFindKingIdx] = useState(0);
@@ -54,20 +50,6 @@ export function KidModePage(): JSX.Element {
     void getJourneyProgress().then((p) => setJourneyProgress(p));
   }, []);
 
-  useEffect(() => {
-    const savedThemeId = previousThemeId.current;
-    const kidTheme = getThemeById('kid-mode');
-    applyTheme(kidTheme);
-    setActiveTheme(kidTheme);
-
-    return () => {
-      voiceService.stop();
-      const prevTheme = getThemeById(savedThemeId);
-      applyTheme(prevTheme);
-      setActiveTheme(prevTheme);
-    };
-  }, [setActiveTheme]);
-
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
     void voiceService.speak(text, personality);
@@ -77,10 +59,6 @@ export function KidModePage(): JSX.Element {
     voiceService.stop();
     setVoiceOn((v) => !v);
   }, []);
-
-  const handleBackToMain = useCallback((): void => {
-    void navigate('/');
-  }, [navigate]);
 
   const handleStartLesson = useCallback((lesson: PieceLesson): void => {
     void navigate(`/kid/${lesson.piece}`);
@@ -140,9 +118,8 @@ export function KidModePage(): JSX.Element {
       {view === 'menu' && (
         <>
           <div className="text-center">
-            <h1 className="text-3xl font-bold">Hi {activeProfile.name}! 👋</h1>
-            <p className="text-lg mt-1" style={{ color: 'var(--color-text-muted)' }}>
-              {activeProfile.xp} XP earned
+            <p className="text-lg" style={{ color: 'var(--color-text-muted)' }}>
+              Hi {activeProfile.name}! You have {activeProfile.xp} XP
             </p>
           </div>
 
@@ -200,15 +177,6 @@ export function KidModePage(): JSX.Element {
             <div className="text-sm opacity-80">Tap the King on the board</div>
           </button>
 
-          <button
-            onClick={handleBackToMain}
-            className="flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-medium border"
-            style={{ borderColor: 'var(--color-border)' }}
-            data-testid="back-to-main-btn"
-          >
-            <ArrowLeft size={16} />
-            Back to main app
-          </button>
         </>
       )}
 

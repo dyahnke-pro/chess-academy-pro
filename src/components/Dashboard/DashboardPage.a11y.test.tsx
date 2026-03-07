@@ -28,6 +28,10 @@ vi.mock('../../services/gamificationService', () => ({
   getXpToNextLevel: vi.fn().mockReturnValue({ current: 250, needed: 500, percent: 50 }),
 }));
 
+vi.mock('../../services/openingService', () => ({
+  getFavoriteOpenings: vi.fn().mockResolvedValue([]),
+}));
+
 vi.mock('../../services/dataLoader', () => ({
   seedDatabase: vi.fn().mockResolvedValue(undefined),
 }));

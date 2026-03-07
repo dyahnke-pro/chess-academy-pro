@@ -302,4 +302,47 @@ describe('ChessBoard', () => {
       expect(screen.getByTestId('mock-chessboard')).toBeInTheDocument();
     });
   });
+
+  describe('showLastMoveHighlight', () => {
+    it('defaults to showing last move highlights', () => {
+      render(<ChessBoard />);
+      // Make a move — highlights should appear by default
+      fireEvent.click(screen.getByTestId('drop-e2-e4'));
+      expect(screen.getByTestId('mock-chessboard')).toBeInTheDocument();
+    });
+
+    it('accepts showLastMoveHighlight=false without error', () => {
+      render(<ChessBoard showLastMoveHighlight={false} />);
+      fireEvent.click(screen.getByTestId('drop-e2-e4'));
+      expect(screen.getByTestId('mock-chessboard')).toBeInTheDocument();
+    });
+  });
+
+  describe('moveQualityFlash', () => {
+    it('does not show flash overlay by default', () => {
+      render(<ChessBoard />);
+      expect(screen.queryByTestId('move-quality-flash')).not.toBeInTheDocument();
+    });
+
+    it('shows green flash overlay when moveQualityFlash is good', () => {
+      render(<ChessBoard moveQualityFlash="good" />);
+      const flash = screen.getByTestId('move-quality-flash');
+      expect(flash).toBeInTheDocument();
+      expect(flash.style.boxShadow).toContain('34, 197, 94');
+    });
+
+    it('shows amber flash overlay when moveQualityFlash is inaccuracy', () => {
+      render(<ChessBoard moveQualityFlash="inaccuracy" />);
+      const flash = screen.getByTestId('move-quality-flash');
+      expect(flash).toBeInTheDocument();
+      expect(flash.style.boxShadow).toContain('245, 158, 11');
+    });
+
+    it('shows red flash overlay when moveQualityFlash is blunder', () => {
+      render(<ChessBoard moveQualityFlash="blunder" />);
+      const flash = screen.getByTestId('move-quality-flash');
+      expect(flash).toBeInTheDocument();
+      expect(flash.style.boxShadow).toContain('239, 68, 68');
+    });
+  });
 });

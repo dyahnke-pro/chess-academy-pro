@@ -64,6 +64,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
   const [lineComplete, setLineComplete] = useState(false);
   const [totalMistakes, setTotalMistakes] = useState(0);
+  const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
   const startTimeRef = useRef<number>(Date.now());
 
   const { playCelebration, playEncouragement } = usePieceSound();
@@ -138,12 +139,14 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
     if (isPlayerTurn(currentMoveIndex)) return;
 
     // Opponent move — auto-play after delay
+    const opponentMove = expectedMoves[currentMoveIndex];
     const timer = setTimeout(() => {
+      setComputerLastMove({ from: opponentMove.from, to: opponentMove.to });
       setCurrentMoveIndex((prev) => prev + 1);
       setBoardKey((k) => k + 1);
     }, 500);
     return () => clearTimeout(timer);
-  }, [currentMoveIndex, expectedMoves.length, isPlayerTurn, lineComplete, showWrongMove]);
+  }, [currentMoveIndex, expectedMoves, isPlayerTurn, lineComplete, showWrongMove]);
 
   // Check for line completion
   useEffect(() => {
@@ -184,6 +187,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
       const expected = expectedMoves[currentMoveIndex];
       if (result.from === expected.from && result.to === expected.to) {
         // Correct move!
+        setComputerLastMove(null);
         setCorrectSquare(expected.to);
         setShowCorrectFlash(true);
         setShowWrongMove(false);
@@ -219,6 +223,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
     setShowCorrectFlash(false);
     setCorrectSquare(null);
     setWrongSquare(null);
+    setComputerLastMove(null);
     setLineComplete(false);
     setTotalMistakes(0);
     startTimeRef.current = Date.now();
@@ -328,6 +333,7 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
               showUndoButton={false}
               showResetButton={false}
               onMove={handleMove}
+              highlightSquares={computerLastMove}
             />
             {/* Green checkmark overlay */}
             <AnimatePresence>

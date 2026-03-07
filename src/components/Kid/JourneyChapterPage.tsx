@@ -5,7 +5,6 @@ import { ArrowLeft, Volume2, VolumeX, Lightbulb } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { StarDisplay } from './StarDisplay';
 import { useAppStore } from '../../stores/appStore';
-import { applyTheme, getThemeById } from '../../services/themeService';
 import { voiceService } from '../../services/voiceService';
 import { JOURNEY_CHAPTERS } from '../../data/journeyChapters';
 import {
@@ -27,10 +26,7 @@ export function JourneyChapterPage(): JSX.Element {
   const { chapterId } = useParams<{ chapterId: string }>();
   const navigate = useNavigate();
 
-  const activeTheme = useAppStore((s) => s.activeTheme);
-  const setActiveTheme = useAppStore((s) => s.setActiveTheme);
   const personality = useAppStore((s) => s.coachPersonality);
-  const previousThemeId = useRef<string>(activeTheme?.id ?? 'dark-premium');
 
   const [phase, setPhase] = useState<ChapterPhase>('intro');
   const [lessonIndex, setLessonIndex] = useState(0);
@@ -42,20 +38,6 @@ export function JourneyChapterPage(): JSX.Element {
   const [voiceOn, setVoiceOn] = useState(true);
 
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Apply kid theme on mount, restore previous theme on unmount
-  useEffect(() => {
-    const savedThemeId = previousThemeId.current;
-    const kidTheme = getThemeById('kid-mode');
-    applyTheme(kidTheme);
-    setActiveTheme(kidTheme);
-    return () => {
-      voiceService.stop();
-      const prevTheme = getThemeById(savedThemeId);
-      applyTheme(prevTheme);
-      setActiveTheme(prevTheme);
-    };
-  }, [setActiveTheme]);
 
   // Cleanup feedback timeout on unmount
   useEffect(() => {

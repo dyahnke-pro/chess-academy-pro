@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, Lightbulb } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { ChessBoard } from '../Board/ChessBoard';
 import { ExplanationCard } from './ExplanationCard';
 import { useAppStore } from '../../stores/appStore';
+import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { speechService } from '../../services/speechService';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import type { OpeningRecord, OpeningPlayResult } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
+import type { MoveQuality } from '../Board/ChessBoard';
 
 interface OpeningPlayModeProps {
   opening: OpeningRecord;
@@ -20,6 +22,7 @@ type PlayPhase = 'pregame' | 'opening' | 'middlegame' | 'postgame';
 
 export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
+  const { settings } = useSettings();
   const playerRating = activeProfile?.currentRating ?? 1420;
   const targetStrength = getTargetStrength(playerRating, 'medium');
   const playerColor = opening.color;
@@ -31,6 +34,10 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const [deviationCard, setDeviationCard] = useState<string | null>(null);
   const [result, setResult] = useState<OpeningPlayResult | null>(null);
   const [boardKey, setBoardKey] = useState(0);
+  const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
+  const [hintSquares, setHintSquares] = useState<{ from: string; to: string } | null>(null);
+  const [hintLoading, setHintLoading] = useState(false);
+  const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
   const isComputerThinking = useRef(false);
   const moveCountRef = useRef(0);
   const { playCelebration } = usePieceSound();
@@ -64,6 +71,35 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       speechService.speak(text);
     }
   }, [voiceOn]);
+
+  // ─── Hint handler ─────────────────────────────────────────────────────────
+  const handleHint = useCallback(async (): Promise<void> => {
+    if (hintLoading) return;
+
+    const currentMoveIdx = moveCountRef.current;
+    const inOpeningPhase = currentMoveIdx < openingPhaseLength && !deviatedRef.current;
+
+    if (inOpeningPhase && currentMoveIdx < openingMoves.length) {
+      // During opening: show expected move
+      const expected = openingMoves[currentMoveIdx];
+      setHintSquares({ from: expected.from, to: expected.to });
+      setTimeout(() => setHintSquares(null), 2000);
+    } else {
+      // During middlegame: ask Stockfish
+      setHintLoading(true);
+      try {
+        const { move } = await getAdaptiveMove(game.fen, playerRating + 200);
+        const from = move.slice(0, 2);
+        const to = move.slice(2, 4);
+        setHintSquares({ from, to });
+        setTimeout(() => setHintSquares(null), 2000);
+      } catch {
+        // Silently fail
+      } finally {
+        setHintLoading(false);
+      }
+    }
+  }, [hintLoading, openingPhaseLength, openingMoves, game.fen, playerRating]);
 
   // ─── Pregame intro ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -143,8 +179,9 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       if (inOpeningPhase && currentMoveIdx < openingMoves.length) {
         // Play the repertoire move
         const expected = openingMoves[currentMoveIdx];
-        const result = game.makeMove(expected.from, expected.to);
-        if (result) {
+        const moveResult = game.makeMove(expected.from, expected.to);
+        if (moveResult) {
+          setComputerLastMove({ from: expected.from, to: expected.to });
           moveCountRef.current += 1;
           setBoardKey((k) => k + 1);
           // Check if opening phase just ended
@@ -164,6 +201,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
             if (randomMove) result = tryMakeMove(randomMove);
           }
           if (result) {
+            setComputerLastMove({ from: result.from, to: result.to });
             moveCountRef.current += 1;
             setBoardKey((k) => k + 1);
           }
@@ -173,6 +211,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           if (randomMove) {
             const result = tryMakeMove(randomMove);
             if (result) {
+              setComputerLastMove({ from: result.from, to: result.to });
               moveCountRef.current += 1;
               setBoardKey((k) => k + 1);
             }
@@ -194,6 +233,8 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const handlePlayerMove = useCallback((moveResult: MoveResult): void => {
     const currentMoveIdx = moveCountRef.current;
     moveCountRef.current += 1;
+    setComputerLastMove(null);
+    setHintSquares(null);
 
     // Sync move to parent game state so turn flips and computer move effect triggers
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
@@ -205,8 +246,16 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       if (moveResult.from === expected.from && moveResult.to === expected.to) {
         // Correct opening move
         setCorrectMovesPlayed((prev) => prev + 1);
+        if (settings.moveQualityFlash) {
+          setMoveFlash('good');
+          setTimeout(() => setMoveFlash(null), 600);
+        }
       } else {
         // Deviation!
+        if (settings.moveQualityFlash) {
+          setMoveFlash('inaccuracy');
+          setTimeout(() => setMoveFlash(null), 600);
+        }
         if (firstDeviation === null) {
           setFirstDeviation(currentMoveIdx);
           deviatedRef.current = true;
@@ -221,7 +270,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
         setPlayPhase('middlegame');
       }
     }
-  }, [openingMoves, openingPhaseLength, firstDeviation, game]);
+  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash]);
 
   // ─── Postgame report ─────────────────────────────────────────────────────
   if (playPhase === 'postgame' && result) {
@@ -273,6 +322,9 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
                 deviatedRef.current = false;
                 setResult(null);
                 setDeviationCard(null);
+                setComputerLastMove(null);
+                setHintSquares(null);
+                setMoveFlash(null);
                 setPlayPhase('pregame');
                 setBoardKey((k) => k + 1);
               }}
@@ -317,14 +369,27 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           </div>
         </div>
 
-        <button
-          onClick={() => setVoiceOn(!voiceOn)}
-          className="p-2 rounded-lg hover:bg-theme-surface text-theme-text-muted"
-          aria-label={voiceOn ? 'Mute voice' : 'Enable voice'}
-          data-testid="voice-toggle"
-        >
-          {voiceOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
-        </button>
+        <div className="flex items-center gap-1">
+          {settings.showHints && (playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (
+            <button
+              onClick={() => void handleHint()}
+              disabled={hintLoading}
+              className="p-2 rounded-lg hover:bg-theme-surface text-theme-text-muted disabled:opacity-40"
+              aria-label="Get hint"
+              data-testid="hint-button"
+            >
+              <Lightbulb size={18} className={hintLoading ? 'animate-pulse' : ''} />
+            </button>
+          )}
+          <button
+            onClick={() => setVoiceOn(!voiceOn)}
+            className="p-2 rounded-lg hover:bg-theme-surface text-theme-text-muted"
+            aria-label={voiceOn ? 'Mute voice' : 'Enable voice'}
+            data-testid="voice-toggle"
+          >
+            {voiceOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* Opening phase indicator */}
@@ -355,6 +420,9 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
             onMove={handlePlayerMove}
             showEvalBar={false}
             showFlipButton={false}
+            highlightSquares={hintSquares ?? computerLastMove}
+            showLastMoveHighlight={settings.highlightLastMove}
+            moveQualityFlash={moveFlash}
           />
         </div>
       </div>

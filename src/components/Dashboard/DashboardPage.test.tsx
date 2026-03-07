@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '../../test/utils';
 import { DashboardPage } from './DashboardPage';
 import { useAppStore } from '../../stores/appStore';
-import { buildUserProfile, buildSessionRecord } from '../../test/factories';
+import { buildUserProfile, buildSessionRecord, buildOpeningRecord } from '../../test/factories';
 import { db } from '../../db/schema';
 import type { UserProfile } from '../../types';
 import type { PuzzleStats } from '../../services/puzzleService';
@@ -14,6 +14,7 @@ const mockGetRecentSessions = vi.fn();
 const mockUpdateStreak = vi.fn();
 const mockCreateSession = vi.fn();
 const mockCheckAndAwardAchievements = vi.fn();
+const mockGetFavoriteOpenings = vi.fn();
 const mockNavigate = vi.fn();
 
 vi.mock('../../services/puzzleService', () => ({
@@ -35,6 +36,10 @@ vi.mock('../../services/gamificationService', async () => {
     checkAndAwardAchievements: (...args: unknown[]): unknown => mockCheckAndAwardAchievements(...args),
   };
 });
+
+vi.mock('../../services/openingService', () => ({
+  getFavoriteOpenings: (...args: unknown[]): unknown => mockGetFavoriteOpenings(...args),
+}));
 
 vi.mock('../../services/dataLoader', () => ({
   seedDatabase: vi.fn().mockResolvedValue(undefined),
@@ -86,6 +91,7 @@ describe('DashboardPage', () => {
 
     mockGetPuzzleStats.mockResolvedValue(null);
     mockGetRecentSessions.mockResolvedValue([]);
+    mockGetFavoriteOpenings.mockResolvedValue([]);
     mockUpdateStreak.mockResolvedValue({ currentStreak: 0, longestStreak: 0 });
     mockCheckAndAwardAchievements.mockResolvedValue([]);
     mockCreateSession.mockResolvedValue(buildSessionRecord());
@@ -195,7 +201,7 @@ describe('DashboardPage', () => {
 
     await waitFor(() => {
       expect(mockCreateSession).toHaveBeenCalledWith(profile);
-      expect(mockNavigate).toHaveBeenCalledWith('/puzzles');
+      expect(mockNavigate).toHaveBeenCalledWith('/openings');
     });
   });
 
@@ -203,9 +209,9 @@ describe('DashboardPage', () => {
     setProfile();
     render(<DashboardPage />);
     await waitFor(() => {
-      expect(screen.getByTestId('quick-action-puzzles')).toBeInTheDocument();
       expect(screen.getByTestId('quick-action-openings')).toBeInTheDocument();
       expect(screen.getByTestId('quick-action-flashcards')).toBeInTheDocument();
+      expect(screen.getByTestId('quick-action-coach')).toBeInTheDocument();
     });
   });
 
@@ -214,17 +220,17 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('quick-action-puzzles')).toBeInTheDocument();
+      expect(screen.getByTestId('quick-action-openings')).toBeInTheDocument();
     });
-
-    fireEvent.click(screen.getByTestId('quick-action-puzzles'));
-    expect(mockNavigate).toHaveBeenCalledWith('/puzzles');
 
     fireEvent.click(screen.getByTestId('quick-action-openings'));
     expect(mockNavigate).toHaveBeenCalledWith('/openings');
 
     fireEvent.click(screen.getByTestId('quick-action-flashcards'));
     expect(mockNavigate).toHaveBeenCalledWith('/flashcards');
+
+    fireEvent.click(screen.getByTestId('quick-action-coach'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach');
   });
 
   it('shows puzzle stats when data is available', async () => {
@@ -345,5 +351,43 @@ describe('DashboardPage', () => {
       expect(screen.getByText("Today's Training")).toBeInTheDocument();
       expect(screen.getByText(/~30 min/)).toBeInTheDocument();
     });
+  });
+
+  it('shows favorites section when favorite openings exist', async () => {
+    setProfile();
+    const favOpening = buildOpeningRecord({ id: 'fav-1', name: 'Italian Game', isFavorite: true });
+    mockGetFavoriteOpenings.mockResolvedValue([favOpening]);
+    render(<DashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('favorites-section')).toBeInTheDocument();
+      expect(screen.getByText('Favorite Openings')).toBeInTheDocument();
+      expect(screen.getByTestId('favorite-opening-fav-1')).toBeInTheDocument();
+    });
+  });
+
+  it('hides favorites section when no favorites exist', async () => {
+    setProfile();
+    mockGetFavoriteOpenings.mockResolvedValue([]);
+    render(<DashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('favorites-section')).not.toBeInTheDocument();
+  });
+
+  it('favorite opening card navigates to opening detail', async () => {
+    setProfile();
+    const favOpening = buildOpeningRecord({ id: 'fav-1', name: 'Italian Game', isFavorite: true });
+    mockGetFavoriteOpenings.mockResolvedValue([favOpening]);
+    render(<DashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('favorite-opening-fav-1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('favorite-opening-fav-1'));
+    expect(mockNavigate).toHaveBeenCalledWith('/openings/fav-1');
   });
 });

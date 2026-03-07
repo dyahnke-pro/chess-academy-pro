@@ -58,7 +58,7 @@ describe('AppLayout a11y', () => {
 
   it('all nav links render with text labels', () => {
     render(<AppLayout />);
-    const expectedLabels = ['Dashboard', 'Puzzles', 'Openings', 'Flashcards', 'Coach', 'Games', 'Analysis', 'Stats', 'Settings'];
+    const expectedLabels = ['Dashboard', 'Openings', 'Flashcards', 'Coach', 'Games', 'Analysis', 'Stats', 'Settings'];
     for (const label of expectedLabels) {
       const links = screen.getAllByText(label);
       expect(links.length).toBeGreaterThanOrEqual(1);

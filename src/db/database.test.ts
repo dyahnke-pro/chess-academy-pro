@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(4);
+    expect(db.verno).toBe(6);
   });
 
   it('has puzzles table', () => {
@@ -95,9 +95,9 @@ describe('Database Index Queries', () => {
 
   it('queries openings by eco index', async () => {
     await db.openings.bulkPut([
-      { id: 'o1', eco: 'B20', name: 'Sicilian', pgn: '', uci: '', fen: '', color: 'black', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null },
-      { id: 'o2', eco: 'C50', name: 'Italian', pgn: '', uci: '', fen: '', color: 'white', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null },
-      { id: 'o3', eco: 'B90', name: 'Najdorf', pgn: '', uci: '', fen: '', color: 'black', style: '', isRepertoire: false, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null },
+      { id: 'o1', eco: 'B20', name: 'Sicilian', pgn: '', uci: '', fen: '', color: 'black', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null, isFavorite: false },
+      { id: 'o2', eco: 'C50', name: 'Italian', pgn: '', uci: '', fen: '', color: 'white', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null, isFavorite: false },
+      { id: 'o3', eco: 'B90', name: 'Najdorf', pgn: '', uci: '', fen: '', color: 'black', style: '', isRepertoire: false, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null, isFavorite: false },
     ]);
 
     const bOpenings = await db.openings.where('eco').between('B00', 'B99\uffff').toArray();
@@ -106,8 +106,8 @@ describe('Database Index Queries', () => {
 
   it('queries openings by color index', async () => {
     await db.openings.bulkPut([
-      { id: 'o1', eco: 'B20', name: 'Sicilian', pgn: '', uci: '', fen: '', color: 'black', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null },
-      { id: 'o2', eco: 'C50', name: 'Italian', pgn: '', uci: '', fen: '', color: 'white', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null },
+      { id: 'o1', eco: 'B20', name: 'Sicilian', pgn: '', uci: '', fen: '', color: 'black', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null, isFavorite: false },
+      { id: 'o2', eco: 'C50', name: 'Italian', pgn: '', uci: '', fen: '', color: 'white', style: '', isRepertoire: true, overview: '', keyIdeas: [], traps: [], warnings: [], variations: null, drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null, isFavorite: false },
     ]);
 
     const whiteOpenings = await db.openings.where('color').equals('white').toArray();

@@ -30,14 +30,21 @@ beforeAll(() => {
     writable: true,
   });
 
+  class MockSpeechSynthesisUtterance {
+    text = '';
+    rate = 1;
+    pitch = 1;
+    volume = 1;
+    voice: SpeechSynthesisVoice | null = null;
+    onend: (() => void) | null = null;
+    onerror: (() => void) | null = null;
+    constructor(text?: string) {
+      if (text) this.text = text;
+    }
+  }
+
   Object.defineProperty(window, 'SpeechSynthesisUtterance', {
-    value: vi.fn().mockImplementation(() => ({
-      text: '',
-      rate: 1,
-      pitch: 1,
-      volume: 1,
-      voice: null,
-    })),
+    value: MockSpeechSynthesisUtterance,
     writable: true,
   });
 

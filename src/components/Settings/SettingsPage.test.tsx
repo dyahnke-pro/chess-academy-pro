@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '../../test/utils';
 import { SettingsPage } from './SettingsPage';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import type { UserProfile } from '../../types';
+import { buildUserProfile } from '../../test/factories';
 
 vi.mock('../../services/themeService', async () => {
   const actual = await vi.importActual<typeof import('../../services/themeService')>('../../services/themeService');
@@ -14,47 +14,6 @@ vi.mock('../../services/cryptoService', () => ({
   encryptApiKey: vi.fn().mockResolvedValue({ encrypted: 'enc', iv: 'iv' }),
 }));
 
-function createProfile(): UserProfile {
-  return {
-    id: 'main',
-    name: 'Tester',
-    isKidMode: false,
-    coachPersonality: 'danya',
-    currentRating: 1500,
-    puzzleRating: 1400,
-    xp: 100,
-    level: 1,
-    currentStreak: 3,
-    longestStreak: 7,
-    streakFreezes: 0,
-    lastActiveDate: '2026-03-04',
-    achievements: [],
-    unlockedCoaches: ['danya'],
-    skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
-    badHabits: [],
-    preferences: {
-      theme: 'dark-premium',
-      boardColor: 'classic',
-      pieceSet: 'staunton',
-      showEvalBar: true,
-      showEngineLines: false,
-      soundEnabled: true,
-      voiceEnabled: true,
-      dailySessionMinutes: 45,
-      apiKeyEncrypted: null,
-      apiKeyIv: null,
-      preferredModel: { commentary: 'claude-haiku-4-5-20251001', analysis: 'claude-sonnet-4-5-20250514', reports: 'claude-opus-4-5-20250514' },
-      monthlyBudgetCap: null,
-      estimatedSpend: 0,
-      elevenlabsKeyEncrypted: null,
-      elevenlabsKeyIv: null,
-      voiceIdDanya: '',
-      voiceIdKasparov: '',
-      voiceIdFischer: '',
-    },
-  };
-}
-
 describe('SettingsPage', () => {
   beforeEach(async () => {
     await db.delete();
@@ -63,30 +22,39 @@ describe('SettingsPage', () => {
   });
 
   it('renders the settings page', () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+    useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
     expect(screen.getByTestId('settings-page')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
   });
 
-  it('shows all 4 tabs', () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+  it('shows all 5 tabs', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
     expect(screen.getByTestId('tab-profile')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-board')).toBeInTheDocument();
     expect(screen.getByTestId('tab-coach')).toBeInTheDocument();
     expect(screen.getByTestId('tab-appearance')).toBeInTheDocument();
     expect(screen.getByTestId('tab-about')).toBeInTheDocument();
   });
 
   it('shows profile tab by default', () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+    useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
     expect(screen.getByTestId('profile-tab')).toBeInTheDocument();
-    expect(screen.getByTestId('name-input')).toHaveValue('Tester');
+    expect(screen.getByTestId('name-input')).toHaveValue('Test Player');
+  });
+
+  it('switches to board tab on click', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile());
+    render(<SettingsPage />);
+    fireEvent.click(screen.getByTestId('tab-board'));
+    expect(screen.getByTestId('board-tab')).toBeInTheDocument();
+    expect(screen.getByTestId('master-all-off-toggle')).toBeInTheDocument();
   });
 
   it('switches to coach tab on click', () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+    useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
     expect(screen.getByTestId('coach-tab')).toBeInTheDocument();
@@ -94,15 +62,24 @@ describe('SettingsPage', () => {
   });
 
   it('switches to appearance tab on click', () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+    useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-appearance'));
     expect(screen.getByTestId('appearance-tab')).toBeInTheDocument();
-    expect(screen.getByTestId('board-color-select')).toBeInTheDocument();
+  });
+
+  it('appearance tab only shows theme picker', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile());
+    render(<SettingsPage />);
+    fireEvent.click(screen.getByTestId('tab-appearance'));
+    expect(screen.getByTestId('appearance-tab')).toBeInTheDocument();
+    expect(screen.queryByTestId('board-color-select')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('piece-set-select')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('sound-toggle')).not.toBeInTheDocument();
   });
 
   it('switches to about tab on click', () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+    useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-about'));
     expect(screen.getByTestId('about-tab')).toBeInTheDocument();
@@ -110,7 +87,7 @@ describe('SettingsPage', () => {
   });
 
   it('about tab has reset button with confirmation', () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+    useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-about'));
     expect(screen.getByTestId('reset-btn')).toBeInTheDocument();
@@ -121,5 +98,99 @@ describe('SettingsPage', () => {
   it('renders empty when no profile', () => {
     render(<SettingsPage />);
     expect(screen.queryByTestId('settings-page')).not.toBeInTheDocument();
+  });
+
+  describe('Board & Gameplay tab', () => {
+    it('renders all board display controls', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      expect(screen.getByTestId('highlight-last-move-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('show-legal-moves-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('show-coordinates-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('animation-speed-select')).toBeInTheDocument();
+      expect(screen.getByTestId('board-orientation-toggle')).toBeInTheDocument();
+    });
+
+    it('renders board appearance controls', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      expect(screen.getByTestId('board-color-select')).toBeInTheDocument();
+      expect(screen.getByTestId('piece-set-select')).toBeInTheDocument();
+    });
+
+    it('renders feedback and game behavior controls', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      expect(screen.getByTestId('move-quality-flash-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('show-hints-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('voice-narration-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('move-method-select')).toBeInTheDocument();
+      expect(screen.getByTestId('move-confirmation-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('auto-promote-queen-toggle')).toBeInTheDocument();
+    });
+
+    it('renders audio and engine controls', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      expect(screen.getByTestId('sound-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('eval-bar-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId('engine-lines-toggle')).toBeInTheDocument();
+    });
+
+    it('master all-off button toggles and shows confirmation text', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      const masterBtn = screen.getByTestId('master-all-off-toggle');
+      expect(masterBtn).toHaveTextContent('Master All Off');
+
+      fireEvent.click(masterBtn);
+      expect(masterBtn).toHaveTextContent('Master Off');
+    });
+
+    it('master all-off disables affected toggle inputs', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      fireEvent.click(screen.getByTestId('master-all-off-toggle'));
+
+      expect(screen.getByTestId('highlight-last-move-toggle')).toBeDisabled();
+      expect(screen.getByTestId('show-legal-moves-toggle')).toBeDisabled();
+      expect(screen.getByTestId('show-hints-toggle')).toBeDisabled();
+      expect(screen.getByTestId('move-quality-flash-toggle')).toBeDisabled();
+      expect(screen.getByTestId('voice-narration-toggle')).toBeDisabled();
+      expect(screen.getByTestId('animation-speed-select')).toBeDisabled();
+    });
+
+    it('master all-off does NOT disable sound or game behavior', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      fireEvent.click(screen.getByTestId('master-all-off-toggle'));
+
+      expect(screen.getByTestId('sound-toggle')).not.toBeDisabled();
+      expect(screen.getByTestId('move-method-select')).not.toBeDisabled();
+      expect(screen.getByTestId('move-confirmation-toggle')).not.toBeDisabled();
+      expect(screen.getByTestId('auto-promote-queen-toggle')).not.toBeDisabled();
+    });
+
+    it('has a save button', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      expect(screen.getByTestId('save-board-btn')).toBeInTheDocument();
+    });
   });
 });

@@ -5,6 +5,7 @@ import {
   getRepertoireOpenings,
   searchOpenings,
   getOpeningsByEcoLetter,
+  toggleFavorite,
 } from '../../services/openingService';
 import { seedDatabase } from '../../services/dataLoader';
 import { OpeningCard } from './OpeningCard';
@@ -85,6 +86,13 @@ export function OpeningExplorerPage(): JSX.Element {
       }
       return next;
     });
+  }, []);
+
+  const handleToggleFavorite = useCallback(async (id: string): Promise<void> => {
+    const newVal = await toggleFavorite(id);
+    setRepertoire((prev) =>
+      prev.map((o) => (o.id === id ? { ...o, isFavorite: newVal } : o)),
+    );
   }, []);
 
   // Repertoire display (with optional search)
@@ -183,6 +191,7 @@ export function OpeningExplorerPage(): JSX.Element {
                     <OpeningCard
                       opening={opening}
                       onClick={() => void navigate(`/openings/${opening.id}`)}
+                      onToggleFavorite={() => void handleToggleFavorite(opening.id)}
                     />
                   </motion.div>
                 ))}
@@ -206,6 +215,7 @@ export function OpeningExplorerPage(): JSX.Element {
                     <OpeningCard
                       opening={opening}
                       onClick={() => void navigate(`/openings/${opening.id}`)}
+                      onToggleFavorite={() => void handleToggleFavorite(opening.id)}
                     />
                   </motion.div>
                 ))}

@@ -28,6 +28,7 @@ describe('gameImportUtils', () => {
           woodpeckerReps: 0,
           woodpeckerSpeed: null,
           woodpeckerLastDate: null,
+          isFavorite: false,
         },
         {
           id: 'sicilian-najdorf',
@@ -50,6 +51,7 @@ describe('gameImportUtils', () => {
           woodpeckerReps: 0,
           woodpeckerSpeed: null,
           woodpeckerLastDate: null,
+          isFavorite: false,
         },
         {
           id: 'italian',
@@ -72,6 +74,7 @@ describe('gameImportUtils', () => {
           woodpeckerReps: 0,
           woodpeckerSpeed: null,
           woodpeckerLastDate: null,
+          isFavorite: false,
         },
       ]);
     });

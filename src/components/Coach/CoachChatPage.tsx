@@ -6,17 +6,21 @@ import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { buildChatMessages, parseActionTags, detectExpression, getChatSystemPromptAdditions, resetExpressionDebounce } from '../../services/coachChatService';
 import { voiceService } from '../../services/voiceService';
-import { CoachAvatar } from './CoachAvatar';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
-import type { ChatMessage as ChatMessageType } from '../../types';
+import type { ChatMessage as ChatMessageType, CoachPersonality } from '../../types';
+
+const PERSONALITY_COLORS: Record<CoachPersonality, string> = {
+  danya: '#4F9D69',
+  kasparov: '#C62828',
+  fischer: '#1565C0',
+};
 
 export function CoachChatPage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const chatMessages = useAppStore((s) => s.chatMessages);
   const addChatMessage = useAppStore((s) => s.addChatMessage);
-  const coachExpression = useAppStore((s) => s.coachExpression);
   const setCoachExpression = useAppStore((s) => s.setCoachExpression);
   const setCoachSpeaking = useAppStore((s) => s.setCoachSpeaking);
 
@@ -137,12 +141,12 @@ export function CoachChatPage(): JSX.Element {
         >
           <ArrowLeft size={20} className="text-theme-text" />
         </button>
-        <CoachAvatar
-          personality={personality}
-          expression={coachExpression}
-          speaking={isStreaming}
-          size="sm"
-        />
+        <div
+          className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold"
+          style={{ backgroundColor: PERSONALITY_COLORS[personality] }}
+        >
+          {personality.charAt(0).toUpperCase()}
+        </div>
         <div>
           <h2 className="text-sm font-semibold text-theme-text">
             Chat with {personality.charAt(0).toUpperCase() + personality.slice(1)}
@@ -161,15 +165,20 @@ export function CoachChatPage(): JSX.Element {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <CoachAvatar
-              personality={personality}
-              expression="encouraging"
-              speaking={false}
-              size="lg"
-            />
-            <p className="text-sm text-theme-text-muted text-center max-w-xs">
-              Ask me anything about chess — positions, openings, strategy, or just say hello!
-            </p>
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold"
+              style={{ backgroundColor: PERSONALITY_COLORS[personality] }}
+            >
+              {personality.charAt(0).toUpperCase()}
+            </div>
+            <div className="text-center max-w-xs">
+              <p className="text-sm font-medium text-theme-text">
+                {personality.charAt(0).toUpperCase() + personality.slice(1)} is ready to chat
+              </p>
+              <p className="text-xs text-theme-text-muted mt-1">
+                Ask about positions, openings, strategy, or just say hello!
+              </p>
+            </div>
           </motion.div>
         )}
 

@@ -1,8 +1,11 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { RotateCcw, SkipBack, RefreshCw } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePieceSound } from '../../hooks/usePieceSound';
+import { useSettings } from '../../hooks/useSettings';
+import { getBoardColor } from '../../services/boardColorService';
+import { buildPieceRenderer } from '../../services/pieceSetService';
 import { EvalBar } from './EvalBar';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type {
@@ -10,6 +13,8 @@ import type {
   SquareHandlerArgs,
   PieceHandlerArgs,
 } from 'react-chessboard';
+
+export type MoveQuality = 'good' | 'inaccuracy' | 'blunder' | null;
 
 export interface ChessBoardProps {
   initialFen?: string;
@@ -31,7 +36,19 @@ export interface ChessBoardProps {
   className?: string;
   /** Color controlled by the computer ('w' | 'b'). When set, that side moves automatically. */
   computerColor?: 'w' | 'b';
+  /** External square highlights (e.g. computer's last move) — shown as yellow background */
+  highlightSquares?: { from: string; to: string } | null;
+  /** Whether to show last-move highlights. Defaults to true. */
+  showLastMoveHighlight?: boolean;
+  /** Flash the board border with a quality color (green/amber/red). Resets after animation. */
+  moveQualityFlash?: MoveQuality;
 }
+
+const FLASH_COLORS: Record<string, string> = {
+  good: 'rgba(34, 197, 94, 0.6)',       // green-500
+  inaccuracy: 'rgba(245, 158, 11, 0.6)', // amber-500
+  blunder: 'rgba(239, 68, 68, 0.6)',     // red-500
+};
 
 export function ChessBoard({
   initialFen,
@@ -49,9 +66,30 @@ export function ChessBoard({
   onReset,
   className = '',
   computerColor,
+  highlightSquares = null,
+  showLastMoveHighlight = true,
+  moveQualityFlash = null,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
+  const { settings } = useSettings();
+
+  // ─── Board color + piece set from settings ────────────────────────────────
+  const boardColorScheme = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
+  const customPieces = useMemo(() => buildPieceRenderer(settings.pieceSet), [settings.pieceSet]);
+
+  // ─── Board border flash ─────────────────────────────────────────────────────
+  const [flashColor, setFlashColor] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!moveQualityFlash) {
+      setFlashColor(null);
+      return;
+    }
+    setFlashColor(FLASH_COLORS[moveQualityFlash] ?? null);
+    const timer = setTimeout(() => setFlashColor(null), 500);
+    return () => clearTimeout(timer);
+  }, [moveQualityFlash]);
 
   // ─── Move handlers ───────────────────────────────────────────────────────────
 
@@ -118,10 +156,13 @@ export function ChessBoard({
       styles[sq] = { boxShadow: 'inset 0 0 8px 2px rgba(255, 215, 0, 0.15)' };
     }
 
-    // Last-move yellow highlight
-    if (lastMove) {
-      styles[lastMove.from] = { background: 'rgba(255, 255, 0, 0.4)' };
-      styles[lastMove.to] = { background: 'rgba(255, 255, 0, 0.4)' };
+    // Last-move yellow highlight (internal or external)
+    if (showLastMoveHighlight) {
+      const moveHighlight = lastMove ?? highlightSquares;
+      if (moveHighlight) {
+        styles[moveHighlight.from] = { background: 'rgba(255, 255, 0, 0.4)' };
+        styles[moveHighlight.to] = { background: 'rgba(255, 255, 0, 0.4)' };
+      }
     }
 
     // King in check — red radial glow
@@ -155,7 +196,7 @@ export function ChessBoard({
     }
 
     return styles;
-  }, [lastMove, checkSquare, selectedSquare, legalMoves, getPiece]);
+  }, [lastMove, highlightSquares, checkSquare, selectedSquare, legalMoves, getPiece, showLastMoveHighlight]);
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
@@ -186,6 +227,9 @@ export function ChessBoard({
               position: game.position,
               boardOrientation: game.boardOrientation,
               squareStyles: customSquareStyles,
+              darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
+              lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
+              ...(customPieces ? { pieces: customPieces } : {}),
               allowDragging: interactive,
               dragActivationDistance: 5,
               animationDurationInMs: 200,
@@ -194,6 +238,14 @@ export function ChessBoard({
               onPieceDrag: handlePieceDrag,
             }}
           />
+          {/* Move quality border flash */}
+          {flashColor && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-sm animate-pulse"
+              style={{ boxShadow: `inset 0 0 0 4px ${flashColor}` }}
+              data-testid="move-quality-flash"
+            />
+          )}
         </div>
       </div>
 

@@ -31,6 +31,12 @@ const mockCreateBufferSource = vi.fn(() => ({
   start: vi.fn(),
   stop: vi.fn(),
 }));
+const mockCreateBiquadFilter = vi.fn(() => ({
+  type: '' as BiquadFilterType,
+  frequency: { setValueAtTime: vi.fn() },
+  Q: { setValueAtTime: vi.fn() },
+  connect: vi.fn(),
+}));
 
 class MockAudioContext {
   currentTime = 0;
@@ -42,6 +48,7 @@ class MockAudioContext {
   createGain = mockCreateGain;
   createBuffer = mockCreateBuffer;
   createBufferSource = mockCreateBufferSource;
+  createBiquadFilter = mockCreateBiquadFilter;
   close = vi.fn(() => Promise.resolve());
 }
 

@@ -4,11 +4,6 @@ import { KidModePage } from './KidModePage';
 import { useAppStore } from '../../stores/appStore';
 import type { UserProfile } from '../../types';
 
-vi.mock('../../services/themeService', async () => {
-  const actual = await vi.importActual<typeof import('../../services/themeService')>('../../services/themeService');
-  return { ...actual, applyTheme: vi.fn() };
-});
-
 vi.mock('../Board/ChessBoard', () => ({
   ChessBoard: ({ initialFen }: { initialFen?: string }) => (
     <div data-testid="chess-board" data-fen={initialFen}>Board</div>
@@ -67,7 +62,7 @@ describe('KidModePage', () => {
 
     expect(screen.getByTestId('kid-mode-page')).toBeInTheDocument();
     expect(screen.getByText(/Hi Kiddo/)).toBeInTheDocument();
-    expect(screen.getByText('100 XP earned')).toBeInTheDocument();
+    expect(screen.getByText(/100 XP/)).toBeInTheDocument();
   });
 
   it('renders all 6 piece lesson cards', () => {
@@ -123,11 +118,12 @@ describe('KidModePage', () => {
     vi.useRealTimers();
   });
 
-  it('has back to main button', () => {
+  it('renders journey card', () => {
     useAppStore.getState().setActiveProfile(createProfile());
     render(<KidModePage />);
 
-    expect(screen.getByTestId('back-to-main-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('journey-card')).toBeInTheDocument();
+    expect(screen.getByText("Pawn's Journey")).toBeInTheDocument();
   });
 
   it('renders empty when no profile', () => {

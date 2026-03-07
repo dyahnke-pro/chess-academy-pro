@@ -4,12 +4,14 @@ import { useAppStore } from '../../stores/appStore';
 import { createSession, updateStreak, getRecentSessions } from '../../services/sessionGenerator';
 import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
+import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
 import { SkillBar } from '../ui/SkillBar';
-import { Flame, Star, Brain, Clock, Play, Target, BookOpen, X } from 'lucide-react';
+import { MiniBoard } from '../Board/MiniBoard';
+import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X } from 'lucide-react';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
-import type { SessionRecord, Achievement } from '../../types';
+import type { SessionRecord, Achievement, OpeningRecord } from '../../types';
 import type { PuzzleStats } from '../../services/puzzleService';
 
 export function DashboardPage(): JSX.Element {
@@ -19,12 +21,14 @@ export function DashboardPage(): JSX.Element {
   const navigate = useNavigate();
   const [puzzleStats, setPuzzleStats] = useState<PuzzleStats | null>(null);
   const [recentSessions, setRecentSessions] = useState<SessionRecord[]>([]);
+  const [favorites, setFavorites] = useState<OpeningRecord[]>([]);
   const [betaBannerVisible, setBetaBannerVisible] = useState(false);
 
   useEffect(() => {
     void seedDatabase();
     void getPuzzleStats().then(setPuzzleStats);
     void getRecentSessions(5).then(setRecentSessions);
+    void getFavoriteOpenings().then(setFavorites);
 
     if (BETA_MODE) {
       void db.meta.get('beta_banner_dismissed').then((record) => {
@@ -63,7 +67,7 @@ export function DashboardPage(): JSX.Element {
     const session = await createSession(activeProfile);
     const store = useAppStore.getState();
     store.setCurrentSession(session);
-    void navigate('/puzzles');
+    void navigate('/openings');
   }, [activeProfile, navigate]);
 
   if (!activeProfile) return <></>;
@@ -151,10 +155,40 @@ export function DashboardPage(): JSX.Element {
 
       {/* Quick actions */}
       <div className="grid grid-cols-3 gap-3">
-        <QuickAction label="Puzzles" icon={<Target size={18} />} onClick={() => void navigate('/puzzles')} />
         <QuickAction label="Openings" icon={<BookOpen size={18} />} onClick={() => void navigate('/openings')} />
         <QuickAction label="Flashcards" icon={<Brain size={18} />} onClick={() => void navigate('/flashcards')} />
+        <QuickAction label="Coach" icon={<Target size={18} />} onClick={() => void navigate('/coach')} />
       </div>
+
+      {/* Favorite openings */}
+      {favorites.length > 0 && (
+        <div
+          className="rounded-xl p-5 border"
+          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+          data-testid="favorites-section"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Heart size={16} className="text-red-500 fill-red-500" />
+            <h2 className="font-semibold text-lg">Favorite Openings</h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {favorites.map((opening) => (
+              <button
+                key={opening.id}
+                onClick={() => void navigate(`/openings/${opening.id}`)}
+                className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-theme-border/50 transition-colors"
+                data-testid={`favorite-opening-${opening.id}`}
+              >
+                <MiniBoard fen={opening.fen} size={64} orientation={opening.color} />
+                <div className="text-center">
+                  <div className="text-xs font-semibold text-theme-text truncate max-w-[100px]">{opening.name}</div>
+                  <div className="text-[10px] text-theme-text-muted">{opening.eco}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Puzzle stats */}
       {puzzleStats && puzzleStats.totalAttempted > 0 && (

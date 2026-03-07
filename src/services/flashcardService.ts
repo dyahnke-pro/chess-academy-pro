@@ -183,3 +183,100 @@ export async function getFlashcardStats(): Promise<FlashcardStats> {
 
   return { total, due: dueCards.length, byOpening };
 }
+
+// ─── Mode-specific queries ──────────────────────────────────────────────────
+
+export type FlashcardMode =
+  | 'random'
+  | 'favorites'
+  | 'previously_studied'
+  | 'traps'
+  | 'warnings'
+  | 'variations'
+  | 'weakest'
+  | 'position_recognition'
+  | 'move_order'
+  | 'due_review';
+
+/** Loads flashcards filtered by mode, up to limit. */
+export async function getFlashcardsByMode(
+  mode: FlashcardMode,
+  limit: number = 20,
+): Promise<FlashcardRecord[]> {
+  switch (mode) {
+    case 'due_review':
+      return getDueFlashcards(limit);
+
+    case 'random': {
+      const all = await db.flashcards.toArray();
+      return shuffleArray(all).slice(0, limit);
+    }
+
+    case 'favorites': {
+      const favOpenings = await db.openings.filter((o) => o.isFavorite).toArray();
+      const favIds = new Set(favOpenings.map((o) => o.id));
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => favIds.has(c.openingId)).slice(0, limit);
+    }
+
+    case 'previously_studied': {
+      const studied = await db.openings.filter((o) => o.lastStudied !== null && o.isRepertoire).toArray();
+      const studiedIds = new Set(studied.map((o) => o.id));
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => studiedIds.has(c.openingId)).slice(0, limit);
+    }
+
+    case 'traps': {
+      const trapped = await db.openings.filter((o) => o.isRepertoire && (o.traps?.length ?? 0) > 0).toArray();
+      const ids = new Set(trapped.map((o) => o.id));
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => ids.has(c.openingId)).slice(0, limit);
+    }
+
+    case 'warnings': {
+      const warned = await db.openings.filter((o) => o.isRepertoire && (o.warnings?.length ?? 0) > 0).toArray();
+      const ids = new Set(warned.map((o) => o.id));
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => ids.has(c.openingId)).slice(0, limit);
+    }
+
+    case 'variations': {
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => c.type === 'best_move').slice(0, limit);
+    }
+
+    case 'weakest': {
+      const weak = await db.openings
+        .filter((o) => o.isRepertoire && o.drillAttempts > 0)
+        .toArray();
+      weak.sort((a, b) => a.drillAccuracy - b.drillAccuracy);
+      const weakIds = new Set(weak.slice(0, 10).map((o) => o.id));
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => weakIds.has(c.openingId)).slice(0, limit);
+    }
+
+    case 'position_recognition': {
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => c.type === 'name_opening').slice(0, limit);
+    }
+
+    case 'move_order': {
+      const withTraps = await db.openings.filter((o) => o.isRepertoire && (o.trapLines?.length ?? 0) > 0).toArray();
+      const ids = new Set(withTraps.map((o) => o.id));
+      const cards = await db.flashcards.toArray();
+      return cards.filter((c) => ids.has(c.openingId) && c.type === 'best_move').slice(0, limit);
+    }
+
+    default:
+      return getDueFlashcards(limit);
+  }
+}
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}

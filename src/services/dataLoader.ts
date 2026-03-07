@@ -29,6 +29,16 @@ interface RepertoireEntry {
     pgn: string;
     explanation: string;
   }>;
+  trapLines?: Array<{
+    name: string;
+    pgn: string;
+    explanation: string;
+  }>;
+  warningLines?: Array<{
+    name: string;
+    pgn: string;
+    explanation: string;
+  }>;
 }
 
 // ─── PGN Helpers ──────────────────────────────────────────────────────────────
@@ -113,6 +123,7 @@ export async function loadEcoData(): Promise<void> {
       woodpeckerReps: 0,
       woodpeckerSpeed: null,
       woodpeckerLastDate: null,
+      isFavorite: false,
       // SRS fields (unused on non-repertoire records, but schema requires them
       // since they share a table — stored as defaults)
       ...defaults,
@@ -147,12 +158,15 @@ export async function loadRepertoireData(): Promise<void> {
         traps: entry.traps,
         warnings: entry.warnings,
         variations: entry.variations,
+        trapLines: entry.trapLines ?? null,
+        warningLines: entry.warningLines ?? null,
         drillAccuracy: 0,
         drillAttempts: 0,
         lastStudied: null,
         woodpeckerReps: 0,
         woodpeckerSpeed: null,
         woodpeckerLastDate: null,
+        isFavorite: false,
         ...defaults,
       };
     },

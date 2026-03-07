@@ -3,7 +3,7 @@
     "id": "vienna-game",
     "eco": "C25",
     "name": "Vienna Game",
-    "pgn": "e4 e5 Nc3",
+    "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 O-O Nf3 d6 O-O",
     "color": "white",
     "style": "Classical, Flexible",
     "overview": "The Vienna Game is one of the most flexible openings for White. Rather than committing to a specific plan immediately, you develop the knight to c3 and keep all options open — f4, Bc4, Nf3, d4, or even g3. It's a great weapon because Black can't just play routine moves without getting into trouble.",
@@ -21,15 +21,27 @@
       "Don't play 3.f4 immediately without Nc3 — the King's Gambit is a separate opening",
       "After 3...Bc5, be careful about the d4 push timing — prepare it properly"
     ],
+    "trapLines": [
+      {
+        "name": "Vienna Trap (Nd5 wins)",
+        "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8",
+        "explanation": "After Black takes on e4, White plays Qh5 creating threats. If Black doesn't find the best defense, Nd5 or Nxc7 wins material."
+      },
+      {
+        "name": "Frankenstein-Dracula Attack",
+        "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 Nc6 Nxe5 g6 Qe2 Nxe5 d4",
+        "explanation": "The Frankenstein-Dracula variation leads to wild tactics. White sacrifices material for a dangerous attack against Black's king."
+      }
+    ],
     "variations": [
       {
         "name": "Vienna Gambit",
-        "pgn": "e4 e5 Nc3 Nf6 f4",
+        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 d4 d5 exd5 Nxd5 Nxd5 Qxd5 Bxf4 Be7 Nf3 O-O Bd3",
         "explanation": "The most aggressive continuation. White plays f4 to attack Black's e5 pawn. Black must decide whether to accept the gambit with exf4 or hold with d5 or Nc6. This leads to sharp, tactical positions where White gets excellent attacking chances."
       },
       {
         "name": "Vienna Game: Stanley Variation",
-        "pgn": "e4 e5 Nc3 Nf6 Bc4",
+        "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4 Na4 Bb6 Nxb6 axb6",
         "explanation": "Transposing into Italian-style positions. The bishop on c4 eyes f7 and prepares d3 or d4. After 4...Bc5 5.Qg4, White immediately creates kingside threats."
       },
       {
@@ -39,7 +51,7 @@
       },
       {
         "name": "Vienna Game vs 2...Nc6",
-        "pgn": "e4 e5 Nc3 Nc6 f4 exf4 Nf3",
+        "pgn": "e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O h6 Bxf4 gxf4",
         "explanation": "Against the knight response, f4 is even stronger. White grabs space immediately and the extra pawn on f4 after exf4 gives White a huge spatial advantage. Develop rapidly and castle to begin the attack."
       },
       {
@@ -158,7 +170,7 @@
     "id": "vienna-gambit",
     "eco": "C29",
     "name": "Vienna Gambit",
-    "pgn": "e4 e5 Nc3 Nf6 f4",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3 Qh4+ g3 Nxg3 Nf3 Qh5 Nxd5",
     "color": "white",
     "style": "Aggressive, Tactical",
     "overview": "The Vienna Gambit is one of the sharpest replies to 1...e5. After 2.Nc3 Nf6 3.f4, White immediately challenges the center and creates threats. The positions become incredibly tactical — Black must be precise or face a devastating kingside attack.",
@@ -184,7 +196,7 @@
       },
       {
         "name": "Gambit Declined: 3...d5",
-        "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3",
+        "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3 Nc5 d4 Ne6 Nf3 Be7 Bd3 O-O O-O c5",
         "explanation": "Black tries to counter in the center. After fxe5 Nxe4, the key is 5.d3! trapping the knight momentarily and gaining time. White emerges with active piece play and central control."
       },
       {
@@ -198,7 +210,7 @@
     "id": "scotch-game",
     "eco": "C45",
     "name": "Scotch Game",
-    "pgn": "e4 e5 Nf3 Nc6 d4",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6",
     "color": "white",
     "style": "Open, Dynamic",
     "overview": "The Scotch Game is Kasparov's favorite weapon against 1...e5. After 3.d4 exd4 4.Nxd4, White immediately opens the position and creates active piece play. It's more dynamic than the Italian and avoids the Berlin — a perfect choice for players who love open positions.",
@@ -498,7 +510,7 @@
     "id": "scotch-gambit",
     "eco": "C44",
     "name": "Scotch Gambit",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5",
     "color": "white",
     "style": "Gambit, Aggressive",
     "overview": "Instead of recapturing on d4, White plays Bc4 — ignoring the pawn and developing aggressively. The Scotch Gambit gives up a pawn for rapid development and a powerful attack against Black's kingside. All three pieces aim at f7!",
@@ -538,7 +550,7 @@
     "id": "bishops-opening",
     "eco": "C23",
     "name": "Bishop's Opening",
-    "pgn": "e4 e5 Bc4",
+    "pgn": "e4 e5 Bc4 Nf6 d3 Bc5 Nf3 d6 O-O O-O c3",
     "color": "white",
     "style": "Classical, Flexible",
     "overview": "The Bishop's Opening is simple and effective. After 2.Bc4, White develops the bishop to its most active diagonal and immediately threatens f7. It leads to Italian-type positions but with more flexibility since Nf3 hasn't been played yet.",
@@ -559,17 +571,17 @@
     "variations": [
       {
         "name": "Urusov Gambit",
-        "pgn": "e4 e5 Bc4 Nf6 d4 exd4 Nf3",
+        "pgn": "e4 e5 Bc4 Nf6 d4 exd4 Nf3 d5 exd5 Bb4+ c3 dxc3 bxc3 Ba5 O-O Nxd5 Qb3",
         "explanation": "After 2...Nf6 3.d4 exd4, White plays Nf3 developing with threats. The gambit gives excellent piece activity and Black's extra pawn is difficult to hold. This is an extremely fun line to play."
       },
       {
         "name": "Vienna Hybrid",
-        "pgn": "e4 e5 Bc4 Nf6 Nc3 Bc5 d3 O-O f4",
+        "pgn": "e4 e5 Bc4 Nf6 Nc3 Bc5 d3 O-O f4 d6 Nf3 Nc6 Na4 Bb6 Nxb6 axb6 O-O",
         "explanation": "Against normal development, White builds the Vienna structure with Nc3 and f4. This creates powerful attacking chances. The bishop on c4 and the f-pawn combine for a crushing kingside attack."
       },
       {
         "name": "Classical Variation",
-        "pgn": "e4 e5 Bc4 Bc5 Nf3 Nf6 d3 Nc6 c3",
+        "pgn": "e4 e5 Bc4 Bc5 Nf3 Nf6 d3 Nc6 c3 d6 Bb3 a5 O-O O-O Nbd2 Be6 Re1",
         "explanation": "Simple and solid. White develops naturally and prepares d4. The position resembles a solid Italian but with the bishop already on c4. Black has no real problems but White gets a pleasant game."
       },
       {
@@ -738,7 +750,7 @@
     "id": "evans-gambit",
     "eco": "C51",
     "name": "Evans Gambit",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6",
     "color": "white",
     "style": "Gambit, Attacking",
     "overview": "The Evans Gambit — 4.b4!? — is one of the most romantic and dangerous openings in chess. White sacrifices a pawn to gain time, open lines, and build a powerful center with c3 and d4. Kasparov used it to crush Anand at PCA 1995. The attack is overwhelming if Black doesn't know the theory.",
@@ -778,7 +790,7 @@
     "id": "kings-gambit",
     "eco": "C30",
     "name": "King's Gambit",
-    "pgn": "e4 e5 f4",
+    "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 d4 d6 Nd3 Nxe4 Bxf4 Bg7 Be2 O-O O-O",
     "color": "white",
     "style": "Romantic, Aggressive",
     "overview": "The King's Gambit is one of the oldest and most romantic openings — White immediately sacrifices a pawn to destroy Black's center and launch a direct attack. After 2...exf4, White gets a powerful center with d4 and open lines for the attack. Fischer said it was 'busted' but top players still use it to devastating effect.",
@@ -1768,7 +1780,7 @@
     "id": "danish-gambit",
     "eco": "C21",
     "name": "Danish Gambit",
-    "pgn": "e4 e5 d4 exd4 c3",
+    "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 d6 Nf3 Nf6 O-O Be7 Nc3",
     "color": "white",
     "style": "Gambit, Attacking",
     "overview": "The Danish Gambit offers two pawns for rapid development. After 3...dxc3 4.Bc4 cxb2 5.Bxb2, White has both bishops aimed at the kingside and complete central control. While Black can try to hold onto the pawns, the resulting positions are extremely dangerous for the defender.",
@@ -1838,7 +1850,7 @@
     "id": "italian-giuoco-piano",
     "eco": "C50",
     "name": "Italian Game: Giuoco Piano",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O",
     "color": "white",
     "style": "Classical, Strategic",
     "overview": "The Italian Game is the most popular opening at all levels. After 3.Bc4, White develops the bishop to its most active diagonal, prepares 0-0, and sets up for d3 or c3+d4. The modern approach is to play a slow but powerful buildup rather than the old sharp lines.",
@@ -1855,6 +1867,18 @@
     "warnings": [
       "The Berlin Defence type setup with ...Nf6 and ...d5 is solid — don't overextend",
       "Against the Hungarian Defence 3...Be7, be patient and build up with d4 and c3"
+    ],
+    "trapLines": [
+      {
+        "name": "Legal's Mate Trap",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5 Nxe5 Bxd1 Bxf7+ Ke7 Nd5",
+        "explanation": "The classic Legal's Mate trap. White sacrifices the queen but delivers checkmate with minor pieces. Even if Black avoids mate, White wins material."
+      },
+      {
+        "name": "Fried Liver Preview",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4",
+        "explanation": "The Fried Liver Attack sacrifices a knight on f7 to expose Black's king. White gets a powerful attack with Qf3+ forcing the king into the center."
+      }
     ],
     "variations": [
       {
@@ -2478,7 +2502,7 @@
     "id": "two-knights",
     "eco": "C57",
     "name": "Two Knights Defence",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6 Nf3 e4 Ne5 Bd6",
     "color": "white",
     "style": "Attacking, Sharp",
     "overview": "After 3...Nf6, White immediately plays 4.Ng5 attacking f7. This leads to some of the sharpest and most tactical positions in chess. Black must respond precisely with 4...d5 — anything else and White has a huge advantage. The Fried Liver Attack after 4...d5 5.exd5 Nxd5 6.Nxf7 is one of the most spectacular sacrifices in chess.",
@@ -2738,7 +2762,7 @@
     "id": "fried-liver-attack",
     "eco": "C57",
     "name": "Fried Liver Attack",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4",
     "color": "white",
     "style": "Sacrificial, Attacking",
     "overview": "The Fried Liver Attack is one of the most spectacular combinations in chess. White sacrifices a knight on f7 to expose Black's king. After 6.Nxf7! Kxf7 7.Qf3+, Black's king is forced to walk into the open board. White's attack is so powerful that even with best play, Black's position is extremely uncomfortable.",
@@ -2773,7 +2797,7 @@
     "id": "reti-opening",
     "eco": "A09",
     "name": "Reti Opening",
-    "pgn": "Nf3 d5 c4",
+    "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Nf6 Be2 Bc5 O-O O-O",
     "color": "white",
     "style": "Hypermodern, Flexible",
     "overview": "The Reti Opening is a hypermodern classic. Instead of controlling the center with pawns, White attacks it from the flanks with Nf3 and c4. The bishop will fianchetto to g2, controlling the long diagonal. Magnus Carlsen has used this system to devastating effect — it's flexible, subtle, and very dangerous.",
@@ -2853,7 +2877,7 @@
     "id": "london-system",
     "eco": "D00",
     "name": "London System",
-    "pgn": "d4 Nf6 Nf3 d5 Bf4",
+    "pgn": "d4 Nf6 Nf3 d5 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qxf5",
     "color": "white",
     "style": "Solid, Aggressive",
     "overview": "The London System has become one of the most popular openings at all levels. After 1.d4 2.Nf3 3.Bf4, White develops solidly with a concrete plan: complete development with e3 and Bd3, then launch a kingside attack with Ne5, f3, and g4-g5. Magnus and Gukesh both use it to great effect.",
@@ -2893,7 +2917,7 @@
     "id": "jobava-london",
     "eco": "D00",
     "name": "Jobava London System",
-    "pgn": "d4 Nf6 Nc3 d5 Bf4",
+    "pgn": "d4 Nf6 Nc3 d5 Bf4 c5 e3 a6 Nf3 Nc6 Be2 cxd4 exd4 Bf5 O-O e6 Re1 Be7",
     "color": "white",
     "style": "Aggressive, Unorthodox",
     "overview": "The Jobava London is the trendy cousin of the regular London. By playing Nc3 instead of Nf3, White creates immediate threats and avoids the well-prepared London theory. The knight on c3 supports e4 and creates tactical threats that Black must deal with immediately.",
@@ -2928,7 +2952,7 @@
     "id": "queens-gambit",
     "eco": "D06",
     "name": "Queen's Gambit",
-    "pgn": "d4 d5 c4",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5",
     "color": "white",
     "style": "Classical, Strategic",
     "overview": "The Queen's Gambit is the most classical of all openings. After 1.d4 d5 2.c4, White offers a pawn to control the center. Whether Black accepts or declines, White gets excellent central control and a great positional game. This opening has been played at the highest levels for over a century.",
@@ -2945,6 +2969,13 @@
     "warnings": [
       "The Nimzo-Indian and King's Indian are common responses after Nc3 — be prepared",
       "Against the Semi-Slav with c6 and e6, the Meran Variation is very sharp"
+    ],
+    "trapLines": [
+      {
+        "name": "Elephant Trap",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8",
+        "explanation": "The Elephant Trap in the QGD. If White captures too eagerly with Nxd5, Black wins the queen with the Bb4+ pin."
+      }
     ],
     "variations": [
       {
@@ -4043,7 +4074,7 @@
     "id": "catalan-opening",
     "eco": "E00",
     "name": "Catalan Opening",
-    "pgn": "d4 Nf6 c4 e6 g3",
+    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4",
     "color": "white",
     "style": "Positional, Endgame",
     "overview": "The Catalan is one of the most sophisticated openings in chess. After 3.g3, White fianchettos the bishop to g2 where it dominates the long diagonal and presses on d5. The pressure on the queenside is immense and Black often struggles to free their game. Karpov, Kramnik, and Carlsen have all used it as their main weapon.",
@@ -4223,7 +4254,7 @@
     "id": "kings-indian-attack",
     "eco": "A07",
     "name": "King's Indian Attack",
-    "pgn": "Nf3 d5 g3",
+    "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 Be7 Re1",
     "color": "white",
     "style": "Strategic, Attacking",
     "overview": "The King's Indian Attack is a universal system that can be played against almost any Black setup. White develops with Nf3, g3, Bg2, d3, Nbd2, e4, and Re1. The attack comes on the kingside with e5 and then f4-g4 or f4-f5. Fischer used it to great effect in the 1960s.",
@@ -4353,7 +4384,7 @@
     "id": "trompowsky-attack",
     "eco": "A45",
     "name": "Trompowsky Attack",
-    "pgn": "d4 Nf6 Bg5",
+    "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 Nc6 c3 Nf6 Nf3 Bg4 Nbd2 e6 O-O Be7",
     "color": "white",
     "style": "Provocative, Aggressive",
     "overview": "The Trompowsky Attack — 1.d4 Nf6 2.Bg5 — immediately challenges Black's most natural developing move. White pins the knight and threatens to double Black's pawns. If Black accepts the trade, White gets active piece play. If Black retreats, White can transpose to favorable lines.",
@@ -4433,7 +4464,7 @@
     "id": "birds-opening",
     "eco": "A02",
     "name": "Bird's Opening",
-    "pgn": "f4",
+    "pgn": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O d3 c5 c3",
     "color": "white",
     "style": "Unorthodox, Flexible",
     "overview": "Bird's Opening — 1.f4 — is a flexible and underestimated opening. White controls e5 and prepares a kingside attack. The Dutch Defence reversed (playing against ...d5) gives White interesting attacking possibilities. Not deeply studied by most players, so there's a surprise value.",
@@ -4598,7 +4629,7 @@
     "id": "goring-gambit",
     "eco": "C44",
     "name": "Goring Gambit",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 c3",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 d6 O-O Nf6 Nd5",
     "color": "white",
     "style": "Gambit, Sharp",
     "overview": "The Goring Gambit is a cousin of the Danish. After 3.d4 exd4 4.c3, White offers a pawn for rapid development and a powerful attack. The piece activity after 4...dxc3 5.Bc4 cxb2 6.Bxb2 is very similar to the Danish. Black must be precise or face a devastating attack.",
@@ -4633,7 +4664,7 @@
     "id": "sicilian-black-lion",
     "eco": "B50",
     "name": "Sicilian: Black Lion",
-    "pgn": "e4 c5 Nf3 d6",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Be2 e5 Nb3 Be7 O-O O-O Be3",
     "color": "black",
     "style": "Solid, Counter-attacking",
     "overview": "The Black Lion — also called the Lion's Opening — is a tricky weapon against 1.e4. Black plays a Philidor-type setup with d6, Nd7, e5, Nf6, and eventually the knight maneuver ...Nbd7-f8-g6 or h5. It avoids main Sicilian theory and gives Black a solid, counter-attacking game.",
@@ -4668,7 +4699,7 @@
     "id": "sicilian-najdorf",
     "eco": "B90",
     "name": "Sicilian: Najdorf Variation",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3",
     "color": "black",
     "style": "Dynamic, Aggressive",
     "overview": "The Najdorf is the most famous opening in chess — Bobby Fischer's weapon of choice, and the battle cry of every attacking player. After 5...a6, Black prepares b5 and e5, fighting for the initiative immediately. The positions are razor-sharp and require precise knowledge, but the rewards are immense.",
@@ -4833,7 +4864,7 @@
     "id": "sicilian-dragon",
     "eco": "B70",
     "name": "Sicilian: Dragon Variation",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4",
     "color": "black",
     "style": "Dynamic, Sharp",
     "overview": "The Sicilian Dragon is one of the most exciting openings in chess. After 5...g6, Black fianchettos the bishop to g7 where it becomes a powerful piece. The Dragon bishop on g7 is a monster — it controls the a1-h8 diagonal and supports Black's counterattack. The Yugoslav Attack creates positions where both kings are under fire.",
@@ -5048,7 +5079,7 @@
     "id": "caro-kann",
     "eco": "B10",
     "name": "Caro-Kann Defence",
-    "pgn": "e4 c6",
+    "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6 O-O-O Be7",
     "color": "black",
     "style": "Solid, Strategic",
     "overview": "The Caro-Kann is one of the most solid defences to 1.e4. After 1...c6, Black prepares d5 without blocking the c8 bishop. The resulting positions are strategic and well-understood. It's Capablanca's favourite defence and has been used by many world champions.",
@@ -5065,6 +5096,13 @@
     "warnings": [
       "The Fantasy Variation (3.f3) is an aggressive line — prepare c5 counter",
       "Against the Advance Variation with 3.e5, the counterplay requires accurate timing"
+    ],
+    "trapLines": [
+      {
+        "name": "Advance Variation Trap",
+        "pgn": "e4 c6 d4 d5 e5 Bf5 Bd3 Bxd3 Qxd3 e6 Nf3 Qa5+ Nbd2 Qa6 Qxa6 Nxa6",
+        "explanation": "In the Advance Variation, Black's bishop comes out before the pawns close the position. The queen trade leads to a solid position for Black."
+      }
     ],
     "variations": [
       {
@@ -5603,7 +5641,7 @@
     "id": "french-defence",
     "eco": "C00",
     "name": "French Defence",
-    "pgn": "e4 e6",
+    "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 O-O Nf3 Nbc6 Bd3 f5 Qg3",
     "color": "black",
     "style": "Solid, Counter-attacking",
     "overview": "The French Defence is a classical system — Black plays e6 and d5, creating a solid pawn structure and challenging White's center. The positions are strategic and Black typically gets counterplay on the queenside. Korchnoi was the greatest French player in history — he used it to nearly defeat Karpov twice in World Championship matches.",
@@ -5620,6 +5658,13 @@
     "warnings": [
       "The bad bishop problem is real — plan to activate it via b6 or c6-b5",
       "Against the Tarrasch (3.Nd2), don't allow White to establish a strong center unchallenged"
+    ],
+    "trapLines": [
+      {
+        "name": "Winawer Poisoned Pawn",
+        "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4 Ne2 Nbc6 f4 Bd7 Qd3",
+        "explanation": "The Poisoned Pawn in the Winawer. White takes on g7 but Black gets strong counterplay with central pressure and queenside attack."
+      }
     ],
     "variations": [
       {
@@ -6693,7 +6738,7 @@
     "id": "pirc-modern",
     "eco": "B07",
     "name": "Pirc / Modern Defence",
-    "pgn": "e4 d6 d4 Nf6",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O c6 a4 Nbd7 Be3 e5 dxe5 dxe5",
     "color": "black",
     "style": "Hypermodern, Flexible",
     "overview": "The Pirc and Modern are closely related hypermodern defences. Black allows White to build a large pawn center and then attacks it from the flanks. After ...g6 and ...Bg7, the fianchettoed bishop is a powerful piece. Fischer called it 'irregular' but it's a fully valid system at all levels.",
@@ -6983,7 +7028,7 @@
     "id": "scandinavian-defence",
     "eco": "B01",
     "name": "Scandinavian Defence",
-    "pgn": "e4 d5",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7",
     "color": "black",
     "style": "Direct, Unorthodox",
     "overview": "The Scandinavian Defence immediately challenges White's pawn on e4. After 1...d5 2.exd5 Qxd5 (or 2...Nf6), Black gives up a tempo to get active piece play. Anand used 3...Qa5 variation to great effect. The Scandinavian is a surprise weapon that leads to positions White players aren't always comfortable with.",
@@ -7238,7 +7283,7 @@
     "id": "kings-indian-defence",
     "eco": "E60",
     "name": "King's Indian Defence",
-    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7",
     "color": "black",
     "style": "Dynamic, Attacking",
     "overview": "The King's Indian Defence is the most dynamic defence to d4. After 3...Bg7, Black fianchettos the bishop and prepares e5, fighting for the center. The positions lead to furious attacks on both sides — White on the queenside, Black on the kingside. Kasparov and Fischer both used it extensively.",
@@ -7778,7 +7823,7 @@
     "id": "nimzo-indian",
     "eco": "E20",
     "name": "Nimzo-Indian Defence",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Bb7 e3",
     "color": "black",
     "style": "Strategic, Solid",
     "overview": "The Nimzo-Indian is widely regarded as Black's best defence to 1.d4. After 3...Bb4, Black pins the knight and immediately challenges White's control of e4. The resulting positions are rich and strategically complex. Kasparov, Kramnik, and virtually every world champion has used the Nimzo at some point.",
@@ -8298,7 +8343,7 @@
     "id": "grunfeld-defence",
     "eco": "D80",
     "name": "Grunfeld Defence",
-    "pgn": "d4 Nf6 c4 g6 Nc3 d5",
+    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1",
     "color": "black",
     "style": "Dynamic, Counterattacking",
     "overview": "The Grunfeld is one of the most ambitious defences to 1.d4. After 3...d5, Black allows White to build a huge pawn center with cxd5 Nxd5 e4, and then immediately counterattacks it. The resulting positions are incredibly dynamic — Black's counterplay must be very precise.",
@@ -8613,7 +8658,7 @@
     "id": "dutch-defence",
     "eco": "A80",
     "name": "Dutch Defence",
-    "pgn": "d4 f5",
+    "pgn": "d4 f5 c4 Nf6 g3 e6 Bg2 Be7 Nf3 O-O O-O d5 b3 c6 Bb2",
     "color": "black",
     "style": "Aggressive, Asymmetric",
     "overview": "The Dutch Defence — 1...f5 — is one of the most aggressive responses to 1.d4. Black immediately fights for e4 and prepares a kingside attack. The positions are highly asymmetric and lead to rich, complex games. Mikhail Botvinnik used it extensively and Magnus has played it in must-win situations.",
@@ -8983,7 +9028,7 @@
     "id": "queens-indian",
     "eco": "E15",
     "name": "Queen's Indian Defence",
-    "pgn": "d4 Nf6 c4 e6 Nf3 b6",
+    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Qc2 Nxc3 Qxc3",
     "color": "black",
     "style": "Strategic, Flexible",
     "overview": "The Queen's Indian Defence is one of the most solid and flexible systems in chess. After 3...b6, Black fianchettos the queen's bishop to b7 where it controls the long diagonal. The resulting positions are deep and strategic. Petrosian was the master of the Queen's Indian and used it to win the World Championship.",
@@ -9253,7 +9298,7 @@
     "id": "budapest-gambit",
     "eco": "A51",
     "name": "Budapest Gambit",
-    "pgn": "d4 Nf6 c4 e5",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 O-O Be2 d6",
     "color": "black",
     "style": "Gambit, Sharp",
     "overview": "The Budapest Gambit — 2...e5!? — is a surprise weapon against 1.d4. Black immediately sacrifices a pawn for piece activity and attacking chances. After 3.dxe5 Ng4, the knight attacks e5 and Black develops quickly. It's not theoretically best but it's extremely practical — White players often don't know the theory.",
@@ -9288,7 +9333,7 @@
     "id": "benko-gambit",
     "eco": "A57",
     "name": "Benko Gambit",
-    "pgn": "d4 Nf6 c4 c5 d5 b5",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2",
     "color": "black",
     "style": "Gambit, Positional",
     "overview": "The Benko Gambit — 3...b5!? — is one of the most spectacular positional gambits in chess. Black sacrifices a pawn to gain long-term queenside pressure. After 4.cxb5 a6, the a and b files become Black's main attacking weapons. The compensation is extremely durable — Black presses on the queenside for the entire game.",
@@ -9438,7 +9483,7 @@
     "id": "benoni-defence",
     "eco": "A60",
     "name": "Benoni Defence",
-    "pgn": "d4 Nf6 c4 c5 d5 e6",
+    "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Na6",
     "color": "black",
     "style": "Sharp, Dynamic",
     "overview": "The Benoni is one of the most dynamic defences to 1.d4. After 3...e6, Black challenges the pawn center and creates a sharp pawn structure with d6 vs d5. Black aims for the ...e5 break or the ...b5 advance. The positions are incredibly rich and both sides play for a win from the start.",
@@ -9638,7 +9683,7 @@
     "id": "old-indian-defence",
     "eco": "A53",
     "name": "Old Indian Defence",
-    "pgn": "d4 Nf6 c4 d6",
+    "pgn": "d4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 e4 Be7 Be2 O-O O-O c6 d5",
     "color": "black",
     "style": "Solid, Strategic",
     "overview": "The Old Indian Defence is a solid and underrated system against 1.d4. After 2...d6, Black prepares ...e5 and develops naturally. The positions resemble the King's Indian but with a different pawn structure. It's a great choice for players who want solid positions with counterplay.",
@@ -9733,7 +9778,7 @@
     "id": "alekhine-defence",
     "eco": "B02",
     "name": "Alekhine's Defence",
-    "pgn": "e4 Nf6",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 Nc3 O-O Be3 d5",
     "color": "black",
     "style": "Hypermodern, Provocative",
     "overview": "Alekhine's Defence — 1...Nf6 — is one of the most provocative openings. Black invites White to build a huge pawn center and then attacks it. Named after World Champion Alexander Alekhine, this defence requires courage and precise play. It's a perfect weapon for players who want to create chaos.",
@@ -10043,7 +10088,7 @@
     "id": "philidor-defence",
     "eco": "C41",
     "name": "Philidor Defence",
-    "pgn": "e4 e5 Nf3 d6",
+    "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O a4 c6 Re1 exd4 Nxd4",
     "color": "black",
     "style": "Solid, Counter-attacking",
     "overview": "The Philidor Defence — 2...d6 — is one of the oldest openings in chess, named after the great 18th century master. It's a solid system that has been rehabilitated by modern players. After ...Nd7 and ...c6, Black has a compact structure. Caruana has used it successfully against 1.e4.",
@@ -10293,7 +10338,7 @@
     "id": "owens-defence",
     "eco": "B00",
     "name": "Owen's Defence",
-    "pgn": "e4 b6",
+    "pgn": "e4 b6 d4 Bb7 Nc3 e6 Nf3 Bb4 Bd3 Nf6 O-O O-O Bg5 d6 Qe2",
     "color": "black",
     "style": "Unorthodox, Flexible",
     "overview": "Owen's Defence — 1...b6 — is an unusual and underestimated opening. Black fianchettos the queen's bishop to b7 where it has great scope. The positions can transpose into various systems but Black immediately challenges White's center from the flank. It has good surprise value.",
@@ -10363,7 +10408,7 @@
     "id": "leningrad-dutch",
     "eco": "A87",
     "name": "Leningrad Dutch",
-    "pgn": "d4 f5 c4 Nf6 g3 g6",
+    "pgn": "d4 f5 c4 Nf6 g3 g6 Bg2 Bg7 Nf3 O-O O-O d6 Nc3 c6 d5",
     "color": "black",
     "style": "Dynamic, Attacking",
     "overview": "The Leningrad Dutch is the most dynamic form of the Dutch Defence. After 3...g6, Black fianchettos the bishop to g7 and creates a Dragon-like structure. The positions are incredibly rich with attacking chances for Black on the kingside. The d5 break and ...e5 advance are Black's main weapons.",

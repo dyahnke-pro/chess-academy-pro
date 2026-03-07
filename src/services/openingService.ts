@@ -271,3 +271,19 @@ export async function updateVariationProgress(
 
   await db.openings.update(id, { variationAccuracy: accuracy });
 }
+
+// ─── Favorites (WO-3) ───────────────────────────────────────────────────────
+
+/** Toggles the isFavorite flag on an opening. Returns the new value. */
+export async function toggleFavorite(id: string): Promise<boolean> {
+  const opening = await db.openings.get(id);
+  if (!opening) return false;
+  const newValue = !opening.isFavorite;
+  await db.openings.update(id, { isFavorite: newValue });
+  return newValue;
+}
+
+/** Returns all favorited repertoire openings. */
+export async function getFavoriteOpenings(): Promise<OpeningRecord[]> {
+  return db.openings.filter((o) => o.isFavorite).toArray();
+}

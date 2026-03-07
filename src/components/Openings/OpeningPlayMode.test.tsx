@@ -97,6 +97,19 @@ vi.mock('../../services/speechService', () => ({
   },
 }));
 
+vi.mock('../../hooks/useSettings', () => ({
+  useSettings: () => ({
+    settings: {
+      showHints: true,
+      highlightLastMove: true,
+      moveQualityFlash: false,
+    },
+    raw: null,
+    updateSetting: vi.fn(),
+    updateSettings: vi.fn(),
+  }),
+}));
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const testOpening: OpeningRecord = buildOpeningRecord({
@@ -232,5 +245,29 @@ describe('OpeningPlayMode', () => {
     });
     renderPlay(blackOpening);
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-orientation', 'black');
+  });
+
+  it('shows hint button during opening phase when hints enabled', async () => {
+    renderPlay();
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('hint-button')).toBeInTheDocument();
+    });
+  });
+
+  it('hint button has correct aria-label', async () => {
+    renderPlay();
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Get hint')).toBeInTheDocument();
+    });
   });
 });

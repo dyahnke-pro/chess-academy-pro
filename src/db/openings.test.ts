@@ -26,6 +26,7 @@ function makeOpening(overrides: Partial<OpeningRecord> = {}): OpeningRecord {
     woodpeckerReps: 0,
     woodpeckerSpeed: null,
     woodpeckerLastDate: null,
+    isFavorite: false,
     ...overrides,
   };
 }

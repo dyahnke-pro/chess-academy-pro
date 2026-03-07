@@ -1,7 +1,12 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { CoachAvatar } from './CoachAvatar';
 import type { ChatMessage as ChatMessageType, CoachPersonality } from '../../types';
+
+const PERSONALITY_COLORS: Record<CoachPersonality, string> = {
+  danya: '#4F9D69',
+  kasparov: '#C62828',
+  fischer: '#1565C0',
+};
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -62,13 +67,12 @@ export function ChatMessage({ message, personality, isStreaming }: ChatMessagePr
       data-testid={`chat-message-${message.role}`}
     >
       {!isUser && (
-        <div className="flex-shrink-0 mt-1">
-          <CoachAvatar
-            personality={personality}
-            expression={message.metadata?.expression ?? 'neutral'}
-            speaking={isStreaming ?? false}
-            size="sm"
-          />
+        <div
+          className="flex-shrink-0 mt-1 w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold"
+          style={{ backgroundColor: PERSONALITY_COLORS[personality] }}
+          data-testid="coach-badge"
+        >
+          {personality.charAt(0).toUpperCase()}
         </div>
       )}
 

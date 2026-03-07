@@ -59,6 +59,9 @@ export interface OpeningRecord {
   traps: string[] | null;
   warnings: string[] | null;
   variations: OpeningVariation[] | null;
+  // Drillable trap/warning lines for Train mode
+  trapLines?: OpeningVariation[] | null;
+  warningLines?: OpeningVariation[] | null;
   drillAccuracy: number;
   drillAttempts: number;
   lastStudied: string | null;
@@ -73,6 +76,8 @@ export interface OpeningRecord {
   // Chess Reps-style line tracking (indices into variations array)
   linesDiscovered?: number[];
   linesPerfected?: number[];
+  // Favorites (WO-3)
+  isFavorite: boolean;
 }
 
 // ─── DB Meta ──────────────────────────────────────────────────────────────────
@@ -143,6 +148,11 @@ export interface FlashcardRecord {
   srsLastReview: string | null;
 }
 
+// ─── Settings Enums (WO-5) ───────────────────────────────────────────────────
+
+export type PieceAnimationSpeed = 'none' | 'fast' | 'medium' | 'slow';
+export type MoveMethod = 'drag' | 'click' | 'both';
+
 // ─── User Profile ─────────────────────────────────────────────────────────────
 
 export type CoachPersonality = 'kasparov' | 'fischer' | 'danya';
@@ -187,6 +197,21 @@ export interface UserPreferences {
   voiceIdKasparov: string;
   voiceIdFischer: string;
   voiceSpeed: number;
+  // Board Display (WO-5)
+  highlightLastMove: boolean;
+  showLegalMoves: boolean;
+  showCoordinates: boolean;
+  pieceAnimationSpeed: PieceAnimationSpeed;
+  boardOrientation: boolean;
+  // Feedback & Coaching (WO-5)
+  moveQualityFlash: boolean;
+  showHints: boolean;
+  // Game Behavior (WO-5)
+  moveMethod: MoveMethod;
+  moveConfirmation: boolean;
+  autoPromoteQueen: boolean;
+  // Master Control (WO-5)
+  masterAllOff: boolean;
 }
 
 export interface UserProfile {

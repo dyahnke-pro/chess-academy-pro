@@ -376,7 +376,7 @@ export function CoachGamePage(): JSX.Element {
     setTimeout(() => setCoachExpression('neutral'), 3000);
   }, [personality, setCoachExpression, coachSay, game]);
 
-  // Hint request
+  // Hint request — level 1: vague direction, level 2: specific piece/area, level 3: the move
   const handleHint = useCallback(async () => {
     const nextLevel = Math.min(gameState.currentHintLevel + 1, 3) as HintLevel;
 
@@ -386,7 +386,11 @@ export function CoachGamePage(): JSX.Element {
       hintsUsed: prev.hintsUsed + 1,
     }));
 
-    // Try API for hint, fall back to template
+    setCoachExpression('thinking');
+
+    // Get Stockfish analysis for context
+    const analysis = await stockfishEngine.analyzePosition(game.fen, 12).catch(() => null);
+    const bestMove = analysis?.bestMove ?? null;
     const hintScenario = `hint_level${nextLevel}` as 'hint_level1' | 'hint_level2' | 'hint_level3';
     let hintText: string;
 
@@ -397,7 +401,7 @@ export function CoachGamePage(): JSX.Element {
         moveNumber: moveCountRef.current,
         pgn: game.history.join(' '),
         openingName: null,
-        stockfishAnalysis: null,
+        stockfishAnalysis: analysis ? `Best: ${bestMove}, eval: ${analysis.evaluation}cp` : null,
         playerMove: null,
         moveClassification: null,
         playerProfile: {
@@ -405,19 +409,21 @@ export function CoachGamePage(): JSX.Element {
           style: personality,
           weaknesses: [],
         },
+        hintLevel: nextLevel,
       };
 
       hintText = await getCoachCommentary('hint', context, personality);
     } catch {
-      const analysis = await stockfishEngine.analyzePosition(game.fen, 10).catch(() => null);
       hintText = getScenarioTemplate(personality, hintScenario, {
-        bestMove: analysis?.bestMove,
+        bestMove,
       });
     }
 
-    setCommentaries((prev) => [...prev, { moveNumber: moveCountRef.current, text: `💡 ${hintText}`, expanded: true }]);
+    setCoachExpression('encouraging');
+    setCommentaries((prev) => [...prev, { moveNumber: moveCountRef.current, text: `Hint: ${hintText}`, expanded: true }]);
     coachSay(hintText);
-  }, [gameState.currentHintLevel, game.fen, game.lastMove, game.history, playerRating, personality, coachSay]);
+    setTimeout(() => setCoachExpression('neutral'), 3000);
+  }, [gameState.currentHintLevel, game.fen, game.lastMove, game.history, playerRating, personality, coachSay, setCoachExpression]);
 
   // Takeback
   const handleTakeback = useCallback(() => {

@@ -24,6 +24,7 @@ import { CoachGamePage } from './components/Coach/CoachGamePage';
 import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
 import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { StatsPage } from './components/Stats/StatsPage';
+import { KidLayout } from './components/Kid/KidLayout';
 import { KidModePage } from './components/Kid/KidModePage';
 import { KidPiecePage } from './components/Kid/KidPiecePage';
 import { JourneyMapPage } from './components/Kid/JourneyMapPage';
@@ -88,10 +89,6 @@ export function App(): JSX.Element {
           <Route path="/games/import" element={<ErrorBoundary><ImportPage /></ErrorBoundary>} />
           <Route path="/analysis" element={<ErrorBoundary><AnalysisBoardPage /></ErrorBoundary>} />
           <Route path="/stats" element={<ErrorBoundary><StatsPage /></ErrorBoundary>} />
-          <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
-          <Route path="/kid/journey" element={<ErrorBoundary><JourneyMapPage /></ErrorBoundary>} />
-          <Route path="/kid/journey/:chapterId" element={<ErrorBoundary><JourneyChapterPage /></ErrorBoundary>} />
-          <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
           <Route
             path="/settings"
             element={
@@ -105,6 +102,12 @@ export function App(): JSX.Element {
           <Route path="/settings/onboarding" element={<ErrorBoundary><OnboardingPage /></ErrorBoundary>} />
           <Route path="/board" element={<ErrorBoundary><BoardTestPage /></ErrorBoundary>} />
           <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+        <Route element={<KidLayout />}>
+          <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
+          <Route path="/kid/journey" element={<ErrorBoundary><JourneyMapPage /></ErrorBoundary>} />
+          <Route path="/kid/journey/:chapterId" element={<ErrorBoundary><JourneyChapterPage /></ErrorBoundary>} />
+          <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>
     </BrowserRouter>

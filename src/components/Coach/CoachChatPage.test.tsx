@@ -81,7 +81,7 @@ describe('CoachChatPage', () => {
 
   it('shows empty state prompt', () => {
     render(<CoachChatPage />);
-    expect(screen.getByText(/Ask me anything about chess/)).toBeInTheDocument();
+    expect(screen.getByText(/Ask about positions, openings, strategy/)).toBeInTheDocument();
   });
 
   it('renders chat input', () => {
@@ -142,7 +142,7 @@ describe('CoachChatPage', () => {
     });
 
     render(<CoachChatPage />);
-    expect(screen.queryByText(/Ask me anything about chess/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Ask about positions, openings, strategy/)).not.toBeInTheDocument();
   });
 
   it('displays Online status when not streaming', () => {
@@ -174,11 +174,11 @@ describe('CoachChatPage', () => {
     expect(sendBtn).toBeDisabled();
   });
 
-  it('renders coach avatar in the header', () => {
+  it('renders coach name badge in the header', () => {
     render(<CoachChatPage />);
-    // The header has a coach avatar
-    const avatars = screen.getAllByTestId('coach-avatar');
-    expect(avatars.length).toBeGreaterThanOrEqual(1);
+    // The header and empty state both show the initial badge 'D'
+    const badges = screen.getAllByText('D');
+    expect(badges.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders action tag buttons when assistant message has actions', () => {

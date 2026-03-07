@@ -11,6 +11,8 @@ import type { OpeningRecord } from '../../types';
 
 const mockGetOpeningById = vi.fn();
 
+const mockToggleFavorite = vi.fn();
+
 vi.mock('../../services/openingService', () => ({
   getOpeningById: (...args: unknown[]): unknown => mockGetOpeningById(...args),
   getMasteryPercent: (o: OpeningRecord) => Math.round(o.drillAccuracy * 100),
@@ -18,6 +20,7 @@ vi.mock('../../services/openingService', () => ({
   getLinesDiscovered: (o: OpeningRecord) => o.linesDiscovered?.length ?? 0,
   getLinesPerfected: (o: OpeningRecord) => o.linesPerfected?.length ?? 0,
   getTotalLines: (o: OpeningRecord) => o.variations?.length ?? 0,
+  toggleFavorite: (...args: unknown[]): unknown => mockToggleFavorite(...args),
   updateDrillProgress: vi.fn().mockResolvedValue(undefined),
   updateWoodpecker: vi.fn().mockResolvedValue(undefined),
   recordDrillAttempt: vi.fn().mockResolvedValue(undefined),
@@ -29,6 +32,12 @@ vi.mock('../../services/openingService', () => ({
 vi.mock('../Board/ChessBoard', () => ({
   ChessBoard: ({ initialFen }: { initialFen?: string }) => (
     <div data-testid="chess-board" data-fen={initialFen}>Board</div>
+  ),
+}));
+
+vi.mock('../Board/MiniBoard', () => ({
+  MiniBoard: ({ fen, size }: { fen: string; size?: number }) => (
+    <div data-testid="mini-board" data-fen={fen} data-size={String(size ?? 56)}>MiniBoard</div>
   ),
 }));
 
@@ -97,6 +106,7 @@ describe('OpeningDetailPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockGetOpeningById.mockResolvedValue(testOpening);
+    mockToggleFavorite.mockResolvedValue(true);
   });
 
   it('renders loading state initially', () => {
@@ -292,6 +302,191 @@ describe('OpeningDetailPage', () => {
     renderWithRoute('test-opening');
     await waitFor(() => {
       expect(mockGetOpeningById).toHaveBeenCalledWith('test-opening');
+    });
+  });
+
+  describe('narration buttons', () => {
+    it('renders narration button on overview section', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('narrate-overview')).toBeInTheDocument();
+      });
+    });
+
+    it('renders narration button on key ideas section', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('narrate-keyIdeas')).toBeInTheDocument();
+      });
+    });
+
+    it('renders narration button on traps section', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('narrate-traps')).toBeInTheDocument();
+      });
+    });
+
+    it('renders narration button on warnings section', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('narrate-warnings')).toBeInTheDocument();
+      });
+    });
+
+    it('narration button has "Narrate section" aria-label initially', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('narrate-overview')).toHaveAttribute('aria-label', 'Narrate section');
+      });
+    });
+
+    it('changes aria-label to "Stop narration" while narrating', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('narrate-overview')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('narrate-overview'));
+
+      // After click, the button should change aria-label to "Stop narration"
+      expect(screen.getByTestId('narrate-overview')).toHaveAttribute('aria-label', 'Stop narration');
+    });
+  });
+
+  describe('train buttons', () => {
+    it('does not render train traps button when no trapLines', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByText('Traps & Pitfalls')).toBeInTheDocument();
+      });
+      expect(screen.queryByTestId('train-traps-btn')).not.toBeInTheDocument();
+    });
+
+    it('renders train traps button when trapLines exist', async () => {
+      const openingWithTraps = {
+        ...testOpening,
+        trapLines: [
+          { name: 'Trap 1', pgn: 'e4 e5 Nc3', explanation: 'A trap' },
+        ],
+      };
+      mockGetOpeningById.mockResolvedValue(openingWithTraps);
+
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('train-traps-btn')).toBeInTheDocument();
+      });
+    });
+
+    it('does not render train warnings button when no warningLines', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByText('Watch Out For')).toBeInTheDocument();
+      });
+      expect(screen.queryByTestId('train-warnings-btn')).not.toBeInTheDocument();
+    });
+
+    it('renders train warnings button when warningLines exist', async () => {
+      const openingWithWarnings = {
+        ...testOpening,
+        warningLines: [
+          { name: 'Warning 1', pgn: 'e4 e5 d4', explanation: 'Be careful' },
+        ],
+      };
+      mockGetOpeningById.mockResolvedValue(openingWithWarnings);
+
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('train-warnings-btn')).toBeInTheDocument();
+      });
+    });
+
+    it('clicking train traps button enters train-traps mode', async () => {
+      const openingWithTraps = {
+        ...testOpening,
+        trapLines: [
+          { name: 'Trap 1', pgn: 'e4 e5 Nc3', explanation: 'A trap' },
+        ],
+      };
+      mockGetOpeningById.mockResolvedValue(openingWithTraps);
+
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('train-traps-btn')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('train-traps-btn'));
+      await waitFor(() => {
+        expect(screen.getByTestId('train-mode')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('variation thumbnails', () => {
+    it('renders MiniBoard thumbnails in variation rows', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        const miniBoards = screen.getAllByTestId('mini-board');
+        // 2 variations → 2 MiniBoard thumbnails
+        expect(miniBoards).toHaveLength(2);
+      });
+    });
+
+    it('MiniBoard receives computed FEN for variation', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        const miniBoards = screen.getAllByTestId('mini-board');
+        // Each MiniBoard should have a non-empty FEN
+        for (const board of miniBoards) {
+          expect(board.getAttribute('data-fen')).toBeTruthy();
+          expect(board.getAttribute('data-fen')).not.toBe('');
+        }
+      });
+    });
+
+    it('MiniBoard uses 52 as size', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        const miniBoards = screen.getAllByTestId('mini-board');
+        for (const board of miniBoards) {
+          expect(board.getAttribute('data-size')).toBe('52');
+        }
+      });
+    });
+  });
+
+  describe('favorite button', () => {
+    it('renders favorite button in header', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('favorite-btn')).toBeInTheDocument();
+      });
+    });
+
+    it('favorite button shows "Add to favorites" when not favorited', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('favorite-btn')).toHaveAttribute('aria-label', 'Add to favorites');
+      });
+    });
+
+    it('favorite button shows "Remove from favorites" when favorited', async () => {
+      mockGetOpeningById.mockResolvedValue({ ...testOpening, isFavorite: true });
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('favorite-btn')).toHaveAttribute('aria-label', 'Remove from favorites');
+      });
+    });
+
+    it('clicking favorite button calls toggleFavorite', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('favorite-btn')).toBeInTheDocument();
+      });
+      fireEvent.click(screen.getByTestId('favorite-btn'));
+      await waitFor(() => {
+        expect(mockToggleFavorite).toHaveBeenCalledWith('test-opening');
+      });
     });
   });
 });

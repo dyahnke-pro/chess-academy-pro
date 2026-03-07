@@ -30,6 +30,7 @@ const whiteOpening = {
   woodpeckerReps: 3,
   woodpeckerSpeed: 25,
   woodpeckerLastDate: '2026-03-01',
+  isFavorite: false,
 };
 
 const blackOpening = {
@@ -53,6 +54,7 @@ const blackOpening = {
   woodpeckerReps: 0,
   woodpeckerSpeed: null,
   woodpeckerLastDate: null,
+  isFavorite: false,
 };
 
 const ecoOpening = {
@@ -76,12 +78,14 @@ const ecoOpening = {
   woodpeckerReps: 0,
   woodpeckerSpeed: null,
   woodpeckerLastDate: null,
+  isFavorite: false,
 };
 
 vi.mock('../../services/openingService', () => ({
   getRepertoireOpenings: (...args: unknown[]): unknown => mockGetRepertoireOpenings(...args),
   searchOpenings: (...args: unknown[]): unknown => mockSearchOpenings(...args),
   getOpeningsByEcoLetter: (...args: unknown[]): unknown => mockGetOpeningsByEcoLetter(...args),
+  toggleFavorite: vi.fn().mockResolvedValue(true),
   getMasteryPercent: (o: typeof whiteOpening) => Math.round(o.drillAccuracy * 100),
   needsReview: (o: typeof whiteOpening) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
 }));

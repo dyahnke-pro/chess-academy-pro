@@ -56,6 +56,17 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
       voiceIdKasparov: 'VR6AewLTigWG4xSOukaG',
       voiceIdFischer: 'TxGEqnHWrfWFTfGW9XjX',
       voiceSpeed: 1.0,
+      highlightLastMove: true,
+      showLegalMoves: true,
+      showCoordinates: true,
+      pieceAnimationSpeed: 'medium' as const,
+      boardOrientation: true,
+      moveQualityFlash: false,
+      showHints: true,
+      moveMethod: 'both' as const,
+      moveConfirmation: false,
+      autoPromoteQueen: true,
+      masterAllOff: false,
     },
   };
 
