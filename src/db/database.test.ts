@@ -118,7 +118,7 @@ describe('Database Index Queries', () => {
   it('queries flashcards by openingId index', async () => {
     await db.flashcards.bulkPut([
       { id: 'f1', openingId: 'sicilian', type: 'best_move', questionFen: '', questionText: 'Q1', answerMove: null, answerText: 'A1', srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0, srsDueDate: '2024-01-01', srsLastReview: null },
-      { id: 'f2', openingId: 'sicilian', type: 'key_idea', questionFen: '', questionText: 'Q2', answerMove: null, answerText: 'A2', srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0, srsDueDate: '2024-01-01', srsLastReview: null },
+      { id: 'f2', openingId: 'sicilian', type: 'explain_idea', questionFen: '', questionText: 'Q2', answerMove: null, answerText: 'A2', srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0, srsDueDate: '2024-01-01', srsLastReview: null },
       { id: 'f3', openingId: 'italian', type: 'best_move', questionFen: '', questionText: 'Q3', answerMove: null, answerText: 'A3', srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0, srsDueDate: '2024-01-01', srsLastReview: null },
     ]);
 
@@ -140,7 +140,7 @@ describe('Database Index Queries', () => {
   it('queries games by source index', async () => {
     await db.games.bulkPut([
       { id: 'g1', pgn: '', white: 'A', black: 'B', result: '1-0', date: '2024-01-01', event: '', eco: 'C50', whiteElo: 1500, blackElo: 1400, source: 'lichess', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null },
-      { id: 'g2', pgn: '', white: 'C', black: 'D', result: '0-1', date: '2024-01-02', event: '', eco: 'B20', whiteElo: 1600, blackElo: 1500, source: 'chess.com', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null },
+      { id: 'g2', pgn: '', white: 'C', black: 'D', result: '0-1', date: '2024-01-02', event: '', eco: 'B20', whiteElo: 1600, blackElo: 1500, source: 'chesscom', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null },
       { id: 'g3', pgn: '', white: 'E', black: 'F', result: '1/2-1/2', date: '2024-01-03', event: '', eco: 'A00', whiteElo: 2500, blackElo: 2400, source: 'lichess', annotations: null, coachAnalysis: null, isMasterGame: true, openingId: null },
     ]);
 
@@ -177,7 +177,7 @@ describe('Database Bulk Operations', () => {
     await db.games.bulkAdd([
       { id: 'ba1', pgn: '', white: 'A', black: 'B', result: '1-0', date: '2024-01-01', event: '', eco: '', whiteElo: 1500, blackElo: 1400, source: 'lichess', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null },
       { id: 'ba2', pgn: '', white: 'C', black: 'D', result: '0-1', date: '2024-01-02', event: '', eco: '', whiteElo: 1600, blackElo: 1500, source: 'lichess', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null },
-      { id: 'ba3', pgn: '', white: 'E', black: 'F', result: '1/2-1/2', date: '2024-01-03', event: '', eco: '', whiteElo: 1700, blackElo: 1600, source: 'chess.com', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null },
+      { id: 'ba3', pgn: '', white: 'E', black: 'F', result: '1/2-1/2', date: '2024-01-03', event: '', eco: '', whiteElo: 1700, blackElo: 1600, source: 'chesscom', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null },
     ]);
 
     expect(await db.games.count()).toBe(3);

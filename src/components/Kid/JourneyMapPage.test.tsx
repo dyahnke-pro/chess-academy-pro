@@ -165,11 +165,11 @@ describe('JourneyMapPage', () => {
     mockGetJourneyProgress.mockResolvedValue(progressData);
     mockIsChapterUnlocked.mockReturnValue(true);
     mockGetChapterProgress.mockImplementation((chapterId: string) => {
-      if (chapterId === 'pawn') {
+      if (chapterId === 'pawn' && progressData.chapters.pawn) {
         return progressData.chapters.pawn;
       }
       return {
-        chapterId,
+        chapterId: chapterId as import('../../types').JourneyChapterId,
         lessonsCompleted: 0,
         puzzlesCompleted: 0,
         puzzlesCorrect: 0,

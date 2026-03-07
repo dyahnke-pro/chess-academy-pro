@@ -47,7 +47,8 @@ export function dispatchInstallPrompt(): {
 // ─── navigator.onLine mock helper ───────────────────────────────────────────
 
 export function setNavigatorOnLine(value: boolean): void {
-  (globalThis as Record<string, unknown>).__setNavigatorOnLine?.(value);
+  const setter = (globalThis as unknown as Record<string, ((v: boolean) => void) | undefined>).__setNavigatorOnLine;
+  setter?.(value);
 }
 
 export * from '@testing-library/react';

@@ -83,10 +83,10 @@ function renderTrain(
     opening?: OpeningRecord;
     lines?: OpeningVariation[];
     sectionLabel?: string;
-    onExit?: ReturnType<typeof vi.fn>;
+    onExit?: ReturnType<typeof vi.fn<() => void>>;
   } = {},
-): { onExit: ReturnType<typeof vi.fn> } {
-  const onExit = overrides.onExit ?? vi.fn();
+): { onExit: ReturnType<typeof vi.fn<() => void>> } {
+  const onExit = overrides.onExit ?? vi.fn<() => void>();
 
   render(
     <TrainMode

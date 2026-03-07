@@ -91,7 +91,7 @@ beforeAll(() => {
         ),
         deriveKey: vi.fn().mockImplementation(
           () => {
-            const key = { type: 'secret', algorithm: { name: 'AES-GCM', length: 256 } } as CryptoKey;
+            const key = { type: 'secret', algorithm: { name: 'AES-GCM', length: 256 } } as unknown as CryptoKey;
             const id = `key_${cryptoKeyStore.size}`;
             cryptoKeyStore.set(id, key);
             return Promise.resolve(key);
@@ -185,7 +185,7 @@ beforeAll(() => {
   if (typeof globalThis.AudioContext === 'undefined') {
     (globalThis as Record<string, unknown>).AudioContext = MockAudioContext;
   }
-  if (typeof (window as Record<string, unknown>).webkitAudioContext === 'undefined') {
+  if (typeof (window as unknown as Record<string, unknown>).webkitAudioContext === 'undefined') {
     Object.defineProperty(window, 'webkitAudioContext', {
       value: MockAudioContext,
       writable: true,

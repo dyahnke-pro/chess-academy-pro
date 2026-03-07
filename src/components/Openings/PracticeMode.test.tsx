@@ -86,14 +86,14 @@ const whiteOpening: OpeningRecord = buildOpeningRecord({
 
 function renderPractice(
   opening: OpeningRecord = whiteOpening,
-  overrides: { onComplete?: () => void; onExit?: () => void; variationIndex?: number } = {},
-): { onComplete: ReturnType<typeof vi.fn>; onExit: ReturnType<typeof vi.fn> } {
+  overrides: { onComplete?: (correct: boolean) => void; onExit?: () => void; variationIndex?: number } = {},
+): { onComplete: ReturnType<typeof vi.fn<(correct: boolean) => void>>; onExit: ReturnType<typeof vi.fn<() => void>> } {
   const onComplete = overrides.onComplete
-    ? (vi.fn(overrides.onComplete) as ReturnType<typeof vi.fn>)
-    : vi.fn();
+    ? vi.fn<(correct: boolean) => void>(overrides.onComplete)
+    : vi.fn<(correct: boolean) => void>();
   const onExit = overrides.onExit
-    ? (vi.fn(overrides.onExit) as ReturnType<typeof vi.fn>)
-    : vi.fn();
+    ? vi.fn<() => void>(overrides.onExit)
+    : vi.fn<() => void>();
 
   render(
     <PracticeMode

@@ -78,7 +78,13 @@ function buildDefaultSkillRadar(overrides?: Partial<SkillRadar>): SkillRadar {
   };
 }
 
-export function buildUserProfile(overrides?: Partial<UserProfile>): UserProfile {
+interface UserProfileOverrides extends Omit<Partial<UserProfile>, 'preferences' | 'skillRadar'> {
+  preferences?: Partial<UserPreferences>;
+  skillRadar?: Partial<SkillRadar>;
+}
+
+export function buildUserProfile(overrides?: UserProfileOverrides): UserProfile {
+  const { preferences, skillRadar, ...rest } = overrides ?? {};
   return {
     id: nextId('profile'),
     name: 'Test Player',
@@ -94,11 +100,10 @@ export function buildUserProfile(overrides?: Partial<UserProfile>): UserProfile 
     lastActiveDate: today(),
     achievements: [],
     unlockedCoaches: ['danya'],
-    skillRadar: buildDefaultSkillRadar(overrides?.skillRadar),
-    badHabits: overrides?.badHabits ?? [],
-    preferences: buildDefaultPreferences(overrides?.preferences),
-    ...overrides,
-    skillRadar: buildDefaultSkillRadar(overrides?.skillRadar),
+    badHabits: rest.badHabits ?? [],
+    preferences: buildDefaultPreferences(preferences),
+    ...rest,
+    skillRadar: buildDefaultSkillRadar(skillRadar),
   };
 }
 

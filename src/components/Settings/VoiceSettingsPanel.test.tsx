@@ -46,6 +46,18 @@ function createProfile(): UserProfile {
       voiceIdDanya: 'voice-danya',
       voiceIdKasparov: 'voice-kasparov',
       voiceIdFischer: 'voice-fischer',
+      voiceSpeed: 1.0,
+      highlightLastMove: true,
+      showLegalMoves: true,
+      showCoordinates: true,
+      pieceAnimationSpeed: 'medium',
+      boardOrientation: true,
+      moveQualityFlash: true,
+      showHints: true,
+      moveMethod: 'both',
+      moveConfirmation: false,
+      autoPromoteQueen: true,
+      masterAllOff: false,
     },
   };
 }

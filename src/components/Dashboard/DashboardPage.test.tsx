@@ -18,7 +18,7 @@ const mockGetFavoriteOpenings = vi.fn();
 const mockNavigate = vi.fn();
 
 vi.mock('../../services/puzzleService', () => ({
-  getPuzzleStats: (...args: unknown[]): unknown => mockGetPuzzleStats(...args),
+  getPuzzleStats: (): unknown => mockGetPuzzleStats(),
 }));
 
 vi.mock('../../services/sessionGenerator', () => ({

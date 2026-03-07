@@ -15,8 +15,8 @@ const mockGetRecentSessions = vi.fn();
 const mockDetectBadHabits = vi.fn();
 
 vi.mock('../../services/puzzleService', () => ({
-  getPuzzleStats: (...args: unknown[]): unknown => mockGetPuzzleStats(...args),
-  getThemeSkills: (...args: unknown[]): unknown => mockGetThemeSkills(...args),
+  getPuzzleStats: (): unknown => mockGetPuzzleStats(),
+  getThemeSkills: (): unknown => mockGetThemeSkills(),
 }));
 
 vi.mock('../../services/sessionGenerator', () => ({
@@ -72,6 +72,17 @@ function createProfile(overrides: Partial<UserProfile> = {}): UserProfile {
       voiceIdKasparov: '',
       voiceIdFischer: '',
       voiceSpeed: 1.0,
+      highlightLastMove: true,
+      showLegalMoves: true,
+      showCoordinates: true,
+      pieceAnimationSpeed: 'medium',
+      boardOrientation: true,
+      moveQualityFlash: true,
+      showHints: true,
+      moveMethod: 'both',
+      moveConfirmation: false,
+      autoPromoteQueen: true,
+      masterAllOff: false,
     },
     ...overrides,
   };

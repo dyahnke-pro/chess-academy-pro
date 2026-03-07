@@ -19,7 +19,7 @@ import { checkAndAwardAchievements } from '../../services/gamificationService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, CoachPersonality,
   CoachDifficulty, HintLevel, MoveClassification, StockfishAnalysis,
-  GameResult,
+  GameResult, CoachContext,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
@@ -147,9 +147,9 @@ export function CoachGamePage(): JSX.Element {
   // Check for game over
   useEffect(() => {
     if (game.isGameOver && gameState.status === 'playing') {
-      const result = game.isCheckmate
-        ? (game.turn === 'w' && playerColor === 'white' ? 'loss' : 'win') as const
-        : 'draw' as const;
+      const result: 'win' | 'loss' | 'draw' = game.isCheckmate
+        ? (game.turn === 'w' && playerColor === 'white' ? 'loss' : 'win')
+        : 'draw';
 
       const keyMoments = findKeyMoments(gameState.moves);
 
@@ -395,13 +395,13 @@ export function CoachGamePage(): JSX.Element {
     let hintText: string;
 
     try {
-      const context = {
+      const context: CoachContext = {
         fen: game.fen,
         lastMoveSan: game.lastMove ? `${game.lastMove.from}${game.lastMove.to}` : null,
         moveNumber: moveCountRef.current,
         pgn: game.history.join(' '),
         openingName: null,
-        stockfishAnalysis: analysis ? `Best: ${bestMove}, eval: ${analysis.evaluation}cp` : null,
+        stockfishAnalysis: analysis ?? null,
         playerMove: null,
         moveClassification: null,
         playerProfile: {
@@ -409,13 +409,12 @@ export function CoachGamePage(): JSX.Element {
           style: personality,
           weaknesses: [],
         },
-        hintLevel: nextLevel,
       };
 
       hintText = await getCoachCommentary('hint', context, personality);
     } catch {
       hintText = getScenarioTemplate(personality, hintScenario, {
-        bestMove,
+        bestMove: bestMove ?? undefined,
       });
     }
 

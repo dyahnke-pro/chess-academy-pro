@@ -127,6 +127,18 @@ describe('Profiles CRUD', () => {
         voiceIdDanya: 'pNInz6obpgDQGcFmaJgB',
         voiceIdKasparov: 'VR6AewLTigWG4xSOukaG',
         voiceIdFischer: 'TxGEqnHWrfWFTfGW9XjX',
+        voiceSpeed: 1.0,
+        highlightLastMove: true,
+        showLegalMoves: true,
+        showCoordinates: true,
+        pieceAnimationSpeed: 'medium',
+        boardOrientation: true,
+        moveQualityFlash: true,
+        showHints: true,
+        moveMethod: 'both',
+        moveConfirmation: false,
+        autoPromoteQueen: true,
+        masterAllOff: false,
       },
     };
 
