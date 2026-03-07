@@ -1,0 +1,13 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+.env.*
+ios
+android
+coverage
+playwright-report
+test-results
+*.tsbuildinfo
+.claude/
