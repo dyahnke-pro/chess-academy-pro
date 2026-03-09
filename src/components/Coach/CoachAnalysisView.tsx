@@ -31,7 +31,7 @@ export function CoachAnalysisView(): JSX.Element {
 
     const context = buildProfileContext(activeProfile);
     const fn = ANALYSIS_FN[type];
-    const text = await fn(context, activeProfile.coachPersonality, (chunk) => {
+    const text = await fn(context, (chunk) => {
       setResult((prev) => prev + chunk);
     });
 

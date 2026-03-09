@@ -12,7 +12,7 @@ const MOCK_CONTEXT: CoachContext = {
   stockfishAnalysis: null,
   playerMove: null,
   moveClassification: null,
-  playerProfile: { rating: 1200, style: 'danya', weaknesses: [] },
+  playerProfile: { rating: 1200, weaknesses: [] },
 };
 
 vi.mock('../../services/coachApi', () => ({
@@ -25,7 +25,6 @@ vi.mock('../../stores/appStore', () => ({
       activeProfile: {
         id: 'main',
         name: 'Test User',
-        coachPersonality: 'danya',
         currentRating: 1200,
         badHabits: [],
         preferences: { apiKeyEncrypted: 'test-key' },
@@ -48,9 +47,9 @@ describe('CoachPanel', () => {
     expect(screen.getByTestId('coach-ask-btn')).toBeInTheDocument();
   });
 
-  it('shows personality name on button', () => {
+  it('shows Ask Coach on button', () => {
     render(<CoachPanel context={MOCK_CONTEXT} />);
-    expect(screen.getByTestId('coach-ask-btn')).toHaveTextContent('Ask Coach Danya');
+    expect(screen.getByTestId('coach-ask-btn')).toHaveTextContent('Ask Coach');
   });
 
   it('shows coach panel after clicking ask', async () => {

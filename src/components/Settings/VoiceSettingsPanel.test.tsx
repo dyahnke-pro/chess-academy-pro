@@ -14,7 +14,6 @@ function createProfile(): UserProfile {
     id: 'main',
     name: 'Tester',
     isKidMode: false,
-    coachPersonality: 'danya',
     currentRating: 1400,
     puzzleRating: 1400,
     xp: 0,
@@ -24,7 +23,6 @@ function createProfile(): UserProfile {
     streakFreezes: 0,
     lastActiveDate: '2026-03-04',
     achievements: [],
-    unlockedCoaches: ['danya'],
     skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
     badHabits: [],
     preferences: {
@@ -43,9 +41,7 @@ function createProfile(): UserProfile {
       estimatedSpend: 0,
       elevenlabsKeyEncrypted: null,
       elevenlabsKeyIv: null,
-      voiceIdDanya: 'voice-danya',
-      voiceIdKasparov: 'voice-kasparov',
-      voiceIdFischer: 'voice-fischer',
+      elevenlabsVoiceId: 'voice-elevenlabs',
       voiceSpeed: 1.0,
       highlightLastMove: true,
       showLegalMoves: true,
@@ -81,18 +77,16 @@ describe('VoiceSettingsPanel', () => {
     expect(screen.getByTestId('elevenlabs-key-input')).toBeInTheDocument();
   });
 
-  it('shows voice ID inputs for all 3 personalities', () => {
+  it('shows single voice ID input', () => {
     useAppStore.getState().setActiveProfile(createProfile());
     render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('voice-id-danya')).toBeInTheDocument();
-    expect(screen.getByTestId('voice-id-kasparov')).toBeInTheDocument();
-    expect(screen.getByTestId('voice-id-fischer')).toBeInTheDocument();
+    expect(screen.getByTestId('voice-id-elevenlabs')).toBeInTheDocument();
   });
 
-  it('pre-fills voice IDs from profile', () => {
+  it('pre-fills voice ID from profile', () => {
     useAppStore.getState().setActiveProfile(createProfile());
     render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('voice-id-danya')).toHaveValue('voice-danya');
+    expect(screen.getByTestId('voice-id-elevenlabs')).toHaveValue('voice-elevenlabs');
   });
 
   it('has save buttons', () => {

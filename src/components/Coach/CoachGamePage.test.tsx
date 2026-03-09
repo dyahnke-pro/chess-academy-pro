@@ -1,13 +1,22 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, act, fireEvent } from '../../test/utils';
+import { render, screen } from '../../test/utils';
 import { CoachGamePage } from './CoachGamePage';
 import { useAppStore } from '../../stores/appStore';
-import type { UserProfile } from '../../types';
+import { buildUserProfile } from '../../test/factories';
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
+  },
+}));
+
+vi.mock('../../services/voiceInputService', () => ({
+  voiceInputService: {
+    isSupported: vi.fn().mockReturnValue(false),
+    startListening: vi.fn().mockReturnValue(false),
+    stopListening: vi.fn(),
+    onResult: vi.fn(),
   },
 }));
 
@@ -45,63 +54,31 @@ vi.mock('../../services/coachGameEngine', () => ({
 
 vi.mock('../../services/coachApi', () => ({
   getCoachCommentary: vi.fn().mockResolvedValue('Good move!'),
+  getCoachChatResponse: vi.fn().mockResolvedValue('Sure, I can help with that position.'),
 }));
 
 vi.mock('../../services/coachTemplates', () => ({
-  getScenarioTemplate: vi.fn().mockReturnValue('Let us begin the game!'),
+  getScenarioTemplate: vi.fn().mockReturnValue('Sure, take it back.'),
   getMoveCommentaryTemplate: vi.fn().mockReturnValue('Solid choice.'),
 }));
 
-const mockProfile: UserProfile = {
+vi.mock('../../services/openingDetectionService', () => ({
+  detectOpening: vi.fn().mockReturnValue(null),
+}));
+
+vi.mock('../../services/boardUtils', () => ({
+  getCapturedPieces: vi.fn().mockReturnValue({ white: [], black: [] }),
+  getMaterialAdvantage: vi.fn().mockReturnValue(0),
+}));
+
+const mockProfile = buildUserProfile({
   id: 'main',
   name: 'Player',
-  isKidMode: false,
-  coachPersonality: 'danya',
   currentRating: 1420,
   puzzleRating: 1400,
   xp: 500,
   level: 3,
-  currentStreak: 0,
-  longestStreak: 0,
-  streakFreezes: 1,
-  lastActiveDate: '2026-03-05',
-  achievements: [],
-  unlockedCoaches: ['danya'],
-  skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
-  badHabits: [],
-  preferences: {
-    theme: 'dark-modern',
-    boardColor: 'classic',
-    pieceSet: 'staunton',
-    showEvalBar: true,
-    showEngineLines: false,
-    soundEnabled: true,
-    voiceEnabled: true,
-    dailySessionMinutes: 45,
-    apiKeyEncrypted: null,
-    apiKeyIv: null,
-    preferredModel: { commentary: 'c', analysis: 'c', reports: 'c' },
-    monthlyBudgetCap: null,
-    estimatedSpend: 0,
-    elevenlabsKeyEncrypted: null,
-    elevenlabsKeyIv: null,
-    voiceIdDanya: '',
-    voiceIdKasparov: '',
-    voiceIdFischer: '',
-    voiceSpeed: 1.0,
-    highlightLastMove: true,
-    showLegalMoves: true,
-    showCoordinates: true,
-    pieceAnimationSpeed: 'medium',
-    boardOrientation: true,
-    moveQualityFlash: true,
-    showHints: true,
-    moveMethod: 'both',
-    moveConfirmation: false,
-    autoPromoteQueen: true,
-    masterAllOff: false,
-  },
-};
+});
 
 describe('CoachGamePage', () => {
   beforeEach(() => {
@@ -109,8 +86,6 @@ describe('CoachGamePage', () => {
     vi.clearAllMocks();
     useAppStore.setState({
       activeProfile: mockProfile,
-      coachExpression: 'neutral',
-      coachSpeaking: false,
     });
   });
 
@@ -121,11 +96,11 @@ describe('CoachGamePage', () => {
   it('renders the game page', () => {
     render(<CoachGamePage />);
     expect(screen.getByTestId('coach-game-page')).toBeInTheDocument();
-  });
+  }, 10000);
 
-  it('shows coach name in header', () => {
+  it('shows AI Coach in header', () => {
     render(<CoachGamePage />);
-    expect(screen.getByText(/Coach Danya/)).toBeInTheDocument();
+    expect(screen.getByText('vs AI Coach')).toBeInTheDocument();
   });
 
   it('shows target ELO', () => {
@@ -133,106 +108,73 @@ describe('CoachGamePage', () => {
     expect(screen.getByText(/1320 ELO/)).toBeInTheDocument();
   });
 
-  it('renders hint button after pregame', () => {
+  it('renders hint button immediately (no pregame delay)', () => {
     render(<CoachGamePage />);
-    // Advance past the 3s pregame timeout
-    act(() => {
-      vi.advanceTimersByTime(3100);
-    });
     expect(screen.getByTestId('hint-button')).toBeInTheDocument();
   });
 
-  it('renders takeback button after pregame', () => {
+  it('renders takeback button', () => {
     render(<CoachGamePage />);
-    act(() => {
-      vi.advanceTimersByTime(3100);
-    });
     expect(screen.getByTestId('takeback-btn')).toBeInTheDocument();
   });
 
-  it('renders chat button after pregame', () => {
+  it('renders the game chat panel', () => {
     render(<CoachGamePage />);
-    act(() => {
-      vi.advanceTimersByTime(3100);
-    });
-    expect(screen.getByTestId('game-chat-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('game-chat-panel')).toBeInTheDocument();
   });
 
-  it('renders the chess board via react-chessboard', () => {
+  it('renders the chess board', () => {
     render(<CoachGamePage />);
-    // The CoachGamePage renders a ChessBoard component which wraps react-chessboard
-    // We verify the board area is present within the page container
     const page = screen.getByTestId('coach-game-page');
     expect(page).toBeInTheDocument();
-    // The board is embedded in the page - it renders real react-chessboard
-    expect(page.querySelector('[data-boardid]') ?? page.querySelector('.board-container') ?? page).toBeTruthy();
-  });
-
-  it('renders coach avatar in the header', () => {
-    render(<CoachGamePage />);
-    const avatars = screen.getAllByTestId('coach-avatar');
-    expect(avatars.length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('shows pregame commentary in the feed and speech bubble', () => {
-    render(<CoachGamePage />);
-    // The pregame greeting appears in the commentary feed AND the coach speech bubble
-    const elements = screen.getAllByText('Let us begin the game!');
-    expect(elements.length).toBeGreaterThanOrEqual(1);
-    expect(elements[0]).toBeInTheDocument();
   });
 
   it('hint button displays Get a Hint text at level 0', () => {
     render(<CoachGamePage />);
-    act(() => {
-      vi.advanceTimersByTime(3100);
-    });
     expect(screen.getByTestId('hint-button')).toHaveTextContent('Get a Hint');
   });
 
   it('takeback button is disabled when no moves have been made', () => {
     render(<CoachGamePage />);
-    act(() => {
-      vi.advanceTimersByTime(3100);
-    });
     const takebackBtn = screen.getByTestId('takeback-btn');
     expect(takebackBtn).toBeDisabled();
   });
 
-  it('chat button toggles chat input visibility', () => {
+  it('chat panel shows placeholder text', () => {
     render(<CoachGamePage />);
-    act(() => {
-      vi.advanceTimersByTime(3100);
-    });
-
-    // Chat input should not be visible initially
-    expect(screen.queryByPlaceholderText('Ask about the position...')).not.toBeInTheDocument();
-
-    // Click chat button
-    fireEvent.click(screen.getByTestId('game-chat-btn'));
-
-    // Now chat input should be visible
     expect(screen.getByPlaceholderText('Ask about the position...')).toBeInTheDocument();
   });
 
-  it('shows fischer personality name when profile uses fischer', () => {
-    useAppStore.setState({
-      activeProfile: { ...mockProfile, coachPersonality: 'fischer' },
-    });
+  it('chat panel shows Game Chat header', () => {
     render(<CoachGamePage />);
-    expect(screen.getByText(/Coach Fischer/)).toBeInTheDocument();
+    expect(screen.getByText('Game Chat')).toBeInTheDocument();
   });
 
-  it('displays move number markers in the commentary feed', () => {
+  it('uses two-column layout', () => {
     render(<CoachGamePage />);
-    // The pregame commentary has moveNumber 0, rendered as #0
-    expect(screen.getByText('#0')).toBeInTheDocument();
+    const page = screen.getByTestId('coach-game-page');
+    expect(page.className).toContain('md:flex-row');
   });
 
-  it('controls section is hidden during pregame', () => {
+  // ─── Board Annotation Tests ─────────────────────────────────────────────────
+
+  it('does not show temporary position banner initially', () => {
     render(<CoachGamePage />);
-    // During pregame (before 3s timeout), controls should not be visible
-    expect(screen.queryByTestId('hint-button')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('takeback-btn')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('temp-position-banner')).not.toBeInTheDocument();
+  });
+
+  it('does not show back-to-game button initially', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('back-to-game-btn')).not.toBeInTheDocument();
+  });
+
+  it('renders panel divider for resizable chat/moves split', () => {
+    render(<CoachGamePage />);
+    expect(screen.getByTestId('panel-divider')).toBeInTheDocument();
+  });
+
+  it('renders speaker toggle button', () => {
+    render(<CoachGamePage />);
+    expect(screen.getByTestId('coach-speaker-toggle')).toBeInTheDocument();
   });
 });

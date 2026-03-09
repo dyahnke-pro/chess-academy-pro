@@ -3,22 +3,15 @@ import { useAppStore } from '../../stores/appStore';
 import { getCoachCommentary } from '../../services/coachApi';
 import { MessageSquare, Loader, X, Volume2 } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
-import type { CoachTask, CoachContext, CoachPersonality } from '../../types';
+import type { CoachTask, CoachContext } from '../../types';
 
 interface CoachPanelProps {
   context: CoachContext;
   task?: CoachTask;
 }
 
-const PERSONALITY_LABELS: Record<CoachPersonality, string> = {
-  danya: 'Coach Danya',
-  kasparov: 'Kasparov',
-  fischer: 'Fischer',
-};
-
 export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProps): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
-  const personality = activeProfile?.coachPersonality ?? 'danya';
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -34,19 +27,19 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
 
     setLoading(true);
 
-    const result = await getCoachCommentary(task, context, personality, (chunk) => {
+    const result = await getCoachCommentary(task, context, (chunk) => {
       setMessage((prev) => prev + chunk);
     });
 
     setMessage(result);
     setLoading(false);
-  }, [task, context, personality, activeProfile]);
+  }, [task, context, activeProfile]);
 
   const handleSpeak = useCallback((): void => {
     if (message) {
-      void voiceService.speak(message, personality);
+      void voiceService.speak(message);
     }
-  }, [message, personality]);
+  }, [message]);
 
   if (!visible) {
     return (
@@ -56,7 +49,7 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
         data-testid="coach-ask-btn"
       >
         <MessageSquare size={14} className="text-theme-accent" />
-        Ask {PERSONALITY_LABELS[personality]}
+        Ask Coach
       </button>
     );
   }
@@ -67,7 +60,7 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
         <div className="flex items-center gap-2">
           <MessageSquare size={14} className="text-theme-accent" />
           <span className="text-sm font-semibold text-theme-text">
-            {PERSONALITY_LABELS[personality]}
+            Coach
           </span>
         </div>
         <div className="flex items-center gap-1">

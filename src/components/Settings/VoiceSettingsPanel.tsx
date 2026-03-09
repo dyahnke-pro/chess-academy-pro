@@ -10,9 +10,7 @@ export function VoiceSettingsPanel(): JSX.Element {
 
   const [elevenlabsKey, setElevenlabsKey] = useState('');
   const [showKey, setShowKey] = useState(false);
-  const [voiceIdDanya, setVoiceIdDanya] = useState(() => activeProfile?.preferences.voiceIdDanya ?? '');
-  const [voiceIdKasparov, setVoiceIdKasparov] = useState(() => activeProfile?.preferences.voiceIdKasparov ?? '');
-  const [voiceIdFischer, setVoiceIdFischer] = useState(() => activeProfile?.preferences.voiceIdFischer ?? '');
+  const [elevenlabsVoiceId, setElevenlabsVoiceId] = useState(() => activeProfile?.preferences.elevenlabsVoiceId ?? '');
   const [voiceSpeed, setVoiceSpeed] = useState(() => activeProfile?.preferences.voiceSpeed ?? 1.0);
   const [status, setStatus] = useState<string | null>(null);
 
@@ -43,9 +41,7 @@ export function VoiceSettingsPanel(): JSX.Element {
 
     const updatedPrefs = {
       ...activeProfile.preferences,
-      voiceIdDanya,
-      voiceIdKasparov,
-      voiceIdFischer,
+      elevenlabsVoiceId,
       voiceSpeed,
     };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
@@ -96,41 +92,15 @@ export function VoiceSettingsPanel(): JSX.Element {
       <div className="space-y-3">
         <div>
           <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-            Danya Voice ID
+            ElevenLabs Voice ID
           </label>
           <input
             type="text"
-            value={voiceIdDanya}
-            onChange={(e) => setVoiceIdDanya(e.target.value)}
+            value={elevenlabsVoiceId}
+            onChange={(e) => setElevenlabsVoiceId(e.target.value)}
             className="w-full px-3 py-2 rounded-lg border text-sm"
             style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="voice-id-danya"
-          />
-        </div>
-        <div>
-          <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-            Kasparov Voice ID
-          </label>
-          <input
-            type="text"
-            value={voiceIdKasparov}
-            onChange={(e) => setVoiceIdKasparov(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border text-sm"
-            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="voice-id-kasparov"
-          />
-        </div>
-        <div>
-          <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-            Fischer Voice ID
-          </label>
-          <input
-            type="text"
-            value={voiceIdFischer}
-            onChange={(e) => setVoiceIdFischer(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border text-sm"
-            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="voice-id-fischer"
+            data-testid="voice-id-elevenlabs"
           />
         </div>
 
@@ -160,7 +130,7 @@ export function VoiceSettingsPanel(): JSX.Element {
           style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
           data-testid="save-voice-ids-btn"
         >
-          Save Voice IDs
+          Save Voice Settings
         </button>
       </div>
 

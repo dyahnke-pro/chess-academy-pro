@@ -13,12 +13,28 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const listeningRef = useRef(false);
   const voiceSupported = voiceInputService.isSupported();
+
+  // Keep ref in sync with state so the onResult callback can read it
+  useEffect(() => {
+    listeningRef.current = listening;
+  }, [listening]);
+
+  // Auto-focus the textarea on mount
+  useEffect(() => {
+    textareaRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     voiceInputService.onResult((transcript) => {
       setText((prev) => (prev ? prev + ' ' + transcript : transcript));
-      setListening(false);
+      // Re-start listening if mic is active (persistent mode)
+      if (listeningRef.current) {
+        setTimeout(() => {
+          voiceInputService.startListening();
+        }, 150);
+      }
     });
   }, []);
 
@@ -31,6 +47,10 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
     }
+    // Re-focus input after sending
+    requestAnimationFrame(() => {
+      textareaRef.current?.focus();
+    });
   }, [text, disabled, onSend]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -55,7 +75,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
     setText(e.target.value);
     const el = e.target;
     el.style.height = 'auto';
-    el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+    el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
   }, []);
 
   return (
@@ -68,7 +88,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
         placeholder={placeholder ?? 'Type a message...'}
         disabled={disabled}
         rows={1}
-        className="flex-1 resize-none rounded-xl border border-theme-border bg-theme-surface px-4 py-2.5 text-sm text-theme-text placeholder:text-theme-text-muted focus:outline-none focus:border-theme-accent disabled:opacity-50"
+        className="flex-1 resize-y rounded-xl border border-theme-border bg-theme-surface px-4 py-2.5 text-sm text-theme-text placeholder:text-theme-text-muted focus:outline-none focus:border-theme-accent disabled:opacity-50 min-h-[40px] max-h-[200px]"
         data-testid="chat-text-input"
       />
 

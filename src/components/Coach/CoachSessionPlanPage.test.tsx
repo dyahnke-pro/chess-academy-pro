@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '../../test/utils';
 import { CoachSessionPlanPage } from './CoachSessionPlanPage';
 import { useAppStore } from '../../stores/appStore';
-import type { UserProfile } from '../../types';
+import { buildUserProfile } from '../../test/factories';
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
@@ -13,7 +13,7 @@ vi.mock('../../services/voiceService', () => ({
 
 vi.mock('../../services/coachApi', () => ({
   getCoachCommentary: vi.fn().mockImplementation(
-    (_task: string, _context: unknown, _personality: string, onStream?: (chunk: string) => void) => {
+    (_task: string, _context: unknown, onStream?: (chunk: string) => void) => {
       if (onStream) {
         onStream('Here is your training plan for today.');
       }
@@ -46,63 +46,18 @@ vi.mock('../../services/sessionGenerator', () => ({
   }),
 }));
 
-const mockProfile: UserProfile = {
+const mockProfile = buildUserProfile({
   id: 'main',
   name: 'Player',
-  isKidMode: false,
-  coachPersonality: 'danya',
   currentRating: 1420,
   puzzleRating: 1400,
-  xp: 0,
-  level: 1,
-  currentStreak: 0,
-  longestStreak: 0,
-  streakFreezes: 1,
-  lastActiveDate: '2026-03-05',
-  achievements: [],
-  unlockedCoaches: ['danya'],
-  skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
-  badHabits: [],
-  preferences: {
-    theme: 'dark-modern',
-    boardColor: 'classic',
-    pieceSet: 'staunton',
-    showEvalBar: true,
-    showEngineLines: false,
-    soundEnabled: true,
-    voiceEnabled: true,
-    dailySessionMinutes: 45,
-    apiKeyEncrypted: null,
-    apiKeyIv: null,
-    preferredModel: { commentary: 'c', analysis: 'c', reports: 'c' },
-    monthlyBudgetCap: null,
-    estimatedSpend: 0,
-    elevenlabsKeyEncrypted: null,
-    elevenlabsKeyIv: null,
-    voiceIdDanya: '',
-    voiceIdKasparov: '',
-    voiceIdFischer: '',
-    voiceSpeed: 1.0,
-    highlightLastMove: true,
-    showLegalMoves: true,
-    showCoordinates: true,
-    pieceAnimationSpeed: 'medium',
-    boardOrientation: true,
-    moveQualityFlash: true,
-    showHints: true,
-    moveMethod: 'both',
-    moveConfirmation: false,
-    autoPromoteQueen: true,
-    masterAllOff: false,
-  },
-};
+});
 
 describe('CoachSessionPlanPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useAppStore.setState({
       activeProfile: mockProfile,
-      coachExpression: 'neutral',
     });
   });
 
@@ -185,9 +140,9 @@ describe('CoachSessionPlanPage', () => {
     });
   });
 
-  it('shows coach personality name in header', () => {
+  it('shows Session Plan in header', () => {
     render(<CoachSessionPlanPage />);
-    expect(screen.getByText(/Session Plan by Danya/)).toBeInTheDocument();
+    expect(screen.getByText(/Session Plan/)).toBeInTheDocument();
   });
 
   it('shows puzzle theme focus when block has puzzleTheme', async () => {
@@ -195,12 +150,6 @@ describe('CoachSessionPlanPage', () => {
     await waitFor(() => {
       expect(screen.getByText('Focus: fork')).toBeInTheDocument();
     });
-  });
-
-  it('renders coach avatar in the header', () => {
-    render(<CoachSessionPlanPage />);
-    const avatars = screen.getAllByTestId('coach-avatar');
-    expect(avatars.length).toBeGreaterThanOrEqual(1);
   });
 
   it('loading state hides start session button', () => {

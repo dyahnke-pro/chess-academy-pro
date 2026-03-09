@@ -48,9 +48,7 @@ function buildDefaultPreferences(overrides?: Partial<UserPreferences>): UserPref
     estimatedSpend: 0,
     elevenlabsKeyEncrypted: null,
     elevenlabsKeyIv: null,
-    voiceIdDanya: 'pNInz6obpgDQGcFmaJgB',
-    voiceIdKasparov: 'VR6AewLTigWG4xSOukaG',
-    voiceIdFischer: 'TxGEqnHWrfWFTfGW9XjX',
+    elevenlabsVoiceId: null,
     voiceSpeed: 1.0,
     highlightLastMove: true,
     showLegalMoves: true,
@@ -63,6 +61,8 @@ function buildDefaultPreferences(overrides?: Partial<UserPreferences>): UserPref
     moveConfirmation: false,
     autoPromoteQueen: true,
     masterAllOff: false,
+    chessComUsername: undefined,
+    lichessUsername: undefined,
     ...overrides,
   };
 }
@@ -89,7 +89,6 @@ export function buildUserProfile(overrides?: UserProfileOverrides): UserProfile 
     id: nextId('profile'),
     name: 'Test Player',
     isKidMode: false,
-    coachPersonality: 'danya',
     currentRating: 1420,
     puzzleRating: 1400,
     xp: 0,
@@ -99,7 +98,6 @@ export function buildUserProfile(overrides?: UserProfileOverrides): UserProfile 
     streakFreezes: 0,
     lastActiveDate: today(),
     achievements: [],
-    unlockedCoaches: ['danya'],
     badHabits: rest.badHabits ?? [],
     preferences: buildDefaultPreferences(preferences),
     ...rest,
@@ -242,7 +240,6 @@ export function buildCoachGameState(overrides?: Partial<CoachGameState>): CoachG
   return {
     gameId: nextId('coach_game'),
     playerColor: 'white',
-    coachPersonality: 'danya',
     targetStrength: 1300,
     moves: [],
     hintsUsed: 0,

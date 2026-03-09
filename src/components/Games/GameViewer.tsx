@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { MoveTree } from '../Openings/MoveTree';
 import { ArrowLeft, ArrowRight, ChevronsLeft, ChevronsRight, Download } from 'lucide-react';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { GameRecord } from '../../types';
 
 interface GameViewerProps {
@@ -16,6 +17,10 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
   const currentFen = moveIdx >= 0 && moveIdx < moves.length
     ? moves[moveIdx].fen
     : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  // Publish board context for global coach drawer
+  const turn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(currentFen, game.pgn, Math.max(0, moveIdx + 1), 'white', turn);
 
   const handleKeyDown = useCallback((e: KeyboardEvent): void => {
     if (e.key === 'ArrowRight') {

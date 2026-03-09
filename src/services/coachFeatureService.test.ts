@@ -205,7 +205,6 @@ describe('coachFeatureService', () => {
       const ctx = buildProfileContext(profile);
       expect(ctx.fen).toBeTruthy();
       expect(ctx.playerProfile.rating).toBe(profile.currentRating);
-      expect(ctx.playerProfile.style).toBe(profile.coachPersonality);
     });
 
     it('includes unresolved bad habits as weaknesses', () => {

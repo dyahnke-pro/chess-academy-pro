@@ -11,6 +11,7 @@ import {
 } from '../../services/openingService';
 import { speechService } from '../../services/speechService';
 import type { OpeningRecord } from '../../types';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
 import {
   ArrowRight,
@@ -93,6 +94,10 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
+
+  // Publish board context for global coach drawer
+  const drillTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, drillTurn);
 
   // Generate explanation for current move (what player should play)
   const currentExplanation = useMemo((): string => {

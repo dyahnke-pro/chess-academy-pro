@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type {
-  UserProfile, SessionRecord, CoachPersonality, AppTheme, Achievement,
-  CoachExpression, CoachGameState, ChatMessage,
+  UserProfile, SessionRecord, AppTheme, Achievement,
+  CoachGameState, ChatMessage, WeaknessProfile,
 } from '../types';
 
 interface AppState {
@@ -18,7 +18,6 @@ interface AppState {
   // UI state
   activeTheme: AppTheme | null;
   sidebarOpen: boolean;
-  coachPersonality: CoachPersonality;
 
   // Gamification
   pendingAchievement: Achievement | null;
@@ -28,15 +27,25 @@ interface AppState {
   evalBarVisible: boolean;
 
   // Coach system
-  coachExpression: CoachExpression;
-  coachSpeaking: boolean;
   coachGameState: CoachGameState | null;
   chatMessages: ChatMessage[];
+  weaknessProfile: WeaknessProfile | null;
 
   // Coach overlay
   coachBubbleVisible: boolean;
   coachBubbleText: string;
   coachVoiceOn: boolean;
+
+  // Global coach drawer
+  coachDrawerOpen: boolean;
+  globalBoardContext: {
+    fen: string;
+    pgn: string;
+    moveNumber: number;
+    playerColor: string;
+    turn: string;
+  } | null;
+  globalPracticePosition: { fen: string; label: string } | null;
 }
 
 interface AppActions {
@@ -48,19 +57,20 @@ interface AppActions {
   tickSessionTimer: () => void;
   setActiveTheme: (theme: AppTheme) => void;
   setSidebarOpen: (open: boolean) => void;
-  setCoachPersonality: (personality: CoachPersonality) => void;
   setPendingAchievement: (achievement: Achievement | null) => void;
   toggleEngine: () => void;
   toggleEvalBar: () => void;
-  setCoachExpression: (expression: CoachExpression) => void;
-  setCoachSpeaking: (speaking: boolean) => void;
   setCoachGameState: (state: CoachGameState | null) => void;
   setChatMessages: (messages: ChatMessage[]) => void;
   addChatMessage: (message: ChatMessage) => void;
   clearChatMessages: () => void;
+  setWeaknessProfile: (profile: WeaknessProfile | null) => void;
   toggleCoachBubble: () => void;
   setCoachBubbleText: (text: string) => void;
   toggleCoachVoice: () => void;
+  setCoachDrawerOpen: (open: boolean) => void;
+  setGlobalBoardContext: (ctx: AppState['globalBoardContext']) => void;
+  setGlobalPracticePosition: (pos: AppState['globalPracticePosition']) => void;
   reset: () => void;
 }
 
@@ -73,16 +83,17 @@ const DEFAULT_STATE: AppState = {
   activeTheme: null,
   pendingAchievement: null,
   sidebarOpen: false,
-  coachPersonality: 'danya',
   engineEnabled: true,
   evalBarVisible: true,
-  coachExpression: 'neutral',
-  coachSpeaking: false,
   coachGameState: null,
   chatMessages: [],
+  weaknessProfile: null,
   coachBubbleVisible: true,
   coachBubbleText: '',
-  coachVoiceOn: true,
+  coachVoiceOn: false,
+  coachDrawerOpen: false,
+  globalBoardContext: null,
+  globalPracticePosition: null,
 };
 
 export const useAppStore = create<AppState & AppActions>()(
@@ -110,17 +121,11 @@ export const useAppStore = create<AppState & AppActions>()(
 
     setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
-    setCoachPersonality: (personality) => set({ coachPersonality: personality }),
-
     setPendingAchievement: (achievement) => set({ pendingAchievement: achievement }),
 
     toggleEngine: () => set((state) => ({ engineEnabled: !state.engineEnabled })),
 
     toggleEvalBar: () => set((state) => ({ evalBarVisible: !state.evalBarVisible })),
-
-    setCoachExpression: (expression) => set({ coachExpression: expression }),
-
-    setCoachSpeaking: (speaking) => set({ coachSpeaking: speaking }),
 
     setCoachGameState: (state) => set({ coachGameState: state }),
 
@@ -131,11 +136,19 @@ export const useAppStore = create<AppState & AppActions>()(
 
     clearChatMessages: () => set({ chatMessages: [] }),
 
+    setWeaknessProfile: (profile) => set({ weaknessProfile: profile }),
+
     toggleCoachBubble: () => set((state) => ({ coachBubbleVisible: !state.coachBubbleVisible })),
 
     setCoachBubbleText: (text) => set({ coachBubbleText: text }),
 
     toggleCoachVoice: () => set((state) => ({ coachVoiceOn: !state.coachVoiceOn })),
+
+    setCoachDrawerOpen: (open) => set({ coachDrawerOpen: open }),
+
+    setGlobalBoardContext: (ctx) => set({ globalBoardContext: ctx }),
+
+    setGlobalPracticePosition: (pos) => set({ globalPracticePosition: pos }),
 
     reset: () => set(DEFAULT_STATE),
   })),

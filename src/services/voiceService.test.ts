@@ -25,7 +25,7 @@ describe('voiceService', () => {
   describe('fallback to speechService', () => {
     it('falls back when no profile exists', async () => {
       // No profile in DB at all
-      await voiceService.speak('Hello world', 'danya');
+      await voiceService.speak('Hello world');
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
@@ -41,7 +41,7 @@ describe('voiceService', () => {
       });
       await db.profiles.put(profile);
 
-      await voiceService.speak('Test speech', 'danya');
+      await voiceService.speak('Test speech');
 
       // When voiceEnabled is false, the service returns early without speaking
       // speechService.speak should NOT be called because it returns before fallback
@@ -60,7 +60,7 @@ describe('voiceService', () => {
       });
       await db.profiles.put(profile);
 
-      await voiceService.speak('Fallback test', 'danya');
+      await voiceService.speak('Fallback test');
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
@@ -91,7 +91,7 @@ describe('voiceService', () => {
         status: 401,
       } as Response);
 
-      await voiceService.speak('Error fallback', 'danya');
+      await voiceService.speak('Error fallback');
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
@@ -117,7 +117,7 @@ describe('voiceService', () => {
 
       vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Network offline'));
 
-      await voiceService.speak('Network fail', 'danya');
+      await voiceService.speak('Network fail');
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(

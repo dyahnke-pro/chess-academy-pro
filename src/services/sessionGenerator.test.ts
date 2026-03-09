@@ -49,7 +49,6 @@ function createMockProfile(overrides: Partial<UserProfile> = {}): UserProfile {
     currentStreak: 3,
     longestStreak: 7,
     lastActiveDate: '2026-03-03',
-    coachPersonality: 'danya',
     preferences: {
       dailySessionMinutes: 30,
       theme: 'dark',

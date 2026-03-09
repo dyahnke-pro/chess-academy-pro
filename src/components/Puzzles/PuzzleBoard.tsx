@@ -5,6 +5,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { speechService } from '../../services/speechService';
 import { CheckCircle, XCircle } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { PuzzleRecord } from '../../types';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
@@ -34,6 +35,9 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
   const userColor: 'white' | 'black' = fenTurn === 'w' ? 'black' : 'white';
+
+  // Publish board context for global coach drawer
+  useBoardContext(fen, '', 0, userColor, fen.split(' ')[1] === 'b' ? 'b' : 'w');
 
   // Reset state when puzzle changes
   useEffect(() => {

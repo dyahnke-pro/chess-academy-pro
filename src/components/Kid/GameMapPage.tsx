@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
-import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { getGameProgress, isChapterUnlocked, getChapterProgress } from '../../services/journeyService';
 import { StarDisplay } from './StarDisplay';
@@ -13,8 +12,6 @@ interface GameMapPageProps {
 
 export function GameMapPage({ config }: GameMapPageProps): JSX.Element {
   const navigate = useNavigate();
-  const personality = useAppStore((s) => s.coachPersonality);
-
   const [progress, setProgress] = useState<JourneyProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const [voiceOn, setVoiceOn] = useState(true);
@@ -22,8 +19,8 @@ export function GameMapPage({ config }: GameMapPageProps): JSX.Element {
   // Voice helper
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
-    void voiceService.speak(text, personality);
-  }, [voiceOn, personality]);
+    void voiceService.speak(text);
+  }, [voiceOn]);
 
   // Load progress on mount
   useEffect(() => {

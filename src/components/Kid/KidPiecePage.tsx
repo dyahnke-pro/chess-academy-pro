@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
-import { useAppStore } from '../../stores/appStore';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import type { ChessPiece } from '../../types';
 
@@ -27,16 +27,18 @@ const VALID_PIECES: ReadonlySet<string> = new Set(['king', 'queen', 'rook', 'bis
 export function KidPiecePage(): JSX.Element {
   const { piece } = useParams<{ piece: string }>();
   const navigate = useNavigate();
-  const personality = useAppStore((s) => s.coachPersonality);
-
   const [speaking, setSpeaking] = useState(false);
   const [voiceOn, setVoiceOn] = useState(true);
+
+  // Publish board context for global coach drawer
+  const pieceFen = piece && VALID_PIECES.has(piece) ? PIECE_CONFIG[piece as ChessPiece].fen : '';
+  useBoardContext(pieceFen, '', 0, 'white', 'w');
 
   const speakInstruction = useCallback((text: string): void => {
     if (!voiceOn) return;
     setSpeaking(true);
-    void voiceService.speak(text, personality).finally(() => setSpeaking(false));
-  }, [voiceOn, personality]);
+    void voiceService.speak(text).finally(() => setSpeaking(false));
+  }, [voiceOn]);
 
   // Speak the instruction on mount
   useEffect(() => {

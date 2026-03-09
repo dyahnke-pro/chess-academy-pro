@@ -7,15 +7,8 @@ import { generateCoachSession } from '../../services/sessionGenerator';
 import { createSession } from '../../services/sessionGenerator';
 import { getCoachCommentary } from '../../services/coachApi';
 import { voiceService } from '../../services/voiceService';
-import { CoachAvatar } from './CoachAvatar';
 import { ChatInput } from './ChatInput';
-import type { SessionPlan, SessionBlock, CoachPersonality } from '../../types';
-
-const PERSONALITY_NAMES: Record<CoachPersonality, string> = {
-  danya: 'Danya',
-  kasparov: 'Kasparov',
-  fischer: 'Fischer',
-};
+import type { SessionPlan, SessionBlock } from '../../types';
 
 const BLOCK_LABELS: Record<string, { label: string; color: string; emoji: string }> = {
   opening_review: { label: 'Opening Review', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', emoji: '📖' },
@@ -55,9 +48,6 @@ export function CoachSessionPlanPage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setCurrentSession = useAppStore((s) => s.setCurrentSession);
-  const setCoachExpression = useAppStore((s) => s.setCoachExpression);
-
-  const personality = activeProfile?.coachPersonality ?? 'danya';
 
   const [plan, setPlan] = useState<SessionPlan | null>(null);
   const [coachExplanation, setCoachExplanation] = useState('');
@@ -85,19 +75,18 @@ export function CoachSessionPlanPage(): JSX.Element {
           moveClassification: null,
           playerProfile: {
             rating: activeProfile.currentRating,
-            style: personality,
+
             weaknesses: activeProfile.badHabits.filter((h) => !h.isResolved).map((h) => h.description),
           },
         };
 
         let explanation = '';
-        await getCoachCommentary('session_plan_generation', context, personality, (chunk) => {
+        await getCoachCommentary('session_plan_generation', context, (chunk) => {
           explanation += chunk;
           setCoachExplanation(explanation);
         });
 
-        void voiceService.speak(explanation.slice(0, 300), personality);
-        setCoachExpression('encouraging');
+        void voiceService.speak(explanation.slice(0, 300));
       } catch (error) {
         console.error('Plan generation error:', error);
         setCoachExplanation('Let me create a training plan for you based on your current progress.');
@@ -114,7 +103,6 @@ export function CoachSessionPlanPage(): JSX.Element {
     if (!activeProfile || !plan) return;
 
     setAdjusting(true);
-    setCoachExpression('thinking');
 
     try {
       const adjustedPlan = await generateCoachSession(activeProfile, text);
@@ -132,25 +120,24 @@ export function CoachSessionPlanPage(): JSX.Element {
         moveClassification: null,
         playerProfile: {
           rating: activeProfile.currentRating,
-          style: personality,
+          style: 'default',
           weaknesses: activeProfile.badHabits.filter((h) => !h.isResolved).map((h) => h.description),
         },
       };
 
       let explanation = '';
-      await getCoachCommentary('session_plan_generation', context, personality, (chunk) => {
+      await getCoachCommentary('session_plan_generation', context, (chunk) => {
         explanation += chunk;
         setCoachExplanation(explanation);
       });
 
-      setCoachExpression('encouraging');
-      void voiceService.speak(explanation.slice(0, 200), personality);
+      void voiceService.speak(explanation.slice(0, 200));
     } catch {
       setCoachExplanation('Sure, I\'ve adjusted the plan. Let me know if this works better for you.');
     } finally {
       setAdjusting(false);
     }
-  }, [activeProfile, plan, personality, setCoachExpression]);
+  }, [activeProfile, plan]);
 
   // Start session
   const handleStartSession = useCallback(async () => {
@@ -188,10 +175,9 @@ export function CoachSessionPlanPage(): JSX.Element {
         <button onClick={() => void navigate('/coach')} className="p-1.5 rounded-lg hover:bg-theme-surface">
           <ArrowLeft size={20} className="text-theme-text" />
         </button>
-        <CoachAvatar personality={personality} expression={useAppStore.getState().coachExpression} speaking={loading || adjusting} size="sm" />
         <div>
           <h2 className="text-sm font-semibold text-theme-text">
-            Session Plan by {PERSONALITY_NAMES[personality]}
+            Session Plan
           </h2>
         </div>
       </div>

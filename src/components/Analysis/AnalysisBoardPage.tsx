@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChessBoard } from '../Board/ChessBoard';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { ArrowLeft, Play, Square, BarChart3, Zap } from 'lucide-react';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { StockfishAnalysis, AnalysisLine } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
@@ -12,6 +13,11 @@ const DEFAULT_DEPTH = 18;
 export function AnalysisBoardPage(): JSX.Element {
   const navigate = useNavigate();
   const [fen, setFen] = useState(DEFAULT_FEN);
+
+  // Publish board context for global coach drawer
+  const turn = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(fen, '', 0, 'white', turn);
+
   const [depth, setDepth] = useState(DEFAULT_DEPTH);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<StockfishAnalysis | null>(null);

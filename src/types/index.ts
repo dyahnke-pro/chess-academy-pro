@@ -111,6 +111,26 @@ export interface MoveAnnotation {
 export type GameSource = 'lichess' | 'chesscom' | 'master' | 'import' | 'coach';
 export type GameResult = '1-0' | '0-1' | '1/2-1/2' | '*';
 
+// ─── Platform Stats (Chess.com / Lichess import) ───────────────────────────
+
+export interface TimeControlStats {
+  rating: number;
+  best: number;
+  wins: number;
+  losses: number;
+  draws: number;
+}
+
+export interface PlatformStats {
+  platform: 'chesscom' | 'lichess';
+  username: string;
+  fetchedAt: string;
+  rapid?: TimeControlStats;
+  blitz?: TimeControlStats;
+  bullet?: TimeControlStats;
+  puzzleRating?: number;
+}
+
 export interface GameRecord {
   id: string;
   pgn: string;
@@ -155,8 +175,6 @@ export type MoveMethod = 'drag' | 'click' | 'both';
 
 // ─── User Profile ─────────────────────────────────────────────────────────────
 
-export type CoachPersonality = 'kasparov' | 'fischer' | 'danya';
-
 export interface SkillRadar {
   opening: number;
   tactics: number;
@@ -193,9 +211,7 @@ export interface UserPreferences {
   estimatedSpend: number;
   elevenlabsKeyEncrypted: string | null;
   elevenlabsKeyIv: string | null;
-  voiceIdDanya: string;
-  voiceIdKasparov: string;
-  voiceIdFischer: string;
+  elevenlabsVoiceId: string | null;
   voiceSpeed: number;
   // Board Display (WO-5)
   highlightLastMove: boolean;
@@ -212,13 +228,15 @@ export interface UserPreferences {
   autoPromoteQueen: boolean;
   // Master Control (WO-5)
   masterAllOff: boolean;
+  // Import accounts
+  chessComUsername?: string;
+  lichessUsername?: string;
 }
 
 export interface UserProfile {
   id: string;
   name: string;
   isKidMode: boolean;
-  coachPersonality: CoachPersonality;
   currentRating: number;
   puzzleRating: number;
   xp: number;
@@ -228,7 +246,6 @@ export interface UserProfile {
   streakFreezes: number;
   lastActiveDate: string;
   achievements: string[];
-  unlockedCoaches: string[];
   skillRadar: SkillRadar;
   badHabits: BadHabit[];
   preferences: UserPreferences;
@@ -305,9 +322,28 @@ export interface StockfishAnalysis {
 
 export type CoachDifficulty = 'easy' | 'medium' | 'hard';
 
-export type CoachExpression = 'neutral' | 'encouraging' | 'excited' | 'disappointed' | 'thinking';
-
 export type HintLevel = 0 | 1 | 2 | 3;
+
+// ─── Board Annotations ──────────────────────────────────────────────────────
+
+export interface BoardArrow {
+  startSquare: string;
+  endSquare: string;
+  color: string;
+}
+
+export interface BoardHighlight {
+  square: string;
+  color: string;
+}
+
+export interface BoardAnnotationCommand {
+  type: 'arrow' | 'highlight' | 'show_position' | 'practice' | 'clear';
+  arrows?: BoardArrow[];
+  highlights?: BoardHighlight[];
+  fen?: string;
+  label?: string;
+}
 
 export interface ChatMessage {
   id: string;
@@ -316,7 +352,7 @@ export interface ChatMessage {
   timestamp: number;
   metadata?: {
     actions?: { type: string; id: string }[];
-    expression?: CoachExpression;
+    annotations?: BoardAnnotationCommand[];
   };
 }
 
@@ -332,6 +368,9 @@ export interface CoachGameMove {
   evaluation: number | null;
   classification: MoveClassification | null;
   expanded: boolean;
+  bestMove: string | null;
+  bestMoveEval: number | null;
+  preMoveEval: number | null;
 }
 
 export interface KeyMoment {
@@ -344,7 +383,6 @@ export interface KeyMoment {
 export interface CoachGameState {
   gameId: string;
   playerColor: 'white' | 'black';
-  coachPersonality: CoachPersonality;
   targetStrength: number;
   moves: CoachGameMove[];
   hintsUsed: number;
@@ -370,7 +408,10 @@ export type CoachTask =
   | 'game_opening_line'
   | 'game_post_review'
   | 'position_analysis_chat'
-  | 'session_plan_generation';
+  | 'session_plan_generation'
+  | 'weakness_report'
+  | 'interactive_review'
+  | 'whatif_commentary';
 
 export interface CoachContext {
   fen: string;
@@ -383,9 +424,89 @@ export interface CoachContext {
   moveClassification: MoveClassification | null;
   playerProfile: {
     rating: number;
-    style: string;
     weaknesses: string[];
   };
+}
+
+// ─── Weakness Analysis ──────────────────────────────────────────────────────
+
+export type WeaknessCategory =
+  | 'tactics'
+  | 'openings'
+  | 'endgame'
+  | 'time_management'
+  | 'positional'
+  | 'calculation';
+
+export interface WeaknessItem {
+  category: WeaknessCategory;
+  label: string;
+  metric: string;
+  severity: number; // 0-100, higher = worse
+  detail: string;
+}
+
+export interface WeaknessProfile {
+  computedAt: string;
+  items: WeaknessItem[];
+  strengths: string[];
+  overallAssessment: string;
+}
+
+export type ReviewMode = 'analysis' | 'whatif' | 'practice';
+
+export interface ReviewState {
+  mode: ReviewMode;
+  currentMoveIndex: number;
+  whatIfMoves: string[];
+  whatIfStartFen: string | null;
+}
+
+export interface CriticalMoment {
+  moveNumber: number;
+  fen: string;
+  playerMove: string;
+  bestMove: string;
+  evaluation: number;
+  bestEvaluation: number;
+  explanation: string;
+  type: 'blunder' | 'mistake' | 'inaccuracy' | 'brilliant' | 'turning_point';
+  relatedWeakness: string | null;
+}
+
+// ─── Game Phase Analysis ─────────────────────────────────────────────────────
+
+export type GamePhase = 'opening' | 'middlegame' | 'endgame';
+
+export interface PhaseAccuracy {
+  phase: GamePhase;
+  accuracy: number;
+  moveCount: number;
+  mistakes: number;
+}
+
+// ─── Missed Tactic Detection ─────────────────────────────────────────────────
+
+export type TacticType =
+  | 'fork'
+  | 'pin'
+  | 'skewer'
+  | 'discovered_attack'
+  | 'back_rank'
+  | 'hanging_piece'
+  | 'promotion'
+  | 'deflection'
+  | 'overloaded_piece'
+  | 'tactical_sequence';
+
+export interface MissedTactic {
+  moveIndex: number;
+  playerMoved: string;
+  bestMove: string;
+  fen: string;
+  evalSwing: number;
+  tacticType: TacticType;
+  explanation: string;
 }
 
 // ─── Theme ───────────────────────────────────────────────────────────────────
@@ -501,6 +622,35 @@ export interface JourneyProgress {
 }
 
 // ─── Kid Game Config ─────────────────────────────────────────────────────────
+
+// ─── Board Utils ────────────────────────────────────────────────────────────
+
+export interface DetectedOpening {
+  eco: string;
+  name: string;
+  plyCount: number;
+}
+
+export interface CapturedPieces {
+  white: string[];
+  black: string[];
+}
+
+export interface GameAccuracy {
+  white: number;
+  black: number;
+  moveCount: number;
+}
+
+export interface MoveClassificationCounts {
+  brilliant: number;
+  great: number;
+  good: number;
+  book: number;
+  inaccuracy: number;
+  mistake: number;
+  blunder: number;
+}
 
 export type KidGameId = 'pawns-journey' | 'fairy-tale';
 

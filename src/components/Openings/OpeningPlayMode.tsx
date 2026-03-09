@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, Lightbulb } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import { ChessBoard } from '../Board/ChessBoard';
 import { ExplanationCard } from './ExplanationCard';
 import { useAppStore } from '../../stores/appStore';
@@ -28,6 +29,10 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const playerColor = opening.color;
 
   const game = useChessGame(undefined, playerColor);
+
+  // Publish board context for global coach drawer
+  const playTurn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(game.fen, opening.pgn, game.history.length, playerColor, playTurn);
 
   const [playPhase, setPlayPhase] = useState<PlayPhase>('pregame');
   const [voiceOn, setVoiceOn] = useState(true);

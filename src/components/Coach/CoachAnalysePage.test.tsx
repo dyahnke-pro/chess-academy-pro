@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '../../test/utils';
 import { CoachAnalysePage } from './CoachAnalysePage';
 import { useAppStore } from '../../stores/appStore';
-import type { UserProfile } from '../../types';
+import { buildUserProfile } from '../../test/factories';
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
@@ -33,63 +33,18 @@ vi.mock('../../services/coachApi', () => ({
   getCoachCommentary: vi.fn().mockResolvedValue('This position is equal.'),
 }));
 
-const mockProfile: UserProfile = {
+const mockProfile = buildUserProfile({
   id: 'main',
   name: 'Player',
-  isKidMode: false,
-  coachPersonality: 'danya',
   currentRating: 1420,
   puzzleRating: 1400,
-  xp: 0,
-  level: 1,
-  currentStreak: 0,
-  longestStreak: 0,
-  streakFreezes: 1,
-  lastActiveDate: '2026-03-05',
-  achievements: [],
-  unlockedCoaches: ['danya'],
-  skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
-  badHabits: [],
-  preferences: {
-    theme: 'dark-modern',
-    boardColor: 'classic',
-    pieceSet: 'staunton',
-    showEvalBar: true,
-    showEngineLines: false,
-    soundEnabled: true,
-    voiceEnabled: true,
-    dailySessionMinutes: 45,
-    apiKeyEncrypted: null,
-    apiKeyIv: null,
-    preferredModel: { commentary: 'c', analysis: 'c', reports: 'c' },
-    monthlyBudgetCap: null,
-    estimatedSpend: 0,
-    elevenlabsKeyEncrypted: null,
-    elevenlabsKeyIv: null,
-    voiceIdDanya: '',
-    voiceIdKasparov: '',
-    voiceIdFischer: '',
-    voiceSpeed: 1.0,
-    highlightLastMove: true,
-    showLegalMoves: true,
-    showCoordinates: true,
-    pieceAnimationSpeed: 'medium',
-    boardOrientation: true,
-    moveQualityFlash: true,
-    showHints: true,
-    moveMethod: 'both',
-    moveConfirmation: false,
-    autoPromoteQueen: true,
-    masterAllOff: false,
-  },
-};
+});
 
 describe('CoachAnalysePage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useAppStore.setState({
       activeProfile: mockProfile,
-      coachExpression: 'neutral',
     });
   });
 
@@ -108,9 +63,9 @@ describe('CoachAnalysePage', () => {
     expect(screen.getByTestId('load-fen-btn')).toBeInTheDocument();
   });
 
-  it('shows header with coach name', () => {
+  it('shows header with Position Analysis', () => {
     render(<CoachAnalysePage />);
-    expect(screen.getByText(/Position Analysis with Danya/)).toBeInTheDocument();
+    expect(screen.getByText(/Position Analysis/)).toBeInTheDocument();
   });
 
   it('renders follow-up input', () => {

@@ -6,10 +6,30 @@ export const handlers = [
     return HttpResponse.text('[Event "Rated Blitz game"]\n[Site "lichess.org"]\n[Date "2024.01.01"]\n[White "Player1"]\n[Black "Player2"]\n[Result "1-0"]\n\n1.e4 e5 2.Nc3 1-0\n\n');
   }),
 
-  // Chess.com API
+  // Chess.com API — archives list
+  http.get('https://api.chess.com/pub/player/:username/games/archives', () => {
+    return HttpResponse.json({
+      archives: [],
+    });
+  }),
+
+  // Chess.com API — monthly games
   http.get('https://api.chess.com/pub/player/:username/games/:year/:month', () => {
     return HttpResponse.json({
       games: [],
+    });
+  }),
+
+  // Chess.com API — player stats
+  http.get('https://api.chess.com/pub/player/:username/stats', () => {
+    return HttpResponse.json({});
+  }),
+
+  // Lichess API — user profile/stats
+  http.get('https://lichess.org/api/user/:username', () => {
+    return HttpResponse.json({
+      username: 'testuser',
+      perfs: {},
     });
   }),
 

@@ -32,7 +32,6 @@ describe('dbService', () => {
       expect(profile.name).toBe('Player');
       expect(profile.currentRating).toBe(1420);
       expect(profile.puzzleRating).toBe(1400);
-      expect(profile.coachPersonality).toBe('danya');
       expect(profile.level).toBe(1);
       expect(profile.xp).toBe(0);
     });
@@ -71,7 +70,7 @@ describe('dbService', () => {
       expect(updated?.name).toBe('New Name');
       expect(updated?.currentRating).toBe(1600);
       // Other fields unchanged
-      expect(updated?.coachPersonality).toBe('danya');
+      expect(updated?.puzzleRating).toBe(1400);
     });
   });
 

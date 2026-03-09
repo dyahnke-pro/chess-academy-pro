@@ -35,24 +35,12 @@ describe('DEFAULT_STATE', () => {
     expect(useAppStore.getState().sessionElapsedSeconds).toBe(0);
   });
 
-  it("initial coachPersonality is 'danya'", () => {
-    expect(useAppStore.getState().coachPersonality).toBe('danya');
-  });
-
   it('initial engineEnabled is true', () => {
     expect(useAppStore.getState().engineEnabled).toBe(true);
   });
 
   it('initial evalBarVisible is true', () => {
     expect(useAppStore.getState().evalBarVisible).toBe(true);
-  });
-
-  it("initial coachExpression is 'neutral'", () => {
-    expect(useAppStore.getState().coachExpression).toBe('neutral');
-  });
-
-  it('initial coachSpeaking is false', () => {
-    expect(useAppStore.getState().coachSpeaking).toBe(false);
   });
 
   it('initial coachGameState is null', () => {
@@ -92,21 +80,6 @@ describe('Setters', () => {
     const session = buildSessionRecord();
     useAppStore.getState().setCurrentSession(session);
     expect(useAppStore.getState().currentSession).toEqual(session);
-  });
-
-  it('setCoachPersonality sets personality', () => {
-    useAppStore.getState().setCoachPersonality('kasparov');
-    expect(useAppStore.getState().coachPersonality).toBe('kasparov');
-  });
-
-  it('setCoachExpression sets expression', () => {
-    useAppStore.getState().setCoachExpression('excited');
-    expect(useAppStore.getState().coachExpression).toBe('excited');
-  });
-
-  it('setCoachSpeaking sets speaking state', () => {
-    useAppStore.getState().setCoachSpeaking(true);
-    expect(useAppStore.getState().coachSpeaking).toBe(true);
   });
 
   it('setCoachGameState sets game state', () => {
@@ -241,11 +214,8 @@ describe('Reset', () => {
     useAppStore.getState().startSessionTimer();
     useAppStore.getState().tickSessionTimer();
     useAppStore.getState().setSidebarOpen(true);
-    useAppStore.getState().setCoachPersonality('kasparov');
     useAppStore.getState().toggleEngine();
     useAppStore.getState().toggleEvalBar();
-    useAppStore.getState().setCoachExpression('excited');
-    useAppStore.getState().setCoachSpeaking(true);
     useAppStore.getState().setCoachGameState(buildCoachGameState());
     useAppStore.getState().addChatMessage(buildChatMessage());
 
@@ -260,11 +230,8 @@ describe('Reset', () => {
     expect(state.sessionTimerActive).toBe(false);
     expect(state.sessionElapsedSeconds).toBe(0);
     expect(state.sidebarOpen).toBe(false);
-    expect(state.coachPersonality).toBe('danya');
     expect(state.engineEnabled).toBe(true);
     expect(state.evalBarVisible).toBe(true);
-    expect(state.coachExpression).toBe('neutral');
-    expect(state.coachSpeaking).toBe(false);
     expect(state.coachGameState).toBeNull();
     expect(state.chatMessages).toEqual([]);
   });
@@ -277,13 +244,13 @@ describe('subscribeWithSelector', () => {
     const callback = vi.fn();
 
     const unsub = useAppStore.subscribe(
-      (state) => state.coachExpression,
+      (state) => state.engineEnabled,
       callback,
     );
 
-    useAppStore.getState().setCoachExpression('thinking');
+    useAppStore.getState().toggleEngine();
     expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith('thinking', 'neutral');
+    expect(callback).toHaveBeenCalledWith(false, true);
 
     // Changing a different field should NOT fire the callback
     useAppStore.getState().setSidebarOpen(true);

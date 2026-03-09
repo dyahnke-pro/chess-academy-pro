@@ -75,6 +75,23 @@ vi.mock('../../services/voiceService', () => ({
   voiceService: { speak: vi.fn().mockResolvedValue(undefined), stop: vi.fn() },
 }));
 
+vi.mock('../../services/kidPuzzleService', () => ({
+  generateKidPuzzles: vi.fn().mockImplementation(
+    (chapter: { puzzles: unknown[] }) => Promise.resolve(chapter.puzzles),
+  ),
+}));
+
+vi.mock('../../services/stockfishEngine', () => ({
+  stockfishEngine: {
+    analyzePosition: vi.fn().mockResolvedValue({
+      evaluation: 0,
+      bestMove: 'e2e4',
+      isMate: false,
+      topLines: [],
+    }),
+  },
+}));
+
 vi.mock('../../services/themeService', () => ({
   applyTheme: vi.fn(),
   getThemeById: vi.fn().mockReturnValue({ id: 'kid-mode', name: 'Kid Mode', colors: {} }),

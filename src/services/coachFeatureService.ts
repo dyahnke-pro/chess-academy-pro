@@ -1,7 +1,7 @@
 import { db } from '../db/schema';
 import { getCoachCommentary } from './coachApi';
 import { getThemeSkills } from './puzzleService';
-import type { CoachContext, CoachPersonality, BadHabit, UserProfile } from '../types';
+import type { CoachContext, BadHabit, UserProfile } from '../types';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -57,40 +57,36 @@ export async function updateBadHabits(profile: UserProfile): Promise<BadHabit[]>
 
 export async function getPostGameAnalysis(
   context: CoachContext,
-  personality: CoachPersonality,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('post_game_analysis', context, personality, onStream);
+  return getCoachCommentary('post_game_analysis', context, onStream);
 }
 
 // ─── Daily Lesson ───────────────────────────────────────────────────────────
 
 export async function getDailyLesson(
   context: CoachContext,
-  personality: CoachPersonality,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('daily_lesson', context, personality, onStream);
+  return getCoachCommentary('daily_lesson', context, onStream);
 }
 
 // ─── Bad Habit Report ───────────────────────────────────────────────────────
 
 export async function getBadHabitReport(
   context: CoachContext,
-  personality: CoachPersonality,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('bad_habit_report', context, personality, onStream);
+  return getCoachCommentary('bad_habit_report', context, onStream);
 }
 
 // ─── Weekly Report ──────────────────────────────────────────────────────────
 
 export async function getWeeklyReport(
   context: CoachContext,
-  personality: CoachPersonality,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('weekly_report', context, personality, onStream);
+  return getCoachCommentary('weekly_report', context, onStream);
 }
 
 // ─── Bad Habit Detection from Coach Game ────────────────────────────────────
@@ -178,7 +174,6 @@ export function buildProfileContext(profile: UserProfile): CoachContext {
     moveClassification: null,
     playerProfile: {
       rating: profile.currentRating,
-      style: profile.coachPersonality,
       weaknesses: profile.badHabits
         .filter((h) => !h.isResolved)
         .map((h) => h.description),

@@ -4,18 +4,12 @@
 
 import { speechService } from './speechService';
 import { db } from '../db/schema';
-import type { CoachPersonality, UserPreferences } from '../types';
+import type { UserPreferences } from '../types';
 
 const ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 
-// Web Speech fallback settings per WO spec
+// Web Speech fallback settings
 const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
-
-const VOICE_PREF_KEY: Record<CoachPersonality, keyof UserPreferences> = {
-  danya: 'voiceIdDanya',
-  kasparov: 'voiceIdKasparov',
-  fischer: 'voiceIdFischer',
-};
 
 class VoiceService {
   private audioContext: AudioContext | null = null;
@@ -31,7 +25,7 @@ class VoiceService {
     return this.speed;
   }
 
-  async speak(text: string, personality: CoachPersonality): Promise<void> {
+  async speak(text: string): Promise<void> {
     this.stop();
 
     const profile = await db.profiles.get('main');
@@ -50,7 +44,7 @@ class VoiceService {
     }
 
     const apiKey = await this.getApiKey(preferences);
-    const voiceId = preferences[VOICE_PREF_KEY[personality]] as string;
+    const voiceId = preferences.elevenlabsVoiceId as string | undefined;
 
     if (!apiKey || !voiceId) {
       speechService.speak(text, WEB_SPEECH_FALLBACK);
@@ -110,22 +104,6 @@ class VoiceService {
 
   isPlaying(): boolean {
     return this.playing;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isSupportedPersonality(_personality: CoachPersonality): boolean {
-    return true;
-  }
-
-  async isSupportedPersonalityAsync(personality: CoachPersonality): Promise<boolean> {
-    const profile = await db.profiles.get('main');
-    if (!profile) return false;
-
-    const { preferences } = profile;
-    const apiKey = preferences.elevenlabsKeyEncrypted;
-    const voiceId = preferences[VOICE_PREF_KEY[personality]];
-
-    return apiKey !== null && typeof voiceId === 'string' && voiceId.length > 0;
   }
 
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {

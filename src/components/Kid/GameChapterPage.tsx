@@ -1,11 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Volume2, VolumeX, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Lightbulb, Loader } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { StarDisplay } from './StarDisplay';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
+import { generateKidPuzzles } from '../../services/kidPuzzleService';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import {
   getGameProgress,
   initGameProgress,
@@ -14,7 +17,7 @@ import {
   completeGameChapter,
   getChapterProgress,
 } from '../../services/journeyService';
-import type { JourneyChapter, KidGameConfig } from '../../types';
+import type { JourneyChapter, JourneyPuzzle, KidGameConfig } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 type ChapterPhase = 'intro' | 'lesson' | 'puzzle' | 'reward';
@@ -29,8 +32,6 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
   const { chapterId } = useParams<{ chapterId: string }>();
   const navigate = useNavigate();
 
-  const personality = useAppStore((s) => s.coachPersonality);
-
   const [phase, setPhase] = useState<ChapterPhase>('intro');
   const [lessonIndex, setLessonIndex] = useState(0);
   const [puzzleIndex, setPuzzleIndex] = useState(0);
@@ -39,7 +40,10 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
   const [puzzleFeedback, setPuzzleFeedback] = useState<'correct' | 'wrong' | null>(null);
   const [boardKey, setBoardKey] = useState(0);
   const [voiceOn, setVoiceOn] = useState(true);
+  const [aiPuzzles, setAiPuzzles] = useState<JourneyPuzzle[] | null>(null);
+  const [puzzlesLoading, setPuzzlesLoading] = useState(false);
 
+  const activeProfile = useAppStore((s) => s.activeProfile);
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Cleanup feedback timeout on unmount
@@ -53,13 +57,40 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
-    void voiceService.speak(text, personality);
-  }, [voiceOn, personality]);
+    void voiceService.speak(text);
+  }, [voiceOn]);
 
   // Find the chapter
   const chapter: JourneyChapter | undefined = config.chapters.find(
     (c) => c.id === chapterId,
   );
+
+  // Use AI-generated puzzles when available, fall back to hardcoded
+  const activePuzzles = useMemo(
+    () => aiPuzzles ?? chapter?.puzzles ?? [],
+    [aiPuzzles, chapter?.puzzles],
+  );
+
+  // Publish board context for global coach drawer
+  const currentFen = chapter
+    ? phase === 'puzzle'
+      ? activePuzzles[puzzleIndex]?.fen ?? ''
+      : phase === 'lesson'
+        ? chapter.lessons[lessonIndex]?.fen ?? ''
+        : ''
+    : '';
+  useBoardContext(currentFen, '', 0, 'white', 'w');
+
+  // Generate AI puzzles when entering puzzle phase
+  useEffect(() => {
+    if (phase !== 'puzzle' || !chapter || !activeProfile || aiPuzzles) return;
+
+    setPuzzlesLoading(true);
+    void generateKidPuzzles(chapter, activeProfile).then((puzzles) => {
+      setAiPuzzles(puzzles);
+      setPuzzlesLoading(false);
+    });
+  }, [phase, chapter, activeProfile, aiPuzzles]);
 
   // Load progress on mount
   useEffect(() => {
@@ -133,13 +164,27 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
     }
   }, [chapter, lessonIndex, config.gameId, config.chapterOrder]);
 
+  const advancePuzzle = useCallback((): void => {
+    if (!chapter) return;
+    const nextPuzzle = puzzleIndex + 1;
+    if (nextPuzzle >= activePuzzles.length) {
+      void completeGameChapter(config.gameId, chapter.id, config.chapterOrder);
+      setPhase('reward');
+    } else {
+      setPuzzleIndex(nextPuzzle);
+      setBoardKey((prev) => prev + 1);
+    }
+  }, [chapter, puzzleIndex, activePuzzles.length, config.gameId, config.chapterOrder]);
+
   const handlePuzzleMove = useCallback((move: MoveResult): void => {
     if (!chapter || puzzleFeedback !== null) return;
 
-    const currentPuzzle = chapter.puzzles[puzzleIndex];
-    const expectedSan = currentPuzzle.solution[0];
+    const currentPuzzle = activePuzzles[puzzleIndex];
 
-    if (move.san === expectedSan) {
+    // Check exact SAN match first (works for hardcoded puzzles)
+    const isExactMatch = move.san === currentPuzzle.solution[0];
+
+    if (isExactMatch) {
       setPuzzleFeedback('correct');
       setPuzzlesCorrect((prev) => prev + 1);
       kidSpeak(currentPuzzle.successMessage);
@@ -148,26 +193,86 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
       feedbackTimeoutRef.current = setTimeout(() => {
         setPuzzleFeedback(null);
         setShowHint(false);
-        const nextPuzzle = puzzleIndex + 1;
-        if (nextPuzzle >= chapter.puzzles.length) {
-          void completeGameChapter(config.gameId, chapter.id, config.chapterOrder);
-          setPhase('reward');
-        } else {
-          setPuzzleIndex(nextPuzzle);
-          setBoardKey((prev) => prev + 1);
-        }
+        advancePuzzle();
       }, 1500);
-    } else {
-      setPuzzleFeedback('wrong');
-      kidSpeak('Not quite, try again!');
-      void recordGamePuzzleAttempt(config.gameId, chapter.id, false, config.chapterOrder);
-
-      feedbackTimeoutRef.current = setTimeout(() => {
-        setPuzzleFeedback(null);
-        setBoardKey((prev) => prev + 1);
-      }, 1200);
+      return;
     }
-  }, [chapter, puzzleIndex, puzzleFeedback, kidSpeak, config.gameId, config.chapterOrder]);
+
+    // For AI-generated puzzles, use Stockfish to check if the move is strong enough
+    if (currentPuzzle.id.startsWith('ai-')) {
+      void (async () => {
+        try {
+          const analysis = await stockfishEngine.analyzePosition(currentPuzzle.fen, 12);
+          const bestEval = analysis.evaluation;
+          const playerUci = `${move.from}${move.to}${move.promotion ?? ''}`;
+
+          // Check if it's a top engine line
+          const isTopLine = analysis.topLines.some((line) => line.moves[0] === playerUci);
+          if (isTopLine || playerUci === analysis.bestMove) {
+            setPuzzleFeedback('correct');
+            setPuzzlesCorrect((prev) => prev + 1);
+            kidSpeak(currentPuzzle.successMessage);
+            void recordGamePuzzleAttempt(config.gameId, chapter.id, true, config.chapterOrder);
+
+            feedbackTimeoutRef.current = setTimeout(() => {
+              setPuzzleFeedback(null);
+              setShowHint(false);
+              advancePuzzle();
+            }, 1500);
+            return;
+          }
+
+          // Check eval loss — accept if within 150cp
+          const { Chess } = await import('chess.js');
+          const tempChess = new Chess(currentPuzzle.fen);
+          tempChess.move({
+            from: move.from,
+            to: move.to,
+            promotion: move.promotion as 'q' | 'r' | 'b' | 'n' | undefined,
+          });
+          const afterAnalysis = await stockfishEngine.analyzePosition(tempChess.fen(), 12);
+          const playerEval = -afterAnalysis.evaluation;
+          const evalLoss = bestEval - playerEval;
+
+          if (evalLoss < 150) {
+            setPuzzleFeedback('correct');
+            setPuzzlesCorrect((prev) => prev + 1);
+            kidSpeak(currentPuzzle.successMessage);
+            void recordGamePuzzleAttempt(config.gameId, chapter.id, true, config.chapterOrder);
+
+            feedbackTimeoutRef.current = setTimeout(() => {
+              setPuzzleFeedback(null);
+              setShowHint(false);
+              advancePuzzle();
+            }, 1500);
+            return;
+          }
+        } catch {
+          // Stockfish failed — fall through to wrong answer
+        }
+
+        setPuzzleFeedback('wrong');
+        kidSpeak('Not quite, try again!');
+        void recordGamePuzzleAttempt(config.gameId, chapter.id, false, config.chapterOrder);
+
+        feedbackTimeoutRef.current = setTimeout(() => {
+          setPuzzleFeedback(null);
+          setBoardKey((prev) => prev + 1);
+        }, 1200);
+      })();
+      return;
+    }
+
+    // Hardcoded puzzle, wrong answer
+    setPuzzleFeedback('wrong');
+    kidSpeak('Not quite, try again!');
+    void recordGamePuzzleAttempt(config.gameId, chapter.id, false, config.chapterOrder);
+
+    feedbackTimeoutRef.current = setTimeout(() => {
+      setPuzzleFeedback(null);
+      setBoardKey((prev) => prev + 1);
+    }, 1200);
+  }, [chapter, puzzleIndex, puzzleFeedback, kidSpeak, config.gameId, config.chapterOrder, activePuzzles, advancePuzzle]);
 
   const handleHint = useCallback((): void => {
     setShowHint(true);
@@ -326,7 +431,24 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
           )}
 
           {/* ── Puzzle Phase ────────────────────────────────────────── */}
-          {phase === 'puzzle' && chapter.puzzles[puzzleIndex] && (
+          {phase === 'puzzle' && puzzlesLoading && (
+            <motion.div
+              key="puzzle-loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col items-center gap-4 py-12"
+              data-testid="puzzle-loading"
+            >
+              <Loader size={32} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+              <p className="text-lg font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                Coach is preparing your puzzles...
+              </p>
+            </motion.div>
+          )}
+
+          {phase === 'puzzle' && !puzzlesLoading && activePuzzles[puzzleIndex] && (
             <motion.div
               key={`puzzle-${puzzleIndex}`}
               initial={{ opacity: 0 }}
@@ -337,13 +459,13 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
               data-testid="chapter-puzzle"
             >
               <h3 className="text-xl font-bold">
-                Puzzle {puzzleIndex + 1} of {chapter.puzzles.length}
+                Puzzle {puzzleIndex + 1} of {activePuzzles.length}
               </h3>
 
               <div className="max-w-sm w-full mx-auto">
                 <ChessBoard
                   key={boardKey}
-                  initialFen={chapter.puzzles[puzzleIndex].fen}
+                  initialFen={activePuzzles[puzzleIndex].fen}
                   interactive={true}
                   showFlipButton={false}
                   showUndoButton={false}
@@ -373,7 +495,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
                   style={{ color: 'var(--color-accent)' }}
                   data-testid="chapter-hint-text"
                 >
-                  {chapter.puzzles[puzzleIndex].hint}
+                  {activePuzzles[puzzleIndex].hint}
                 </p>
               )}
 
@@ -416,7 +538,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
               >
                 <StarDisplay
                   earned={puzzlesCorrect}
-                  total={chapter.puzzles.length}
+                  total={activePuzzles.length}
                   size="lg"
                 />
               </motion.div>

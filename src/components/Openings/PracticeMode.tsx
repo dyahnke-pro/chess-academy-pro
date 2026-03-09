@@ -12,6 +12,7 @@ import {
 } from '../../services/openingService';
 import { speechService } from '../../services/speechService';
 import type { OpeningRecord } from '../../types';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import {
@@ -96,6 +97,10 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
+
+  // Publish board context for global coach drawer
+  const practiceTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, practiceTurn);
 
   // Auto-play opponent moves
   useEffect(() => {

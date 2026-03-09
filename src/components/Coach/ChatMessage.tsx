@@ -1,16 +1,37 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import type { ChatMessage as ChatMessageType, CoachPersonality } from '../../types';
+import type { ChatMessage as ChatMessageType } from '../../types';
 
-const PERSONALITY_COLORS: Record<CoachPersonality, string> = {
-  danya: '#4F9D69',
-  kasparov: '#C62828',
-  fischer: '#1565C0',
-};
+/** Render basic markdown-style formatting: **bold** and *italic* */
+function renderFormattedText(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  // Match **bold** first, then *italic*
+  const regex = /\*\*(.+?)\*\*|\*(.+?)\*/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    if (match[1]) {
+      parts.push(<strong key={key++} className="font-semibold">{match[1]}</strong>);
+    } else if (match[2]) {
+      parts.push(<em key={key++}>{match[2]}</em>);
+    }
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts;
+}
 
 interface ChatMessageProps {
   message: ChatMessageType;
-  personality: CoachPersonality;
   isStreaming?: boolean;
 }
 
@@ -36,7 +57,7 @@ function ActionButton({ action, onClick }: {
   );
 }
 
-export function ChatMessage({ message, personality, isStreaming }: ChatMessageProps): JSX.Element {
+export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Element {
   const navigate = useNavigate();
   const isUser = message.role === 'user';
   const actions = message.metadata?.actions ?? [];
@@ -68,11 +89,10 @@ export function ChatMessage({ message, personality, isStreaming }: ChatMessagePr
     >
       {!isUser && (
         <div
-          className="flex-shrink-0 mt-1 w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold"
-          style={{ backgroundColor: PERSONALITY_COLORS[personality] }}
+          className="flex-shrink-0 mt-1 w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold bg-theme-accent"
           data-testid="coach-badge"
         >
-          {personality.charAt(0).toUpperCase()}
+          C
         </div>
       )}
 
@@ -83,7 +103,7 @@ export function ChatMessage({ message, personality, isStreaming }: ChatMessagePr
             : 'bg-theme-surface border border-theme-border text-theme-text rounded-bl-sm'
         }`}
       >
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+        <p className="text-sm leading-relaxed whitespace-pre-wrap">{renderFormattedText(message.content)}</p>
 
         {isStreaming && !message.content && (
           <div className="flex gap-1 py-1" data-testid="streaming-indicator">

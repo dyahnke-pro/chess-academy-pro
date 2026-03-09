@@ -1,74 +1,47 @@
 import { describe, it, expect } from 'vitest';
 import {
-  SYSTEM_PROMPTS,
-  GAME_NARRATION_ADDITIONS,
-  POSITION_ANALYSIS_ADDITIONS,
-  SESSION_PLAN_ADDITIONS,
+  SYSTEM_PROMPT,
+  GAME_NARRATION_ADDITION,
+  POSITION_ANALYSIS_ADDITION,
+  SESSION_PLAN_ADDITION,
   buildChessContextMessage,
 } from './coachPrompts';
-import type { CoachContext, CoachPersonality, StockfishAnalysis } from '../types';
-
-const PERSONALITIES: CoachPersonality[] = ['danya', 'kasparov', 'fischer'];
+import type { CoachContext, StockfishAnalysis } from '../types';
 
 describe('coachPrompts', () => {
-  describe('SYSTEM_PROMPTS', () => {
-    it('has prompts for all 3 personalities', () => {
-      for (const p of PERSONALITIES) {
-        expect(SYSTEM_PROMPTS[p]).toBeTruthy();
-        expect(SYSTEM_PROMPTS[p].length).toBeGreaterThan(100);
-      }
+  describe('SYSTEM_PROMPT', () => {
+    it('is a non-empty string', () => {
+      expect(SYSTEM_PROMPT).toBeTruthy();
+      expect(SYSTEM_PROMPT.length).toBeGreaterThan(100);
     });
 
-    it('danya prompt mentions warm/encouraging', () => {
-      expect(SYSTEM_PROMPTS.danya.toLowerCase()).toContain('warm');
-      expect(SYSTEM_PROMPTS.danya.toLowerCase()).toContain('encouraging');
-    });
-
-    it('kasparov prompt mentions demanding/intense', () => {
-      expect(SYSTEM_PROMPTS.kasparov.toLowerCase()).toContain('demanding');
-    });
-
-    it('fischer prompt mentions precise/perfectionist', () => {
-      expect(SYSTEM_PROMPTS.fischer.toLowerCase()).toContain('precise');
+    it('mentions key coaching traits', () => {
+      expect(SYSTEM_PROMPT.toLowerCase()).toContain('chess');
     });
   });
 
-  describe('GAME_NARRATION_ADDITIONS', () => {
-    it('has narration additions for all 3 personalities', () => {
-      for (const p of PERSONALITIES) {
-        expect(GAME_NARRATION_ADDITIONS[p]).toBeTruthy();
-        expect(GAME_NARRATION_ADDITIONS[p].length).toBeGreaterThan(50);
-      }
+  describe('GAME_NARRATION_ADDITION', () => {
+    it('is a non-empty string with game narration content', () => {
+      expect(GAME_NARRATION_ADDITION).toBeTruthy();
+      expect(GAME_NARRATION_ADDITION.length).toBeGreaterThan(50);
     });
 
-    it('danya allows takebacks freely', () => {
-      expect(GAME_NARRATION_ADDITIONS.danya.toLowerCase()).toContain('allow takebacks freely');
-    });
-
-    it('kasparov allows one takeback', () => {
-      expect(GAME_NARRATION_ADDITIONS.kasparov.toLowerCase()).toContain('one takeback');
-    });
-
-    it('fischer forbids takebacks', () => {
-      expect(GAME_NARRATION_ADDITIONS.fischer.toLowerCase()).toContain('no takebacks');
+    it('mentions takeback policy', () => {
+      expect(GAME_NARRATION_ADDITION.toLowerCase()).toContain('takeback');
     });
   });
 
-  describe('POSITION_ANALYSIS_ADDITIONS', () => {
-    it('has analysis additions for all 3 personalities', () => {
-      for (const p of PERSONALITIES) {
-        expect(POSITION_ANALYSIS_ADDITIONS[p]).toBeTruthy();
-        expect(POSITION_ANALYSIS_ADDITIONS[p].length).toBeGreaterThan(30);
-      }
+  describe('POSITION_ANALYSIS_ADDITION', () => {
+    it('is a non-empty string with analysis content', () => {
+      expect(POSITION_ANALYSIS_ADDITION).toBeTruthy();
+      expect(POSITION_ANALYSIS_ADDITION.length).toBeGreaterThan(30);
     });
   });
 
-  describe('SESSION_PLAN_ADDITIONS', () => {
-    it('has session plan additions for all 3 personalities', () => {
-      for (const p of PERSONALITIES) {
-        expect(SESSION_PLAN_ADDITIONS[p]).toBeTruthy();
-        expect(SESSION_PLAN_ADDITIONS[p].length).toBeGreaterThan(30);
-      }
+  describe('SESSION_PLAN_ADDITION', () => {
+    it('is a non-empty string with session planning content', () => {
+      expect(SESSION_PLAN_ADDITION).toBeTruthy();
+      expect(SESSION_PLAN_ADDITION.length).toBeGreaterThan(30);
     });
   });
 
@@ -83,7 +56,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: null,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).toContain('rnbqkbnr');
@@ -100,7 +73,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: null,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).toContain('Last move: e4');
@@ -117,7 +90,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: null,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).not.toContain('Last move:');
@@ -133,7 +106,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: null,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).toContain('Opening: Sicilian Defense');
@@ -160,7 +133,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: analysis,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).toContain('Stockfish evaluation: +0.45');
@@ -187,7 +160,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: analysis,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).toContain('Mate in 3');
@@ -203,7 +176,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: null,
         playerMove: 'Nf3',
         moveClassification: 'good',
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).toContain("Player's move: Nf3");
@@ -220,11 +193,10 @@ describe('coachPrompts', () => {
         stockfishAnalysis: null,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1500, style: 'aggressive', weaknesses: ['Weak at endgames'] },
+        playerProfile: { rating: 1500, weaknesses: ['Weak at endgames'] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).toContain('1500 ELO');
-      expect(msg).toContain('aggressive');
       expect(msg).toContain('Weak at endgames');
     });
 
@@ -238,7 +210,7 @@ describe('coachPrompts', () => {
         stockfishAnalysis: null,
         playerMove: null,
         moveClassification: null,
-        playerProfile: { rating: 1400, style: 'tactical', weaknesses: [] },
+        playerProfile: { rating: 1400, weaknesses: [] },
       };
       const msg = buildChessContextMessage(ctx);
       expect(msg).not.toContain('Current weakness');

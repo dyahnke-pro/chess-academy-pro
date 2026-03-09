@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
-import { CoachPersonalitySelector } from '../Coach/CoachPersonalitySelector';
 
 type OnboardingStep = 1 | 2 | 3;
 
@@ -149,12 +148,6 @@ export function OnboardingPage(): JSX.Element {
               style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
               data-testid="onboarding-elo"
             />
-          </div>
-          <div>
-            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-              Choose Your Coach
-            </label>
-            <CoachPersonalitySelector />
           </div>
           <button
             onClick={() => void handleFinish()}

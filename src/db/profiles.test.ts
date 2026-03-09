@@ -13,7 +13,6 @@ describe('Profiles CRUD', () => {
     const profile = await getOrCreateMainProfile();
     expect(profile.id).toBe('main');
     expect(profile.isKidMode).toBe(false);
-    expect(profile.coachPersonality).toBe('danya');
     expect(profile.xp).toBe(0);
     expect(profile.level).toBe(1);
     expect(profile.currentStreak).toBe(0);
@@ -91,7 +90,6 @@ describe('Profiles CRUD', () => {
       id: 'kid',
       name: 'Kid Player',
       isKidMode: true,
-      coachPersonality: 'danya',
       currentRating: 600,
       puzzleRating: 600,
       xp: 0,
@@ -101,7 +99,6 @@ describe('Profiles CRUD', () => {
       streakFreezes: 1,
       lastActiveDate: new Date().toISOString().split('T')[0],
       achievements: [],
-      unlockedCoaches: ['danya'],
       skillRadar: { opening: 0, tactics: 0, endgame: 0, memory: 0, calculation: 0 },
       badHabits: [],
       preferences: {
@@ -124,9 +121,7 @@ describe('Profiles CRUD', () => {
         estimatedSpend: 0,
         elevenlabsKeyEncrypted: null,
         elevenlabsKeyIv: null,
-        voiceIdDanya: 'pNInz6obpgDQGcFmaJgB',
-        voiceIdKasparov: 'VR6AewLTigWG4xSOukaG',
-        voiceIdFischer: 'TxGEqnHWrfWFTfGW9XjX',
+        elevenlabsVoiceId: null,
         voiceSpeed: 1.0,
         highlightLastMove: true,
         showLegalMoves: true,

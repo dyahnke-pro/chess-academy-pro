@@ -42,6 +42,10 @@ export interface ChessBoardProps {
   showLastMoveHighlight?: boolean;
   /** Flash the board border with a quality color (green/amber/red). Resets after animation. */
   moveQualityFlash?: MoveQuality;
+  /** Arrows to draw on the board (e.g. best-move indicators). */
+  arrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
+  /** Annotation square highlights from coach chat (colored square backgrounds). */
+  annotationHighlights?: Array<{ square: string; color: string }>;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -69,6 +73,8 @@ export function ChessBoard({
   highlightSquares = null,
   showLastMoveHighlight = true,
   moveQualityFlash = null,
+  arrows,
+  annotationHighlights,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -165,6 +171,16 @@ export function ChessBoard({
       }
     }
 
+    // Coach annotation highlights — inner border so pieces remain visible
+    if (annotationHighlights) {
+      for (const h of annotationHighlights) {
+        styles[h.square] = {
+          ...styles[h.square],
+          boxShadow: `inset 0 0 0 3px ${h.color}`,
+        };
+      }
+    }
+
     // King in check — red radial glow
     if (checkSquare) {
       styles[checkSquare] = {
@@ -196,7 +212,7 @@ export function ChessBoard({
     }
 
     return styles;
-  }, [lastMove, highlightSquares, checkSquare, selectedSquare, legalMoves, getPiece, showLastMoveHighlight]);
+  }, [lastMove, highlightSquares, checkSquare, selectedSquare, legalMoves, getPiece, showLastMoveHighlight, annotationHighlights]);
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
@@ -236,6 +252,7 @@ export function ChessBoard({
               onPieceDrop: handlePieceDrop,
               onSquareClick: handleSquareClick,
               onPieceDrag: handlePieceDrag,
+              ...(arrows && arrows.length > 0 ? { arrows, clearArrowsOnPositionChange: true } : {}),
             }}
           />
           {/* Move quality border flash */}

@@ -18,7 +18,6 @@ describe('Test Factories', () => {
     const profile = buildUserProfile();
     expect(profile.id).toContain('profile');
     expect(profile.name).toBe('Test Player');
-    expect(profile.coachPersonality).toBe('danya');
     expect(profile.preferences.theme).toBe('dark-premium');
     expect(profile.skillRadar.tactics).toBe(50);
   });
@@ -27,7 +26,7 @@ describe('Test Factories', () => {
     const profile = buildUserProfile({ name: 'Alice', currentRating: 2000 });
     expect(profile.name).toBe('Alice');
     expect(profile.currentRating).toBe(2000);
-    expect(profile.coachPersonality).toBe('danya'); // default preserved
+    expect(profile.preferences.theme).toBe('dark-premium'); // default preserved
   });
 
   it('creates unique IDs across factory calls', () => {

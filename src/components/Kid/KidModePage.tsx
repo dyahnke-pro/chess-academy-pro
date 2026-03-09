@@ -37,7 +37,6 @@ type KidView = 'menu' | 'findKing';
 
 export function KidModePage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
-  const personality = useAppStore((s) => s.coachPersonality);
   const navigate = useNavigate();
 
   const [view, setView] = useState<KidView>('menu');
@@ -55,8 +54,8 @@ export function KidModePage(): JSX.Element {
 
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
-    void voiceService.speak(text, personality);
-  }, [voiceOn, personality]);
+    void voiceService.speak(text);
+  }, [voiceOn]);
 
   const handleToggleVoice = useCallback((): void => {
     voiceService.stop();

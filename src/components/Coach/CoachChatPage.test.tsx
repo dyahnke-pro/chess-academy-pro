@@ -2,7 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '../../test/utils';
 import { CoachChatPage } from './CoachChatPage';
 import { useAppStore } from '../../stores/appStore';
-import type { UserProfile, ChatMessage as ChatMessageType } from '../../types';
+import { buildUserProfile } from '../../test/factories';
+import type { ChatMessage as ChatMessageType } from '../../types';
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
@@ -15,56 +16,22 @@ vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue('Hello! How can I help?'),
 }));
 
-const mockProfile: UserProfile = {
+vi.mock('../../services/coachChatService', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../services/coachChatService')>();
+  return {
+    ...actual,
+    loadAnalysisContext: vi.fn().mockResolvedValue(''),
+  };
+});
+
+const mockProfile = buildUserProfile({
   id: 'main',
   name: 'Player',
-  isKidMode: false,
-  coachPersonality: 'danya',
   currentRating: 1420,
   puzzleRating: 1400,
   xp: 500,
   level: 3,
-  currentStreak: 0,
-  longestStreak: 0,
-  streakFreezes: 1,
-  lastActiveDate: '2026-03-05',
-  achievements: [],
-  unlockedCoaches: ['danya'],
-  skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
-  badHabits: [],
-  preferences: {
-    theme: 'dark-modern',
-    boardColor: 'classic',
-    pieceSet: 'staunton',
-    showEvalBar: true,
-    showEngineLines: false,
-    soundEnabled: true,
-    voiceEnabled: true,
-    dailySessionMinutes: 45,
-    apiKeyEncrypted: null,
-    apiKeyIv: null,
-    preferredModel: { commentary: 'c', analysis: 'c', reports: 'c' },
-    monthlyBudgetCap: null,
-    estimatedSpend: 0,
-    elevenlabsKeyEncrypted: null,
-    elevenlabsKeyIv: null,
-    voiceIdDanya: '',
-    voiceIdKasparov: '',
-    voiceIdFischer: '',
-    voiceSpeed: 1.0,
-    highlightLastMove: true,
-    showLegalMoves: true,
-    showCoordinates: true,
-    pieceAnimationSpeed: 'medium',
-    boardOrientation: true,
-    moveQualityFlash: true,
-    showHints: true,
-    moveMethod: 'both',
-    moveConfirmation: false,
-    autoPromoteQueen: true,
-    masterAllOff: false,
-  },
-};
+});
 
 // Mock scrollIntoView for JSDOM
 Element.prototype.scrollIntoView = vi.fn();
@@ -75,8 +42,6 @@ describe('CoachChatPage', () => {
     useAppStore.setState({
       activeProfile: mockProfile,
       chatMessages: [],
-      coachExpression: 'neutral',
-      coachSpeaking: false,
     });
   });
 
@@ -87,7 +52,7 @@ describe('CoachChatPage', () => {
 
   it('shows coach name in header', () => {
     render(<CoachChatPage />);
-    expect(screen.getByText(/Chat with Danya/)).toBeInTheDocument();
+    expect(screen.getByText(/Chat with Coach/)).toBeInTheDocument();
   });
 
   it('shows empty state prompt', () => {
@@ -161,35 +126,10 @@ describe('CoachChatPage', () => {
     expect(screen.getByText('Online')).toBeInTheDocument();
   });
 
-  it('shows correct coach name for kasparov personality', () => {
-    useAppStore.setState({
-      activeProfile: { ...mockProfile, coachPersonality: 'kasparov' },
-    });
-
-    render(<CoachChatPage />);
-    expect(screen.getByText(/Chat with Kasparov/)).toBeInTheDocument();
-  });
-
-  it('shows correct coach name for fischer personality', () => {
-    useAppStore.setState({
-      activeProfile: { ...mockProfile, coachPersonality: 'fischer' },
-    });
-
-    render(<CoachChatPage />);
-    expect(screen.getByText(/Chat with Fischer/)).toBeInTheDocument();
-  });
-
   it('send button is initially disabled when input is empty', () => {
     render(<CoachChatPage />);
     const sendBtn = screen.getByTestId('chat-send-btn');
     expect(sendBtn).toBeDisabled();
-  });
-
-  it('renders coach name badge in the header', () => {
-    render(<CoachChatPage />);
-    // The header and empty state both show the initial badge 'D'
-    const badges = screen.getAllByText('D');
-    expect(badges.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders action tag buttons when assistant message has actions', () => {

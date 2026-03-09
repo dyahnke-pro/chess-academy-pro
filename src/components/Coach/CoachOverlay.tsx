@@ -1,13 +1,9 @@
 import { Volume2, VolumeX } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { CoachAvatar } from './CoachAvatar';
 import { voiceService } from '../../services/voiceService';
 
 export function CoachOverlay(): JSX.Element {
-  const coachExpression = useAppStore((s) => s.coachExpression);
-  const coachSpeaking = useAppStore((s) => s.coachSpeaking);
-  const coachPersonality = useAppStore((s) => s.coachPersonality);
   const bubbleVisible = useAppStore((s) => s.coachBubbleVisible);
   const bubbleText = useAppStore((s) => s.coachBubbleText);
   const voiceOn = useAppStore((s) => s.coachVoiceOn);
@@ -39,7 +35,7 @@ export function CoachOverlay(): JSX.Element {
             }}
             data-testid="coach-bubble"
           >
-            {/* Bubble tail pointing right toward avatar */}
+            {/* Bubble tail pointing right toward toggle */}
             <div
               className="absolute top-3 -right-2 w-0 h-0"
               style={{
@@ -53,19 +49,19 @@ export function CoachOverlay(): JSX.Element {
         )}
       </AnimatePresence>
 
-      {/* Avatar — click to toggle bubble */}
+      {/* Bubble toggle */}
       <button
         onClick={toggleBubble}
-        className="flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity"
+        className="flex-shrink-0 p-2 rounded-lg border transition-colors cursor-pointer hover:opacity-90"
+        style={{
+          background: bubbleVisible ? 'var(--color-accent)' : 'var(--color-surface)',
+          borderColor: 'var(--color-border)',
+          color: bubbleVisible ? 'var(--color-bg)' : 'var(--color-text-muted)',
+        }}
         aria-label={bubbleVisible ? 'Hide speech bubble' : 'Show speech bubble'}
         data-testid="coach-avatar-toggle"
       >
-        <CoachAvatar
-          personality={coachPersonality}
-          expression={coachExpression}
-          speaking={coachSpeaking}
-          size="sm"
-        />
+        💬
       </button>
 
       {/* Speaker button */}

@@ -7,6 +7,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { speechService } from '../../services/speechService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import {
@@ -90,6 +91,10 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
+
+  // Publish board context for global coach drawer
+  const trainTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(currentFen, currentLine.pgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, trainTurn);
 
   // Auto-play opponent moves
   useEffect(() => {

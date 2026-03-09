@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
@@ -12,12 +12,14 @@ import {
   GraduationCap,
   Menu,
   X,
+  MessageCircle,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
 import { AchievementToast } from './AchievementToast';
 import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
+import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
 
 interface NavItem {
   to: string;
@@ -42,10 +44,16 @@ export function AppLayout(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const sidebarOpen = useAppStore((s) => s.sidebarOpen);
   const setSidebarOpen = useAppStore((s) => s.setSidebarOpen);
+  const coachDrawerOpen = useAppStore((s) => s.coachDrawerOpen);
+  const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
+  const location = useLocation();
 
   const closeSidebar = useCallback((): void => {
     setSidebarOpen(false);
   }, [setSidebarOpen]);
+
+  // Hide FAB on /coach/play (has its own chat) and when no profile
+  const showCoachFab = activeProfile && location.pathname !== '/coach/play' && !coachDrawerOpen;
 
   return (
     <div className="flex flex-col min-h-dvh" style={{ background: 'var(--color-bg)' }}>
@@ -249,6 +257,27 @@ export function AppLayout(): JSX.Element {
           </NavLink>
         ))}
       </nav>
+
+      {/* Coach FAB */}
+      {showCoachFab && (
+        <button
+          onClick={() => setCoachDrawerOpen(true)}
+          className="fixed z-40 flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
+          style={{
+            background: 'var(--color-accent)',
+            color: 'var(--color-bg)',
+            right: '1rem',
+            bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
+          }}
+          aria-label="Open coach chat"
+          data-testid="coach-fab"
+        >
+          <MessageCircle size={22} />
+        </button>
+      )}
+
+      {/* Global coach drawer */}
+      <GlobalCoachDrawer />
     </div>
   );
 }

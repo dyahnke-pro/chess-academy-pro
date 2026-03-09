@@ -3,31 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search, Loader } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ChessBoard } from '../Board/ChessBoard';
-import { CoachAvatar } from './CoachAvatar';
 import { ChatInput } from './ChatInput';
 import { useChessGame } from '../../hooks/useChessGame';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import { useAppStore } from '../../stores/appStore';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachCommentary } from '../../services/coachApi';
 import { voiceService } from '../../services/voiceService';
-import type { StockfishAnalysis, CoachPersonality } from '../../types';
-
-const PERSONALITY_NAMES: Record<CoachPersonality, string> = {
-  danya: 'Danya',
-  kasparov: 'Kasparov',
-  fischer: 'Fischer',
-};
+import type { StockfishAnalysis } from '../../types';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 export function CoachAnalysePage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
-  const coachExpression = useAppStore((s) => s.coachExpression);
-  const setCoachExpression = useAppStore((s) => s.setCoachExpression);
 
-  const personality = activeProfile?.coachPersonality ?? 'danya';
   const game = useChessGame();
+
+  // Publish board context for global coach drawer
+  const turn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(game.fen, '', 0, 'white', turn);
 
   const [fenInput, setFenInput] = useState('');
   const [analysis, setAnalysis] = useState<StockfishAnalysis | null>(null);
@@ -38,7 +33,6 @@ export function CoachAnalysePage(): JSX.Element {
   const analysePosition = useCallback(async (fen: string) => {
     setLoading(true);
     setCoachExplanation('');
-    setCoachExpression('thinking');
 
     try {
       // Run Stockfish analysis
@@ -61,27 +55,25 @@ export function CoachAnalysePage(): JSX.Element {
         moveClassification: null,
         playerProfile: {
           rating: activeProfile?.currentRating ?? 1420,
-          style: personality,
+
           weaknesses: activeProfile?.badHabits.filter((h) => !h.isResolved).map((h) => h.description) ?? [],
         },
       };
 
       let explanation = '';
-      await getCoachCommentary('deep_analysis', context, personality, (chunk) => {
+      await getCoachCommentary('deep_analysis', context, (chunk) => {
         explanation += chunk;
         setCoachExplanation(explanation);
       });
 
-      setCoachExpression('neutral');
-      void voiceService.speak(explanation.slice(0, 200), personality); // First 200 chars only for voice
+      void voiceService.speak(explanation.slice(0, 200)); // First 200 chars only for voice
     } catch (error) {
       console.error('Analysis error:', error);
       setCoachExplanation('I had trouble analysing that position. Please check the FEN and try again.');
-      setCoachExpression('disappointed');
     } finally {
       setLoading(false);
     }
-  }, [activeProfile, personality, setCoachExpression]);
+  }, [activeProfile]);
 
   const handleLoadFen = useCallback(() => {
     const fen = fenInput.trim() || START_FEN;
@@ -97,7 +89,6 @@ export function CoachAnalysePage(): JSX.Element {
 
   const handleFollowUp = useCallback(async (question: string) => {
     setLoading(true);
-    setCoachExpression('thinking');
 
     const context = {
       fen: game.fen,
@@ -110,8 +101,8 @@ export function CoachAnalysePage(): JSX.Element {
       moveClassification: null,
       playerProfile: {
         rating: activeProfile?.currentRating ?? 1420,
-        style: personality,
-        weaknesses: [],
+        style: 'default',
+        weaknesses: [] as string[],
       },
     };
 
@@ -119,15 +110,14 @@ export function CoachAnalysePage(): JSX.Element {
     const questionContext = { ...context, pgn: `User question: ${question}` };
 
     let response = '';
-    await getCoachCommentary('position_analysis_chat', questionContext, personality, (chunk) => {
+    await getCoachCommentary('position_analysis_chat', questionContext, (chunk) => {
       response += chunk;
       setCoachExplanation((prev) => prev + '\n\n' + response);
     });
 
-    setCoachExpression('neutral');
     setLoading(false);
-    void voiceService.speak(response.slice(0, 200), personality);
-  }, [game.fen, analysis, activeProfile, personality, setCoachExpression]);
+    void voiceService.speak(response.slice(0, 200));
+  }, [game.fen, analysis, activeProfile]);
 
   return (
     <div className="flex flex-col max-w-2xl mx-auto w-full" data-testid="coach-analyse-page">
@@ -136,10 +126,9 @@ export function CoachAnalysePage(): JSX.Element {
         <button onClick={() => void navigate('/coach')} className="p-1.5 rounded-lg hover:bg-theme-surface">
           <ArrowLeft size={20} className="text-theme-text" />
         </button>
-        <CoachAvatar personality={personality} expression={coachExpression} speaking={loading} size="sm" />
         <div>
           <h2 className="text-sm font-semibold text-theme-text">
-            Position Analysis with {PERSONALITY_NAMES[personality]}
+            Position Analysis
           </h2>
         </div>
       </div>
