@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { validatePuzzleFen, generateKidPuzzles } from './kidPuzzleService';
 import { buildUserProfile } from '../test/factories';
-import type { JourneyChapter, JourneyPuzzle } from '../types';
+import type { JourneyChapter } from '../types';
 
 // Mock the coachApi module
 vi.mock('./coachApi', () => ({

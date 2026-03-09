@@ -1,4 +1,4 @@
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import type { CoachGameMove, MissedTactic, TacticType } from '../types';
 
 /** Minimum centipawn swing to qualify as a missed tactic */
@@ -18,8 +18,8 @@ const PIECE_VALUE: Record<string, number> = {
 function detectTacticType(fen: string, bestMoveUci: string): TacticType {
   try {
     const chess = new Chess(fen);
-    const from = bestMoveUci.slice(0, 2);
-    const to = bestMoveUci.slice(2, 4);
+    const from = bestMoveUci.slice(0, 2) as Square;
+    const to = bestMoveUci.slice(2, 4) as Square;
     const promotion = bestMoveUci.length > 4 ? bestMoveUci[4] : undefined;
 
     // Check for promotion
@@ -103,28 +103,23 @@ function detectTacticType(fen: string, bestMoveUci: string): TacticType {
 /**
  * Get squares attacked by a piece at a given square.
  */
-function getAttackedSquares(chess: Chess, square: string): string[] {
-  const attacked: string[] = [];
+function getAttackedSquares(chess: Chess, square: Square): Square[] {
+  const attacked: Square[] = [];
   const files = 'abcdefgh';
   const ranks = '12345678';
 
   for (const f of files) {
     for (const r of ranks) {
-      const targetSquare = `${f}${r}`;
+      const targetSquare = `${f}${r}` as Square;
       if (targetSquare === square) continue;
 
-      // Check if the piece on `square` can move to `targetSquare`
       try {
-        // Create a copy to test moves
         const testChess = new Chess(chess.fen());
         const piece = testChess.get(square);
         if (!piece) continue;
 
-        // For attack detection, try to see if the move is possible
-        // (chess.js won't allow moving to a friendly piece, so check captures)
         const target = testChess.get(targetSquare);
         if (target && target.color !== piece.color) {
-          // Check if there's a valid move from square to targetSquare
           const moves = testChess.moves({ square, verbose: true });
           if (moves.some((m) => m.to === targetSquare)) {
             attacked.push(targetSquare);
