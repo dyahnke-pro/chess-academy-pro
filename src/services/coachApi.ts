@@ -22,6 +22,7 @@ const MODEL_MAP: Record<CoachTask, string> = {
   weakness_report:         'claude-opus-4-6',
   interactive_review:      'claude-sonnet-4-6',
   whatif_commentary:       'claude-haiku-4-5-20251001',
+  game_narrative_summary:  'claude-haiku-4-5-20251001',
   weekly_report:           'claude-opus-4-6',
   deep_analysis:           'claude-opus-4-6',
 };

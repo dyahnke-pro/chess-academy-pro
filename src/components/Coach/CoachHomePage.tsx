@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Swords, BarChart3, Calendar, Search, MessageCircle } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { getStoredWeaknessProfile, computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { GameImportCard } from './GameImportCard';
@@ -155,6 +155,18 @@ export function CoachHomePage(): JSX.Element {
             </button>
           </div>
         )}
+      </section>
+
+      {/* Work with Coach — full-width card */}
+      <section>
+        <ActionCard
+          icon={<GraduationCap size={24} />}
+          label="Work with Coach"
+          description="Get personalised training recommendations from your coach"
+          accentColor="var(--color-accent)"
+          onClick={() => void navigate('/coach/train')}
+          testId="coach-action-train"
+        />
       </section>
 
       {/* Primary Actions */}

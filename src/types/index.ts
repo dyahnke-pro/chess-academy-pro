@@ -411,7 +411,8 @@ export type CoachTask =
   | 'session_plan_generation'
   | 'weakness_report'
   | 'interactive_review'
-  | 'whatif_commentary';
+  | 'whatif_commentary'
+  | 'game_narrative_summary';
 
 export interface CoachContext {
   fen: string;
@@ -426,6 +427,7 @@ export interface CoachContext {
     rating: number;
     weaknesses: string[];
   };
+  additionalContext?: string;
 }
 
 // ─── Weakness Analysis ──────────────────────────────────────────────────────
@@ -453,7 +455,7 @@ export interface WeaknessProfile {
   overallAssessment: string;
 }
 
-export type ReviewMode = 'analysis' | 'whatif' | 'practice';
+export type ReviewMode = 'analysis' | 'whatif' | 'practice' | 'guided_lesson';
 
 export interface ReviewState {
   mode: ReviewMode;
