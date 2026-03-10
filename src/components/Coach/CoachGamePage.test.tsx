@@ -71,6 +71,33 @@ vi.mock('../../services/boardUtils', () => ({
   getMaterialAdvantage: vi.fn().mockReturnValue(0),
 }));
 
+vi.mock('../../services/accuracyService', () => ({
+  calculateAccuracy: vi.fn().mockReturnValue({ white: 85, black: 78, moveCount: 20 }),
+  getClassificationCounts: vi.fn().mockReturnValue({
+    brilliant: 0, great: 2, good: 8, book: 0, inaccuracy: 1, mistake: 0, blunder: 0,
+  }),
+}));
+
+vi.mock('../../services/gamePhaseService', () => ({
+  getPhaseBreakdown: vi.fn().mockReturnValue([
+    { phase: 'opening', accuracy: 90, moveCount: 5, mistakes: 0 },
+    { phase: 'middlegame', accuracy: 80, moveCount: 10, mistakes: 1 },
+    { phase: 'endgame', accuracy: 85, moveCount: 5, mistakes: 0 },
+  ]),
+}));
+
+vi.mock('../../services/missedTacticService', () => ({
+  detectMissedTactics: vi.fn().mockReturnValue([]),
+}));
+
+vi.mock('../../services/coachFeatureService', () => ({
+  detectBadHabitsFromGame: vi.fn().mockResolvedValue([]),
+}));
+
+vi.mock('../../services/gamificationService', () => ({
+  checkAndAwardAchievements: vi.fn().mockResolvedValue([]),
+}));
+
 const mockProfile = buildUserProfile({
   id: 'main',
   name: 'Player',

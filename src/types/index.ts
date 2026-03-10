@@ -652,6 +652,16 @@ export interface MoveClassificationCounts {
   blunder: number;
 }
 
+export interface GameAnalysisSummary {
+  accuracy: GameAccuracy;
+  classificationCounts: MoveClassificationCounts;
+  phaseBreakdown: PhaseAccuracy[];
+  missedTactics: MissedTactic[];
+  keyMoments: KeyMoment[];
+  playerColor: 'white' | 'black';
+  result: CoachGameResult;
+}
+
 export type KidGameId = 'pawns-journey' | 'fairy-tale';
 
 export interface KidGameConfig {

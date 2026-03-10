@@ -22,9 +22,14 @@ import { detectOpening } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { db } from '../../db/schema';
 import { checkAndAwardAchievements } from '../../services/gamificationService';
+import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
+import { getPhaseBreakdown } from '../../services/gamePhaseService';
+import { detectMissedTactics } from '../../services/missedTacticService';
+import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
-  CoachDifficulty, HintLevel, MoveClassification, StockfishAnalysis,
+  CoachDifficulty, HintLevel, MoveClassification, MoveAnnotation,
+  StockfishAnalysis, GameAnalysisSummary,
   GameResult, CoachContext, BoardArrow, BoardHighlight, BoardAnnotationCommand,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -73,6 +78,43 @@ function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
       type,
     };
   });
+}
+
+function movesToAnnotations(moves: CoachGameMove[]): MoveAnnotation[] {
+  return moves
+    .filter((m): m is CoachGameMove & { classification: MoveClassification } =>
+      !m.isCoachMove && m.classification !== null)
+    .map((m) => ({
+      moveNumber: m.moveNumber,
+      color: m.moveNumber % 2 === 1 ? 'white' : 'black',
+      san: m.san,
+      evaluation: m.evaluation,
+      bestMove: m.bestMove,
+      classification: m.classification,
+      comment: m.commentary || null,
+    }));
+}
+
+function buildAnalysisSummary(
+  moves: CoachGameMove[],
+  keyMoments: KeyMoment[],
+  playerColor: 'white' | 'black',
+  result: 'win' | 'loss' | 'draw',
+): GameAnalysisSummary {
+  const accuracy = calculateAccuracy(moves);
+  const classificationCounts = getClassificationCounts(moves, playerColor);
+  const phaseBreakdown = getPhaseBreakdown(moves, playerColor);
+  const missedTactics = detectMissedTactics(moves, playerColor);
+
+  return {
+    accuracy,
+    classificationCounts,
+    phaseBreakdown,
+    missedTactics,
+    keyMoments,
+    playerColor,
+    result,
+  };
 }
 
 export function CoachGamePage(): JSX.Element {
@@ -321,28 +363,41 @@ export function CoachGamePage(): JSX.Element {
       }));
 
       // Save game to DB and check achievements
-      const pgnResult: GameResult = result === 'win' ? '1-0' : result === 'loss' ? '0-1' : '1/2-1/2';
+      const playerWon = result === 'win';
+      const playerLost = result === 'loss';
+      const pgnResult: GameResult = playerColor === 'white'
+        ? (playerWon ? '1-0' : playerLost ? '0-1' : '1/2-1/2')
+        : (playerWon ? '0-1' : playerLost ? '1-0' : '1/2-1/2');
       const tags: string[] = [difficulty === 'hard' ? 'Hard' : '', gameState.hintsUsed === 0 ? 'NoHints' : ''].filter(Boolean);
+
+      const annotations = movesToAnnotations(gameState.moves);
+      const summary = buildAnalysisSummary(gameState.moves, keyMoments, playerColor, result);
+
+      const playerName = activeProfile?.name ?? 'Player';
       const gameRecord = {
         id: gameState.gameId,
         pgn: game.history.join(' '),
-        white: activeProfile?.name ?? 'Player',
-        black: 'AI Coach',
+        white: playerColor === 'white' ? playerName : 'AI Coach',
+        black: playerColor === 'black' ? playerName : 'AI Coach',
         result: pgnResult,
         date: new Date().toISOString().split('T')[0],
         event: `Coach Game ${tags.join(' ')}`.trim(),
-        eco: null,
-        whiteElo: playerRating,
-        blackElo: targetStrength,
+        eco: detectedOpening?.eco ?? null,
+        whiteElo: playerColor === 'white' ? playerRating : targetStrength,
+        blackElo: playerColor === 'black' ? playerRating : targetStrength,
         source: 'coach' as const,
-        annotations: null,
-        coachAnalysis: null,
+        annotations,
+        coachAnalysis: JSON.stringify(summary),
         isMasterGame: false,
-        openingId: null,
+        openingId: detectedOpening?.name ?? null,
       };
 
       void db.games.add(gameRecord).then(() => {
         if (!activeProfile) return;
+
+        // Detect bad habits from game moves
+        void detectBadHabitsFromGame(gameState.moves, activeProfile);
+
         void checkAndAwardAchievements(activeProfile).then((earned) => {
           if (earned.length > 0) {
             // Queue achievement toasts
@@ -357,7 +412,7 @@ export function CoachGamePage(): JSX.Element {
         });
       });
     }
-  }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, gameState.moves, playerColor, difficulty, gameState.hintsUsed, gameState.gameId, game.history, activeProfile, playerRating, targetStrength, setPendingAchievement, setActiveProfile]);
+  }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, gameState.moves, playerColor, difficulty, gameState.hintsUsed, gameState.gameId, game.history, activeProfile, playerRating, targetStrength, setPendingAchievement, setActiveProfile, detectedOpening]);
 
   // Coach makes a move when it's their turn.
   // Uses an AbortController (not a ref guard) to handle React strict-mode
