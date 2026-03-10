@@ -791,7 +791,7 @@ describe('StockfishEngine', () => {
       mockWorker.emitError('WASM load failed');
 
       await expect(initPromise).rejects.toThrow(
-        'Stockfish worker error: WASM load failed',
+        'Worker failed to load: WASM load failed',
       );
     });
   });

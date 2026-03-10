@@ -1,6 +1,8 @@
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 
 type StockfishMessageHandler = (analysis: StockfishAnalysis) => void;
+type StockfishStatus = 'idle' | 'loading' | 'ready' | 'error';
+type StatusChangeHandler = (status: StockfishStatus, error?: string) => void;
 
 interface PendingAnalysis {
   resolve: (analysis: StockfishAnalysis) => void;
@@ -10,48 +12,76 @@ interface PendingAnalysis {
   depth: number;
 }
 
-function createStockfishWorker(): Worker {
-  const hasSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined';
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-  if (isMobile || !hasSharedArrayBuffer) {
-    return new Worker(
-      new URL('../../node_modules/stockfish/bin/stockfish-18-single.js', import.meta.url),
-    );
-  }
-  return new Worker(
-    new URL('../../node_modules/stockfish/bin/stockfish-18.js', import.meta.url),
-  );
-}
+const INIT_TIMEOUT_MS = 45_000;
 
 class StockfishEngine {
   private worker: Worker | null = null;
   private isReady = false;
   private pending: PendingAnalysis | null = null;
   private messageHandlers: Set<StockfishMessageHandler> = new Set();
+  private statusHandlers: Set<StatusChangeHandler> = new Set();
   private initPromise: Promise<void> | null = null;
+  private _status: StockfishStatus = 'idle';
+  private _error: string | null = null;
+
+  get status(): StockfishStatus {
+    return this._status;
+  }
+
+  get error(): string | null {
+    return this._error;
+  }
+
+  private setStatus(status: StockfishStatus, error?: string): void {
+    this._status = status;
+    this._error = error ?? null;
+    this.statusHandlers.forEach((h) => h(status, error));
+  }
+
+  onStatusChange(handler: StatusChangeHandler): () => void {
+    this.statusHandlers.add(handler);
+    return () => this.statusHandlers.delete(handler);
+  }
 
   async initialize(): Promise<void> {
     if (this.initPromise) return this.initPromise;
 
+    this.setStatus('loading');
+    console.log('[Stockfish] Initializing worker...');
+
     this.initPromise = new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        const msg = 'Stockfish initialization timed out after 45s';
+        console.error('[Stockfish]', msg);
+        this.setStatus('error', msg);
+        reject(new Error(msg));
+      }, INIT_TIMEOUT_MS);
+
       try {
-        this.worker = createStockfishWorker();
+        this.worker = new Worker('/stockfish/stockfish-18-lite-single.js');
 
         this.worker.onmessage = (event: MessageEvent<string>) => {
           this.handleMessage(event.data);
         };
 
         this.worker.onerror = (error) => {
-          reject(new Error(`Stockfish worker error: ${error.message}`));
+          clearTimeout(timeoutId);
+          const msg = `Worker failed to load: ${error.message}`;
+          console.error('[Stockfish]', msg);
+          this.setStatus('error', msg);
+          this.initPromise = null;
+          reject(new Error(msg));
         };
 
         // Wait for readyok
         const readyHandler = (event: MessageEvent<string>): void => {
           if (event.data === 'readyok') {
+            clearTimeout(timeoutId);
             this.worker?.removeEventListener('message', readyHandler);
             this.isReady = true;
             this.send('setoption name MultiPV value 3');
+            console.log('[Stockfish] Engine ready (lite-single WASM)');
+            this.setStatus('ready');
             resolve();
           }
         };
@@ -60,7 +90,12 @@ class StockfishEngine {
         this.send('uci');
         this.send('isready');
       } catch (error) {
-        reject(error instanceof Error ? error : new Error(String(error)));
+        clearTimeout(timeoutId);
+        const msg = error instanceof Error ? error.message : String(error);
+        console.error('[Stockfish] Init error:', msg);
+        this.setStatus('error', msg);
+        this.initPromise = null;
+        reject(error instanceof Error ? error : new Error(msg));
       }
     });
 
@@ -137,6 +172,7 @@ class StockfishEngine {
     this.worker = null;
     this.isReady = false;
     this.initPromise = null;
+    this.setStatus('idle');
   }
 
   onAnalysis(handler: StockfishMessageHandler): () => void {

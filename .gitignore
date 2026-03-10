@@ -11,3 +11,5 @@ playwright-report
 test-results
 *.tsbuildinfo
 .claude/
+public/stockfish/*.js
+public/stockfish/*.wasm

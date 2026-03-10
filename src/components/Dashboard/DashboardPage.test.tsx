@@ -313,23 +313,15 @@ describe('DashboardPage', () => {
     expect(screen.getByText('calculation')).toBeInTheDocument();
   });
 
-  it('shows beta banner and dismisses on click', async () => {
+  it('does not show beta banner when BETA_MODE is false', async () => {
     setProfile();
-    // Ensure no dismissal record exists
     await db.meta.delete('beta_banner_dismissed');
     render(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('beta-banner')).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard')).toBeInTheDocument();
     });
-
-    expect(screen.getByText(/Chess Academy Pro/)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByLabelText('Dismiss beta banner'));
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('beta-banner')).not.toBeInTheDocument();
-    });
+    expect(screen.queryByTestId('beta-banner')).not.toBeInTheDocument();
   });
 
   it('does not show beta banner when already dismissed', async () => {
