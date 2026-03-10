@@ -49,6 +49,10 @@ vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue('The position is balanced with chances for both sides.'),
 }));
 
+vi.mock('../../services/coachFeatureService', () => ({
+  generateNarrativeSummary: vi.fn().mockResolvedValue('This was a well-played game with some key moments.'),
+}));
+
 vi.mock('../../services/coachPrompts', () => ({
   buildChessContextMessage: vi.fn().mockReturnValue('Position (FEN): test-fen'),
   POSITION_ANALYSIS_ADDITION: 'Test position analysis prompt',

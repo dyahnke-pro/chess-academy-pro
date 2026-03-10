@@ -160,6 +160,35 @@ export async function detectBadHabitsFromGame(
   return habits;
 }
 
+// ─── Narrative Summary ──────────────────────────────────────────────────────
+
+export async function generateNarrativeSummary(
+  pgn: string,
+  playerColor: string,
+  openingName: string | null,
+  result: string,
+  playerRating: number,
+  onStream?: (chunk: string) => void,
+): Promise<string> {
+  const context: CoachContext = {
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    lastMoveSan: null,
+    moveNumber: 0,
+    pgn,
+    openingName,
+    stockfishAnalysis: null,
+    playerMove: null,
+    moveClassification: null,
+    playerProfile: {
+      rating: playerRating,
+      weaknesses: [],
+    },
+    additionalContext: `Player color: ${playerColor}. Game result: ${result}. Please write a narrative summary of this game: describe the key moments, what went well, what to improve, and the overall story of the game in an encouraging coaching tone.`,
+  };
+
+  return getCoachCommentary('game_narrative_summary', context, onStream);
+}
+
 // ─── Build Context from Profile ─────────────────────────────────────────────
 
 export function buildProfileContext(profile: UserProfile): CoachContext {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Undo2, Volume2, VolumeX, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Undo2, Volume2, VolumeX, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
@@ -26,10 +26,11 @@ import { calculateAccuracy, getClassificationCounts } from '../../services/accur
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
+import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty, HintLevel, MoveClassification, MoveAnnotation,
-  StockfishAnalysis, GameAnalysisSummary,
+  StockfishAnalysis, GameAnalysisSummary, GameRecord,
   GameResult, CoachContext, BoardArrow, BoardHighlight, BoardAnnotationCommand,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -119,7 +120,26 @@ function buildAnalysisSummary(
 
 export function CoachGamePage(): JSX.Element {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const reviewGameId = searchParams.get('review');
   const activeProfile = useAppStore((s) => s.activeProfile);
+
+  // ─── Guided Lesson State (review query param) ──────────────────────────────
+  const [reviewGame, setReviewGame] = useState<GameRecord | null>(null);
+  const [reviewMoves, setReviewMoves] = useState<CoachGameMove[] | null>(null);
+  const [reviewLoading, setReviewLoading] = useState(!!reviewGameId);
+
+  useEffect(() => {
+    if (!reviewGameId) return;
+    setReviewLoading(true);
+    void db.games.get(reviewGameId).then((game) => {
+      if (game) {
+        setReviewGame(game);
+        setReviewMoves(reconstructMovesFromGame(game));
+      }
+      setReviewLoading(false);
+    });
+  }, [reviewGameId]);
 
   const coachVoiceOn = useAppStore((s) => s.coachVoiceOn);
   const toggleCoachVoice = useAppStore((s) => s.toggleCoachVoice);
@@ -695,6 +715,59 @@ export function CoachGamePage(): JSX.Element {
   const playerName = activeProfile?.name ?? 'Player';
   const opponentName = 'AI Coach';
   const isPlayerTurn = (isPlayerWhite && game.turn === 'w') || (!isPlayerWhite && game.turn === 'b');
+
+  // Guided Lesson Mode — review a past game
+  if (reviewGameId) {
+    if (reviewLoading) {
+      return (
+        <div className="flex items-center justify-center h-dvh" data-testid="coach-game-page">
+          <div className="flex items-center gap-2" style={{ color: 'var(--color-text-muted)' }}>
+            <Loader2 size={20} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+            <span className="text-sm">Loading game...</span>
+          </div>
+        </div>
+      );
+    }
+
+    if (!reviewGame || !reviewMoves) {
+      return (
+        <div className="flex flex-col items-center justify-center h-dvh gap-3" data-testid="coach-game-page">
+          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Game not found.</p>
+          <button
+            onClick={() => void navigate('/coach')}
+            className="px-4 py-2 rounded-lg text-sm font-medium"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          >
+            Back to Coach
+          </button>
+        </div>
+      );
+    }
+
+    const reviewPlayerColor: 'white' | 'black' = reviewGame.white !== 'AI Coach' ? 'white' : 'black';
+    const reviewPlayerName = reviewPlayerColor === 'white' ? reviewGame.white : reviewGame.black;
+    const reviewOpponentRating = reviewPlayerColor === 'white' ? (reviewGame.blackElo ?? 1500) : (reviewGame.whiteElo ?? 1500);
+    const reviewPlayerRating = reviewPlayerColor === 'white' ? (reviewGame.whiteElo ?? playerRating) : (reviewGame.blackElo ?? playerRating);
+
+    return (
+      <div className="flex flex-col md:flex-row h-dvh overflow-hidden" data-testid="coach-game-page">
+        <CoachGameReview
+          moves={reviewMoves}
+          keyMoments={[]}
+          playerColor={reviewPlayerColor}
+          result={reviewGame.result}
+          openingName={reviewGame.openingId}
+          playerName={reviewPlayerName}
+          playerRating={reviewPlayerRating}
+          opponentRating={reviewOpponentRating}
+          onPlayAgain={() => void navigate('/coach/play')}
+          onBackToCoach={() => void navigate('/coach')}
+          isGuidedLesson
+          pgn={reviewGame.pgn}
+        />
+      </div>
+    );
+  }
 
   // Post-game review — same two-column layout as gameplay
   if (gameState.status === 'postgame') {

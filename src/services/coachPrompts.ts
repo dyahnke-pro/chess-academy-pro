@@ -119,5 +119,9 @@ export function buildChessContextMessage(ctx: CoachContext): string {
     lines.push(`Current weakness: ${ctx.playerProfile.weaknesses[0]}`);
   }
 
+  if (ctx.additionalContext) {
+    lines.push(`\n${ctx.additionalContext}`);
+  }
+
   return lines.join('\n');
 }

@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Home, Undo2, ArrowLeft, MessageCircle, Loader2, Play, Pause, Target, Crosshair, Zap, CheckCircle2, XCircle } from 'lucide-react';
+import { RotateCcw, Home, Undo2, ArrowLeft, MessageCircle, Loader2, Play, Pause, Target, Crosshair, Zap, CheckCircle2, XCircle, GraduationCap, AlertTriangle, Sparkles, FastForward } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveNavigationControls } from './MoveNavigationControls';
@@ -17,6 +17,7 @@ import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../servi
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
+import { generateNarrativeSummary } from '../../services/coachFeatureService';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
@@ -32,6 +33,8 @@ interface CoachGameReviewProps {
   onPlayAgain: () => void;
   onBackToCoach: () => void;
   onPracticeInChat?: (prompt: string) => void;
+  isGuidedLesson?: boolean;
+  pgn?: string;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -58,11 +61,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     moves, keyMoments, playerColor, result, openingName,
     playerName, playerRating, opponentRating,
     onPlayAgain, onBackToCoach, onPracticeInChat,
+    isGuidedLesson, pgn,
   } = props;
 
   const [reviewState, setReviewState] = useState<ReviewState>({
-    mode: 'analysis',
-    currentMoveIndex: moves.length > 0 ? moves.length - 1 : -1,
+    mode: isGuidedLesson ? 'guided_lesson' : 'analysis',
+    currentMoveIndex: isGuidedLesson ? -1 : (moves.length > 0 ? moves.length - 1 : -1),
     whatIfMoves: [],
     whatIfStartFen: null,
   });
@@ -93,6 +97,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [autoReviewActive, setAutoReviewActive] = useState(false);
   const [autoReviewPaused, setAutoReviewPaused] = useState(false);
   const autoReviewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ─── Guided Lesson State ────────────────────────────────────────────────────
+  const [guidedLessonActive, setGuidedLessonActive] = useState(!!isGuidedLesson);
+  const [guidedStopped, setGuidedStopped] = useState(false);
+  const [guidedComplete, setGuidedComplete] = useState(false);
+  const [narrativeSummary, setNarrativeSummary] = useState<string | null>(null);
+  const [isLoadingNarrative, setIsLoadingNarrative] = useState(false);
+  const guidedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Pre-compute accuracy + classification counts
   const accuracy = useMemo<GameAccuracy>(() => calculateAccuracy(moves), [moves]);
@@ -129,7 +141,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Best-move arrow: show for suboptimal player moves
   const arrows = useMemo(() => {
-    if (reviewState.mode !== 'analysis' || !currentMove) return [];
+    if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return [];
+    if (!currentMove) return [];
     if (currentMove.isCoachMove) return [];
     if (!currentMove.bestMove) return [];
     const cls = currentMove.classification;
@@ -166,7 +179,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
-      if (reviewState.mode !== 'analysis') return;
+      if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
         navigateMove('prev');
@@ -181,7 +194,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // ─── AI Commentary: lazy-load for key moments ───────────────────────────────
   useEffect(() => {
-    if (reviewState.mode !== 'analysis') return;
+    if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
     if (!currentMove) {
       setAiCommentary(null);
       return;
@@ -523,6 +536,120 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     };
   }, [autoReviewActive, autoReviewPaused, reviewState.currentMoveIndex, moves]);
 
+  // ─── Guided Lesson Auto-Advance Effect ────────────────────────────────────
+  const GUIDED_ADVANCE_MS = 1500;
+
+  useEffect(() => {
+    if (!guidedLessonActive || guidedStopped || guidedComplete) return;
+    if (reviewState.mode !== 'guided_lesson') return;
+
+    const moveIdx = reviewState.currentMoveIndex;
+
+    // Check if we've reached the end
+    if (moveIdx >= moves.length - 1) {
+      setGuidedComplete(true);
+      setGuidedLessonActive(false);
+
+      // Generate narrative summary
+      const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
+      setIsLoadingNarrative(true);
+      setNarrativeSummary('');
+      void generateNarrativeSummary(
+        gamePgn,
+        playerColor,
+        openingName,
+        result,
+        playerRating,
+        (chunk) => setNarrativeSummary((prev) => (prev ?? '') + chunk),
+      ).then((fullText) => {
+        setNarrativeSummary(fullText);
+      }).finally(() => {
+        setIsLoadingNarrative(false);
+      });
+      return;
+    }
+
+    // Check if current move is a critical moment that should stop
+    const nextIdx = moveIdx + 1;
+    const nextMove = nextIdx < moves.length ? moves[nextIdx] : null;
+    if (nextMove && !nextMove.isCoachMove) {
+      const cls = nextMove.classification;
+      if (cls === 'blunder' || cls === 'mistake' || cls === 'brilliant') {
+        // Advance to the critical move, then stop
+        guidedTimerRef.current = setTimeout(() => {
+          setReviewState((prev) => ({
+            ...prev,
+            currentMoveIndex: nextIdx,
+          }));
+          setGuidedStopped(true);
+        }, GUIDED_ADVANCE_MS);
+
+        return () => {
+          if (guidedTimerRef.current) clearTimeout(guidedTimerRef.current);
+        };
+      }
+    }
+
+    // Normal advance
+    guidedTimerRef.current = setTimeout(() => {
+      setReviewState((prev) => ({
+        ...prev,
+        currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
+      }));
+    }, GUIDED_ADVANCE_MS);
+
+    return () => {
+      if (guidedTimerRef.current) clearTimeout(guidedTimerRef.current);
+    };
+  }, [guidedLessonActive, guidedStopped, guidedComplete, reviewState.currentMoveIndex, reviewState.mode, moves, pgn, playerColor, openingName, result, playerRating]);
+
+  // Guided lesson: resume auto-advance
+  const handleGuidedContinue = useCallback(() => {
+    setGuidedStopped(false);
+  }, []);
+
+  // Guided lesson: enter practice mode for the stopped critical moment
+  const handleGuidedTryIt = useCallback(() => {
+    const moveIdx = reviewState.currentMoveIndex;
+    const move = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
+    if (!move || !move.bestMove) return;
+
+    // Find the pre-move FEN (the position before the critical move was played)
+    const preFen = moveIdx > 0 ? moves[moveIdx - 1].fen : STARTING_FEN;
+
+    const tactic: MissedTactic = {
+      moveIndex: moveIdx,
+      fen: preFen,
+      bestMove: move.bestMove,
+      playerMoved: move.san,
+      evalSwing: move.preMoveEval !== null && move.evaluation !== null
+        ? Math.abs(move.evaluation - move.preMoveEval)
+        : 0,
+      tacticType: 'tactical_sequence',
+      explanation: move.commentary || `The best move here was ${move.bestMove}.`,
+    };
+
+    handleStartPractice(tactic);
+  }, [reviewState.currentMoveIndex, moves, handleStartPractice]);
+
+  // Guided lesson: exit practice and resume lesson
+  const handleGuidedExitPractice = useCallback(() => {
+    setPracticeTarget(null);
+    setPracticeResult(null);
+    setPracticeAttempts(0);
+    setReviewState((prev) => ({
+      ...prev,
+      mode: 'guided_lesson',
+      whatIfMoves: [],
+      whatIfStartFen: null,
+    }));
+    setWhatIfFen(null);
+    setWhatIfCommentary(null);
+    setIsThinking(false);
+    // Resume auto-advance
+    setGuidedStopped(false);
+  }, []);
+
   // ─── Practice In Chat Handler ─────────────────────────────────────────────
   const handlePracticeInChat = useCallback(() => {
     const tacticTypes = [...new Set(missedTactics.map((t) => t.tacticType))];
@@ -570,7 +697,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
             </button>
             <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
-              Game Review
+              {isGuidedLesson ? 'Guided Lesson' : 'Game Review'}
             </h2>
           </div>
           {/* Auto-Review Button */}
@@ -657,12 +784,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   </span>
                 </div>
                 <button
-                  onClick={handleExitPractice}
+                  onClick={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice}
                   className="px-2.5 py-1 rounded-lg text-xs font-semibold"
                   style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
                   data-testid="exit-practice-btn"
                 >
-                  Back to Review
+                  {isGuidedLesson ? 'Back to Lesson' : 'Back to Review'}
                 </button>
               </div>
               {practiceResult === 'correct' && (
@@ -686,6 +813,55 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   Not quite — try again ({3 - practiceAttempts} attempt{3 - practiceAttempts !== 1 ? 's' : ''} left)
                 </p>
               )}
+            </motion.div>
+          )}
+          {/* Guided Lesson Stop Banner */}
+          {isGuidedLesson && guidedStopped && reviewState.mode === 'guided_lesson' && currentMove && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="rounded-lg mx-2 mt-1 p-2.5 overflow-hidden"
+              style={{ background: 'color-mix(in srgb, var(--color-warning) 15%, var(--color-surface))' }}
+              data-testid="guided-stop-banner"
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                {currentMove.classification === 'brilliant' ? (
+                  <Sparkles size={14} style={{ color: 'var(--color-success)' }} />
+                ) : (
+                  <AlertTriangle size={14} style={{ color: 'var(--color-warning)' }} />
+                )}
+                <span className="text-xs font-semibold capitalize" style={{ color: 'var(--color-text)' }}>
+                  {currentMove.classification === 'brilliant' ? 'Brilliant Move!' : `${currentMove.classification} Detected`}
+                </span>
+              </div>
+              {currentMove.commentary && (
+                <p className="text-xs mb-2 leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                  {currentMove.commentary}
+                </p>
+              )}
+              <div className="flex items-center gap-2">
+                {currentMove.bestMove && currentMove.classification !== 'brilliant' && (
+                  <button
+                    onClick={handleGuidedTryIt}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
+                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                    data-testid="guided-try-it-btn"
+                  >
+                    <Target size={12} />
+                    Try It Yourself
+                  </button>
+                )}
+                <button
+                  onClick={handleGuidedContinue}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
+                  style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+                  data-testid="guided-continue-btn"
+                >
+                  <FastForward size={12} />
+                  Continue
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -740,7 +916,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         </div>
 
         {/* Move navigation controls */}
-        {reviewState.mode === 'analysis' && (
+        {(reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson') && (
           <MoveNavigationControls
             currentIndex={reviewState.currentMoveIndex}
             totalMoves={moves.length}
@@ -822,7 +998,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         <div className="px-2 py-1 border-b border-theme-border">
           <EvalGraph
             moves={moves}
-            currentMoveIndex={reviewState.mode === 'analysis' ? reviewState.currentMoveIndex : null}
+            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
             onMoveClick={handleMoveClick}
           />
         </div>
@@ -832,7 +1008,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           <MoveListPanel
             moves={moves}
             openingName={openingName}
-            currentMoveIndex={reviewState.mode === 'analysis' ? reviewState.currentMoveIndex : null}
+            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
             onMoveClick={handleMoveClick}
             className="h-full"
           />
@@ -974,6 +1150,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               <Target size={12} />
               Practice in Chat
             </button>
+          </div>
+        )}
+
+        {/* Guided Lesson Narrative Summary */}
+        {isGuidedLesson && guidedComplete && (
+          <div className="p-3 border-b border-theme-border" data-testid="narrative-summary">
+            <div className="flex items-center gap-2 mb-2">
+              <GraduationCap size={16} style={{ color: 'var(--color-accent)' }} />
+              <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
+                Game Summary
+              </span>
+              {isLoadingNarrative && (
+                <Loader2 size={12} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+              )}
+            </div>
+            {narrativeSummary ? (
+              <p className="text-xs leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
+                {narrativeSummary}
+              </p>
+            ) : isLoadingNarrative ? (
+              <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                Generating your game summary...
+              </p>
+            ) : null}
           </div>
         )}
 
