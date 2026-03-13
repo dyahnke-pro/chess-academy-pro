@@ -4,6 +4,7 @@ import { ThemePickerPanel } from './ThemePickerPanel';
 import { THEMES } from '../../services/themeService';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
+import { buildUserProfile } from '../../test/factories';
 
 vi.mock('../../services/themeService', async () => {
   const actual = await vi.importActual<typeof import('../../services/themeService')>('../../services/themeService');
@@ -48,52 +49,7 @@ describe('ThemePickerPanel', () => {
   });
 
   it('clicking a card updates the active theme in store', async () => {
-    const profile = {
-      id: 'main',
-      name: 'Tester',
-      isKidMode: false,
-      currentRating: 1400,
-      puzzleRating: 1400,
-      xp: 0,
-      level: 1,
-      currentStreak: 0,
-      longestStreak: 0,
-      streakFreezes: 0,
-      lastActiveDate: '2026-03-04',
-      achievements: [],
-      skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
-      badHabits: [],
-      preferences: {
-        theme: 'dark-premium',
-        boardColor: 'classic',
-        pieceSet: 'staunton',
-        showEvalBar: true,
-        showEngineLines: false,
-        soundEnabled: true,
-        voiceEnabled: true,
-        dailySessionMinutes: 45,
-        apiKeyEncrypted: null,
-        apiKeyIv: null,
-        preferredModel: { commentary: 'haiku', analysis: 'sonnet', reports: 'opus' },
-        monthlyBudgetCap: null,
-        estimatedSpend: 0,
-        elevenlabsKeyEncrypted: null,
-        elevenlabsKeyIv: null,
-        elevenlabsVoiceId: null,
-        voiceSpeed: 1.0,
-        highlightLastMove: true,
-        showLegalMoves: true,
-        showCoordinates: true,
-        pieceAnimationSpeed: 'medium' as const,
-        boardOrientation: true,
-        moveQualityFlash: true,
-        showHints: true,
-        moveMethod: 'both' as const,
-        moveConfirmation: false,
-        autoPromoteQueen: true,
-        masterAllOff: false,
-      },
-    };
+    const profile = buildUserProfile();
     await db.profiles.put(profile);
     useAppStore.getState().setActiveProfile(profile);
     useAppStore.getState().setActiveTheme(THEMES[0]);
@@ -110,52 +66,7 @@ describe('ThemePickerPanel', () => {
   });
 
   it('persists theme preference to DB on click', async () => {
-    const profile = {
-      id: 'main',
-      name: 'Tester',
-      isKidMode: false,
-      currentRating: 1400,
-      puzzleRating: 1400,
-      xp: 0,
-      level: 1,
-      currentStreak: 0,
-      longestStreak: 0,
-      streakFreezes: 0,
-      lastActiveDate: '2026-03-04',
-      achievements: [],
-      skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
-      badHabits: [],
-      preferences: {
-        theme: 'dark-premium',
-        boardColor: 'classic',
-        pieceSet: 'staunton',
-        showEvalBar: true,
-        showEngineLines: false,
-        soundEnabled: true,
-        voiceEnabled: true,
-        dailySessionMinutes: 45,
-        apiKeyEncrypted: null,
-        apiKeyIv: null,
-        preferredModel: { commentary: 'haiku', analysis: 'sonnet', reports: 'opus' },
-        monthlyBudgetCap: null,
-        estimatedSpend: 0,
-        elevenlabsKeyEncrypted: null,
-        elevenlabsKeyIv: null,
-        elevenlabsVoiceId: null,
-        voiceSpeed: 1.0,
-        highlightLastMove: true,
-        showLegalMoves: true,
-        showCoordinates: true,
-        pieceAnimationSpeed: 'medium' as const,
-        boardOrientation: true,
-        moveQualityFlash: true,
-        showHints: true,
-        moveMethod: 'both' as const,
-        moveConfirmation: false,
-        autoPromoteQueen: true,
-        masterAllOff: false,
-      },
-    };
+    const profile = buildUserProfile();
     await db.profiles.put(profile);
     useAppStore.getState().setActiveProfile(profile);
 

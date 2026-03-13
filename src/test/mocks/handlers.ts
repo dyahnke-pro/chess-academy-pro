@@ -33,19 +33,29 @@ export const handlers = [
     });
   }),
 
-  // Anthropic Claude API — single message
-  http.post('https://api.anthropic.com/v1/messages', ({ request }) => {
+  // DeepSeek API — chat completions
+  http.post('https://api.deepseek.com/chat/completions', ({ request }) => {
     const url = new URL(request.url);
-    // Check if streaming is requested via header
     const isStream = url.searchParams.get('stream') === 'true';
 
     if (isStream) {
       return HttpResponse.text(
-        'event: content_block_delta\ndata: {"type":"content_block_delta","delta":{"type":"text_delta","text":"Great move!"}}\n\n',
+        'data: {"choices":[{"delta":{"content":"Great move!"}}]}\n\n',
         { headers: { 'Content-Type': 'text/event-stream' } },
       );
     }
 
+    return HttpResponse.json({
+      id: 'chatcmpl-mock',
+      object: 'chat.completion',
+      choices: [{ message: { role: 'assistant', content: "Great move! You're developing your pieces actively." } }],
+      model: 'deepseek-chat',
+      usage: { prompt_tokens: 100, completion_tokens: 20 },
+    });
+  }),
+
+  // Anthropic Claude API — messages
+  http.post('https://api.anthropic.com/v1/messages', () => {
     return HttpResponse.json({
       id: 'msg_mock',
       type: 'message',

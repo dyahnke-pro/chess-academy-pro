@@ -55,6 +55,7 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: ['stockfish'],
+    include: ['openai', '@anthropic-ai/sdk'],
   },
   build: {
     target: 'esnext',

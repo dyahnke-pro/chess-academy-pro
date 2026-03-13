@@ -20,8 +20,12 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
     setVisible(true);
     setMessage('');
 
-    if (!activeProfile?.preferences.apiKeyEncrypted) {
-      setMessage('To enable AI coaching, add your Anthropic API key in Settings → Coach tab. The coach will respond once your key is saved.');
+    const provider = activeProfile?.preferences.aiProvider ?? 'deepseek';
+    const hasKey = provider === 'anthropic'
+      ? Boolean(activeProfile?.preferences.anthropicApiKeyEncrypted)
+      : Boolean(activeProfile?.preferences.apiKeyEncrypted);
+    if (!hasKey) {
+      setMessage('To enable AI coaching, add your API key in Settings → Coach tab. The coach will respond once your key is saved.');
       return;
     }
 

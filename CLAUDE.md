@@ -22,7 +22,8 @@ Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScr
 - Zustand 5.0.11 (state management)
 - Recharts 3.7.0
 - Framer Motion 12.34.4
-- @anthropic-ai/sdk 0.78.0
+- openai 6.27.0 (DeepSeek provider, baseURL: https://api.deepseek.com)
+- @anthropic-ai/sdk (Anthropic provider)
 - Lucide React 0.576.0 (icons)
 - Capacitor 8.1.0 (core + cli + ios)
 
@@ -140,7 +141,7 @@ Use `src/test/factories.ts` for all test data. Available builders:
 - Add features not specified in the current work order
 - Skip tests
 - Use `localStorage` for anything (use Dexie/IndexedDB)
-- Import from `@anthropic-ai/sdk` anywhere except `src/services/coachApi.ts`
+- Import from `openai` anywhere except `src/services/coachApi.ts`
 - Run Stockfish anywhere except through `src/services/stockfishEngine.ts`
 
 ## Before Finishing a Session

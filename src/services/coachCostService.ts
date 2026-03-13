@@ -10,11 +10,15 @@ export interface ApiUsageEntry {
   estimatedCost: number;
 }
 
-// Rough per-token pricing (USD) as of 2025
+// Rough per-token pricing (USD)
 const PRICING: Record<string, { input: number; output: number }> = {
+  // DeepSeek
+  'deepseek-chat':     { input: 0.00000027, output: 0.0000011 },
+  'deepseek-reasoner': { input: 0.00000055, output: 0.00000219 },
+  // Anthropic
   'claude-haiku-4-5-20251001': { input: 0.0000008, output: 0.000004 },
-  'claude-sonnet-4-5-20250514': { input: 0.000003, output: 0.000015 },
-  'claude-opus-4-5-20250514': { input: 0.000015, output: 0.000075 },
+  'claude-sonnet-4-6':         { input: 0.000003,  output: 0.000015 },
+  'claude-opus-4-6':           { input: 0.000015,  output: 0.000075 },
 };
 
 export function estimateCost(

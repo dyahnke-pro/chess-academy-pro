@@ -121,6 +121,29 @@ class ChessAcademyDB extends Dexie {
         }
       });
     });
+
+    this.version(7).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+    }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (!('aiProvider' in prefs)) {
+          prefs.aiProvider = 'deepseek';
+        }
+        if (!('anthropicApiKeyEncrypted' in prefs)) {
+          prefs.anthropicApiKeyEncrypted = null;
+        }
+        if (!('anthropicApiKeyIv' in prefs)) {
+          prefs.anthropicApiKeyIv = null;
+        }
+      });
+    });
   }
 }
 

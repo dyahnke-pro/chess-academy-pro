@@ -172,6 +172,7 @@ export interface FlashcardRecord {
 
 export type PieceAnimationSpeed = 'none' | 'fast' | 'medium' | 'slow';
 export type MoveMethod = 'drag' | 'click' | 'both';
+export type AiProvider = 'deepseek' | 'anthropic';
 
 // ─── User Profile ─────────────────────────────────────────────────────────────
 
@@ -200,8 +201,11 @@ export interface UserPreferences {
   soundEnabled: boolean;
   voiceEnabled: boolean;
   dailySessionMinutes: number;
+  aiProvider: AiProvider;
   apiKeyEncrypted: string | null;
   apiKeyIv: string | null;
+  anthropicApiKeyEncrypted: string | null;
+  anthropicApiKeyIv: string | null;
   preferredModel: {
     commentary: string;
     analysis: string;
@@ -335,6 +339,14 @@ export interface BoardArrow {
 export interface BoardHighlight {
   square: string;
   color: string;
+}
+
+export interface GhostMoveData {
+  fromSquare: string;
+  toSquare: string;
+  /** Piece code like 'wN', 'bQ' — matches pieceSetService keys */
+  piece: string;
+  capturedSquare: string | null;
 }
 
 export interface BoardAnnotationCommand {

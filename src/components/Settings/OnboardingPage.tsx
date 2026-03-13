@@ -12,18 +12,24 @@ export function OnboardingPage(): JSX.Element {
   const navigate = useNavigate();
   const [step, setStep] = useState<OnboardingStep>(1);
   const [apiKey, setApiKey] = useState('');
+  const [provider, setProvider] = useState<'deepseek' | 'anthropic'>(activeProfile?.preferences.aiProvider ?? 'deepseek');
   const [name, setName] = useState(activeProfile?.name ?? 'Player');
   const [elo, setElo] = useState(activeProfile?.currentRating ?? 1200);
   const [status, setStatus] = useState<string | null>(null);
+
+  const isAnthropic = provider === 'anthropic';
 
   const handleSaveApiKey = async (): Promise<void> => {
     if (!activeProfile || !apiKey.trim()) return;
     try {
       const { encrypted, iv } = await encryptApiKey(apiKey.trim());
+      const keyPrefs = isAnthropic
+        ? { anthropicApiKeyEncrypted: encrypted, anthropicApiKeyIv: iv }
+        : { apiKeyEncrypted: encrypted, apiKeyIv: iv };
       const updatedPrefs = {
         ...activeProfile.preferences,
-        apiKeyEncrypted: encrypted,
-        apiKeyIv: iv,
+        ...keyPrefs,
+        aiProvider: provider,
       };
       await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
       setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
@@ -91,18 +97,37 @@ export function OnboardingPage(): JSX.Element {
         <div className="max-w-md w-full space-y-6">
           <h2 className="text-2xl font-bold text-center">API Key Setup</h2>
           <p className="text-sm text-center" style={{ color: 'var(--color-text-muted)' }}>
-            Enter your Anthropic API key to enable AI coaching. Get one at console.anthropic.com.
+            Enter your API key to enable AI coaching.
           </p>
+          <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--color-border)' }} data-testid="onboarding-provider-toggle">
+            {(['deepseek', 'anthropic'] as const).map((p) => (
+              <button
+                key={p}
+                onClick={() => { setProvider(p); setApiKey(''); }}
+                className="flex-1 px-4 py-2 text-sm font-medium transition-colors"
+                style={{
+                  background: provider === p ? 'var(--color-accent)' : 'var(--color-bg)',
+                  color: provider === p ? 'var(--color-bg)' : 'var(--color-text)',
+                }}
+                data-testid={`onboarding-provider-${p}`}
+              >
+                {p === 'deepseek' ? 'DeepSeek' : 'Anthropic'}
+              </button>
+            ))}
+          </div>
           <div>
             <input
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="sk-ant-api03-..."
+              placeholder={isAnthropic ? 'sk-ant-...' : 'sk-...'}
               className="w-full px-3 py-2 rounded-lg border text-sm"
               style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
               data-testid="onboarding-api-key"
             />
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+              {isAnthropic ? 'Get a key at console.anthropic.com' : 'Get a key at platform.deepseek.com'}
+            </p>
           </div>
           {status && <p className="text-sm text-center" style={{ color: 'var(--color-error)' }}>{status}</p>}
           <button
