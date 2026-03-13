@@ -1,7 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
+import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
+import { useSettings } from '../../hooks/useSettings';
+import { useHintSystem } from '../../hooks/useHintSystem';
 import { speechService } from '../../services/speechService';
 import { CheckCircle, XCircle } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -31,6 +34,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
+  const { settings } = useSettings();
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
@@ -38,6 +42,33 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
   // Publish board context for global coach drawer
   useBoardContext(fen, '', 0, userColor, fen.split(' ')[1] === 'b' ? 'b' : 'w');
+
+  // Derive the expected move for the hint system
+  const knownMove = useMemo((): { from: string; to: string; san: string } | null => {
+    if (state !== 'playing') return null;
+    const allMoves = movesRef.current;
+    if (moveIndex >= allMoves.length) return null;
+    const expected = allMoves[moveIndex];
+
+    // Get the SAN for the expected move
+    try {
+      const chess = new Chess(fen);
+      const result = chess.move({ from: expected.from, to: expected.to, promotion: expected.promotion });
+      chess.undo();
+      return { from: expected.from, to: expected.to, san: result.san };
+    } catch {
+      return { from: expected.from, to: expected.to, san: '' };
+    }
+  }, [state, moveIndex, fen]);
+
+  // Hint system
+  const { hintState, requestHint, resetHints } = useHintSystem({
+    fen,
+    playerColor: userColor,
+    enabled: settings.showHints && state === 'playing',
+    knownMove,
+    puzzleThemes: puzzle.themes,
+  });
 
   // Reset state when puzzle changes
   useEffect(() => {
@@ -47,6 +78,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     setMoveIndex(0);
     setFen(puzzle.fen);
     setState('loading');
+    resetHints();
 
     // Auto-play the first move (opponent sets up the puzzle)
     const timer = setTimeout(() => {
@@ -66,7 +98,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [puzzle, playMoveSound]);
+  }, [puzzle, playMoveSound, resetHints]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
@@ -79,6 +111,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
     if (isCorrect) {
       playMoveSound(move.san);
+      resetHints();
       const nextIndex = moveIndex + 1;
 
       // Check if puzzle is fully solved
@@ -121,7 +154,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         setState('playing');
       }, 1500);
     }
-  }, [state, disabled, moveIndex, puzzle.themes, onComplete, playMoveSound, playCelebration, playEncouragement]);
+  }, [state, disabled, moveIndex, puzzle.themes, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     // ChessBoard's internal chess.js has already applied the move.
@@ -138,7 +171,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
   return (
     <div className="space-y-3" data-testid="puzzle-board">
-      <div className="max-w-md">
+      <div className="max-w-md mx-auto">
         <ChessBoard
           initialFen={fen}
           key={fen}
@@ -148,8 +181,26 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
           showUndoButton={false}
           showResetButton={false}
           onMove={handleChessBoardMove}
+          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          ghostMove={hintState.ghostMove}
         />
       </div>
+
+      {/* Hint controls */}
+      {state === 'playing' && settings.showHints && (
+        <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
+          <HintButton
+            currentLevel={hintState.level}
+            onRequestHint={requestHint}
+            disabled={hintState.isAnalyzing}
+          />
+          {hintState.nudgeText && (
+            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
+              {hintState.nudgeText}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Status message */}
       {state === 'correct' && (

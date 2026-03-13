@@ -240,7 +240,7 @@ export function OpeningDetailPage(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col flex-1 p-4 md:p-6 overflow-y-auto" data-testid="opening-detail">
+    <div className="flex flex-col flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto" data-testid="opening-detail">
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <button
@@ -433,7 +433,7 @@ export function OpeningDetailPage(): JSX.Element {
                   <div className="flex items-center gap-1.5 ml-2">
                     <button
                       onClick={() => handleStartVariationLearn(i)}
-                      className="p-2.5 rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Learn ${variation.name}`}
                       title="Learn"
                       data-testid={`variation-learn-${i}`}
@@ -442,7 +442,7 @@ export function OpeningDetailPage(): JSX.Element {
                     </button>
                     <button
                       onClick={() => handleStartVariationPractice(i)}
-                      className="p-2.5 rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Practice ${variation.name}`}
                       title="Practice"
                       data-testid={`variation-practice-${i}`}

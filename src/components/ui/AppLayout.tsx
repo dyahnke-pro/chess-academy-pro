@@ -3,7 +3,7 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
-  FlipHorizontal,
+  Swords,
   Database,
   BarChart3,
   Settings,
@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   MessageCircle,
+  ChevronLeft,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
@@ -30,7 +31,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
-  { to: '/flashcards', label: 'Flashcards', icon: FlipHorizontal },
+  { to: '/play', label: 'Play', icon: Swords },
   { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/games', label: 'Games', icon: Database },
   { to: '/analysis', label: 'Analysis', icon: Search },
@@ -52,8 +53,11 @@ export function AppLayout(): JSX.Element {
     setSidebarOpen(false);
   }, [setSidebarOpen]);
 
-  // Hide FAB on /coach/play (has its own chat) and when no profile
-  const showCoachFab = activeProfile && location.pathname !== '/coach/play' && !coachDrawerOpen;
+  // Hide FAB on pages with their own chat panel and when no profile
+  const showCoachFab = activeProfile
+    && location.pathname !== '/coach/play'
+    && !location.pathname.startsWith('/play')
+    && !coachDrawerOpen;
 
   return (
     <div className="flex flex-col min-h-dvh" style={{ background: 'var(--color-bg)' }}>
@@ -258,22 +262,44 @@ export function AppLayout(): JSX.Element {
         ))}
       </nav>
 
-      {/* Coach FAB */}
+      {/* Coach trigger — edge tab on mobile, FAB on desktop */}
       {showCoachFab && (
-        <button
-          onClick={() => setCoachDrawerOpen(true)}
-          className="fixed z-40 flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
-          style={{
-            background: 'var(--color-accent)',
-            color: 'var(--color-bg)',
-            right: '1rem',
-            bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
-          }}
-          aria-label="Open coach chat"
-          data-testid="coach-fab"
-        >
-          <MessageCircle size={22} />
-        </button>
+        <>
+          {/* Mobile: right-edge tab with left arrow */}
+          <button
+            onClick={() => setCoachDrawerOpen(true)}
+            className="md:hidden fixed z-40 flex items-center justify-center rounded-l-lg shadow-lg active:scale-95"
+            style={{
+              background: 'var(--color-accent)',
+              color: 'var(--color-bg)',
+              right: 0,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              width: 44,
+              height: 64,
+            }}
+            aria-label="Open coach chat"
+            data-testid="coach-edge-tab"
+          >
+            <ChevronLeft size={20} />
+          </button>
+
+          {/* Desktop: floating action button */}
+          <button
+            onClick={() => setCoachDrawerOpen(true)}
+            className="hidden md:flex fixed z-40 items-center justify-center w-12 h-12 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
+            style={{
+              background: 'var(--color-accent)',
+              color: 'var(--color-bg)',
+              right: '1rem',
+              bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
+            }}
+            aria-label="Open coach chat"
+            data-testid="coach-fab"
+          >
+            <MessageCircle size={22} />
+          </button>
+        </>
       )}
 
       {/* Global coach drawer */}

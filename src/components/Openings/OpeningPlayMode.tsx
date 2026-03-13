@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
+import { useHintSystem } from '../../hooks/useHintSystem';
 import { ChessBoard } from '../Board/ChessBoard';
+import { HintButton } from '../Coach/HintButton';
 import { ExplanationCard } from './ExplanationCard';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
@@ -40,8 +42,6 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const [result, setResult] = useState<OpeningPlayResult | null>(null);
   const [boardKey, setBoardKey] = useState(0);
   const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
-  const [hintSquares, setHintSquares] = useState<{ from: string; to: string } | null>(null);
-  const [hintLoading, setHintLoading] = useState(false);
   const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
   const isComputerThinking = useRef(false);
   const moveCountRef = useRef(0);
@@ -65,6 +65,27 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
 
   const openingPhaseLength = openingMoves.length;
 
+  // Hint system — knownMove during opening phase, Stockfish in middlegame
+  const isPlayersTurn =
+    (playerColor === 'white' && game.turn === 'w') ||
+    (playerColor === 'black' && game.turn === 'b');
+  const inOpeningForHint = playPhase === 'opening' && moveCountRef.current < openingMoves.length;
+  const hintKnownMove = useMemo((): { from: string; to: string; san: string } | null => {
+    if (!isPlayersTurn || playPhase === 'pregame' || playPhase === 'postgame') return null;
+    if (inOpeningForHint) {
+      const expected = openingMoves[moveCountRef.current];
+      return expected;
+    }
+    return null; // Stockfish mode in middlegame
+  }, [isPlayersTurn, playPhase, inOpeningForHint, openingMoves]);
+
+  const { hintState, requestHint, resetHints } = useHintSystem({
+    fen: game.fen,
+    playerColor,
+    enabled: settings.showHints && (playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver,
+    knownMove: hintKnownMove,
+  });
+
   // Track deviations
   const [firstDeviation, setFirstDeviation] = useState<number | null>(null);
   const [correctMovesPlayed, setCorrectMovesPlayed] = useState(0);
@@ -76,35 +97,6 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       speechService.speak(text);
     }
   }, [voiceOn]);
-
-  // ─── Hint handler ─────────────────────────────────────────────────────────
-  const handleHint = useCallback(async (): Promise<void> => {
-    if (hintLoading) return;
-
-    const currentMoveIdx = moveCountRef.current;
-    const inOpeningPhase = currentMoveIdx < openingPhaseLength && !deviatedRef.current;
-
-    if (inOpeningPhase && currentMoveIdx < openingMoves.length) {
-      // During opening: show expected move
-      const expected = openingMoves[currentMoveIdx];
-      setHintSquares({ from: expected.from, to: expected.to });
-      setTimeout(() => setHintSquares(null), 2000);
-    } else {
-      // During middlegame: ask Stockfish
-      setHintLoading(true);
-      try {
-        const { move } = await getAdaptiveMove(game.fen, playerRating + 200);
-        const from = move.slice(0, 2);
-        const to = move.slice(2, 4);
-        setHintSquares({ from, to });
-        setTimeout(() => setHintSquares(null), 2000);
-      } catch {
-        // Silently fail
-      } finally {
-        setHintLoading(false);
-      }
-    }
-  }, [hintLoading, openingPhaseLength, openingMoves, game.fen, playerRating]);
 
   // ─── Pregame intro ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -231,6 +223,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
     return () => {
       abortController.abort();
       clearTimeout(timer);
+      isComputerThinking.current = false;
     };
   }, [game.turn, game.fen, game.isGameOver, playPhase, playerColor, targetStrength, openingMoves, openingPhaseLength, game]);
 
@@ -239,7 +232,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
     const currentMoveIdx = moveCountRef.current;
     moveCountRef.current += 1;
     setComputerLastMove(null);
-    setHintSquares(null);
+    resetHints();
 
     // Sync move to parent game state so turn flips and computer move effect triggers
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
@@ -275,7 +268,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
         setPlayPhase('middlegame');
       }
     }
-  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash]);
+  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints]);
 
   // ─── Postgame report ─────────────────────────────────────────────────────
   if (playPhase === 'postgame' && result) {
@@ -328,7 +321,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
                 setResult(null);
                 setDeviationCard(null);
                 setComputerLastMove(null);
-                setHintSquares(null);
+                resetHints();
                 setMoveFlash(null);
                 setPlayPhase('pregame');
                 setBoardKey((k) => k + 1);
@@ -376,15 +369,11 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
 
         <div className="flex items-center gap-1">
           {settings.showHints && (playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (
-            <button
-              onClick={() => void handleHint()}
-              disabled={hintLoading}
-              className="p-2 rounded-lg hover:bg-theme-surface text-theme-text-muted disabled:opacity-40"
-              aria-label="Get hint"
-              data-testid="hint-button"
-            >
-              <Lightbulb size={18} className={hintLoading ? 'animate-pulse' : ''} />
-            </button>
+            <HintButton
+              currentLevel={hintState.level}
+              onRequestHint={requestHint}
+              disabled={hintState.isAnalyzing}
+            />
           )}
           <button
             onClick={() => setVoiceOn(!voiceOn)}
@@ -412,7 +401,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
 
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-center px-2 py-2">
-        <div className="w-full max-w-[360px]">
+        <div className="w-full md:max-w-[420px]">
           <ChessBoard
             key={boardKey}
             initialFen={game.fen}
@@ -425,15 +414,26 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
             onMove={handlePlayerMove}
             showEvalBar={false}
             showFlipButton={false}
-            highlightSquares={hintSquares ?? computerLastMove}
+            highlightSquares={computerLastMove}
             showLastMoveHighlight={settings.highlightLastMove}
             moveQualityFlash={moveFlash}
+            arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+            ghostMove={hintState.ghostMove}
           />
         </div>
       </div>
 
+      {/* Nudge text */}
+      {hintState.nudgeText && (
+        <div className="px-4 pb-2">
+          <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
+            {hintState.nudgeText}
+          </p>
+        </div>
+      )}
+
       {/* Deviation card */}
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-safe-4">
         <ExplanationCard
           text={deviationCard ?? ''}
           visible={deviationCard !== null}

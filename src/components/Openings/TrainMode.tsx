@@ -314,7 +314,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
 
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-center px-2 py-2">
-        <div className="w-full max-w-[360px]">
+        <div className="w-full md:max-w-[420px]">
           <div className="relative">
             <ChessBoard
               key={boardKey}
@@ -368,7 +368,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       </div>
 
       {/* Bottom: prompt + controls */}
-      <div className="px-4 pb-4 space-y-3">
+      <div className="px-4 pb-safe-4 space-y-3">
         {showWrongMove ? (
           <div className="space-y-2">
             <ExplanationCard

@@ -46,5 +46,16 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.pb-safe': {
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        },
+        '.pb-safe-4': {
+          paddingBottom: 'max(1rem, calc(1rem + env(safe-area-inset-bottom, 0px)))',
+        },
+      });
+    },
+  ],
 };

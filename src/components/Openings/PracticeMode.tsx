@@ -3,8 +3,10 @@ import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChessBoard } from '../Board/ChessBoard';
 import { ExplanationCard } from './ExplanationCard';
+import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
+import { useHintSystem } from '../../hooks/useHintSystem';
 import {
   recordDrillAttempt,
   updateVariationProgress,
@@ -67,6 +69,7 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
   const [lineComplete, setLineComplete] = useState(false);
   const [totalMistakes, setTotalMistakes] = useState(0);
   const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
+  const [hintCostApplied, setHintCostApplied] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
 
   const { settings } = useSettings();
@@ -101,6 +104,24 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
   // Publish board context for global coach drawer
   const practiceTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
   useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, practiceTurn);
+
+  // Hint system
+  const currentExpected = currentMoveIndex < expectedMoves.length ? expectedMoves[currentMoveIndex] : undefined;
+  const knownMove = currentExpected && isPlayerTurn(currentMoveIndex) ? currentExpected : null;
+  const { hintState, requestHint, resetHints } = useHintSystem({
+    fen: currentFen,
+    playerColor: playerColor,
+    enabled: settings.showHints,
+    knownMove,
+  });
+
+  const handleHint = useCallback((): void => {
+    if (!hintCostApplied) {
+      setTotalMistakes((prev) => prev + 1);
+      setHintCostApplied(true);
+    }
+    requestHint();
+  }, [hintCostApplied, requestHint]);
 
   // Auto-play opponent moves
   useEffect(() => {
@@ -153,6 +174,8 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
       if (result.from === expected.from && result.to === expected.to) {
         // Correct
         setComputerLastMove(null);
+        setHintCostApplied(false);
+        resetHints();
         setShowCorrectFlash(true);
         setShowWrongMove(false);
         setWrongSquare(null);
@@ -176,14 +199,15 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
         setBoardKey((k) => k + 1);
       }
     },
-    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash],
+    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash, resetHints],
   );
 
   const handleUndo = useCallback((): void => {
     setShowWrongMove(false);
     setWrongSquare(null);
+    resetHints();
     setBoardKey((k) => k + 1);
-  }, []);
+  }, [resetHints]);
 
   const handleRetry = useCallback((): void => {
     setCurrentMoveIndex(0);
@@ -192,11 +216,13 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
     setShowCorrectFlash(false);
     setWrongSquare(null);
     setComputerLastMove(null);
+    setHintCostApplied(false);
+    resetHints();
     setLineComplete(false);
     setTotalMistakes(0);
     startTimeRef.current = Date.now();
     speechService.stop();
-  }, []);
+  }, [resetHints]);
 
   const progress = expectedMoves.length > 0
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
@@ -294,7 +320,7 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
 
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-center px-2 py-2">
-        <div className="w-full max-w-[360px]">
+        <div className="w-full md:max-w-[420px]">
           <div className="relative">
             <ChessBoard
               key={boardKey}
@@ -308,6 +334,8 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
               highlightSquares={computerLastMove}
               showLastMoveHighlight={settings.highlightLastMove}
               moveQualityFlash={moveFlash}
+              arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+              ghostMove={hintState.ghostMove}
             />
             {/* Green checkmark overlay */}
             <AnimatePresence>
@@ -348,7 +376,7 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
       </div>
 
       {/* Bottom: prompt + controls */}
-      <div className="px-4 pb-4 space-y-3">
+      <div className="px-4 pb-safe-4 space-y-3">
         {showWrongMove ? (
           <div className="space-y-2">
             <ExplanationCard
@@ -371,6 +399,20 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
               <p className="text-sm text-theme-text text-center font-medium" data-testid="practice-prompt">
                 What's the best move?
               </p>
+              {settings.showHints && (
+                <div className="mt-2 flex flex-col items-center gap-2">
+                  <HintButton
+                    currentLevel={hintState.level}
+                    onRequestHint={handleHint}
+                    disabled={hintState.isAnalyzing}
+                  />
+                  {hintState.nudgeText && (
+                    <p className="text-xs text-amber-500 text-center max-w-xs" data-testid="hint-nudge">
+                      {hintState.nudgeText}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )
         )}

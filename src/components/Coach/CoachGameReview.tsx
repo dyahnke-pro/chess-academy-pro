@@ -6,7 +6,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveNavigationControls } from './MoveNavigationControls';
 import { MoveListPanel } from './MoveListPanel';
 import { EvalGraph } from './EvalGraph';
-import { GameSummaryStats } from './GameSummaryStats';
+import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { ChatInput } from './ChatInput';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
 import { getMoveCommentaryTemplate } from '../../services/coachTemplates';
@@ -18,6 +18,7 @@ import { calculateAccuracy, getClassificationCounts } from '../../services/accur
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { generateNarrativeSummary } from '../../services/coachFeatureService';
+import { getClassificationHighlightColor } from './classificationStyles';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
@@ -39,12 +40,6 @@ interface CoachGameReviewProps {
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-const PHASE_LABELS: Record<string, string> = {
-  opening: 'Opening',
-  middlegame: 'Middlegame',
-  endgame: 'Endgame',
-};
-
 const AUTO_REVIEW_ADVANCE_MS = 2000;
 const AUTO_REVIEW_PAUSE_MS = 5000;
 
@@ -63,6 +58,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     onPlayAgain, onBackToCoach, onPracticeInChat,
     isGuidedLesson, pgn,
   } = props;
+
+  // ─── Summary-First Flow ─────────────────────────────────────────────────────
+  const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
+    isGuidedLesson ? 'analysis' : 'summary',
+  );
 
   const [reviewState, setReviewState] = useState<ReviewState>({
     mode: isGuidedLesson ? 'guided_lesson' : 'analysis',
@@ -113,6 +113,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     [moves, playerColor],
   );
 
+  // Opponent classification counts for summary card
+  const opponentColor = playerColor === 'white' ? 'black' : 'white';
+  const opponentClassificationCounts = useMemo<MoveClassificationCounts>(
+    () => getClassificationCounts(moves, opponentColor),
+    [moves, opponentColor],
+  );
+
   // Pre-compute phase breakdown + missed tactics
   const phaseBreakdown = useMemo<PhaseAccuracy[]>(
     () => getPhaseBreakdown(moves, playerColor),
@@ -149,6 +156,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (cls === 'brilliant' || cls === 'great' || cls === 'good' || cls === 'book') return [];
     const arrow = uciToArrow(currentMove.bestMove, 'rgba(34, 197, 94, 0.8)');
     return arrow ? [arrow] : [];
+  }, [reviewState.mode, currentMove]);
+
+  // Board highlights: classification-colored square for played move (mistakes/blunders)
+  const classificationHighlights = useMemo(() => {
+    if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return [];
+    if (!currentMove) return [];
+    if (currentMove.isCoachMove) return [];
+    const cls = currentMove.classification;
+    if (!cls) return [];
+    const highlightColor = getClassificationHighlightColor(cls);
+    if (!highlightColor) return [];
+    // Highlight the destination square of the played move
+    const san = currentMove.san;
+    // Extract destination square from SAN (last 2 chars before optional +/#/=)
+    const cleaned = san.replace(/[+#=].*/, '');
+    const dest = cleaned.slice(-2);
+    if (dest.length === 2 && dest[0] >= 'a' && dest[0] <= 'h' && dest[1] >= '1' && dest[1] <= '8') {
+      return [{ square: dest, color: highlightColor }];
+    }
+    return [];
   }, [reviewState.mode, currentMove]);
 
   // Commentary for current move
@@ -659,6 +686,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     onPracticeInChat?.(prompt);
   }, [missedTactics, onPracticeInChat]);
 
+  // Handle transitioning from summary to analysis
+  const handleStartReview = useCallback(() => {
+    setReviewPhase('analysis');
+    // Start at the beginning for step-through
+    setReviewState((prev) => ({
+      ...prev,
+      currentMoveIndex: -1,
+    }));
+  }, []);
+
   // Empty state
   if (moves.length === 0) {
     return (
@@ -686,6 +723,31 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     );
   }
 
+  // ─── Summary Phase ──────────────────────────────────────────────────────────
+  if (reviewPhase === 'summary') {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full overflow-y-auto" data-testid="coach-game-review">
+        <ReviewSummaryCard
+          result={result}
+          playerName={playerName}
+          playerRating={playerRating}
+          opponentRating={opponentRating}
+          playerColor={playerColor}
+          accuracy={accuracy}
+          classificationCounts={classificationCounts}
+          opponentClassificationCounts={opponentClassificationCounts}
+          phaseBreakdown={phaseBreakdown}
+          openingName={openingName}
+          moveCount={accuracy.moveCount}
+          onStartReview={handleStartReview}
+          onPlayAgain={onPlayAgain}
+          onBackToCoach={onBackToCoach}
+        />
+      </div>
+    );
+  }
+
+  // ─── Analysis Phase ─────────────────────────────────────────────────────────
   return (
     <>
       {/* Left column: board + nav */}
@@ -699,6 +761,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
               {isGuidedLesson ? 'Guided Lesson' : 'Game Review'}
             </h2>
+            {/* Compact accuracy badge */}
+            {!isGuidedLesson && (
+              <div className="flex items-center gap-1.5 ml-2 px-2 py-0.5 rounded-full" style={{ background: 'var(--color-surface)' }}>
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: getAccuracyColor(playerColor === 'white' ? accuracy.white : accuracy.black) }}
+                />
+                <span className="text-xs font-mono font-medium" style={{ color: 'var(--color-text)' }}>
+                  {Math.round(playerColor === 'white' ? accuracy.white : accuracy.black)}%
+                </span>
+              </div>
+            )}
           </div>
           {/* Auto-Review Button */}
           {!autoReviewActive ? (
@@ -869,7 +943,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         {/* Opponent info bar */}
         <div className="px-2 pt-1">
           <PlayerInfoBar
-            name="AI Coach"
+            name="Stockfish Bot"
             rating={opponentRating}
             isBot
             capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
@@ -881,7 +955,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         {/* Board with optional classification flash border */}
         <div className="px-2 py-1 flex justify-center">
           <div
-            className="w-full max-w-[300px] sm:max-w-[360px] md:max-w-[420px] rounded-sm transition-shadow duration-300"
+            className="w-full md:max-w-[420px] rounded-sm transition-shadow duration-300"
             style={{
               boxShadow: boardFlash ? `0 0 0 3px ${boardFlash}` : 'none',
             }}
@@ -897,9 +971,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   void handleBoardMove(moveResult);
                 }
               }}
-              showEvalBar={reviewState.mode !== 'practice'}
+              showEvalBar
               evaluation={currentMove?.evaluation ?? null}
               arrows={reviewState.mode === 'practice' ? practiceArrows : arrows}
+              annotationHighlights={reviewState.mode === 'practice' ? [] : classificationHighlights}
             />
           </div>
         </div>
@@ -947,53 +1022,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         )}
       </div>
 
-      {/* Right column: stats + eval graph + move list + commentary + actions */}
-      <div className="flex flex-col h-[40vh] md:h-auto md:flex-1 md:border-l border-theme-border min-h-[200px] overflow-y-auto">
-        {/* Game summary stats */}
-        <div className="p-3 border-b border-theme-border">
-          <GameSummaryStats
-            accuracy={accuracy}
-            classificationCounts={classificationCounts}
-            playerColor={playerColor}
-            result={result}
-          />
-        </div>
-
-        {/* Phase Accuracy Breakdown */}
-        {phaseBreakdown.some((p) => p.moveCount > 0) && (
-          <div className="px-3 py-2 border-b border-theme-border" data-testid="phase-breakdown">
-            <p className="text-[10px] font-semibold uppercase tracking-wide mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
-              Phase Accuracy
-            </p>
-            <div className="space-y-1.5">
-              {phaseBreakdown.filter((p) => p.moveCount > 0).map((phase) => {
-                const color = phase.accuracy >= 80 ? 'var(--color-success)' : phase.accuracy >= 50 ? 'var(--color-warning)' : 'var(--color-error)';
-                return (
-                  <div key={phase.phase} className="flex items-center gap-2">
-                    <span className="text-xs w-20 shrink-0" style={{ color: 'var(--color-text-muted)' }}>
-                      {PHASE_LABELS[phase.phase]}
-                    </span>
-                    <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-surface)' }}>
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{ width: `${Math.min(100, phase.accuracy)}%`, background: color }}
-                      />
-                    </div>
-                    <span className="text-xs font-mono w-10 text-right" style={{ color }}>
-                      {phase.accuracy.toFixed(0)}%
-                    </span>
-                    {phase.mistakes > 0 && (
-                      <span className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
-                        ({phase.mistakes} err)
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
+      {/* Right column: eval graph + move list + commentary + actions */}
+      <div className="flex flex-col h-[45dvh] md:h-auto md:flex-1 md:border-l border-theme-border min-h-[220px] overflow-y-auto">
         {/* Eval graph */}
         <div className="px-2 py-1 border-b border-theme-border">
           <EvalGraph
@@ -1201,4 +1231,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       </div>
     </>
   );
+}
+
+function getAccuracyColor(accuracy: number): string {
+  if (accuracy >= 80) return '#22c55e';
+  if (accuracy >= 60) return '#fbbf24';
+  return '#ef4444';
 }

@@ -10,7 +10,7 @@ import {
 import { seedDatabase } from '../../services/dataLoader';
 import { OpeningCard } from './OpeningCard';
 import type { OpeningRecord } from '../../types';
-import { Search, BookOpen, Library, ChevronDown, ChevronRight } from 'lucide-react';
+import { Search, BookOpen, Library, ChevronDown, ChevronRight, Star } from 'lucide-react';
 
 type TabMode = 'repertoire' | 'all';
 
@@ -103,8 +103,9 @@ export function OpeningExplorerPage(): JSX.Element {
     return repertoire;
   }, [repertoire, searchResults, tab]);
 
-  const whites = displayRepertoire.filter((o) => o.color === 'white');
-  const blacks = displayRepertoire.filter((o) => o.color === 'black');
+  const favorites = displayRepertoire.filter((o) => o.isFavorite);
+  const whites = displayRepertoire.filter((o) => o.color === 'white' && !o.isFavorite);
+  const blacks = displayRepertoire.filter((o) => o.color === 'black' && !o.isFavorite);
 
   // All openings search results
   const displayAllSearch = useMemo((): OpeningRecord[] | null => {
@@ -121,7 +122,7 @@ export function OpeningExplorerPage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col flex-1 p-4 md:p-6 overflow-y-auto" data-testid="opening-explorer">
+    <div className="flex flex-col flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto" data-testid="opening-explorer">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <BookOpen size={24} className="text-theme-accent" />
@@ -175,6 +176,31 @@ export function OpeningExplorerPage(): JSX.Element {
       {/* ─── Repertoire tab ──────────────────────────────────────────────── */}
       {tab === 'repertoire' && (
         <>
+          {favorites.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                <Star size={12} className="text-amber-500 fill-amber-500" />
+                Favorites
+              </h2>
+              <div className="space-y-2">
+                {favorites.map((opening, i) => (
+                  <motion.div
+                    key={opening.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.03, duration: 0.25 }}
+                  >
+                    <OpeningCard
+                      opening={opening}
+                      onClick={() => void navigate(`/openings/${opening.id}`)}
+                      onToggleFavorite={() => void handleToggleFavorite(opening.id)}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {whites.length > 0 && (
             <div className="mb-8">
               <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-3">
