@@ -13,3 +13,4 @@ test-results
 .claude/
 public/stockfish/*.js
 public/stockfish/*.wasm
+.netlify/

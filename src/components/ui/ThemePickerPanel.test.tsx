@@ -49,7 +49,7 @@ describe('ThemePickerPanel', () => {
   });
 
   it('clicking a card updates the active theme in store', async () => {
-    const profile = buildUserProfile();
+    const profile = buildUserProfile({ id: 'main' });
     await db.profiles.put(profile);
     useAppStore.getState().setActiveProfile(profile);
     useAppStore.getState().setActiveTheme(THEMES[0]);
@@ -66,7 +66,7 @@ describe('ThemePickerPanel', () => {
   });
 
   it('persists theme preference to DB on click', async () => {
-    const profile = buildUserProfile();
+    const profile = buildUserProfile({ id: 'main' });
     await db.profiles.put(profile);
     useAppStore.getState().setActiveProfile(profile);
 

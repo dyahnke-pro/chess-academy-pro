@@ -98,6 +98,10 @@ vi.mock('../../services/gamificationService', () => ({
   checkAndAwardAchievements: vi.fn().mockResolvedValue([]),
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 const mockProfile = buildUserProfile({
   id: 'main',
   name: 'Player',
@@ -125,9 +129,9 @@ describe('CoachGamePage', () => {
     expect(screen.getByTestId('coach-game-page')).toBeInTheDocument();
   }, 10000);
 
-  it('shows AI Coach in header', () => {
+  it('shows Stockfish Bot in header', () => {
     render(<CoachGamePage />);
-    expect(screen.getByText('vs AI Coach')).toBeInTheDocument();
+    expect(screen.getByText('vs Stockfish Bot')).toBeInTheDocument();
   });
 
   it('shows target ELO', () => {

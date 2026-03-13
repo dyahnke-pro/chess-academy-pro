@@ -47,7 +47,7 @@ function getRouteForRecommendation(rec: TrainingRecommendation): string {
     case 'endgame_practice':
       return '/puzzles?theme=endgame';
     case 'flashcard_review':
-      return '/flashcards';
+      return '/play';
     case 'position_practice':
       return '/coach/play';
   }

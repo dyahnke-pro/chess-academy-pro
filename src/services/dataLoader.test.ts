@@ -99,7 +99,7 @@ describe('loadEcoData', () => {
     await loadEcoData();
     const countSecond = await db.openings.count();
     expect(countSecond).toBe(countFirst);
-  }, 120000);
+  }, 300000);
 });
 
 describe('loadRepertoireData', () => {

@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Volume2, VolumeX, Lightbulb, Loader } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Loader } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
+import { HintButton } from '../Coach/HintButton';
 import { StarDisplay } from './StarDisplay';
 import { useBoardContext } from '../../hooks/useBoardContext';
+import { useHintSystem } from '../../hooks/useHintSystem';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { generateKidPuzzles } from '../../services/kidPuzzleService';
@@ -36,7 +39,6 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
   const [lessonIndex, setLessonIndex] = useState(0);
   const [puzzleIndex, setPuzzleIndex] = useState(0);
   const [puzzlesCorrect, setPuzzlesCorrect] = useState(0);
-  const [showHint, setShowHint] = useState(false);
   const [puzzleFeedback, setPuzzleFeedback] = useState<'correct' | 'wrong' | null>(null);
   const [boardKey, setBoardKey] = useState(0);
   const [voiceOn, setVoiceOn] = useState(true);
@@ -80,6 +82,26 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
         : ''
     : '';
   useBoardContext(currentFen, '', 0, 'white', 'w');
+
+  // Derive knownMove for hint system from current puzzle's solution
+  const currentPuzzleForHint = phase === 'puzzle' && !puzzlesLoading ? activePuzzles[puzzleIndex] : undefined;
+  const kidKnownMove = useMemo((): { from: string; to: string; san: string } | null => {
+    if (!currentPuzzleForHint?.fen || !currentPuzzleForHint.solution[0]) return null;
+    try {
+      const chess = new Chess(currentPuzzleForHint.fen);
+      const result = chess.move(currentPuzzleForHint.solution[0]);
+      return { from: result.from, to: result.to, san: result.san };
+    } catch {
+      return null;
+    }
+  }, [currentPuzzleForHint]);
+
+  const { hintState, requestHint, resetHints } = useHintSystem({
+    fen: currentPuzzleForHint?.fen ?? '',
+    playerColor: 'white',
+    enabled: phase === 'puzzle' && !puzzlesLoading,
+    knownMove: kidKnownMove,
+  });
 
   // Generate AI puzzles when entering puzzle phase
   useEffect(() => {
@@ -192,7 +214,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
       feedbackTimeoutRef.current = setTimeout(() => {
         setPuzzleFeedback(null);
-        setShowHint(false);
+        resetHints();
         advancePuzzle();
       }, 1500);
       return;
@@ -216,7 +238,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
             feedbackTimeoutRef.current = setTimeout(() => {
               setPuzzleFeedback(null);
-              setShowHint(false);
+              resetHints();
               advancePuzzle();
             }, 1500);
             return;
@@ -242,7 +264,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
             feedbackTimeoutRef.current = setTimeout(() => {
               setPuzzleFeedback(null);
-              setShowHint(false);
+              resetHints();
               advancePuzzle();
             }, 1500);
             return;
@@ -272,11 +294,11 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
       setPuzzleFeedback(null);
       setBoardKey((prev) => prev + 1);
     }, 1200);
-  }, [chapter, puzzleIndex, puzzleFeedback, kidSpeak, config.gameId, config.chapterOrder, activePuzzles, advancePuzzle]);
+  }, [chapter, puzzleIndex, puzzleFeedback, kidSpeak, config.gameId, config.chapterOrder, activePuzzles, advancePuzzle, resetHints]);
 
   const handleHint = useCallback((): void => {
-    setShowHint(true);
-  }, []);
+    requestHint();
+  }, [requestHint]);
 
   const handleVoiceToggle = useCallback((): void => {
     if (voiceOn) {
@@ -471,31 +493,25 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
                   showUndoButton={false}
                   showResetButton={false}
                   onMove={handlePuzzleMove}
+                  arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+                  ghostMove={hintState.ghostMove}
                 />
               </div>
 
               {/* Hint button */}
-              <button
-                onClick={handleHint}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border"
-                style={{
-                  background: 'var(--color-surface)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text-muted)',
-                }}
-                data-testid="chapter-hint-btn"
-              >
-                <Lightbulb size={16} />
-                Hint
-              </button>
+              <HintButton
+                currentLevel={hintState.level}
+                onRequestHint={handleHint}
+                disabled={hintState.isAnalyzing}
+              />
 
-              {showHint && (
+              {hintState.nudgeText && (
                 <p
                   className="text-sm text-center max-w-sm"
                   style={{ color: 'var(--color-accent)' }}
                   data-testid="chapter-hint-text"
                 >
-                  {activePuzzles[puzzleIndex].hint}
+                  {hintState.nudgeText}
                 </p>
               )}
 

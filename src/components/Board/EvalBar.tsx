@@ -6,6 +6,8 @@ export interface EvalBarProps {
   evaluation: number | null;
   isMate: boolean;
   mateIn: number | null;
+  /** Render as a horizontal bar (left = black, right = white). */
+  horizontal?: boolean;
   className?: string;
 }
 
@@ -47,6 +49,7 @@ export function EvalBar({
   evaluation,
   isMate,
   mateIn,
+  horizontal = false,
   className = '',
 }: EvalBarProps): JSX.Element {
   const whitePercent = useMemo(
@@ -61,6 +64,42 @@ export function EvalBar({
 
   // Show label on the winning side's segment (wherever there's more room)
   const whiteIsWinning = whitePercent >= 50;
+
+  if (horizontal) {
+    return (
+      <div
+        className={`relative flex flex-row h-5 w-full rounded overflow-hidden select-none ${className}`}
+        data-testid="eval-bar"
+        aria-label={`Evaluation: ${label}`}
+      >
+        {/* Black segment (left) */}
+        <motion.div
+          className="bg-neutral-800 flex items-center justify-start pl-1.5 overflow-hidden"
+          style={{ fontSize: '0.6rem', color: '#aaa', fontWeight: 600 }}
+          animate={{ width: `${blackPercent}%` }}
+          transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+          data-testid="eval-bar-black"
+        >
+          {!whiteIsWinning && (
+            <span className="whitespace-nowrap" data-testid="eval-label">{label}</span>
+          )}
+        </motion.div>
+
+        {/* White segment (right) */}
+        <motion.div
+          className="bg-neutral-100 flex items-center justify-end pr-1.5 overflow-hidden"
+          style={{ fontSize: '0.6rem', color: '#555', fontWeight: 600 }}
+          animate={{ width: `${whitePercent}%` }}
+          transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+          data-testid="eval-bar-white"
+        >
+          {whiteIsWinning && (
+            <span className="whitespace-nowrap" data-testid="eval-label">{label}</span>
+          )}
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div

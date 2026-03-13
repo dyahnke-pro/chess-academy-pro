@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Volume2, VolumeX, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2 } from 'lucide-react';
+import { ArrowLeft, Undo2, Volume2, VolumeX, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
+import { useHintSystem } from '../../hooks/useHintSystem';
 import { ChessBoard } from '../Board/ChessBoard';
 import { DifficultyToggle } from './DifficultyToggle';
 import { HintButton } from './HintButton';
@@ -12,10 +13,11 @@ import { GameChatPanel } from './GameChatPanel';
 import type { GameChatPanelHandle } from './GameChatPanel';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveListPanel } from './MoveListPanel';
+import { MobileChatDrawer } from './MobileChatDrawer';
 import { ResignButton } from './ResignButton';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
-import { getCoachCommentary } from '../../services/coachApi';
 import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening } from '../../services/openingDetectionService';
@@ -29,23 +31,26 @@ import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
-  CoachDifficulty, HintLevel, MoveClassification, MoveAnnotation,
+  CoachDifficulty, MoveClassification, MoveAnnotation,
   StockfishAnalysis, GameAnalysisSummary, GameRecord,
-  GameResult, CoachContext, BoardArrow, BoardHighlight, BoardAnnotationCommand,
+  GameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 function classifyMove(
-  playerEval: number | null,
-  bestEval: number,
+  preMoveEval: number | null,
+  postMoveEval: number,
 ): MoveClassification {
-  if (playerEval === null) return 'good';
-  const delta = Math.abs(bestEval - playerEval);
-  if (delta < 10) return 'brilliant';
-  if (delta < 30) return 'great';
-  if (delta < 60) return 'good';
-  if (delta < 100) return 'inaccuracy';
-  if (delta < 200) return 'mistake';
+  if (preMoveEval === null) return 'good';
+  // Evals are from side-to-move perspective, which alternates each move.
+  // evalLoss = preMoveEval + postMoveEval
+  //   positive → player lost advantage, negative → player gained advantage
+  const evalLoss = preMoveEval + postMoveEval;
+  if (evalLoss < -50) return 'brilliant';
+  if (evalLoss <= 5) return 'great';
+  if (evalLoss < 30) return 'good';
+  if (evalLoss < 80) return 'inaccuracy';
+  if (evalLoss < 200) return 'mistake';
   return 'blunder';
 }
 
@@ -171,12 +176,15 @@ export function CoachGamePage(): JSX.Element {
     keyMoments: [],
   });
 
+  const isMobile = useIsMobile();
+  const [mobileChatOpen, setMobileChatOpen] = useState(false);
+
   const [coachLastMove, setCoachLastMove] = useState<{ from: string; to: string } | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
 
   // Resizable split between move list and chat panel (percentage for chat)
-  const [chatPercent, setChatPercent] = useState(60);
+  const [chatPercent, setChatPercent] = useState(80);
   const rightColumnRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
 
@@ -221,6 +229,25 @@ export function CoachGamePage(): JSX.Element {
   const [latestEval, setLatestEval] = useState<number>(0);
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+
+  // 3-tier visual hint system (Stockfish-powered, no knownMove)
+  const isPlayersTurn =
+    (playerColor === 'white' && game.turn === 'w') ||
+    (playerColor === 'black' && game.turn === 'b');
+  const { hintState, requestHint, resetHints } = useHintSystem({
+    fen: game.fen,
+    playerColor,
+    enabled: gameState.status === 'playing' && isPlayersTurn && !game.isGameOver,
+  });
+
+  // Inject nudge text into chat when it appears
+  const prevNudgeRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (hintState.nudgeText && hintState.nudgeText !== prevNudgeRef.current) {
+      prevNudgeRef.current = hintState.nudgeText;
+      gameChatRef.current?.injectAssistantMessage(hintState.nudgeText);
+    }
+  }, [hintState.nudgeText]);
 
   // Move navigation — null means live position
   const [viewedMoveIndex, setViewedMoveIndex] = useState<number | null>(null);
@@ -293,8 +320,10 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
+    resetHints();
+    prevNudgeRef.current = null;
     handleBackToGame();
-  }, [game, targetStrength, handleBackToGame]);
+  }, [game, targetStrength, handleBackToGame, resetHints]);
 
   // Move navigation handlers
   const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -397,8 +426,8 @@ export function CoachGamePage(): JSX.Element {
       const gameRecord = {
         id: gameState.gameId,
         pgn: game.history.join(' '),
-        white: playerColor === 'white' ? playerName : 'AI Coach',
-        black: playerColor === 'black' ? playerName : 'AI Coach',
+        white: playerColor === 'white' ? playerName : 'Stockfish Bot',
+        black: playerColor === 'black' ? playerName : 'Stockfish Bot',
         result: pgnResult,
         date: new Date().toISOString().split('T')[0],
         event: `Coach Game ${tags.join(' ')}`.trim(),
@@ -553,9 +582,11 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
-    // Clear any coach annotations and reset move navigation when player moves
+    // Clear any coach annotations, hints, and reset move navigation when player moves
     handleBackToGame();
     setViewedMoveIndex(null);
+    resetHints();
+    prevNudgeRef.current = null;
 
     // Sync the page's game instance with the board's move so game.turn
     // flips to the coach's color and triggers the coach move useEffect.
@@ -565,10 +596,8 @@ export function CoachGamePage(): JSX.Element {
 
     // Analyze the player's move
     let analysis: StockfishAnalysis | null = null;
-    let classification: MoveClassification = 'good';
     try {
       analysis = await stockfishEngine.analyzePosition(moveResult.fen, 12);
-      classification = classifyMove(analysis.evaluation, analysis.topLines[0]?.evaluation ?? 0);
     } catch {
       // If analysis fails, default to 'good'
     }
@@ -580,16 +609,22 @@ export function CoachGamePage(): JSX.Element {
       setLatestMateIn(analysis.mateIn);
     }
 
-    const vars = {
-      playerMove: moveResult.san,
-      bestMove: analysis?.bestMove ?? '?',
-      evalDelta: analysis ? String(Math.abs(analysis.evaluation - (analysis.topLines[0]?.evaluation ?? 0))) : '0',
-    };
-
-    const commentary = getMoveCommentaryTemplate(classification, vars);
-
     setGameState((prev) => {
       const preMoveEval = prev.moves.length > 0 ? (prev.moves[prev.moves.length - 1].evaluation ?? null) : 0;
+      const classification = analysis
+        ? classifyMove(preMoveEval, analysis.evaluation)
+        : 'good';
+
+      const evalLoss = analysis && preMoveEval !== null
+        ? Math.max(0, preMoveEval + analysis.evaluation)
+        : 0;
+      const vars = {
+        playerMove: moveResult.san,
+        bestMove: analysis?.bestMove ?? '?',
+        evalDelta: String(evalLoss),
+      };
+      const commentary = getMoveCommentaryTemplate(classification, vars);
+
       const playerMove: CoachGameMove = {
         moveNumber: moveCountRef.current,
         san: moveResult.san,
@@ -609,7 +644,7 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       };
     });
-  }, [game, handleBackToGame]);
+  }, [game, handleBackToGame, resetHints]);
 
   // Handle practice move (when in chat-driven practice mode)
   const handlePracticeMove = useCallback(async (moveResult: MoveResult) => {
@@ -650,48 +685,15 @@ export function CoachGamePage(): JSX.Element {
     setPendingChatPrompt(prompt);
   }, [game, playerColor, targetStrength]);
 
-  // Hint request — level 1: vague direction, level 2: specific piece/area, level 3: the move
-  const handleHint = useCallback(async () => {
-    const nextLevel = Math.min(gameState.currentHintLevel + 1, 3) as HintLevel;
-
+  // Hint request — uses 3-tier visual hint system
+  const handleHint = useCallback(() => {
+    requestHint();
     setGameState((prev) => ({
       ...prev,
-      currentHintLevel: nextLevel,
+      currentHintLevel: Math.min(prev.currentHintLevel + 1, 3) as 0 | 1 | 2 | 3,
       hintsUsed: prev.hintsUsed + 1,
     }));
-
-    // Get Stockfish analysis for context
-    const analysis = await stockfishEngine.analyzePosition(game.fen, 12).catch(() => null);
-    const bestMove = analysis?.bestMove ?? null;
-    const hintScenario = `hint_level${nextLevel}` as 'hint_level1' | 'hint_level2' | 'hint_level3';
-    let hintText: string;
-
-    try {
-      const context: CoachContext = {
-        fen: game.fen,
-        lastMoveSan: game.lastMove ? `${game.lastMove.from}${game.lastMove.to}` : null,
-        moveNumber: moveCountRef.current,
-        pgn: game.history.join(' '),
-        openingName: null,
-        stockfishAnalysis: analysis ?? null,
-        playerMove: null,
-        moveClassification: null,
-        playerProfile: {
-          rating: playerRating,
-
-          weaknesses: [] as string[],
-        },
-      };
-
-      hintText = await getCoachCommentary('hint', context);
-    } catch {
-      hintText = getScenarioTemplate(hintScenario, {
-        bestMove: bestMove ?? undefined,
-      });
-    }
-
-    coachSay(hintText);
-  }, [gameState.currentHintLevel, game.fen, game.lastMove, game.history, playerRating, coachSay]);
+  }, [requestHint]);
 
   // Takeback — always allowed
   const handleTakeback = useCallback(() => {
@@ -699,6 +701,8 @@ export function CoachGamePage(): JSX.Element {
     game.undoMove(); // Undo coach's response
     game.undoMove(); // Undo player's move
     moveCountRef.current = Math.max(0, moveCountRef.current - 2);
+    resetHints();
+    prevNudgeRef.current = null;
 
     setGameState((prev) => ({
       ...prev,
@@ -708,12 +712,12 @@ export function CoachGamePage(): JSX.Element {
 
     const msg = getScenarioTemplate('takeback_allowed');
     coachSay(msg);
-  }, [game, coachSay]);
+  }, [game, coachSay, resetHints]);
 
   // Derive opponent/player info for PlayerInfoBar
   const isPlayerWhite = playerColor === 'white';
   const playerName = activeProfile?.name ?? 'Player';
-  const opponentName = 'AI Coach';
+  const opponentName = 'Stockfish Bot';
   const isPlayerTurn = (isPlayerWhite && game.turn === 'w') || (!isPlayerWhite && game.turn === 'b');
 
   // Guided Lesson Mode — review a past game
@@ -744,13 +748,13 @@ export function CoachGamePage(): JSX.Element {
       );
     }
 
-    const reviewPlayerColor: 'white' | 'black' = reviewGame.white !== 'AI Coach' ? 'white' : 'black';
+    const reviewPlayerColor: 'white' | 'black' = reviewGame.white !== 'Stockfish Bot' && reviewGame.white !== 'AI Coach' ? 'white' : 'black';
     const reviewPlayerName = reviewPlayerColor === 'white' ? reviewGame.white : reviewGame.black;
     const reviewOpponentRating = reviewPlayerColor === 'white' ? (reviewGame.blackElo ?? 1500) : (reviewGame.whiteElo ?? 1500);
     const reviewPlayerRating = reviewPlayerColor === 'white' ? (reviewGame.whiteElo ?? playerRating) : (reviewGame.blackElo ?? playerRating);
 
     return (
-      <div className="flex flex-col md:flex-row h-dvh overflow-hidden" data-testid="coach-game-page">
+      <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
         <CoachGameReview
           moves={reviewMoves}
           keyMoments={[]}
@@ -772,7 +776,7 @@ export function CoachGamePage(): JSX.Element {
   // Post-game review — same two-column layout as gameplay
   if (gameState.status === 'postgame') {
     return (
-      <div className="flex flex-col md:flex-row h-dvh overflow-hidden" data-testid="coach-game-page">
+      <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
         <CoachGameReview
           moves={gameState.moves}
           keyMoments={gameState.keyMoments}
@@ -801,6 +805,8 @@ export function CoachGamePage(): JSX.Element {
             setLatestIsMate(false);
             setLatestMateIn(null);
             setViewedMoveIndex(null);
+            resetHints();
+            prevNudgeRef.current = null;
           }}
           onBackToCoach={() => void navigate('/coach')}
           onPracticeInChat={handlePracticeInChat}
@@ -810,48 +816,48 @@ export function CoachGamePage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-dvh overflow-hidden" data-testid="coach-game-page">
+    <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
       {/* Left column: board + controls */}
       <div className="flex flex-col flex-1 md:flex-none md:w-3/5 min-h-0 overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-theme-border">
-          <div className="flex items-center gap-3">
-            <button onClick={() => void navigate('/coach')} className="p-1.5 rounded-lg hover:bg-theme-surface">
+        <div className="flex items-center justify-between px-3 py-2 md:p-4 border-b border-theme-border">
+          <div className="flex items-center gap-2 md:gap-3">
+            <button onClick={() => void navigate('/coach')} className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center">
               <ArrowLeft size={20} className="text-theme-text" />
             </button>
             <div>
               <h2 className="text-sm font-semibold text-theme-text">
-                vs AI Coach
+                vs Stockfish Bot
               </h2>
               <p className="text-xs text-theme-text-muted">
                 ~{targetStrength} ELO
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             {/* Color selector */}
             <div className="flex items-center gap-0.5 rounded-lg border border-theme-border p-0.5" data-testid="color-selector">
               <button
                 onClick={() => handleColorChange('white')}
                 disabled={gameState.moves.length > 0}
-                className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+                className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
                   playerColor === 'white' ? 'ring-2 ring-theme-accent ring-inset' : ''
                 }`}
                 aria-label="Play as white"
                 data-testid="color-white-btn"
               >
-                <div className="w-4 h-4 rounded-full bg-white border border-neutral-300" />
+                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-white border border-neutral-300" />
               </button>
               <button
                 onClick={() => handleColorChange('black')}
                 disabled={gameState.moves.length > 0}
-                className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+                className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
                   playerColor === 'black' ? 'ring-2 ring-theme-accent ring-inset' : ''
                 }`}
                 aria-label="Play as black"
                 data-testid="color-black-btn"
               >
-                <div className="w-4 h-4 rounded-full bg-neutral-800 border border-neutral-600" />
+                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-neutral-800 border border-neutral-600" />
               </button>
             </div>
             <DifficultyToggle
@@ -861,7 +867,7 @@ export function CoachGamePage(): JSX.Element {
             />
             <button
               onClick={toggleCoachVoice}
-              className="flex-shrink-0 p-2 rounded-lg border transition-colors"
+              className="flex-shrink-0 p-1.5 md:p-2 rounded-lg border transition-colors"
               style={{
                 background: coachVoiceOn ? 'var(--color-accent)' : 'var(--color-surface)',
                 borderColor: 'var(--color-border)',
@@ -943,7 +949,7 @@ export function CoachGamePage(): JSX.Element {
 
         {/* Board */}
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
-          <div className="w-full max-w-[300px] sm:max-w-[360px] md:max-w-[420px]">
+          <div className="w-full md:max-w-[420px]">
             <ChessBoard
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}`}
               initialFen={displayFen}
@@ -956,8 +962,9 @@ export function CoachGamePage(): JSX.Element {
               mateIn={latestMateIn}
               showFlipButton={false}
               highlightSquares={coachLastMove}
-              arrows={annotationArrows.length > 0 ? annotationArrows : undefined}
+              arrows={[...hintState.arrows, ...annotationArrows].length > 0 ? [...hintState.arrows, ...annotationArrows] : undefined}
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
+              ghostMove={hintState.ghostMove}
             />
           </div>
         </div>
@@ -977,9 +984,9 @@ export function CoachGamePage(): JSX.Element {
         {gameState.status === 'playing' && (
           <div className="flex items-center justify-between px-4 py-2 flex-shrink-0">
             <HintButton
-              currentLevel={gameState.currentHintLevel}
-              onRequestHint={() => void handleHint()}
-              disabled={isCoachThinking}
+              currentLevel={hintState.level}
+              onRequestHint={handleHint}
+              disabled={isCoachThinking || hintState.isAnalyzing}
             />
 
             {/* Move navigation */}
@@ -987,7 +994,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToFirstMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                className="p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors"
+                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="First move"
                 data-testid="nav-first"
               >
@@ -996,7 +1003,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToPrevMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                className="p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors"
+                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Previous move"
                 data-testid="nav-prev"
               >
@@ -1005,7 +1012,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToNextMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                className="p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors"
+                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Next move"
                 data-testid="nav-next"
               >
@@ -1014,7 +1021,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToLastMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                className="p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors"
+                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Last move"
                 data-testid="nav-last"
               >
@@ -1022,15 +1029,15 @@ export function CoachGamePage(): JSX.Element {
               </button>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 md:gap-2">
               <button
                 onClick={handleTakeback}
                 disabled={gameState.moves.length < 2}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg border border-theme-border text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
+                className="flex items-center gap-1 px-2 py-2 md:px-3 rounded-lg border border-theme-border text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
                 data-testid="takeback-btn"
               >
                 <Undo2 size={14} />
-                Takeback
+                <span className="hidden md:inline">Takeback</span>
               </button>
               <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
             </div>
@@ -1038,54 +1045,87 @@ export function CoachGamePage(): JSX.Element {
         )}
       </div>
 
-      {/* Right column: move list + resizable divider + chat panel */}
-      <div
-        ref={rightColumnRef}
-        className="flex flex-col flex-shrink-0 h-[40vh] md:h-auto md:flex-1 md:border-l border-theme-border overflow-hidden"
-      >
-        {/* Move list panel (top portion) */}
-        <div
-          className="min-h-0 overflow-hidden"
-          style={{ height: `${100 - chatPercent}%` }}
-        >
-          <MoveListPanel
-            moves={gameState.moves}
-            openingName={detectedOpening?.name ?? null}
-            currentMoveIndex={viewedMoveIndex !== null ? viewedMoveIndex : (gameState.moves.length > 0 ? gameState.moves.length - 1 : null)}
-            className="h-full"
-          />
-        </div>
+      {/* Mobile: swipeable chat drawer + toggle button */}
+      {isMobile && (
+        <>
+          <button
+            onClick={() => setMobileChatOpen(true)}
+            className="fixed z-30 flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-theme-accent text-white transition-transform hover:scale-105 active:scale-95"
+            style={{
+              right: '1rem',
+              bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
+            }}
+            aria-label="Open chat"
+            data-testid="mobile-chat-toggle"
+          >
+            <MessageCircle size={22} />
+          </button>
 
-        {/* Draggable divider */}
-        <div
-          className="flex-shrink-0 h-1.5 bg-theme-border hover:bg-theme-accent/50 cursor-row-resize flex items-center justify-center transition-colors"
-          onPointerDown={handleDividerPointerDown}
-          onPointerMove={handleDividerPointerMove}
-          onPointerUp={handleDividerPointerUp}
-          data-testid="panel-divider"
-        >
-          <div className="w-8 h-0.5 rounded-full bg-theme-text-muted/40" />
-        </div>
+          <MobileChatDrawer isOpen={mobileChatOpen} onClose={() => setMobileChatOpen(false)}>
+            <GameChatPanel
+              ref={gameChatRef}
+              fen={game.fen}
+              pgn={game.history.join(' ')}
+              moveNumber={moveCountRef.current}
+              playerColor={playerColor}
+              turn={game.turn}
+              isGameOver={game.isGameOver}
+              gameResult={gameState.result}
+              onBoardAnnotation={handleBoardAnnotation}
+              initialPrompt={pendingChatPrompt}
+              className="h-full"
+            />
+          </MobileChatDrawer>
+        </>
+      )}
 
-        {/* Chat panel (bottom portion) */}
+      {/* Desktop: right column with move list + divider + chat */}
+      {!isMobile && (
         <div
-          className="min-h-[120px] overflow-hidden"
-          style={{ height: `${chatPercent}%` }}
+          ref={rightColumnRef}
+          className="flex flex-col flex-1 border-l border-theme-border overflow-hidden"
         >
-          <GameChatPanel
-            ref={gameChatRef}
-            fen={game.fen}
-            pgn={game.history.join(' ')}
-            moveNumber={moveCountRef.current}
-            playerColor={playerColor}
-            turn={game.turn}
-            isGameOver={game.isGameOver}
-            gameResult={gameState.result}
-            onBoardAnnotation={handleBoardAnnotation}
-            initialPrompt={pendingChatPrompt}
-          />
+          <div
+            className="min-h-0 overflow-hidden"
+            style={{ height: `${100 - chatPercent}%` }}
+          >
+            <MoveListPanel
+              moves={gameState.moves}
+              openingName={detectedOpening?.name ?? null}
+              currentMoveIndex={viewedMoveIndex !== null ? viewedMoveIndex : (gameState.moves.length > 0 ? gameState.moves.length - 1 : null)}
+              className="h-full"
+            />
+          </div>
+
+          <div
+            className="flex-shrink-0 h-1.5 bg-theme-border hover:bg-theme-accent/50 cursor-row-resize flex items-center justify-center transition-colors"
+            onPointerDown={handleDividerPointerDown}
+            onPointerMove={handleDividerPointerMove}
+            onPointerUp={handleDividerPointerUp}
+            data-testid="panel-divider"
+          >
+            <div className="w-8 h-0.5 rounded-full bg-theme-text-muted/40" />
+          </div>
+
+          <div
+            className="min-h-[120px] overflow-hidden"
+            style={{ height: `${chatPercent}%` }}
+          >
+            <GameChatPanel
+              ref={gameChatRef}
+              fen={game.fen}
+              pgn={game.history.join(' ')}
+              moveNumber={moveCountRef.current}
+              playerColor={playerColor}
+              turn={game.turn}
+              isGameOver={game.isGameOver}
+              gameResult={gameState.result}
+              onBoardAnnotation={handleBoardAnnotation}
+              initialPrompt={pendingChatPrompt}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -17,6 +17,10 @@ vi.mock('../Openings/MoveTree', () => ({
   ),
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 describe('GameViewer', () => {
   const defaultGame = buildGameRecord({
     id: 'viewer-g1',

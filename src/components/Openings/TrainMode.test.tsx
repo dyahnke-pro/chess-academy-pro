@@ -62,6 +62,10 @@ vi.mock('../../services/speechService', () => ({
   },
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 // ─── Test Data ───────────────────────────────────────────────────────────────
 
 const trapLines: OpeningVariation[] = [

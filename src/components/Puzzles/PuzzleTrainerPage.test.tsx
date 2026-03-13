@@ -96,6 +96,10 @@ vi.mock('../../db/schema', () => ({
   },
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 describe('PuzzleTrainerPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();

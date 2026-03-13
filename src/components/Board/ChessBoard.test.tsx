@@ -67,6 +67,12 @@ vi.mock('react-chessboard', () => ({
   },
 }));
 
+// ─── Mock useIsMobile (matchMedia not available in jsdom) ────────────────────
+
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 // ─── Mock usePieceSound to avoid AudioContext in jsdom ──────────────────────
 
 vi.mock('../../hooks/usePieceSound', () => ({

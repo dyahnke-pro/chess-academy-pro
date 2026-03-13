@@ -238,6 +238,43 @@ describe('OpeningExplorerPage', () => {
     });
   });
 
+  // ─── Favorites section tests ────────────────────────────────────────────────
+
+  it('shows Favorites section when a repertoire opening is favorited', async () => {
+    mockGetRepertoireOpenings.mockResolvedValue([
+      { ...whiteOpening, isFavorite: true },
+      blackOpening,
+    ]);
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByText('Favorites')).toBeInTheDocument();
+      expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
+    });
+  });
+
+  it('does not show favorited opening under its color section', async () => {
+    mockGetRepertoireOpenings.mockResolvedValue([
+      { ...whiteOpening, isFavorite: true },
+      blackOpening,
+    ]);
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByText('Favorites')).toBeInTheDocument();
+      // White section should not appear since the only white opening is favorited
+      expect(screen.queryByText('My White Openings')).not.toBeInTheDocument();
+      // Black section still appears
+      expect(screen.getByText('My Black Openings')).toBeInTheDocument();
+    });
+  });
+
+  it('does not show Favorites section when no openings are favorited', async () => {
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByText('My White Openings')).toBeInTheDocument();
+      expect(screen.queryByText('Favorites')).not.toBeInTheDocument();
+    });
+  });
+
   // ─── Tab toggle tests ──────────────────────────────────────────────────────
 
   it('shows tab toggle with "My Repertoire" and "All Openings"', async () => {

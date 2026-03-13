@@ -10,6 +10,7 @@ interface PendingAnalysis {
   lines: Map<number, AnalysisLine>;
   bestMove: string;
   depth: number;
+  blackToMove: boolean;
 }
 
 const INIT_TIMEOUT_MS = 45_000;
@@ -119,12 +120,15 @@ class StockfishEngine {
         oldPending.reject(new Error('Analysis interrupted by new request'));
       }
 
+      const blackToMove = fen.split(' ')[1] === 'b';
+
       this.pending = {
         resolve,
         reject,
         lines: new Map(),
         bestMove: '',
         depth: 0,
+        blackToMove,
       };
 
       this.send('ucinewgame');
@@ -224,16 +228,28 @@ class StockfishEngine {
 
       // Cast to include undefined — TypeScript omits it without noUncheckedIndexedAccess
       const primaryLine = topLines[0] as AnalysisLine | undefined;
-      const evaluation = primaryLine?.evaluation ?? 0;
+      // Stockfish returns score from side-to-move's perspective; normalize to white's perspective
+      const flip = this.pending.blackToMove ? -1 : 1;
+      const evaluation = (primaryLine?.evaluation ?? 0) * flip;
       const isMate = primaryLine?.mate !== null && primaryLine?.mate !== undefined;
+      const mateIn = primaryLine?.mate !== null && primaryLine?.mate !== undefined
+        ? primaryLine.mate * flip
+        : null;
+
+      // Normalize all lines to white's perspective
+      const normalizedLines = topLines.map((line) => ({
+        ...line,
+        evaluation: line.evaluation * flip,
+        mate: line.mate !== null ? line.mate * flip : null,
+      }));
 
       const analysis: StockfishAnalysis = {
         bestMove,
         evaluation,
         isMate,
-        mateIn: primaryLine?.mate ?? null,
+        mateIn,
         depth: this.pending.depth,
-        topLines,
+        topLines: normalizedLines,
         nodesPerSecond: 0,
       };
 

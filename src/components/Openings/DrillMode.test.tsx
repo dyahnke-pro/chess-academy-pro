@@ -72,6 +72,10 @@ vi.mock('../../services/speechService', () => ({
   },
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const whiteOpening: OpeningRecord = buildOpeningRecord({

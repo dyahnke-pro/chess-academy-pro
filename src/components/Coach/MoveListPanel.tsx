@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, forwardRef } from 'react';
 import type { CoachGameMove, MoveClassification } from '../../types';
+import { CLASSIFICATION_STYLES, getClassificationHighlightColor } from './classificationStyles';
 
 interface MoveListPanelProps {
   moves: CoachGameMove[];
@@ -17,14 +18,6 @@ const CLASSIFICATION_COLORS: Record<MoveClassification, string> = {
   inaccuracy: 'var(--color-warning)',
   mistake: 'var(--color-error)',
   blunder: 'var(--color-error)',
-};
-
-const CLASSIFICATION_SYMBOLS: Partial<Record<MoveClassification, string>> = {
-  brilliant: '!!',
-  great: '!',
-  inaccuracy: '?!',
-  mistake: '?',
-  blunder: '??',
 };
 
 export function MoveListPanel({
@@ -125,8 +118,6 @@ export function MoveListPanel({
   );
 }
 
-import { forwardRef } from 'react';
-
 interface MoveCellProps {
   move: CoachGameMove;
   index: number;
@@ -141,27 +132,46 @@ const MoveCell = forwardRef<HTMLButtonElement, MoveCellProps>(
       : 'var(--color-text)';
 
     const symbol = move.classification
-      ? CLASSIFICATION_SYMBOLS[move.classification] ?? ''
+      ? CLASSIFICATION_STYLES[move.classification].symbol
       : '';
+
+    // Show symbol only for non-neutral classifications
+    const showSymbol = symbol && move.classification !== 'good' && move.classification !== 'book';
+
+    // Active move background: use classification color if available, else accent
+    const activeHighlight = isActive && move.classification
+      ? getClassificationHighlightColor(move.classification)
+      : null;
+    const activeBg = isActive
+      ? (activeHighlight ?? 'color-mix(in srgb, var(--color-accent) 20%, transparent)')
+      : 'transparent';
 
     return (
       <button
         ref={ref}
         onClick={onClick ? () => onClick(index) : undefined}
-        className={`flex-1 px-1.5 py-0.5 text-left font-mono transition-colors ${
+        className={`flex-1 px-1.5 py-0.5 text-left font-mono flex items-center gap-0.5 transition-colors ${
           onClick ? 'hover:opacity-80 cursor-pointer' : 'cursor-default'
         }`}
         style={{
           color,
-          background: isActive ? 'color-mix(in srgb, var(--color-accent) 20%, transparent)' : 'transparent',
+          background: activeBg,
           borderRadius: isActive ? '2px' : undefined,
         }}
+        title={move.classification ? CLASSIFICATION_STYLES[move.classification].label : undefined}
         data-testid={`move-cell-${index}`}
       >
-        {move.san}
-        {symbol && (
-          <span style={{ color, fontSize: '0.65rem' }}>{symbol}</span>
+        {/* Classification icon dot */}
+        {showSymbol && move.classification && (
+          <span
+            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-[7px] font-bold text-white flex-shrink-0 leading-none"
+            style={{ background: CLASSIFICATION_STYLES[move.classification].color }}
+            data-testid={`move-icon-${index}`}
+          >
+            {symbol}
+          </span>
         )}
+        <span>{move.san}</span>
       </button>
     );
   },

@@ -33,6 +33,10 @@ vi.mock('../../hooks/usePieceSound', () => ({
   usePieceSound: () => ({ playMoveSound: vi.fn() }),
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 describe('ChessBoard a11y', () => {
   it('flip button has accessible label', () => {
     render(<ChessBoard showFlipButton />);

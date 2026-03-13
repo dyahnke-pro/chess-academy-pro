@@ -37,8 +37,8 @@ interface RawPuzzleResponse {
 export function validatePuzzleFen(fen: string, solution: string): boolean {
   try {
     const chess = new Chess(fen);
-    const move = chess.move(solution);
-    return move !== null;
+    chess.move(solution);
+    return true;
   } catch {
     return false;
   }

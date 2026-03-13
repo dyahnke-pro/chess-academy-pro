@@ -16,7 +16,7 @@ import { BoardTestPage } from './components/BoardTest/BoardTestPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
-import { FlashcardStudyPage } from './components/Flashcards/FlashcardStudyPage';
+import { GamesPage } from './components/Play/GamesPage';
 import { AnalysisBoardPage } from './components/Analysis/AnalysisBoardPage';
 import { CoachPage } from './components/Coach/CoachPage';
 import { CoachChatPage } from './components/Coach/CoachChatPage';
@@ -83,7 +83,7 @@ export function App(): JSX.Element {
           <Route path="/puzzles" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
-          <Route path="/flashcards" element={<ErrorBoundary><FlashcardStudyPage /></ErrorBoundary>} />
+          <Route path="/play" element={<ErrorBoundary><GamesPage /></ErrorBoundary>} />
           <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />

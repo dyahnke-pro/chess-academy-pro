@@ -116,7 +116,7 @@ export function CoachWeaknessReport(): JSX.Element {
 
   return (
     <motion.div
-      className="max-w-2xl mx-auto w-full p-6 flex flex-col gap-6"
+      className="max-w-2xl mx-auto w-full p-6 pb-20 md:pb-6 flex flex-col gap-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       data-testid="weakness-report"

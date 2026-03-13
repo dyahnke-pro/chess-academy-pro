@@ -82,6 +82,10 @@ vi.mock('react-chessboard', () => ({
   Chessboard: () => <div data-testid="chessboard">Board</div>,
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 beforeEach(() => {
   vi.clearAllMocks();
   mockGetFlashcardsByMode.mockResolvedValue(sampleCards);

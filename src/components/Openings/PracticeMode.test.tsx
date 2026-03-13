@@ -72,6 +72,10 @@ vi.mock('../../services/speechService', () => ({
   },
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const whiteOpening: OpeningRecord = buildOpeningRecord({
@@ -212,10 +216,55 @@ describe('PracticeMode', () => {
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'true');
   });
 
-  it('does NOT show any hint or explanation text', () => {
+  it('does NOT show any explanation card', () => {
     renderPractice();
-    // Should not have any explanation card with move guidance
     const cards = screen.queryAllByTestId('explanation-card');
     expect(cards.length).toBe(0);
+  });
+
+  it('shows hint button on player turn', () => {
+    renderPractice();
+    expect(screen.getByTestId('hint-button')).toBeInTheDocument();
+    expect(screen.getByText('Get a Hint')).toBeInTheDocument();
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '0');
+  });
+
+  it('clicking hint advances through levels', async () => {
+    renderPractice();
+
+    // Click 1: level 0→1 (arrows)
+    await act(async () => {
+      screen.getByTestId('hint-button').click();
+    });
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
+
+    // Click 2: level 1→2 (nudge text appears)
+    await act(async () => {
+      screen.getByTestId('hint-button').click();
+    });
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
+  });
+
+  it('hint resets after making the correct move', async () => {
+    renderPractice();
+
+    // Use hint
+    await act(async () => {
+      screen.getByTestId('hint-button').click();
+    });
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
+
+    // Make correct move
+    await act(async () => {
+      screen.getByTestId('make-correct-move').click();
+    });
+
+    // Wait for opponent move + next player turn
+    await act(async () => { vi.advanceTimersByTime(600); });
+
+    // Hint should reset back to level 0
+    await waitFor(() => {
+      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '0');
+    });
   });
 });

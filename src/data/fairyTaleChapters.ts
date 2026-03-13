@@ -572,11 +572,11 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'king-puzzle-2',
-        fen: '5k2/8/8/8/8/8/6K1/R7 w - - 0 1',
-        solution: ['Ra8+', 'Ke7'],
-        hint: 'Use the rook to give check on the back rank!',
+        fen: '4k3/8/8/8/8/4n3/3K4/8 w - - 0 1',
+        solution: ['Kxe3'],
+        hint: 'The Wise King can step in any direction — even to capture an enemy!',
         successMessage:
-          'Check! The enemy king is driven from its hiding place. Now the hunt begins!',
+          'The Wise King claims the knight with a single bold step! One square is all a king needs.',
       },
       {
         id: 'king-puzzle-3',

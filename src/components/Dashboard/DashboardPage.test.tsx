@@ -210,7 +210,7 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
     await waitFor(() => {
       expect(screen.getByTestId('quick-action-openings')).toBeInTheDocument();
-      expect(screen.getByTestId('quick-action-flashcards')).toBeInTheDocument();
+      expect(screen.getByTestId('quick-action-play')).toBeInTheDocument();
       expect(screen.getByTestId('quick-action-coach')).toBeInTheDocument();
     });
   });
@@ -226,8 +226,8 @@ describe('DashboardPage', () => {
     fireEvent.click(screen.getByTestId('quick-action-openings'));
     expect(mockNavigate).toHaveBeenCalledWith('/openings');
 
-    fireEvent.click(screen.getByTestId('quick-action-flashcards'));
-    expect(mockNavigate).toHaveBeenCalledWith('/flashcards');
+    fireEvent.click(screen.getByTestId('quick-action-play'));
+    expect(mockNavigate).toHaveBeenCalledWith('/play');
 
     fireEvent.click(screen.getByTestId('quick-action-coach'));
     expect(mockNavigate).toHaveBeenCalledWith('/coach');

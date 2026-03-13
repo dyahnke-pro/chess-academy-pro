@@ -156,7 +156,7 @@ export function DashboardPage(): JSX.Element {
       {/* Quick actions */}
       <div className="grid grid-cols-3 gap-3">
         <QuickAction label="Openings" icon={<BookOpen size={18} />} onClick={() => void navigate('/openings')} />
-        <QuickAction label="Flashcards" icon={<Brain size={18} />} onClick={() => void navigate('/flashcards')} />
+        <QuickAction label="Play" icon={<Brain size={18} />} onClick={() => void navigate('/play')} />
         <QuickAction label="Coach" icon={<Target size={18} />} onClick={() => void navigate('/coach')} />
       </div>
 

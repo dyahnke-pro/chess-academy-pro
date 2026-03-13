@@ -110,6 +110,10 @@ vi.mock('../../hooks/useSettings', () => ({
   }),
 }));
 
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
+}));
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const testOpening: OpeningRecord = buildOpeningRecord({
@@ -259,7 +263,7 @@ describe('OpeningPlayMode', () => {
     });
   });
 
-  it('hint button has correct aria-label', async () => {
+  it('hint button shows Get a Hint text at level 0', async () => {
     renderPlay();
 
     act(() => {
@@ -267,7 +271,10 @@ describe('OpeningPlayMode', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Get hint')).toBeInTheDocument();
+      expect(screen.getByTestId('hint-button')).toBeInTheDocument();
     });
+
+    expect(screen.getByText('Get a Hint')).toBeInTheDocument();
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '0');
   });
 });

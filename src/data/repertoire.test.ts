@@ -18,8 +18,9 @@ function validatePgn(pgn: string): Chess {
   const chess = new Chess();
   const moves = pgn.trim().split(/\s+/);
   for (let i = 0; i < moves.length; i++) {
-    const result = chess.move(moves[i]);
-    if (!result) {
+    try {
+      chess.move(moves[i]);
+    } catch {
       throw new Error(`Illegal move "${moves[i]}" at half-move ${i + 1} in: ${pgn}`);
     }
   }
@@ -83,31 +84,74 @@ describe('repertoire.json — PGN legality', () => {
   });
 });
 
+/**
+ * Starting squares for minor pieces (knight/bishop) by color.
+ * Maps square → expected piece type at game start.
+ */
+const WHITE_MINOR_STARTS: Record<string, 'n' | 'b'> = {
+  b1: 'n', c1: 'b', f1: 'b', g1: 'n',
+};
+const BLACK_MINOR_STARTS: Record<string, 'n' | 'b'> = {
+  b8: 'n', c8: 'b', f8: 'b', g8: 'n',
+};
+
+/**
+ * Returns squares where the original minor piece is still sitting
+ * on its starting square (i.e., undeveloped).
+ */
+function getUndevelopedMinors(chess: Chess): { white: string[]; black: string[] } {
+  const board = chess.board();
+  const white: string[] = [];
+  const black: string[] = [];
+
+  for (const [sq, expectedType] of Object.entries(WHITE_MINOR_STARTS)) {
+    const row = 8 - parseInt(sq[1]);
+    const col = sq.charCodeAt(0) - 97;
+    const piece = board[row][col];
+    if (piece && piece.color === 'w' && piece.type === expectedType) {
+      white.push(sq);
+    }
+  }
+
+  for (const [sq, expectedType] of Object.entries(BLACK_MINOR_STARTS)) {
+    const row = 8 - parseInt(sq[1]);
+    const col = sq.charCodeAt(0) - 97;
+    const piece = board[row][col];
+    if (piece && piece.color === 'b' && piece.type === expectedType) {
+      black.push(sq);
+    }
+  }
+
+  return { white, black };
+}
+
 describe('repertoire.json — development depth (main lines)', () => {
   const entries = repertoire as RepertoireEntry[];
+
+  // Castling exceptions:
+  // - Fried Liver: Black's king moves early (can't castle)
+  // - Benko Gambit: White castles by hand (Kf1-Kg2) after fianchetto
+  const castlingExceptions = ['fried-liver-attack', 'benko-gambit'];
 
   for (const entry of entries) {
     it(`${entry.name} — main line reaches full development`, () => {
       const chess = validatePgn(entry.pgn);
       const moves = entry.pgn.trim().split(/\s+/);
+      const isException = castlingExceptions.includes(entry.id);
 
-      // Both sides should have castled (or king moved for safety in exceptional cases)
-      const whiteCastled = hasCastled(entry.pgn, 'white');
-      const blackCastled = hasCastled(entry.pgn, 'black');
-
-      // Special exceptions:
-      // - Fried Liver: Black's king moves early (can't castle)
-      // - Benko Gambit: White castles by hand (Kf1-Kg2) after fianchetto
-      const exceptions = ['fried-liver-attack', 'benko-gambit'];
-      const isException = exceptions.includes(entry.id);
-
+      // Both sides should have castled
       if (!isException) {
-        expect(whiteCastled).toBe(true);
-        expect(blackCastled).toBe(true);
+        expect(hasCastled(entry.pgn, 'white')).toBe(true);
+        expect(hasCastled(entry.pgn, 'black')).toBe(true);
       }
 
-      // Should have at least 16 half-moves for reasonable development
-      expect(moves.length).toBeGreaterThanOrEqual(16);
+      // Should have at least 20 half-moves for full development
+      expect(moves.length).toBeGreaterThanOrEqual(20);
+
+      // All minor pieces must be off their starting squares (developed or traded)
+      const undeveloped = getUndevelopedMinors(chess);
+      expect(undeveloped.white).toEqual([]);
+      expect(undeveloped.black).toEqual([]);
 
       // Check that the final position is legal
       expect(chess.isGameOver()).toBe(false);

@@ -25,7 +25,7 @@ const PIECE_MAP: Record<string, string> = {
   bP: 'bP', bN: 'bN', bB: 'bB', bR: 'bR', bQ: 'bQ', bK: 'bK',
 };
 
-const LICHESS_CDN = 'https://lichess1.org/assets/piece';
+export const LICHESS_CDN = 'https://lichess1.org/assets/piece';
 
 /**
  * Builds a PieceRenderObject for react-chessboard from a Lichess piece set name.

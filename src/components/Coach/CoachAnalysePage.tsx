@@ -120,7 +120,7 @@ export function CoachAnalysePage(): JSX.Element {
   }, [game.fen, analysis, activeProfile]);
 
   return (
-    <div className="flex flex-col max-w-2xl mx-auto w-full" data-testid="coach-analyse-page">
+    <div className="flex flex-col pb-20 md:pb-6 max-w-2xl mx-auto w-full" data-testid="coach-analyse-page">
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-theme-border">
         <button onClick={() => void navigate('/coach')} className="p-1.5 rounded-lg hover:bg-theme-surface">

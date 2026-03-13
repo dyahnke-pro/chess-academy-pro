@@ -113,10 +113,17 @@ vi.mock('./EvalGraph', () => ({
   ),
 }));
 
-vi.mock('./GameSummaryStats', () => ({
-  GameSummaryStats: ({ result }: { result: string }) => (
-    <div data-testid="game-summary-stats" data-result={result}>
-      Summary
+vi.mock('./ReviewSummaryCard', () => ({
+  ReviewSummaryCard: ({ onStartReview, onPlayAgain, onBackToCoach, result }: {
+    onStartReview: () => void;
+    onPlayAgain: () => void;
+    onBackToCoach: () => void;
+    result: string;
+  }) => (
+    <div data-testid="review-summary-card" data-result={result}>
+      <button data-testid="start-review-btn" onClick={onStartReview}>Review Game</button>
+      <button data-testid="summary-play-again-btn" onClick={onPlayAgain}>Play Again</button>
+      <button data-testid="summary-back-btn" onClick={onBackToCoach}>Back to Coach</button>
     </div>
   ),
 }));
@@ -147,6 +154,10 @@ vi.mock('./MoveListPanel', () => ({
       Move List
     </div>
   ),
+}));
+
+vi.mock('../../hooks/useIsMobile', () => ({
+  useIsMobile: () => false,
 }));
 
 // ─── Test Data ──────────────────────────────────────────────────────────────
@@ -190,6 +201,14 @@ function renderReview(overrides?: {
   );
 }
 
+/** Render and click through the summary card into analysis mode */
+function renderAnalysis(overrides?: Parameters<typeof renderReview>[0]): ReturnType<typeof render> {
+  const result = renderReview(overrides);
+  // Click "Review Game" to transition from summary to analysis phase
+  fireEvent.click(screen.getByTestId('start-review-btn'));
+  return result;
+}
+
 // We need a lazy import reference since vi.mock hoists above imports
 let CoachGameReviewComponent: typeof import('./CoachGameReview').CoachGameReview;
 
@@ -210,70 +229,104 @@ describe('CoachGameReview', () => {
     expect(container).toHaveTextContent('No moves to review');
   });
 
-  it('renders the review layout with all sections', () => {
+  // ─── Summary Phase ─────────────────────────────────────────────────────────
+
+  it('shows summary card first (not analysis)', () => {
     renderReview();
+
+    expect(screen.getByTestId('review-summary-card')).toBeInTheDocument();
+    expect(screen.queryByTestId('chess-board')).not.toBeInTheDocument();
+  });
+
+  it('summary card has Review Game, Play Again, and Back to Coach buttons', () => {
+    renderReview();
+
+    expect(screen.getByTestId('start-review-btn')).toHaveTextContent('Review Game');
+    expect(screen.getByTestId('summary-play-again-btn')).toHaveTextContent('Play Again');
+    expect(screen.getByTestId('summary-back-btn')).toHaveTextContent('Back to Coach');
+  });
+
+  it('summary card passes result', () => {
+    renderReview({ result: 'loss' });
+
+    expect(screen.getByTestId('review-summary-card')).toHaveAttribute('data-result', 'loss');
+  });
+
+  it('summary Play Again callback fires', () => {
+    const onPlayAgain = vi.fn();
+    renderReview({ onPlayAgain });
+
+    fireEvent.click(screen.getByTestId('summary-play-again-btn'));
+    expect(onPlayAgain).toHaveBeenCalledOnce();
+  });
+
+  it('summary Back to Coach callback fires', () => {
+    const onBackToCoach = vi.fn();
+    renderReview({ onBackToCoach });
+
+    fireEvent.click(screen.getByTestId('summary-back-btn'));
+    expect(onBackToCoach).toHaveBeenCalledOnce();
+  });
+
+  // ─── Analysis Phase (after clicking Review Game) ───────────────────────────
+
+  it('renders the review layout with all sections after clicking Review Game', () => {
+    renderAnalysis();
 
     expect(screen.getByTestId('coach-game-review')).toBeInTheDocument();
     expect(screen.getByTestId('chess-board')).toBeInTheDocument();
     expect(screen.getByTestId('eval-graph')).toBeInTheDocument();
-    expect(screen.getByTestId('game-summary-stats')).toBeInTheDocument();
     expect(screen.getByTestId('move-list-panel')).toBeInTheDocument();
     expect(screen.getByTestId('move-nav-controls')).toBeInTheDocument();
   });
 
-  it('defaults to last move position', () => {
-    renderReview();
+  it('starts at beginning after clicking Review Game', () => {
+    renderAnalysis();
 
-    // Board should show the last move FEN
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-nc6');
+    // After clicking Review Game, should be at starting position (index -1)
+    expect(screen.getByTestId('chess-board')).toHaveAttribute(
+      'data-fen',
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    );
   });
 
   it('shows player info bars', () => {
-    renderReview();
+    renderAnalysis();
 
     const infoBars = screen.getAllByTestId('player-info-bar');
     expect(infoBars.length).toBe(2);
-    expect(infoBars[0]).toHaveTextContent('AI Coach');
+    expect(infoBars[0]).toHaveTextContent('Stockfish Bot');
     expect(infoBars[1]).toHaveTextContent('Player');
   });
 
-  it('passes result to GameSummaryStats', () => {
-    renderReview({ result: 'loss' });
-
-    expect(screen.getByTestId('game-summary-stats')).toHaveAttribute('data-result', 'loss');
-  });
-
   it('passes opening name to MoveListPanel', () => {
-    renderReview({ openingName: 'Sicilian Defense' });
+    renderAnalysis({ openingName: 'Sicilian Defense' });
 
     expect(screen.getByTestId('move-list-panel')).toHaveAttribute('data-opening', 'Sicilian Defense');
   });
 
   it('navigating with prev/next updates board position', () => {
-    renderReview();
+    renderAnalysis();
 
-    // Initially at last move (index 3)
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-nc6');
+    // Start at beginning (index -1), navigate forward
+    fireEvent.click(screen.getByTestId('nav-next'));
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-e4');
+
+    fireEvent.click(screen.getByTestId('nav-next'));
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-e5');
 
     // Click prev
     fireEvent.click(screen.getByTestId('nav-prev'));
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-nf3');
-
-    // Click prev again
-    fireEvent.click(screen.getByTestId('nav-prev'));
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-e5');
-
-    // Click next
-    fireEvent.click(screen.getByTestId('nav-next'));
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-nf3');
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-e4');
   });
 
   it('navigating to first shows starting position', () => {
-    renderReview();
+    renderAnalysis();
 
+    // Go to last then back to first
+    fireEvent.click(screen.getByTestId('nav-last'));
     fireEvent.click(screen.getByTestId('nav-first'));
 
-    // Should show starting FEN
     expect(screen.getByTestId('chess-board')).toHaveAttribute(
       'data-fen',
       'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -281,28 +334,25 @@ describe('CoachGameReview', () => {
   });
 
   it('navigating to last shows final position', () => {
-    renderReview();
+    renderAnalysis();
 
-    // Go to first, then last
-    fireEvent.click(screen.getByTestId('nav-first'));
     fireEvent.click(screen.getByTestId('nav-last'));
 
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-nc6');
   });
 
   it('shows commentary for key moment moves', () => {
-    renderReview();
+    renderAnalysis();
 
     // Navigate to move index 0 (moveNumber 1) which is a key moment
-    fireEvent.click(screen.getByTestId('nav-first'));
     fireEvent.click(screen.getByTestId('nav-next'));
 
     // Move 1 has key moment explanation 'You missed a fork'
     expect(screen.getByTestId('review-commentary')).toHaveTextContent('You missed a fork');
   });
 
-  it('shows play again and back to coach buttons', () => {
-    renderReview();
+  it('shows play again and back to coach buttons in analysis', () => {
+    renderAnalysis();
 
     expect(screen.getByTestId('play-again-btn')).toBeInTheDocument();
     expect(screen.getByTestId('play-again-btn')).toHaveTextContent('Play Again');
@@ -310,17 +360,17 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('back-to-coach-btn')).toHaveTextContent('Back to Coach');
   });
 
-  it('onPlayAgain callback fires when clicked', () => {
+  it('onPlayAgain callback fires when clicked in analysis', () => {
     const onPlayAgain = vi.fn();
-    renderReview({ onPlayAgain });
+    renderAnalysis({ onPlayAgain });
 
     fireEvent.click(screen.getByTestId('play-again-btn'));
     expect(onPlayAgain).toHaveBeenCalledTimes(1);
   });
 
-  it('onBackToCoach callback fires when clicked', () => {
+  it('onBackToCoach callback fires when clicked in analysis', () => {
     const onBackToCoach = vi.fn();
-    renderReview({ onBackToCoach });
+    renderAnalysis({ onBackToCoach });
 
     fireEvent.click(screen.getByTestId('back-to-coach-btn'));
     expect(onBackToCoach).toHaveBeenCalledTimes(1);
@@ -344,12 +394,13 @@ describe('CoachGameReview', () => {
   });
 
   it('entering what-if mode shows banner and back-to-review button', async () => {
-    renderReview();
+    renderAnalysis();
 
     // Initially no whatif banner
     expect(screen.queryByTestId('whatif-banner')).not.toBeInTheDocument();
 
-    // Make a move on the board to enter what-if mode
+    // Navigate to a move first, then make a board move
+    fireEvent.click(screen.getByTestId('nav-last'));
     fireEvent.click(screen.getByTestId('mock-board-move'));
 
     await waitFor(() => {
@@ -360,52 +411,49 @@ describe('CoachGameReview', () => {
   });
 
   it('what-if mode shows variation move list', async () => {
-    renderReview();
+    renderAnalysis();
 
-    // Make a move on the board
+    fireEvent.click(screen.getByTestId('nav-last'));
     fireEvent.click(screen.getByTestId('mock-board-move'));
 
     await waitFor(() => {
       expect(screen.getByTestId('whatif-moves')).toBeInTheDocument();
     });
-    // Should include the move SAN in the variation list
     expect(screen.getByTestId('whatif-moves')).toHaveTextContent('e4');
   });
 
   it('back-to-review button returns to analysis mode', async () => {
-    renderReview();
+    renderAnalysis();
 
-    // Enter what-if mode
+    fireEvent.click(screen.getByTestId('nav-last'));
     fireEvent.click(screen.getByTestId('mock-board-move'));
 
     await waitFor(() => {
       expect(screen.getByTestId('whatif-banner')).toBeInTheDocument();
     });
 
-    // Click back to review
     fireEvent.click(screen.getByTestId('back-to-review-btn'));
 
     await waitFor(() => {
       expect(screen.queryByTestId('whatif-banner')).not.toBeInTheDocument();
     });
 
-    // Should be back in analysis mode with move nav controls visible
     expect(screen.getByTestId('move-nav-controls')).toBeInTheDocument();
   });
 
   it('syncs eval graph current index with navigation', () => {
-    renderReview();
+    renderAnalysis();
 
-    // Initially at last move
-    expect(screen.getByTestId('eval-graph')).toHaveAttribute('data-current-index', '3');
+    // Initially at starting position (index -1)
+    expect(screen.getByTestId('eval-graph')).toHaveAttribute('data-current-index', '-1');
 
-    // Navigate to prev
-    fireEvent.click(screen.getByTestId('nav-prev'));
-    expect(screen.getByTestId('eval-graph')).toHaveAttribute('data-current-index', '2');
+    // Navigate to next
+    fireEvent.click(screen.getByTestId('nav-next'));
+    expect(screen.getByTestId('eval-graph')).toHaveAttribute('data-current-index', '0');
   });
 
   it('clicking eval graph move updates board position', () => {
-    renderReview();
+    renderAnalysis();
 
     // Click move 0 from eval graph
     fireEvent.click(screen.getByTestId('eval-graph-click'));
@@ -417,19 +465,17 @@ describe('CoachGameReview', () => {
   // ─── AI Features ───────────────────────────────────────────────────────────
 
   it('shows "Ask about this position" button', () => {
-    renderReview();
+    renderAnalysis();
 
     expect(screen.getByTestId('ask-position-btn')).toBeInTheDocument();
     expect(screen.getByTestId('ask-position-btn')).toHaveTextContent('Ask about this position');
   });
 
   it('expands ask panel when button is clicked', () => {
-    renderReview();
+    renderAnalysis();
 
-    // Initially no ask panel
     expect(screen.queryByTestId('ask-position-panel')).not.toBeInTheDocument();
 
-    // Click to expand
     fireEvent.click(screen.getByTestId('ask-position-btn'));
 
     expect(screen.getByTestId('ask-position-panel')).toBeInTheDocument();
@@ -438,20 +484,15 @@ describe('CoachGameReview', () => {
 
   it('sends question to coach API and shows response', async () => {
     const { getCoachChatResponse } = await import('../../services/coachApi');
-    renderReview();
+    renderAnalysis();
 
-    // Expand ask panel
     fireEvent.click(screen.getByTestId('ask-position-btn'));
-
-    // Send a question
     fireEvent.click(screen.getByTestId('mock-ask-send'));
 
-    // Should call getCoachChatResponse
     await waitFor(() => {
       expect(getCoachChatResponse).toHaveBeenCalled();
     });
 
-    // Should show response
     await waitFor(() => {
       expect(screen.getByTestId('ask-response')).toBeInTheDocument();
     });
@@ -464,13 +505,11 @@ describe('CoachGameReview', () => {
       { moveNumber: 2, san: 'e5', fen: 'fen-after-e5', isCoachMove: true, commentary: '', evaluation: -20, classification: null, expanded: false, bestMove: null, bestMoveEval: null, preMoveEval: 30 },
     ];
 
-    renderReview({ moves: blunderMoves });
+    renderAnalysis({ moves: blunderMoves });
 
     // Navigate to the blunder move (index 0)
-    fireEvent.click(screen.getByTestId('nav-first'));
     fireEvent.click(screen.getByTestId('nav-next'));
 
-    // Should call getCoachCommentary for the blunder
     await waitFor(() => {
       expect(getCoachCommentary).toHaveBeenCalledWith(
         'interactive_review',
@@ -479,7 +518,6 @@ describe('CoachGameReview', () => {
       );
     });
 
-    // AI commentary section should appear
     await waitFor(() => {
       expect(screen.getByTestId('ai-commentary')).toBeInTheDocument();
     });
@@ -489,12 +527,11 @@ describe('CoachGameReview', () => {
     const { getCoachCommentary } = await import('../../services/coachApi');
     (getCoachCommentary as ReturnType<typeof vi.fn>).mockClear();
 
-    renderReview();
+    renderAnalysis();
 
-    // Navigate to move index 2 (classification: 'good')
-    fireEvent.click(screen.getByTestId('nav-prev'));
+    // Navigate to move index 0 (classification: 'good')
+    fireEvent.click(screen.getByTestId('nav-next'));
 
-    // getCoachCommentary should NOT be called for good classification
     await waitFor(() => {
       expect(getCoachCommentary).not.toHaveBeenCalled();
     });
@@ -503,18 +540,20 @@ describe('CoachGameReview', () => {
   });
 
   it('resets ask panel when navigating to different move', () => {
-    renderReview();
+    renderAnalysis();
+
+    // Navigate to a move first
+    fireEvent.click(screen.getByTestId('nav-next'));
 
     // Expand ask panel
     fireEvent.click(screen.getByTestId('ask-position-btn'));
     expect(screen.getByTestId('ask-position-panel')).toBeInTheDocument();
 
     // Navigate to different move
-    fireEvent.click(screen.getByTestId('nav-prev'));
+    fireEvent.click(screen.getByTestId('nav-next'));
 
     // Ask panel should be collapsed
     expect(screen.queryByTestId('ask-position-panel')).not.toBeInTheDocument();
-    // Button should be visible again
     expect(screen.getByTestId('ask-position-btn')).toBeInTheDocument();
   });
 });

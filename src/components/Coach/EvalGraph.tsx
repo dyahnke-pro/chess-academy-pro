@@ -7,8 +7,10 @@ import {
   YAxis,
   ReferenceLine,
   Tooltip,
+  ReferenceDot,
 } from 'recharts';
-import type { CoachGameMove } from '../../types';
+import type { CoachGameMove, MoveClassification } from '../../types';
+import { CLASSIFICATION_STYLES } from './classificationStyles';
 
 interface EvalGraphProps {
   moves: CoachGameMove[];
@@ -23,6 +25,7 @@ interface DataPoint {
   eval: number;
   isBlunder: boolean;
   isBrilliant: boolean;
+  classification: MoveClassification | null;
 }
 
 interface EvalTooltipProps {
@@ -50,6 +53,9 @@ function clampEval(evalCp: number | null): number {
   return Math.max(-EVAL_CLAMP, Math.min(EVAL_CLAMP, pawns));
 }
 
+// Classifications that get dots on the graph
+const DOT_CLASSIFICATIONS: MoveClassification[] = ['brilliant', 'great', 'blunder', 'mistake', 'inaccuracy'];
+
 export function EvalGraph({
   moves,
   currentMoveIndex,
@@ -57,7 +63,7 @@ export function EvalGraph({
   className = '',
 }: EvalGraphProps): JSX.Element {
   const data = useMemo<DataPoint[]>(() => {
-    const points: DataPoint[] = [{ index: -1, label: 'Start', eval: 0, isBlunder: false, isBrilliant: false }];
+    const points: DataPoint[] = [{ index: -1, label: 'Start', eval: 0, isBlunder: false, isBrilliant: false, classification: null }];
 
     for (let i = 0; i < moves.length; i++) {
       const m = moves[i];
@@ -70,11 +76,19 @@ export function EvalGraph({
         eval: clampEval(m.evaluation),
         isBlunder: m.classification === 'blunder' || m.classification === 'mistake',
         isBrilliant: m.classification === 'brilliant',
+        classification: m.classification ?? null,
       });
     }
 
     return points;
   }, [moves]);
+
+  // Find points that should have classification dots
+  const classificationDots = useMemo(() => {
+    return data.filter((p) =>
+      p.classification && DOT_CLASSIFICATIONS.includes(p.classification),
+    );
+  }, [data]);
 
   const handleClick = useCallback(
     (point: DataPoint) => {
@@ -143,6 +157,22 @@ export function EvalGraph({
             baseValue={0}
             isAnimationActive={false}
           />
+
+          {/* Classification-colored dots */}
+          {classificationDots.map((dot) => {
+            if (!dot.classification) return null;
+            return (
+              <ReferenceDot
+                key={dot.index}
+                x={dot.index}
+                y={dot.eval}
+                r={4}
+                fill={CLASSIFICATION_STYLES[dot.classification].color}
+                stroke="var(--color-bg)"
+                strokeWidth={1}
+              />
+            );
+          })}
 
           <Tooltip content={<EvalTooltip />} />
         </AreaChart>

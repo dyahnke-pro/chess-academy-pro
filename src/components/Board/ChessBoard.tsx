@@ -7,12 +7,15 @@ import { useSettings } from '../../hooks/useSettings';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { EvalBar } from './EvalBar';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { GhostPieceOverlay } from './GhostPieceOverlay';
 import type {
   PieceDropHandlerArgs,
   SquareHandlerArgs,
   PieceHandlerArgs,
 } from 'react-chessboard';
+import type { GhostMoveData } from '../../types';
 
 export type MoveQuality = 'good' | 'inaccuracy' | 'blunder' | null;
 
@@ -46,6 +49,8 @@ export interface ChessBoardProps {
   arrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
   /** Annotation square highlights from coach chat (colored square backgrounds). */
   annotationHighlights?: Array<{ square: string; color: string }>;
+  /** Ghost piece overlay data for hint system level 3. */
+  ghostMove?: GhostMoveData | null;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -75,10 +80,12 @@ export function ChessBoard({
   moveQualityFlash = null,
   arrows,
   annotationHighlights,
+  ghostMove,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
   const { settings } = useSettings();
+  const isMobile = useIsMobile();
 
   // ─── Board color + piece set from settings ────────────────────────────────
   const boardColorScheme = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
@@ -223,16 +230,25 @@ export function ChessBoard({
       className={`flex flex-col ${className}`}
       data-testid="chess-board-container"
     >
-      {/* Board row: eval bar + board */}
+      {/* Mobile: horizontal eval bar above the board */}
+      {showEvalBar && isMobile && (
+        <EvalBar
+          evaluation={evaluation}
+          isMate={isMate}
+          mateIn={mateIn}
+          horizontal
+        />
+      )}
+
+      {/* Board row: eval bar (desktop only) + board */}
       <div className="relative flex items-stretch gap-1">
-        {/* Evaluation bar — left side */}
-        {showEvalBar && (
+        {/* Evaluation bar — left side (desktop only) */}
+        {showEvalBar && !isMobile && (
           <EvalBar
             evaluation={evaluation}
             isMate={isMate}
             mateIn={mateIn}
             className="self-stretch"
-            data-testid="eval-bar-wrapper"
           />
         )}
 
@@ -261,6 +277,14 @@ export function ChessBoard({
               className="absolute inset-0 pointer-events-none rounded-sm animate-pulse"
               style={{ boxShadow: `inset 0 0 0 4px ${flashColor}` }}
               data-testid="move-quality-flash"
+            />
+          )}
+          {/* Ghost piece overlay for hint level 3 */}
+          {ghostMove && (
+            <GhostPieceOverlay
+              ghostMove={ghostMove}
+              boardOrientation={game.boardOrientation}
+              pieceSet={settings.pieceSet}
             />
           )}
         </div>

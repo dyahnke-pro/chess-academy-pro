@@ -157,7 +157,7 @@ export function CoachSessionPlanPage(): JSX.Element {
           void navigate('/puzzles');
           break;
         case 'flashcards':
-          void navigate('/flashcards');
+          void navigate('/play');
           break;
         default:
           void navigate('/');
@@ -169,7 +169,7 @@ export function CoachSessionPlanPage(): JSX.Element {
   }, [activeProfile, plan, navigate, setCurrentSession]);
 
   return (
-    <div className="flex flex-col max-w-2xl mx-auto w-full" data-testid="coach-session-plan-page">
+    <div className="flex flex-col pb-20 md:pb-6 max-w-2xl mx-auto w-full" data-testid="coach-session-plan-page">
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-theme-border">
         <button onClick={() => void navigate('/coach')} className="p-1.5 rounded-lg hover:bg-theme-surface">

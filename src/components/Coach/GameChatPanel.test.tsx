@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
 import { createRef } from 'react';
@@ -26,7 +27,7 @@ vi.mock('../../services/voiceInputService', () => ({
 }));
 
 vi.mock('../../services/coachApi', () => ({
-  getCoachChatResponse: (...args: unknown[]) => mockGetCoachChatResponse(...args),
+  getCoachChatResponse: (...args: unknown[]): Promise<string> => mockGetCoachChatResponse(...args) as Promise<string>,
 }));
 
 const defaultProps = {
@@ -107,10 +108,10 @@ describe('GameChatPanel', () => {
     render(<GameChatPanel {...defaultProps} onBoardAnnotation={onBoardAnnotation} />);
 
     const input = screen.getByTestId('chat-text-input');
-    await act(async () => {
+    act(() => {
       fireEvent.change(input, { target: { value: 'What should I play?' } });
     });
-    await act(async () => {
+    act(() => {
       fireEvent.click(screen.getByTestId('chat-send-btn'));
     });
 
@@ -142,10 +143,10 @@ describe('GameChatPanel', () => {
     render(<GameChatPanel {...defaultProps} onBoardAnnotation={onBoardAnnotation} />);
 
     const input = screen.getByTestId('chat-text-input');
-    await act(async () => {
+    act(() => {
       fireEvent.change(input, { target: { value: 'What squares matter?' } });
     });
-    await act(async () => {
+    act(() => {
       fireEvent.click(screen.getByTestId('chat-send-btn'));
     });
 
@@ -167,10 +168,10 @@ describe('GameChatPanel', () => {
     render(<GameChatPanel {...defaultProps} onBoardAnnotation={onBoardAnnotation} />);
 
     const input = screen.getByTestId('chat-text-input');
-    await act(async () => {
+    act(() => {
       fireEvent.change(input, { target: { value: 'Hello' } });
     });
-    await act(async () => {
+    act(() => {
       fireEvent.click(screen.getByTestId('chat-send-btn'));
     });
 
@@ -180,7 +181,8 @@ describe('GameChatPanel', () => {
 
     // Only the initial clear call, no annotation call
     expect(onBoardAnnotation).toHaveBeenCalledTimes(1);
-    expect(onBoardAnnotation.mock.calls[0][0][0].type).toBe('clear');
+    const clearCall = onBoardAnnotation.mock.calls[0][0] as BoardAnnotationCommand[];
+    expect(clearCall[0].type).toBe('clear');
   });
 
   it('strips board tags from displayed message text', async () => {
@@ -191,10 +193,10 @@ describe('GameChatPanel', () => {
     render(<GameChatPanel {...defaultProps} />);
 
     const input = screen.getByTestId('chat-text-input');
-    await act(async () => {
+    act(() => {
       fireEvent.change(input, { target: { value: 'Advice?' } });
     });
-    await act(async () => {
+    act(() => {
       fireEvent.click(screen.getByTestId('chat-send-btn'));
     });
 
@@ -215,10 +217,10 @@ describe('GameChatPanel', () => {
     render(<GameChatPanel {...defaultProps} onBoardAnnotation={onBoardAnnotation} />);
 
     const input = screen.getByTestId('chat-text-input');
-    await act(async () => {
+    act(() => {
       fireEvent.change(input, { target: { value: 'Show me' } });
     });
-    await act(async () => {
+    act(() => {
       fireEvent.click(screen.getByTestId('chat-send-btn'));
     });
 
@@ -240,7 +242,7 @@ describe('GameChatPanel', () => {
 
     expect(ref.current).not.toBeNull();
 
-    await act(async () => {
+    act(() => {
       ref.current!.injectAssistantMessage('Here is a hint.');
     });
 

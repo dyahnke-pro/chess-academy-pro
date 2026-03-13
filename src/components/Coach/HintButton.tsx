@@ -11,9 +11,9 @@ interface HintButtonProps {
 
 const LEVEL_LABELS: Record<HintLevel, string> = {
   0: 'Get a Hint',
-  1: 'More Specific',
-  2: 'Show Me',
-  3: 'Hint Used',
+  1: 'Show Nudge',
+  2: 'Show Move',
+  3: 'Hints Used',
 };
 
 const LEVEL_COLORS: Record<HintLevel, string> = {

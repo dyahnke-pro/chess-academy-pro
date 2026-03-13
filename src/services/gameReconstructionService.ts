@@ -22,7 +22,7 @@ export function reconstructMovesFromGame(game: GameRecord): CoachGameMove[] {
     }
   }
 
-  const playerIsWhite = game.white !== 'AI Coach';
+  const playerIsWhite = game.white !== 'AI Coach' && game.white !== 'Stockfish Bot';
   const chess = new Chess();
   const moves: CoachGameMove[] = [];
   let previousEval: number | null = null;

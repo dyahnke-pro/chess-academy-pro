@@ -441,11 +441,11 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'king-puzzle-2',
-        fen: '5k2/8/8/8/8/8/6K1/R7 w - - 0 1',
-        solution: ['Ra8+', 'Ke7'],
-        hint: 'Use the rook to give check on the back rank!',
+        fen: '4k3/8/8/8/8/4n3/3K4/8 w - - 0 1',
+        solution: ['Kxe3'],
+        hint: 'The king can move one square in any direction — even to capture a piece!',
         successMessage:
-          'Check! You drove the king forward. Forcing the king out of safety is a great strategy!',
+          'The king grabbed the knight! Remember, the king moves one step in any direction, including to capture.',
       },
       {
         id: 'king-puzzle-3',

@@ -273,7 +273,7 @@ describe('JourneyChapterPage', () => {
     expect(screen.getByText('Puzzle 1 of 1')).toBeInTheDocument();
   });
 
-  it('hint button reveals hint text', async () => {
+  it('hint button advances through hint levels and reveals nudge text', async () => {
     renderChapterPage();
 
     await waitFor(() => {
@@ -289,15 +289,20 @@ describe('JourneyChapterPage', () => {
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('chapter-hint-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('hint-button')).toBeInTheDocument();
     });
 
+    // No hint text before clicking
     expect(screen.queryByTestId('chapter-hint-text')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('chapter-hint-btn'));
+    // Click 1: level 0→1 (arrows only, no text yet)
+    fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
 
+    // Click 2: level 1→2 (nudge text appears)
+    fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
     expect(screen.getByTestId('chapter-hint-text')).toBeInTheDocument();
-    expect(screen.getByText('Move the pawn two squares!')).toBeInTheDocument();
   });
 
   it('correct puzzle move shows success feedback', async () => {
