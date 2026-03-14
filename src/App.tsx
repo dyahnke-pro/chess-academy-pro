@@ -33,6 +33,7 @@ import { JourneyMapPage } from './components/Kid/JourneyMapPage';
 import { JourneyChapterPage } from './components/Kid/JourneyChapterPage';
 import { FairyTaleMapPage } from './components/Kid/FairyTaleMapPage';
 import { FairyTaleChapterPage } from './components/Kid/FairyTaleChapterPage';
+import { QueenGamesHub } from './components/Kid/QueenGamesHub';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
@@ -112,6 +113,7 @@ export function App(): JSX.Element {
         <Route element={<KidLayout />}>
           <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
           <Route path="/kid/journey" element={<ErrorBoundary><JourneyMapPage /></ErrorBoundary>} />
+          <Route path="/kid/journey/queen-games" element={<ErrorBoundary><QueenGamesHub /></ErrorBoundary>} />
           <Route path="/kid/journey/:chapterId" element={<ErrorBoundary><JourneyChapterPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale" element={<ErrorBoundary><FairyTaleMapPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale/:chapterId" element={<ErrorBoundary><FairyTaleChapterPage /></ErrorBoundary>} />

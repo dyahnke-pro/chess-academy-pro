@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
@@ -122,52 +122,94 @@ export function GameMapPage({ config }: GameMapPageProps): JSX.Element {
             : null;
           const completed = chapterProgress?.completed === true;
 
+          // Show Queen Games card after the knight chapter (for pawns-journey only)
+          const showQueenGames =
+            config.gameId === 'pawns-journey' && chapter.id === 'knight';
+          const knightCompleted = chapterProgress?.completed === true;
+
           return (
-            <button
-              key={chapter.id}
-              onClick={() => handleChapterClick(chapter)}
-              disabled={!unlocked}
-              className={[
-                'rounded-xl p-4 border-2 flex items-center gap-4 text-left transition-all',
-                !unlocked && 'opacity-50 cursor-not-allowed',
-                unlocked && !completed && 'hover:opacity-90',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              style={{
-                background: 'var(--color-surface)',
-                borderColor: completed
-                  ? '#22c55e'
-                  : unlocked
-                    ? 'var(--color-accent)'
-                    : 'var(--color-border)',
-                animation: unlocked && !completed ? 'journey-pulse 2s ease-in-out infinite' : undefined,
-              }}
-              data-testid={`chapter-card-${chapter.id}`}
-            >
-              {/* Icon */}
-              <span className="text-3xl flex-shrink-0">
-                {unlocked ? chapter.icon : '\uD83D\uDD12'}
-              </span>
+            <Fragment key={chapter.id}>
+              <button
+                onClick={() => handleChapterClick(chapter)}
+                disabled={!unlocked}
+                className={[
+                  'rounded-xl p-4 border-2 flex items-center gap-4 text-left transition-all',
+                  !unlocked && 'opacity-50 cursor-not-allowed',
+                  unlocked && !completed && 'hover:opacity-90',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                style={{
+                  background: 'var(--color-surface)',
+                  borderColor: completed
+                    ? '#22c55e'
+                    : unlocked
+                      ? 'var(--color-accent)'
+                      : 'var(--color-border)',
+                  animation: unlocked && !completed ? 'journey-pulse 2s ease-in-out infinite' : undefined,
+                }}
+                data-testid={`chapter-card-${chapter.id}`}
+              >
+                {/* Icon */}
+                <span className="text-3xl flex-shrink-0">
+                  {unlocked ? chapter.icon : '\uD83D\uDD12'}
+                </span>
 
-              {/* Text */}
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-sm">{chapter.title}</div>
-                <div
-                  className="text-xs truncate"
-                  style={{ color: 'var(--color-text-muted)' }}
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm">{chapter.title}</div>
+                  <div
+                    className="text-xs truncate"
+                    style={{ color: 'var(--color-text-muted)' }}
+                  >
+                    {chapter.subtitle}
+                  </div>
+                </div>
+
+                {/* Status indicator */}
+                {chapterProgress !== null && chapterProgress.completed && (
+                  <div className="flex-shrink-0">
+                    <StarDisplay earned={chapterProgress.bestScore} total={3} size="sm" />
+                  </div>
+                )}
+              </button>
+
+              {showQueenGames && (
+                <button
+                  onClick={() => void navigate('/kid/journey/queen-games')}
+                  disabled={!knightCompleted}
+                  className={[
+                    'rounded-xl p-4 border-2 flex items-center gap-4 text-left transition-all ml-6',
+                    !knightCompleted && 'opacity-50 cursor-not-allowed',
+                    knightCompleted && 'hover:opacity-90',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  style={{
+                    background: 'var(--color-surface)',
+                    borderColor: knightCompleted
+                      ? 'var(--color-accent)'
+                      : 'var(--color-border)',
+                  }}
+                  data-testid="queen-games-card"
                 >
-                  {chapter.subtitle}
-                </div>
-              </div>
-
-              {/* Status indicator */}
-              {chapterProgress !== null && chapterProgress.completed && (
-                <div className="flex-shrink-0">
-                  <StarDisplay earned={chapterProgress.bestScore} total={3} size="sm" />
-                </div>
+                  <span className="text-2xl flex-shrink-0">
+                    {knightCompleted ? '👑' : '🔒'}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-sm">Queen Games</div>
+                    <div
+                      className="text-xs truncate"
+                      style={{ color: 'var(--color-text-muted)' }}
+                    >
+                      {knightCompleted
+                        ? 'Two queen mini-games to test your skills!'
+                        : 'Complete the Knight chapter to unlock'}
+                    </div>
+                  </div>
+                </button>
               )}
-            </button>
+            </Fragment>
           );
         })}
       </div>
