@@ -33,6 +33,8 @@ import { JourneyMapPage } from './components/Kid/JourneyMapPage';
 import { JourneyChapterPage } from './components/Kid/JourneyChapterPage';
 import { FairyTaleMapPage } from './components/Kid/FairyTaleMapPage';
 import { FairyTaleChapterPage } from './components/Kid/FairyTaleChapterPage';
+import { KingEscapeGame } from './components/Kid/KingEscapeGame';
+import { KingMarchGame } from './components/Kid/KingMarchGame';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
@@ -115,6 +117,8 @@ export function App(): JSX.Element {
           <Route path="/kid/journey/:chapterId" element={<ErrorBoundary><JourneyChapterPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale" element={<ErrorBoundary><FairyTaleMapPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale/:chapterId" element={<ErrorBoundary><FairyTaleChapterPage /></ErrorBoundary>} />
+          <Route path="/kid/king-escape" element={<ErrorBoundary><KingEscapeGame /></ErrorBoundary>} />
+          <Route path="/kid/king-march" element={<ErrorBoundary><KingMarchGame /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>

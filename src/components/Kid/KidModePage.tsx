@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX, ArrowLeft, Map } from 'lucide-react';
+import { Volume2, VolumeX, ArrowLeft, Map, Lock, Shield, Footprints } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { getGameProgress, getGameCompletedChapterCount } from '../../services/journeyService';
@@ -51,6 +51,12 @@ export function KidModePage(): JSX.Element {
     void getGameProgress('pawns-journey').then((p) => setJourneyProgress(p));
     void getGameProgress('fairy-tale').then((p) => setFairyTaleProgress(p));
   }, []);
+
+  // King games unlock after queen chapter is completed in Pawn's Journey
+  const kingGamesUnlocked = useMemo((): boolean => {
+    if (!journeyProgress) return false;
+    return journeyProgress.chapters['queen']?.completed === true;
+  }, [journeyProgress]);
 
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
@@ -190,6 +196,53 @@ export function KidModePage(): JSX.Element {
             ))}
           </div>
 
+          {/* King mini-games (unlock after queen chapter) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button
+              onClick={() => kingGamesUnlocked && void navigate('/kid/king-escape')}
+              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+              style={{
+                background: kingGamesUnlocked ? 'var(--color-surface)' : 'var(--color-bg)',
+                borderColor: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-border)',
+                opacity: kingGamesUnlocked ? 1 : 0.5,
+                cursor: kingGamesUnlocked ? 'pointer' : 'not-allowed',
+              }}
+              disabled={!kingGamesUnlocked}
+              data-testid="king-escape-card"
+            >
+              <Shield size={28} style={{ color: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-text-muted)' }} />
+              <div className="flex-1">
+                <div className="font-bold">King Escape</div>
+                <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                  {kingGamesUnlocked ? 'Save the king from check!' : 'Complete the Queen chapter to unlock'}
+                </div>
+              </div>
+              {!kingGamesUnlocked && <Lock size={16} style={{ color: 'var(--color-text-muted)' }} />}
+            </button>
+
+            <button
+              onClick={() => kingGamesUnlocked && void navigate('/kid/king-march')}
+              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+              style={{
+                background: kingGamesUnlocked ? 'var(--color-surface)' : 'var(--color-bg)',
+                borderColor: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-border)',
+                opacity: kingGamesUnlocked ? 1 : 0.5,
+                cursor: kingGamesUnlocked ? 'pointer' : 'not-allowed',
+              }}
+              disabled={!kingGamesUnlocked}
+              data-testid="king-march-card"
+            >
+              <Footprints size={28} style={{ color: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-text-muted)' }} />
+              <div className="flex-1">
+                <div className="font-bold">King March</div>
+                <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                  {kingGamesUnlocked ? 'March the king to rank 8!' : 'Complete the Queen chapter to unlock'}
+                </div>
+              </div>
+              {!kingGamesUnlocked && <Lock size={16} style={{ color: 'var(--color-text-muted)' }} />}
+            </button>
+          </div>
+
           {/* Find the King game */}
           <button
             onClick={() => { setView('findKing'); setFindKingIdx(0); setFindKingScore(0); kidSpeak('Find the King! Where is the White King? Tap it!'); }}
@@ -197,7 +250,7 @@ export function KidModePage(): JSX.Element {
             style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
             data-testid="find-king-btn"
           >
-            <span className="text-2xl">👑</span>
+            <span className="text-2xl">{'👑'}</span>
             <div className="font-bold text-lg mt-1">Find the King!</div>
             <div className="text-sm opacity-80">Tap the King on the board</div>
           </button>
