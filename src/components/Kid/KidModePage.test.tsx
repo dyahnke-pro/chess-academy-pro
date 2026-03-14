@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '../../test/utils';
+import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { KidModePage } from './KidModePage';
 import { useAppStore } from '../../stores/appStore';
 import type { UserProfile } from '../../types';
@@ -189,5 +189,59 @@ describe('KidModePage', () => {
     // Clicking the mini-games card should trigger navigation (rendered in MemoryRouter)
     fireEvent.click(screen.getByTestId('mini-games-card'));
     // In integration tests with full routing, this would navigate to /kid/mini-games
+  });
+
+  it('renders king escape card as locked when no progress', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    const card = screen.getByTestId('king-escape-card');
+    expect(card).toBeInTheDocument();
+    expect(card).toBeDisabled();
+    expect(screen.getByText('King Escape')).toBeInTheDocument();
+    const unlockTexts = screen.getAllByText(/Complete the Queen chapter/);
+    expect(unlockTexts.length).toBe(2);
+  });
+
+  it('renders king march card as locked when no progress', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    const card = screen.getByTestId('king-march-card');
+    expect(card).toBeInTheDocument();
+    expect(card).toBeDisabled();
+    expect(screen.getByText('King March')).toBeInTheDocument();
+  });
+
+  it('unlocks king games when queen chapter is completed', async () => {
+    const { getGameProgress } = await import('../../services/journeyService');
+    vi.mocked(getGameProgress).mockResolvedValue({
+      chapters: {
+        queen: {
+          chapterId: 'queen',
+          lessonsCompleted: 3,
+          puzzlesCompleted: 3,
+          puzzlesCorrect: 3,
+          completed: true,
+          bestScore: 3,
+          completedAt: '2026-01-01T00:00:00.000Z',
+        },
+      },
+      currentChapterId: 'king',
+      startedAt: '2026-01-01T00:00:00.000Z',
+      completedAt: null,
+    });
+
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    // Wait for the async progress fetch to update unlock state
+    await waitFor(() => {
+      expect(screen.getByTestId('king-escape-card')).not.toBeDisabled();
+    });
+
+    expect(screen.getByTestId('king-march-card')).not.toBeDisabled();
+    expect(screen.getByText('Save the king from check!')).toBeInTheDocument();
+    expect(screen.getByText('March the king to rank 8!')).toBeInTheDocument();
   });
 });
