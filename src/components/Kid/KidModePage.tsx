@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX, ArrowLeft, Map } from 'lucide-react';
+import { Volume2, VolumeX, ArrowLeft, Map, Lock } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { getGameProgress, getGameCompletedChapterCount } from '../../services/journeyService';
+import { isPawnChapterCompleted } from '../../services/rookGameService';
 import { PAWNS_JOURNEY_CONFIG, FAIRY_TALE_CONFIG } from '../../data/kidGameConfigs';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { ChessPiece, JourneyProgress } from '../../types';
@@ -46,10 +47,12 @@ export function KidModePage(): JSX.Element {
   const [voiceOn, setVoiceOn] = useState(true);
   const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
   const [fairyTaleProgress, setFairyTaleProgress] = useState<JourneyProgress | null>(null);
+  const [rookGamesUnlocked, setRookGamesUnlocked] = useState(false);
 
   useEffect(() => {
     void getGameProgress('pawns-journey').then((p) => setJourneyProgress(p));
     void getGameProgress('fairy-tale').then((p) => setFairyTaleProgress(p));
+    void isPawnChapterCompleted().then((done) => setRookGamesUnlocked(done));
   }, []);
 
   const kidSpeak = useCallback((text: string): void => {
@@ -169,6 +172,34 @@ export function KidModePage(): JSX.Element {
               </div>
             </div>
             <span className="text-2xl">{FAIRY_TALE_CONFIG.icon}</span>
+          </button>
+
+          {/* Rook Games card */}
+          <button
+            onClick={() => void navigate('/kid/rook-games')}
+            disabled={!rookGamesUnlocked}
+            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+            style={{
+              background: 'var(--color-surface)',
+              borderColor: rookGamesUnlocked ? 'var(--color-accent)' : 'var(--color-border)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              opacity: rookGamesUnlocked ? 1 : 0.5,
+              cursor: rookGamesUnlocked ? 'pointer' : 'not-allowed',
+            }}
+            data-testid="rook-games-card"
+          >
+            <span className="text-3xl">{'\u265C'}</span>
+            <div className="flex-1">
+              <div className="font-bold text-lg">Rook Games</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                {rookGamesUnlocked
+                  ? 'Maze puzzles & capture challenges!'
+                  : 'Complete the Pawn chapter to unlock'}
+              </div>
+            </div>
+            {!rookGamesUnlocked && (
+              <Lock size={20} style={{ color: 'var(--color-text-muted)' }} />
+            )}
           </button>
 
           {/* Piece lesson cards */}
