@@ -739,3 +739,27 @@ export interface MiniGameLevelProgress {
 export interface MiniGameProgress {
   levels: Partial<Record<number, MiniGameLevelProgress>>;
 }
+
+// ─── Bishop Mini-Games ──────────────────────────────────────────────────────
+
+export type BishopGamePhase = 'menu' | 'playing' | 'won' | 'lost';
+
+export interface BishopVsPawnsLevel {
+  level: number;
+  description: string;
+  bishopStart: string;
+  pawnSquares: string[];
+  showBishopMoves: boolean;
+  showThreatenedSquares: boolean;
+}
+
+export interface ColorWarsLevel {
+  level: number;
+  description: string;
+  lightBishopStart: string;
+  darkBishopStart: string;
+  enemyPieces: Array<{ square: string; piece: string }>;
+  timerSeconds: number;
+  showBishopMoves: boolean;
+  showEnemyGlow: boolean;
+}

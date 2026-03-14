@@ -6,6 +6,8 @@ import { voiceService } from '../../services/voiceService';
 import { getGameProgress, getGameCompletedChapterCount } from '../../services/journeyService';
 import { PAWNS_JOURNEY_CONFIG, FAIRY_TALE_CONFIG } from '../../data/kidGameConfigs';
 import { ChessBoard } from '../Board/ChessBoard';
+import { BishopVsPawns } from './BishopVsPawns';
+import { ColorWars } from './ColorWars';
 import type { ChessPiece, JourneyProgress } from '../../types';
 
 interface PieceLesson {
@@ -33,7 +35,7 @@ const FIND_KING_FENS = [
   'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1',
 ];
 
-type KidView = 'menu' | 'findKing';
+type KidView = 'menu' | 'findKing' | 'bishopVsPawns' | 'colorWars';
 
 export function KidModePage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -109,7 +111,17 @@ export function KidModePage(): JSX.Element {
     }, 1200);
   }, [findKingIdx, findKingScore, kingSquare, kidSpeak]);
 
+  const bishopGamesUnlocked = journeyProgress?.chapters['rook']?.completed ?? false;
+
   if (!activeProfile) return <></>;
+
+  if (view === 'bishopVsPawns') {
+    return <BishopVsPawns onBack={() => setView('menu')} />;
+  }
+
+  if (view === 'colorWars') {
+    return <ColorWars onBack={() => setView('menu')} />;
+  }
 
   return (
     <div
@@ -239,6 +251,57 @@ export function KidModePage(): JSX.Element {
                 </div>
               </div>
             </button>
+
+            {/* Bishop Games */}
+            {!bishopGamesUnlocked && (
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }} data-testid="bishop-games-locked-msg">
+                Complete the Rook chapter to unlock bishop games!
+              </p>
+            )}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => { if (bishopGamesUnlocked) setView('bishopVsPawns'); }}
+                disabled={!bishopGamesUnlocked}
+                className={`rounded-xl p-5 border-2 flex items-center gap-4 transition-opacity w-full text-left ${
+                  !bishopGamesUnlocked ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: 'var(--color-surface)',
+                  borderColor: 'var(--color-accent)',
+                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                }}
+                data-testid="bishop-vs-pawns-btn"
+              >
+                <span className="text-3xl">♗</span>
+                <div className="flex-1">
+                  <div className="font-bold">Bishop vs Pawns</div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    Catch the pawns!
+                  </div>
+                </div>
+              </button>
+              <button
+                onClick={() => { if (bishopGamesUnlocked) setView('colorWars'); }}
+                disabled={!bishopGamesUnlocked}
+                className={`rounded-xl p-5 border-2 flex items-center gap-4 transition-opacity w-full text-left ${
+                  !bishopGamesUnlocked ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: 'var(--color-surface)',
+                  borderColor: 'var(--color-accent)',
+                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                }}
+                data-testid="color-wars-btn"
+              >
+                <span className="text-3xl">♗♗</span>
+                <div className="flex-1">
+                  <div className="font-bold">Color Wars</div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    Two bishops attack!
+                  </div>
+                </div>
+              </button>
+            </div>
 
             {/* Queen Games */}
             <button
