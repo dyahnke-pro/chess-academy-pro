@@ -11,6 +11,7 @@ import type {
   SkillRadar,
   UserPreferences,
   BadHabit,
+  MiniGameProgress,
 } from '../types';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -276,6 +277,15 @@ export function buildBadHabit(overrides?: Partial<BadHabit>): BadHabit {
     occurrences: 3,
     lastSeen: today(),
     isResolved: false,
+    ...overrides,
+  };
+}
+
+export function buildMiniGameProgress(
+  overrides?: Partial<MiniGameProgress>,
+): MiniGameProgress {
+  return {
+    levels: {},
     ...overrides,
   };
 }

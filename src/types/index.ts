@@ -686,3 +686,56 @@ export interface KidGameConfig {
   chapters: JourneyChapter[];
   chapterOrder: readonly JourneyChapterId[];
 }
+
+// ─── Mini-Games ─────────────────────────────────────────────────────────────
+
+export type MiniGameId = 'pawn-wars' | 'blocker';
+
+export type MiniGameDifficulty = 1 | 2 | 3;
+
+export type MiniGameHighlightMode = 'all' | 'danger' | 'none';
+
+export type MiniGamePhase = 'intro' | 'playing' | 'won' | 'lost';
+
+export interface MiniGameAiConfig {
+  /** Probability (0–1) of making the scored "best" move vs a random pawn move */
+  bestMoveChance: number;
+  /** Whether AI tries to block/capture the player's most advanced pawn */
+  blocksAdvancedPawn: boolean;
+  /** Whether AI prioritises pushing its own most advanced pawn */
+  prioritizesAdvancement: boolean;
+  /** For Blocker: file index (0-based, c=0 d=1 e=2 f=3) of the AI's target pawn */
+  targetPawnFile?: string;
+}
+
+export interface MiniGameLevelConfig {
+  level: MiniGameDifficulty;
+  title: string;
+  description: string;
+  /** Starting FEN — kings placed in corners for chess.js legality */
+  startFen: string;
+  /** Player colour */
+  playerColor: 'w' | 'b';
+  /** Which square highlights to show */
+  highlightMode: MiniGameHighlightMode;
+  /** Whether the AI's target pawn is visually marked (Blocker only) */
+  showTargetPawn: boolean;
+  /** AI behaviour */
+  aiConfig: MiniGameAiConfig;
+  /** Narrative intro spoken before game */
+  storyIntro: string;
+  /** Narrative on win */
+  storyWin: string;
+  /** Narrative on loss */
+  storyLoss: string;
+}
+
+export interface MiniGameLevelProgress {
+  completed: boolean;
+  stars: number;
+  hintsUsed: number;
+}
+
+export interface MiniGameProgress {
+  levels: Partial<Record<number, MiniGameLevelProgress>>;
+}
