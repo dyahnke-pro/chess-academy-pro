@@ -4,27 +4,29 @@ import { QueenVsArmy } from './QueenVsArmy';
 
 // Mock react-chessboard
 vi.mock('react-chessboard', () => ({
-  Chessboard: ({ onPieceDrop, position }: {
-    onPieceDrop?: (args: { sourceSquare: string; targetSquare: string; piece: string }) => boolean;
-    position: Record<string, string>;
+  Chessboard: ({ options }: {
+    options?: {
+      onPieceDrop?: (args: { sourceSquare: string; targetSquare: string; piece: { pieceType: string } }) => boolean;
+      position: Record<string, { pieceType: string }>;
+    };
   }) => (
     <div data-testid="mock-chessboard">
-      <div data-testid="board-position">{JSON.stringify(position)}</div>
+      <div data-testid="board-position">{JSON.stringify(options?.position)}</div>
       <button
         data-testid="drop-capture-pawn"
-        onClick={() => onPieceDrop?.({ sourceSquare: 'd5', targetSquare: 'd2', piece: 'wQ' })}
+        onClick={() => options?.onPieceDrop?.({ sourceSquare: 'd5', targetSquare: 'd2', piece: { pieceType: 'wQ' } })}
       >
         Capture pawn
       </button>
       <button
         data-testid="drop-invalid"
-        onClick={() => onPieceDrop?.({ sourceSquare: 'd5', targetSquare: 'c3', piece: 'wQ' })}
+        onClick={() => options?.onPieceDrop?.({ sourceSquare: 'd5', targetSquare: 'c3', piece: { pieceType: 'wQ' } })}
       >
         Invalid move
       </button>
       <button
         data-testid="drop-non-capture"
-        onClick={() => onPieceDrop?.({ sourceSquare: 'd5', targetSquare: 'd8', piece: 'wQ' })}
+        onClick={() => options?.onPieceDrop?.({ sourceSquare: 'd5', targetSquare: 'd8', piece: { pieceType: 'wQ' } })}
       >
         Non-capture move
       </button>
@@ -76,10 +78,10 @@ describe('QueenVsArmy', () => {
   it('renders the correct initial position', () => {
     render(<QueenVsArmy onBack={onBack} onComplete={onComplete} />);
     const posText = screen.getByTestId('board-position').textContent;
-    const pos = JSON.parse(posText ?? '{}') as Record<string, string>;
-    expect(pos['d5']).toBe('wQ');
-    expect(pos['b2']).toBe('bP');
-    expect(pos['e3']).toBe('bP');
+    const pos = JSON.parse(posText ?? '{}') as Record<string, { pieceType: string }>;
+    expect(pos['d5'].pieceType).toBe('wQ');
+    expect(pos['b2'].pieceType).toBe('bP');
+    expect(pos['e3'].pieceType).toBe('bP');
   });
 
   it('calls onBack when back button is clicked', () => {

@@ -206,7 +206,6 @@ describe('Queen vs Army', () => {
 
     it('wins when all pawns are captured', () => {
       // Set up a minimal state with one pawn
-      const level = QUEEN_ARMY_LEVELS[0];
       const state = {
         queen: 'a1',
         pawns: ['a2'],
@@ -220,7 +219,6 @@ describe('Queen vs Army', () => {
     });
 
     it('loses when a pawn reaches rank 8', () => {
-      const level = QUEEN_ARMY_LEVELS[0];
       // Pawn on rank 7 — after queen move it advances to rank 8
       const state = {
         queen: 'a1',
@@ -235,7 +233,6 @@ describe('Queen vs Army', () => {
     });
 
     it('does not process moves when game is over', () => {
-      const level = QUEEN_ARMY_LEVELS[0];
       const state = {
         queen: 'a1',
         pawns: [],
@@ -248,10 +245,7 @@ describe('Queen vs Army', () => {
     });
 
     it('queen can capture the knight in level 3', () => {
-      const level = QUEEN_ARMY_LEVELS[2];
-      const state = initQueenArmyState(level);
-      // Knight at g6, queen at d4 — is g6 reachable? No, d4→g6 is not a queen move
-      // Let's construct a state where queen can capture knight
+      // Construct a state where queen can capture knight along a file
       const customState = {
         queen: 'g4',
         pawns: ['a2'],
@@ -269,16 +263,16 @@ describe('Queen vs Army', () => {
     it('returns correct position object', () => {
       const state = initQueenArmyState(QUEEN_ARMY_LEVELS[0]);
       const pos = queenArmyPosition(state);
-      expect(pos[state.queen]).toBe('wQ');
+      expect(pos[state.queen].pieceType).toBe('wQ');
       for (const p of state.pawns) {
-        expect(pos[p]).toBe('bP');
+        expect(pos[p].pieceType).toBe('bP');
       }
     });
 
     it('includes knight for level 3', () => {
       const state = initQueenArmyState(QUEEN_ARMY_LEVELS[2]);
       const pos = queenArmyPosition(state);
-      expect(pos['g6']).toBe('bN');
+      expect(pos['g6'].pieceType).toBe('bN');
     });
   });
 
@@ -419,9 +413,9 @@ describe("Queen's Gauntlet", () => {
     it('returns correct position object', () => {
       const state = initGauntletState(QUEEN_GAUNTLET_LEVELS[0]);
       const pos = gauntletPosition(state);
-      expect(pos['a1']).toBe('wQ');
-      expect(pos['d4']).toBe('bR');
-      expect(pos['f5']).toBe('bB');
+      expect(pos['a1'].pieceType).toBe('wQ');
+      expect(pos['d4'].pieceType).toBe('bR');
+      expect(pos['f5'].pieceType).toBe('bB');
     });
   });
 

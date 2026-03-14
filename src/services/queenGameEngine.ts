@@ -317,14 +317,14 @@ export function processQueenArmyMove(
  */
 export function queenArmyPosition(
   state: QueenArmyState,
-): Record<string, string> {
-  const pos: Record<string, string> = {};
-  pos[state.queen] = 'wQ';
+): Record<string, { pieceType: string }> {
+  const pos: Record<string, { pieceType: string }> = {};
+  pos[state.queen] = { pieceType: 'wQ' };
   for (const p of state.pawns) {
-    pos[p] = 'bP';
+    pos[p] = { pieceType: 'bP' };
   }
   if (state.knight) {
-    pos[state.knight] = 'bN';
+    pos[state.knight] = { pieceType: 'bN' };
   }
   return pos;
 }
@@ -498,11 +498,11 @@ export function processGauntletMove(
  */
 export function gauntletPosition(
   state: QueenGauntletState,
-): Record<string, string> {
-  const pos: Record<string, string> = {};
-  pos[state.queen] = 'wQ';
+): Record<string, { pieceType: string }> {
+  const pos: Record<string, { pieceType: string }> = {};
+  pos[state.queen] = { pieceType: 'wQ' };
   for (const e of state.enemies) {
-    pos[e.square] = e.type === 'rook' ? 'bR' : 'bB';
+    pos[e.square] = { pieceType: e.type === 'rook' ? 'bR' : 'bB' };
   }
   return pos;
 }

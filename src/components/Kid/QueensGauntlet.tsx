@@ -64,8 +64,8 @@ export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX
   }, [attackedSquares, safeSquares, state.target, state.status]);
 
   const handleDrop = useCallback(
-    ({ sourceSquare, targetSquare, piece }: { sourceSquare: string; targetSquare: string | null; piece: string }): boolean => {
-      if (piece !== 'wQ') return false;
+    ({ sourceSquare, targetSquare, piece }: { sourceSquare: string; targetSquare: string | null; piece: { pieceType: string } }): boolean => {
+      if (piece.pieceType !== 'wQ') return false;
       if (state.status !== 'playing') return false;
       if (!targetSquare || sourceSquare === targetSquare) return false;
 
@@ -150,15 +150,16 @@ export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX
       {/* Board */}
       <div style={{ width: boardWidth }}>
         <Chessboard
-          id="queens-gauntlet"
-          position={position}
-          onPieceDrop={handleDrop}
-          boardWidth={boardWidth}
-          customDarkSquareStyle={{ backgroundColor: boardColors.darkSquare }}
-          customLightSquareStyle={{ backgroundColor: boardColors.lightSquare }}
-          customSquareStyles={customSquareStyles}
-          animationDuration={200}
-          arePiecesDraggable={state.status === 'playing'}
+          options={{
+            position,
+            boardOrientation: 'white' as const,
+            darkSquareStyle: { backgroundColor: boardColors.darkSquare },
+            lightSquareStyle: { backgroundColor: boardColors.lightSquare },
+            squareStyles: customSquareStyles,
+            animationDurationInMs: 200,
+            allowDragging: state.status === 'playing',
+            onPieceDrop: handleDrop,
+          }}
         />
       </div>
 
