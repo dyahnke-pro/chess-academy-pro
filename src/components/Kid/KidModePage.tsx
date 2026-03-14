@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX, ArrowLeft, Map, Lock } from 'lucide-react';
+import { Volume2, VolumeX, ArrowLeft, Map, Lock, Swords } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { getGameProgress, getGameCompletedChapterCount } from '../../services/journeyService';
@@ -200,6 +200,27 @@ export function KidModePage(): JSX.Element {
             {!rookGamesUnlocked && (
               <Lock size={20} style={{ color: 'var(--color-text-muted)' }} />
             )}
+          </button>
+
+          {/* Mini-Games card */}
+          <button
+            onClick={() => void navigate('/kid/mini-games')}
+            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+            style={{
+              background: 'var(--color-surface)',
+              borderColor: 'var(--color-accent)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+            }}
+            data-testid="mini-games-card"
+          >
+            <Swords size={32} style={{ color: 'var(--color-accent)' }} />
+            <div className="flex-1">
+              <div className="font-bold text-lg">Pawn Games</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                Race and block with your pawns!
+              </div>
+            </div>
+            <span className="text-2xl">{'\u265F'}</span>
           </button>
 
           {/* Piece lesson cards */}

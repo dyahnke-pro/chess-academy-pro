@@ -36,6 +36,8 @@ import { FairyTaleChapterPage } from './components/Kid/FairyTaleChapterPage';
 import { RookGamesPage } from './components/Kid/RookGamesPage';
 import { RookMazePage } from './components/Kid/RookMazePage';
 import { RowClearerPage } from './components/Kid/RowClearerPage';
+import { MiniGameHubPage } from './components/Kid/MiniGameHubPage';
+import { MiniGamePage } from './components/Kid/MiniGamePage';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
@@ -121,6 +123,9 @@ export function App(): JSX.Element {
           <Route path="/kid/rook-games" element={<ErrorBoundary><RookGamesPage /></ErrorBoundary>} />
           <Route path="/kid/rook-maze/:level" element={<ErrorBoundary><RookMazePage /></ErrorBoundary>} />
           <Route path="/kid/row-clearer/:level" element={<ErrorBoundary><RowClearerPage /></ErrorBoundary>} />
+          <Route path="/kid/mini-games" element={<ErrorBoundary><MiniGameHubPage /></ErrorBoundary>} />
+          <Route path="/kid/mini-games/pawn-wars/:level" element={<ErrorBoundary><MiniGamePage gameId="pawn-wars" /></ErrorBoundary>} />
+          <Route path="/kid/mini-games/blocker/:level" element={<ErrorBoundary><MiniGamePage gameId="blocker" /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>

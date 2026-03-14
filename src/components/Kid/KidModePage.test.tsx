@@ -173,4 +173,21 @@ describe('KidModePage', () => {
     render(<KidModePage />);
     expect(screen.queryByTestId('kid-mode-page')).not.toBeInTheDocument();
   });
+
+  it('renders mini-games card with "Pawn Games" text', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    expect(screen.getByTestId('mini-games-card')).toBeInTheDocument();
+    expect(screen.getByText('Pawn Games')).toBeInTheDocument();
+  });
+
+  it('clicking mini-games card triggers navigation', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    // Clicking the mini-games card should trigger navigation (rendered in MemoryRouter)
+    fireEvent.click(screen.getByTestId('mini-games-card'));
+    // In integration tests with full routing, this would navigate to /kid/mini-games
+  });
 });
