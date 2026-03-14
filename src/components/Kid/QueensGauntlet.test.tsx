@@ -76,11 +76,11 @@ describe('QueensGauntlet', () => {
 
   it('renders correct initial position', () => {
     render(<QueensGauntlet onBack={onBack} onComplete={onComplete} />);
-    const posText = screen.getByTestId('board-position').textContent;
-    const pos = JSON.parse(posText ?? '{}') as Record<string, { pieceType: string }>;
-    expect(pos['a1'].pieceType).toBe('wQ');
-    expect(pos['d4'].pieceType).toBe('bR');
-    expect(pos['f5'].pieceType).toBe('bB');
+    const posJson = screen.getByTestId('board-position').textContent ?? '';
+    const pos = JSON.parse(posJson) as Record<string, { pieceType: string }>;
+    expect(pos['a1']).toEqual({ pieceType: 'wQ' });
+    expect(pos['d4']).toEqual({ pieceType: 'bR' });
+    expect(pos['f5']).toEqual({ pieceType: 'bB' });
   });
 
   it('calls onBack when back button is clicked', () => {

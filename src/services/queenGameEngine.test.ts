@@ -260,19 +260,19 @@ describe('Queen vs Army', () => {
   });
 
   describe('queenArmyPosition', () => {
-    it('returns correct position object', () => {
+    it('returns a position object with queen and pawns', () => {
       const state = initQueenArmyState(QUEEN_ARMY_LEVELS[0]);
       const pos = queenArmyPosition(state);
-      expect(pos[state.queen].pieceType).toBe('wQ');
+      expect(pos[state.queen]).toEqual({ pieceType: 'wQ' });
       for (const p of state.pawns) {
-        expect(pos[p].pieceType).toBe('bP');
+        expect(pos[p]).toEqual({ pieceType: 'bP' });
       }
     });
 
     it('includes knight for level 3', () => {
       const state = initQueenArmyState(QUEEN_ARMY_LEVELS[2]);
       const pos = queenArmyPosition(state);
-      expect(pos['g6'].pieceType).toBe('bN');
+      expect(pos[state.knight!]).toEqual({ pieceType: 'bN' });
     });
   });
 
@@ -410,12 +410,14 @@ describe("Queen's Gauntlet", () => {
   });
 
   describe('gauntletPosition', () => {
-    it('returns correct position object', () => {
+    it('returns a FEN string with queen and enemies', () => {
       const state = initGauntletState(QUEEN_GAUNTLET_LEVELS[0]);
       const pos = gauntletPosition(state);
-      expect(pos['a1'].pieceType).toBe('wQ');
-      expect(pos['d4'].pieceType).toBe('bR');
-      expect(pos['f5'].pieceType).toBe('bB');
+      expect(pos[state.queen]).toEqual({ pieceType: 'wQ' });
+      for (const e of state.enemies) {
+        const expected = e.type === 'rook' ? 'bR' : 'bB';
+        expect(pos[e.square]).toEqual({ pieceType: expected });
+      }
     });
   });
 

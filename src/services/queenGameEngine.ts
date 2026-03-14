@@ -313,7 +313,7 @@ export function processQueenArmyMove(
 }
 
 /**
- * Get the react-chessboard position object for a Queen vs Army state.
+ * Get the position object for a Queen vs Army state.
  */
 export function queenArmyPosition(
   state: QueenArmyState,
@@ -494,7 +494,7 @@ export function processGauntletMove(
 }
 
 /**
- * Get the react-chessboard position object for a Gauntlet state.
+ * Get the position object for a Gauntlet state.
  */
 export function gauntletPosition(
   state: QueenGauntletState,

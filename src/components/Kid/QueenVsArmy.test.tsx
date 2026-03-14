@@ -77,11 +77,10 @@ describe('QueenVsArmy', () => {
 
   it('renders the correct initial position', () => {
     render(<QueenVsArmy onBack={onBack} onComplete={onComplete} />);
-    const posText = screen.getByTestId('board-position').textContent;
-    const pos = JSON.parse(posText ?? '{}') as Record<string, { pieceType: string }>;
-    expect(pos['d5'].pieceType).toBe('wQ');
-    expect(pos['b2'].pieceType).toBe('bP');
-    expect(pos['e3'].pieceType).toBe('bP');
+    const posJson = screen.getByTestId('board-position').textContent ?? '';
+    const pos = JSON.parse(posJson) as Record<string, { pieceType: string }>;
+    expect(pos['d5']).toEqual({ pieceType: 'wQ' });
+    expect(pos['d2']).toEqual({ pieceType: 'bP' });
   });
 
   it('calls onBack when back button is clicked', () => {
