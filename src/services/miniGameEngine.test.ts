@@ -17,7 +17,7 @@ import type { MiniGameAiConfig } from '../types';
 const STANDARD_PAWN_WARS = '7k/pppppppp/8/8/8/8/PPPPPPPP/K7 w - - 0 1';
 const BLOCKER_FEN = '7k/8/2pppp2/8/8/2PPPP2/8/K7 w - - 0 1';
 const WHITE_ABOUT_TO_PROMOTE = '7k/4P3/8/8/8/8/8/K7 w - - 0 1';
-const BLACK_ABOUT_TO_PROMOTE = '7k/8/8/8/8/8/4p3/K7 b - - 0 1';
+// BLACK_ABOUT_TO_PROMOTE available if needed: '7k/8/8/8/8/8/4p3/K7 b - - 0 1'
 const NO_WHITE_PAWNS = '7k/pppppppp/8/8/8/8/8/K7 b - - 0 1';
 // Single white pawn blocked by single black pawn, no captures possible
 const WHITE_PAWN_BLOCKED = '7k/4p3/4P3/8/8/8/8/K7 w - - 0 1';
@@ -133,7 +133,7 @@ describe('computeSafeSquares', () => {
     // Position where white has one pawn and both forward diagonals are attacked
     // White pawn on e3, black pawns on d4 and f4 => e4 is attacked by both
     const fen = '7k/8/8/8/3p1p2/4P3/8/K7 w - - 0 1';
-    const safe = computeSafeSquares(fen, 'w');
+    computeSafeSquares(fen, 'w');
     // e3 can go to e4 — is e4 attacked by d4 and f4 diagonally?
     // d4 attacks c3 and e3, f4 attacks e3 and g3 (black pawns attack DOWN)
     // e4 is NOT attacked by d4/f4 (they attack rank 3, not rank 4)

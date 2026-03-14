@@ -81,7 +81,6 @@ function renderWithRoute(level: string): ReturnType<typeof render> {
         </Routes>
       </MotionConfig>
     </MemoryRouter>,
-    { wrapper: undefined as unknown as React.ComponentType },
   );
 }
 
