@@ -244,4 +244,19 @@ describe('KidModePage', () => {
     expect(screen.getByText('Save the king from check!')).toBeInTheDocument();
     expect(screen.getByText('March the king to rank 8!')).toBeInTheDocument();
   });
+
+  it('renders knight games card', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    expect(screen.getByTestId('knight-games-card')).toBeInTheDocument();
+    expect(screen.getByText('Knight Games')).toBeInTheDocument();
+  });
+
+  it('knight games card shows locked text when bishop not completed', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    expect(screen.getByText('Complete Bishop chapter to unlock')).toBeInTheDocument();
+  });
 });

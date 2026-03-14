@@ -40,6 +40,9 @@ import { MiniGameHubPage } from './components/Kid/MiniGameHubPage';
 import { MiniGamePage } from './components/Kid/MiniGamePage';
 import { KingEscapeGame } from './components/Kid/KingEscapeGame';
 import { KingMarchGame } from './components/Kid/KingMarchGame';
+import { KnightGamesPage } from './components/Kid/KnightGamesPage';
+import { LeapFrogGame } from './components/Kid/LeapFrogGame';
+import { KnightSweepGame } from './components/Kid/KnightSweepGame';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
@@ -130,6 +133,9 @@ export function App(): JSX.Element {
           <Route path="/kid/mini-games/blocker/:level" element={<ErrorBoundary><MiniGamePage gameId="blocker" /></ErrorBoundary>} />
           <Route path="/kid/king-escape" element={<ErrorBoundary><KingEscapeGame /></ErrorBoundary>} />
           <Route path="/kid/king-march" element={<ErrorBoundary><KingMarchGame /></ErrorBoundary>} />
+          <Route path="/kid/knight-games" element={<ErrorBoundary><KnightGamesPage /></ErrorBoundary>} />
+          <Route path="/kid/knight-games/leap-frog" element={<ErrorBoundary><LeapFrogGame /></ErrorBoundary>} />
+          <Route path="/kid/knight-games/knight-sweep" element={<ErrorBoundary><KnightSweepGame /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>

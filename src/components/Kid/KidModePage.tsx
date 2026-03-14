@@ -229,6 +229,34 @@ export function KidModePage(): JSX.Element {
             <span className="text-2xl">{'\u265F'}</span>
           </button>
 
+          {/* Knight Games card — unlocked after bishop chapter */}
+          <button
+            onClick={() => void navigate('/kid/knight-games')}
+            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+            style={{
+              background: 'var(--color-surface)',
+              borderColor: journeyProgress?.chapters['bishop']?.completed
+                ? 'var(--color-accent)'
+                : 'var(--color-border)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              opacity: journeyProgress?.chapters['bishop']?.completed ? 1 : 0.6,
+            }}
+            data-testid="knight-games-card"
+          >
+            <span className="text-3xl">♞</span>
+            <div className="flex-1">
+              <div className="font-bold text-lg">Knight Games</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                {journeyProgress?.chapters['bishop']?.completed
+                  ? 'Leap Frog & Knight Sweep'
+                  : 'Complete Bishop chapter to unlock'}
+              </div>
+            </div>
+            {journeyProgress?.chapters['bishop']?.completed
+              ? <span className="text-2xl">🐸</span>
+              : <Lock size={20} style={{ color: 'var(--color-text-muted)' }} />}
+          </button>
+
           {/* Piece lesson cards */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {PIECE_LESSONS.map((lesson) => (
