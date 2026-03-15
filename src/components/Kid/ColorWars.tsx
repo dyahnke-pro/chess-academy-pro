@@ -191,7 +191,6 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
   }, [selectedSquare, legalMoves, levelConfig, pieces]);
 
   const bishopSquares = useMemo(() => findPieceSquares(pieces, 'B'), [pieces]);
-  const enemiesRemaining = useMemo(() => countEnemyPieces(pieces), [pieces]);
 
   return (
     <div

@@ -276,8 +276,10 @@ describe('KidModePage', () => {
 
   it('bishop game buttons are enabled when rook chapter is completed', async () => {
     const progress: JourneyProgress = {
-      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzleCorrect: 5, puzzleTotal: 5, completed: true } },
+      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzlesCorrect: 5, puzzlesCompleted: 5, completed: true, bestScore: 5, completedAt: null } },
       currentChapterId: 'bishop',
+      startedAt: new Date().toISOString(),
+      completedAt: null,
     };
     vi.mocked(getGameProgress).mockResolvedValue(progress);
     useAppStore.getState().setActiveProfile(createProfile());
@@ -291,8 +293,10 @@ describe('KidModePage', () => {
 
   it('clicking Bishop vs Pawns button shows the game', async () => {
     const progress: JourneyProgress = {
-      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzleCorrect: 5, puzzleTotal: 5, completed: true } },
+      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzlesCorrect: 5, puzzlesCompleted: 5, completed: true, bestScore: 5, completedAt: null } },
       currentChapterId: 'bishop',
+      startedAt: new Date().toISOString(),
+      completedAt: null,
     };
     vi.mocked(getGameProgress).mockResolvedValue(progress);
     useAppStore.getState().setActiveProfile(createProfile());
@@ -305,8 +309,10 @@ describe('KidModePage', () => {
 
   it('clicking Color Wars button shows the game', async () => {
     const progress: JourneyProgress = {
-      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzleCorrect: 5, puzzleTotal: 5, completed: true } },
+      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzlesCorrect: 5, puzzlesCompleted: 5, completed: true, bestScore: 5, completedAt: null } },
       currentChapterId: 'bishop',
+      startedAt: new Date().toISOString(),
+      completedAt: null,
     };
     vi.mocked(getGameProgress).mockResolvedValue(progress);
     useAppStore.getState().setActiveProfile(createProfile());
@@ -319,8 +325,10 @@ describe('KidModePage', () => {
 
   it('back from Bishop vs Pawns returns to menu', async () => {
     const progress: JourneyProgress = {
-      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzleCorrect: 5, puzzleTotal: 5, completed: true } },
+      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzlesCorrect: 5, puzzlesCompleted: 5, completed: true, bestScore: 5, completedAt: null } },
       currentChapterId: 'bishop',
+      startedAt: new Date().toISOString(),
+      completedAt: null,
     };
     vi.mocked(getGameProgress).mockResolvedValue(progress);
     useAppStore.getState().setActiveProfile(createProfile());
@@ -336,8 +344,10 @@ describe('KidModePage', () => {
 
   it('back from Color Wars returns to menu', async () => {
     const progress: JourneyProgress = {
-      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzleCorrect: 5, puzzleTotal: 5, completed: true } },
+      chapters: { rook: { chapterId: 'rook', lessonsCompleted: 3, puzzlesCorrect: 5, puzzlesCompleted: 5, completed: true, bestScore: 5, completedAt: null } },
       currentChapterId: 'bishop',
+      startedAt: new Date().toISOString(),
+      completedAt: null,
     };
     vi.mocked(getGameProgress).mockResolvedValue(progress);
     useAppStore.getState().setActiveProfile(createProfile());

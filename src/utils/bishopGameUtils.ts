@@ -27,11 +27,6 @@ export function isDarkSquare(square: string): boolean {
   return !isLightSquare(square);
 }
 
-/** Check if a piece character is a white piece (uppercase). */
-function isWhitePiece(piece: string): boolean {
-  return piece === piece.toUpperCase() && piece !== piece.toLowerCase();
-}
-
 /** Check if a piece character is a black piece (lowercase). */
 function isBlackPiece(piece: string): boolean {
   return piece === piece.toLowerCase() && piece !== piece.toUpperCase();

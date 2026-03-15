@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
+import { render, screen, fireEvent, act } from '../../test/utils';
 import { BishopVsPawns } from './BishopVsPawns';
 
 vi.mock('framer-motion', async (importOriginal) => {
