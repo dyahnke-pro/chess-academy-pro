@@ -50,7 +50,7 @@ interface RawPuzzle {
   nbPlays: number;
 }
 
-const PUZZLE_SEED_KEY = 'puzzles_seeded_v1';
+const PUZZLE_SEED_KEY = 'puzzles_seeded_v2';
 
 export async function isPuzzleSeeded(): Promise<boolean> {
   const record = await db.meta.get(PUZZLE_SEED_KEY);
@@ -63,26 +63,33 @@ export async function seedPuzzles(): Promise<void> {
   const defaults = createDefaultSrsFields();
   const today = new Date().toISOString().split('T')[0];
 
-  const records: PuzzleRecord[] = (puzzleData as RawPuzzle[]).map((p) => ({
-    id: p.id,
-    fen: p.fen,
-    moves: p.moves,
-    rating: p.rating,
-    themes: p.themes,
-    openingTags: p.openingTags,
-    popularity: p.popularity,
-    nbPlays: p.nbPlays,
-    srsInterval: defaults.interval,
-    srsEaseFactor: defaults.easeFactor,
-    srsRepetitions: defaults.repetitions,
-    srsDueDate: today,
-    srsLastReview: null,
-    userRating: 1200,
-    attempts: 0,
-    successes: 0,
-  }));
+  // Get existing puzzle IDs to preserve SRS progress
+  const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
 
-  await db.puzzles.bulkPut(records);
+  const records: PuzzleRecord[] = (puzzleData as RawPuzzle[])
+    .filter((p) => !existingIds.has(p.id))
+    .map((p) => ({
+      id: p.id,
+      fen: p.fen,
+      moves: p.moves,
+      rating: p.rating,
+      themes: p.themes,
+      openingTags: p.openingTags,
+      popularity: p.popularity,
+      nbPlays: p.nbPlays,
+      srsInterval: defaults.interval,
+      srsEaseFactor: defaults.easeFactor,
+      srsRepetitions: defaults.repetitions,
+      srsDueDate: today,
+      srsLastReview: null,
+      userRating: 1200,
+      attempts: 0,
+      successes: 0,
+    }));
+
+  if (records.length > 0) {
+    await db.puzzles.bulkAdd(records);
+  }
   await db.meta.put({ key: PUZZLE_SEED_KEY, value: 'true' });
 }
 

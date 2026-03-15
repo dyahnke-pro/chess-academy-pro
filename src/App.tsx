@@ -16,6 +16,7 @@ import { BoardTestPage } from './components/BoardTest/BoardTestPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
+import { AdaptivePuzzlePage } from './components/Puzzles/AdaptivePuzzlePage';
 import { GamesPage } from './components/Play/GamesPage';
 import { AnalysisBoardPage } from './components/Analysis/AnalysisBoardPage';
 import { CoachPage } from './components/Coach/CoachPage';
@@ -92,7 +93,8 @@ export function App(): JSX.Element {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
-          <Route path="/puzzles" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
+          <Route path="/puzzles" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
+          <Route path="/puzzles/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           <Route path="/play" element={<ErrorBoundary><GamesPage /></ErrorBoundary>} />
