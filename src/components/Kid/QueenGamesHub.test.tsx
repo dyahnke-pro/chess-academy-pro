@@ -47,20 +47,19 @@ describe('QueenGamesHub', () => {
     expect(screen.getByTestId('queen-games-loading')).toBeInTheDocument();
   });
 
-  it('shows locked state when knight chapter not completed', async () => {
+  it('shows game cards when progress is loaded', async () => {
     mockGetGameProgress.mockResolvedValue({
       chapters: { pawn: { chapterId: 'pawn', completed: true, lessonsCompleted: 3, puzzlesCompleted: 3, puzzlesCorrect: 3, bestScore: 3, completedAt: '2024-01-01' } },
       currentChapterId: 'rook',
       startedAt: '2024-01-01',
       completedAt: null,
     });
-    mockIsChapterUnlocked.mockReturnValue(false);
 
     render(<QueenGamesHub />);
     await waitFor(() => {
-      expect(screen.getByTestId('queen-games-locked')).toBeInTheDocument();
+      expect(screen.getByTestId('queen-army-card')).toBeInTheDocument();
     });
-    expect(screen.getByText(/Complete the Knight chapter/)).toBeInTheDocument();
+    expect(screen.getByTestId('queen-gauntlet-card')).toBeInTheDocument();
   });
 
   it('shows game cards when unlocked', async () => {

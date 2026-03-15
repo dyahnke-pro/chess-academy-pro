@@ -123,7 +123,7 @@ export function App(): JSX.Element {
         <Route element={<KidLayout />}>
           <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
           <Route path="/kid/journey" element={<ErrorBoundary><JourneyMapPage /></ErrorBoundary>} />
-          <Route path="/kid/journey/queen-games" element={<ErrorBoundary><QueenGamesHub /></ErrorBoundary>} />
+          <Route path="/kid/queen-games" element={<ErrorBoundary><QueenGamesHub /></ErrorBoundary>} />
           <Route path="/kid/journey/:chapterId" element={<ErrorBoundary><JourneyChapterPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale" element={<ErrorBoundary><FairyTaleMapPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale/:chapterId" element={<ErrorBoundary><FairyTaleChapterPage /></ErrorBoundary>} />

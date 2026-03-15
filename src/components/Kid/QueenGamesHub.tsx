@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { motion, MotionConfig } from 'framer-motion';
 import { voiceService } from '../../services/voiceService';
-import { getGameProgress, isChapterUnlocked } from '../../services/journeyService';
+import { getGameProgress } from '../../services/journeyService';
 import { QueenVsArmy } from './QueenVsArmy';
 import { QueensGauntlet } from './QueensGauntlet';
 import type { JourneyProgress } from '../../types';
-import { JOURNEY_CHAPTER_ORDER } from '../../types';
 
 type HubView = 'menu' | 'queen-vs-army' | 'queens-gauntlet';
 
@@ -30,8 +29,7 @@ export function QueenGamesHub(): JSX.Element {
   useEffect(() => {
     void getGameProgress('pawns-journey').then((progress: JourneyProgress | null) => {
       if (progress) {
-        const isUnlocked = isChapterUnlocked('queen', progress, JOURNEY_CHAPTER_ORDER);
-        setUnlocked(isUnlocked);
+        setUnlocked(true); // DEV: unlocked for testing
       }
       setLoading(false);
     });
@@ -51,7 +49,7 @@ export function QueenGamesHub(): JSX.Element {
     if (view !== 'menu') {
       setView('menu');
     } else {
-      void navigate('/kid/journey');
+      void navigate('/kid');
     }
   }, [view, navigate]);
 

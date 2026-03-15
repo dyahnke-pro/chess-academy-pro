@@ -116,7 +116,7 @@ export function GameMapPage({ config }: GameMapPageProps): JSX.Element {
         {config.chapters.map((chapter) => {
           const unlocked = progress
             ? isChapterUnlocked(chapter.id, progress, config.chapterOrder)
-            : chapter.id === config.chapterOrder[0];
+            : true; // DEV: all chapters unlocked for testing
           const chapterProgress = progress
             ? getChapterProgress(chapter.id, progress)
             : null;
@@ -125,7 +125,7 @@ export function GameMapPage({ config }: GameMapPageProps): JSX.Element {
           // Show Queen Games card after the knight chapter (for pawns-journey only)
           const showQueenGames =
             config.gameId === 'pawns-journey' && chapter.id === 'knight';
-          const knightCompleted = chapterProgress?.completed === true;
+          const knightCompleted = true; // DEV: unlocked for testing
 
           return (
             <Fragment key={chapter.id}>
@@ -176,7 +176,7 @@ export function GameMapPage({ config }: GameMapPageProps): JSX.Element {
 
               {showQueenGames && (
                 <button
-                  onClick={() => void navigate('/kid/journey/queen-games')}
+                  onClick={() => void navigate('/kid/queen-games')}
                   disabled={!knightCompleted}
                   className={[
                     'rounded-xl p-4 border-2 flex items-center gap-4 text-left transition-all ml-6',
