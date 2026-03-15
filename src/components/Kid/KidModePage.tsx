@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX, ArrowLeft, Map, Lock, Swords, Shield, Footprints } from 'lucide-react';
+import { Volume2, VolumeX, ArrowLeft, Map, Swords, Shield, Footprints, Gamepad2 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { getGameProgress, getGameCompletedChapterCount } from '../../services/journeyService';
-import { isPawnChapterCompleted } from '../../services/rookGameService';
 import { PAWNS_JOURNEY_CONFIG, FAIRY_TALE_CONFIG } from '../../data/kidGameConfigs';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { ChessPiece, JourneyProgress } from '../../types';
@@ -47,19 +46,11 @@ export function KidModePage(): JSX.Element {
   const [voiceOn, setVoiceOn] = useState(true);
   const [journeyProgress, setJourneyProgress] = useState<JourneyProgress | null>(null);
   const [fairyTaleProgress, setFairyTaleProgress] = useState<JourneyProgress | null>(null);
-  const [rookGamesUnlocked, setRookGamesUnlocked] = useState(false);
 
   useEffect(() => {
     void getGameProgress('pawns-journey').then((p) => setJourneyProgress(p));
     void getGameProgress('fairy-tale').then((p) => setFairyTaleProgress(p));
-    void isPawnChapterCompleted().then((done) => setRookGamesUnlocked(done));
   }, []);
-
-  // King games unlock after queen chapter is completed in Pawn's Journey
-  const kingGamesUnlocked = useMemo((): boolean => {
-    if (!journeyProgress) return false;
-    return journeyProgress.chapters['queen']?.completed === true;
-  }, [journeyProgress]);
 
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
@@ -180,84 +171,159 @@ export function KidModePage(): JSX.Element {
             <span className="text-2xl">{FAIRY_TALE_CONFIG.icon}</span>
           </button>
 
-          {/* Rook Games card */}
-          <button
-            onClick={() => void navigate('/kid/rook-games')}
-            disabled={!rookGamesUnlocked}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: rookGamesUnlocked ? 'var(--color-accent)' : 'var(--color-border)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-              opacity: rookGamesUnlocked ? 1 : 0.5,
-              cursor: rookGamesUnlocked ? 'pointer' : 'not-allowed',
-            }}
-            data-testid="rook-games-card"
-          >
-            <span className="text-3xl">{'\u265C'}</span>
-            <div className="flex-1">
-              <div className="font-bold text-lg">Rook Games</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                {rookGamesUnlocked
-                  ? 'Maze puzzles & capture challenges!'
-                  : 'Complete the Pawn chapter to unlock'}
-              </div>
-            </div>
-            {!rookGamesUnlocked && (
-              <Lock size={20} style={{ color: 'var(--color-text-muted)' }} />
-            )}
-          </button>
+          {/* Games section */}
+          <div className="flex items-center gap-2 mt-2">
+            <Gamepad2 size={24} style={{ color: 'var(--color-accent)' }} />
+            <h2 className="text-xl font-bold">Games</h2>
+          </div>
 
-          {/* Mini-Games card */}
-          <button
-            onClick={() => void navigate('/kid/mini-games')}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-            }}
-            data-testid="mini-games-card"
-          >
-            <Swords size={32} style={{ color: 'var(--color-accent)' }} />
-            <div className="flex-1">
-              <div className="font-bold text-lg">Pawn Games</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                Race and block with your pawns!
+          <div className="flex flex-col gap-3">
+            {/* Pawn Games */}
+            <button
+              onClick={() => void navigate('/kid/mini-games')}
+              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+              style={{
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-accent)',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              }}
+              data-testid="mini-games-card"
+            >
+              <Swords size={28} style={{ color: 'var(--color-accent)' }} />
+              <div className="flex-1">
+                <div className="font-bold text-lg">Pawn Games</div>
+                <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                  Pawn Wars & Blocker
+                </div>
               </div>
-            </div>
-            <span className="text-2xl">{'\u265F'}</span>
-          </button>
+              <span className="text-2xl">{'\u265F'}</span>
+            </button>
 
-          {/* Knight Games card — unlocked after bishop chapter */}
-          <button
-            onClick={() => void navigate('/kid/knight-games')}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: journeyProgress?.chapters['bishop']?.completed
-                ? 'var(--color-accent)'
-                : 'var(--color-border)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-              opacity: journeyProgress?.chapters['bishop']?.completed ? 1 : 0.6,
-            }}
-            data-testid="knight-games-card"
-          >
-            <span className="text-3xl">♞</span>
-            <div className="flex-1">
-              <div className="font-bold text-lg">Knight Games</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                {journeyProgress?.chapters['bishop']?.completed
-                  ? 'Leap Frog & Knight Sweep'
-                  : 'Complete Bishop chapter to unlock'}
+            {/* Knight Games */}
+            <button
+              onClick={() => void navigate('/kid/knight-games')}
+              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+              style={{
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-accent)',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              }}
+              data-testid="knight-games-card"
+            >
+              <span className="text-3xl">♞</span>
+              <div className="flex-1">
+                <div className="font-bold text-lg">Knight Games</div>
+                <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                  Leap Frog & Knight Sweep
+                </div>
               </div>
+              <span className="text-2xl">🐸</span>
+            </button>
+
+            {/* Rook Games */}
+            <button
+              onClick={() => void navigate('/kid/rook-games')}
+              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+              style={{
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-accent)',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              }}
+              data-testid="rook-games-card"
+            >
+              <span className="text-3xl">{'\u265C'}</span>
+              <div className="flex-1">
+                <div className="font-bold text-lg">Rook Games</div>
+                <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                  Rook Maze & Row Clearer
+                </div>
+              </div>
+            </button>
+
+            {/* Queen Games */}
+            <button
+              onClick={() => void navigate('/kid/queen-games')}
+              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+              style={{
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-accent)',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              }}
+              data-testid="queen-games-card"
+            >
+              <span className="text-3xl">♛</span>
+              <div className="flex-1">
+                <div className="font-bold text-lg">Queen Games</div>
+                <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                  Queen vs. Army & Queen's Gauntlet
+                </div>
+              </div>
+            </button>
+
+            {/* King Games */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                onClick={() => void navigate('/kid/king-escape')}
+                className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+                style={{
+                  background: 'var(--color-surface)',
+                  borderColor: 'var(--color-accent)',
+                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                }}
+                data-testid="king-escape-card"
+              >
+                <Shield size={28} style={{ color: 'var(--color-accent)' }} />
+                <div className="flex-1">
+                  <div className="font-bold">King Escape</div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    Save the king from check!
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => void navigate('/kid/king-march')}
+                className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+                style={{
+                  background: 'var(--color-surface)',
+                  borderColor: 'var(--color-accent)',
+                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                }}
+                data-testid="king-march-card"
+              >
+                <Footprints size={28} style={{ color: 'var(--color-accent)' }} />
+                <div className="flex-1">
+                  <div className="font-bold">King March</div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    March the king to rank 8!
+                  </div>
+                </div>
+              </button>
             </div>
-            {journeyProgress?.chapters['bishop']?.completed
-              ? <span className="text-2xl">🐸</span>
-              : <Lock size={20} style={{ color: 'var(--color-text-muted)' }} />}
-          </button>
+
+            {/* Find the King */}
+            <button
+              onClick={() => { setView('findKing'); setFindKingIdx(0); setFindKingScore(0); kidSpeak('Find the King! Where is the White King? Tap it!'); }}
+              className="rounded-xl p-5 border-2 text-center hover:opacity-80 transition-opacity"
+              style={{
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-accent)',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              }}
+              data-testid="find-king-btn"
+            >
+              <span className="text-2xl">{'👑'}</span>
+              <div className="font-bold text-lg mt-1">Find the King!</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Tap the King on the board</div>
+            </button>
+          </div>
 
           {/* Piece lesson cards */}
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-xl">📖</span>
+            <h2 className="text-xl font-bold">Piece Lessons</h2>
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {PIECE_LESSONS.map((lesson) => (
               <button
@@ -275,65 +341,6 @@ export function KidModePage(): JSX.Element {
               </button>
             ))}
           </div>
-
-          {/* King mini-games (unlock after queen chapter) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <button
-              onClick={() => kingGamesUnlocked && void navigate('/kid/king-escape')}
-              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
-              style={{
-                background: kingGamesUnlocked ? 'var(--color-surface)' : 'var(--color-bg)',
-                borderColor: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-border)',
-                opacity: kingGamesUnlocked ? 1 : 0.5,
-                cursor: kingGamesUnlocked ? 'pointer' : 'not-allowed',
-              }}
-              disabled={!kingGamesUnlocked}
-              data-testid="king-escape-card"
-            >
-              <Shield size={28} style={{ color: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-text-muted)' }} />
-              <div className="flex-1">
-                <div className="font-bold">King Escape</div>
-                <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                  {kingGamesUnlocked ? 'Save the king from check!' : 'Complete the Queen chapter to unlock'}
-                </div>
-              </div>
-              {!kingGamesUnlocked && <Lock size={16} style={{ color: 'var(--color-text-muted)' }} />}
-            </button>
-
-            <button
-              onClick={() => kingGamesUnlocked && void navigate('/kid/king-march')}
-              className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
-              style={{
-                background: kingGamesUnlocked ? 'var(--color-surface)' : 'var(--color-bg)',
-                borderColor: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-border)',
-                opacity: kingGamesUnlocked ? 1 : 0.5,
-                cursor: kingGamesUnlocked ? 'pointer' : 'not-allowed',
-              }}
-              disabled={!kingGamesUnlocked}
-              data-testid="king-march-card"
-            >
-              <Footprints size={28} style={{ color: kingGamesUnlocked ? 'var(--color-accent)' : 'var(--color-text-muted)' }} />
-              <div className="flex-1">
-                <div className="font-bold">King March</div>
-                <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                  {kingGamesUnlocked ? 'March the king to rank 8!' : 'Complete the Queen chapter to unlock'}
-                </div>
-              </div>
-              {!kingGamesUnlocked && <Lock size={16} style={{ color: 'var(--color-text-muted)' }} />}
-            </button>
-          </div>
-
-          {/* Find the King game */}
-          <button
-            onClick={() => { setView('findKing'); setFindKingIdx(0); setFindKingScore(0); kidSpeak('Find the King! Where is the White King? Tap it!'); }}
-            className="rounded-xl p-5 border text-center hover:opacity-80 transition-opacity"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-            data-testid="find-king-btn"
-          >
-            <span className="text-2xl">{'👑'}</span>
-            <div className="font-bold text-lg mt-1">Find the King!</div>
-            <div className="text-sm opacity-80">Tap the King on the board</div>
-          </button>
 
         </>
       )}
