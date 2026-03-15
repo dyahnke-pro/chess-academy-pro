@@ -4,8 +4,8 @@ import { KidPuzzlePage } from './KidPuzzlePage';
 import { useAppStore } from '../../stores/appStore';
 import type { UserProfile, PuzzleRecord } from '../../types';
 
-const mockGetKidPuzzles = vi.fn<[], Promise<PuzzleRecord[]>>();
-const mockSeedPuzzles = vi.fn<[], Promise<void>>();
+const mockGetKidPuzzles = vi.fn<() => Promise<PuzzleRecord[]>>();
+const mockSeedPuzzles = vi.fn<() => Promise<void>>();
 const mockRecordAttempt = vi.fn();
 
 vi.mock('../../services/puzzleService', () => ({
