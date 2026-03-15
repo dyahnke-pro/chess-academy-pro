@@ -120,7 +120,7 @@ export function createAdaptiveSession(difficulty: AdaptiveDifficulty): AdaptiveS
 
 export function processAdaptiveResult(
   session: AdaptiveSessionState,
-  puzzleRating: number,
+  _puzzleRating: number,
   correct: boolean,
   puzzleThemes: string[],
 ): AdaptiveSessionState {
