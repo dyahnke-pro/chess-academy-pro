@@ -44,6 +44,7 @@ import { KnightGamesPage } from './components/Kid/KnightGamesPage';
 import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
 import { QueenGamesHub } from './components/Kid/QueenGamesHub';
+import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
@@ -138,6 +139,7 @@ export function App(): JSX.Element {
           <Route path="/kid/knight-games" element={<ErrorBoundary><KnightGamesPage /></ErrorBoundary>} />
           <Route path="/kid/knight-games/leap-frog" element={<ErrorBoundary><LeapFrogGame /></ErrorBoundary>} />
           <Route path="/kid/knight-games/knight-sweep" element={<ErrorBoundary><KnightSweepGame /></ErrorBoundary>} />
+          <Route path="/kid/puzzles" element={<ErrorBoundary><KidPuzzlePage /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>

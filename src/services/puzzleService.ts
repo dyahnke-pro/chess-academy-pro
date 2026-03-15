@@ -1,7 +1,7 @@
 import { db } from '../db/schema';
 import { calculateNextInterval, createDefaultSrsFields } from './srsEngine';
 import puzzleData from '../data/puzzles.json';
-import type { PuzzleRecord, SrsGrade } from '../types';
+import type { PuzzleRecord, SrsGrade, CoachDifficulty } from '../types';
 
 // ─── Theme Mapping ──────────────────────────────────────────────────────────
 
@@ -394,6 +394,45 @@ export async function getPuzzlesForMode(
   }
 
   return getDailyPuzzles(userRating, limit);
+}
+
+// ─── Kid Mode Puzzles ────────────────────────────────────────────────────────
+
+interface KidDifficultyBracket {
+  minRating: number;
+  maxRating: number;
+}
+
+export const KID_DIFFICULTY_BRACKETS: Record<CoachDifficulty, KidDifficultyBracket> = {
+  easy:   { minRating: 0,    maxRating: 799  },
+  medium: { minRating: 800,  maxRating: 1099 },
+  hard:   { minRating: 1100, maxRating: 1399 },
+};
+
+/**
+ * Returns puzzles for kid mode filtered by difficulty bracket.
+ * Prioritizes unattempted puzzles and shuffles results for variety.
+ */
+export async function getKidPuzzles(
+  difficulty: CoachDifficulty,
+  limit: number = 10,
+): Promise<PuzzleRecord[]> {
+  const bracket = KID_DIFFICULTY_BRACKETS[difficulty];
+  const puzzles = await db.puzzles
+    .where('rating')
+    .between(bracket.minRating, bracket.maxRating, true, true)
+    .toArray();
+
+  // Sort so unattempted puzzles come first, then least-attempted
+  const sorted = puzzles.sort((a, b) => a.attempts - b.attempts);
+
+  // Take a pool and shuffle for variety
+  const pool = sorted.slice(0, Math.min(limit * 3, sorted.length));
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, limit);
 }
 
 // ─── Stats ──────────────────────────────────────────────────────────────────

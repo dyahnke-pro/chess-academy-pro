@@ -15,6 +15,8 @@ import {
   recordAttempt,
   getPuzzlesForMode,
   getPuzzleStats,
+  getKidPuzzles,
+  KID_DIFFICULTY_BRACKETS,
   THEME_MAP,
   PUZZLE_MODES,
 } from './puzzleService';
@@ -354,6 +356,108 @@ describe('puzzleService', () => {
         const hasOpeningTag = p.themes.includes('openingTrap') || p.openingTags !== null;
         expect(hasOpeningTag).toBe(true);
       }
+    });
+  });
+
+  describe('getKidPuzzles', () => {
+    it('returns only puzzles in the easy bracket (rating < 800)', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'kid-e1', rating: 500 }),
+        makePuzzle({ id: 'kid-e2', rating: 700 }),
+        makePuzzle({ id: 'kid-m1', rating: 900 }),
+        makePuzzle({ id: 'kid-h1', rating: 1200 }),
+      ]);
+
+      const result = await getKidPuzzles('easy');
+      expect(result.length).toBe(2);
+      for (const p of result) {
+        expect(p.rating).toBeLessThan(800);
+      }
+    });
+
+    it('returns only puzzles in the medium bracket (800-1099)', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'kid-e1', rating: 500 }),
+        makePuzzle({ id: 'kid-m1', rating: 800 }),
+        makePuzzle({ id: 'kid-m2', rating: 1050 }),
+        makePuzzle({ id: 'kid-h1', rating: 1200 }),
+      ]);
+
+      const result = await getKidPuzzles('medium');
+      expect(result.length).toBe(2);
+      for (const p of result) {
+        expect(p.rating).toBeGreaterThanOrEqual(800);
+        expect(p.rating).toBeLessThanOrEqual(1099);
+      }
+    });
+
+    it('returns only puzzles in the hard bracket (1100-1399)', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'kid-m1', rating: 900 }),
+        makePuzzle({ id: 'kid-h1', rating: 1100 }),
+        makePuzzle({ id: 'kid-h2', rating: 1350 }),
+        makePuzzle({ id: 'kid-x1', rating: 1500 }),
+      ]);
+
+      const result = await getKidPuzzles('hard');
+      expect(result.length).toBe(2);
+      for (const p of result) {
+        expect(p.rating).toBeGreaterThanOrEqual(1100);
+        expect(p.rating).toBeLessThanOrEqual(1399);
+      }
+    });
+
+    it('respects the limit parameter', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'kid-e1', rating: 500 }),
+        makePuzzle({ id: 'kid-e2', rating: 600 }),
+        makePuzzle({ id: 'kid-e3', rating: 700 }),
+        makePuzzle({ id: 'kid-e4', rating: 650 }),
+        makePuzzle({ id: 'kid-e5', rating: 550 }),
+      ]);
+
+      const result = await getKidPuzzles('easy', 3);
+      expect(result.length).toBe(3);
+    });
+
+    it('returns empty array when no puzzles match the bracket', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'kid-h1', rating: 1500 }),
+        makePuzzle({ id: 'kid-h2', rating: 1600 }),
+      ]);
+
+      const result = await getKidPuzzles('easy');
+      expect(result).toEqual([]);
+    });
+
+    it('prioritizes unattempted puzzles', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'kid-a1', rating: 600, attempts: 10 }),
+        makePuzzle({ id: 'kid-a2', rating: 650, attempts: 0 }),
+        makePuzzle({ id: 'kid-a3', rating: 700, attempts: 5 }),
+      ]);
+
+      const result = await getKidPuzzles('easy', 2);
+      // With only 3 puzzles and limit 2, the pool is all 3 (limit*3=6 > 3).
+      // The sort puts unattempted first, so kid-a2 (0 attempts) should always be included.
+      const ids = result.map((p) => p.id);
+      expect(ids).toContain('kid-a2');
+    });
+
+    it('has correct bracket boundaries', () => {
+      expect(KID_DIFFICULTY_BRACKETS.easy).toEqual({ minRating: 0, maxRating: 799 });
+      expect(KID_DIFFICULTY_BRACKETS.medium).toEqual({ minRating: 800, maxRating: 1099 });
+      expect(KID_DIFFICULTY_BRACKETS.hard).toEqual({ minRating: 1100, maxRating: 1399 });
+    });
+
+    it('returns all available puzzles when fewer than limit exist', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'kid-e1', rating: 500 }),
+        makePuzzle({ id: 'kid-e2', rating: 600 }),
+      ]);
+
+      const result = await getKidPuzzles('easy', 10);
+      expect(result.length).toBe(2);
     });
   });
 

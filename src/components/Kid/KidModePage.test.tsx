@@ -360,4 +360,13 @@ describe('KidModePage', () => {
     fireEvent.click(screen.getByTestId('cw-back'));
     expect(screen.getByTestId('kid-mode-page')).toBeInTheDocument();
   });
+
+  it('renders puzzle quest card', () => {
+    useAppStore.getState().setActiveProfile(createProfile());
+    render(<KidModePage />);
+
+    expect(screen.getByTestId('puzzle-quest-card')).toBeInTheDocument();
+    expect(screen.getByText('Puzzle Quest')).toBeInTheDocument();
+    expect(screen.getByText('Solve chess puzzles and become a puzzle star!')).toBeInTheDocument();
+  });
 });
