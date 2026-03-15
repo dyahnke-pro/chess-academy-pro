@@ -152,7 +152,7 @@ describe('KidPuzzlePage', () => {
   });
 
   it('starts puzzles and transitions to playing phase', async () => {
-    const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600), makePuzzle('p3', 700)];
+    const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600)];
     mockGetKidPuzzles.mockResolvedValue(puzzles);
 
     render(<KidPuzzlePage />);
@@ -163,7 +163,6 @@ describe('KidPuzzlePage', () => {
     });
 
     expect(screen.getByTestId('puzzle-progress')).toBeInTheDocument();
-    expect(screen.getByText('Puzzle 1 of 3')).toBeInTheDocument();
     expect(screen.getByTestId('puzzle-solved-count')).toHaveTextContent('Solved: 0');
   });
 
@@ -178,7 +177,7 @@ describe('KidPuzzlePage', () => {
     });
   });
 
-  it('shows between phase with correct message after solving', async () => {
+  it('shows result overlay after solving correctly', async () => {
     const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600)];
     mockGetKidPuzzles.mockResolvedValue(puzzles);
 
@@ -191,11 +190,11 @@ describe('KidPuzzlePage', () => {
 
     fireEvent.click(screen.getByTestId('complete-correct'));
 
+    expect(screen.getByTestId('puzzle-result-overlay')).toBeInTheDocument();
     expect(screen.getByTestId('puzzle-result-message')).toHaveTextContent('Correct!');
-    expect(screen.getByTestId('next-puzzle-btn')).toBeInTheDocument();
   });
 
-  it('shows between phase with incorrect message after failing', async () => {
+  it('shows result overlay after failing', async () => {
     const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600)];
     mockGetKidPuzzles.mockResolvedValue(puzzles);
 
@@ -208,10 +207,11 @@ describe('KidPuzzlePage', () => {
 
     fireEvent.click(screen.getByTestId('complete-incorrect'));
 
+    expect(screen.getByTestId('puzzle-result-overlay')).toBeInTheDocument();
     expect(screen.getByTestId('puzzle-result-message')).toHaveTextContent('Good Try!');
   });
 
-  it('advances to next puzzle when clicking Next Puzzle', async () => {
+  it('auto-advances to next puzzle after delay', async () => {
     const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600)];
     mockGetKidPuzzles.mockResolvedValue(puzzles);
 
@@ -222,15 +222,21 @@ describe('KidPuzzlePage', () => {
       expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('complete-correct'));
-    fireEvent.click(screen.getByTestId('next-puzzle-btn'));
+    expect(screen.getByTestId('puzzle-board')).toHaveAttribute('data-puzzle-id', 'p1');
 
-    expect(screen.getByTestId('puzzle-board')).toHaveAttribute('data-puzzle-id', 'p2');
-    expect(screen.getByText('Puzzle 2 of 2')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('complete-correct'));
+    expect(screen.getByTestId('puzzle-result-overlay')).toBeInTheDocument();
+
+    // Wait for auto-advance (2s timer)
+    await waitFor(() => {
+      expect(screen.getByTestId('puzzle-board')).toHaveAttribute('data-puzzle-id', 'p2');
+    }, { timeout: 3000 });
+
+    expect(screen.queryByTestId('puzzle-result-overlay')).not.toBeInTheDocument();
   });
 
-  it('shows complete summary after last puzzle', async () => {
-    const puzzles = [makePuzzle('p1', 500)];
+  it('has a Done button that returns to select phase', async () => {
+    const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600)];
     mockGetKidPuzzles.mockResolvedValue(puzzles);
 
     render(<KidPuzzlePage />);
@@ -240,48 +246,7 @@ describe('KidPuzzlePage', () => {
       expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('complete-correct'));
-
-    expect(screen.getByTestId('puzzle-complete-summary')).toBeInTheDocument();
-    expect(screen.getByText('All Done!')).toBeInTheDocument();
-    expect(screen.getByText(/1 out of 1/)).toBeInTheDocument();
-  });
-
-  it('play again button reloads puzzles', async () => {
-    const puzzles = [makePuzzle('p1', 500)];
-    mockGetKidPuzzles.mockResolvedValue(puzzles);
-
-    render(<KidPuzzlePage />);
-    fireEvent.click(screen.getByTestId('start-puzzle-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('complete-correct'));
-    expect(screen.getByTestId('play-again-btn')).toBeInTheDocument();
-
-    mockGetKidPuzzles.mockResolvedValue([makePuzzle('p2', 600)]);
-    fireEvent.click(screen.getByTestId('play-again-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
-    });
-  });
-
-  it('change level button returns to select phase', async () => {
-    const puzzles = [makePuzzle('p1', 500)];
-    mockGetKidPuzzles.mockResolvedValue(puzzles);
-
-    render(<KidPuzzlePage />);
-    fireEvent.click(screen.getByTestId('start-puzzle-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('complete-correct'));
-    fireEvent.click(screen.getByTestId('change-level-btn'));
+    fireEvent.click(screen.getByTestId('done-btn'));
 
     expect(screen.getByTestId('difficulty-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('start-puzzle-btn')).toBeInTheDocument();
@@ -298,32 +263,6 @@ describe('KidPuzzlePage', () => {
     });
   });
 
-  it('tracks solved count correctly', async () => {
-    const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600), makePuzzle('p3', 700)];
-    mockGetKidPuzzles.mockResolvedValue(puzzles);
-
-    render(<KidPuzzlePage />);
-    fireEvent.click(screen.getByTestId('start-puzzle-btn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
-    });
-
-    // Solve first puzzle correctly
-    fireEvent.click(screen.getByTestId('complete-correct'));
-    fireEvent.click(screen.getByTestId('next-puzzle-btn'));
-
-    // Fail second puzzle
-    fireEvent.click(screen.getByTestId('complete-incorrect'));
-    fireEvent.click(screen.getByTestId('next-puzzle-btn'));
-
-    // Solve third puzzle correctly — this is the last so it goes to complete
-    fireEvent.click(screen.getByTestId('complete-correct'));
-
-    expect(screen.getByTestId('puzzle-complete-summary')).toBeInTheDocument();
-    expect(screen.getByText(/2 out of 3/)).toBeInTheDocument();
-  });
-
   it('records attempt via puzzleService', async () => {
     const puzzles = [makePuzzle('p1', 500), makePuzzle('p2', 600)];
     mockGetKidPuzzles.mockResolvedValue(puzzles);
@@ -338,5 +277,21 @@ describe('KidPuzzlePage', () => {
     fireEvent.click(screen.getByTestId('complete-correct'));
 
     expect(mockRecordAttempt).toHaveBeenCalledWith('p1', true, 800, 'good');
+  });
+
+  it('displays Playing as white/black based on puzzle FEN', async () => {
+    // FEN has 'b' to move → user plays white
+    const whitePuzzle = makePuzzle('pw', 500);
+    whitePuzzle.fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
+    mockGetKidPuzzles.mockResolvedValue([whitePuzzle, makePuzzle('p2', 500)]);
+
+    render(<KidPuzzlePage />);
+    fireEvent.click(screen.getByTestId('start-puzzle-btn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Playing as white/)).toBeInTheDocument();
   });
 });

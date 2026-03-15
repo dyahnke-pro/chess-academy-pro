@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
@@ -8,7 +8,7 @@ import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
 import { useAppStore } from '../../stores/appStore';
 import type { CoachDifficulty, PuzzleRecord } from '../../types';
 
-type KidPuzzlePhase = 'select' | 'loading' | 'playing' | 'between' | 'complete';
+type KidPuzzlePhase = 'select' | 'loading' | 'playing';
 
 const CORRECT_MESSAGES = [
   'Amazing job! You are a puzzle star!',
@@ -31,7 +31,9 @@ const DIFFICULTY_INFO: Record<CoachDifficulty, { emoji: string; label: string; d
   hard:   { emoji: '🏆', label: 'Champion', description: 'Challenge yourself!' },
 };
 
-const PUZZLES_PER_SESSION = 10;
+const BATCH_SIZE = 20;
+const REFETCH_THRESHOLD = 5;
+const AUTO_ADVANCE_DELAY = 2000;
 
 export function KidPuzzlePage(): JSX.Element {
   const navigate = useNavigate();
@@ -42,8 +44,11 @@ export function KidPuzzlePage(): JSX.Element {
   const [puzzles, setPuzzles] = useState<PuzzleRecord[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solvedCount, setSolvedCount] = useState(0);
-  const [lastResult, setLastResult] = useState<'correct' | 'incorrect' | null>(null);
+  const [totalAttempted, setTotalAttempted] = useState(0);
+  const [resultOverlay, setResultOverlay] = useState<'correct' | 'incorrect' | null>(null);
   const [voiceOn, setVoiceOn] = useState(true);
+  const isFetchingRef = useRef(false);
+  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
@@ -59,10 +64,28 @@ export function KidPuzzlePage(): JSX.Element {
     kidSpeak('Welcome to Puzzle Quest! Pick your level and start solving!');
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Cleanup auto-advance timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoAdvanceTimerRef.current) clearTimeout(autoAdvanceTimerRef.current);
+    };
+  }, []);
+
+  const fetchMorePuzzles = useCallback(async (diff: CoachDifficulty): Promise<PuzzleRecord[]> => {
+    if (isFetchingRef.current) return [];
+    isFetchingRef.current = true;
+    try {
+      await seedPuzzles();
+      const fetched = await getKidPuzzles(diff, BATCH_SIZE);
+      return fetched;
+    } finally {
+      isFetchingRef.current = false;
+    }
+  }, []);
+
   const handleStart = useCallback(async (): Promise<void> => {
     setPhase('loading');
-    await seedPuzzles();
-    const fetched = await getKidPuzzles(difficulty, PUZZLES_PER_SESSION);
+    const fetched = await fetchMorePuzzles(difficulty);
     if (fetched.length === 0) {
       kidSpeak('No puzzles available for this level. Try another!');
       setPhase('select');
@@ -71,60 +94,76 @@ export function KidPuzzlePage(): JSX.Element {
     setPuzzles(fetched);
     setCurrentIndex(0);
     setSolvedCount(0);
-    setLastResult(null);
+    setTotalAttempted(0);
+    setResultOverlay(null);
     setPhase('playing');
     kidSpeak('Here is your first puzzle! Find the best move.');
-  }, [difficulty, kidSpeak]);
+  }, [difficulty, kidSpeak, fetchMorePuzzles]);
+
+  const advanceToNext = useCallback((): void => {
+    setResultOverlay(null);
+    setCurrentIndex((prev) => prev + 1);
+  }, []);
+
+  // Fetch more puzzles when getting close to the end
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    const remaining = puzzles.length - currentIndex;
+    if (remaining <= REFETCH_THRESHOLD && !isFetchingRef.current) {
+      void fetchMorePuzzles(difficulty).then((newPuzzles) => {
+        if (newPuzzles.length > 0) {
+          setPuzzles((prev) => [...prev, ...newPuzzles]);
+        }
+      });
+    }
+  }, [currentIndex, puzzles.length, phase, difficulty, fetchMorePuzzles]);
 
   const handlePuzzleComplete = useCallback((correct: boolean): void => {
     if (correct) setSolvedCount((c) => c + 1);
-    setLastResult(correct ? 'correct' : 'incorrect');
+    setTotalAttempted((t) => t + 1);
+    setResultOverlay(correct ? 'correct' : 'incorrect');
 
     // Record the attempt
     if (activeProfile) {
       const puzzle = puzzles[currentIndex];
-      void recordAttempt(
-        puzzle.id,
-        correct,
-        activeProfile.puzzleRating,
-        correct ? 'good' : 'again',
-      );
+      if (puzzle) {
+        void recordAttempt(
+          puzzle.id,
+          correct,
+          activeProfile.puzzleRating,
+          correct ? 'good' : 'again',
+        );
+      }
     }
 
-    const isLast = currentIndex >= puzzles.length - 1;
-    if (isLast) {
-      const finalSolved = correct ? solvedCount + 1 : solvedCount;
-      setPhase('complete');
-      kidSpeak(`All done! You solved ${finalSolved} out of ${puzzles.length} puzzles!`);
-    } else {
-      setPhase('between');
-      const messages = correct ? CORRECT_MESSAGES : INCORRECT_MESSAGES;
-      const msg = messages[Math.floor(Math.random() * messages.length)];
-      kidSpeak(msg);
+    const messages = correct ? CORRECT_MESSAGES : INCORRECT_MESSAGES;
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    kidSpeak(msg);
+
+    // Auto-advance to next puzzle
+    autoAdvanceTimerRef.current = setTimeout(() => {
+      advanceToNext();
+    }, AUTO_ADVANCE_DELAY);
+  }, [puzzles, currentIndex, activeProfile, kidSpeak, advanceToNext]);
+
+  const handleDone = useCallback((): void => {
+    if (autoAdvanceTimerRef.current) {
+      clearTimeout(autoAdvanceTimerRef.current);
+      autoAdvanceTimerRef.current = null;
     }
-  }, [puzzles, currentIndex, solvedCount, activeProfile, kidSpeak]);
-
-  const handleNextPuzzle = useCallback((): void => {
-    setCurrentIndex((i) => i + 1);
-    setLastResult(null);
-    setPhase('playing');
-    kidSpeak('Next puzzle! You can do it!');
-  }, [kidSpeak]);
-
-  const handlePlayAgain = useCallback((): void => {
-    void handleStart();
-  }, [handleStart]);
-
-  const handleChangeLevel = useCallback((): void => {
     setPhase('select');
     setPuzzles([]);
     setCurrentIndex(0);
-    setSolvedCount(0);
-    setLastResult(null);
+    setResultOverlay(null);
   }, []);
 
   const currentPuzzle = puzzles[currentIndex] as PuzzleRecord | undefined;
   const info = DIFFICULTY_INFO[difficulty];
+
+  // Determine the user's color for the current puzzle (for display purposes)
+  const userColor = currentPuzzle
+    ? (currentPuzzle.fen.split(' ')[1] === 'w' ? 'black' : 'white')
+    : 'white';
 
   return (
     <div
@@ -163,6 +202,31 @@ export function KidPuzzlePage(): JSX.Element {
       {/* Select Phase */}
       {phase === 'select' && (
         <div className="flex flex-col gap-6 items-center">
+          {/* Show stats if returning from a session */}
+          {totalAttempted > 0 && (
+            <div
+              className="rounded-2xl p-6 border-2 text-center w-full max-w-md"
+              style={{
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-accent)',
+                boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
+              }}
+              data-testid="puzzle-session-stats"
+            >
+              <span className="text-4xl">🎉</span>
+              <p className="text-lg font-bold mt-2">
+                Solved {solvedCount} of {totalAttempted} puzzles!
+              </p>
+              <p className="text-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>
+                {solvedCount === totalAttempted
+                  ? 'Perfect score! You are a puzzle champion!'
+                  : solvedCount > totalAttempted / 2
+                    ? 'Great job! Keep practicing!'
+                    : 'Every puzzle makes you stronger!'}
+              </p>
+            </div>
+          )}
+
           <div
             className="rounded-2xl p-6 border-2 text-center w-full max-w-md"
             style={{
@@ -205,124 +269,77 @@ export function KidPuzzlePage(): JSX.Element {
 
       {/* Playing Phase */}
       {phase === 'playing' && currentPuzzle && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 relative">
           <div className="flex items-center justify-between" data-testid="puzzle-progress">
             <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
-              Puzzle {currentIndex + 1} of {puzzles.length}
+              Puzzle {totalAttempted + 1} · Playing as {userColor}
             </span>
-            <span className="text-sm font-medium" data-testid="puzzle-solved-count">
-              Solved: {solvedCount}
-            </span>
-          </div>
-
-          {/* Progress bar */}
-          <div
-            className="w-full h-2 rounded-full overflow-hidden"
-            style={{ background: 'var(--color-border)' }}
-          >
-            <div
-              className="h-full rounded-full transition-all duration-300"
-              style={{
-                width: `${((currentIndex) / puzzles.length) * 100}%`,
-                background: 'var(--color-accent)',
-              }}
-            />
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium" data-testid="puzzle-solved-count">
+                Solved: {solvedCount}
+              </span>
+              <button
+                onClick={handleDone}
+                className="px-3 py-1 rounded-lg text-sm font-medium border transition-opacity hover:opacity-80"
+                style={{
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-muted)',
+                  background: 'var(--color-surface)',
+                }}
+                data-testid="done-btn"
+              >
+                Done
+              </button>
+            </div>
           </div>
 
           <PuzzleBoard
             puzzle={currentPuzzle}
             onComplete={handlePuzzleComplete}
           />
+
+          {/* Result overlay */}
+          {resultOverlay && (
+            <div
+              className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+              data-testid="puzzle-result-overlay"
+            >
+              <div
+                className="rounded-2xl px-8 py-6 text-center shadow-lg"
+                style={{
+                  background: resultOverlay === 'correct'
+                    ? 'rgba(34, 197, 94, 0.95)'
+                    : 'rgba(239, 68, 68, 0.9)',
+                  color: 'white',
+                }}
+              >
+                <span className="text-4xl">
+                  {resultOverlay === 'correct' ? '⭐' : '💪'}
+                </span>
+                <p className="text-xl font-bold mt-2" data-testid="puzzle-result-message">
+                  {resultOverlay === 'correct' ? 'Correct!' : 'Good Try!'}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Between Phase */}
-      {phase === 'between' && (
-        <div className="flex flex-col items-center gap-6">
-          <div
-            className="rounded-2xl p-8 border-2 text-center w-full max-w-md"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
-            }}
-          >
-            <span className="text-5xl">
-              {lastResult === 'correct' ? '⭐' : '💪'}
-            </span>
-            <p className="text-xl font-bold mt-4" data-testid="puzzle-result-message">
-              {lastResult === 'correct' ? 'Correct!' : 'Good Try!'}
-            </p>
-            <p className="mt-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-              Solved: {solvedCount} of {puzzles.length}
-            </p>
-          </div>
-
+      {/* No more puzzles fallback */}
+      {phase === 'playing' && !currentPuzzle && (
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-lg font-medium">No more puzzles at this level!</p>
           <button
-            onClick={handleNextPuzzle}
-            className="px-8 py-3 rounded-xl text-lg font-bold transition-opacity hover:opacity-80"
+            onClick={handleDone}
+            className="px-6 py-3 rounded-xl font-bold transition-opacity hover:opacity-80"
             style={{
               background: 'var(--color-accent)',
               color: 'var(--color-bg)',
             }}
-            data-testid="next-puzzle-btn"
+            data-testid="change-level-btn"
           >
-            Next Puzzle →
+            Choose Another Level
           </button>
-        </div>
-      )}
-
-      {/* Complete Phase */}
-      {phase === 'complete' && (
-        <div className="flex flex-col items-center gap-6">
-          <div
-            className="rounded-2xl p-8 border-2 text-center w-full max-w-md"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
-            }}
-            data-testid="puzzle-complete-summary"
-          >
-            <span className="text-5xl">🎉</span>
-            <p className="text-2xl font-bold mt-4">All Done!</p>
-            <p className="text-lg mt-2">
-              You solved {solvedCount} out of {puzzles.length} puzzles!
-            </p>
-            <p className="mt-1 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-              {solvedCount === puzzles.length
-                ? 'Perfect score! You are a puzzle champion!'
-                : solvedCount > puzzles.length / 2
-                  ? 'Great job! Keep practicing!'
-                  : 'Every puzzle makes you stronger!'}
-            </p>
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={handlePlayAgain}
-              className="px-6 py-3 rounded-xl font-bold transition-opacity hover:opacity-80"
-              style={{
-                background: 'var(--color-accent)',
-                color: 'var(--color-bg)',
-              }}
-              data-testid="play-again-btn"
-            >
-              Play Again
-            </button>
-            <button
-              onClick={handleChangeLevel}
-              className="px-6 py-3 rounded-xl font-bold border-2 transition-opacity hover:opacity-80"
-              style={{
-                borderColor: 'var(--color-accent)',
-                color: 'var(--color-accent)',
-                background: 'var(--color-surface)',
-              }}
-              data-testid="change-level-btn"
-            >
-              Change Level
-            </button>
-          </div>
         </div>
       )}
     </div>
