@@ -10,6 +10,7 @@ import {
   Baby,
   Search,
   GraduationCap,
+  Puzzle,
   Menu,
   X,
   MessageCircle,
@@ -31,6 +32,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
+  { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
   { to: '/play', label: 'Play', icon: Swords },
   { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/games', label: 'Games', icon: Database },

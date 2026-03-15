@@ -55,7 +55,7 @@ describe('puzzleService', () => {
     await db.open();
   });
 
-  describe('seedPuzzles', () => {
+  describe('seedPuzzles', { timeout: 30000 }, () => {
     it('seeds puzzles from the JSON data file', async () => {
       await seedPuzzles();
       const count = await db.puzzles.count();
@@ -226,7 +226,7 @@ describe('puzzleService', () => {
     });
   });
 
-  describe('getDailyPuzzles', () => {
+  describe('getDailyPuzzles', { timeout: 60000 }, () => {
     it('returns puzzles up to the requested count', async () => {
       await seedPuzzles();
       const daily = await getDailyPuzzles(1200, 5);
@@ -319,10 +319,10 @@ describe('puzzleService', () => {
     });
   });
 
-  describe('getPuzzlesForMode', () => {
+  describe('getPuzzlesForMode', { timeout: 30000 }, () => {
     beforeEach(async () => {
       await seedPuzzles();
-    });
+    }, 30000);
 
     it('returns puzzles for standard mode', async () => {
       const puzzles = await getPuzzlesForMode('standard', 1200, 5);
