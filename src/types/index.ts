@@ -78,6 +78,20 @@ export interface OpeningRecord {
   linesPerfected?: number[];
   // Favorites (WO-3)
   isFavorite: boolean;
+  // Pro repertoire link (null for personal/ECO openings)
+  proPlayerId?: string | null;
+}
+
+// ─── Pro Repertoires ────────────────────────────────────────────────────────
+
+export interface ProPlayer {
+  id: string;
+  name: string;
+  title: string;
+  rating: number;
+  style: string;
+  description: string;
+  imageInitials: string;
 }
 
 // ─── DB Meta ──────────────────────────────────────────────────────────────────

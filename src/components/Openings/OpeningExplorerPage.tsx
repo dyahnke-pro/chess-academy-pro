@@ -10,9 +10,10 @@ import {
 import { seedDatabase } from '../../services/dataLoader';
 import { OpeningCard } from './OpeningCard';
 import type { OpeningRecord } from '../../types';
-import { Search, BookOpen, Library, ChevronDown, ChevronRight, Star } from 'lucide-react';
+import { ProRepertoiresTab } from './ProRepertoiresTab';
+import { Search, BookOpen, Library, ChevronDown, ChevronRight, Star, Users } from 'lucide-react';
 
-type TabMode = 'repertoire' | 'all';
+type TabMode = 'repertoire' | 'all' | 'pro';
 
 const ECO_LETTERS = ['A', 'B', 'C', 'D', 'E'] as const;
 
@@ -155,6 +156,18 @@ export function OpeningExplorerPage(): JSX.Element {
           <Library size={14} />
           All Openings
         </button>
+        <button
+          onClick={() => setTab('pro')}
+          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+            tab === 'pro'
+              ? 'bg-theme-accent text-white'
+              : 'text-theme-text-muted hover:text-theme-text'
+          }`}
+          data-testid="tab-pro"
+        >
+          <Users size={14} />
+          Pro Repertoires
+        </button>
       </div>
 
       {/* Search bar */}
@@ -256,6 +269,9 @@ export function OpeningExplorerPage(): JSX.Element {
           )}
         </>
       )}
+
+      {/* ─── Pro Repertoires tab ──────────────────────────────────────────── */}
+      {tab === 'pro' && <ProRepertoiresTab />}
 
       {/* ─── All Openings tab ────────────────────────────────────────────── */}
       {tab === 'all' && (

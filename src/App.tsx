@@ -49,6 +49,7 @@ import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
 import { ImportPage } from './components/Games/ImportPage';
+import { ProPlayerPage } from './components/Openings/ProPlayerPage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -94,6 +95,8 @@ export function App(): JSX.Element {
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           <Route path="/puzzles" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
+          <Route path="/openings/pro/:playerId" element={<ErrorBoundary><ProPlayerPage /></ErrorBoundary>} />
+          <Route path="/openings/pro/:playerId/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           <Route path="/play" element={<ErrorBoundary><GamesPage /></ErrorBoundary>} />
           <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
