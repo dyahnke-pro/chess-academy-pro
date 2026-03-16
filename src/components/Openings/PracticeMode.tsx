@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChessBoard } from '../Board/ChessBoard';
+import { BoardControls } from '../Board/BoardControls';
 import { ExplanationCard } from './ExplanationCard';
 import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -13,6 +14,7 @@ import {
   markLinePerfected,
 } from '../../services/openingService';
 import { speechService } from '../../services/speechService';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import type { OpeningRecord } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -20,7 +22,6 @@ import type { MoveQuality } from '../Board/ChessBoard';
 import {
   ArrowRight,
   RotateCcw,
-  Undo2,
   CheckCircle,
   XCircle,
   Trophy,
@@ -75,6 +76,11 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
   const { settings } = useSettings();
   const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
   const { playCelebration, playEncouragement } = usePieceSound();
+
+  // Stockfish eval state
+  const [latestEval, setLatestEval] = useState<number | null>(null);
+  const [latestIsMate, setLatestIsMate] = useState(false);
+  const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
 
   const isPlayerTurn = useCallback(
     (idx: number): boolean => {
@@ -209,6 +215,33 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
     setBoardKey((k) => k + 1);
   }, [resetHints]);
 
+  // Analyze position when it changes
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
+        if (!cancelled) {
+          setLatestEval(analysis.evaluation);
+          setLatestIsMate(analysis.isMate);
+          setLatestMateIn(analysis.mateIn);
+        }
+      } catch {
+        // Stockfish not ready yet
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [currentFen]);
+
+  // Auto-takeback: revert wrong move after brief delay
+  useEffect(() => {
+    if (!showWrongMove) return;
+    const timer = setTimeout(() => {
+      handleUndo();
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, [showWrongMove, handleUndo]);
+
   const handleRetry = useCallback((): void => {
     setCurrentMoveIndex(0);
     setBoardKey((k) => k + 1);
@@ -319,7 +352,7 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
       </div>
 
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-center px-2 py-2">
+      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
           <div className="relative">
             <ChessBoard
@@ -327,9 +360,13 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
               initialFen={currentFen}
               orientation={playerColor}
               interactive={isPlayerTurn(currentMoveIndex) && !showWrongMove}
-              showFlipButton={false}
+              showFlipButton={true}
               showUndoButton={false}
               showResetButton={false}
+              showEvalBar={true}
+              evaluation={latestEval}
+              isMate={latestIsMate}
+              mateIn={latestMateIn}
               onMove={handleMove}
               highlightSquares={computerLastMove}
               showLastMoveHighlight={settings.highlightLastMove}
@@ -375,24 +412,26 @@ export function PracticeMode({ opening, variationIndex, onComplete, onExit }: Pr
         </div>
       </div>
 
-      {/* Bottom: prompt + controls */}
-      <div className="px-4 pb-safe-4 space-y-3">
+      {/* Move navigation */}
+      <div className="px-4">
+        <BoardControls
+          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
+          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
+          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
+          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
+          canGoPrev={currentMoveIndex > 0}
+          canGoNext={currentMoveIndex < expectedMoves.length}
+        />
+      </div>
+
+      {/* Bottom: prompt */}
+      <div className="px-4 pb-safe-4 min-h-[80px]">
         {showWrongMove ? (
-          <div className="space-y-2">
-            <ExplanationCard
-              text="Incorrect move. Try again."
-              visible={true}
-              variant="error"
-            />
-            <button
-              onClick={handleUndo}
-              className="flex items-center gap-2 justify-center w-full py-2.5 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text hover:bg-theme-border transition-colors"
-              data-testid="undo-btn"
-            >
-              <Undo2 size={14} />
-              Undo
-            </button>
-          </div>
+          <ExplanationCard
+            text="Incorrect move. Try again."
+            visible={true}
+            variant="error"
+          />
         ) : (
           isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
             <div className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg">

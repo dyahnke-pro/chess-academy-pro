@@ -5,14 +5,18 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { ChessBoard } from '../Board/ChessBoard';
+import { BoardControls } from '../Board/BoardControls';
 import { HintButton } from '../Coach/HintButton';
+import { DifficultyToggle } from '../Coach/DifficultyToggle';
+import { ResignButton } from '../Coach/ResignButton';
 import { ExplanationCard } from './ExplanationCard';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import { speechService } from '../../services/speechService';
 import { usePieceSound } from '../../hooks/usePieceSound';
-import type { OpeningRecord, OpeningPlayResult } from '../../types';
+import type { OpeningRecord, OpeningPlayResult, CoachDifficulty } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 
@@ -27,7 +31,8 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const activeProfile = useAppStore((s) => s.activeProfile);
   const { settings } = useSettings();
   const playerRating = activeProfile?.currentRating ?? 1420;
-  const targetStrength = getTargetStrength(playerRating, 'medium');
+  const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
+  const targetStrength = getTargetStrength(playerRating, difficulty);
   const playerColor = opening.color;
 
   const game = useChessGame(undefined, playerColor);
@@ -46,6 +51,16 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   const isComputerThinking = useRef(false);
   const moveCountRef = useRef(0);
   const { playCelebration } = usePieceSound();
+
+  // Stockfish eval state
+  const [latestEval, setLatestEval] = useState<number | null>(null);
+  const [latestIsMate, setLatestIsMate] = useState(false);
+  const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+
+  // Move history for navigation
+  const [moveHistory, setMoveHistory] = useState<Array<{ fen: string; from: string; to: string }>>([]);
+  const [viewedMoveIndex, setViewedMoveIndex] = useState<number | null>(null);
+  const [takebacksUsed, setTakebacksUsed] = useState(0);
 
   // Parse expected opening moves
   const openingMoves = useMemo((): Array<{ san: string; from: string; to: string }> => {
@@ -97,6 +112,87 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       speechService.speak(text);
     }
   }, [voiceOn]);
+
+  // ─── Stockfish eval on position change ──────────────────────────────────
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const analysis = await stockfishEngine.analyzePosition(game.fen, 12);
+        if (!cancelled) {
+          setLatestEval(analysis.evaluation);
+          setLatestIsMate(analysis.isMate);
+          setLatestMateIn(analysis.mateIn);
+        }
+      } catch {
+        // Stockfish not ready yet
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [game.fen]);
+
+  // ─── Move navigation ──────────────────────────────────────────────────
+  const displayFen = viewedMoveIndex !== null
+    ? (viewedMoveIndex === -1 ? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' : moveHistory[viewedMoveIndex]?.fen ?? game.fen)
+    : game.fen;
+
+  const goToFirstMove = useCallback(() => {
+    if (moveHistory.length === 0) return;
+    setViewedMoveIndex(-1);
+  }, [moveHistory.length]);
+
+  const goToPrevMove = useCallback(() => {
+    if (moveHistory.length === 0) return;
+    setViewedMoveIndex((prev) => {
+      if (prev === null) return moveHistory.length - 2;
+      return Math.max(-1, prev - 1);
+    });
+  }, [moveHistory.length]);
+
+  const goToNextMove = useCallback(() => {
+    if (moveHistory.length === 0) return;
+    setViewedMoveIndex((prev) => {
+      if (prev === null) return null;
+      if (prev >= moveHistory.length - 1) return null;
+      return prev + 1;
+    });
+  }, [moveHistory.length]);
+
+  const goToLastMove = useCallback(() => {
+    setViewedMoveIndex(null);
+  }, []);
+
+  // ─── Takeback ──────────────────────────────────────────────────────────
+  const handleTakeback = useCallback(() => {
+    if (moveHistory.length < 2) return;
+    game.undoMove();
+    game.undoMove();
+    moveCountRef.current = Math.max(0, moveCountRef.current - 2);
+    setMoveHistory((prev) => prev.slice(0, -2));
+    setTakebacksUsed((prev) => prev + 1);
+    setComputerLastMove(null);
+    resetHints();
+    setViewedMoveIndex(null);
+  }, [game, moveHistory.length, resetHints]);
+
+  // ─── Resign ────────────────────────────────────────────────────────────
+  const handleResign = useCallback(() => {
+    const openingPlayerMoves = Math.ceil(openingPhaseLength / 2);
+    const correctMoves = Math.min(correctMovesPlayed, openingPlayerMoves);
+    const playResult: OpeningPlayResult = {
+      openingId: opening.id,
+      openingMovesTotal: openingPlayerMoves,
+      openingMovesCorrect: correctMoves,
+      firstDeviationMove: firstDeviation,
+      correctMoveAtDeviation: firstDeviation !== null && firstDeviation < openingMoves.length
+        ? openingMoves[firstDeviation].san
+        : null,
+      finalEval: latestEval,
+      recommendation: 'You resigned. Review the position to see where things went wrong.',
+    };
+    setResult(playResult);
+    setPlayPhase('postgame');
+  }, [openingPhaseLength, correctMovesPlayed, opening.id, firstDeviation, openingMoves, latestEval]);
 
   // ─── Pregame intro ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -179,9 +275,9 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
         const moveResult = game.makeMove(expected.from, expected.to);
         if (moveResult) {
           setComputerLastMove({ from: expected.from, to: expected.to });
+          setMoveHistory((prev) => [...prev, { fen: moveResult.fen, from: expected.from, to: expected.to }]);
           moveCountRef.current += 1;
           setBoardKey((k) => k + 1);
-          // Check if opening phase just ended
           if (moveCountRef.current >= openingPhaseLength) {
             setPlayPhase('middlegame');
           }
@@ -199,6 +295,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           }
           if (result) {
             setComputerLastMove({ from: result.from, to: result.to });
+            setMoveHistory((prev) => [...prev, { fen: result!.fen, from: result!.from, to: result!.to }]);
             moveCountRef.current += 1;
             setBoardKey((k) => k + 1);
           }
@@ -206,9 +303,10 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           if (isCancelled()) return;
           const randomMove = getRandomLegalMove(game.fen);
           if (randomMove) {
-            const result = tryMakeMove(randomMove);
-            if (result) {
-              setComputerLastMove({ from: result.from, to: result.to });
+            const fallback = tryMakeMove(randomMove);
+            if (fallback) {
+              setComputerLastMove({ from: fallback.from, to: fallback.to });
+              setMoveHistory((prev) => [...prev, { fen: fallback.fen, from: fallback.from, to: fallback.to }]);
               moveCountRef.current += 1;
               setBoardKey((k) => k + 1);
             }
@@ -233,9 +331,11 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
     moveCountRef.current += 1;
     setComputerLastMove(null);
     resetHints();
+    setViewedMoveIndex(null);
 
     // Sync move to parent game state so turn flips and computer move effect triggers
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
+    setMoveHistory((prev) => [...prev, { fen: moveResult.fen, from: moveResult.from, to: moveResult.to }]);
 
     const inOpeningPhase = currentMoveIdx < openingPhaseLength && !deviatedRef.current;
 
@@ -323,6 +423,12 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
                 setComputerLastMove(null);
                 resetHints();
                 setMoveFlash(null);
+                setMoveHistory([]);
+                setViewedMoveIndex(null);
+                setTakebacksUsed(0);
+                setLatestEval(null);
+                setLatestIsMate(false);
+                setLatestMateIn(null);
                 setPlayPhase('pregame');
                 setBoardKey((k) => k + 1);
               }}
@@ -367,14 +473,12 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           </div>
         </div>
 
-        <div className="flex items-center gap-1">
-          {settings.showHints && (playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (
-            <HintButton
-              currentLevel={hintState.level}
-              onRequestHint={requestHint}
-              disabled={hintState.isAnalyzing}
-            />
-          )}
+        <div className="flex items-center gap-2">
+          <DifficultyToggle
+            value={difficulty}
+            onChange={setDifficulty}
+            disabled={moveHistory.length > 0}
+          />
           <button
             onClick={() => setVoiceOn(!voiceOn)}
             className="p-2 rounded-lg hover:bg-theme-surface text-theme-text-muted"
@@ -400,20 +504,24 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       )}
 
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-center px-2 py-2">
+      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
           <ChessBoard
             key={boardKey}
-            initialFen={game.fen}
+            initialFen={displayFen}
             orientation={playerColor}
             interactive={
+              viewedMoveIndex === null &&
               (playPhase === 'opening' || playPhase === 'middlegame') &&
               !game.isGameOver &&
               !isComputerThinking.current
             }
             onMove={handlePlayerMove}
-            showEvalBar={false}
-            showFlipButton={false}
+            showEvalBar={difficulty !== 'hard'}
+            evaluation={latestEval}
+            isMate={latestIsMate}
+            mateIn={latestMateIn}
+            showFlipButton={true}
             highlightSquares={computerLastMove}
             showLastMoveHighlight={settings.highlightLastMove}
             moveQualityFlash={moveFlash}
@@ -422,6 +530,32 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           />
         </div>
       </div>
+
+      {/* Controls bar */}
+      {(playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (
+        <div className="px-4">
+          <BoardControls
+            onFirst={goToFirstMove}
+            onPrev={goToPrevMove}
+            onNext={goToNextMove}
+            onLast={goToLastMove}
+            canGoPrev={moveHistory.length > 0 && (viewedMoveIndex === null || viewedMoveIndex > -1)}
+            canGoNext={viewedMoveIndex !== null}
+            onTakeback={handleTakeback}
+            canTakeback={moveHistory.length >= 2}
+            extraLeft={
+              settings.showHints ? (
+                <HintButton
+                  currentLevel={hintState.level}
+                  onRequestHint={requestHint}
+                  disabled={hintState.isAnalyzing}
+                />
+              ) : undefined
+            }
+            extraRight={<ResignButton onResign={handleResign} disabled={moveHistory.length === 0} />}
+          />
+        </div>
+      )}
 
       {/* Nudge text */}
       {hintState.nudgeText && (
@@ -433,7 +567,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       )}
 
       {/* Deviation card */}
-      <div className="px-4 pb-safe-4">
+      <div className="px-4 pb-safe-4 min-h-[60px]">
         <ExplanationCard
           text={deviationCard ?? ''}
           visible={deviationCard !== null}
