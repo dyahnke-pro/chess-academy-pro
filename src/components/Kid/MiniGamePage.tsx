@@ -341,7 +341,7 @@ export function MiniGamePage({ gameId }: MiniGamePageProps): JSX.Element {
       {/* Playing phase */}
       {phase === 'playing' && (
         <>
-          <div className="max-w-md mx-auto w-full">
+          <div className="w-full md:max-w-[420px] mx-auto">
             <ChessBoard
               initialFen={currentFen}
               interactive={!isAiTurn}

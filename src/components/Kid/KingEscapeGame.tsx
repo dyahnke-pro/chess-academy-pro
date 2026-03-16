@@ -201,7 +201,7 @@ export function KingEscapeGame(): JSX.Element {
                 {level.description}
               </p>
 
-              <div className="max-w-sm w-full mx-auto">
+              <div className="w-full md:max-w-[420px] mx-auto">
                 <ChessBoard
                   key={boardKey}
                   initialFen={level.fen}

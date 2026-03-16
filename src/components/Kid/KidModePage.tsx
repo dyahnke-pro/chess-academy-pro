@@ -477,7 +477,7 @@ export function KidModePage(): JSX.Element {
               {findKingResult === 'correct' ? '⭐ Correct!' : '❌ Try again!'}
             </div>
           )}
-          <div className="max-w-md mx-auto w-full relative">
+          <div className="w-full md:max-w-[420px] mx-auto relative">
             <ChessBoard
               initialFen={FIND_KING_FENS[findKingIdx]}
               interactive={false}

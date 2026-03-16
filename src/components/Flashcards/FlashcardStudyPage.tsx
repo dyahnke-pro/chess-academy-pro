@@ -263,7 +263,7 @@ export function FlashcardStudyPage(): JSX.Element {
 
         {/* Board */}
         <div className="flex justify-center">
-          <div className="w-full max-w-sm">
+          <div className="w-full md:max-w-[420px]">
             <ChessBoard
               initialFen={card.questionFen}
               interactive={false}

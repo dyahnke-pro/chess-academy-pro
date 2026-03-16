@@ -263,7 +263,7 @@ export function KingMarchGame(): JSX.Element {
                 Moves: {moveCount}
               </div>
 
-              <div className="max-w-sm w-full mx-auto relative">
+              <div className="w-full md:max-w-[420px] mx-auto relative">
                 <ChessBoard
                   key={boardKey}
                   initialFen={currentFen}

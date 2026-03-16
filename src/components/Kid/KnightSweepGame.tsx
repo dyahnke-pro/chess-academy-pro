@@ -372,7 +372,7 @@ export function KnightSweepGame(): JSX.Element {
       )}
 
       {/* Board */}
-      <div className="max-w-md mx-auto w-full">
+      <div className="w-full md:max-w-[420px] mx-auto">
         <Chessboard
           options={{
             position,

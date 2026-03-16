@@ -415,7 +415,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
                 {chapter.lessons[lessonIndex].instruction}
               </p>
 
-              <div className="max-w-sm w-full mx-auto">
+              <div className="w-full md:max-w-[420px] mx-auto">
                 <ChessBoard
                   initialFen={chapter.lessons[lessonIndex].fen}
                   interactive={false}
@@ -484,7 +484,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
                 Puzzle {puzzleIndex + 1} of {activePuzzles.length}
               </h3>
 
-              <div className="max-w-sm w-full mx-auto">
+              <div className="w-full md:max-w-[420px] mx-auto">
                 <ChessBoard
                   key={boardKey}
                   initialFen={activePuzzles[puzzleIndex].fen}

@@ -231,7 +231,7 @@ export function RookMazePage(): JSX.Element {
         </div>
 
         {/* Board */}
-        <div className="max-w-sm w-full mx-auto">
+        <div className="w-full md:max-w-[420px] mx-auto">
           <Chessboard
             options={{
               position: fen,

@@ -2,7 +2,6 @@ import { useState, useCallback, useMemo } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
-import { useIsMobile } from '../../hooks/useIsMobile';
 import { useSettings } from '../../hooks/useSettings';
 import { getBoardColor } from '../../services/boardColorService';
 import {
@@ -23,7 +22,6 @@ export function QueenVsArmy({ onBack, onComplete }: QueenVsArmyProps): JSX.Eleme
   const [levelIndex, setLevelIndex] = useState(0);
   const level = QUEEN_ARMY_LEVELS[levelIndex];
   const [state, setState] = useState<QueenArmyState>(() => initQueenArmyState(level));
-  const isMobile = useIsMobile();
   const { settings } = useSettings();
   const boardColors = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
 
@@ -95,8 +93,6 @@ export function QueenVsArmy({ onBack, onComplete }: QueenVsArmyProps): JSX.Eleme
     setState(initQueenArmyState(level));
   }, [level]);
 
-  const boardWidth = isMobile ? Math.min(window.innerWidth - 48, 360) : 400;
-
   return (
     <div
       className="flex flex-col items-center gap-4 p-4"
@@ -141,7 +137,7 @@ export function QueenVsArmy({ onBack, onComplete }: QueenVsArmyProps): JSX.Eleme
       </div>
 
       {/* Board */}
-      <div style={{ width: boardWidth }}>
+      <div className="w-full md:max-w-[420px]">
         <Chessboard
           options={{
             position,

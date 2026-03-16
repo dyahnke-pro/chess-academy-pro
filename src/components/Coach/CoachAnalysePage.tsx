@@ -155,16 +155,18 @@ export function CoachAnalysePage(): JSX.Element {
       </div>
 
       {/* Board */}
-      <div className="p-4">
-        <ChessBoard
-          initialFen={game.fen}
-          interactive
-          showEvalBar={!!analysis}
-          evaluation={analysis?.evaluation}
-          isMate={analysis?.isMate}
-          mateIn={analysis?.mateIn}
-          onMove={handleMoveOnBoard}
-        />
+      <div className="px-2 py-1 flex justify-center">
+        <div className="w-full md:max-w-[420px]">
+          <ChessBoard
+            initialFen={game.fen}
+            interactive
+            showEvalBar={!!analysis}
+            evaluation={analysis?.evaluation}
+            isMate={analysis?.isMate}
+            mateIn={analysis?.mateIn}
+            onMove={handleMoveOnBoard}
+          />
+        </div>
       </div>
 
       {/* Candidate Moves */}

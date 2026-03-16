@@ -171,7 +171,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
   return (
     <div className="space-y-3" data-testid="puzzle-board">
-      <div className="max-w-md mx-auto">
+      <div className="w-full md:max-w-[420px] mx-auto">
         <ChessBoard
           initialFen={fen}
           key={fen}

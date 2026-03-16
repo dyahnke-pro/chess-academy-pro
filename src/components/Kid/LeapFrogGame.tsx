@@ -394,7 +394,7 @@ export function LeapFrogGame(): JSX.Element {
       )}
 
       {/* Board */}
-      <div className="max-w-md mx-auto w-full relative">
+      <div className="w-full md:max-w-[420px] mx-auto relative">
         <Chessboard
           options={{
             position,

@@ -138,7 +138,7 @@ export function KidPiecePage(): JSX.Element {
         </p>
       </div>
 
-      <div className="max-w-md mx-auto w-full">
+      <div className="w-full md:max-w-[420px] mx-auto">
         <ChessBoard
           initialFen={config.fen}
           interactive
