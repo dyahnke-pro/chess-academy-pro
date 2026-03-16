@@ -60,7 +60,6 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   // Move history for navigation
   const [moveHistory, setMoveHistory] = useState<Array<{ fen: string; from: string; to: string }>>([]);
   const [viewedMoveIndex, setViewedMoveIndex] = useState<number | null>(null);
-  const [takebacksUsed, setTakebacksUsed] = useState(0);
 
   // Parse expected opening moves
   const openingMoves = useMemo((): Array<{ san: string; from: string; to: string }> => {
@@ -169,7 +168,6 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
     game.undoMove();
     moveCountRef.current = Math.max(0, moveCountRef.current - 2);
     setMoveHistory((prev) => prev.slice(0, -2));
-    setTakebacksUsed((prev) => prev + 1);
     setComputerLastMove(null);
     resetHints();
     setViewedMoveIndex(null);
@@ -425,7 +423,6 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
                 setMoveFlash(null);
                 setMoveHistory([]);
                 setViewedMoveIndex(null);
-                setTakebacksUsed(0);
                 setLatestEval(null);
                 setLatestIsMate(false);
                 setLatestMateIn(null);

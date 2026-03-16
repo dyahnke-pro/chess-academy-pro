@@ -76,24 +76,6 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
 
-  // Analyze position when it changes
-  useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      try {
-        const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
-        if (!cancelled) {
-          setLatestEval(analysis.evaluation);
-          setLatestIsMate(analysis.isMate);
-          setLatestMateIn(analysis.mateIn);
-        }
-      } catch {
-        // Stockfish not ready yet — skip
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [currentFen]);
-
   const isPlayerTurn = useCallback(
     (idx: number): boolean => {
       return playerColor === 'white' ? idx % 2 === 0 : idx % 2 === 1;
@@ -122,6 +104,24 @@ export function DrillMode({ opening, variationIndex, onComplete, onExit }: Drill
   // Publish board context for global coach drawer
   const drillTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
   useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, drillTurn);
+
+  // Analyze position when it changes
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
+        if (!cancelled) {
+          setLatestEval(analysis.evaluation);
+          setLatestIsMate(analysis.isMate);
+          setLatestMateIn(analysis.mateIn);
+        }
+      } catch {
+        // Stockfish not ready yet
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [currentFen]);
 
   // Generate explanation for current move (what player should play)
   const currentExplanation = useMemo((): string => {
