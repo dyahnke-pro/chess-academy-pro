@@ -12,6 +12,7 @@ import type {
   UserPreferences,
   BadHabit,
   MiniGameProgress,
+  ProPlayer,
 } from '../types';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -286,6 +287,21 @@ export function buildMiniGameProgress(
 ): MiniGameProgress {
   return {
     levels: {},
+    ...overrides,
+  };
+}
+
+// ─── ProPlayer ─────────────────────────────────────────────────────────────
+
+export function buildProPlayer(overrides?: Partial<ProPlayer>): ProPlayer {
+  return {
+    id: nextId('player'),
+    name: 'Test Player',
+    title: 'GM',
+    rating: 2700,
+    style: 'Aggressive, Dynamic',
+    description: 'A test chess player.',
+    imageInitials: 'TP',
     ...overrides,
   };
 }

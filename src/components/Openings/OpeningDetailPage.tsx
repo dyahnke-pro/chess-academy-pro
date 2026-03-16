@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
@@ -59,8 +59,10 @@ function computeFenFromPgn(pgn: string): string {
 }
 
 export function OpeningDetailPage(): JSX.Element {
-  const { id } = useParams<{ id: string }>();
+  const { id, playerId } = useParams<{ id: string; playerId?: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isProContext = location.pathname.includes('/openings/pro/');
   const [opening, setOpening] = useState<OpeningRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('detail');
@@ -244,7 +246,7 @@ export function OpeningDetailPage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <button
-          onClick={() => void navigate('/openings')}
+          onClick={() => void navigate(isProContext && playerId ? `/openings/pro/${playerId}` : '/openings')}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
           aria-label="Back to openings"
           data-testid="back-button"
