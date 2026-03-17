@@ -119,6 +119,14 @@ export function buildChessContextMessage(ctx: CoachContext): string {
     lines.push(`Current weakness: ${ctx.playerProfile.weaknesses[0]}`);
   }
 
+  if (ctx.hintContext && ctx.hintContext.level > 0) {
+    lines.push(`\nDuring live play, the student requested a hint (level ${ctx.hintContext.level}).`);
+    if (ctx.hintContext.nudgeText) {
+      lines.push(`The nudge shown was: "${ctx.hintContext.nudgeText}"`);
+    }
+    lines.push('Reference this in your commentary if relevant — connect the hint to what the student should have noticed.');
+  }
+
   if (ctx.additionalContext) {
     lines.push(`\n${ctx.additionalContext}`);
   }

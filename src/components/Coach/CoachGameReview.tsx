@@ -1,13 +1,13 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Home, Undo2, ArrowLeft, MessageCircle, Loader2, Play, Pause, Target, Crosshair, Zap, CheckCircle2, XCircle, GraduationCap, AlertTriangle, Sparkles, FastForward } from 'lucide-react';
+import { ArrowLeft, Play, Pause, Target, AlertTriangle, Sparkles, FastForward } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveNavigationControls } from './MoveNavigationControls';
-import { MoveListPanel } from './MoveListPanel';
-import { EvalGraph } from './EvalGraph';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
-import { ChatInput } from './ChatInput';
+import { ReviewAnalysisPanel } from './ReviewAnalysisPanel';
+import { ReviewWhatIfBanner } from './ReviewWhatIfBanner';
+import { ReviewPracticeBanner } from './ReviewPracticeBanner';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
 import { getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { getCoachCommentary, getCoachChatResponse } from '../../services/coachApi';
@@ -19,7 +19,7 @@ import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { generateNarrativeSummary } from '../../services/coachFeatureService';
 import { getClassificationHighlightColor } from './classificationStyles';
-import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
+import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic, GamePhase } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 interface CoachGameReviewProps {
@@ -92,6 +92,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [practiceTarget, setPracticeTarget] = useState<MissedTactic | null>(null);
   const [practiceResult, setPracticeResult] = useState<'pending' | 'correct' | 'incorrect' | null>(null);
   const [practiceAttempts, setPracticeAttempts] = useState(0);
+
+  // ─── Phase Detail State ─────────────────────────────────────────────────────
+  const [phaseDetails, setPhaseDetails] = useState<Partial<Record<GamePhase, string>>>({});
+  const [loadingPhase, setLoadingPhase] = useState<GamePhase | null>(null);
 
   // ─── Auto-Review State ────────────────────────────────────────────────────
   const [autoReviewActive, setAutoReviewActive] = useState(false);
@@ -268,6 +272,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       playerMove: currentMove.san,
       moveClassification: currentMove.classification,
       playerProfile: { rating: playerRating, weaknesses: [] },
+      hintContext: currentMove.hintShown
+        ? { level: currentMove.hintShown.level, nudgeText: currentMove.hintShown.nudgeText }
+        : null,
     };
 
     void getCoachCommentary('interactive_review', ctx, (chunk) => {
@@ -686,6 +693,40 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     onPracticeInChat?.(prompt);
   }, [missedTactics, onPracticeInChat]);
 
+  // Handle phase detail request (lazy AI analysis per phase)
+  const handleRequestPhaseDetail = useCallback((phase: GamePhase) => {
+    if (phaseDetails[phase] || loadingPhase) return;
+    setLoadingPhase(phase);
+
+    const phaseMovesSan = moves
+      .filter((m) => !m.isCoachMove)
+      .map((m) => m.san)
+      .join(' ');
+
+    const ctx: CoachContext = {
+      fen: moves.length > 0 ? moves[moves.length - 1].fen : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      lastMoveSan: null,
+      moveNumber: 0,
+      pgn: phaseMovesSan,
+      openingName,
+      stockfishAnalysis: null,
+      playerMove: null,
+      moveClassification: null,
+      playerProfile: { rating: playerRating, weaknesses: [] },
+      additionalContext: `Summarize the player's ${phase} play in 2-3 sentences. Reference specific moves where possible. Phase accuracy: ${phaseBreakdown.find((p) => p.phase === phase)?.accuracy.toFixed(0) ?? '?'}%.`,
+    };
+
+    let accumulated = '';
+    void getCoachCommentary('interactive_review', ctx, (chunk) => {
+      accumulated += chunk;
+      setPhaseDetails((prev) => ({ ...prev, [phase]: accumulated }));
+    }).then((fullText) => {
+      setPhaseDetails((prev) => ({ ...prev, [phase]: fullText }));
+    }).finally(() => {
+      setLoadingPhase(null);
+    });
+  }, [phaseDetails, loadingPhase, moves, openingName, playerRating, phaseBreakdown]);
+
   // Handle transitioning from summary to analysis
   const handleStartReview = useCallback(() => {
     setReviewPhase('analysis');
@@ -811,83 +852,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         {/* What-If Mode Banner */}
         <AnimatePresence>
           {reviewState.mode === 'whatif' && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="rounded-lg mx-2 mt-1 p-2.5 flex items-center justify-between overflow-hidden"
-              style={{ background: 'color-mix(in srgb, var(--color-accent) 15%, var(--color-surface))' }}
-              data-testid="whatif-banner"
-            >
-              <div className="flex items-center gap-2">
-                <Undo2 size={14} style={{ color: 'var(--color-accent)' }} />
-                <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                  What-If Mode
-                </span>
-                {isThinking && (
-                  <span className="text-xs animate-pulse" style={{ color: 'var(--color-text-muted)' }}>
-                    Thinking...
-                  </span>
-                )}
-              </div>
-              <button
-                onClick={handleBackToReview}
-                className="px-2.5 py-1 rounded-lg text-xs font-semibold"
-                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                data-testid="back-to-review-btn"
-              >
-                Back to Review
-              </button>
-            </motion.div>
+            <ReviewWhatIfBanner isThinking={isThinking} onBackToReview={handleBackToReview} />
           )}
           {/* Practice Mode Banner */}
           {reviewState.mode === 'practice' && practiceTarget && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="rounded-lg mx-2 mt-1 p-2.5 overflow-hidden"
-              style={{ background: 'color-mix(in srgb, var(--color-success) 15%, var(--color-surface))' }}
-              data-testid="practice-banner"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Target size={14} style={{ color: 'var(--color-success)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                    Find the best move!
-                  </span>
-                </div>
-                <button
-                  onClick={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice}
-                  className="px-2.5 py-1 rounded-lg text-xs font-semibold"
-                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                  data-testid="exit-practice-btn"
-                >
-                  {isGuidedLesson ? 'Back to Lesson' : 'Back to Review'}
-                </button>
-              </div>
-              {practiceResult === 'correct' && (
-                <div className="flex items-center gap-1.5 mt-2" data-testid="practice-correct">
-                  <CheckCircle2 size={14} style={{ color: 'var(--color-success)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-success)' }}>
-                    You found it! {practiceTarget.explanation}
-                  </span>
-                </div>
-              )}
-              {practiceResult === 'incorrect' && (
-                <div className="flex items-center gap-1.5 mt-2" data-testid="practice-incorrect">
-                  <XCircle size={14} style={{ color: 'var(--color-error)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                    The best move was {practiceTarget.bestMove}. {practiceTarget.explanation}
-                  </span>
-                </div>
-              )}
-              {practiceResult === 'pending' && practiceAttempts > 0 && (
-                <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                  Not quite — try again ({3 - practiceAttempts} attempt{3 - practiceAttempts !== 1 ? 's' : ''} left)
-                </p>
-              )}
-            </motion.div>
+            <ReviewPracticeBanner
+              practiceTarget={practiceTarget}
+              practiceResult={practiceResult}
+              practiceAttempts={practiceAttempts}
+              isGuidedLesson={!!isGuidedLesson}
+              onExitPractice={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice}
+            />
           )}
           {/* Guided Lesson Stop Banner */}
           {isGuidedLesson && guidedStopped && reviewState.mode === 'guided_lesson' && currentMove && (
@@ -1023,212 +998,35 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       </div>
 
       {/* Right column: eval graph + move list + commentary + actions */}
-      <div className="flex flex-col h-[45dvh] md:h-auto md:flex-1 md:border-l border-theme-border min-h-[220px] overflow-y-auto">
-        {/* Eval graph */}
-        <div className="px-2 py-1 border-b border-theme-border">
-          <EvalGraph
-            moves={moves}
-            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
-            onMoveClick={handleMoveClick}
-          />
-        </div>
-
-        {/* Move list panel */}
-        <div className="flex-1 min-h-[100px] border-b border-theme-border overflow-hidden">
-          <MoveListPanel
-            moves={moves}
-            openingName={openingName}
-            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
-            onMoveClick={handleMoveClick}
-            className="h-full"
-          />
-        </div>
-
-        {/* Missed Tactics Panel */}
-        {missedTactics.length > 0 && (
-          <div className="px-3 py-2 border-b border-theme-border" data-testid="missed-tactics-panel">
-            <div className="flex items-center gap-1.5 mb-2">
-              <Zap size={12} style={{ color: 'var(--color-warning)' }} />
-              <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-warning)' }}>
-                Missed Tactics ({missedTactics.length})
-              </span>
-            </div>
-            <div className="space-y-1.5">
-              {missedTactics.map((tactic, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 p-1.5 rounded-md hover:bg-theme-surface transition-colors cursor-pointer"
-                  onClick={() => handleMoveClick(tactic.moveIndex)}
-                  data-testid={`missed-tactic-${i}`}
-                >
-                  <Crosshair size={12} style={{ color: 'var(--color-text-muted)' }} />
-                  <div className="flex-1 min-w-0">
-                    <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                      Move {Math.ceil(moves[tactic.moveIndex].moveNumber / 2)}:{' '}
-                      <span className="capitalize">{tactic.tacticType.replace(/_/g, ' ')}</span>
-                    </span>
-                    <span className="text-[10px] ml-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                      ({(tactic.evalSwing / 100).toFixed(1)} pawns)
-                    </span>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleStartPractice(tactic);
-                    }}
-                    className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap"
-                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                    data-testid={`try-it-${i}`}
-                  >
-                    Try It
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Commentary panel */}
-        {commentary && (
-          <div
-            className="p-3 border-b border-theme-border"
-            data-testid="review-commentary"
-          >
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-              {commentary}
-            </p>
-          </div>
-        )}
-
-        {/* AI Key Moment Commentary */}
-        {(aiCommentary || isLoadingAiCommentary) && (
-          <div
-            className="px-3 py-2 border-b border-theme-border"
-            data-testid="ai-commentary"
-          >
-            <div className="flex items-center gap-1.5 mb-1">
-              <MessageCircle size={12} style={{ color: 'var(--color-accent)' }} />
-              <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                AI Analysis
-              </span>
-              {isLoadingAiCommentary && (
-                <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-              )}
-            </div>
-            {aiCommentary && (
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                {aiCommentary}
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Ask About This Position */}
-        <div className="border-b border-theme-border">
-          {!askExpanded ? (
-            <button
-              onClick={() => setAskExpanded(true)}
-              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium hover:opacity-80 transition-opacity"
-              style={{ color: 'var(--color-accent)' }}
-              data-testid="ask-position-btn"
-            >
-              <MessageCircle size={14} />
-              Ask about this position
-            </button>
-          ) : (
-            <div data-testid="ask-position-panel">
-              {askResponse !== null && (
-                <div className="px-3 pt-2">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                      Coach
-                    </span>
-                    {isAskStreaming && (
-                      <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                    )}
-                  </div>
-                  <p
-                    className="text-xs leading-relaxed mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                    data-testid="ask-response"
-                  >
-                    {askResponse || (isAskStreaming ? '' : 'No response')}
-                  </p>
-                </div>
-              )}
-              <ChatInput
-                onSend={handleAskSend}
-                disabled={isAskStreaming}
-                placeholder="Ask about this position..."
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Practice Suggestions */}
-        {missedTactics.length > 0 && onPracticeInChat && (
-          <div className="px-3 py-2 border-b border-theme-border" data-testid="practice-suggestions">
-            <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--color-text-muted)' }}>
-              Want to practice similar positions? The coach can set up interactive tactics for you.
-            </p>
-            <button
-              onClick={handlePracticeInChat}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"
-              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-              data-testid="practice-in-chat-btn"
-            >
-              <Target size={12} />
-              Practice in Chat
-            </button>
-          </div>
-        )}
-
-        {/* Guided Lesson Narrative Summary */}
-        {isGuidedLesson && guidedComplete && (
-          <div className="p-3 border-b border-theme-border" data-testid="narrative-summary">
-            <div className="flex items-center gap-2 mb-2">
-              <GraduationCap size={16} style={{ color: 'var(--color-accent)' }} />
-              <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                Game Summary
-              </span>
-              {isLoadingNarrative && (
-                <Loader2 size={12} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-              )}
-            </div>
-            {narrativeSummary ? (
-              <p className="text-xs leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
-                {narrativeSummary}
-              </p>
-            ) : isLoadingNarrative ? (
-              <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                Generating your game summary...
-              </p>
-            ) : null}
-          </div>
-        )}
-
-        {/* Action buttons */}
-        <div className="flex gap-2 justify-center p-3">
-          <button
-            onClick={onPlayAgain}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium hover:opacity-90"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-            data-testid="play-again-btn"
-          >
-            <RotateCcw size={14} />
-            Play Again
-          </button>
-          <button
-            onClick={onBackToCoach}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium hover:opacity-90"
-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="back-to-coach-btn"
-          >
-            <Home size={14} />
-            Back to Coach
-          </button>
-        </div>
-      </div>
+      <ReviewAnalysisPanel
+        moves={moves}
+        currentMoveIndex={reviewState.currentMoveIndex}
+        reviewMode={reviewState.mode}
+        openingName={openingName}
+        onMoveClick={handleMoveClick}
+        keyMoments={keyMoments}
+        phaseBreakdown={phaseBreakdown}
+        phaseDetails={phaseDetails}
+        loadingPhase={loadingPhase}
+        onRequestPhaseDetail={handleRequestPhaseDetail}
+        missedTactics={missedTactics}
+        onStartPractice={handleStartPractice}
+        commentary={commentary}
+        aiCommentary={aiCommentary}
+        isLoadingAiCommentary={isLoadingAiCommentary}
+        askExpanded={askExpanded}
+        onToggleAsk={() => setAskExpanded(true)}
+        askResponse={askResponse}
+        isAskStreaming={isAskStreaming}
+        onAskSend={handleAskSend}
+        onPracticeInChat={onPracticeInChat ? handlePracticeInChat : undefined}
+        isGuidedLesson={!!isGuidedLesson}
+        guidedComplete={guidedComplete}
+        narrativeSummary={narrativeSummary}
+        isLoadingNarrative={isLoadingNarrative}
+        onPlayAgain={onPlayAgain}
+        onBackToCoach={onBackToCoach}
+      />
     </>
   );
 }

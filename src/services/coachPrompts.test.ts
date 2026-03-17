@@ -215,5 +215,79 @@ describe('coachPrompts', () => {
       const msg = buildChessContextMessage(ctx);
       expect(msg).not.toContain('Current weakness');
     });
+
+    it('includes hint context when provided', () => {
+      const ctx: CoachContext = {
+        fen: 'test',
+        lastMoveSan: 'Nf3',
+        moveNumber: 5,
+        pgn: '1. e4 e5 2. Nf3',
+        openingName: null,
+        stockfishAnalysis: null,
+        playerMove: 'Nf3',
+        moveClassification: 'good',
+        playerProfile: { rating: 1400, weaknesses: [] },
+        hintContext: {
+          level: 2,
+          nudgeText: 'Look for a fork!',
+        },
+      };
+      const msg = buildChessContextMessage(ctx);
+      expect(msg).toContain('hint (level 2)');
+      expect(msg).toContain('Look for a fork!');
+      expect(msg).toContain('Reference this');
+    });
+
+    it('omits hint context when level is 0', () => {
+      const ctx: CoachContext = {
+        fen: 'test',
+        lastMoveSan: null,
+        moveNumber: 0,
+        pgn: '',
+        openingName: null,
+        stockfishAnalysis: null,
+        playerMove: null,
+        moveClassification: null,
+        playerProfile: { rating: 1400, weaknesses: [] },
+        hintContext: { level: 0, nudgeText: null },
+      };
+      const msg = buildChessContextMessage(ctx);
+      expect(msg).not.toContain('hint');
+    });
+
+    it('omits hint context when null', () => {
+      const ctx: CoachContext = {
+        fen: 'test',
+        lastMoveSan: null,
+        moveNumber: 0,
+        pgn: '',
+        openingName: null,
+        stockfishAnalysis: null,
+        playerMove: null,
+        moveClassification: null,
+        playerProfile: { rating: 1400, weaknesses: [] },
+        hintContext: null,
+      };
+      const msg = buildChessContextMessage(ctx);
+      expect(msg).not.toContain('hint');
+    });
+
+    it('includes hint level but handles null nudgeText', () => {
+      const ctx: CoachContext = {
+        fen: 'test',
+        lastMoveSan: null,
+        moveNumber: 0,
+        pgn: '',
+        openingName: null,
+        stockfishAnalysis: null,
+        playerMove: null,
+        moveClassification: null,
+        playerProfile: { rating: 1400, weaknesses: [] },
+        hintContext: { level: 1, nudgeText: null },
+      };
+      const msg = buildChessContextMessage(ctx);
+      expect(msg).toContain('hint (level 1)');
+      expect(msg).not.toContain('nudge shown');
+    });
   });
 });

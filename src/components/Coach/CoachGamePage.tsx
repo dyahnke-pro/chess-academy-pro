@@ -23,6 +23,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { db } from '../../db/schema';
+import { saveCachedAnalysis } from '../../services/reviewAnalysisCache';
 import { checkAndAwardAchievements } from '../../services/gamificationService';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
@@ -441,6 +442,14 @@ export function CoachGamePage(): JSX.Element {
         openingId: detectedOpening?.name ?? null,
       };
 
+      // Cache analysis for fast re-review
+      void saveCachedAnalysis({
+        gameId: gameState.gameId,
+        moves: gameState.moves,
+        depth: 12,
+        analyzedAt: new Date().toISOString(),
+      });
+
       void db.games.add(gameRecord).then(() => {
         if (!activeProfile) return;
 
@@ -582,6 +591,16 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
+    // Capture hint data before clearing — used in post-game review for narrative continuity
+    const capturedHint = hintState.level > 0
+      ? {
+        moveIndex: moveCountRef.current,
+        level: hintState.level,
+        nudgeText: hintState.nudgeText,
+        arrowSquares: hintState.arrows.map((a) => `${a.startSquare}${a.endSquare}`),
+      }
+      : null;
+
     // Clear any coach annotations, hints, and reset move navigation when player moves
     handleBackToGame();
     setViewedMoveIndex(null);
@@ -637,6 +656,7 @@ export function CoachGamePage(): JSX.Element {
         bestMove: analysis?.bestMove ?? null,
         bestMoveEval: analysis?.topLines[0]?.evaluation ?? null,
         preMoveEval,
+        hintShown: capturedHint,
       };
       return {
         ...prev,
@@ -644,7 +664,7 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       };
     });
-  }, [game, handleBackToGame, resetHints]);
+  }, [game, handleBackToGame, hintState.level, hintState.nudgeText, hintState.arrows, resetHints]);
 
   // Handle practice move (when in chat-driven practice mode)
   const handlePracticeMove = useCallback(async (moveResult: MoveResult) => {

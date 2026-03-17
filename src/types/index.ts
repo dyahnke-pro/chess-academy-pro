@@ -385,6 +385,13 @@ export interface ChatMessage {
 export type CoachGameStatus = 'pregame' | 'playing' | 'postgame';
 export type CoachGameResult = 'win' | 'loss' | 'draw' | 'ongoing';
 
+export interface HintRecord {
+  moveIndex: number;
+  level: HintLevel;
+  nudgeText: string | null;
+  arrowSquares: string[] | null;
+}
+
 export interface CoachGameMove {
   moveNumber: number;
   san: string;
@@ -397,6 +404,7 @@ export interface CoachGameMove {
   bestMove: string | null;
   bestMoveEval: number | null;
   preMoveEval: number | null;
+  hintShown?: HintRecord | null;
 }
 
 export interface KeyMoment {
@@ -454,6 +462,10 @@ export interface CoachContext {
     weaknesses: string[];
   };
   additionalContext?: string;
+  hintContext?: {
+    level: HintLevel;
+    nudgeText: string | null;
+  } | null;
 }
 
 // ─── Weakness Analysis ──────────────────────────────────────────────────────
@@ -688,6 +700,13 @@ export interface GameAnalysisSummary {
   keyMoments: KeyMoment[];
   playerColor: 'white' | 'black';
   result: CoachGameResult;
+}
+
+export interface AnalysisCacheEntry {
+  gameId: string;
+  moves: CoachGameMove[];
+  depth: number;
+  analyzedAt: string;
 }
 
 export type KidGameId = 'pawns-journey' | 'fairy-tale';

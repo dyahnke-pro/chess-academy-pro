@@ -7,6 +7,7 @@ import type {
   UserProfile,
   SessionRecord,
   MetaRecord,
+  AnalysisCacheEntry,
 } from '../types';
 
 class ChessAcademyDB extends Dexie {
@@ -17,6 +18,7 @@ class ChessAcademyDB extends Dexie {
   profiles!: EntityTable<UserProfile, 'id'>;
   sessions!: EntityTable<SessionRecord, 'id'>;
   meta!: EntityTable<MetaRecord, 'key'>;
+  analysisCache!: EntityTable<AnalysisCacheEntry, 'gameId'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -143,6 +145,17 @@ class ChessAcademyDB extends Dexie {
           prefs.anthropicApiKeyIv = null;
         }
       });
+    });
+
+    this.version(8).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      analysisCache: 'gameId',
     });
   }
 }
