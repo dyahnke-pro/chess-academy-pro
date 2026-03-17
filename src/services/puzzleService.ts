@@ -1,7 +1,8 @@
 import { db } from '../db/schema';
 import { calculateNextInterval, createDefaultSrsFields } from './srsEngine';
+import { getMistakePuzzlesDue } from './mistakePuzzleService';
 import puzzleData from '../data/puzzles.json';
-import type { PuzzleRecord, SrsGrade, CoachDifficulty } from '../types';
+import type { PuzzleRecord, SrsGrade, CoachDifficulty, MistakePuzzle } from '../types';
 
 // ─── Theme Mapping ──────────────────────────────────────────────────────────
 
@@ -216,8 +217,33 @@ export async function getDuePuzzles(limit: number = 20): Promise<PuzzleRecord[]>
 }
 
 /**
+ * Adapts a MistakePuzzle to PuzzleRecord shape for the unified puzzle queue.
+ * Tagged with openingTags: 'mistake' so the UI can show a "From your game" badge.
+ */
+export function mistakePuzzleToPuzzleRecord(mp: MistakePuzzle): PuzzleRecord {
+  return {
+    id: mp.id,
+    fen: mp.fen,
+    moves: mp.bestMove,
+    rating: 1200,
+    themes: [mp.classification],
+    openingTags: 'mistake',
+    popularity: 0,
+    nbPlays: 0,
+    srsInterval: mp.srsInterval,
+    srsEaseFactor: mp.srsEaseFactor,
+    srsRepetitions: mp.srsRepetitions,
+    srsDueDate: mp.srsDueDate,
+    srsLastReview: mp.srsLastReview,
+    userRating: 1200,
+    attempts: mp.attempts,
+    successes: mp.successes,
+  };
+}
+
+/**
  * Daily puzzle selection algorithm.
- * Prioritizes: SRS due puzzles > weakest theme puzzles > rating band puzzles.
+ * Prioritizes: mistake puzzles > SRS due > weakest themes > rating band.
  */
 export async function getDailyPuzzles(
   userRating: number,
@@ -226,8 +252,19 @@ export async function getDailyPuzzles(
   const result: PuzzleRecord[] = [];
   const usedIds = new Set<string>();
 
-  // 1. SRS due puzzles (highest priority — 40% of target)
-  const dueTarget = Math.ceil(count * 0.4);
+  // 1. Mistake puzzles (priority — 20% of target)
+  const mistakeTarget = Math.ceil(count * 0.2);
+  const dueMistakes = await getMistakePuzzlesDue(mistakeTarget);
+  for (const mp of dueMistakes) {
+    if (result.length >= count) break;
+    if (!usedIds.has(mp.id)) {
+      result.push(mistakePuzzleToPuzzleRecord(mp));
+      usedIds.add(mp.id);
+    }
+  }
+
+  // 2. SRS due puzzles (35% of target)
+  const dueTarget = Math.ceil(count * 0.35);
   const duePuzzles = await getDuePuzzles(dueTarget);
   for (const p of duePuzzles) {
     if (result.length >= count) break;
@@ -237,8 +274,8 @@ export async function getDailyPuzzles(
     }
   }
 
-  // 2. Weakest theme puzzles (30% of target)
-  const themeTarget = Math.ceil(count * 0.3);
+  // 3. Weakest theme puzzles (25% of target)
+  const themeTarget = Math.ceil(count * 0.25);
   const weakThemes = await getWeakestThemes(3);
   for (const theme of weakThemes) {
     if (result.length >= count) break;
@@ -252,7 +289,7 @@ export async function getDailyPuzzles(
     }
   }
 
-  // 3. Fill remaining from rating band
+  // 4. Fill remaining from rating band
   if (result.length < count) {
     const bandPuzzles = await getPuzzlesInRatingBand(userRating, 200, count * 2);
     for (const p of bandPuzzles) {

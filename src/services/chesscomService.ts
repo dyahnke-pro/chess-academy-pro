@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import type { GameRecord, PlatformStats, TimeControlStats } from '../types';
 import { detectOpening, detectBlunders } from './gameImportUtils';
+import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
 
 // ─── Chess.com API types ────────────────────────────────────────────────────
 
@@ -110,6 +111,7 @@ export async function importChessComGames(
   // Step 2: Fetch each archive (most recent first for better UX)
   const reversedArchives = [...archives].reverse();
   let imported = 0;
+  const importedGameIds: string[] = [];
 
   for (let i = 0; i < reversedArchives.length; i++) {
     const archiveUrl = reversedArchives[i];
@@ -134,6 +136,7 @@ export async function importChessComGames(
           }
 
           await db.games.put(record);
+          importedGameIds.push(record.id);
           imported++;
           onProgress?.(imported);
         }
@@ -142,6 +145,11 @@ export async function importChessComGames(
       // Skip failed archives and continue with the rest
       continue;
     }
+  }
+
+  // Generate mistake puzzles from imported games in background
+  if (importedGameIds.length > 0) {
+    void generateMistakePuzzlesForBatch(importedGameIds, username);
   }
 
   return imported;

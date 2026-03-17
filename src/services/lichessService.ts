@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import type { GameRecord, PlatformStats } from '../types';
 import { detectOpening, detectBlunders } from './gameImportUtils';
+import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
 
 // ─── Lichess API types ──────────────────────────────────────────────────────
 
@@ -65,6 +66,7 @@ export async function importLichessGames(
   const text = await response.text();
   const lines = text.split('\n').filter((l) => l.trim());
   let imported = 0;
+  const importedGameIds: string[] = [];
 
   onProgress?.(0, `Processing ${lines.length} games...`);
 
@@ -104,9 +106,15 @@ export async function importLichessGames(
       }
 
       await db.games.put(record);
+      importedGameIds.push(record.id);
       imported++;
       onProgress?.(imported);
     }
+  }
+
+  // Generate mistake puzzles from imported games in background
+  if (importedGameIds.length > 0) {
+    void generateMistakePuzzlesForBatch(importedGameIds, username);
   }
 
   return imported;

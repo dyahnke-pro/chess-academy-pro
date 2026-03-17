@@ -2,6 +2,10 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { importLichessGames, importLichessStats } from './lichessService';
 
+vi.mock('./mistakePuzzleService', () => ({
+  generateMistakePuzzlesForBatch: vi.fn().mockResolvedValue(0),
+}));
+
 const MOCK_NDJSON = [
   JSON.stringify({
     id: 'abc123',

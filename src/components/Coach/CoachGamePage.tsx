@@ -28,6 +28,7 @@ import { calculateAccuracy, getClassificationCounts } from '../../services/accur
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
+import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
@@ -446,6 +447,9 @@ export function CoachGamePage(): JSX.Element {
 
         // Detect bad habits from game moves
         void detectBadHabitsFromGame(gameState.moves, activeProfile);
+
+        // Generate mistake puzzles from the completed game
+        void generateMistakePuzzlesFromGame(gameRecord.id);
 
         void checkAndAwardAchievements(activeProfile).then((earned) => {
           if (earned.length > 0) {

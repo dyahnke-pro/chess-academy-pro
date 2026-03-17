@@ -20,6 +20,37 @@ export interface PuzzleRecord {
   successes: number;
 }
 
+// ─── Mistake Puzzles ─────────────────────────────────────────────────────────
+
+export type MistakeClassification = 'inaccuracy' | 'mistake' | 'blunder';
+export type MistakePuzzleStatus = 'unsolved' | 'solved' | 'mastered';
+export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom';
+
+export interface MistakePuzzle {
+  id: string;
+  fen: string;
+  playerMove: string;
+  bestMove: string;
+  bestMoveSan: string;
+  cpLoss: number;
+  classification: MistakeClassification;
+  moveNumber: number;
+  sourceGameId: string;
+  sourceMode: MistakePuzzleSourceMode;
+  playerColor: 'white' | 'black';
+  promptText: string;
+  createdAt: string;
+  // SRS fields
+  srsInterval: number;
+  srsEaseFactor: number;
+  srsRepetitions: number;
+  srsDueDate: string;
+  srsLastReview: string | null;
+  status: MistakePuzzleStatus;
+  attempts: number;
+  successes: number;
+}
+
 // ─── Opening ─────────────────────────────────────────────────────────────────
 
 export interface OpeningVariation {

@@ -2,6 +2,10 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { importChessComGames, importChessComStats } from './chesscomService';
 
+vi.mock('./mistakePuzzleService', () => ({
+  generateMistakePuzzlesForBatch: vi.fn().mockResolvedValue(0),
+}));
+
 const MOCK_GAMES = [
   {
     url: 'https://www.chess.com/game/live/12345',

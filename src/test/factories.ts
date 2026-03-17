@@ -13,6 +13,7 @@ import type {
   BadHabit,
   MiniGameProgress,
   ProPlayer,
+  MistakePuzzle,
 } from '../types';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -302,6 +303,35 @@ export function buildProPlayer(overrides?: Partial<ProPlayer>): ProPlayer {
     style: 'Aggressive, Dynamic',
     description: 'A test chess player.',
     imageInitials: 'TP',
+    ...overrides,
+  };
+}
+
+// ─── MistakePuzzle ─────────────────────────────────────────────────────────
+
+export function buildMistakePuzzle(overrides?: Partial<MistakePuzzle>): MistakePuzzle {
+  return {
+    id: nextId('mistake'),
+    fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4',
+    playerMove: 'f3g5',
+    bestMove: 'd2d4',
+    bestMoveSan: 'd4',
+    cpLoss: 150,
+    classification: 'mistake',
+    moveNumber: 4,
+    sourceGameId: 'game_1',
+    sourceMode: 'coach',
+    playerColor: 'white',
+    promptText: 'This move cost you. What should you have played?',
+    createdAt: new Date().toISOString(),
+    srsInterval: 0,
+    srsEaseFactor: 2.5,
+    srsRepetitions: 0,
+    srsDueDate: today(),
+    srsLastReview: null,
+    status: 'unsolved',
+    attempts: 0,
+    successes: 0,
     ...overrides,
   };
 }
