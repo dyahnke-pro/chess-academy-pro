@@ -110,7 +110,7 @@ export function MyMistakesPage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button
-          onClick={() => { void navigate('/puzzles'); }}
+          onClick={() => void navigate('/puzzles')}
           className="text-theme-text-muted hover:text-theme-text"
           aria-label="Back to puzzles"
         >
