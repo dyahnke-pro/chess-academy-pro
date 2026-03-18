@@ -16,30 +16,33 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../se
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { speechService } from '../../services/speechService';
 import { usePieceSound } from '../../hooks/usePieceSound';
-import type { OpeningRecord, OpeningPlayResult, CoachDifficulty } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 
 interface OpeningPlayModeProps {
   opening: OpeningRecord;
+  customLine?: OpeningVariation;
   onExit: () => void;
 }
 
 type PlayPhase = 'pregame' | 'opening' | 'middlegame' | 'postgame';
 
-export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.Element {
+export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayModeProps): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const { settings } = useSettings();
   const playerRating = activeProfile?.currentRating ?? 1420;
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
   const targetStrength = getTargetStrength(playerRating, difficulty);
   const playerColor = opening.color;
+  const activePgn = customLine ? customLine.pgn : opening.pgn;
+  const displayName = customLine ? `${opening.name}: ${customLine.name}` : opening.name;
 
   const game = useChessGame(undefined, playerColor);
 
   // Publish board context for global coach drawer
   const playTurn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
-  useBoardContext(game.fen, opening.pgn, game.history.length, playerColor, playTurn);
+  useBoardContext(game.fen, activePgn, game.history.length, playerColor, playTurn);
 
   const [playPhase, setPlayPhase] = useState<PlayPhase>('pregame');
   const [voiceOn, setVoiceOn] = useState(true);
@@ -63,7 +66,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
 
   // Parse expected opening moves
   const openingMoves = useMemo((): Array<{ san: string; from: string; to: string }> => {
-    const tokens = opening.pgn.trim().split(/\s+/).filter(Boolean);
+    const tokens = activePgn.trim().split(/\s+/).filter(Boolean);
     const chess = new Chess();
     const moves: Array<{ san: string; from: string; to: string }> = [];
     for (const san of tokens) {
@@ -75,7 +78,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
       }
     }
     return moves;
-  }, [opening.pgn]);
+  }, [activePgn]);
 
   const openingPhaseLength = openingMoves.length;
 
@@ -195,7 +198,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
   // ─── Pregame intro ───────────────────────────────────────────────────────
   useEffect(() => {
     if (playPhase !== 'pregame') return;
-    say(`Let's play the ${opening.name}. Remember your key ideas and play confidently.`);
+    say(`Let's play the ${displayName}. Remember your key ideas and play confidently.`);
     const timer = setTimeout(() => {
       setPlayPhase('opening');
     }, 2500);
@@ -460,7 +463,7 @@ export function OpeningPlayMode({ opening, onExit }: OpeningPlayModeProps): JSX.
           <div>
             <div className="flex items-center gap-2">
               <Swords size={14} className="text-theme-accent" />
-              <p className="text-sm font-semibold text-theme-text">{opening.name}</p>
+              <p className="text-sm font-semibold text-theme-text">{displayName}</p>
             </div>
             <p className="text-xs text-theme-text-muted">
               {playPhase === 'pregame' && 'Starting...'}
