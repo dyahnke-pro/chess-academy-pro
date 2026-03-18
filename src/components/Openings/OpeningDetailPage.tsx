@@ -42,6 +42,13 @@ type ViewMode =
   | 'play'
   | 'variation-learn'
   | 'variation-practice'
+  | 'variation-play'
+  | 'trap-learn'
+  | 'trap-practice'
+  | 'trap-play'
+  | 'warning-learn'
+  | 'warning-practice'
+  | 'warning-play'
   | 'train-traps'
   | 'train-warnings';
 
@@ -67,6 +74,8 @@ export function OpeningDetailPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('detail');
   const [activeVariationIndex, setActiveVariationIndex] = useState(-1);
+  const [activeTrapLineIndex, setActiveTrapLineIndex] = useState(-1);
+  const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
@@ -95,6 +104,8 @@ export function OpeningDetailPage(): JSX.Element {
   const handleExit = useCallback((): void => {
     setViewMode('detail');
     setActiveVariationIndex(-1);
+    setActiveTrapLineIndex(-1);
+    setActiveWarningLineIndex(-1);
     void loadOpening();
   }, [loadOpening]);
 
@@ -106,6 +117,21 @@ export function OpeningDetailPage(): JSX.Element {
   const handleStartVariationPractice = useCallback((index: number): void => {
     setActiveVariationIndex(index);
     setViewMode('variation-practice');
+  }, []);
+
+  const handleStartVariationPlay = useCallback((index: number): void => {
+    setActiveVariationIndex(index);
+    setViewMode('variation-play');
+  }, []);
+
+  const handleStartTrapLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play'): void => {
+    setActiveTrapLineIndex(index);
+    setViewMode(`trap-${action}` as ViewMode);
+  }, []);
+
+  const handleStartWarningLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play'): void => {
+    setActiveWarningLineIndex(index);
+    setViewMode(`warning-${action}` as ViewMode);
   }, []);
 
   const handleToggleFavorite = useCallback(async (): Promise<void> => {
@@ -148,6 +174,17 @@ export function OpeningDetailPage(): JSX.Element {
     return opening.variations.map((v) => computeFenFromPgn(v.pgn));
   }, [opening?.variations]);
 
+  // Precompute trap/warning line FENs for thumbnails
+  const trapLineFens = useMemo((): string[] => {
+    if (!opening?.trapLines) return [];
+    return opening.trapLines.map((v) => computeFenFromPgn(v.pgn));
+  }, [opening?.trapLines]);
+
+  const warningLineFens = useMemo((): string[] => {
+    if (!opening?.warningLines) return [];
+    return opening.warningLines.map((v) => computeFenFromPgn(v.pgn));
+  }, [opening?.warningLines]);
+
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
@@ -176,6 +213,28 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Learn mode (trap/warning lines)
+  if (viewMode === 'trap-learn' && opening.trapLines?.[activeTrapLineIndex]) {
+    return (
+      <DrillMode
+        opening={opening}
+        customLine={opening.trapLines[activeTrapLineIndex]}
+        onComplete={handleComplete}
+        onExit={handleExit}
+      />
+    );
+  }
+  if (viewMode === 'warning-learn' && opening.warningLines?.[activeWarningLineIndex]) {
+    return (
+      <DrillMode
+        opening={opening}
+        customLine={opening.warningLines[activeWarningLineIndex]}
+        onComplete={handleComplete}
+        onExit={handleExit}
+      />
+    );
+  }
+
   // Practice mode (main line or variation)
   if (viewMode === 'practice' || viewMode === 'variation-practice') {
     return (
@@ -188,11 +247,64 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Play mode
+  // Practice mode (trap/warning lines)
+  if (viewMode === 'trap-practice' && opening.trapLines?.[activeTrapLineIndex]) {
+    return (
+      <PracticeMode
+        opening={opening}
+        customLine={opening.trapLines[activeTrapLineIndex]}
+        onComplete={handleComplete}
+        onExit={handleExit}
+      />
+    );
+  }
+  if (viewMode === 'warning-practice' && opening.warningLines?.[activeWarningLineIndex]) {
+    return (
+      <PracticeMode
+        opening={opening}
+        customLine={opening.warningLines[activeWarningLineIndex]}
+        onComplete={handleComplete}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Play mode (main line)
   if (viewMode === 'play') {
     return (
       <OpeningPlayMode
         opening={opening}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Play mode (variation)
+  if (viewMode === 'variation-play' && opening.variations?.[activeVariationIndex]) {
+    return (
+      <OpeningPlayMode
+        opening={opening}
+        customLine={opening.variations[activeVariationIndex]}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Play mode (trap/warning lines)
+  if (viewMode === 'trap-play' && opening.trapLines?.[activeTrapLineIndex]) {
+    return (
+      <OpeningPlayMode
+        opening={opening}
+        customLine={opening.trapLines[activeTrapLineIndex]}
+        onExit={handleExit}
+      />
+    );
+  }
+  if (viewMode === 'warning-play' && opening.warningLines?.[activeWarningLineIndex]) {
+    return (
+      <OpeningPlayMode
+        opening={opening}
+        customLine={opening.warningLines[activeWarningLineIndex]}
         onExit={handleExit}
       />
     );
@@ -372,6 +484,52 @@ export function OpeningDetailPage(): JSX.Element {
               <li key={i} className="text-sm text-theme-text-muted">{trap}</li>
             ))}
           </ul>
+          {opening.trapLines && opening.trapLines.length > 0 && (
+            <div className="space-y-1 mt-3 pt-3 border-t border-theme-border">
+              {opening.trapLines.map((line, i) => (
+                <div
+                  key={i}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                  data-testid={`trap-line-${i}`}
+                >
+                  <MiniBoard fen={trapLineFens[i]} size={52} orientation={opening.color} />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-theme-text">{line.name}</span>
+                    <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 ml-2">
+                    <button
+                      onClick={() => handleStartTrapLineAction(i, 'learn')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Learn ${line.name}`}
+                      title="Learn"
+                      data-testid={`trap-learn-${i}`}
+                    >
+                      <LearnIcon size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleStartTrapLineAction(i, 'practice')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Practice ${line.name}`}
+                      title="Practice"
+                      data-testid={`trap-practice-${i}`}
+                    >
+                      <Brain size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleStartTrapLineAction(i, 'play')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Play ${line.name}`}
+                      title="Play"
+                      data-testid={`trap-play-${i}`}
+                    >
+                      <Swords size={20} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -399,6 +557,52 @@ export function OpeningDetailPage(): JSX.Element {
               <li key={i} className="text-sm text-theme-text-muted">{warning}</li>
             ))}
           </ul>
+          {opening.warningLines && opening.warningLines.length > 0 && (
+            <div className="space-y-1 mt-3 pt-3 border-t border-theme-border">
+              {opening.warningLines.map((line, i) => (
+                <div
+                  key={i}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                  data-testid={`warning-line-${i}`}
+                >
+                  <MiniBoard fen={warningLineFens[i]} size={52} orientation={opening.color} />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-theme-text">{line.name}</span>
+                    <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 ml-2">
+                    <button
+                      onClick={() => handleStartWarningLineAction(i, 'learn')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Learn ${line.name}`}
+                      title="Learn"
+                      data-testid={`warning-learn-${i}`}
+                    >
+                      <LearnIcon size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleStartWarningLineAction(i, 'practice')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Practice ${line.name}`}
+                      title="Practice"
+                      data-testid={`warning-practice-${i}`}
+                    >
+                      <Brain size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleStartWarningLineAction(i, 'play')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Play ${line.name}`}
+                      title="Play"
+                      data-testid={`warning-play-${i}`}
+                    >
+                      <Swords size={20} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -450,6 +654,15 @@ export function OpeningDetailPage(): JSX.Element {
                       data-testid={`variation-practice-${i}`}
                     >
                       <Brain size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleStartVariationPlay(i)}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Play ${variation.name}`}
+                      title="Play"
+                      data-testid={`variation-play-${i}`}
+                    >
+                      <Swords size={20} />
                     </button>
                   </div>
                 </div>

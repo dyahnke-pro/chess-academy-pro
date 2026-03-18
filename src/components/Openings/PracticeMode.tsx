@@ -15,7 +15,7 @@ import {
 } from '../../services/openingService';
 import { speechService } from '../../services/speechService';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import type { OpeningRecord } from '../../types';
+import type { OpeningRecord, OpeningVariation } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
@@ -30,6 +30,7 @@ import {
 export interface PracticeModeProps {
   opening: OpeningRecord;
   variationIndex?: number;
+  customLine?: OpeningVariation;
   onComplete: (correct: boolean) => void;
   onExit: () => void;
 }
@@ -40,9 +41,9 @@ interface MoveInfo {
   to: string;
 }
 
-export function PracticeMode({ opening, variationIndex, onComplete, onExit }: PracticeModeProps): JSX.Element {
+export function PracticeMode({ opening, variationIndex, customLine, onComplete, onExit }: PracticeModeProps): JSX.Element {
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
-  const variation = isVariation ? opening.variations?.[variationIndex] : undefined;
+  const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
   const activePgn = variation ? variation.pgn : opening.pgn;
 
   // Parse PGN into move list
