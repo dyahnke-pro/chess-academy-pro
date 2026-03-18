@@ -142,16 +142,16 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         }, 400);
       }
     } else {
-      // Wrong move — undo it from chess.js state and show feedback
+      // Wrong move — undo it from chess.js state and show feedback, then auto-reset
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setState('incorrect');
       playEncouragement();
-      speechService.speak('Not quite. Try to find the best move.');
+      speechService.speak('Not quite. Try again.');
 
-      // Allow retry after brief pause
+      // Auto-reset: mark as failed after brief pause
       setTimeout(() => {
-        setState('playing');
+        onComplete(false);
       }, 1500);
     }
   }, [state, disabled, moveIndex, puzzle.themes, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);

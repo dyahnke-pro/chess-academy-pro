@@ -38,6 +38,7 @@ interface AppState {
 
   // Global coach drawer
   coachDrawerOpen: boolean;
+  coachEdgeTabPercent: number; // 0–100, vertical position on right edge
   globalBoardContext: {
     fen: string;
     pgn: string;
@@ -69,6 +70,7 @@ interface AppActions {
   setCoachBubbleText: (text: string) => void;
   toggleCoachVoice: () => void;
   setCoachDrawerOpen: (open: boolean) => void;
+  setCoachEdgeTabPercent: (percent: number) => void;
   setGlobalBoardContext: (ctx: AppState['globalBoardContext']) => void;
   setGlobalPracticePosition: (pos: AppState['globalPracticePosition']) => void;
   reset: () => void;
@@ -92,6 +94,7 @@ const DEFAULT_STATE: AppState = {
   coachBubbleText: '',
   coachVoiceOn: false,
   coachDrawerOpen: false,
+  coachEdgeTabPercent: 50,
   globalBoardContext: null,
   globalPracticePosition: null,
 };
@@ -145,6 +148,8 @@ export const useAppStore = create<AppState & AppActions>()(
     toggleCoachVoice: () => set((state) => ({ coachVoiceOn: !state.coachVoiceOn })),
 
     setCoachDrawerOpen: (open) => set({ coachDrawerOpen: open }),
+
+    setCoachEdgeTabPercent: (percent) => set({ coachEdgeTabPercent: Math.max(10, Math.min(90, percent)) }),
 
     setGlobalBoardContext: (ctx) => set({ globalBoardContext: ctx }),
 
