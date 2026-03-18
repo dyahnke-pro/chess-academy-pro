@@ -22,6 +22,11 @@ vi.mock('../../services/mistakePuzzleService', () => ({
   getMistakePuzzleStats: vi.fn(() => Promise.resolve(mockStats)),
   gradeMistakePuzzle: vi.fn(() => Promise.resolve()),
   deleteMistakePuzzle: vi.fn(() => Promise.resolve()),
+  movesForDifficulty: vi.fn((moves: string[], difficulty: string) => {
+    const lengths: Record<string, number> = { easy: 1, medium: 3, hard: Math.max(5, moves.length) };
+    return moves.slice(0, lengths[difficulty]);
+  }),
+  MIN_CONTINUATION_LENGTH: { easy: 1, medium: 3, hard: 5 },
 }));
 
 // Mock sound hooks
@@ -99,6 +104,47 @@ describe('MyMistakesPage', () => {
     expect(screen.getByText('1 unsolved')).toBeInTheDocument();
     expect(screen.getByText('1 solved')).toBeInTheDocument();
     expect(screen.getByText('1 mastered')).toBeInTheDocument();
+  });
+
+  it('renders difficulty picker with three options', async () => {
+    setMockData([buildMistakePuzzle({ id: 'p1' })]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('difficulty-picker')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('difficulty-easy')).toBeInTheDocument();
+    expect(screen.getByTestId('difficulty-medium')).toBeInTheDocument();
+    expect(screen.getByTestId('difficulty-hard')).toBeInTheDocument();
+  });
+
+  it('filters puzzles by difficulty based on continuation length', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'short', continuationMoves: ['d2d4'] }),
+      buildMistakePuzzle({ id: 'medium-len', continuationMoves: ['d2d4', 'e5d4', 'f3d4'] }),
+      buildMistakePuzzle({ id: 'long', continuationMoves: ['d2d4', 'e5d4', 'f3d4', 'b8c6', 'd4c6'] }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    // Easy: all 3 puzzles have at least 1 continuation move
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(3);
+    });
+
+    // Switch to medium: need at least 3 continuation moves
+    fireEvent.click(screen.getByTestId('difficulty-medium'));
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
+    });
+
+    // Switch to hard: need at least 5 continuation moves
+    fireEvent.click(screen.getByTestId('difficulty-hard'));
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(1);
+    });
   });
 
   it('filters by classification', async () => {
@@ -216,5 +262,26 @@ describe('MyMistakesPage', () => {
     expect(screen.getByTestId('classification-filter')).toBeInTheDocument();
     expect(screen.getByTestId('source-filter')).toBeInTheDocument();
     expect(screen.getByTestId('status-filter')).toBeInTheDocument();
+  });
+
+  it('shows hint about difficulty when no-matches with non-easy difficulty', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', continuationMoves: ['d2d4'] }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('puzzle-card')).toBeInTheDocument();
+    });
+
+    // Switch to hard — puzzle only has 1 continuation move, needs 5
+    fireEvent.click(screen.getByTestId('difficulty-hard'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('no-matches')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Try switching to an easier difficulty/)).toBeInTheDocument();
   });
 });

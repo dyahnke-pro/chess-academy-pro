@@ -25,6 +25,7 @@ export interface PuzzleRecord {
 export type MistakeClassification = 'inaccuracy' | 'mistake' | 'blunder';
 export type MistakePuzzleStatus = 'unsolved' | 'solved' | 'mastered';
 export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom';
+export type MistakePuzzleDifficulty = 'easy' | 'medium' | 'hard';
 
 export interface MistakePuzzle {
   id: string;
@@ -40,6 +41,7 @@ export interface MistakePuzzle {
   playerColor: 'white' | 'black';
   promptText: string;
   createdAt: string;
+  continuationMoves: string[];  // Full PV line as UCI moves (e.g., ['e2e4', 'd7d5', 'e4d5'])
   // SRS fields
   srsInterval: number;
   srsEaseFactor: number;

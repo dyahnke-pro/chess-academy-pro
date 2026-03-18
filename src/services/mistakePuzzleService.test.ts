@@ -10,11 +10,13 @@ import {
   gradeMistakePuzzle,
   deleteMistakePuzzle,
   getMistakePuzzleStats,
+  movesForDifficulty,
+  MIN_CONTINUATION_LENGTH,
 } from './mistakePuzzleService';
 import { buildGameRecord, buildMistakePuzzle, resetFactoryCounter } from '../test/factories';
 import type { MoveAnnotation } from '../types';
 
-// Mock stockfishEngine for imported game analysis
+// Mock stockfishEngine for analysis
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn().mockResolvedValue({
@@ -23,7 +25,12 @@ vi.mock('./stockfishEngine', () => ({
       isMate: false,
       mateIn: null,
       depth: 18,
-      topLines: [],
+      topLines: [{
+        rank: 1,
+        evaluation: 50,
+        moves: ['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3'],
+        mate: null,
+      }],
       nodesPerSecond: 0,
     }),
     initialize: vi.fn().mockResolvedValue(undefined),
@@ -62,6 +69,45 @@ describe('mistakePuzzleService', () => {
     await db.open();
   });
 
+  describe('movesForDifficulty', () => {
+    it('returns 1 move for easy', () => {
+      const moves = ['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3'];
+      expect(movesForDifficulty(moves, 'easy')).toEqual(['e2e4']);
+    });
+
+    it('returns 3 moves for medium', () => {
+      const moves = ['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3'];
+      expect(movesForDifficulty(moves, 'medium')).toEqual(['e2e4', 'd7d5', 'e4d5']);
+    });
+
+    it('returns 5+ moves for hard', () => {
+      const moves = ['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3', 'd5c6', 'f1c4'];
+      expect(movesForDifficulty(moves, 'hard')).toEqual(moves);
+    });
+
+    it('returns at least 5 moves for hard if available', () => {
+      const moves = ['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3'];
+      expect(movesForDifficulty(moves, 'hard')).toEqual(moves);
+    });
+
+    it('returns empty array for empty input', () => {
+      expect(movesForDifficulty([], 'easy')).toEqual([]);
+    });
+
+    it('returns available moves if fewer than requested', () => {
+      const moves = ['e2e4'];
+      expect(movesForDifficulty(moves, 'medium')).toEqual(['e2e4']);
+    });
+  });
+
+  describe('MIN_CONTINUATION_LENGTH', () => {
+    it('has correct minimums', () => {
+      expect(MIN_CONTINUATION_LENGTH.easy).toBe(1);
+      expect(MIN_CONTINUATION_LENGTH.medium).toBe(3);
+      expect(MIN_CONTINUATION_LENGTH.hard).toBe(5);
+    });
+  });
+
   describe('generateMistakePuzzlesFromGame', () => {
     it('generates puzzles from coach game with annotated mistakes', async () => {
       const game = buildGameRecord({
@@ -97,6 +143,30 @@ describe('mistakePuzzleService', () => {
       expect(mistake).toBeDefined();
       expect(mistake!.moveNumber).toBe(4);
       expect(mistake!.bestMove).toBe('e4d5');
+    });
+
+    it('stores continuationMoves from Stockfish PV line', async () => {
+      const game = buildGameRecord({
+        id: 'coach-pv',
+        pgn: TEST_PGN,
+        white: 'TestPlayer',
+        black: 'Stockfish Bot',
+        source: 'coach',
+        annotations: buildAnnotations(),
+      });
+      await db.games.add(game);
+
+      await generateMistakePuzzlesFromGame('coach-pv');
+
+      const puzzles = await db.mistakePuzzles.toArray();
+      // Each puzzle should have continuationMoves from the Stockfish PV
+      for (const puzzle of puzzles) {
+        expect(puzzle.continuationMoves).toBeDefined();
+        expect(Array.isArray(puzzle.continuationMoves)).toBe(true);
+        expect(puzzle.continuationMoves.length).toBeGreaterThan(0);
+        // First move should be the bestMove
+        expect(puzzle.continuationMoves[0]).toBe(puzzle.bestMove);
+      }
     });
 
     it('is idempotent — no duplicates on second call', async () => {
@@ -191,6 +261,8 @@ describe('mistakePuzzleService', () => {
       expect(puzzles[0].playerColor).toBe('white');
       // bestMove comes from mocked stockfishEngine
       expect(puzzles[0].bestMove).toBe('e2e4');
+      // continuationMoves from PV line
+      expect(puzzles[0].continuationMoves).toEqual(['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3']);
     });
 
     it('generates puzzles from chess.com imports', async () => {

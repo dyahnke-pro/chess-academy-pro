@@ -5,6 +5,7 @@ import { stockfishEngine } from './stockfishEngine';
 import type {
   MistakePuzzle,
   MistakeClassification,
+  MistakePuzzleDifficulty,
   MistakePuzzleSourceMode,
   MistakePuzzleStatus,
   SrsGrade,
@@ -89,6 +90,34 @@ function determinePlayerColor(
   }
   return null;
 }
+
+/**
+ * Slice the continuation PV line for a given difficulty level.
+ * Easy: 1 half-move (just the best move).
+ * Medium: up to 3 half-moves (player → opponent → player).
+ * Hard: up to the full PV (at least 5 half-moves).
+ */
+export function movesForDifficulty(
+  moves: string[],
+  difficulty: MistakePuzzleDifficulty,
+): string[] {
+  if (moves.length === 0) return [];
+  const lengths: Record<MistakePuzzleDifficulty, number> = {
+    easy: 1,
+    medium: 3,
+    hard: Math.max(5, moves.length),
+  };
+  return moves.slice(0, lengths[difficulty]);
+}
+
+/**
+ * Minimum continuation length required for each difficulty.
+ */
+export const MIN_CONTINUATION_LENGTH: Record<MistakePuzzleDifficulty, number> = {
+  easy: 1,
+  medium: 3,
+  hard: 5,
+};
 
 // ─── Generation ─────────────────────────────────────────────────────────────
 
@@ -177,17 +206,30 @@ export async function generateMistakePuzzlesFromGame(
 
     if (cpLoss < CP_LOSS_THRESHOLD) continue;
 
-    // Get bestMove — either from annotation or via Stockfish
+    // Get bestMove and PV continuation via Stockfish
     let bestMove = annotation.bestMove;
-    if (!bestMove) {
-      try {
-        const analysis = await stockfishEngine.analyzePosition(fen, 18);
+    let continuationMoves: string[] = [];
+
+    try {
+      const analysis = await stockfishEngine.analyzePosition(fen, 18);
+      if (!bestMove) {
         bestMove = analysis.bestMove;
-      } catch {
-        continue; // Skip if Stockfish fails
       }
+      // Use PV line from best line; first move is the bestMove itself
+      const pvLine = analysis.topLines[0] as typeof analysis.topLines[number] | undefined;
+      if (pvLine && pvLine.moves.length > 0) {
+        continuationMoves = pvLine.moves;
+      }
+    } catch {
+      if (!bestMove) continue; // Skip if no bestMove available
     }
+
     if (!bestMove) continue;
+
+    // Ensure continuationMoves starts with bestMove
+    if (continuationMoves.length === 0 || continuationMoves[0] !== bestMove) {
+      continuationMoves = [bestMove, ...continuationMoves.filter((m) => m !== bestMove)];
+    }
 
     const bestMoveSan = uciToSan(fen, bestMove);
     const classification = classifyCpLoss(cpLoss);
@@ -215,6 +257,7 @@ export async function generateMistakePuzzlesFromGame(
       sourceMode,
       playerColor,
       promptText: PROMPT_TEXT[classification],
+      continuationMoves,
       createdAt: now,
       srsInterval: srsDefaults.interval,
       srsEaseFactor: srsDefaults.easeFactor,

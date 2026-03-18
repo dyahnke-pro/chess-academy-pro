@@ -6,10 +6,11 @@ import {
   getMistakePuzzleStats,
   gradeMistakePuzzle,
   deleteMistakePuzzle,
+  MIN_CONTINUATION_LENGTH,
   type MistakePuzzleStats,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot } from 'lucide-react';
-import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus } from '../../types';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, Zap, Target, Flame } from 'lucide-react';
+import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakePuzzleDifficulty } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
 type SourceFilter = MistakePuzzleSourceMode | 'all';
@@ -33,11 +34,38 @@ const SOURCE_LABELS: Record<MistakePuzzleSourceMode, string> = {
   chesscom: 'Chess.com',
 };
 
+const DIFFICULTY_CONFIG: Record<MistakePuzzleDifficulty, { label: string; description: string; icon: typeof Zap; color: string; activeColor: string }> = {
+  easy: {
+    label: 'Easy',
+    description: '1 move',
+    icon: Zap,
+    color: 'border-green-500/30 text-theme-text-muted hover:border-green-500/60 hover:text-green-500',
+    activeColor: 'border-green-500 bg-green-500/10 text-green-500',
+  },
+  medium: {
+    label: 'Medium',
+    description: '3 moves',
+    icon: Target,
+    color: 'border-amber-500/30 text-theme-text-muted hover:border-amber-500/60 hover:text-amber-500',
+    activeColor: 'border-amber-500 bg-amber-500/10 text-amber-500',
+  },
+  hard: {
+    label: 'Hard',
+    description: '5+ moves',
+    icon: Flame,
+    color: 'border-red-500/30 text-theme-text-muted hover:border-red-500/60 hover:text-red-500',
+    activeColor: 'border-red-500 bg-red-500/10 text-red-500',
+  },
+};
+
+const DIFFICULTIES: MistakePuzzleDifficulty[] = ['easy', 'medium', 'hard'];
+
 export function MyMistakesPage(): JSX.Element {
   const navigate = useNavigate();
   const [puzzles, setPuzzles] = useState<MistakePuzzle[]>([]);
   const [stats, setStats] = useState<MistakePuzzleStats | null>(null);
   const [activePuzzle, setActivePuzzle] = useState<MistakePuzzle | null>(null);
+  const [difficulty, setDifficulty] = useState<MistakePuzzleDifficulty>('easy');
   const [classFilter, setClassFilter] = useState<ClassificationFilter>('all');
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
@@ -57,10 +85,15 @@ export function MyMistakesPage(): JSX.Element {
     void loadData();
   }, [loadData]);
 
+  const minMoves = MIN_CONTINUATION_LENGTH[difficulty];
+
   const filtered = puzzles.filter((p) => {
     if (classFilter !== 'all' && p.classification !== classFilter) return false;
     if (sourceFilter !== 'all' && p.sourceMode !== sourceFilter) return false;
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
+    // Filter by continuation length for the selected difficulty
+    const contLen = p.continuationMoves.length;
+    if (contLen < minMoves) return false;
     return true;
   });
 
@@ -99,6 +132,7 @@ export function MyMistakesPage(): JSX.Element {
         </button>
         <MistakePuzzleBoard
           puzzle={activePuzzle}
+          difficulty={difficulty}
           onComplete={handlePuzzleComplete}
         />
       </div>
@@ -140,6 +174,30 @@ export function MyMistakesPage(): JSX.Element {
           </div>
         </div>
       )}
+
+      {/* Difficulty picker */}
+      <div className="flex gap-2" data-testid="difficulty-picker">
+        {DIFFICULTIES.map((diff) => {
+          const config = DIFFICULTY_CONFIG[diff];
+          const Icon = config.icon;
+          const isActive = difficulty === diff;
+
+          return (
+            <button
+              key={diff}
+              onClick={() => setDifficulty(diff)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium transition-all ${
+                isActive ? config.activeColor : config.color
+              }`}
+              data-testid={`difficulty-${diff}`}
+            >
+              <Icon size={14} />
+              {config.label}
+              <span className="text-xs opacity-70">({config.description})</span>
+            </button>
+          );
+        })}
+      </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2" data-testid="filters">
@@ -195,6 +253,11 @@ export function MyMistakesPage(): JSX.Element {
       {puzzles.length > 0 && filtered.length === 0 && (
         <div className="text-center py-8 text-theme-text-muted" data-testid="no-matches">
           <p className="text-sm">No puzzles match your filters.</p>
+          {difficulty !== 'easy' && (
+            <p className="text-xs mt-1">
+              Try switching to an easier difficulty — some puzzles may not have enough continuation moves.
+            </p>
+          )}
         </div>
       )}
 

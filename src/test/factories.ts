@@ -329,6 +329,7 @@ export function buildMistakePuzzle(overrides?: Partial<MistakePuzzle>): MistakeP
     srsRepetitions: 0,
     srsDueDate: today(),
     srsLastReview: null,
+    continuationMoves: ['d2d4', 'e5d4', 'f3d4'],
     status: 'unsolved',
     attempts: 0,
     successes: 0,
