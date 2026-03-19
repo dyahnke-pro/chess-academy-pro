@@ -157,6 +157,25 @@ class ChessAcademyDB extends Dexie {
       meta: 'key',
       mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode',
     });
+
+    this.version(9).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+    }).upgrade(async (tx) => {
+      await tx.table('mistakePuzzles').toCollection().modify((puzzle: Record<string, unknown>) => {
+        const moveNumber = puzzle.moveNumber as number;
+        if (moveNumber <= 15) puzzle.gamePhase = 'opening';
+        else if (moveNumber <= 35) puzzle.gamePhase = 'middlegame';
+        else puzzle.gamePhase = 'endgame';
+        if (!puzzle.moves) puzzle.moves = puzzle.bestMove as string;
+      });
+    });
   }
 }
 

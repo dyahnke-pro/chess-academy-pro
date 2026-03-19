@@ -5,6 +5,7 @@ import { stockfishEngine } from './stockfishEngine';
 import type {
   MistakePuzzle,
   MistakeClassification,
+  MistakeGamePhase,
   MistakePuzzleSourceMode,
   MistakePuzzleStatus,
   SrsGrade,
@@ -16,6 +17,8 @@ import type {
 
 const CP_LOSS_THRESHOLD = 50;
 const MASTERY_REPETITIONS = 3;
+const MIN_PV_MOVES = 3;
+const BATCH_GAME_LIMIT = 100;
 
 function generateId(): string {
   const timestamp = Date.now().toString(36);
@@ -55,6 +58,26 @@ function uciToSan(fen: string, uci: string): string {
   } catch {
     return uci;
   }
+}
+
+function classifyGamePhase(fen: string, moveNumber: number): MistakeGamePhase {
+  // Use both move number and piece count for classification
+  if (moveNumber <= 12) return 'opening';
+
+  // Count non-pawn, non-king pieces to detect endgame
+  const board = fen.split(' ')[0];
+  let minorMajorCount = 0;
+  for (const ch of board) {
+    if ('rnbqRNBQ'.includes(ch)) minorMajorCount++;
+  }
+
+  // Endgame: few pieces left or late in the game with reduced material
+  if (minorMajorCount <= 4 || (moveNumber > 35 && minorMajorCount <= 6)) return 'endgame';
+
+  // Opening extends a bit if still developing (many pieces, early moves)
+  if (moveNumber <= 15 && minorMajorCount >= 12) return 'opening';
+
+  return 'middlegame';
 }
 
 function replayPgnToFens(pgn: string): string[] {
@@ -340,20 +363,44 @@ async function generateFromAnnotations(
 
     if (cpLoss < CP_LOSS_THRESHOLD) continue;
 
-    // Get bestMove — either from annotation or via Stockfish
+    // Get bestMove + PV line via Stockfish (or annotation for quick fallback)
     let bestMove = annotation.bestMove;
-    if (!bestMove) {
-      try {
-        const analysis = await stockfishEngine.analyzePosition(fen, 18);
-        bestMove = analysis.bestMove;
-      } catch {
-        continue; // Skip if Stockfish fails
+    let pvMoves: string[] = [];
+
+    try {
+      const analysis = await stockfishEngine.analyzePosition(fen, 18);
+      if (!bestMove) bestMove = analysis.bestMove;
+      // Get the PV line (multi-move continuation) from top line
+      const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
+      if (topLine && topLine.moves.length >= MIN_PV_MOVES) {
+        pvMoves = topLine.moves;
       }
+    } catch {
+      if (!bestMove) continue; // Skip if no bestMove at all
     }
+
     if (!bestMove) continue;
 
+    // If PV line is too short, build a minimum 3-move sequence from bestMove
+    if (pvMoves.length < MIN_PV_MOVES) {
+      pvMoves = [bestMove];
+      // Try to extend by playing the best move and analyzing the response
+      try {
+        const tempChess = new Chess(fen);
+        tempChess.move({ from: bestMove.slice(0, 2), to: bestMove.slice(2, 4), promotion: bestMove.length > 4 ? bestMove[4] : undefined });
+        const followUp = await stockfishEngine.analyzePosition(tempChess.fen(), 14);
+        if (followUp.topLines[0]) {
+          pvMoves.push(...followUp.topLines[0].moves.slice(0, 4));
+        }
+      } catch {
+        // Keep what we have
+      }
+    }
+
+    const movesUci = pvMoves.join(' ');
     const bestMoveSan = uciToSan(fen, bestMove);
     const classification = classifyCpLoss(cpLoss);
+    const gamePhase = classifyGamePhase(fen, annotation.moveNumber);
 
     // Determine player's move in UCI format from annotation SAN
     let playerMove = '';
@@ -371,8 +418,10 @@ async function generateFromAnnotations(
       playerMove,
       bestMove,
       bestMoveSan,
+      moves: movesUci,
       cpLoss,
       classification,
+      gamePhase,
       moveNumber: annotation.moveNumber,
       sourceGameId: gameId,
       sourceMode,
@@ -406,8 +455,10 @@ export async function generateMistakePuzzlesForBatch(
   gameIds: string[],
   username: string,
 ): Promise<number> {
+  // Limit to most recent games to avoid bogging down the system
+  const limitedIds = gameIds.slice(-BATCH_GAME_LIMIT);
   let total = 0;
-  for (const id of gameIds) {
+  for (const id of limitedIds) {
     total += await generateMistakePuzzlesFromGame(id, username);
   }
   return total;
@@ -525,6 +576,15 @@ export async function getAllMistakePuzzles(): Promise<MistakePuzzle[]> {
   return db.mistakePuzzles.toArray();
 }
 
+export async function getMistakePuzzlesByPhase(
+  phase: MistakeGamePhase,
+): Promise<MistakePuzzle[]> {
+  return db.mistakePuzzles
+    .where('gamePhase')
+    .equals(phase)
+    .toArray();
+}
+
 // ─── Grading ────────────────────────────────────────────────────────────────
 
 export async function gradeMistakePuzzle(
@@ -586,6 +646,11 @@ export interface MistakePuzzleStats {
     mistake: number;
     blunder: number;
   };
+  byPhase: {
+    opening: number;
+    middlegame: number;
+    endgame: number;
+  };
   dueCount: number;
 }
 
@@ -599,6 +664,7 @@ export async function getMistakePuzzleStats(): Promise<MistakePuzzleStats> {
     solved: 0,
     mastered: 0,
     byClassification: { inaccuracy: 0, mistake: 0, blunder: 0 },
+    byPhase: { opening: 0, middlegame: 0, endgame: 0 },
     dueCount: 0,
   };
 
@@ -608,6 +674,8 @@ export async function getMistakePuzzleStats(): Promise<MistakePuzzleStats> {
     else stats.mastered++;
 
     stats.byClassification[p.classification]++;
+
+    stats.byPhase[p.gamePhase]++;
 
     if (p.srsDueDate <= today) stats.dueCount++;
   }

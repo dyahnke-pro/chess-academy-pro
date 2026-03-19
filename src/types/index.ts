@@ -25,6 +25,7 @@ export interface PuzzleRecord {
 export type MistakeClassification = 'inaccuracy' | 'mistake' | 'blunder';
 export type MistakePuzzleStatus = 'unsolved' | 'solved' | 'mastered';
 export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom';
+export type MistakeGamePhase = 'opening' | 'middlegame' | 'endgame';
 
 export interface MistakePuzzle {
   id: string;
@@ -32,8 +33,10 @@ export interface MistakePuzzle {
   playerMove: string;
   bestMove: string;
   bestMoveSan: string;
+  moves: string;
   cpLoss: number;
   classification: MistakeClassification;
+  gamePhase: MistakeGamePhase;
   moveNumber: number;
   sourceGameId: string;
   sourceMode: MistakePuzzleSourceMode;
