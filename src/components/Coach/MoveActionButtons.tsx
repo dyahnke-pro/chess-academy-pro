@@ -1,4 +1,4 @@
-import { Eye, RotateCcw } from 'lucide-react';
+import { Eye, RotateCcw, GitBranch } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CoachGameMove, MoveClassification } from '../../types';
 
@@ -6,6 +6,8 @@ interface MoveActionButtonsProps {
   currentMove: CoachGameMove | null;
   onShowBestMove: () => void;
   onRetryPosition: () => void;
+  onShowBestLine?: () => void;
+  showingBestLine?: boolean;
   className?: string;
 }
 
@@ -23,6 +25,8 @@ export function MoveActionButtons({
   currentMove,
   onShowBestMove,
   onRetryPosition,
+  onShowBestLine,
+  showingBestLine = false,
   className = '',
 }: MoveActionButtonsProps): JSX.Element {
   const show = isSuboptimal(currentMove);
@@ -52,6 +56,21 @@ export function MoveActionButtons({
             <Eye size={14} />
             Show Best
           </button>
+          {onShowBestLine && (
+            <button
+              onClick={onShowBestLine}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-80"
+              style={{
+                background: showingBestLine ? 'var(--color-accent)' : 'var(--color-surface)',
+                color: showingBestLine ? 'var(--color-bg)' : 'var(--color-text)',
+                border: `1px solid ${showingBestLine ? 'var(--color-accent)' : 'var(--color-border)'}`,
+              }}
+              data-testid="show-line-btn"
+            >
+              <GitBranch size={14} />
+              {showingBestLine ? 'Exit Line' : 'Best Line'}
+            </button>
+          )}
           <button
             onClick={onRetryPosition}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-80"

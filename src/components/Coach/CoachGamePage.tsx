@@ -41,20 +41,34 @@ import type { MoveResult } from '../../hooks/useChessGame';
 function classifyMove(
   preMoveEval: number | null,
   postMoveEval: number,
+  bestMoveEval: number | null,
+  isEngineBestMove: boolean,
   playerColor: 'white' | 'black',
 ): MoveClassification {
   if (preMoveEval === null) return 'good';
   // Both evals are from White's perspective (normalized by stockfishEngine).
-  // For White: losing advantage = preMoveEval drops → evalLoss = pre - post
-  // For Black: losing advantage = preMoveEval rises → evalLoss = post - pre
+  // evalLoss = how many centipawns the player lost compared to pre-move position
   const evalLoss = playerColor === 'white'
     ? preMoveEval - postMoveEval
     : postMoveEval - preMoveEval;
-  if (evalLoss < -50) return 'brilliant';
-  if (evalLoss <= 5) return 'great';
-  if (evalLoss < 30) return 'good';
-  if (evalLoss < 80) return 'inaccuracy';
-  if (evalLoss < 200) return 'mistake';
+
+  // cpLostVsBest = how much worse the played move is vs the engine's best
+  const cpLostVsBest = bestMoveEval !== null
+    ? (playerColor === 'white'
+        ? bestMoveEval - postMoveEval
+        : postMoveEval - bestMoveEval)
+    : Math.max(0, evalLoss);
+
+  // Brilliant: player found the engine's best move AND it was a critical move
+  // (position improves significantly, meaning other moves were much worse)
+  if (isEngineBestMove && evalLoss < -50) return 'brilliant';
+  // Great: played the best move or very close (<10cp off)
+  if (cpLostVsBest <= 10) return 'great';
+  // Good: small loss vs best
+  if (cpLostVsBest < 30) return 'good';
+  // Suboptimal classifications based on cp lost vs best move
+  if (cpLostVsBest < 80) return 'inaccuracy';
+  if (cpLostVsBest < 200) return 'mistake';
   return 'blunder';
 }
 
@@ -608,18 +622,29 @@ export function CoachGamePage(): JSX.Element {
     resetHints();
     prevNudgeRef.current = null;
 
+    // Capture pre-move FEN before making the move
+    const preFen = game.fen;
+
     // Sync the page's game instance with the board's move so game.turn
     // flips to the coach's color and triggers the coach move useEffect.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
     setCoachLastMove(null);
     moveCountRef.current += 1;
 
-    // Analyze the player's move
+    // Analyze the position AFTER the player's move (for eval bar + post-move eval)
     let analysis: StockfishAnalysis | null = null;
     try {
       analysis = await stockfishEngine.analyzePosition(moveResult.fen, 12);
     } catch {
       // If analysis fails, default to 'good'
+    }
+
+    // Analyze the position BEFORE the player's move (for best move comparison)
+    let preAnalysis: StockfishAnalysis | null = null;
+    try {
+      preAnalysis = await stockfishEngine.analyzePosition(preFen, 12);
+    } catch {
+      // If pre-analysis fails, we'll use simpler classification
     }
 
     // Update eval bar
@@ -629,10 +654,15 @@ export function CoachGamePage(): JSX.Element {
       setLatestMateIn(analysis.mateIn);
     }
 
+    // Check if the player played the engine's best move
+    const playerUci = moveResult.from + moveResult.to + (moveResult.promotion ?? '');
+    const isEngineBestMove = preAnalysis?.bestMove === playerUci;
+    const bestMoveEval = preAnalysis?.topLines[0]?.evaluation ?? null;
+
     setGameState((prev) => {
       const preMoveEval = prev.moves.length > 0 ? (prev.moves[prev.moves.length - 1].evaluation ?? null) : 0;
       const classification = analysis
-        ? classifyMove(preMoveEval, analysis.evaluation, playerColor)
+        ? classifyMove(preMoveEval, analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor)
         : 'good';
 
       const evalLoss = analysis && preMoveEval !== null
@@ -640,9 +670,11 @@ export function CoachGamePage(): JSX.Element {
             ? preMoveEval - analysis.evaluation
             : analysis.evaluation - preMoveEval)
         : 0;
+      // bestMove from pre-analysis = what the player SHOULD have played
+      const engineBestMove = preAnalysis?.bestMove ?? null;
       const vars = {
         playerMove: moveResult.san,
-        bestMove: analysis?.bestMove ?? '?',
+        bestMove: engineBestMove ?? '?',
         evalDelta: String(evalLoss),
       };
       const commentary = getMoveCommentaryTemplate(classification, vars);
@@ -656,8 +688,8 @@ export function CoachGamePage(): JSX.Element {
         evaluation: analysis?.evaluation ?? null,
         classification,
         expanded: false,
-        bestMove: analysis?.bestMove ?? null,
-        bestMoveEval: analysis?.topLines[0]?.evaluation ?? null,
+        bestMove: engineBestMove,
+        bestMoveEval: bestMoveEval,
         preMoveEval,
       };
       return {

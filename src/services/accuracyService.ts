@@ -34,16 +34,16 @@ export function calculateAccuracy(moves: CoachGameMove[]): GameAccuracy {
     const winProbBest = evalToWinProb(move.bestMoveEval * signForSide);
     const winProbAfter = evalToWinProb(move.evaluation * signForSide);
 
-    // Per-move accuracy: how much of the "best possible" win probability was retained
+    // Per-move accuracy: ratio of win probability retained vs best move
     // If the player played the best move, accuracy = 100%
-    // If the player lost all advantage, accuracy approaches 0%
+    // If the player's move is much worse, accuracy drops toward 0%
     let moveAccuracy: number;
-    if (winProbBest <= 0.001) {
+    if (winProbBest <= 0.01) {
       // Position was already lost — any move is "accurate" since there's nothing to lose
       moveAccuracy = 100;
     } else {
-      const bestDelta = Math.abs(winProbBest - winProbAfter);
-      moveAccuracy = Math.max(0, Math.min(100, 100 * (1 - bestDelta / Math.max(winProbBefore, 0.001))));
+      // How much win probability did the player retain compared to the best move?
+      moveAccuracy = Math.max(0, Math.min(100, (winProbAfter / winProbBest) * 100));
     }
 
     if (isWhiteMove) {
