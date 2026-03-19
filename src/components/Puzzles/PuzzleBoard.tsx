@@ -142,16 +142,38 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         }, 400);
       }
     } else {
-      // Wrong move — undo it from chess.js state and show feedback, then auto-reset
+      // Wrong move — undo it from chess.js state and show feedback, then reset puzzle
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setState('incorrect');
       playEncouragement();
       speechService.speak('Not quite. Try again.');
 
-      // Auto-reset: mark as failed after brief pause
+      // Auto-reset: replay the puzzle from the start after brief pause
       setTimeout(() => {
-        onComplete(false);
+        const chess = new Chess(puzzle.fen);
+        chessRef.current = chess;
+        setMoveIndex(0);
+        setFen(puzzle.fen);
+        setState('loading');
+        resetHints();
+
+        // Re-play the first (opponent) move
+        setTimeout(() => {
+          const moves = movesRef.current;
+          const firstMove = moves.length > 0 ? moves[0] : undefined;
+          if (firstMove) {
+            try {
+              const result = chess.move({ from: firstMove.from, to: firstMove.to, promotion: firstMove.promotion });
+              playMoveSound(result.san);
+              setFen(chess.fen());
+            } catch {
+              // skip
+            }
+          }
+          setMoveIndex(1);
+          setState('playing');
+        }, 600);
       }, 1500);
     }
   }, [state, disabled, moveIndex, puzzle.themes, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
