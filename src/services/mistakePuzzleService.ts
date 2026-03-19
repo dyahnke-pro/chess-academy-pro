@@ -511,14 +511,11 @@ export async function reanalyzeImportedGames(
     }
   }
 
-  // Determine username from first imported game
-  let username = '';
-  for (const game of allGames) {
-    if (game.source === 'chesscom' || game.source === 'lichess') {
-      username = game.white.toLowerCase();
-      break;
-    }
-  }
+  // Read stored usernames from the user profile
+  const profiles = await db.profiles.toArray();
+  const profile = profiles[0] as typeof profiles[0] | undefined;
+  const chessComUsername = profile?.preferences.chessComUsername ?? '';
+  const lichessUsername = profile?.preferences.lichessUsername ?? '';
 
   // Re-run analysis on all games
   let totalPuzzles = 0;
@@ -527,6 +524,9 @@ export async function reanalyzeImportedGames(
 
     const freshGame = await db.games.get(allGames[i].id);
     if (!freshGame) continue;
+
+    // Use the correct username for the game's source platform
+    const username = freshGame.source === 'chesscom' ? chessComUsername : lichessUsername;
 
     const count = await generateMistakePuzzlesFromGame(
       freshGame.id,
