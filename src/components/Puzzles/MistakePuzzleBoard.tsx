@@ -43,6 +43,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
   const [moveCount, setMoveCount] = useState(0);
+  const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
+  // boardKey increments to force ChessBoard remount only on resets
+  const [boardKey, setBoardKey] = useState(0);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
@@ -84,6 +87,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     setMoveIndex(0);
     setMoveCount(0);
     setFen(puzzle.fen);
+    setLastMoveHighlight(null);
+    setBoardKey((k) => k + 1);
     setState('loading');
     resetHints();
 
@@ -107,6 +112,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     if (isCorrect) {
       playMoveSound(move.san);
       resetHints();
+      setLastMoveHighlight({ from: move.from, to: move.to });
       setMoveCount((c) => c + 1);
       const nextIndex = moveIndex + 1;
 
@@ -119,7 +125,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         return;
       }
 
-      // Auto-play opponent's response
+      // Auto-play opponent's response after a delay
+      setMoveIndex(nextIndex);
       if (nextIndex < allMoves.length) {
         const opponentMove = allMoves[nextIndex];
         setTimeout(() => {
@@ -130,22 +137,29 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
               promotion: opponentMove.promotion,
             });
             playMoveSound(result.san);
-            setFen(chessRef.current.fen());
+            const newFen = chessRef.current.fen();
+            setLastMoveHighlight({ from: opponentMove.from, to: opponentMove.to });
+            setFen(newFen);
+            setBoardKey((k) => k + 1);
           } catch {
-            // skip
+            // skip invalid opponent move
           }
           setMoveIndex(nextIndex + 1);
-        }, 400);
+        }, 500);
       }
     } else {
-      // Wrong move — undo and reset puzzle
+      // Wrong move — undo from chess instance and show incorrect state
       chessRef.current.undo();
-      setFen(chessRef.current.fen());
+      const prevFen = chessRef.current.fen();
       setState('incorrect');
       playEncouragement();
       speechService.speak('Not quite. Try again.');
 
-      // Auto-reset after brief pause
+      // Immediately reset board to pre-move position (takeback)
+      setFen(prevFen);
+      setBoardKey((k) => k + 1);
+
+      // Auto-reset full puzzle after brief pause
       setTimeout(() => {
         const chess = new Chess(puzzle.fen);
         chessRef.current = chess;
@@ -153,6 +167,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         setMoveIndex(0);
         setMoveCount(0);
         setFen(puzzle.fen);
+        setLastMoveHighlight(null);
+        setBoardKey((k) => k + 1);
         setState('loading');
         resetHints();
 
@@ -205,13 +221,14 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       <div className="w-full md:max-w-[420px] mx-auto">
         <ChessBoard
           initialFen={fen}
-          key={fen}
+          key={boardKey}
           orientation={puzzle.playerColor}
           interactive={state === 'playing'}
           showFlipButton
           showUndoButton={false}
           showResetButton={false}
           onMove={handleChessBoardMove}
+          highlightSquares={lastMoveHighlight}
           arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
         />
