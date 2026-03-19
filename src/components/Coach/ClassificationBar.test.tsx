@@ -8,6 +8,7 @@ const makeCounts = (overrides: Partial<MoveClassificationCounts> = {}): MoveClas
   great: 0,
   good: 0,
   book: 0,
+  miss: 0,
   inaccuracy: 0,
   mistake: 0,
   blunder: 0,

@@ -143,13 +143,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     [moves, playerColor],
   );
 
-  // Opponent classification counts for summary card
-  const opponentColor = playerColor === 'white' ? 'black' : 'white';
-  const opponentClassificationCounts = useMemo<MoveClassificationCounts>(
-    () => getClassificationCounts(moves, opponentColor),
-    [moves, opponentColor],
-  );
-
   // Pre-compute phase breakdown + missed tactics
   const phaseBreakdown = useMemo<PhaseAccuracy[]>(
     () => getPhaseBreakdown(moves, playerColor),
@@ -923,22 +916,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }
 
   // ─── Analysis Phase ─────────────────────────────────────────────────────────
+  // Layout: Left column = fixed board area (no scroll), Right column = scrollable panels
+  // Mobile: board section is static at top, bottom panel scrolls independently
   return (
     <>
-      {/* Left column: board + nav */}
-      <div className="flex flex-col md:w-3/5 min-h-0 overflow-y-auto" data-testid="coach-game-review">
-        {/* Header */}
-        <div className="flex items-center justify-between p-3 border-b border-theme-border">
-          <div className="flex items-center gap-3">
-            <button onClick={onBackToCoach} className="p-1.5 rounded-lg hover:bg-theme-surface">
-              <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
+      {/* Left column: STATIC board area — never scrolls */}
+      <div className="flex flex-col md:w-3/5 min-h-0 shrink-0" data-testid="coach-game-review">
+        {/* Header bar */}
+        <div className="flex items-center justify-between px-3 py-2 border-b border-theme-border shrink-0">
+          <div className="flex items-center gap-2">
+            <button onClick={onBackToCoach} className="p-1 rounded-lg hover:bg-theme-surface">
+              <ArrowLeft size={18} style={{ color: 'var(--color-text)' }} />
             </button>
             <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
               {isGuidedLesson ? 'Guided Lesson' : 'Game Review'}
             </h2>
-            {/* Compact accuracy badge */}
             {!isGuidedLesson && (
-              <div className="flex items-center gap-1.5 ml-2 px-2 py-0.5 rounded-full" style={{ background: 'var(--color-surface)' }}>
+              <div className="flex items-center gap-1.5 ml-1 px-2 py-0.5 rounded-full" style={{ background: 'var(--color-surface)' }}>
                 <div
                   className="w-2 h-2 rounded-full"
                   style={{ background: getAccuracyColor(playerColor === 'white' ? accuracy.white : accuracy.black) }}
@@ -949,7 +943,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
           </div>
-          {/* Auto-Review Button */}
           {!autoReviewActive ? (
             <button
               onClick={handleStartAutoReview}
@@ -983,14 +976,187 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           )}
         </div>
 
-        {/* What-If Mode Banner */}
+        {/* Compact Eval Graph strip — fixed height, never pushes board */}
+        <div className="px-2 py-0.5 shrink-0">
+          <EvalGraph
+            moves={moves}
+            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
+            onMoveClick={handleMoveClick}
+            size="compact"
+          />
+        </div>
+
+        {/* Opponent info bar */}
+        <div className="px-2 shrink-0">
+          <PlayerInfoBar
+            name="Stockfish Bot"
+            rating={opponentRating}
+            isBot
+            capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
+            materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
+            isActive={false}
+          />
+        </div>
+
+        {/* Board — fixed size, centered */}
+        <div className="px-2 py-0.5 flex justify-center shrink-0">
+          <div
+            className="w-full md:max-w-[420px] rounded-sm transition-shadow duration-300"
+            style={{
+              boxShadow: boardFlash ? `0 0 0 3px ${boardFlash}` : 'none',
+            }}
+          >
+            <ChessBoard
+              initialFen={displayFen}
+              orientation={playerColor}
+              interactive={reviewState.mode === 'practice' ? (practiceResult === 'pending') : !isThinking}
+              onMove={(moveResult) => {
+                if (reviewState.mode === 'practice') {
+                  void handlePracticeMove(moveResult);
+                } else {
+                  void handleBoardMove(moveResult);
+                }
+              }}
+              showEvalBar
+              evaluation={currentMove?.evaluation ?? null}
+              arrows={reviewState.mode === 'practice' ? practiceArrows : arrows}
+              annotationHighlights={reviewState.mode === 'practice' ? [] : classificationHighlights}
+              classificationOverlay={reviewState.mode === 'practice' ? null : classificationOverlay}
+            />
+          </div>
+        </div>
+
+        {/* Player info bar */}
+        <div className="px-2 shrink-0">
+          <PlayerInfoBar
+            name={playerName}
+            rating={playerRating}
+            capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
+            materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
+            isActive={false}
+          />
+        </div>
+
+        {/* Navigation controls — always visible, fixed at bottom of board section */}
+        <div className="px-2 pb-1 shrink-0">
+          {(reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson') && (
+            <div className="flex items-center justify-between">
+              <MoveNavigationControls
+                currentIndex={reviewState.currentMoveIndex}
+                totalMoves={moves.length}
+                onFirst={() => navigateMove('first')}
+                onPrev={() => navigateMove('prev')}
+                onNext={() => navigateMove('next')}
+                onLast={() => navigateMove('last')}
+                className="py-0.5"
+              />
+              <div className="flex items-center gap-1">
+                <MoveActionButtons
+                  currentMove={currentMove}
+                  onShowBestMove={() => {
+                    // Toggle best-move arrow visibility
+                  }}
+                  onRetryPosition={() => {
+                    if (!currentMove || !currentMove.bestMove) return;
+                    const prevFen = reviewState.currentMoveIndex > 0
+                      ? moves[reviewState.currentMoveIndex - 1]?.fen ?? STARTING_FEN
+                      : STARTING_FEN;
+                    handleStartPractice({
+                      moveIndex: reviewState.currentMoveIndex,
+                      fen: prevFen,
+                      bestMove: currentMove.bestMove,
+                      explanation: currentMove.commentary || 'Find the best move here.',
+                      tacticType: 'tactical_sequence',
+                      playerMoved: currentMove.san,
+                      evalSwing: Math.abs((currentMove.bestMoveEval ?? 0) - (currentMove.evaluation ?? 0)),
+                    });
+                  }}
+                  onShowBestLine={() => void handleToggleBestLine()}
+                  showingBestLine={bestLineActive}
+                />
+                <KeyMomentNav
+                  moves={moves}
+                  currentIndex={reviewState.currentMoveIndex}
+                  onNavigate={handleMoveClick}
+                  className=""
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Best Line Navigator — overlays below nav when active */}
+          {bestLineActive && bestLineSans.length > 0 && (
+            <div
+              className="rounded-lg p-1.5 flex items-center gap-1 mt-0.5"
+              style={{ background: 'var(--color-surface)', border: '1px solid var(--color-accent)' }}
+              data-testid="best-line-nav"
+            >
+              <button
+                onClick={() => handleBestLineStep('prev')}
+                disabled={bestLineIndex <= 0}
+                className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30"
+                style={{ color: 'var(--color-text)' }}
+              >
+                ‹
+              </button>
+              <div className="flex-1 text-center text-[11px] font-mono overflow-hidden whitespace-nowrap" style={{ color: 'var(--color-text)' }}>
+                <span className="font-medium" style={{ color: 'var(--color-accent)' }}>Best: </span>
+                {bestLineSans.map((san, i) => (
+                  <span
+                    key={i}
+                    className={`${i < bestLineIndex ? 'opacity-40' : i === bestLineIndex ? 'font-bold' : 'opacity-60'}`}
+                    style={i === bestLineIndex ? { color: 'var(--color-accent)' } : undefined}
+                  >
+                    {san}{i < bestLineSans.length - 1 ? ' ' : ''}
+                  </span>
+                ))}
+              </div>
+              <button
+                onClick={() => handleBestLineStep('next')}
+                disabled={bestLineIndex >= bestLineMoves.length}
+                className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30"
+                style={{ color: 'var(--color-text)' }}
+              >
+                ›
+              </button>
+            </div>
+          )}
+          {bestLineLoading && (
+            <div className="text-center text-xs py-0.5" style={{ color: 'var(--color-text-muted)' }}>
+              Analyzing position...
+            </div>
+          )}
+
+          {/* What-If Move List */}
+          {reviewState.mode === 'whatif' && reviewState.whatIfMoves.length > 0 && (
+            <div className="py-0.5" data-testid="whatif-moves">
+              <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                Variation:{' '}
+              </span>
+              {reviewState.whatIfMoves.map((m, i) => (
+                <span
+                  key={i}
+                  className="text-xs font-mono"
+                  style={{ color: i % 2 === 0 ? 'var(--color-accent)' : 'var(--color-text)' }}
+                >
+                  {m}{' '}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right column: scrollable panels — move list, commentary, banners, actions */}
+      <div className="flex flex-col flex-1 md:border-l border-theme-border min-h-0 overflow-hidden">
+        {/* Mode banners — fixed at top of right column */}
         <AnimatePresence>
           {reviewState.mode === 'whatif' && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="rounded-lg mx-2 mt-1 p-2.5 flex items-center justify-between overflow-hidden"
+              className="p-2.5 flex items-center justify-between overflow-hidden shrink-0 border-b border-theme-border"
               style={{ background: 'color-mix(in srgb, var(--color-accent) 15%, var(--color-surface))' }}
               data-testid="whatif-banner"
             >
@@ -1015,13 +1181,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </button>
             </motion.div>
           )}
-          {/* Practice Mode Banner */}
           {reviewState.mode === 'practice' && practiceTarget && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="rounded-lg mx-2 mt-1 p-2.5 overflow-hidden"
+              className="p-2.5 overflow-hidden shrink-0 border-b border-theme-border"
               style={{ background: 'color-mix(in srgb, var(--color-success) 15%, var(--color-surface))' }}
               data-testid="practice-banner"
             >
@@ -1064,13 +1229,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               )}
             </motion.div>
           )}
-          {/* Guided Lesson Stop Banner */}
           {isGuidedLesson && guidedStopped && reviewState.mode === 'guided_lesson' && currentMove && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="rounded-lg mx-2 mt-1 p-2.5 overflow-hidden"
+              className="p-2.5 overflow-hidden shrink-0 border-b border-theme-border"
               style={{ background: 'color-mix(in srgb, var(--color-warning) 15%, var(--color-surface))' }}
               data-testid="guided-stop-banner"
             >
@@ -1115,373 +1279,197 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           )}
         </AnimatePresence>
 
-        {/* Eval graph — always visible above board */}
-        <div className="px-2 py-1">
-          <EvalGraph
-            moves={moves}
-            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
-            onMoveClick={handleMoveClick}
-            size="full"
-          />
-        </div>
-
-        {/* Key Moment Navigation */}
-        {(reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson') && (
-          <KeyMomentNav
-            moves={moves}
-            currentIndex={reviewState.currentMoveIndex}
-            onNavigate={handleMoveClick}
-            className="py-1"
-          />
-        )}
-
-        {/* Opponent info bar */}
-        <div className="px-2 pt-1">
-          <PlayerInfoBar
-            name="Stockfish Bot"
-            rating={opponentRating}
-            isBot
-            capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
-            materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
-            isActive={false}
-          />
-        </div>
-
-        {/* Board with optional classification flash border */}
-        <div className="px-2 py-1 flex justify-center">
-          <div
-            className="w-full md:max-w-[420px] rounded-sm transition-shadow duration-300"
-            style={{
-              boxShadow: boardFlash ? `0 0 0 3px ${boardFlash}` : 'none',
-            }}
-          >
-            <ChessBoard
-              initialFen={displayFen}
-              orientation={playerColor}
-              interactive={reviewState.mode === 'practice' ? (practiceResult === 'pending') : !isThinking}
-              onMove={(moveResult) => {
-                if (reviewState.mode === 'practice') {
-                  void handlePracticeMove(moveResult);
-                } else {
-                  void handleBoardMove(moveResult);
-                }
-              }}
-              showEvalBar
-              evaluation={currentMove?.evaluation ?? null}
-              arrows={reviewState.mode === 'practice' ? practiceArrows : arrows}
-              annotationHighlights={reviewState.mode === 'practice' ? [] : classificationHighlights}
-              classificationOverlay={reviewState.mode === 'practice' ? null : classificationOverlay}
+        {/* Scrollable content area */}
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          {/* Move list panel */}
+          <div className="min-h-[120px] max-h-[200px] md:max-h-none md:min-h-[150px] border-b border-theme-border overflow-hidden">
+            <MoveListPanel
+              moves={moves}
+              openingName={openingName}
+              currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
+              onMoveClick={handleMoveClick}
+              className="h-full"
             />
           </div>
-        </div>
 
-        {/* Player info bar */}
-        <div className="px-2">
-          <PlayerInfoBar
-            name={playerName}
-            rating={playerRating}
-            capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
-            materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
-            isActive={false}
-          />
-        </div>
-
-        {/* Move navigation controls + action buttons */}
-        {(reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson') && (
-          <div className="flex items-center justify-between px-2">
-            <MoveNavigationControls
-              currentIndex={reviewState.currentMoveIndex}
-              totalMoves={moves.length}
-              onFirst={() => navigateMove('first')}
-              onPrev={() => navigateMove('prev')}
-              onNext={() => navigateMove('next')}
-              onLast={() => navigateMove('last')}
-              className="py-1"
-            />
-            <MoveActionButtons
-              currentMove={currentMove}
-              onShowBestMove={() => {
-                // Toggle best-move arrow visibility (arrows are already computed)
-              }}
-              onRetryPosition={() => {
-                if (!currentMove || !currentMove.bestMove) return;
-                const prevFen = reviewState.currentMoveIndex > 0
-                  ? moves[reviewState.currentMoveIndex - 1]?.fen ?? STARTING_FEN
-                  : STARTING_FEN;
-                handleStartPractice({
-                  moveIndex: reviewState.currentMoveIndex,
-                  fen: prevFen,
-                  bestMove: currentMove.bestMove,
-                  explanation: currentMove.commentary || 'Find the best move here.',
-                  tacticType: 'tactical_sequence',
-                  playerMoved: currentMove.san,
-                  evalSwing: Math.abs((currentMove.bestMoveEval ?? 0) - (currentMove.evaluation ?? 0)),
-                });
-              }}
-              onShowBestLine={() => void handleToggleBestLine()}
-              showingBestLine={bestLineActive}
-            />
-          </div>
-        )}
-
-        {/* Best Line Navigator */}
-        {bestLineActive && bestLineSans.length > 0 && (
-          <div
-            className="mx-2 rounded-lg p-2 flex items-center gap-2"
-            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-accent)' }}
-            data-testid="best-line-nav"
-          >
-            <button
-              onClick={() => handleBestLineStep('prev')}
-              disabled={bestLineIndex <= 0}
-              className="px-2 py-1 rounded text-xs font-medium disabled:opacity-30"
-              style={{ color: 'var(--color-text)' }}
-            >
-              ‹ Prev
-            </button>
-            <div className="flex-1 text-center text-xs" style={{ color: 'var(--color-text)' }}>
-              <span className="font-medium" style={{ color: 'var(--color-accent)' }}>Best line: </span>
-              {bestLineSans.map((san, i) => (
-                <span
-                  key={i}
-                  className={`${i < bestLineIndex ? 'opacity-50' : i === bestLineIndex ? 'font-bold' : 'opacity-70'}`}
-                  style={i === bestLineIndex ? { color: 'var(--color-accent)' } : undefined}
-                >
-                  {san}{i < bestLineSans.length - 1 ? ' ' : ''}
-                </span>
-              ))}
-            </div>
-            <button
-              onClick={() => handleBestLineStep('next')}
-              disabled={bestLineIndex >= bestLineMoves.length}
-              className="px-2 py-1 rounded text-xs font-medium disabled:opacity-30"
-              style={{ color: 'var(--color-text)' }}
-            >
-              Next ›
-            </button>
-          </div>
-        )}
-        {bestLineLoading && (
-          <div className="mx-2 text-center text-xs py-1" style={{ color: 'var(--color-text-muted)' }}>
-            Analyzing position...
-          </div>
-        )}
-
-        {/* What-If Move List (mobile) */}
-        {reviewState.mode === 'whatif' && reviewState.whatIfMoves.length > 0 && (
-          <div className="px-3 py-1" data-testid="whatif-moves">
-            <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
-              Variation:{' '}
-            </span>
-            {reviewState.whatIfMoves.map((m, i) => (
-              <span
-                key={i}
-                className="text-xs font-mono"
-                style={{ color: i % 2 === 0 ? 'var(--color-accent)' : 'var(--color-text)' }}
-              >
-                {m}{' '}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Right column: eval graph + move list + commentary + actions */}
-      <div className="flex flex-col h-[45dvh] md:h-auto md:flex-1 md:border-l border-theme-border min-h-[220px] overflow-y-auto">
-        {/* Move list panel */}
-        <div className="flex-1 min-h-[100px] border-b border-theme-border overflow-hidden">
-          <MoveListPanel
-            moves={moves}
-            openingName={openingName}
-            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
-            onMoveClick={handleMoveClick}
-            className="h-full"
-          />
-        </div>
-
-        {/* Missed Tactics Panel */}
-        {missedTactics.length > 0 && (
-          <div className="px-3 py-2 border-b border-theme-border" data-testid="missed-tactics-panel">
-            <div className="flex items-center gap-1.5 mb-2">
-              <Zap size={12} style={{ color: 'var(--color-warning)' }} />
-              <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-warning)' }}>
-                Missed Tactics ({missedTactics.length})
-              </span>
-            </div>
-            <div className="space-y-1.5">
-              {missedTactics.map((tactic, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 p-1.5 rounded-md hover:bg-theme-surface transition-colors cursor-pointer"
-                  onClick={() => handleMoveClick(tactic.moveIndex)}
-                  data-testid={`missed-tactic-${i}`}
-                >
-                  <Crosshair size={12} style={{ color: 'var(--color-text-muted)' }} />
-                  <div className="flex-1 min-w-0">
-                    <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                      Move {Math.ceil(moves[tactic.moveIndex].moveNumber / 2)}:{' '}
-                      <span className="capitalize">{tactic.tacticType.replace(/_/g, ' ')}</span>
-                    </span>
-                    <span className="text-[10px] ml-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                      ({(tactic.evalSwing / 100).toFixed(1)} pawns)
-                    </span>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleStartPractice(tactic);
-                    }}
-                    className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap"
-                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                    data-testid={`try-it-${i}`}
-                  >
-                    Try It
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Commentary panel */}
-        {commentary && (
-          <div
-            className="p-3 border-b border-theme-border"
-            data-testid="review-commentary"
-          >
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-              {commentary}
-            </p>
-          </div>
-        )}
-
-        {/* AI Key Moment Commentary */}
-        {(aiCommentary || isLoadingAiCommentary) && (
-          <div
-            className="px-3 py-2 border-b border-theme-border"
-            data-testid="ai-commentary"
-          >
-            <div className="flex items-center gap-1.5 mb-1">
-              <MessageCircle size={12} style={{ color: 'var(--color-accent)' }} />
-              <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                AI Analysis
-              </span>
-              {isLoadingAiCommentary && (
-                <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-              )}
-            </div>
-            {aiCommentary && (
+          {/* Commentary panel — inline with move context */}
+          {commentary && (
+            <div className="p-3 border-b border-theme-border" data-testid="review-commentary">
               <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                {aiCommentary}
+                {commentary}
               </p>
-            )}
-          </div>
-        )}
-
-        {/* Ask About This Position */}
-        <div className="border-b border-theme-border">
-          {!askExpanded ? (
-            <button
-              onClick={() => setAskExpanded(true)}
-              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium hover:opacity-80 transition-opacity"
-              style={{ color: 'var(--color-accent)' }}
-              data-testid="ask-position-btn"
-            >
-              <MessageCircle size={14} />
-              Ask about this position
-            </button>
-          ) : (
-            <div data-testid="ask-position-panel">
-              {askResponse !== null && (
-                <div className="px-3 pt-2">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                      Coach
-                    </span>
-                    {isAskStreaming && (
-                      <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                    )}
-                  </div>
-                  <p
-                    className="text-xs leading-relaxed mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                    data-testid="ask-response"
-                  >
-                    {askResponse || (isAskStreaming ? '' : 'No response')}
-                  </p>
-                </div>
-              )}
-              <ChatInput
-                onSend={handleAskSend}
-                disabled={isAskStreaming}
-                placeholder="Ask about this position..."
-              />
             </div>
           )}
-        </div>
 
-        {/* Practice Suggestions */}
-        {missedTactics.length > 0 && onPracticeInChat && (
-          <div className="px-3 py-2 border-b border-theme-border" data-testid="practice-suggestions">
-            <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--color-text-muted)' }}>
-              Want to practice similar positions? The coach can set up interactive tactics for you.
-            </p>
-            <button
-              onClick={handlePracticeInChat}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"
-              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-              data-testid="practice-in-chat-btn"
-            >
-              <Target size={12} />
-              Practice in Chat
-            </button>
-          </div>
-        )}
-
-        {/* Guided Lesson Narrative Summary */}
-        {isGuidedLesson && guidedComplete && (
-          <div className="p-3 border-b border-theme-border" data-testid="narrative-summary">
-            <div className="flex items-center gap-2 mb-2">
-              <GraduationCap size={16} style={{ color: 'var(--color-accent)' }} />
-              <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                Game Summary
-              </span>
-              {isLoadingNarrative && (
-                <Loader2 size={12} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+          {/* AI Key Moment Commentary */}
+          {(aiCommentary || isLoadingAiCommentary) && (
+            <div className="px-3 py-2 border-b border-theme-border" data-testid="ai-commentary">
+              <div className="flex items-center gap-1.5 mb-1">
+                <MessageCircle size={12} style={{ color: 'var(--color-accent)' }} />
+                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
+                  AI Analysis
+                </span>
+                {isLoadingAiCommentary && (
+                  <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+                )}
+              </div>
+              {aiCommentary && (
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                  {aiCommentary}
+                </p>
               )}
             </div>
-            {narrativeSummary ? (
-              <p className="text-xs leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
-                {narrativeSummary}
-              </p>
-            ) : isLoadingNarrative ? (
-              <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                Generating your game summary...
-              </p>
-            ) : null}
-          </div>
-        )}
+          )}
 
-        {/* Action buttons */}
-        <div className="flex gap-2 justify-center p-3 pb-20">
-          <button
-            onClick={onPlayAgain}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium hover:opacity-90"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-            data-testid="play-again-btn"
-          >
-            <RotateCcw size={14} />
-            Play Again
-          </button>
-          <button
-            onClick={onBackToCoach}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium hover:opacity-90"
-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="back-to-coach-btn"
-          >
-            <Home size={14} />
-            Back to Coach
-          </button>
+          {/* Missed Tactics Panel */}
+          {missedTactics.length > 0 && (
+            <div className="px-3 py-2 border-b border-theme-border" data-testid="missed-tactics-panel">
+              <div className="flex items-center gap-1.5 mb-2">
+                <Zap size={12} style={{ color: 'var(--color-warning)' }} />
+                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-warning)' }}>
+                  Missed Tactics ({missedTactics.length})
+                </span>
+              </div>
+              <div className="space-y-1.5">
+                {missedTactics.map((tactic, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 p-1.5 rounded-md hover:bg-theme-surface transition-colors cursor-pointer"
+                    onClick={() => handleMoveClick(tactic.moveIndex)}
+                    data-testid={`missed-tactic-${i}`}
+                  >
+                    <Crosshair size={12} style={{ color: 'var(--color-text-muted)' }} />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+                        Move {Math.ceil(moves[tactic.moveIndex].moveNumber / 2)}:{' '}
+                        <span className="capitalize">{tactic.tacticType.replace(/_/g, ' ')}</span>
+                      </span>
+                      <span className="text-[10px] ml-1.5" style={{ color: 'var(--color-text-muted)' }}>
+                        ({(tactic.evalSwing / 100).toFixed(1)} pawns)
+                      </span>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleStartPractice(tactic);
+                      }}
+                      className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap"
+                      style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                      data-testid={`try-it-${i}`}
+                    >
+                      Try It
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Ask About This Position */}
+          <div className="border-b border-theme-border">
+            {!askExpanded ? (
+              <button
+                onClick={() => setAskExpanded(true)}
+                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium hover:opacity-80 transition-opacity"
+                style={{ color: 'var(--color-accent)' }}
+                data-testid="ask-position-btn"
+              >
+                <MessageCircle size={14} />
+                Ask about this position
+              </button>
+            ) : (
+              <div data-testid="ask-position-panel">
+                {askResponse !== null && (
+                  <div className="px-3 pt-2">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
+                        Coach
+                      </span>
+                      {isAskStreaming && (
+                        <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+                      )}
+                    </div>
+                    <p
+                      className="text-xs leading-relaxed mb-2"
+                      style={{ color: 'var(--color-text)' }}
+                      data-testid="ask-response"
+                    >
+                      {askResponse || (isAskStreaming ? '' : 'No response')}
+                    </p>
+                  </div>
+                )}
+                <ChatInput
+                  onSend={handleAskSend}
+                  disabled={isAskStreaming}
+                  placeholder="Ask about this position..."
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Practice Suggestions */}
+          {missedTactics.length > 0 && onPracticeInChat && (
+            <div className="px-3 py-2 border-b border-theme-border" data-testid="practice-suggestions">
+              <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--color-text-muted)' }}>
+                Want to practice similar positions? The coach can set up interactive tactics for you.
+              </p>
+              <button
+                onClick={handlePracticeInChat}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"
+                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                data-testid="practice-in-chat-btn"
+              >
+                <Target size={12} />
+                Practice in Chat
+              </button>
+            </div>
+          )}
+
+          {/* Guided Lesson Narrative Summary */}
+          {isGuidedLesson && guidedComplete && (
+            <div className="p-3 border-b border-theme-border" data-testid="narrative-summary">
+              <div className="flex items-center gap-2 mb-2">
+                <GraduationCap size={16} style={{ color: 'var(--color-accent)' }} />
+                <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
+                  Game Summary
+                </span>
+                {isLoadingNarrative && (
+                  <Loader2 size={12} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+                )}
+              </div>
+              {narrativeSummary ? (
+                <p className="text-xs leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
+                  {narrativeSummary}
+                </p>
+              ) : isLoadingNarrative ? (
+                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                  Generating your game summary...
+                </p>
+              ) : null}
+            </div>
+          )}
+
+          {/* Action buttons — with safe area padding for mobile */}
+          <div className="flex gap-2 justify-center p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,20px))]">
+            <button
+              onClick={onPlayAgain}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium hover:opacity-90"
+              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+              data-testid="play-again-btn"
+            >
+              <RotateCcw size={14} />
+              Play Again
+            </button>
+            <button
+              onClick={onBackToCoach}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium hover:opacity-90"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+              data-testid="back-to-coach-btn"
+            >
+              <Home size={14} />
+              Back to Coach
+            </button>
+          </div>
         </div>
       </div>
     </>

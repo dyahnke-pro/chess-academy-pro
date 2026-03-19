@@ -70,6 +70,10 @@ const MOVE_COMMENTARY: Record<MoveClassification, string[]> = {
     "Uh oh — {playerMove} is a serious mistake. {bestMove} was needed here. Let's figure out what went wrong so we don't repeat it.",
     "That hurts — {playerMove} throws away our position. {bestMove} was critical. Take a breath, and let's learn from this moment.",
   ],
+  miss: [
+    "Your opponent slipped there! {bestMove} would have punished the mistake. Keep your eyes open for these opportunities.",
+    "Missed chance! {bestMove} was the way to take advantage. Spotting these moments is a key skill to develop.",
+  ],
 };
 
 // ─── Scenario Templates ─────────────────────────────────────────────────────

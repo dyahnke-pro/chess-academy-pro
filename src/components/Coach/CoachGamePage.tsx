@@ -44,31 +44,35 @@ function classifyMove(
   bestMoveEval: number | null,
   isEngineBestMove: boolean,
   playerColor: 'white' | 'black',
+  secondBestEval?: number | null,
 ): MoveClassification {
   if (preMoveEval === null) return 'good';
   // Both evals are from White's perspective (normalized by stockfishEngine).
-  // evalLoss = how many centipawns the player lost compared to pre-move position
-  const evalLoss = playerColor === 'white'
-    ? preMoveEval - postMoveEval
-    : postMoveEval - preMoveEval;
 
   // cpLostVsBest = how much worse the played move is vs the engine's best
   const cpLostVsBest = bestMoveEval !== null
     ? (playerColor === 'white'
         ? bestMoveEval - postMoveEval
         : postMoveEval - bestMoveEval)
-    : Math.max(0, evalLoss);
+    : 0;
 
-  // Brilliant: player found the engine's best move AND it was a critical move
-  // (position improves significantly, meaning other moves were much worse)
-  if (isEngineBestMove && evalLoss < -50) return 'brilliant';
+  // Brilliant: player found the engine's best move AND second-best was significantly worse.
+  // This means the move was the *only* good option in a critical position (Chess.com-style).
+  // We require second-best to be ≥150cp worse than best to qualify as brilliant.
+  if (isEngineBestMove && secondBestEval !== null && secondBestEval !== undefined) {
+    const secondBestGap = playerColor === 'white'
+      ? (bestMoveEval ?? postMoveEval) - secondBestEval
+      : secondBestEval - (bestMoveEval ?? postMoveEval);
+    if (secondBestGap >= 150) return 'brilliant';
+  }
+
   // Great: played the best move or very close (<10cp off)
   if (cpLostVsBest <= 10) return 'great';
-  // Good: small loss vs best
-  if (cpLostVsBest < 30) return 'good';
+  // Good: small inaccuracy vs best
+  if (cpLostVsBest < 50) return 'good';
   // Suboptimal classifications based on cp lost vs best move
-  if (cpLostVsBest < 80) return 'inaccuracy';
-  if (cpLostVsBest < 200) return 'mistake';
+  if (cpLostVsBest < 100) return 'inaccuracy';
+  if (cpLostVsBest < 250) return 'mistake';
   return 'blunder';
 }
 
@@ -658,11 +662,12 @@ export function CoachGamePage(): JSX.Element {
     const playerUci = moveResult.from + moveResult.to + (moveResult.promotion ?? '');
     const isEngineBestMove = preAnalysis?.bestMove === playerUci;
     const bestMoveEval = preAnalysis?.topLines[0]?.evaluation ?? null;
+    const secondBestEval = preAnalysis?.topLines[1]?.evaluation ?? null;
 
     setGameState((prev) => {
       const preMoveEval = prev.moves.length > 0 ? (prev.moves[prev.moves.length - 1].evaluation ?? null) : 0;
       const classification = analysis
-        ? classifyMove(preMoveEval, analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor)
+        ? classifyMove(preMoveEval, analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval)
         : 'good';
 
       const evalLoss = analysis && preMoveEval !== null
