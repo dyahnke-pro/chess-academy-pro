@@ -67,16 +67,12 @@ export async function resetGameProgress(gameId: KidGameId): Promise<void> {
 }
 
 export function isChapterUnlocked(
-  chapterId: JourneyChapterId,
-  progress: JourneyProgress,
-  chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
+  _chapterId: JourneyChapterId,
+  _progress: JourneyProgress,
+  _chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
 ): boolean {
-  const index = chapterOrder.indexOf(chapterId);
-  if (index === 0) return true;
-
-  const previousChapterId = chapterOrder[index - 1];
-  const previousProgress = progress.chapters[previousChapterId];
-  return previousProgress?.completed === true;
+  // DEV: all chapters unlocked for testing
+  return true;
 }
 
 export function getChapterProgress(

@@ -218,11 +218,6 @@ export async function completeClearerLevel(
  * Check if the pawn chapter is completed in Pawn's Journey (unlock condition for rook games).
  */
 export async function isPawnChapterCompleted(): Promise<boolean> {
-  const record = await db.meta.get('journey_progress');
-  if (!record) return false;
-  const progress = JSON.parse(record.value) as {
-    chapters: Partial<Record<string, { completed?: boolean }>>;
-  };
-  const pawn = progress.chapters.pawn;
-  return pawn?.completed === true;
+  // DEV: unlocked for testing
+  return true;
 }

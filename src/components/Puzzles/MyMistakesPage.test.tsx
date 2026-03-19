@@ -54,11 +54,6 @@ function setMockData(puzzles: MistakePuzzle[], stats?: Partial<MistakePuzzleStat
       middlegame: puzzles.filter((p) => p.gamePhase === 'middlegame').length,
       endgame: puzzles.filter((p) => p.gamePhase === 'endgame').length,
     },
-    byPhase: {
-      opening: puzzles.filter((p) => p.gamePhase === 'opening').length,
-      middlegame: puzzles.filter((p) => p.gamePhase === 'middlegame').length,
-      endgame: puzzles.filter((p) => p.gamePhase === 'endgame').length,
-    },
     dueCount: puzzles.length,
     ...stats,
   });

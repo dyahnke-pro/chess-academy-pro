@@ -134,13 +134,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     [moves, playerColor],
   );
 
-  // Opponent classification counts for summary card
-  const opponentColor = playerColor === 'white' ? 'black' : 'white';
-  const opponentClassificationCounts = useMemo<MoveClassificationCounts>(
-    () => getClassificationCounts(moves, opponentColor),
-    [moves, opponentColor],
-  );
-
   // Pre-compute phase breakdown + missed tactics
   const phaseBreakdown = useMemo<PhaseAccuracy[]>(
     () => getPhaseBreakdown(moves, playerColor),
@@ -1113,8 +1106,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   moveIndex: reviewState.currentMoveIndex,
                   fen: prevFen,
                   bestMove: currentMove.bestMove,
+                  playerMoved: currentMove.san,
                   explanation: currentMove.commentary || 'Find the best move here.',
-                  type: 'tactical_sequence',
+                  tacticType: 'tactical_sequence',
                   evalSwing: Math.abs((currentMove.bestMoveEval ?? 0) - (currentMove.evaluation ?? 0)),
                 });
               }}

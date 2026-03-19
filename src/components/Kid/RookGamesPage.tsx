@@ -88,11 +88,11 @@ export function RookGamesPage(): JSX.Element {
   }
 
   const isLevelUnlocked = (
-    gameProgress: Record<number, MiniGameLevelProgress> | undefined,
-    levelId: number,
+    _gameProgress: Record<number, MiniGameLevelProgress> | undefined,
+    _levelId: number,
   ): boolean => {
-    if (levelId === 1) return true;
-    return gameProgress?.[levelId - 1]?.completed === true;
+    // DEV: all levels unlocked for testing
+    return true;
   };
 
   return (

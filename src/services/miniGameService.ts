@@ -49,9 +49,9 @@ export async function completeMiniGameLevel(
 
 /** Level 1 is always unlocked; subsequent levels require the previous one completed. */
 export function isLevelUnlocked(
-  progress: MiniGameProgress | null,
-  level: number,
+  _progress: MiniGameProgress | null,
+  _level: number,
 ): boolean {
-  if (level <= 1) return true;
-  return progress?.levels[level - 1]?.completed === true;
+  // DEV: all levels unlocked for testing
+  return true;
 }

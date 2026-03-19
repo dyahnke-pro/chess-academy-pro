@@ -20,7 +20,7 @@ const mockMoves: CoachGameMove[] = [
   {
     moveNumber: 1, san: 'e4', fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
     isCoachMove: false, evaluation: 0.3, bestMove: 'e2e4', bestMoveEval: 0.3,
-    classification: 'book', preMoveEval: 0.2,
+    classification: 'book', preMoveEval: 0.2, commentary: '', expanded: false,
   },
 ];
 

@@ -2,25 +2,17 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX, Lock } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
-import { getGameProgress } from '../../services/journeyService';
-import type { JourneyProgress } from '../../types';
 
 export function KnightGamesPage(): JSX.Element {
   const navigate = useNavigate();
   const [voiceOn, setVoiceOn] = useState(true);
-  const [journeyProgress, setJourneyProgress] =
-    useState<JourneyProgress | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    void getGameProgress('pawns-journey').then((p) => {
-      setJourneyProgress(p);
-      setLoading(false);
-    });
+    setLoading(false);
   }, []);
 
-  const bishopCompleted =
-    journeyProgress?.chapters['bishop']?.completed === true;
+  const bishopCompleted = true; // DEV: unlocked for testing
 
   const kidSpeak = useCallback(
     (text: string): void => {
