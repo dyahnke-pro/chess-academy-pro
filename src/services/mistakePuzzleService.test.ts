@@ -216,6 +216,52 @@ describe('mistakePuzzleService', () => {
       expect(puzzles[0].playerColor).toBe('black');
       expect(puzzles[0].classification).toBe('mistake');
     });
+
+    it('analyzes imported games without annotations via Stockfish', async () => {
+      const { stockfishEngine } = await import('./stockfishEngine');
+      const analyzePosition = vi.mocked(stockfishEngine.analyzePosition);
+
+      // Game: 1.e4 e5 2.Qh5 Nc6
+      // White is 'testplayer'. We need evals for all positions (both before and after each White move).
+      // fens: [0]=start, [1]=after e4, [2]=after e5, [3]=after Qh5, [4]=after Nc6
+      // White moves at idx 0→1 (e4) and 2→3 (Qh5)
+      // We analyze: fens[0], fens[1], fens[2], fens[3] (all relevant to White moves) + fens[4] not needed
+      // Then a depth-18 bestMove lookup for the mistake position
+      const defaultResult = { isMate: false, mateIn: null, topLines: [], nodesPerSecond: 0 };
+      analyzePosition
+        .mockResolvedValueOnce({ ...defaultResult, bestMove: 'e2e4', evaluation: 30, depth: 12 })   // fens[0] before e4
+        .mockResolvedValueOnce({ ...defaultResult, bestMove: 'e7e5', evaluation: 25, depth: 12 })   // fens[1] after e4
+        .mockResolvedValueOnce({ ...defaultResult, bestMove: 'd2d4', evaluation: 30, depth: 12 })   // fens[2] before Qh5
+        .mockResolvedValueOnce({ ...defaultResult, bestMove: 'b8c6', evaluation: -400, depth: 12 }) // fens[3] after Qh5 (blunder)
+        .mockResolvedValueOnce({ ...defaultResult, bestMove: 'd2d4', evaluation: -380, depth: 12 }) // fens[4] after Nc6
+        .mockResolvedValueOnce({ ...defaultResult, bestMove: 'f1c4', evaluation: 30, depth: 18 });  // bestMove lookup for mistake
+
+      const game = buildGameRecord({
+        id: 'chesscom-noeval',
+        pgn: '1.e4 e5 2.Qh5 Nc6',
+        white: 'testplayer',
+        black: 'opponent',
+        source: 'chesscom',
+        annotations: null,
+      });
+      await db.games.add(game);
+
+      const count = await generateMistakePuzzlesFromGame('chesscom-noeval', 'testplayer');
+
+      expect(count).toBe(1);
+      const puzzles = await db.mistakePuzzles.toArray();
+      expect(puzzles[0].sourceMode).toBe('chesscom');
+      expect(puzzles[0].playerColor).toBe('white');
+      // cpLoss = 30 - (-400) = 430 → blunder (≥300)
+      expect(puzzles[0].classification).toBe('blunder');
+      expect(puzzles[0].cpLoss).toBe(430);
+      expect(puzzles[0].bestMove).toBe('f1c4');
+
+      // Annotations should be saved back to the game
+      const updatedGame = await db.games.get('chesscom-noeval');
+      expect(updatedGame!.annotations).not.toBeNull();
+      expect(updatedGame!.annotations!.length).toBe(1);
+    });
   });
 
   describe('generateMistakePuzzlesForBatch', () => {

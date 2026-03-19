@@ -96,6 +96,7 @@ function determinePlayerColor(
  * Generate mistake puzzles from a completed game.
  * For coach games, annotations already have bestMove — extraction is instant.
  * For imported games with eval-only annotations (bestMove: null), runs Stockfish.
+ * For imported games with NO annotations, runs full Stockfish analysis to detect mistakes.
  */
 export async function generateMistakePuzzlesFromGame(
   gameId: string,
@@ -106,7 +107,7 @@ export async function generateMistakePuzzlesFromGame(
   if (existing?.value === 'true') return 0;
 
   const game = await db.games.get(gameId);
-  if (!game || !game.annotations || game.annotations.length === 0) return 0;
+  if (!game) return 0;
 
   const sourceMode = sourceFromGameSource(game.source);
   if (!sourceMode) return 0;
@@ -117,18 +118,180 @@ export async function generateMistakePuzzlesFromGame(
   const fens = replayPgnToFens(game.pgn);
   if (fens.length < 2) return 0;
 
+  // If no annotations exist, run Stockfish analysis to find mistakes
+  if (!game.annotations || game.annotations.length === 0) {
+    return analyzeGameWithStockfish(game, gameId, sourceMode, playerColor, fens);
+  }
+
+  return generateFromAnnotations(game, gameId, sourceMode, playerColor, fens);
+}
+
+const ANALYSIS_DEPTH = 12;
+
+/**
+ * Analyze a game move-by-move with Stockfish to detect mistakes.
+ * Used for imported games that lack eval annotations.
+ */
+async function analyzeGameWithStockfish(
+  game: GameRecord,
+  gameId: string,
+  sourceMode: MistakePuzzleSourceMode,
+  playerColor: 'white' | 'black',
+  fens: string[],
+): Promise<number> {
+  const metaKey = `mistakes_generated_${gameId}`;
   const srsDefaults = createDefaultSrsFields();
   const now = new Date().toISOString();
   const puzzles: MistakePuzzle[] = [];
 
-  // Build a map from (moveNumber, color) → annotation for quick lookup
-  const annotationMap = new Map<string, MoveAnnotation>();
-  for (const ann of game.annotations) {
-    annotationMap.set(`${ann.moveNumber}-${ann.color}`, ann);
+  // Replay to get SAN moves
+  const chess = new Chess();
+  const moves: string[] = [];
+  try {
+    chess.loadPgn(game.pgn);
+    moves.push(...chess.history());
+  } catch {
+    await db.meta.put({ key: metaKey, value: 'true' });
+    return 0;
   }
 
-  // Walk through annotations to find player mistakes
-  for (const annotation of game.annotations) {
+  // Analyze each position to build an eval curve
+  // fens[0] = starting position, fens[i] = position after move i
+  const evals: (number | null)[] = [];
+
+  try {
+    await stockfishEngine.initialize();
+  } catch {
+    await db.meta.put({ key: metaKey, value: 'true' });
+    return 0;
+  }
+
+  // Analyze every position to build a complete eval curve.
+  // We need evals before and after each player move to detect mistakes.
+  for (let i = 0; i < fens.length; i++) {
+    try {
+      const analysis = await stockfishEngine.analyzePosition(fens[i], ANALYSIS_DEPTH);
+      evals.push(analysis.evaluation);
+    } catch {
+      evals.push(null);
+    }
+  }
+
+  // Walk through player moves and detect mistakes
+  const annotations: MoveAnnotation[] = [];
+
+  for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
+    const isWhiteMove = moveIdx % 2 === 0;
+    const moveColor: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
+    if (moveColor !== playerColor) continue;
+
+    const fenBeforeIdx = moveIdx;       // fens[moveIdx] = position before this move
+    const fenAfterIdx = moveIdx + 1;    // fens[moveIdx+1] = position after this move
+
+    const evalBefore = evals[fenBeforeIdx];
+    const evalAfter = evals[fenAfterIdx];
+    if (evalBefore === null || evalAfter === null) continue;
+
+    // Both evals are from White's perspective
+    const cpLoss = playerColor === 'white'
+      ? evalBefore - evalAfter
+      : evalAfter - evalBefore;
+
+    if (cpLoss < CP_LOSS_THRESHOLD) continue;
+
+    const moveNumber = Math.floor(moveIdx / 2) + 1;
+    const classification = classifyCpLoss(cpLoss);
+    const fen = fens[fenBeforeIdx];
+
+    // Get best move via Stockfish at higher depth
+    let bestMove: string | null = null;
+    try {
+      const bestAnalysis = await stockfishEngine.analyzePosition(fen, 18);
+      bestMove = bestAnalysis.bestMove;
+    } catch {
+      continue;
+    }
+    if (!bestMove) continue;
+
+    const bestMoveSan = uciToSan(fen, bestMove);
+    const san = moves[moveIdx];
+
+    // Player's actual move in UCI
+    let playerMove = '';
+    try {
+      const c = new Chess(fen);
+      const m = c.move(san);
+      playerMove = m.from + m.to + (m.promotion ?? '');
+    } catch {
+      playerMove = san;
+    }
+
+    // Store annotation for the game record
+    annotations.push({
+      moveNumber,
+      color: moveColor,
+      san,
+      evaluation: evalAfter / 100,
+      bestMove,
+      classification,
+      comment: null,
+    });
+
+    puzzles.push({
+      id: generateId(),
+      fen,
+      playerMove,
+      bestMove,
+      bestMoveSan,
+      cpLoss: Math.round(cpLoss),
+      classification,
+      moveNumber,
+      sourceGameId: gameId,
+      sourceMode,
+      playerColor,
+      promptText: PROMPT_TEXT[classification],
+      createdAt: now,
+      srsInterval: srsDefaults.interval,
+      srsEaseFactor: srsDefaults.easeFactor,
+      srsRepetitions: srsDefaults.repetitions,
+      srsDueDate: srsDefaults.dueDate,
+      srsLastReview: null,
+      status: 'unsolved',
+      attempts: 0,
+      successes: 0,
+    });
+  }
+
+  // Save annotations back to the game record so they're available for game review
+  if (annotations.length > 0) {
+    await db.games.update(gameId, { annotations });
+  }
+
+  if (puzzles.length > 0) {
+    await db.mistakePuzzles.bulkAdd(puzzles);
+  }
+
+  await db.meta.put({ key: metaKey, value: 'true' });
+  return puzzles.length;
+}
+
+/**
+ * Generate puzzles from existing annotations (coach games or games with eval data).
+ */
+async function generateFromAnnotations(
+  game: GameRecord,
+  gameId: string,
+  sourceMode: MistakePuzzleSourceMode,
+  playerColor: 'white' | 'black',
+  fens: string[],
+): Promise<number> {
+  const metaKey = `mistakes_generated_${gameId}`;
+  const srsDefaults = createDefaultSrsFields();
+  const now = new Date().toISOString();
+  const puzzles: MistakePuzzle[] = [];
+  const annotations = game.annotations ?? [];
+
+  for (const annotation of annotations) {
     if (annotation.color !== playerColor) continue;
 
     const isQualifying =
@@ -149,7 +312,7 @@ export async function generateMistakePuzzlesFromGame(
     if (annotation.evaluation !== null) {
       // Find the annotation for the move right before this one
       let prevEval: number | null = null;
-      for (const ann of game.annotations) {
+      for (const ann of annotations) {
         const annIdx = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
         if (annIdx === fenIndex - 1) {
           prevEval = ann.evaluation;
@@ -248,6 +411,83 @@ export async function generateMistakePuzzlesForBatch(
     total += await generateMistakePuzzlesFromGame(id, username);
   }
   return total;
+}
+
+// ─── Re-analysis ─────────────────────────────────────────────────────────────
+
+export interface ReanalysisProgress {
+  current: number;
+  total: number;
+  puzzlesFound: number;
+}
+
+/**
+ * Re-analyze all imported games that haven't produced mistake puzzles.
+ * Clears cached meta keys and existing puzzles, then re-runs Stockfish analysis.
+ * Reports progress via callback so the UI can show a progress indicator.
+ */
+export async function reanalyzeImportedGames(
+  onProgress?: (progress: ReanalysisProgress) => void,
+): Promise<number> {
+  // Find all imported games (chesscom + lichess)
+  const allGames = await db.games
+    .filter((g) => g.source === 'chesscom' || g.source === 'lichess')
+    .toArray();
+
+  if (allGames.length === 0) return 0;
+
+  // Clear all existing mistake puzzles from imported games
+  const importedPuzzles = await db.mistakePuzzles
+    .filter((p) => p.sourceMode === 'chesscom' || p.sourceMode === 'lichess')
+    .toArray();
+  if (importedPuzzles.length > 0) {
+    await db.mistakePuzzles.bulkDelete(importedPuzzles.map((p) => p.id));
+  }
+
+  // Clear cached meta keys so games get re-processed
+  const metaKeys = allGames.map((g) => `mistakes_generated_${g.id}`);
+  await db.meta.bulkDelete(metaKeys);
+
+  // Also clear annotations on games that had none originally (so Stockfish re-analyzes)
+  for (const game of allGames) {
+    if (game.annotations && game.annotations.length > 0) {
+      // Check if these annotations came from our Stockfish analysis (no eval comments in PGN)
+      // by seeing if annotations only cover mistakes (not full game annotations)
+      const hasFullAnnotations = game.annotations.length > 5;
+      if (!hasFullAnnotations) {
+        await db.games.update(game.id, { annotations: null });
+      }
+    }
+  }
+
+  // Determine username from first imported game
+  let username = '';
+  for (const game of allGames) {
+    if (game.source === 'chesscom' || game.source === 'lichess') {
+      // Username is whichever name isn't a bot/generic
+      username = game.white.toLowerCase();
+      break;
+    }
+  }
+
+  // Re-run analysis on all games
+  let totalPuzzles = 0;
+  for (let i = 0; i < allGames.length; i++) {
+    onProgress?.({ current: i + 1, total: allGames.length, puzzlesFound: totalPuzzles });
+
+    // Re-fetch game since we may have cleared annotations
+    const freshGame = await db.games.get(allGames[i].id);
+    if (!freshGame) continue;
+
+    const count = await generateMistakePuzzlesFromGame(
+      freshGame.id,
+      username || freshGame.white,
+    );
+    totalPuzzles += count;
+  }
+
+  onProgress?.({ current: allGames.length, total: allGames.length, puzzlesFound: totalPuzzles });
+  return totalPuzzles;
 }
 
 // ─── Queries ────────────────────────────────────────────────────────────────

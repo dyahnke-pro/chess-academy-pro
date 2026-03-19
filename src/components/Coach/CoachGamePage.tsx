@@ -41,12 +41,15 @@ import type { MoveResult } from '../../hooks/useChessGame';
 function classifyMove(
   preMoveEval: number | null,
   postMoveEval: number,
+  playerColor: 'white' | 'black',
 ): MoveClassification {
   if (preMoveEval === null) return 'good';
-  // Evals are from side-to-move perspective, which alternates each move.
-  // evalLoss = preMoveEval + postMoveEval
-  //   positive → player lost advantage, negative → player gained advantage
-  const evalLoss = preMoveEval + postMoveEval;
+  // Both evals are from White's perspective (normalized by stockfishEngine).
+  // For White: losing advantage = preMoveEval drops → evalLoss = pre - post
+  // For Black: losing advantage = preMoveEval rises → evalLoss = post - pre
+  const evalLoss = playerColor === 'white'
+    ? preMoveEval - postMoveEval
+    : postMoveEval - preMoveEval;
   if (evalLoss < -50) return 'brilliant';
   if (evalLoss <= 5) return 'great';
   if (evalLoss < 30) return 'good';
@@ -545,8 +548,21 @@ export function CoachGamePage(): JSX.Element {
         if (isCancelled()) return;
 
         console.log('[CoachGame] Coach played:', result.san);
-        applyCoachMove(result, analysis.evaluation);
-        setLatestEval(analysis.evaluation);
+
+        // Analyze the position AFTER the coach moved to get accurate
+        // preMoveEval for the player's next move classification.
+        let postCoachEval = analysis.evaluation;
+        try {
+          const postCoachAnalysis = await stockfishEngine.analyzePosition(result.fen, 10);
+          if (!isCancelled()) {
+            postCoachEval = postCoachAnalysis.evaluation;
+          }
+        } catch {
+          // Fall back to pre-coach eval if analysis fails
+        }
+
+        applyCoachMove(result, postCoachEval);
+        setLatestEval(postCoachEval);
         setLatestIsMate(analysis.isMate);
         setLatestMateIn(analysis.mateIn);
       } catch (error) {
@@ -616,11 +632,13 @@ export function CoachGamePage(): JSX.Element {
     setGameState((prev) => {
       const preMoveEval = prev.moves.length > 0 ? (prev.moves[prev.moves.length - 1].evaluation ?? null) : 0;
       const classification = analysis
-        ? classifyMove(preMoveEval, analysis.evaluation)
+        ? classifyMove(preMoveEval, analysis.evaluation, playerColor)
         : 'good';
 
       const evalLoss = analysis && preMoveEval !== null
-        ? Math.max(0, preMoveEval + analysis.evaluation)
+        ? Math.max(0, playerColor === 'white'
+            ? preMoveEval - analysis.evaluation
+            : analysis.evaluation - preMoveEval)
         : 0;
       const vars = {
         playerMove: moveResult.san,
@@ -648,7 +666,7 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       };
     });
-  }, [game, handleBackToGame, resetHints]);
+  }, [game, handleBackToGame, resetHints, playerColor]);
 
   // Handle practice move (when in chat-driven practice mode)
   const handlePracticeMove = useCallback(async (moveResult: MoveResult) => {
