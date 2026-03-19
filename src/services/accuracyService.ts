@@ -30,7 +30,6 @@ export function calculateAccuracy(moves: CoachGameMove[]): GameAccuracy {
 
     // Win probability before and after the move, from the moving side's perspective
     const signForSide = isWhiteMove ? 1 : -1;
-    const winProbBefore = evalToWinProb(move.preMoveEval * signForSide);
     const winProbBest = evalToWinProb(move.bestMoveEval * signForSide);
     const winProbAfter = evalToWinProb(move.evaluation * signForSide);
 
