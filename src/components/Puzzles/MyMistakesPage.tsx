@@ -6,9 +6,11 @@ import {
   getMistakePuzzleStats,
   gradeMistakePuzzle,
   deleteMistakePuzzle,
+  reanalyzeImportedGames,
   type MistakePuzzleStats,
+  type ReanalysisProgress,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, BookOpen, Swords, Crown } from 'lucide-react';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown } from 'lucide-react';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
@@ -57,6 +59,8 @@ export function MyMistakesPage(): JSX.Element {
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [loading, setLoading] = useState(true);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysisProgress, setAnalysisProgress] = useState<ReanalysisProgress | null>(null);
 
   const loadData = useCallback(async () => {
     const [allPuzzles, puzzleStats] = await Promise.all([
@@ -93,6 +97,20 @@ export function MyMistakesPage(): JSX.Element {
       void loadData();
     });
   }, [activePuzzle, loadData]);
+
+  const handleReanalyze = useCallback(async () => {
+    setAnalyzing(true);
+    setAnalysisProgress(null);
+    try {
+      await reanalyzeImportedGames((progress) => {
+        setAnalysisProgress(progress);
+      });
+      await loadData();
+    } finally {
+      setAnalyzing(false);
+      setAnalysisProgress(null);
+    }
+  }, [loadData]);
 
   const getPhaseCount = (phase: MistakeGamePhase | 'all'): number => {
     if (!stats) return 0;
@@ -138,8 +156,33 @@ export function MyMistakesPage(): JSX.Element {
         >
           <ArrowLeft size={18} className="text-theme-text" />
         </button>
-        <h1 className="text-xl font-bold text-theme-text">My Mistakes</h1>
+        <h1 className="text-xl font-bold text-theme-text flex-1">My Mistakes</h1>
+        <button
+          onClick={() => void handleReanalyze()}
+          disabled={analyzing}
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded bg-theme-accent/10 text-theme-accent hover:bg-theme-accent/20 disabled:opacity-50 transition-colors"
+          data-testid="reanalyze-button"
+        >
+          <RefreshCw size={14} className={analyzing ? 'animate-spin' : ''} />
+          {analyzing ? 'Analyzing...' : 'Re-analyze Games'}
+        </button>
       </div>
+
+      {/* Analysis progress */}
+      {analyzing && analysisProgress && (
+        <div className="p-3 rounded-lg bg-theme-surface border border-theme-border mb-4" data-testid="analysis-progress">
+          <div className="flex justify-between text-xs text-theme-text-muted mb-1.5">
+            <span>Analyzing game {analysisProgress.current} of {analysisProgress.total}</span>
+            <span>{analysisProgress.puzzlesFound} mistakes found</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-theme-border overflow-hidden">
+            <div
+              className="h-full rounded-full bg-theme-accent transition-all duration-300"
+              style={{ width: `${(analysisProgress.current / analysisProgress.total) * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Stats bar */}
       {stats && stats.total > 0 && (

@@ -14,6 +14,7 @@ const mockStats: MistakePuzzleStats = {
   solved: 0,
   mastered: 0,
   byClassification: { inaccuracy: 0, mistake: 0, blunder: 0 },
+  byPhase: { opening: 0, middlegame: 0, endgame: 0 },
   dueCount: 0,
 };
 
@@ -22,6 +23,7 @@ vi.mock('../../services/mistakePuzzleService', () => ({
   getMistakePuzzleStats: vi.fn(() => Promise.resolve(mockStats)),
   gradeMistakePuzzle: vi.fn(() => Promise.resolve()),
   deleteMistakePuzzle: vi.fn(() => Promise.resolve()),
+  reanalyzeImportedGames: vi.fn(() => Promise.resolve(0)),
 }));
 
 // Mock sound hooks
@@ -45,6 +47,11 @@ function setMockData(puzzles: MistakePuzzle[], stats?: Partial<MistakePuzzleStat
       inaccuracy: puzzles.filter((p) => p.classification === 'inaccuracy').length,
       mistake: puzzles.filter((p) => p.classification === 'mistake').length,
       blunder: puzzles.filter((p) => p.classification === 'blunder').length,
+    },
+    byPhase: {
+      opening: puzzles.filter((p) => p.gamePhase === 'opening').length,
+      middlegame: puzzles.filter((p) => p.gamePhase === 'middlegame').length,
+      endgame: puzzles.filter((p) => p.gamePhase === 'endgame').length,
     },
     dueCount: puzzles.length,
     ...stats,
