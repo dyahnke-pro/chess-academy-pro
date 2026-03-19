@@ -14,6 +14,7 @@ const mockStats: MistakePuzzleStats = {
   solved: 0,
   mastered: 0,
   byClassification: { inaccuracy: 0, mistake: 0, blunder: 0 },
+  byPhase: { opening: 0, middlegame: 0, endgame: 0 },
   dueCount: 0,
 };
 
