@@ -5,7 +5,6 @@ import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useHintSystem } from '../../hooks/useHintSystem';
-import { speechService } from '../../services/speechService';
 import { CheckCircle, XCircle } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -31,6 +30,8 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   const [state, setState] = useState<PuzzleState>('loading');
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
+  const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
+  const [boardKey, setBoardKey] = useState(0);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
@@ -77,6 +78,8 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     movesRef.current = parseUciMoves(puzzle.moves);
     setMoveIndex(0);
     setFen(puzzle.fen);
+    setLastMoveHighlight(null);
+    setBoardKey((k) => k + 1);
     setState('loading');
     resetHints();
 
@@ -89,6 +92,8 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
           const result = chess.move({ from: firstMove.from, to: firstMove.to, promotion: firstMove.promotion });
           playMoveSound(result.san);
           setFen(chess.fen());
+          setLastMoveHighlight({ from: firstMove.from, to: firstMove.to });
+          setBoardKey((k) => k + 1);
         } catch {
           // Invalid move in puzzle data - skip
         }
@@ -112,13 +117,13 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     if (isCorrect) {
       playMoveSound(move.san);
       resetHints();
+      setLastMoveHighlight({ from: move.from, to: move.to });
       const nextIndex = moveIndex + 1;
 
       // Check if puzzle is fully solved
       if (nextIndex >= movesRef.current.length) {
         setState('correct');
         playCelebration();
-        speechService.speak(getThemeComment(puzzle.themes));
         onComplete(true);
         return;
       }
@@ -134,7 +139,9 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
               promotion: opponentMove.promotion,
             });
             playMoveSound(result.san);
+            setLastMoveHighlight({ from: opponentMove.from, to: opponentMove.to });
             setFen(chessRef.current.fen());
+            setBoardKey((k) => k + 1);
           } catch {
             // skip
           }
@@ -142,41 +149,19 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         }, 400);
       }
     } else {
-      // Wrong move — undo it from chess.js state and show feedback, then reset puzzle
+      // Wrong move — undo and let them try again from the same position
       chessRef.current.undo();
       setFen(chessRef.current.fen());
+      setBoardKey((k) => k + 1);
       setState('incorrect');
       playEncouragement();
-      speechService.speak('Not quite. Try again.');
 
-      // Auto-reset: replay the puzzle from the start after brief pause
+      // Brief feedback then back to playing
       setTimeout(() => {
-        const chess = new Chess(puzzle.fen);
-        chessRef.current = chess;
-        setMoveIndex(0);
-        setFen(puzzle.fen);
-        setState('loading');
-        resetHints();
-
-        // Re-play the first (opponent) move
-        setTimeout(() => {
-          const moves = movesRef.current;
-          const firstMove = moves.length > 0 ? moves[0] : undefined;
-          if (firstMove) {
-            try {
-              const result = chess.move({ from: firstMove.from, to: firstMove.to, promotion: firstMove.promotion });
-              playMoveSound(result.san);
-              setFen(chess.fen());
-            } catch {
-              // skip
-            }
-          }
-          setMoveIndex(1);
-          setState('playing');
-        }, 600);
-      }, 1500);
+        setState('playing');
+      }, 1000);
     }
-  }, [state, disabled, moveIndex, puzzle.themes, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
+  }, [state, disabled, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     // ChessBoard's internal chess.js has already applied the move.
@@ -196,13 +181,14 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
       <div className="w-full md:max-w-[420px] mx-auto">
         <ChessBoard
           initialFen={fen}
-          key={fen}
+          key={boardKey}
           orientation={userColor}
           interactive={state === 'playing' && !disabled}
           showFlipButton
           showUndoButton={false}
           showResetButton={false}
           onMove={handleChessBoardMove}
+          highlightSquares={lastMoveHighlight}
           arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
         />
@@ -253,16 +239,3 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   );
 }
 
-function getThemeComment(themes: string[]): string {
-  if (themes.includes('fork')) return 'Nice fork! You attacked two pieces at once.';
-  if (themes.includes('pin')) return 'Great pin! The piece is stuck defending.';
-  if (themes.includes('skewer')) return 'Clean skewer! Attacking through the more valuable piece.';
-  if (themes.includes('backRankMate')) return 'Back rank mate! Always watch the back rank.';
-  if (themes.includes('sacrifice')) return 'Beautiful sacrifice! Material for initiative.';
-  if (themes.includes('mateIn1') || themes.includes('mateIn2')) return 'Checkmate! Sharp calculation.';
-  if (themes.includes('endgame')) return 'Endgame technique on point!';
-  if (themes.includes('discoveredAttack')) return 'Discovered attack! Unleashing the hidden piece.';
-  if (themes.includes('deflection')) return 'Perfect deflection! Overloaded defender.';
-  if (themes.includes('zugzwang')) return 'Zugzwang! Every move makes it worse.';
-  return 'Well solved! On to the next one.';
-}
