@@ -4,7 +4,6 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
-import { speechService } from '../../services/speechService';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -121,7 +120,6 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       if (nextIndex >= allMoves.length) {
         setState('correct');
         playCelebration();
-        speechService.speak('Excellent! You found the correct continuation.');
         onComplete(true);
         return;
       }
@@ -149,36 +147,21 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         }, 500);
       }
     } else {
-      // Wrong move — undo from chess instance and show incorrect state
+      // Wrong move — undo and let them try again from the same position
       chessRef.current.undo();
       const prevFen = chessRef.current.fen();
       setState('incorrect');
       playEncouragement();
-      speechService.speak('Not quite. Try again.');
 
-      // Immediately reset board to pre-move position (takeback)
       setFen(prevFen);
       setBoardKey((k) => k + 1);
 
-      // Auto-reset full puzzle after brief pause
+      // Brief feedback then back to playing
       setTimeout(() => {
-        const chess = new Chess(puzzle.fen);
-        chessRef.current = chess;
-        movesRef.current = parseUciMoves(puzzle.moves);
-        setMoveIndex(0);
-        setMoveCount(0);
-        setFen(puzzle.fen);
-        setLastMoveHighlight(null);
-        setBoardKey((k) => k + 1);
-        setState('loading');
-        resetHints();
-
-        setTimeout(() => {
-          setState('playing');
-        }, 400);
-      }, 1500);
+        setState('playing');
+      }, 1000);
     }
-  }, [state, moveIndex, puzzle, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
+  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     try {
@@ -276,7 +259,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       {state === 'incorrect' && (
         <div className="flex items-center gap-2 text-red-500" data-testid="puzzle-incorrect">
           <XCircle size={18} />
-          <span className="text-sm font-medium">Incorrect — resetting puzzle</span>
+          <span className="text-sm font-medium">Incorrect — try again</span>
         </div>
       )}
       {state === 'loading' && (
