@@ -13,7 +13,7 @@ const mockStats: MistakePuzzleStats = {
   unsolved: 0,
   solved: 0,
   mastered: 0,
-  byClassification: { inaccuracy: 0, mistake: 0, blunder: 0 },
+  byClassification: { inaccuracy: 0, mistake: 0, blunder: 0, miss: 0 },
   byPhase: { opening: 0, middlegame: 0, endgame: 0 },
   dueCount: 0,
 };
@@ -47,6 +47,12 @@ function setMockData(puzzles: MistakePuzzle[], stats?: Partial<MistakePuzzleStat
       inaccuracy: puzzles.filter((p) => p.classification === 'inaccuracy').length,
       mistake: puzzles.filter((p) => p.classification === 'mistake').length,
       blunder: puzzles.filter((p) => p.classification === 'blunder').length,
+      miss: puzzles.filter((p) => p.classification === 'miss').length,
+    },
+    byPhase: {
+      opening: puzzles.filter((p) => p.gamePhase === 'opening').length,
+      middlegame: puzzles.filter((p) => p.gamePhase === 'middlegame').length,
+      endgame: puzzles.filter((p) => p.gamePhase === 'endgame').length,
     },
     byPhase: {
       opening: puzzles.filter((p) => p.gamePhase === 'opening').length,

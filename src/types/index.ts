@@ -22,7 +22,7 @@ export interface PuzzleRecord {
 
 // ─── Mistake Puzzles ─────────────────────────────────────────────────────────
 
-export type MistakeClassification = 'inaccuracy' | 'mistake' | 'blunder';
+export type MistakeClassification = 'inaccuracy' | 'mistake' | 'blunder' | 'miss';
 export type MistakePuzzleStatus = 'unsolved' | 'solved' | 'mastered';
 export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom';
 export type MistakeGamePhase = 'opening' | 'middlegame' | 'endgame';
@@ -142,6 +142,7 @@ export type MoveClassification =
   | 'great'
   | 'good'
   | 'book'
+  | 'miss'
   | 'inaccuracy'
   | 'mistake'
   | 'blunder';
@@ -709,6 +710,7 @@ export interface MoveClassificationCounts {
   great: number;
   good: number;
   book: number;
+  miss: number;
   inaccuracy: number;
   mistake: number;
   blunder: number;

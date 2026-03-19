@@ -1,269 +1,177 @@
 import { motion } from 'framer-motion';
-import { Bot, User, RotateCcw, Home, ChevronRight } from 'lucide-react';
-import { AccuracyRing } from './AccuracyRing';
-import { ClassificationBar } from './ClassificationBar';
-import type { GameAccuracy, GamePhase, MoveClassificationCounts, PhaseAccuracy } from '../../types';
+import { RotateCcw, Home, ChevronRight, Bot, Target } from 'lucide-react';
+import { AnimatedAccuracy } from './AnimatedAccuracy';
+import { ClassificationPills } from './ClassificationPills';
+import { PhaseGrades } from './PhaseGrades';
+import { EvalGraph } from './EvalGraph';
+import type { CoachGameMove, GameAccuracy, MoveClassificationCounts, PhaseAccuracy } from '../../types';
 
 interface ReviewSummaryCardProps {
   result: string;
-  playerName: string;
-  playerRating: number;
-  opponentRating: number;
   playerColor: 'white' | 'black';
   accuracy: GameAccuracy;
   classificationCounts: MoveClassificationCounts;
-  opponentClassificationCounts: MoveClassificationCounts;
   phaseBreakdown: PhaseAccuracy[];
   openingName: string | null;
   moveCount: number;
+  moves: CoachGameMove[];
+  narrativeSummary?: string;
+  missedOpportunities?: number;
   onStartReview: () => void;
   onPlayAgain: () => void;
   onBackToCoach: () => void;
-}
-
-const PHASE_LABELS: Record<GamePhase, string> = {
-  opening: 'Opening',
-  middlegame: 'Middlegame',
-  endgame: 'Endgame',
-};
-
-function getAccuracyBarColor(accuracy: number): string {
-  if (accuracy >= 80) return 'var(--color-success)';
-  if (accuracy >= 50) return 'var(--color-warning)';
-  return 'var(--color-error)';
+  onNavigateToMistakes?: () => void;
 }
 
 export function ReviewSummaryCard({
   result,
-  playerName,
-  playerRating,
-  opponentRating,
   playerColor,
   accuracy,
   classificationCounts,
-  opponentClassificationCounts,
   phaseBreakdown,
   openingName,
   moveCount,
+  moves,
+  narrativeSummary,
+  missedOpportunities,
   onStartReview,
   onPlayAgain,
   onBackToCoach,
+  onNavigateToMistakes,
 }: ReviewSummaryCardProps): JSX.Element {
   const playerAccuracy = playerColor === 'white' ? accuracy.white : accuracy.black;
-  const opponentAccuracy = playerColor === 'white' ? accuracy.black : accuracy.white;
 
   const resultLabel = result === 'win' ? 'Victory' : result === 'loss' ? 'Defeat' : 'Draw';
-  const resultBg =
-    result === 'win'
-      ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05))'
-      : result === 'loss'
-        ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05))'
-        : 'linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05))';
-  const resultBorder =
+  const resultColor =
     result === 'win'
       ? 'var(--color-success)'
       : result === 'loss'
         ? 'var(--color-error)'
         : 'var(--color-warning)';
-  const resultTextColor =
-    result === 'win'
-      ? 'var(--color-success)'
-      : result === 'loss'
-        ? 'var(--color-error)'
-        : 'var(--color-warning)';
-
-  // Count player's classified moves
-  const playerTotalClassified = (Object.values(classificationCounts) as number[]).reduce((a, b) => a + b, 0);
-  const opponentTotalClassified = (Object.values(opponentClassificationCounts) as number[]).reduce((a, b) => a + b, 0);
 
   return (
     <div
       className="flex flex-col items-center w-full max-w-md mx-auto p-4 gap-5 overflow-y-auto"
       data-testid="review-summary-card"
     >
-      {/* Result Banner */}
+      {/* Compact Result Banner */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="w-full rounded-xl p-4 text-center"
-        style={{
-          background: resultBg,
-          border: `1px solid ${resultBorder}`,
-        }}
+        className="flex items-center gap-2"
         data-testid="result-banner"
       >
-        <h2
-          className="text-2xl font-bold mb-1"
-          style={{ color: resultTextColor }}
+        <span
+          className="text-lg font-bold"
+          style={{ color: resultColor }}
         >
           {resultLabel}
-        </h2>
-        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-          {moveCount} moves played
-        </p>
-      </motion.div>
-
-      {/* Player vs Opponent with Accuracy Rings */}
-      <motion.div
-        initial={{ y: 10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-        className="w-full flex items-center justify-between px-2"
-        data-testid="accuracy-comparison"
-      >
-        {/* Player side */}
-        <div className="flex flex-col items-center gap-1.5">
-          <AccuracyRing accuracy={playerAccuracy} size={90} strokeWidth={5} label="You" />
-          <div className="flex items-center gap-1.5 mt-1">
-            <div
-              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: 'var(--color-border)' }}
-            >
-              <User size={12} style={{ color: 'var(--color-text-muted)' }} />
-            </div>
-            <div className="text-left">
-              <p className="text-xs font-medium truncate max-w-[100px]" style={{ color: 'var(--color-text)' }}>
-                {playerName}
-              </p>
-              <p className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
-                {playerRating}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* VS divider */}
-        <span className="text-xs font-bold" style={{ color: 'var(--color-text-muted)' }}>
-          vs
         </span>
-
-        {/* Opponent side */}
-        <div className="flex flex-col items-center gap-1.5">
-          <AccuracyRing accuracy={opponentAccuracy} size={90} strokeWidth={5} label="Opp" />
-          <div className="flex items-center gap-1.5 mt-1">
-            <div
-              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: 'var(--color-border)' }}
-            >
-              <Bot size={12} style={{ color: 'var(--color-text-muted)' }} />
-            </div>
-            <div className="text-left">
-              <p className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                Stockfish Bot
-              </p>
-              <p className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
-                {opponentRating}
-              </p>
-            </div>
-          </div>
-        </div>
+        <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          &middot; {moveCount} moves
+        </span>
       </motion.div>
 
-      {/* Classification Bar (player) */}
+      {/* Hero Accuracy */}
+      <AnimatedAccuracy accuracy={playerAccuracy} />
+
+      {/* Eval Graph */}
       <motion.div
-        initial={{ y: 10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
         className="w-full"
+        data-testid="summary-eval-graph"
       >
-        <p
-          className="text-[10px] font-semibold uppercase tracking-wide mb-1.5"
-          style={{ color: 'var(--color-text-muted)' }}
-        >
-          Your Move Accuracy
-        </p>
-        <ClassificationBar counts={classificationCounts} totalMoves={playerTotalClassified} />
+        <EvalGraph
+          moves={moves}
+          currentMoveIndex={null}
+          size="compact"
+        />
       </motion.div>
 
-      {/* Opponent Classification Bar */}
+      {/* Phase Grades */}
+      <PhaseGrades phases={phaseBreakdown} />
+
+      {/* Classification Pills */}
       <motion.div
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.25 }}
         className="w-full"
       >
-        <p
-          className="text-[10px] font-semibold uppercase tracking-wide mb-1.5"
-          style={{ color: 'var(--color-text-muted)' }}
-        >
-          Opponent Move Accuracy
-        </p>
-        <ClassificationBar counts={opponentClassificationCounts} totalMoves={opponentTotalClassified} />
+        <ClassificationPills counts={classificationCounts} />
       </motion.div>
-
-      {/* Phase Accuracy */}
-      {phaseBreakdown.some((p) => p.moveCount > 0) && (
-        <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="w-full"
-          data-testid="phase-breakdown"
-        >
-          <p
-            className="text-[10px] font-semibold uppercase tracking-wide mb-2"
-            style={{ color: 'var(--color-text-muted)' }}
-          >
-            Phase Accuracy
-          </p>
-          <div className="space-y-2">
-            {phaseBreakdown
-              .filter((p) => p.moveCount > 0)
-              .map((phase) => {
-                const color = getAccuracyBarColor(phase.accuracy);
-                return (
-                  <div key={phase.phase} className="flex items-center gap-2">
-                    <span
-                      className="text-xs w-20 shrink-0"
-                      style={{ color: 'var(--color-text-muted)' }}
-                    >
-                      {PHASE_LABELS[phase.phase]}
-                    </span>
-                    <div
-                      className="flex-1 h-2.5 rounded-full overflow-hidden"
-                      style={{ background: 'var(--color-surface)' }}
-                    >
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(100, phase.accuracy)}%` }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        className="h-full rounded-full"
-                        style={{ background: color }}
-                      />
-                    </div>
-                    <span
-                      className="text-xs font-mono w-10 text-right"
-                      style={{ color }}
-                    >
-                      {phase.accuracy.toFixed(0)}%
-                    </span>
-                  </div>
-                );
-              })}
-          </div>
-        </motion.div>
-      )}
 
       {/* Opening name */}
       {openingName && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.35 }}
+          transition={{ delay: 0.3 }}
           className="w-full text-center"
         >
-          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            Opening:{' '}
-          </span>
           <span
-            className="text-xs font-medium"
+            className="text-sm font-medium"
             style={{ color: 'var(--color-accent)' }}
             data-testid="opening-label"
           >
             {openingName}
           </span>
         </motion.div>
+      )}
+
+      {/* Coach Narrative Bubble */}
+      {narrativeSummary && (
+        <motion.div
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.35 }}
+          className="w-full rounded-xl p-3.5 flex gap-3"
+          style={{
+            background: 'var(--color-surface)',
+            border: '1px solid var(--color-border)',
+          }}
+          data-testid="coach-narrative"
+        >
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          >
+            <Bot size={16} />
+          </div>
+          <p
+            className="text-sm leading-relaxed"
+            style={{ color: 'var(--color-text)' }}
+          >
+            {narrativeSummary}
+          </p>
+        </motion.div>
+      )}
+
+      {/* Missed Opportunities Callout */}
+      {missedOpportunities !== undefined && missedOpportunities > 0 && (
+        <motion.button
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.38 }}
+          onClick={onNavigateToMistakes}
+          className="w-full rounded-lg p-3 flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+          style={{
+            background: 'rgba(168, 85, 247, 0.1)',
+            border: '1px solid rgba(168, 85, 247, 0.3)',
+          }}
+          data-testid="missed-opportunities-callout"
+        >
+          <Target size={16} style={{ color: '#a855f7' }} />
+          <span className="text-sm" style={{ color: '#a855f7' }}>
+            {missedOpportunities} missed {missedOpportunities === 1 ? 'opportunity' : 'opportunities'}
+          </span>
+          <span className="text-xs ml-auto" style={{ color: 'var(--color-text-muted)' }}>
+            Practice &rarr;
+          </span>
+        </motion.button>
       )}
 
       {/* Action buttons */}

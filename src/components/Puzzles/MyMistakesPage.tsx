@@ -21,12 +21,14 @@ const CLASSIFICATION_COLORS: Record<MistakeClassification, string> = {
   inaccuracy: 'text-yellow-500 bg-yellow-500/10',
   mistake: 'text-orange-500 bg-orange-500/10',
   blunder: 'text-red-500 bg-red-500/10',
+  miss: 'text-purple-500 bg-purple-500/10',
 };
 
 const CLASSIFICATION_SYMBOLS: Record<MistakeClassification, string> = {
   inaccuracy: '?!',
   mistake: '?',
   blunder: '??',
+  miss: '✕',
 };
 
 const SOURCE_LABELS: Record<MistakePuzzleSourceMode, string> = {
@@ -249,6 +251,7 @@ export function MyMistakesPage(): JSX.Element {
           <option value="inaccuracy">Inaccuracies</option>
           <option value="mistake">Mistakes</option>
           <option value="blunder">Blunders</option>
+          <option value="miss">Misses</option>
         </select>
 
         <select

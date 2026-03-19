@@ -7,6 +7,8 @@ import { MoveNavigationControls } from './MoveNavigationControls';
 import { MoveListPanel } from './MoveListPanel';
 import { EvalGraph } from './EvalGraph';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
+import { KeyMomentNav } from './KeyMomentNav';
+import { MoveActionButtons } from './MoveActionButtons';
 import { ChatInput } from './ChatInput';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
 import { getMoveCommentaryTemplate } from '../../services/coachTemplates';
@@ -14,11 +16,12 @@ import { getCoachCommentary, getCoachChatResponse } from '../../services/coachAp
 import { buildChessContextMessage, POSITION_ANALYSIS_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
-import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
+import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { generateNarrativeSummary } from '../../services/coachFeatureService';
-import { getClassificationHighlightColor } from './classificationStyles';
+import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
+import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
@@ -39,6 +42,24 @@ interface CoachGameReviewProps {
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+const PLAYED_MOVE_ARROW_COLORS: Record<string, string> = {
+  blunder: 'rgba(239, 68, 68, 0.7)',
+  mistake: 'rgba(249, 115, 22, 0.7)',
+  inaccuracy: 'rgba(251, 191, 36, 0.6)',
+  miss: 'rgba(168, 85, 247, 0.7)',
+};
+
+function sanToSquares(san: string, fen: string): { from: string; to: string } | null {
+  try {
+    const chess = new Chess(fen);
+    const move = chess.move(san);
+    if (!move) return null;
+    return { from: move.from, to: move.to };
+  } catch {
+    return null;
+  }
+}
 
 const AUTO_REVIEW_ADVANCE_MS = 2000;
 const AUTO_REVIEW_PAUSE_MS = 5000;
@@ -130,6 +151,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     [moves, playerColor],
   );
 
+  const missCount = useMemo(() => detectMisses(moves, playerColor), [moves, playerColor]);
+
+  // Generate narrative summary on summary phase mount (for non-guided lessons)
+  useEffect(() => {
+    if (reviewPhase !== 'summary' || isGuidedLesson || narrativeSummary !== null) return;
+    const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
+    setIsLoadingNarrative(true);
+    setNarrativeSummary('');
+    void generateNarrativeSummary(
+      gamePgn,
+      playerColor,
+      openingName,
+      result,
+      playerRating,
+      (chunk) => setNarrativeSummary((prev) => (prev ?? '') + chunk),
+    ).then((fullText) => {
+      setNarrativeSummary(fullText);
+    }).catch(() => {
+      setNarrativeSummary(null);
+    }).finally(() => {
+      setIsLoadingNarrative(false);
+    });
+  }, [reviewPhase]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Derived state from current move index
   const currentMove = reviewState.currentMoveIndex >= 0 && reviewState.currentMoveIndex < moves.length
     ? moves[reviewState.currentMoveIndex]
@@ -154,9 +199,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!currentMove.bestMove) return [];
     const cls = currentMove.classification;
     if (cls === 'brilliant' || cls === 'great' || cls === 'good' || cls === 'book') return [];
-    const arrow = uciToArrow(currentMove.bestMove, 'rgba(34, 197, 94, 0.8)');
-    return arrow ? [arrow] : [];
-  }, [reviewState.mode, currentMove]);
+    const result: Array<{ startSquare: string; endSquare: string; color: string }> = [];
+
+    // Played move arrow (red/orange) — show what was actually played
+    const playedMoveColor = cls ? PLAYED_MOVE_ARROW_COLORS[cls] : null;
+    if (playedMoveColor) {
+      const prevMoveIdx = reviewState.currentMoveIndex - 1;
+      const prevFen = prevMoveIdx >= 0 ? moves[prevMoveIdx]?.fen ?? STARTING_FEN : STARTING_FEN;
+      const squares = sanToSquares(currentMove.san, prevFen);
+      if (squares) {
+        result.push({ startSquare: squares.from, endSquare: squares.to, color: playedMoveColor });
+      }
+    }
+
+    // Best move arrow (green) — show what should have been played
+    const bestArrow = uciToArrow(currentMove.bestMove, 'rgba(34, 197, 94, 0.8)');
+    if (bestArrow) result.push(bestArrow);
+
+    return result;
+  }, [reviewState.mode, reviewState.currentMoveIndex, currentMove, moves]);
 
   // Board highlights: classification-colored square for played move (mistakes/blunders)
   const classificationHighlights = useMemo(() => {
@@ -176,6 +237,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return [{ square: dest, color: highlightColor }];
     }
     return [];
+  }, [reviewState.mode, currentMove]);
+
+  // Classification badge overlay for the board (Chess.com-style icon on square)
+  const classificationOverlay = useMemo(() => {
+    if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return null;
+    if (!currentMove) return null;
+    if (currentMove.isCoachMove) return null;
+    const cls = currentMove.classification;
+    if (!cls || cls === 'good' || cls === 'book') return null;
+    const style = CLASSIFICATION_STYLES[cls];
+    const cleaned = currentMove.san.replace(/[+#=].*/, '');
+    const dest = cleaned.slice(-2);
+    if (dest.length === 2 && dest[0] >= 'a' && dest[0] <= 'h' && dest[1] >= '1' && dest[1] <= '8') {
+      return { square: dest, symbol: style.symbol, color: style.color };
+    }
+    return null;
   }, [reviewState.mode, currentMove]);
 
   // Commentary for current move
@@ -729,16 +806,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       <div className="flex flex-col items-center justify-center w-full h-full overflow-y-auto" data-testid="coach-game-review">
         <ReviewSummaryCard
           result={result}
-          playerName={playerName}
-          playerRating={playerRating}
-          opponentRating={opponentRating}
           playerColor={playerColor}
           accuracy={accuracy}
           classificationCounts={classificationCounts}
-          opponentClassificationCounts={opponentClassificationCounts}
           phaseBreakdown={phaseBreakdown}
           openingName={openingName}
           moveCount={accuracy.moveCount}
+          moves={moves}
+          narrativeSummary={isLoadingNarrative ? (narrativeSummary ?? undefined) : (narrativeSummary ?? undefined)}
+          missedOpportunities={missCount}
           onStartReview={handleStartReview}
           onPlayAgain={onPlayAgain}
           onBackToCoach={onBackToCoach}
@@ -940,6 +1016,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           )}
         </AnimatePresence>
 
+        {/* Eval graph — always visible above board */}
+        <div className="px-2 py-1">
+          <EvalGraph
+            moves={moves}
+            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
+            onMoveClick={handleMoveClick}
+            size="full"
+          />
+        </div>
+
+        {/* Key Moment Navigation */}
+        {(reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson') && (
+          <KeyMomentNav
+            moves={moves}
+            currentIndex={reviewState.currentMoveIndex}
+            onNavigate={handleMoveClick}
+            className="py-1"
+          />
+        )}
+
         {/* Opponent info bar */}
         <div className="px-2 pt-1">
           <PlayerInfoBar
@@ -975,6 +1071,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               evaluation={currentMove?.evaluation ?? null}
               arrows={reviewState.mode === 'practice' ? practiceArrows : arrows}
               annotationHighlights={reviewState.mode === 'practice' ? [] : classificationHighlights}
+              classificationOverlay={reviewState.mode === 'practice' ? null : classificationOverlay}
             />
           </div>
         </div>
@@ -990,17 +1087,39 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           />
         </div>
 
-        {/* Move navigation controls */}
+        {/* Move navigation controls + action buttons */}
         {(reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson') && (
-          <MoveNavigationControls
-            currentIndex={reviewState.currentMoveIndex}
-            totalMoves={moves.length}
-            onFirst={() => navigateMove('first')}
-            onPrev={() => navigateMove('prev')}
-            onNext={() => navigateMove('next')}
-            onLast={() => navigateMove('last')}
-            className="py-1"
-          />
+          <div className="flex items-center justify-between px-2">
+            <MoveNavigationControls
+              currentIndex={reviewState.currentMoveIndex}
+              totalMoves={moves.length}
+              onFirst={() => navigateMove('first')}
+              onPrev={() => navigateMove('prev')}
+              onNext={() => navigateMove('next')}
+              onLast={() => navigateMove('last')}
+              className="py-1"
+            />
+            <MoveActionButtons
+              currentMove={currentMove}
+              onShowBestMove={() => {
+                // Toggle best-move arrow visibility (arrows are already computed)
+              }}
+              onRetryPosition={() => {
+                if (!currentMove || !currentMove.bestMove) return;
+                const prevFen = reviewState.currentMoveIndex > 0
+                  ? moves[reviewState.currentMoveIndex - 1]?.fen ?? STARTING_FEN
+                  : STARTING_FEN;
+                handleStartPractice({
+                  moveIndex: reviewState.currentMoveIndex,
+                  fen: prevFen,
+                  bestMove: currentMove.bestMove,
+                  explanation: currentMove.commentary || 'Find the best move here.',
+                  type: 'tactical_sequence',
+                  evalSwing: Math.abs((currentMove.bestMoveEval ?? 0) - (currentMove.evaluation ?? 0)),
+                });
+              }}
+            />
+          </div>
         )}
 
         {/* What-If Move List (mobile) */}
@@ -1024,15 +1143,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
       {/* Right column: eval graph + move list + commentary + actions */}
       <div className="flex flex-col h-[45dvh] md:h-auto md:flex-1 md:border-l border-theme-border min-h-[220px] overflow-y-auto">
-        {/* Eval graph */}
-        <div className="px-2 py-1 border-b border-theme-border">
-          <EvalGraph
-            moves={moves}
-            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
-            onMoveClick={handleMoveClick}
-          />
-        </div>
-
         {/* Move list panel */}
         <div className="flex-1 min-h-[100px] border-b border-theme-border overflow-hidden">
           <MoveListPanel

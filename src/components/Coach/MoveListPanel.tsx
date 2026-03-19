@@ -1,4 +1,5 @@
 import { useEffect, useRef, forwardRef } from 'react';
+import { BookOpen } from 'lucide-react';
 import type { CoachGameMove, MoveClassification } from '../../types';
 import { CLASSIFICATION_STYLES, getClassificationHighlightColor } from './classificationStyles';
 
@@ -15,10 +16,18 @@ const CLASSIFICATION_COLORS: Record<MoveClassification, string> = {
   great: 'var(--color-success)',
   good: 'var(--color-text)',
   book: 'var(--color-accent)',
+  miss: '#a855f7',
   inaccuracy: 'var(--color-warning)',
   mistake: 'var(--color-error)',
   blunder: 'var(--color-error)',
 };
+
+function formatEval(evalCp: number | null): string | null {
+  if (evalCp === null) return null;
+  const pawns = evalCp / 100;
+  if (pawns >= 0) return `+${pawns.toFixed(1)}`;
+  return pawns.toFixed(1);
+}
 
 export function MoveListPanel({
   moves,
@@ -61,10 +70,11 @@ export function MoveListPanel({
       {/* Opening name header */}
       {openingName && (
         <div
-          className="px-3 py-1.5 text-xs font-medium border-b truncate"
+          className="px-3 py-1.5 text-xs font-medium border-b truncate flex items-center gap-1.5"
           style={{ color: 'var(--color-accent)', borderColor: 'var(--color-border)' }}
           data-testid="opening-name"
         >
+          <BookOpen size={12} />
           {openingName}
         </div>
       )}
@@ -135,43 +145,54 @@ const MoveCell = forwardRef<HTMLButtonElement, MoveCellProps>(
       ? CLASSIFICATION_STYLES[move.classification].symbol
       : '';
 
-    // Show symbol only for non-neutral classifications
+    // Show symbol for non-neutral classifications
     const showSymbol = symbol && move.classification !== 'good' && move.classification !== 'book';
 
-    // Active move background: use classification color if available, else accent
-    const activeHighlight = isActive && move.classification
+    // Active move: left border accent instead of full background
+    const highlightColor = isActive && move.classification
       ? getClassificationHighlightColor(move.classification)
       : null;
-    const activeBg = isActive
-      ? (activeHighlight ?? 'color-mix(in srgb, var(--color-accent) 20%, transparent)')
-      : 'transparent';
+
+    const evalText = formatEval(move.evaluation);
 
     return (
       <button
         ref={ref}
         onClick={onClick ? () => onClick(index) : undefined}
-        className={`flex-1 px-1.5 py-0.5 text-left font-mono flex items-center gap-0.5 transition-colors ${
+        className={`flex-1 px-1.5 py-0.5 text-left font-mono flex items-center gap-1 transition-colors ${
           onClick ? 'hover:opacity-80 cursor-pointer' : 'cursor-default'
         }`}
         style={{
           color,
-          background: activeBg,
-          borderRadius: isActive ? '2px' : undefined,
+          background: isActive
+            ? (highlightColor ?? 'color-mix(in srgb, var(--color-accent) 15%, transparent)')
+            : 'transparent',
+          borderLeft: isActive ? `3px solid ${highlightColor ?? 'var(--color-accent)'}` : '3px solid transparent',
+          borderRadius: isActive ? '0 2px 2px 0' : undefined,
         }}
         title={move.classification ? CLASSIFICATION_STYLES[move.classification].label : undefined}
         data-testid={`move-cell-${index}`}
       >
-        {/* Classification icon dot */}
+        {/* Classification icon dot — larger */}
         {showSymbol && move.classification && (
           <span
-            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-[7px] font-bold text-white flex-shrink-0 leading-none"
+            className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full text-[8px] font-bold text-white flex-shrink-0 leading-none"
             style={{ background: CLASSIFICATION_STYLES[move.classification].color }}
             data-testid={`move-icon-${index}`}
           >
             {symbol}
           </span>
         )}
-        <span>{move.san}</span>
+        <span className="truncate">{move.san}</span>
+        {/* Eval text */}
+        {evalText && isActive && (
+          <span
+            className="text-[9px] ml-auto flex-shrink-0"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            {evalText}
+          </span>
+        )}
       </button>
     );
   },

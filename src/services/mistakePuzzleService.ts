@@ -31,6 +31,7 @@ const PROMPT_TEXT: Record<MistakeClassification, string> = {
   inaccuracy: 'You had a better option here. Can you find it?',
   mistake: 'This move cost you. What should you have played?',
   blunder: 'Oops — this was a serious mistake. Find the best move.',
+  miss: 'Your opponent made a mistake here. Find the best way to punish it!',
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -351,7 +352,8 @@ async function generateFromAnnotations(
     const isQualifying =
       annotation.classification === 'inaccuracy' ||
       annotation.classification === 'mistake' ||
-      annotation.classification === 'blunder';
+      annotation.classification === 'blunder' ||
+      annotation.classification === 'miss';
     if (!isQualifying) continue;
 
     // Calculate the FEN index: move 1 white = index 0 (before) → 1 (after),
@@ -385,6 +387,7 @@ async function generateFromAnnotations(
     if (cpLoss === null) {
       if (annotation.classification === 'blunder') cpLoss = 350;
       else if (annotation.classification === 'mistake') cpLoss = 175;
+      else if (annotation.classification === 'miss') cpLoss = 100;
       else cpLoss = 75;
     }
 
@@ -398,7 +401,7 @@ async function generateFromAnnotations(
 
     const movesUci = pvMoves.length > 0 ? pvMoves.join(' ') : bestMove;
     const bestMoveSan = uciToSan(fen, bestMove);
-    const classification = classifyCpLoss(cpLoss);
+    const classification: MistakeClassification = annotation.classification === 'miss' ? 'miss' : classifyCpLoss(cpLoss);
     const gamePhase = classifyGamePhase(fen, annotation.moveNumber);
 
     // Determine player's move in UCI format from annotation SAN
@@ -640,6 +643,7 @@ export interface MistakePuzzleStats {
     inaccuracy: number;
     mistake: number;
     blunder: number;
+    miss: number;
   };
   byPhase: {
     opening: number;
@@ -658,7 +662,7 @@ export async function getMistakePuzzleStats(): Promise<MistakePuzzleStats> {
     unsolved: 0,
     solved: 0,
     mastered: 0,
-    byClassification: { inaccuracy: 0, mistake: 0, blunder: 0 },
+    byClassification: { inaccuracy: 0, mistake: 0, blunder: 0, miss: 0 },
     byPhase: { opening: 0, middlegame: 0, endgame: 0 },
     dueCount: 0,
   };

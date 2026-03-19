@@ -1,4 +1,5 @@
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState, useEffect, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Chessboard } from 'react-chessboard';
 import { RotateCcw, SkipBack, RefreshCw } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
@@ -51,6 +52,8 @@ export interface ChessBoardProps {
   annotationHighlights?: Array<{ square: string; color: string }>;
   /** Ghost piece overlay data for hint system level 3. */
   ghostMove?: GhostMoveData | null;
+  /** Classification icon overlay on a square (Chess.com-style badge). */
+  classificationOverlay?: { square: string; symbol: string; color: string } | null;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -81,6 +84,7 @@ export function ChessBoard({
   arrows,
   annotationHighlights,
   ghostMove,
+  classificationOverlay = null,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -287,6 +291,15 @@ export function ChessBoard({
               pieceSet={settings.pieceSet}
             />
           )}
+          {/* Classification icon overlay (Chess.com-style badge) */}
+          {classificationOverlay && (
+            <ClassificationBadge
+              square={classificationOverlay.square}
+              symbol={classificationOverlay.symbol}
+              color={classificationOverlay.color}
+              boardOrientation={game.boardOrientation}
+            />
+          )}
         </div>
       </div>
 
@@ -334,3 +347,62 @@ export function ChessBoard({
     </div>
   );
 }
+
+interface ClassificationBadgeProps {
+  square: string;
+  symbol: string;
+  color: string;
+  boardOrientation: 'white' | 'black';
+}
+
+function squareToPosition(
+  square: string,
+  boardOrientation: 'white' | 'black',
+): { left: string; top: string } {
+  const file = square.charCodeAt(0) - 97; // a=0, h=7
+  const rank = parseInt(square[1], 10) - 1; // 1=0, 8=7
+
+  const col = boardOrientation === 'white' ? file : 7 - file;
+  const row = boardOrientation === 'white' ? 7 - rank : rank;
+
+  return {
+    left: `${(col + 0.5) * 12.5}%`,
+    top: `${(row + 0.1) * 12.5}%`,
+  };
+}
+
+const ClassificationBadge = memo(function ClassificationBadge({
+  square,
+  symbol,
+  color,
+  boardOrientation,
+}: ClassificationBadgeProps): JSX.Element {
+  const pos = squareToPosition(square, boardOrientation);
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={`${square}-${symbol}`}
+        className="absolute pointer-events-none"
+        style={{
+          left: pos.left,
+          top: pos.top,
+          transform: 'translate(-50%, -50%)',
+          zIndex: 10,
+        }}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        data-testid="classification-badge"
+      >
+        <div
+          className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-white shadow-md"
+          style={{ background: color }}
+        >
+          {symbol}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+});

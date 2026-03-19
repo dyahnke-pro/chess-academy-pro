@@ -1,18 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '../../test/utils';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
-import type { GameAccuracy, MoveClassificationCounts, PhaseAccuracy } from '../../types';
+import type { CoachGameMove, GameAccuracy, MoveClassificationCounts, PhaseAccuracy } from '../../types';
 
 const defaultAccuracy: GameAccuracy = { white: 85.3, black: 72.1, moveCount: 30 };
 
 const playerCounts: MoveClassificationCounts = {
-  brilliant: 1, great: 2, good: 5, book: 2,
+  brilliant: 1, great: 2, good: 5, book: 2, miss: 0,
   inaccuracy: 1, mistake: 1, blunder: 0,
-};
-
-const opponentCounts: MoveClassificationCounts = {
-  brilliant: 0, great: 1, good: 6, book: 2,
-  inaccuracy: 2, mistake: 0, blunder: 1,
 };
 
 const phaseBreakdown: PhaseAccuracy[] = [
@@ -21,36 +16,44 @@ const phaseBreakdown: PhaseAccuracy[] = [
   { phase: 'endgame', accuracy: 85.0, moveCount: 8, mistakes: 0 },
 ];
 
+const mockMoves: CoachGameMove[] = [
+  {
+    moveNumber: 1, san: 'e4', fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+    isCoachMove: false, evaluation: 0.3, bestMove: 'e2e4', bestMoveEval: 0.3,
+    classification: 'book', preMoveEval: 0.2,
+  },
+];
+
 function renderCard(overrides: Record<string, unknown> = {}): {
   onStartReview: ReturnType<typeof vi.fn>;
   onPlayAgain: ReturnType<typeof vi.fn>;
   onBackToCoach: ReturnType<typeof vi.fn>;
+  onNavigateToMistakes: ReturnType<typeof vi.fn>;
 } {
   const onStartReview = vi.fn();
   const onPlayAgain = vi.fn();
   const onBackToCoach = vi.fn();
+  const onNavigateToMistakes = vi.fn();
 
   render(
     <ReviewSummaryCard
       result="win"
-      playerName="David"
-      playerRating={1200}
-      opponentRating={1150}
       playerColor="white"
       accuracy={defaultAccuracy}
       classificationCounts={playerCounts}
-      opponentClassificationCounts={opponentCounts}
       phaseBreakdown={phaseBreakdown}
       openingName="Italian Game"
       moveCount={30}
+      moves={mockMoves}
       onStartReview={onStartReview}
       onPlayAgain={onPlayAgain}
       onBackToCoach={onBackToCoach}
+      onNavigateToMistakes={onNavigateToMistakes}
       {...overrides}
     />,
   );
 
-  return { onStartReview, onPlayAgain, onBackToCoach };
+  return { onStartReview, onPlayAgain, onBackToCoach, onNavigateToMistakes };
 }
 
 describe('ReviewSummaryCard', () => {
@@ -71,42 +74,23 @@ describe('ReviewSummaryCard', () => {
 
   it('shows move count', () => {
     renderCard();
-    expect(screen.getByText('30 moves played')).toBeInTheDocument();
+    // Move count is in the compact banner as "· 30 moves"
+    expect(screen.getByTestId('result-banner')).toHaveTextContent('30 moves');
   });
 
-  it('renders dual accuracy rings', () => {
+  it('renders hero accuracy', () => {
     renderCard();
-    const rings = screen.getAllByTestId('accuracy-ring');
-    expect(rings).toHaveLength(2);
-    // Player accuracy: 85.3 → 85
-    expect(screen.getByText('85')).toBeInTheDocument();
-    // Opponent accuracy: 72.1 → 72
-    expect(screen.getByText('72')).toBeInTheDocument();
+    expect(screen.getByTestId('hero-accuracy')).toBeInTheDocument();
   });
 
-  it('shows player name and rating', () => {
+  it('renders eval graph in compact mode', () => {
     renderCard();
-    expect(screen.getByText('David')).toBeInTheDocument();
-    expect(screen.getByText('1200')).toBeInTheDocument();
+    expect(screen.getByTestId('summary-eval-graph')).toBeInTheDocument();
   });
 
-  it('shows Stockfish Bot label for opponent', () => {
+  it('shows phase grades breakdown', () => {
     renderCard();
-    expect(screen.getByText('Stockfish Bot')).toBeInTheDocument();
-    expect(screen.getByText('1150')).toBeInTheDocument();
-  });
-
-  it('renders classification bars', () => {
-    renderCard();
-    const bars = screen.getAllByTestId('classification-bar');
-    expect(bars.length).toBe(2); // player + opponent
-  });
-
-  it('shows phase accuracy breakdown', () => {
-    renderCard();
-    expect(screen.getByText('Opening')).toBeInTheDocument();
-    expect(screen.getByText('Middlegame')).toBeInTheDocument();
-    expect(screen.getByText('Endgame')).toBeInTheDocument();
+    expect(screen.getByTestId('phase-grades')).toBeInTheDocument();
   });
 
   it('shows opening name when provided', () => {
@@ -117,6 +101,27 @@ describe('ReviewSummaryCard', () => {
   it('hides opening name when null', () => {
     renderCard({ openingName: null });
     expect(screen.queryByTestId('opening-label')).not.toBeInTheDocument();
+  });
+
+  it('shows coach narrative when provided', () => {
+    renderCard({ narrativeSummary: 'Great game! You played well in the opening.' });
+    expect(screen.getByTestId('coach-narrative')).toBeInTheDocument();
+  });
+
+  it('hides coach narrative when not provided', () => {
+    renderCard({ narrativeSummary: undefined });
+    expect(screen.queryByTestId('coach-narrative')).not.toBeInTheDocument();
+  });
+
+  it('shows missed opportunities callout when count > 0', () => {
+    renderCard({ missedOpportunities: 3 });
+    expect(screen.getByTestId('missed-opportunities-callout')).toBeInTheDocument();
+    expect(screen.getByText(/3 missed opportunities/)).toBeInTheDocument();
+  });
+
+  it('hides missed opportunities callout when 0', () => {
+    renderCard({ missedOpportunities: 0 });
+    expect(screen.queryByTestId('missed-opportunities-callout')).not.toBeInTheDocument();
   });
 
   it('calls onStartReview when "Review Game" is clicked', () => {
@@ -135,13 +140,5 @@ describe('ReviewSummaryCard', () => {
     const { onBackToCoach } = renderCard();
     fireEvent.click(screen.getByTestId('summary-back-btn'));
     expect(onBackToCoach).toHaveBeenCalledOnce();
-  });
-
-  it('uses correct accuracy for black player', () => {
-    renderCard({ playerColor: 'black' });
-    // Black accuracy is 72.1 → 72 for player
-    // White accuracy is 85.3 → 85 for opponent
-    const rings = screen.getAllByTestId('accuracy-ring');
-    expect(rings).toHaveLength(2);
   });
 });

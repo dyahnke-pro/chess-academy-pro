@@ -11,13 +11,14 @@ export const CLASSIFICATION_STYLES: Record<MoveClassification, ClassificationSty
   great:      { symbol: '!',  color: '#4ade80', label: 'Great' },
   good:       { symbol: '✓',  color: '#a3a3a3', label: 'Good' },
   book:       { symbol: '📖', color: '#60a5fa', label: 'Book' },
+  miss:       { symbol: '✕',  color: '#a855f7', label: 'Miss' },
   inaccuracy: { symbol: '?!', color: '#fbbf24', label: 'Inaccuracy' },
   mistake:    { symbol: '?',  color: '#f97316', label: 'Mistake' },
   blunder:    { symbol: '??', color: '#ef4444', label: 'Blunder' },
 };
 
 export const CLASSIFICATION_ORDER: MoveClassification[] = [
-  'brilliant', 'great', 'good', 'book', 'inaccuracy', 'mistake', 'blunder',
+  'brilliant', 'great', 'good', 'book', 'miss', 'inaccuracy', 'mistake', 'blunder',
 ];
 
 export function getAccuracyColor(accuracy: number): string {
@@ -26,11 +27,21 @@ export function getAccuracyColor(accuracy: number): string {
   return '#ef4444';
 }
 
+export function getPhaseGrade(accuracy: number): string {
+  if (accuracy >= 95) return 'A+';
+  if (accuracy >= 90) return 'A';
+  if (accuracy >= 80) return 'B';
+  if (accuracy >= 70) return 'C';
+  if (accuracy >= 60) return 'D';
+  return 'F';
+}
+
 export function getClassificationHighlightColor(classification: MoveClassification): string | null {
   switch (classification) {
     case 'blunder': return 'rgba(239, 68, 68, 0.5)';
     case 'mistake': return 'rgba(249, 115, 22, 0.5)';
     case 'inaccuracy': return 'rgba(251, 191, 36, 0.4)';
+    case 'miss': return 'rgba(168, 85, 247, 0.4)';
     default: return null;
   }
 }

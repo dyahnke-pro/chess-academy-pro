@@ -16,6 +16,7 @@ interface EvalGraphProps {
   moves: CoachGameMove[];
   currentMoveIndex: number | null;
   onMoveClick?: (moveIndex: number) => void;
+  size?: 'compact' | 'full';
   className?: string;
 }
 
@@ -26,6 +27,8 @@ interface DataPoint {
   isBlunder: boolean;
   isBrilliant: boolean;
   classification: MoveClassification | null;
+  evalPositive: number;
+  evalNegative: number;
 }
 
 interface EvalTooltipProps {
@@ -54,29 +57,39 @@ function clampEval(evalCp: number | null): number {
 }
 
 // Classifications that get dots on the graph
-const DOT_CLASSIFICATIONS: MoveClassification[] = ['brilliant', 'great', 'blunder', 'mistake', 'inaccuracy'];
+const DOT_CLASSIFICATIONS: MoveClassification[] = ['brilliant', 'great', 'blunder', 'mistake', 'inaccuracy', 'miss'];
+
+const SIZE_HEIGHTS: Record<string, number> = {
+  compact: 80,
+  full: 140,
+};
 
 export function EvalGraph({
   moves,
   currentMoveIndex,
   onMoveClick,
+  size = 'full',
   className = '',
 }: EvalGraphProps): JSX.Element {
+  const chartHeight = SIZE_HEIGHTS[size] ?? 140;
   const data = useMemo<DataPoint[]>(() => {
-    const points: DataPoint[] = [{ index: -1, label: 'Start', eval: 0, isBlunder: false, isBrilliant: false, classification: null }];
+    const points: DataPoint[] = [{ index: -1, label: 'Start', eval: 0, isBlunder: false, isBrilliant: false, classification: null, evalPositive: 0, evalNegative: 0 }];
 
     for (let i = 0; i < moves.length; i++) {
       const m = moves[i];
       const moveNum = Math.floor(i / 2) + 1;
       const label = i % 2 === 0 ? `${moveNum}. ${m.san}` : `${moveNum}... ${m.san}`;
 
+      const evalValue = clampEval(m.evaluation);
       points.push({
         index: i,
         label,
-        eval: clampEval(m.evaluation),
+        eval: evalValue,
         isBlunder: m.classification === 'blunder' || m.classification === 'mistake',
         isBrilliant: m.classification === 'brilliant',
         classification: m.classification ?? null,
+        evalPositive: Math.max(0, evalValue),
+        evalNegative: Math.min(0, evalValue),
       });
     }
 
@@ -112,7 +125,7 @@ export function EvalGraph({
 
   return (
     <div className={`w-full ${className}`} data-testid="eval-graph">
-      <ResponsiveContainer width="100%" height={100}>
+      <ResponsiveContainer width="100%" height={chartHeight}>
         <AreaChart
           data={data}
           margin={{ top: 4, right: 4, bottom: 0, left: 4 }}
@@ -150,10 +163,26 @@ export function EvalGraph({
 
           <Area
             type="monotone"
+            dataKey="evalPositive"
+            stroke="none"
+            fill="url(#evalGradientPos)"
+            baseValue={0}
+            isAnimationActive={false}
+          />
+          <Area
+            type="monotone"
+            dataKey="evalNegative"
+            stroke="none"
+            fill="url(#evalGradientNeg)"
+            baseValue={0}
+            isAnimationActive={false}
+          />
+          <Area
+            type="monotone"
             dataKey="eval"
             stroke="var(--color-text-muted)"
             strokeWidth={1.5}
-            fill="url(#evalGradientPos)"
+            fill="transparent"
             baseValue={0}
             isAnimationActive={false}
           />
