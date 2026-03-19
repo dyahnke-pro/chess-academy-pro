@@ -114,6 +114,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [practiceResult, setPracticeResult] = useState<'pending' | 'correct' | 'incorrect' | null>(null);
   const [practiceAttempts, setPracticeAttempts] = useState(0);
 
+  // ─── Best Line Explorer State ──────────────────────────────────────────────
+  const [bestLineActive, setBestLineActive] = useState(false);
+  const [bestLineMoves, setBestLineMoves] = useState<string[]>([]); // UCI moves
+  const [bestLineSans, setBestLineSans] = useState<string[]>([]); // SAN moves
+  const [bestLineIndex, setBestLineIndex] = useState(0); // current step in the line
+  const [bestLineFen, setBestLineFen] = useState<string | null>(null); // current FEN in the line
+  const [bestLineBaseFen, setBestLineBaseFen] = useState<string | null>(null); // starting FEN
+  const [bestLineLoading, setBestLineLoading] = useState(false);
+
   // ─── Auto-Review State ────────────────────────────────────────────────────
   const [autoReviewActive, setAutoReviewActive] = useState(false);
   const [autoReviewPaused, setAutoReviewPaused] = useState(false);
@@ -180,11 +189,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     ? moves[reviewState.currentMoveIndex]
     : null;
 
-  const displayFen = reviewState.mode === 'practice' && practiceTarget
-    ? practiceTarget.fen
-    : reviewState.mode === 'whatif' && whatIfFen
-      ? whatIfFen
-      : currentMove?.fen ?? STARTING_FEN;
+  const displayFen = bestLineActive && bestLineFen
+    ? bestLineFen
+    : reviewState.mode === 'practice' && practiceTarget
+      ? practiceTarget.fen
+      : reviewState.mode === 'whatif' && whatIfFen
+        ? whatIfFen
+        : currentMove?.fen ?? STARTING_FEN;
 
   // Captured pieces + material advantage for current position
   const capturedPieces = useMemo(() => getCapturedPieces(displayFen), [displayFen]);
@@ -575,6 +586,94 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const arrow = uciToArrow(practiceTarget.bestMove, 'rgba(34, 197, 94, 0.8)');
     return arrow ? [arrow] : [];
   }, [reviewState.mode, practiceTarget, practiceResult]);
+
+  // ─── Best Line Explorer ────────────────────────────────────────────────────
+  const handleToggleBestLine = useCallback(async () => {
+    if (bestLineActive) {
+      // Exit best line mode
+      setBestLineActive(false);
+      setBestLineMoves([]);
+      setBestLineSans([]);
+      setBestLineIndex(0);
+      setBestLineFen(null);
+      setBestLineBaseFen(null);
+      return;
+    }
+
+    // Get the pre-move position FEN
+    const moveIdx = reviewState.currentMoveIndex;
+    const preFen = moveIdx > 0 ? moves[moveIdx - 1]?.fen ?? STARTING_FEN : STARTING_FEN;
+
+    setBestLineLoading(true);
+    try {
+      const analysis = await stockfishEngine.analyzePosition(preFen, 18);
+      const pvMoves = analysis.topLines[0]?.moves ?? [];
+      if (pvMoves.length === 0) {
+        setBestLineLoading(false);
+        return;
+      }
+
+      // Convert UCI moves to SAN for display
+      const sans: string[] = [];
+      const chess = new Chess(preFen);
+      for (const uci of pvMoves) {
+        try {
+          const from = uci.slice(0, 2);
+          const to = uci.slice(2, 4);
+          const promotion = uci.length > 4 ? uci[4] : undefined;
+          const move = chess.move({ from, to, promotion });
+          sans.push(move.san);
+        } catch {
+          break;
+        }
+      }
+
+      setBestLineMoves(pvMoves.slice(0, sans.length));
+      setBestLineSans(sans);
+      setBestLineIndex(0);
+      setBestLineBaseFen(preFen);
+      setBestLineFen(preFen);
+      setBestLineActive(true);
+    } catch {
+      // Analysis failed
+    }
+    setBestLineLoading(false);
+  }, [bestLineActive, reviewState.currentMoveIndex, moves]);
+
+  const handleBestLineStep = useCallback((direction: 'next' | 'prev') => {
+    if (!bestLineBaseFen || bestLineMoves.length === 0) return;
+
+    const newIndex = direction === 'next'
+      ? Math.min(bestLineIndex + 1, bestLineMoves.length)
+      : Math.max(bestLineIndex - 1, 0);
+
+    // Replay moves from base FEN up to newIndex
+    const chess = new Chess(bestLineBaseFen);
+    for (let i = 0; i < newIndex; i++) {
+      const uci = bestLineMoves[i];
+      try {
+        chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+      } catch {
+        break;
+      }
+    }
+
+    setBestLineIndex(newIndex);
+    setBestLineFen(chess.fen());
+  }, [bestLineBaseFen, bestLineMoves, bestLineIndex]);
+
+  // Reset best line when move changes
+  useEffect(() => {
+    if (bestLineActive) {
+      setBestLineActive(false);
+      setBestLineMoves([]);
+      setBestLineSans([]);
+      setBestLineIndex(0);
+      setBestLineFen(null);
+      setBestLineBaseFen(null);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviewState.currentMoveIndex]);
 
   // ─── Auto-Review Mode ──────────────────────────────────────────────────────
   const handleStartAutoReview = useCallback(() => {
@@ -1114,11 +1213,57 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   fen: prevFen,
                   bestMove: currentMove.bestMove,
                   explanation: currentMove.commentary || 'Find the best move here.',
-                  type: 'tactical_sequence',
+                  tacticType: 'tactical_sequence',
+                  playerMoved: currentMove.san,
                   evalSwing: Math.abs((currentMove.bestMoveEval ?? 0) - (currentMove.evaluation ?? 0)),
                 });
               }}
+              onShowBestLine={() => void handleToggleBestLine()}
+              showingBestLine={bestLineActive}
             />
+          </div>
+        )}
+
+        {/* Best Line Navigator */}
+        {bestLineActive && bestLineSans.length > 0 && (
+          <div
+            className="mx-2 rounded-lg p-2 flex items-center gap-2"
+            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-accent)' }}
+            data-testid="best-line-nav"
+          >
+            <button
+              onClick={() => handleBestLineStep('prev')}
+              disabled={bestLineIndex <= 0}
+              className="px-2 py-1 rounded text-xs font-medium disabled:opacity-30"
+              style={{ color: 'var(--color-text)' }}
+            >
+              ‹ Prev
+            </button>
+            <div className="flex-1 text-center text-xs" style={{ color: 'var(--color-text)' }}>
+              <span className="font-medium" style={{ color: 'var(--color-accent)' }}>Best line: </span>
+              {bestLineSans.map((san, i) => (
+                <span
+                  key={i}
+                  className={`${i < bestLineIndex ? 'opacity-50' : i === bestLineIndex ? 'font-bold' : 'opacity-70'}`}
+                  style={i === bestLineIndex ? { color: 'var(--color-accent)' } : undefined}
+                >
+                  {san}{i < bestLineSans.length - 1 ? ' ' : ''}
+                </span>
+              ))}
+            </div>
+            <button
+              onClick={() => handleBestLineStep('next')}
+              disabled={bestLineIndex >= bestLineMoves.length}
+              className="px-2 py-1 rounded text-xs font-medium disabled:opacity-30"
+              style={{ color: 'var(--color-text)' }}
+            >
+              Next ›
+            </button>
+          </div>
+        )}
+        {bestLineLoading && (
+          <div className="mx-2 text-center text-xs py-1" style={{ color: 'var(--color-text-muted)' }}>
+            Analyzing position...
           </div>
         )}
 
@@ -1318,7 +1463,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         )}
 
         {/* Action buttons */}
-        <div className="flex gap-2 justify-center p-3">
+        <div className="flex gap-2 justify-center p-3 pb-20">
           <button
             onClick={onPlayAgain}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium hover:opacity-90"
