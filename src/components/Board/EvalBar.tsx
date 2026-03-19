@@ -76,6 +76,7 @@ export function EvalBar({
         <motion.div
           className="bg-neutral-800 flex items-center justify-start pl-1.5 overflow-hidden"
           style={{ fontSize: '0.6rem', color: '#aaa', fontWeight: 600 }}
+          initial={false}
           animate={{ width: `${blackPercent}%` }}
           transition={{ type: 'spring', stiffness: 120, damping: 20 }}
           data-testid="eval-bar-black"
@@ -89,6 +90,7 @@ export function EvalBar({
         <motion.div
           className="bg-neutral-100 flex items-center justify-end pr-1.5 overflow-hidden"
           style={{ fontSize: '0.6rem', color: '#555', fontWeight: 600 }}
+          initial={false}
           animate={{ width: `${whitePercent}%` }}
           transition={{ type: 'spring', stiffness: 120, damping: 20 }}
           data-testid="eval-bar-white"
@@ -112,6 +114,7 @@ export function EvalBar({
       <motion.div
         className="bg-neutral-800 flex items-start justify-center pt-1"
         style={{ fontSize: '0.55rem', color: '#aaa', fontWeight: 600 }}
+        initial={false}
         animate={{ height: `${blackPercent}%` }}
         transition={{ type: 'spring', stiffness: 120, damping: 20 }}
         data-testid="eval-bar-black"
@@ -125,6 +128,7 @@ export function EvalBar({
       <motion.div
         className="bg-neutral-100 flex items-end justify-center pb-1"
         style={{ fontSize: '0.55rem', color: '#555', fontWeight: 600 }}
+        initial={false}
         animate={{ height: `${whitePercent}%` }}
         transition={{ type: 'spring', stiffness: 120, damping: 20 }}
         data-testid="eval-bar-white"
