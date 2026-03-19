@@ -813,64 +813,60 @@ export function CoachGamePage(): JSX.Element {
     const reviewPlayerRating = reviewPlayerColor === 'white' ? (reviewGame.whiteElo ?? playerRating) : (reviewGame.blackElo ?? playerRating);
 
     return (
-      <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
-        <CoachGameReview
-          moves={reviewMoves}
-          keyMoments={[]}
-          playerColor={reviewPlayerColor}
-          result={reviewGame.result}
-          openingName={reviewGame.openingId}
-          playerName={reviewPlayerName}
-          playerRating={reviewPlayerRating}
-          opponentRating={reviewOpponentRating}
-          onPlayAgain={() => void navigate('/coach/play')}
-          onBackToCoach={() => void navigate('/coach')}
-          isGuidedLesson
-          pgn={reviewGame.pgn}
-        />
-      </div>
+      <CoachGameReview
+        moves={reviewMoves}
+        keyMoments={[]}
+        playerColor={reviewPlayerColor}
+        result={reviewGame.result}
+        openingName={reviewGame.openingId}
+        playerName={reviewPlayerName}
+        playerRating={reviewPlayerRating}
+        opponentRating={reviewOpponentRating}
+        onPlayAgain={() => void navigate('/coach/play')}
+        onBackToCoach={() => void navigate('/coach')}
+        isGuidedLesson
+        pgn={reviewGame.pgn}
+      />
     );
   }
 
-  // Post-game review — same two-column layout as gameplay
+  // Post-game review — CoachGameReview handles its own layout
   if (gameState.status === 'postgame') {
     return (
-      <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
-        <CoachGameReview
-          moves={gameState.moves}
-          keyMoments={gameState.keyMoments}
-          playerColor={playerColor}
-          result={gameState.result === 'ongoing' ? 'draw' : gameState.result}
-          openingName={detectedOpening?.name ?? null}
-          playerName={playerName}
-          playerRating={playerRating}
-          opponentRating={targetStrength}
-          onPlayAgain={() => {
-            game.resetGame();
-            moveCountRef.current = 0;
-            setGameState({
-              gameId: `game-${Date.now()}`,
-              playerColor,
-              targetStrength,
-              moves: [],
-              hintsUsed: 0,
-              currentHintLevel: 0,
-              takebacksUsed: 0,
-              status: 'playing',
-              result: 'ongoing',
-              keyMoments: [],
-            });
-            setLatestEval(0);
-            setLatestIsMate(false);
-            setLatestMateIn(null);
-            setViewedMoveIndex(null);
-            resetHints();
-            prevNudgeRef.current = null;
-          }}
-          onBackToCoach={() => void navigate('/coach')}
-          onPracticeInChat={handlePracticeInChat}
-        />
-      </div>
+      <CoachGameReview
+        moves={gameState.moves}
+        keyMoments={gameState.keyMoments}
+        playerColor={playerColor}
+        result={gameState.result === 'ongoing' ? 'draw' : gameState.result}
+        openingName={detectedOpening?.name ?? null}
+        playerName={playerName}
+        playerRating={playerRating}
+        opponentRating={targetStrength}
+        onPlayAgain={() => {
+          game.resetGame();
+          moveCountRef.current = 0;
+          setGameState({
+            gameId: `game-${Date.now()}`,
+            playerColor,
+            targetStrength,
+            moves: [],
+            hintsUsed: 0,
+            currentHintLevel: 0,
+            takebacksUsed: 0,
+            status: 'playing',
+            result: 'ongoing',
+            keyMoments: [],
+          });
+          setLatestEval(0);
+          setLatestIsMate(false);
+          setLatestMateIn(null);
+          setViewedMoveIndex(null);
+          resetHints();
+          prevNudgeRef.current = null;
+        }}
+        onBackToCoach={() => void navigate('/coach')}
+        onPracticeInChat={handlePracticeInChat}
+      />
     );
   }
 
