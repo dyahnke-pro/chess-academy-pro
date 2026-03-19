@@ -74,6 +74,7 @@ export function getClassificationCounts(
     great: 0,
     good: 0,
     book: 0,
+    miss: 0,
     inaccuracy: 0,
     mistake: 0,
     blunder: 0,
@@ -96,4 +97,48 @@ export function getClassificationCounts(
   }
 
   return counts;
+}
+
+/**
+ * Detect missed opportunities: positions where the opponent made a mistake/blunder
+ * but the player failed to capitalize (eval swung back toward equal).
+ * Returns the count of misses.
+ */
+const MISS_EVAL_THRESHOLD = 50;
+
+export function detectMisses(
+  moves: CoachGameMove[],
+  playerColor: 'white' | 'black',
+): number {
+  let missCount = 0;
+
+  for (let i = 1; i < moves.length; i++) {
+    const prevMove = moves[i - 1];
+    const currentMove = moves[i];
+
+    // We're looking at the player's move (currentMove) after the opponent's mistake (prevMove)
+    const isPlayerMove = playerColor === 'white'
+      ? currentMove.moveNumber % 2 === 1
+      : currentMove.moveNumber % 2 === 0;
+    if (!isPlayerMove) continue;
+    if (currentMove.isCoachMove) continue;
+
+    // Check if the opponent's previous move was a mistake or blunder
+    const opponentClassification = prevMove.classification;
+    if (opponentClassification !== 'mistake' && opponentClassification !== 'blunder') continue;
+
+    // Check if the player failed to capitalize: their move lost significant eval
+    if (currentMove.evaluation === null || currentMove.bestMoveEval === null) continue;
+
+    const sign = playerColor === 'white' ? 1 : -1;
+    const evalAfterPlayerMove = currentMove.evaluation * sign;
+    const bestEvalForPlayer = currentMove.bestMoveEval * sign;
+    const cpLost = bestEvalForPlayer - evalAfterPlayerMove;
+
+    if (cpLost >= MISS_EVAL_THRESHOLD) {
+      missCount++;
+    }
+  }
+
+  return missCount;
 }

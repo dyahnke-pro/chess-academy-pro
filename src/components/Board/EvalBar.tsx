@@ -2,18 +2,15 @@ import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 export interface EvalBarProps {
-  /** Evaluation in centipawns. Positive = white winning, negative = black winning. */
   evaluation: number | null;
   isMate: boolean;
   mateIn: number | null;
-  /** Render as a horizontal bar (left = black, right = white). */
   horizontal?: boolean;
   className?: string;
 }
 
-const MAX_PAWNS = 10; // Clamp bar display at ±10 pawns (±1000 cp)
+const MAX_PAWNS = 10;
 
-/** Convert centipawn evaluation to a 0–100 white percentage for the bar. */
 function getWhitePercent(
   evaluation: number | null,
   isMate: boolean,
@@ -25,11 +22,9 @@ function getWhitePercent(
   if (evaluation === null) return 50;
   const pawns = evaluation / 100;
   const clamped = Math.min(MAX_PAWNS, Math.max(-MAX_PAWNS, pawns));
-  // Map from [-10, +10] to [5%, 95%] to always show a sliver of each colour
   return 50 + (clamped / MAX_PAWNS) * 45;
 }
 
-/** Format evaluation text shown at the segment boundary. */
 function getEvalLabel(
   evaluation: number | null,
   isMate: boolean,
@@ -44,6 +39,8 @@ function getEvalLabel(
   const formatted = abs.toFixed(1);
   return pawns >= 0 ? `+${formatted}` : `-${formatted}`;
 }
+
+const SPRING_CONFIG = { type: 'spring' as const, stiffness: 80, damping: 15 };
 
 export function EvalBar({
   evaluation,
@@ -62,39 +59,69 @@ export function EvalBar({
     [evaluation, isMate, mateIn],
   );
 
-  // Show label on the winning side's segment (wherever there's more room)
   const whiteIsWinning = whitePercent >= 50;
+  const isMateScore = isMate && mateIn !== null;
 
   if (horizontal) {
     return (
       <div
-        className={`relative flex flex-row h-5 w-full rounded overflow-hidden select-none ${className}`}
+        className={`relative flex flex-row h-6 w-full rounded-md overflow-hidden select-none ${className}`}
         data-testid="eval-bar"
         aria-label={`Evaluation: ${label}`}
       >
         {/* Black segment (left) */}
         <motion.div
-          className="bg-neutral-800 flex items-center justify-start pl-1.5 overflow-hidden"
-          style={{ fontSize: '0.6rem', color: '#aaa', fontWeight: 600 }}
+          className="flex items-center justify-start pl-2 overflow-hidden"
+          style={{
+            background: 'linear-gradient(90deg, #1a1a1a, #2d2d2d)',
+            fontSize: '0.65rem',
+            color: '#aaa',
+            fontWeight: 600,
+          }}
           animate={{ width: `${blackPercent}%` }}
-          transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+          transition={SPRING_CONFIG}
           data-testid="eval-bar-black"
         >
           {!whiteIsWinning && (
-            <span className="whitespace-nowrap" data-testid="eval-label">{label}</span>
+            <motion.span
+              className="whitespace-nowrap"
+              animate={isMateScore ? { scale: [1, 1.1, 1] } : {}}
+              transition={isMateScore ? { repeat: Infinity, duration: 1.5 } : {}}
+              data-testid="eval-label"
+            >
+              {label}
+            </motion.span>
           )}
         </motion.div>
 
+        {/* Center tick */}
+        <div
+          className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
+          style={{ background: 'rgba(128, 128, 128, 0.3)' }}
+        />
+
         {/* White segment (right) */}
         <motion.div
-          className="bg-neutral-100 flex items-center justify-end pr-1.5 overflow-hidden"
-          style={{ fontSize: '0.6rem', color: '#555', fontWeight: 600 }}
+          className="flex items-center justify-end pr-2 overflow-hidden"
+          style={{
+            background: 'linear-gradient(90deg, #e5e5e5, #f5f5f5)',
+            fontSize: '0.65rem',
+            color: '#444',
+            fontWeight: 600,
+          }}
           animate={{ width: `${whitePercent}%` }}
-          transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+          transition={SPRING_CONFIG}
           data-testid="eval-bar-white"
         >
           {whiteIsWinning && (
-            <span className="whitespace-nowrap" data-testid="eval-label">{label}</span>
+            <motion.span
+              className="whitespace-nowrap"
+              animate={isMateScore ? { scale: [1, 1.1, 1] } : {}}
+              transition={isMateScore ? { repeat: Infinity, duration: 1.5 } : {}}
+              data-testid="eval-label"
+            >
+              {label}
+            </motion.span>
           )}
         </motion.div>
       </div>
@@ -103,34 +130,62 @@ export function EvalBar({
 
   return (
     <div
-      className={`relative flex flex-col w-4 rounded overflow-hidden select-none ${className}`}
+      className={`relative flex flex-col w-7 rounded-md overflow-hidden select-none ${className}`}
       data-testid="eval-bar"
       aria-label={`Evaluation: ${label}`}
       style={{ minHeight: '100%' }}
     >
       {/* Black segment (top) */}
       <motion.div
-        className="bg-neutral-800 flex items-start justify-center pt-1"
-        style={{ fontSize: '0.55rem', color: '#aaa', fontWeight: 600 }}
+        className="flex items-start justify-center pt-1.5"
+        style={{
+          background: 'linear-gradient(180deg, #1a1a1a, #2d2d2d)',
+          fontSize: '0.6rem',
+          color: '#aaa',
+          fontWeight: 600,
+        }}
         animate={{ height: `${blackPercent}%` }}
-        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+        transition={SPRING_CONFIG}
         data-testid="eval-bar-black"
       >
         {!whiteIsWinning && (
-          <span data-testid="eval-label">{label}</span>
+          <motion.span
+            animate={isMateScore ? { scale: [1, 1.15, 1] } : {}}
+            transition={isMateScore ? { repeat: Infinity, duration: 1.5 } : {}}
+            data-testid="eval-label"
+          >
+            {label}
+          </motion.span>
         )}
       </motion.div>
 
+      {/* Center tick */}
+      <div
+        className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2"
+        style={{ background: 'rgba(128, 128, 128, 0.3)' }}
+      />
+
       {/* White segment (bottom) */}
       <motion.div
-        className="bg-neutral-100 flex items-end justify-center pb-1"
-        style={{ fontSize: '0.55rem', color: '#555', fontWeight: 600 }}
+        className="flex items-end justify-center pb-1.5"
+        style={{
+          background: 'linear-gradient(180deg, #e5e5e5, #f5f5f5)',
+          fontSize: '0.6rem',
+          color: '#444',
+          fontWeight: 600,
+        }}
         animate={{ height: `${whitePercent}%` }}
-        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+        transition={SPRING_CONFIG}
         data-testid="eval-bar-white"
       >
         {whiteIsWinning && (
-          <span data-testid="eval-label">{label}</span>
+          <motion.span
+            animate={isMateScore ? { scale: [1, 1.15, 1] } : {}}
+            transition={isMateScore ? { repeat: Infinity, duration: 1.5 } : {}}
+            data-testid="eval-label"
+          >
+            {label}
+          </motion.span>
         )}
       </motion.div>
     </div>
