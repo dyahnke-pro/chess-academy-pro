@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Brain, BookOpen } from 'lucide-react';
+import { ArrowLeft, Brain, BookOpen, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { seedPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
 import type { PuzzleStats } from '../../services/puzzleService';
@@ -165,14 +165,22 @@ export function AdaptivePuzzlePage(): JSX.Element {
             </div>
           )}
           <DifficultySelector onSelect={(d) => void handleSelectDifficulty(d)} />
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
             <Link
               to="/puzzles/classic"
               className="flex items-center gap-2 text-sm text-theme-text-muted hover:text-theme-text transition-colors"
               data-testid="classic-trainer-link"
             >
               <BookOpen size={14} />
-              Classic Trainer (SRS mode)
+              Classic Trainer
+            </Link>
+            <Link
+              to="/puzzles/mistakes"
+              className="flex items-center gap-2 text-sm text-theme-text-muted hover:text-theme-text transition-colors"
+              data-testid="my-mistakes-link"
+            >
+              <AlertTriangle size={14} />
+              My Mistakes
             </Link>
           </div>
         </div>
