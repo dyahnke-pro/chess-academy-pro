@@ -1,12 +1,16 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
+import { useHintSystem } from '../../hooks/useHintSystem';
+import { useSettings } from '../../hooks/useSettings';
+import { speechService } from '../../services/speechService';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { HintButton } from '../Coach/HintButton';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
 
-type PuzzleState = 'playing' | 'correct' | 'incorrect';
+type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
 interface MistakePuzzleBoardProps {
   puzzle: MistakePuzzle;
@@ -19,72 +23,159 @@ const CLASSIFICATION_BADGE: Record<MistakeClassification, { label: string; symbo
   blunder: { label: 'Blunder', symbol: '??', color: 'text-red-500 bg-red-500/10' },
 };
 
+const PHASE_LABELS: Record<string, string> = {
+  opening: 'Opening',
+  middlegame: 'Middlegame',
+  endgame: 'Endgame',
+};
+
+function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
+  if (!uci || uci.trim().length === 0) return [];
+  return uci.trim().split(/\s+/).map((m) => ({
+    from: m.slice(0, 2),
+    to: m.slice(2, 4),
+    promotion: m.length > 4 ? m.slice(4) : undefined,
+  }));
+}
+
 export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardProps): JSX.Element {
-  const [state, setState] = useState<PuzzleState>('playing');
+  const [state, setState] = useState<PuzzleState>('loading');
+  const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
+  const [moveCount, setMoveCount] = useState(0);
   const chessRef = useRef(new Chess(puzzle.fen));
+  const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
+  const { settings } = useSettings();
 
   const badge = CLASSIFICATION_BADGE[puzzle.classification];
+  const totalMoves = movesRef.current.length;
+  const isMultiMove = totalMoves > 1;
+
+  // Derive the expected move for hint system
+  const knownMove = useMemo((): { from: string; to: string; san: string } | null => {
+    if (state !== 'playing') return null;
+    const allMoves = movesRef.current;
+    if (moveIndex >= allMoves.length) return null;
+    const expected = allMoves[moveIndex];
+    try {
+      const chess = new Chess(fen);
+      const result = chess.move({ from: expected.from, to: expected.to, promotion: expected.promotion });
+      chess.undo();
+      return { from: expected.from, to: expected.to, san: result.san };
+    } catch {
+      return { from: expected.from, to: expected.to, san: '' };
+    }
+  }, [state, moveIndex, fen]);
+
+  const { hintState, requestHint, resetHints } = useHintSystem({
+    fen,
+    playerColor: puzzle.playerColor,
+    enabled: settings.showHints && state === 'playing',
+    knownMove,
+    puzzleThemes: [],
+  });
 
   // Reset when puzzle changes
   useEffect(() => {
-    chessRef.current = new Chess(puzzle.fen);
+    const chess = new Chess(puzzle.fen);
+    chessRef.current = chess;
+    movesRef.current = parseUciMoves(puzzle.moves);
+    setMoveIndex(0);
+    setMoveCount(0);
     setFen(puzzle.fen);
-    setState('playing');
-  }, [puzzle]);
+    setState('loading');
+    resetHints();
 
-  const handleMove = useCallback((moveResult: MoveResult): void => {
+    // Brief loading state then ready to play
+    const timer = setTimeout(() => {
+      setState('playing');
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [puzzle, resetHints]);
+
+  const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
 
-    // Sync with our chess instance
-    try {
-      chessRef.current.move({ from: moveResult.from, to: moveResult.to, promotion: moveResult.promotion });
-    } catch {
-      // Already applied
-    }
-    setFen(chessRef.current.fen());
+    const allMoves = movesRef.current;
+    if (moveIndex >= allMoves.length) return;
+    const expected = allMoves[moveIndex];
 
-    // Check if the move matches bestMove
-    const playerUci = moveResult.from + moveResult.to + (moveResult.promotion ?? '');
-    const isCorrect = playerUci === puzzle.bestMove;
+    const isCorrect = move.from === expected.from && move.to === expected.to;
 
     if (isCorrect) {
-      setState('correct');
-      playMoveSound(moveResult.san);
-      playCelebration();
-      onComplete(true);
+      playMoveSound(move.san);
+      resetHints();
+      setMoveCount((c) => c + 1);
+      const nextIndex = moveIndex + 1;
+
+      // Check if puzzle is fully solved
+      if (nextIndex >= allMoves.length) {
+        setState('correct');
+        playCelebration();
+        speechService.speak('Excellent! You found the correct continuation.');
+        onComplete(true);
+        return;
+      }
+
+      // Auto-play opponent's response
+      if (nextIndex < allMoves.length) {
+        const opponentMove = allMoves[nextIndex];
+        setTimeout(() => {
+          try {
+            const result = chessRef.current.move({
+              from: opponentMove.from,
+              to: opponentMove.to,
+              promotion: opponentMove.promotion,
+            });
+            playMoveSound(result.san);
+            setFen(chessRef.current.fen());
+          } catch {
+            // skip
+          }
+          setMoveIndex(nextIndex + 1);
+        }, 400);
+      }
     } else {
-      // Undo and show answer
+      // Wrong move — undo and reset puzzle
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setState('incorrect');
       playEncouragement();
+      speechService.speak('Not quite. Try again.');
 
-      // Show the correct move after a brief pause
+      // Auto-reset after brief pause
       setTimeout(() => {
-        onComplete(false);
-      }, 2000);
-    }
-  }, [state, puzzle.bestMove, onComplete, playMoveSound, playCelebration, playEncouragement]);
+        const chess = new Chess(puzzle.fen);
+        chessRef.current = chess;
+        movesRef.current = parseUciMoves(puzzle.moves);
+        setMoveIndex(0);
+        setMoveCount(0);
+        setFen(puzzle.fen);
+        setState('loading');
+        resetHints();
 
-  // Build arrows showing the correct move on incorrect state
-  const arrows = state === 'incorrect' ? [
-    {
-      startSquare: puzzle.playerMove.slice(0, 2),
-      endSquare: puzzle.playerMove.slice(2, 4),
-      color: 'rgba(239,68,68,0.4)',
-    },
-    {
-      startSquare: puzzle.bestMove.slice(0, 2),
-      endSquare: puzzle.bestMove.slice(2, 4),
-      color: 'rgba(34,197,94,0.6)',
-    },
-  ] : undefined;
+        setTimeout(() => {
+          setState('playing');
+        }, 400);
+      }, 1500);
+    }
+  }, [state, moveIndex, puzzle, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
+
+  const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
+    try {
+      chessRef.current.move({ from: moveResult.from, to: moveResult.to, promotion: moveResult.promotion });
+    } catch {
+      // Move already applied or invalid
+    }
+    setFen(chessRef.current.fen());
+    handleMove(moveResult);
+  }, [handleMove]);
 
   return (
     <div className="space-y-3" data-testid="mistake-puzzle-board">
-      {/* Header with classification badge and prompt */}
+      {/* Header with classification badge and phase */}
       <div className="flex items-center gap-2">
         <span
           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold ${badge.color}`}
@@ -93,6 +184,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
           <AlertTriangle size={12} />
           {badge.symbol} {badge.label}
         </span>
+        <span className="text-xs px-2 py-0.5 rounded bg-theme-surface text-theme-text-muted border border-theme-border">
+          {PHASE_LABELS[puzzle.gamePhase]}
+        </span>
         <span className="text-xs text-theme-text-muted">
           From your game
         </span>
@@ -100,6 +194,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
 
       <p className="text-sm text-theme-text-secondary" data-testid="prompt-text">
         {puzzle.promptText}
+        {isMultiMove && (
+          <span className="text-theme-text-muted ml-1">
+            ({Math.ceil(totalMoves / 2)} move{Math.ceil(totalMoves / 2) > 1 ? 's' : ''} to find)
+          </span>
+        )}
       </p>
 
       {/* Board */}
@@ -112,24 +211,59 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
           showFlipButton
           showUndoButton={false}
           showResetButton={false}
-          onMove={handleMove}
-          arrows={arrows}
+          onMove={handleChessBoardMove}
+          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          ghostMove={hintState.ghostMove}
         />
       </div>
+
+      {/* Hint controls */}
+      {state === 'playing' && settings.showHints && (
+        <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
+          <HintButton
+            currentLevel={hintState.level}
+            onRequestHint={requestHint}
+            disabled={hintState.isAnalyzing}
+          />
+          {hintState.nudgeText && (
+            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
+              {hintState.nudgeText}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Progress indicator for multi-move */}
+      {isMultiMove && state === 'playing' && moveCount > 0 && (
+        <div className="flex items-center gap-2 text-xs text-theme-text-muted" data-testid="move-progress">
+          <div className="flex-1 h-1.5 rounded-full bg-theme-border overflow-hidden">
+            <div
+              className="h-full rounded-full bg-theme-accent transition-all"
+              style={{ width: `${(moveCount / Math.ceil(totalMoves / 2)) * 100}%` }}
+            />
+          </div>
+          <span>{moveCount}/{Math.ceil(totalMoves / 2)}</span>
+        </div>
+      )}
 
       {/* Status feedback */}
       {state === 'correct' && (
         <div className="flex items-center gap-2 text-green-500" data-testid="puzzle-correct">
           <CheckCircle size={18} />
-          <span className="text-sm font-medium">Correct! The best move was {puzzle.bestMoveSan}.</span>
+          <span className="text-sm font-medium">
+            Correct!{isMultiMove ? ` You found all ${Math.ceil(totalMoves / 2)} moves.` : ` The best move was ${puzzle.bestMoveSan}.`}
+          </span>
         </div>
       )}
       {state === 'incorrect' && (
         <div className="flex items-center gap-2 text-red-500" data-testid="puzzle-incorrect">
           <XCircle size={18} />
-          <span className="text-sm font-medium">
-            The best move was {puzzle.bestMoveSan}. You originally played {puzzle.playerMove.slice(0, 2)}-{puzzle.playerMove.slice(2, 4)}.
-          </span>
+          <span className="text-sm font-medium">Incorrect — resetting puzzle</span>
+        </div>
+      )}
+      {state === 'loading' && (
+        <div className="text-sm text-theme-text-muted" data-testid="puzzle-loading">
+          Setting up position...
         </div>
       )}
 
@@ -138,6 +272,12 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         <span>Move {puzzle.moveNumber}</span>
         <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
         <span>{puzzle.cpLoss}cp loss</span>
+        {isMultiMove && (
+          <>
+            <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
+            <span>{Math.ceil(totalMoves / 2)} moves deep</span>
+          </>
+        )}
       </div>
     </div>
   );

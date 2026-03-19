@@ -8,8 +8,8 @@ import {
   deleteMistakePuzzle,
   type MistakePuzzleStats,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot } from 'lucide-react';
-import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus } from '../../types';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, BookOpen, Swords, Crown } from 'lucide-react';
+import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
 type SourceFilter = MistakePuzzleSourceMode | 'all';
@@ -33,11 +33,26 @@ const SOURCE_LABELS: Record<MistakePuzzleSourceMode, string> = {
   chesscom: 'Chess.com',
 };
 
+interface PhaseTabConfig {
+  phase: MistakeGamePhase | 'all';
+  label: string;
+  icon: JSX.Element;
+  description: string;
+}
+
+const PHASE_TABS: PhaseTabConfig[] = [
+  { phase: 'all', label: 'All', icon: <AlertTriangle size={16} />, description: 'All mistakes from your games' },
+  { phase: 'opening', label: 'Opening', icon: <BookOpen size={16} />, description: 'Development and opening theory mistakes' },
+  { phase: 'middlegame', label: 'Middlegame', icon: <Swords size={16} />, description: 'Tactical and positional errors' },
+  { phase: 'endgame', label: 'Endgame', icon: <Crown size={16} />, description: 'Conversion and technique mistakes' },
+];
+
 export function MyMistakesPage(): JSX.Element {
   const navigate = useNavigate();
   const [puzzles, setPuzzles] = useState<MistakePuzzle[]>([]);
   const [stats, setStats] = useState<MistakePuzzleStats | null>(null);
   const [activePuzzle, setActivePuzzle] = useState<MistakePuzzle | null>(null);
+  const [phaseTab, setPhaseTab] = useState<MistakeGamePhase | 'all'>('all');
   const [classFilter, setClassFilter] = useState<ClassificationFilter>('all');
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
@@ -58,6 +73,7 @@ export function MyMistakesPage(): JSX.Element {
   }, [loadData]);
 
   const filtered = puzzles.filter((p) => {
+    if (phaseTab !== 'all' && p.gamePhase !== phaseTab) return false;
     if (classFilter !== 'all' && p.classification !== classFilter) return false;
     if (sourceFilter !== 'all' && p.sourceMode !== sourceFilter) return false;
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
@@ -77,6 +93,12 @@ export function MyMistakesPage(): JSX.Element {
       void loadData();
     });
   }, [activePuzzle, loadData]);
+
+  const getPhaseCount = (phase: MistakeGamePhase | 'all'): number => {
+    if (!stats) return 0;
+    if (phase === 'all') return stats.total;
+    return stats.byPhase[phase];
+  };
 
   if (loading) {
     return (
@@ -106,22 +128,22 @@ export function MyMistakesPage(): JSX.Element {
   }
 
   return (
-    <div className="p-4 max-w-2xl mx-auto space-y-6" data-testid="my-mistakes-page">
+    <div className="flex flex-col flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto" data-testid="my-mistakes-page">
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 mb-4">
         <button
           onClick={() => void navigate('/puzzles')}
-          className="text-theme-text-muted hover:text-theme-text"
+          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
           aria-label="Back to puzzles"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={18} className="text-theme-text" />
         </button>
         <h1 className="text-xl font-bold text-theme-text">My Mistakes</h1>
       </div>
 
       {/* Stats bar */}
       {stats && stats.total > 0 && (
-        <div className="flex gap-4 text-sm" data-testid="stats-bar">
+        <div className="flex gap-4 text-sm mb-4" data-testid="stats-bar">
           <div className="flex items-center gap-1 text-theme-text-muted">
             <AlertTriangle size={14} />
             <span>{stats.total} total</span>
@@ -141,8 +163,39 @@ export function MyMistakesPage(): JSX.Element {
         </div>
       )}
 
+      {/* Phase tabs */}
+      <div className="grid grid-cols-4 gap-2 mb-4" data-testid="phase-tabs">
+        {PHASE_TABS.map((tab) => {
+          const count = getPhaseCount(tab.phase);
+          const isActive = phaseTab === tab.phase;
+          return (
+            <button
+              key={tab.phase}
+              onClick={() => setPhaseTab(tab.phase)}
+              className={`flex flex-col items-center gap-1 p-3 rounded-lg border transition-colors ${
+                isActive
+                  ? 'bg-theme-accent/10 border-theme-accent text-theme-accent'
+                  : 'bg-theme-surface border-theme-border text-theme-text-muted hover:border-theme-accent/30'
+              }`}
+              data-testid={`phase-tab-${tab.phase}`}
+            >
+              {tab.icon}
+              <span className="text-xs font-semibold">{tab.label}</span>
+              <span className="text-[10px] opacity-70">{count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Phase description */}
+      {phaseTab !== 'all' && (
+        <p className="text-xs text-theme-text-muted mb-3" data-testid="phase-description">
+          {PHASE_TABS.find((t) => t.phase === phaseTab)?.description}
+        </p>
+      )}
+
       {/* Filters */}
-      <div className="flex flex-wrap gap-2" data-testid="filters">
+      <div className="flex flex-wrap gap-2 mb-4" data-testid="filters">
         <select
           value={classFilter}
           onChange={(e) => setClassFilter(e.target.value as ClassificationFilter)}
@@ -226,6 +279,8 @@ export function MyMistakesPage(): JSX.Element {
                 <span>{SOURCE_LABELS[puzzle.sourceMode]}</span>
                 <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
                 <span>{puzzle.cpLoss}cp</span>
+                <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
+                <span className="capitalize">{puzzle.gamePhase}</span>
                 <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
                 <span className={
                   puzzle.status === 'mastered' ? 'text-green-500' :
