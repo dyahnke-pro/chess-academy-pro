@@ -18,11 +18,10 @@ interface MistakePuzzleBoardProps {
 }
 
 const CLASSIFICATION_BADGE: Record<MistakeClassification, { label: string; symbol: string; color: string }> = {
-  miss: { label: 'Missed Tactic', symbol: '!', color: 'text-blue-500 bg-blue-500/10' },
+  miss: { label: 'Miss', symbol: '✕', color: 'text-purple-500 bg-purple-500/10' },
   inaccuracy: { label: 'Inaccuracy', symbol: '?!', color: 'text-yellow-500 bg-yellow-500/10' },
   mistake: { label: 'Mistake', symbol: '?', color: 'text-orange-500 bg-orange-500/10' },
   blunder: { label: 'Blunder', symbol: '??', color: 'text-red-500 bg-red-500/10' },
-  miss: { label: 'Miss', symbol: '!?', color: 'text-blue-500 bg-blue-500/10' },
 };
 
 const PHASE_LABELS: Record<string, string> = {
