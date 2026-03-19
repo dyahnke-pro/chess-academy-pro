@@ -60,7 +60,7 @@ function clampEval(evalCp: number | null): number {
 const DOT_CLASSIFICATIONS: MoveClassification[] = ['brilliant', 'great', 'blunder', 'mistake', 'inaccuracy', 'miss'];
 
 const SIZE_HEIGHTS: Record<string, number> = {
-  compact: 80,
+  compact: 50,
   full: 140,
 };
 

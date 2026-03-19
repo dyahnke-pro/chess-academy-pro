@@ -12,8 +12,8 @@ interface CompactMoveStripProps {
 const CLASSIFICATION_COLORS: Record<MoveClassification, string> = {
   brilliant: '#22c55e',
   great: '#4ade80',
-  good: 'var(--color-text)',
-  book: 'var(--color-accent)',
+  good: 'rgba(255,255,255,0.7)',
+  book: '#60a5fa',
   miss: '#a855f7',
   inaccuracy: '#fbbf24',
   mistake: '#f97316',
@@ -22,7 +22,7 @@ const CLASSIFICATION_COLORS: Record<MoveClassification, string> = {
 
 /**
  * Compact horizontal scrollable move strip — Chess.com-style.
- * Shows moves in a single horizontal row with classification badges inline.
+ * Dark background, no move numbers, tight spacing.
  */
 export function CompactMoveStrip({
   moves,
@@ -38,8 +38,6 @@ export function CompactMoveStrip({
     if (activeRef.current && scrollRef.current) {
       const container = scrollRef.current;
       const active = activeRef.current;
-
-      // Center the active move in the container
       const scrollLeft = active.offsetLeft - container.offsetWidth / 2 + active.offsetWidth / 2;
       container.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
     }
@@ -48,41 +46,29 @@ export function CompactMoveStrip({
   return (
     <div
       ref={scrollRef}
-      className={`flex items-center gap-0.5 overflow-x-auto scrollbar-none px-2 py-1.5 ${className}`}
-      style={{ background: 'var(--color-surface)' }}
+      className={`flex items-center gap-px overflow-x-auto scrollbar-none px-1 py-1 ${className}`}
+      style={{ background: 'color-mix(in srgb, var(--color-bg) 60%, black)' }}
       data-testid="compact-move-strip"
     >
       {moves.map((move, i) => {
-        const isWhite = i % 2 === 0;
-        const moveNum = Math.floor(i / 2) + 1;
         const isActive = currentMoveIndex === i;
         const cls = move.classification;
         const showBadge = cls && cls !== 'good' && cls !== 'book';
 
         return (
-          <span key={i} className="flex items-center shrink-0">
-            {/* Move number before white's move */}
-            {isWhite && (
-              <span
-                className="text-[10px] mr-0.5 select-none"
-                style={{ color: 'var(--color-text-muted)', opacity: 0.6 }}
-              >
-                {moveNum}.
-              </span>
-            )}
-            <MoveChip
-              ref={isActive ? activeRef : null}
-              move={move}
-              index={i}
-              isActive={isActive}
-              showBadge={!!showBadge}
-              onClick={onMoveClick}
-            />
-          </span>
+          <MoveChip
+            key={i}
+            ref={isActive ? activeRef : null}
+            move={move}
+            index={i}
+            isActive={isActive}
+            showBadge={!!showBadge}
+            onClick={onMoveClick}
+          />
         );
       })}
       {moves.length === 0 && (
-        <span className="text-xs px-2" style={{ color: 'var(--color-text-muted)' }}>
+        <span className="text-xs px-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
           Starting position
         </span>
       )}
@@ -101,29 +87,28 @@ interface MoveChipProps {
 const MoveChip = forwardRef<HTMLButtonElement, MoveChipProps>(
   function MoveChip({ move, index, isActive, showBadge, onClick }, ref) {
     const cls = move.classification;
-    const color = cls ? CLASSIFICATION_COLORS[cls] : 'var(--color-text)';
+    const color = cls ? CLASSIFICATION_COLORS[cls] : 'rgba(255,255,255,0.7)';
     const style = cls ? CLASSIFICATION_STYLES[cls] : null;
 
     return (
       <button
         ref={ref}
         onClick={onClick ? () => onClick(index) : undefined}
-        className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-xs font-mono whitespace-nowrap transition-all ${
+        className={`inline-flex items-center gap-0.5 px-1 py-0.5 text-[11px] font-mono whitespace-nowrap shrink-0 ${
           onClick ? 'hover:opacity-80 cursor-pointer' : 'cursor-default'
         } ${isActive ? 'font-bold' : ''}`}
         style={{
-          color: isActive ? (showBadge ? color : 'var(--color-bg)') : color,
+          color: isActive ? '#fff' : color,
           background: isActive
-            ? (showBadge ? `color-mix(in srgb, ${color} 20%, var(--color-surface))` : 'var(--color-accent)')
+            ? (showBadge ? style?.color ?? 'var(--color-accent)' : 'var(--color-accent)')
             : 'transparent',
-          borderRadius: '4px',
+          borderRadius: '3px',
         }}
         data-testid={`move-chip-${index}`}
       >
-        {/* Classification badge — small colored dot with symbol */}
-        {showBadge && style && (
+        {showBadge && style && !isActive && (
           <span
-            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-[7px] font-bold text-white leading-none shrink-0"
+            className="inline-flex items-center justify-center w-3 h-3 rounded-full text-[6px] font-bold text-white leading-none shrink-0"
             style={{ background: style.color }}
           >
             {style.symbol}

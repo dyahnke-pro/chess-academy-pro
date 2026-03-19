@@ -51,7 +51,8 @@ export function ReviewSummaryCard({
 
   return (
     <div
-      className="flex flex-col items-center w-full max-w-md mx-auto p-4 pb-24 gap-5 overflow-y-auto"
+      className="flex flex-col items-center w-full max-w-md mx-auto p-4 gap-5 overflow-y-auto"
+      style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 16px))' }}
       data-testid="review-summary-card"
     >
       {/* Compact Result Banner */}

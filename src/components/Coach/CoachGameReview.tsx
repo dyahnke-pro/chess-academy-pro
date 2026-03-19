@@ -940,336 +940,415 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const isAnalysisMode = reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson';
   const moveListIndex = isAnalysisMode ? reviewState.currentMoveIndex : null;
 
+  const isSuboptimalMove = currentMove && !currentMove.isCoachMove &&
+    currentMove.classification && ['inaccuracy', 'mistake', 'blunder', 'miss'].includes(currentMove.classification);
+
+  const classificationColor = currentMove?.classification
+    ? CLASSIFICATION_STYLES[currentMove.classification].color
+    : null;
+
   return (
     <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-review">
-      {/* ═══ LEFT / MAIN COLUMN ═══ Board + controls (single column on mobile) */}
-      <div className="flex flex-col md:w-3/5 min-h-0 overflow-y-auto md:overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between px-3 py-1.5 border-b border-theme-border shrink-0">
-          <div className="flex items-center gap-2">
-            <button onClick={onBackToCoach} className="p-1 rounded-lg hover:bg-theme-surface" aria-label="Back">
-              <ArrowLeft size={18} style={{ color: 'var(--color-text)' }} />
-            </button>
-            <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
-              {isGuidedLesson ? 'Guided Lesson' : 'Review'}
-            </span>
-            {!isGuidedLesson && (
-              <span
-                className="text-xs font-mono font-semibold px-1.5 py-0.5 rounded"
-                style={{
-                  color: getAccuracyColor(playerColor === 'white' ? accuracy.white : accuracy.black),
-                  background: 'var(--color-surface)',
-                }}
-              >
-                {Math.round(playerColor === 'white' ? accuracy.white : accuracy.black)}%
+      {/* ═══ LEFT / MAIN COLUMN ═══ */}
+      <div className="flex flex-col md:w-3/5 min-h-0 flex-1 md:flex-none relative">
+        {/* Scrollable content area (everything except sticky bottom bar) */}
+        <div className="flex-1 overflow-y-auto md:overflow-hidden min-h-0">
+          {/* Header — slim */}
+          <div className="flex items-center justify-between px-2 py-1 shrink-0" style={{ background: 'var(--color-bg)', borderBottom: '1px solid var(--color-border)' }}>
+            <div className="flex items-center gap-1.5">
+              <button onClick={onBackToCoach} className="p-1 rounded hover:opacity-80" aria-label="Back">
+                <ArrowLeft size={16} style={{ color: 'var(--color-text)' }} />
+              </button>
+              <span className="text-xs font-semibold" style={{ color: 'var(--color-text)' }}>
+                {isGuidedLesson ? 'Guided Lesson' : 'Game Review'}
               </span>
+            </div>
+            {!autoReviewActive ? (
+              <button
+                onClick={handleStartAutoReview}
+                className="flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium hover:opacity-80"
+                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                data-testid="auto-review-btn"
+              >
+                <Play size={10} /> Auto
+              </button>
+            ) : (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={handleToggleAutoReviewPause}
+                  className="px-1.5 py-0.5 rounded text-[11px]"
+                  style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
+                  data-testid="auto-review-pause-btn"
+                >
+                  {autoReviewPaused ? '▶' : '⏸'}
+                </button>
+                <button
+                  onClick={handleStopAutoReview}
+                  className="px-1.5 py-0.5 rounded text-[11px]"
+                  style={{ color: 'var(--color-text-muted)' }}
+                  data-testid="auto-review-stop-btn"
+                >
+                  ✕
+                </button>
+              </div>
             )}
           </div>
-          {!autoReviewActive ? (
-            <button
-              onClick={handleStartAutoReview}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium hover:opacity-80"
-              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-              data-testid="auto-review-btn"
+
+          {/* Mode banners (what-if, practice, guided) — above board */}
+          <AnimatePresence>
+            {reviewState.mode === 'whatif' && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="px-2 py-1.5 flex items-center justify-between overflow-hidden shrink-0"
+                style={{ background: 'color-mix(in srgb, var(--color-accent) 15%, var(--color-surface))' }}
+                data-testid="whatif-banner"
+              >
+                <div className="flex items-center gap-2">
+                  <Undo2 size={12} style={{ color: 'var(--color-accent)' }} />
+                  <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>What-If Mode</span>
+                  {isThinking && <Loader2 size={11} className="animate-spin" style={{ color: 'var(--color-text-muted)' }} />}
+                </div>
+                <button onClick={handleBackToReview} className="px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="back-to-review-btn">Back</button>
+              </motion.div>
+            )}
+            {reviewState.mode === 'practice' && practiceTarget && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="px-2 py-1.5 overflow-hidden shrink-0"
+                style={{ background: 'color-mix(in srgb, var(--color-success) 15%, var(--color-surface))' }}
+                data-testid="practice-banner"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Target size={12} style={{ color: 'var(--color-success)' }} />
+                    <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>Find the best move!</span>
+                  </div>
+                  <button onClick={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice} className="px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="exit-practice-btn">Back</button>
+                </div>
+                {practiceResult === 'correct' && (
+                  <div className="flex items-center gap-1.5 mt-1" data-testid="practice-correct">
+                    <CheckCircle2 size={12} style={{ color: 'var(--color-success)' }} />
+                    <span className="text-xs font-medium" style={{ color: 'var(--color-success)' }}>Correct! {practiceTarget.explanation}</span>
+                  </div>
+                )}
+                {practiceResult === 'incorrect' && (
+                  <div className="flex items-center gap-1.5 mt-1" data-testid="practice-incorrect">
+                    <XCircle size={12} style={{ color: 'var(--color-error)' }} />
+                    <span className="text-xs" style={{ color: 'var(--color-text)' }}>Best: {practiceTarget.bestMove}</span>
+                  </div>
+                )}
+                {practiceResult === 'pending' && practiceAttempts > 0 && (
+                  <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>Try again ({3 - practiceAttempts} left)</p>
+                )}
+              </motion.div>
+            )}
+            {isGuidedLesson && guidedStopped && reviewState.mode === 'guided_lesson' && currentMove && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="px-2 py-1.5 overflow-hidden shrink-0"
+                style={{ background: 'color-mix(in srgb, var(--color-warning) 15%, var(--color-surface))' }}
+                data-testid="guided-stop-banner"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  {currentMove.classification === 'brilliant' ? <Sparkles size={12} style={{ color: 'var(--color-success)' }} /> : <AlertTriangle size={12} style={{ color: 'var(--color-warning)' }} />}
+                  <span className="text-xs font-semibold capitalize" style={{ color: 'var(--color-text)' }}>
+                    {currentMove.classification === 'brilliant' ? 'Brilliant!' : `${currentMove.classification}`}
+                  </span>
+                </div>
+                {currentMove.commentary && <p className="text-xs mb-1.5 leading-relaxed" style={{ color: 'var(--color-text)' }}>{currentMove.commentary}</p>}
+                <div className="flex items-center gap-2">
+                  {currentMove.bestMove && currentMove.classification !== 'brilliant' && (
+                    <button onClick={handleGuidedTryIt} className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="guided-try-it-btn"><Target size={11} />Try It</button>
+                  )}
+                  <button onClick={handleGuidedContinue} className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} data-testid="guided-continue-btn"><FastForward size={11} />Continue</button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Opponent info bar */}
+          <div className="shrink-0">
+            <PlayerInfoBar
+              name="Stockfish Bot"
+              rating={opponentRating}
+              isBot
+              capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
+              materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
+              isActive={false}
+            />
+          </div>
+
+          {/* Board — full width on mobile, constrained on desktop */}
+          <div className="md:px-2 flex justify-center shrink-0">
+            <div
+              className="w-full md:max-w-[420px] transition-shadow duration-300"
+              style={{ boxShadow: boardFlash ? `0 0 0 3px ${boardFlash}` : 'none' }}
             >
-              <Play size={11} /> Auto
-            </button>
-          ) : (
-            <div className="flex items-center gap-1">
-              <button
-                onClick={handleToggleAutoReviewPause}
-                className="px-2 py-1 rounded-lg text-xs font-medium"
-                style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                data-testid="auto-review-pause-btn"
-              >
-                {autoReviewPaused ? '▶' : '⏸'}
-              </button>
-              <button
-                onClick={handleStopAutoReview}
-                className="px-2 py-1 rounded-lg text-xs"
-                style={{ color: 'var(--color-text-muted)' }}
-                data-testid="auto-review-stop-btn"
-              >
-                ✕
-              </button>
+              <ChessBoard
+                initialFen={displayFen}
+                orientation={playerColor}
+                interactive={reviewState.mode === 'practice' ? (practiceResult === 'pending') : !isThinking}
+                onMove={(moveResult) => {
+                  if (reviewState.mode === 'practice') {
+                    void handlePracticeMove(moveResult);
+                  } else {
+                    void handleBoardMove(moveResult);
+                  }
+                }}
+                showEvalBar
+                evaluation={currentMove?.evaluation ?? null}
+                arrows={reviewState.mode === 'practice' ? practiceArrows : arrows}
+                annotationHighlights={reviewState.mode === 'practice' ? [] : classificationHighlights}
+                classificationOverlay={reviewState.mode === 'practice' ? null : classificationOverlay}
+              />
+            </div>
+          </div>
+
+          {/* Player info bar */}
+          <div className="shrink-0">
+            <PlayerInfoBar
+              name={playerName}
+              rating={playerRating}
+              capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
+              materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
+              isActive={false}
+            />
+          </div>
+
+          {/* ═══ MOBILE: Dark Navigation Zone ═══ */}
+          <div className="md:hidden shrink-0" style={{ background: 'color-mix(in srgb, var(--color-bg) 60%, black)' }}>
+            {/* Eval graph — thin strip */}
+            <div className="px-1">
+              <EvalGraph
+                moves={moves}
+                currentMoveIndex={isAnalysisMode ? reviewState.currentMoveIndex : null}
+                onMoveClick={handleMoveClick}
+                size="compact"
+              />
+            </div>
+
+            {/* Navigation arrows + key moments */}
+            {isAnalysisMode && (
+              <div className="flex items-center justify-center gap-1 py-0.5">
+                <MoveNavigationControls
+                  currentIndex={reviewState.currentMoveIndex}
+                  totalMoves={moves.length}
+                  onFirst={() => navigateMove('first')}
+                  onPrev={() => navigateMove('prev')}
+                  onNext={() => navigateMove('next')}
+                  onLast={() => navigateMove('last')}
+                  className=""
+                />
+                <KeyMomentNav
+                  moves={moves}
+                  currentIndex={reviewState.currentMoveIndex}
+                  onNavigate={handleMoveClick}
+                  className=""
+                />
+              </div>
+            )}
+
+            {/* Compact move strip */}
+            <CompactMoveStrip
+              moves={moves}
+              currentMoveIndex={moveListIndex}
+              onMoveClick={handleMoveClick}
+            />
+          </div>
+
+          {/* ═══ DESKTOP: Eval graph (stays above board area on desktop) ═══ */}
+          <div className="hidden md:block px-2 shrink-0">
+            <EvalGraph
+              moves={moves}
+              currentMoveIndex={isAnalysisMode ? reviewState.currentMoveIndex : null}
+              onMoveClick={handleMoveClick}
+              size="compact"
+            />
+          </div>
+
+          {/* Desktop navigation + action buttons */}
+          {isAnalysisMode && (
+            <div className="hidden md:flex items-center justify-center gap-1 px-2 py-0.5 shrink-0">
+              <MoveNavigationControls
+                currentIndex={reviewState.currentMoveIndex}
+                totalMoves={moves.length}
+                onFirst={() => navigateMove('first')}
+                onPrev={() => navigateMove('prev')}
+                onNext={() => navigateMove('next')}
+                onLast={() => navigateMove('last')}
+                className=""
+              />
+              <KeyMomentNav
+                moves={moves}
+                currentIndex={reviewState.currentMoveIndex}
+                onNavigate={handleMoveClick}
+                className=""
+              />
             </div>
           )}
-        </div>
-
-        {/* Eval graph — thin interactive strip */}
-        <div className="px-2 shrink-0">
-          <EvalGraph
-            moves={moves}
-            currentMoveIndex={isAnalysisMode ? reviewState.currentMoveIndex : null}
-            onMoveClick={handleMoveClick}
-            size="compact"
-          />
-        </div>
-
-        {/* Mode banners (what-if, practice, guided) — above board on mobile */}
-        <AnimatePresence>
-          {reviewState.mode === 'whatif' && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mx-2 mt-1 p-2 rounded-lg flex items-center justify-between overflow-hidden shrink-0"
-              style={{ background: 'color-mix(in srgb, var(--color-accent) 15%, var(--color-surface))' }}
-              data-testid="whatif-banner"
-            >
-              <div className="flex items-center gap-2">
-                <Undo2 size={13} style={{ color: 'var(--color-accent)' }} />
-                <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>What-If</span>
-                {isThinking && <Loader2 size={12} className="animate-spin" style={{ color: 'var(--color-text-muted)' }} />}
-              </div>
-              <button onClick={handleBackToReview} className="px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="back-to-review-btn">Back</button>
-            </motion.div>
+          {isAnalysisMode && (
+            <div className="hidden md:flex items-center justify-center gap-2 px-2 py-1 shrink-0">
+              <MoveActionButtons
+                currentMove={currentMove}
+                onShowBestMove={() => { /* arrows already shown */ }}
+                onRetryPosition={retryHandler}
+                onShowBestLine={() => void handleToggleBestLine()}
+                showingBestLine={bestLineActive}
+              />
+            </div>
           )}
-          {reviewState.mode === 'practice' && practiceTarget && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mx-2 mt-1 p-2 rounded-lg overflow-hidden shrink-0"
-              style={{ background: 'color-mix(in srgb, var(--color-success) 15%, var(--color-surface))' }}
-              data-testid="practice-banner"
+
+          {/* Best Line stepper (both mobile + desktop) */}
+          {bestLineActive && bestLineSans.length > 0 && (
+            <div
+              className="mx-2 rounded p-1.5 flex items-center gap-1 shrink-0"
+              style={{ background: 'var(--color-surface)', border: '1px solid var(--color-accent)' }}
+              data-testid="best-line-nav"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Target size={13} style={{ color: 'var(--color-success)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>Find the best move!</span>
-                </div>
-                <button onClick={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice} className="px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="exit-practice-btn">Back</button>
+              <button onClick={() => handleBestLineStep('prev')} disabled={bestLineIndex <= 0} className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30" style={{ color: 'var(--color-text)' }}>‹</button>
+              <div className="flex-1 text-center text-[11px] font-mono overflow-hidden whitespace-nowrap" style={{ color: 'var(--color-text)' }}>
+                <span className="font-medium" style={{ color: 'var(--color-accent)' }}>Best: </span>
+                {bestLineSans.map((san, i) => (
+                  <span key={i} className={i < bestLineIndex ? 'opacity-40' : i === bestLineIndex ? 'font-bold' : 'opacity-60'} style={i === bestLineIndex ? { color: 'var(--color-accent)' } : undefined}>
+                    {san}{i < bestLineSans.length - 1 ? ' ' : ''}
+                  </span>
+                ))}
               </div>
-              {practiceResult === 'correct' && (
-                <div className="flex items-center gap-1.5 mt-1.5" data-testid="practice-correct">
-                  <CheckCircle2 size={13} style={{ color: 'var(--color-success)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-success)' }}>Correct! {practiceTarget.explanation}</span>
-                </div>
-              )}
-              {practiceResult === 'incorrect' && (
-                <div className="flex items-center gap-1.5 mt-1.5" data-testid="practice-incorrect">
-                  <XCircle size={13} style={{ color: 'var(--color-error)' }} />
-                  <span className="text-xs" style={{ color: 'var(--color-text)' }}>Best: {practiceTarget.bestMove}</span>
-                </div>
-              )}
-              {practiceResult === 'pending' && practiceAttempts > 0 && (
-                <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>Try again ({3 - practiceAttempts} left)</p>
-              )}
-            </motion.div>
+              <button onClick={() => handleBestLineStep('next')} disabled={bestLineIndex >= bestLineMoves.length} className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30" style={{ color: 'var(--color-text)' }}>›</button>
+            </div>
           )}
-          {isGuidedLesson && guidedStopped && reviewState.mode === 'guided_lesson' && currentMove && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mx-2 mt-1 p-2 rounded-lg overflow-hidden shrink-0"
-              style={{ background: 'color-mix(in srgb, var(--color-warning) 15%, var(--color-surface))' }}
-              data-testid="guided-stop-banner"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                {currentMove.classification === 'brilliant' ? <Sparkles size={13} style={{ color: 'var(--color-success)' }} /> : <AlertTriangle size={13} style={{ color: 'var(--color-warning)' }} />}
-                <span className="text-xs font-semibold capitalize" style={{ color: 'var(--color-text)' }}>
-                  {currentMove.classification === 'brilliant' ? 'Brilliant!' : `${currentMove.classification}`}
-                </span>
-              </div>
-              {currentMove.commentary && <p className="text-xs mb-1.5 leading-relaxed" style={{ color: 'var(--color-text)' }}>{currentMove.commentary}</p>}
-              <div className="flex items-center gap-2">
-                {currentMove.bestMove && currentMove.classification !== 'brilliant' && (
-                  <button onClick={handleGuidedTryIt} className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="guided-try-it-btn"><Target size={11} />Try It</button>
-                )}
-                <button onClick={handleGuidedContinue} className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold" style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} data-testid="guided-continue-btn"><FastForward size={11} />Continue</button>
-              </div>
-            </motion.div>
+          {bestLineLoading && (
+            <div className="text-center text-xs py-0.5 shrink-0" style={{ color: 'var(--color-text-muted)' }}>Analyzing...</div>
           )}
-        </AnimatePresence>
 
-        {/* Opponent info bar */}
-        <div className="px-2 shrink-0">
-          <PlayerInfoBar
-            name="Stockfish Bot"
-            rating={opponentRating}
-            isBot
-            capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
-            materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
-            isActive={false}
-          />
-        </div>
-
-        {/* Board */}
-        <div className="px-2 py-0.5 flex justify-center shrink-0">
-          <div
-            className="w-full md:max-w-[420px] rounded-sm transition-shadow duration-300"
-            style={{ boxShadow: boardFlash ? `0 0 0 3px ${boardFlash}` : 'none' }}
-          >
-            <ChessBoard
-              initialFen={displayFen}
-              orientation={playerColor}
-              interactive={reviewState.mode === 'practice' ? (practiceResult === 'pending') : !isThinking}
-              onMove={(moveResult) => {
-                if (reviewState.mode === 'practice') {
-                  void handlePracticeMove(moveResult);
-                } else {
-                  void handleBoardMove(moveResult);
-                }
-              }}
-              showEvalBar
-              evaluation={currentMove?.evaluation ?? null}
-              arrows={reviewState.mode === 'practice' ? practiceArrows : arrows}
-              annotationHighlights={reviewState.mode === 'practice' ? [] : classificationHighlights}
-              classificationOverlay={reviewState.mode === 'practice' ? null : classificationOverlay}
-            />
-          </div>
-        </div>
-
-        {/* Player info bar */}
-        <div className="px-2 shrink-0">
-          <PlayerInfoBar
-            name={playerName}
-            rating={playerRating}
-            capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
-            materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
-            isActive={false}
-          />
-        </div>
-
-        {/* Navigation row: |< < > >| + key moments */}
-        {isAnalysisMode && (
-          <div className="flex items-center justify-center gap-1 px-2 py-0.5 shrink-0">
-            <MoveNavigationControls
-              currentIndex={reviewState.currentMoveIndex}
-              totalMoves={moves.length}
-              onFirst={() => navigateMove('first')}
-              onPrev={() => navigateMove('prev')}
-              onNext={() => navigateMove('next')}
-              onLast={() => navigateMove('last')}
-              className=""
-            />
-            <KeyMomentNav
-              moves={moves}
-              currentIndex={reviewState.currentMoveIndex}
-              onNavigate={handleMoveClick}
-              className=""
-            />
-          </div>
-        )}
-
-        {/* ─── Chess.com-style action buttons: Show / Best Line / Retry ─── */}
-        {isAnalysisMode && (
-          <div className="flex items-center justify-center gap-2 px-2 py-1 shrink-0">
-            <MoveActionButtons
-              currentMove={currentMove}
-              onShowBestMove={() => { /* arrows already shown */ }}
-              onRetryPosition={retryHandler}
-              onShowBestLine={() => void handleToggleBestLine()}
-              showingBestLine={bestLineActive}
-            />
-          </div>
-        )}
-
-        {/* Best Line stepper */}
-        {bestLineActive && bestLineSans.length > 0 && (
-          <div
-            className="mx-2 rounded-lg p-1.5 flex items-center gap-1 shrink-0"
-            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-accent)' }}
-            data-testid="best-line-nav"
-          >
-            <button onClick={() => handleBestLineStep('prev')} disabled={bestLineIndex <= 0} className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30" style={{ color: 'var(--color-text)' }}>‹</button>
-            <div className="flex-1 text-center text-[11px] font-mono overflow-hidden whitespace-nowrap" style={{ color: 'var(--color-text)' }}>
-              <span className="font-medium" style={{ color: 'var(--color-accent)' }}>Best: </span>
-              {bestLineSans.map((san, i) => (
-                <span key={i} className={i < bestLineIndex ? 'opacity-40' : i === bestLineIndex ? 'font-bold' : 'opacity-60'} style={i === bestLineIndex ? { color: 'var(--color-accent)' } : undefined}>
-                  {san}{i < bestLineSans.length - 1 ? ' ' : ''}
-                </span>
+          {/* What-If variation moves */}
+          {reviewState.mode === 'whatif' && reviewState.whatIfMoves.length > 0 && (
+            <div className="px-2 py-0.5 shrink-0" data-testid="whatif-moves">
+              <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Variation: </span>
+              {reviewState.whatIfMoves.map((m, i) => (
+                <span key={i} className="text-xs font-mono" style={{ color: i % 2 === 0 ? 'var(--color-accent)' : 'var(--color-text)' }}>{m} </span>
               ))}
             </div>
-            <button onClick={() => handleBestLineStep('next')} disabled={bestLineIndex >= bestLineMoves.length} className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30" style={{ color: 'var(--color-text)' }}>›</button>
-          </div>
-        )}
-        {bestLineLoading && (
-          <div className="text-center text-xs py-0.5 shrink-0" style={{ color: 'var(--color-text-muted)' }}>Analyzing...</div>
-        )}
+          )}
 
-        {/* What-If variation moves */}
-        {reviewState.mode === 'whatif' && reviewState.whatIfMoves.length > 0 && (
-          <div className="px-2 py-0.5 shrink-0" data-testid="whatif-moves">
-            <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Variation: </span>
-            {reviewState.whatIfMoves.map((m, i) => (
-              <span key={i} className="text-xs font-mono" style={{ color: i % 2 === 0 ? 'var(--color-accent)' : 'var(--color-text)' }}>{m} </span>
-            ))}
-          </div>
-        )}
+          {/* ═══ MOBILE: Coach Speech Bubble with integrated action buttons ═══ */}
+          {isAnalysisMode && (commentary || aiCommentary || isLoadingAiCommentary || isSuboptimalMove) && (
+            <div className="md:hidden px-2 py-1 shrink-0">
+              <div
+                className="rounded-xl p-2.5 relative"
+                style={{
+                  background: 'var(--color-surface)',
+                  borderLeft: classificationColor && isSuboptimalMove
+                    ? `3px solid ${classificationColor}`
+                    : '3px solid var(--color-accent)',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
+                }}
+                data-testid="review-commentary"
+              >
+                {/* Speech bubble triangle */}
+                <div
+                  className="absolute -top-1.5 left-4 w-3 h-3 rotate-45"
+                  style={{ background: 'var(--color-surface)' }}
+                />
 
-        {/* ═══ MOBILE: Compact move strip + commentary (hidden on desktop) ═══ */}
-        <div className="md:hidden shrink-0 border-t border-theme-border">
-          <CompactMoveStrip
-            moves={moves}
-            currentMoveIndex={moveListIndex}
-            onMoveClick={handleMoveClick}
-          />
-        </div>
-
-        {/* Mobile: Coach commentary card */}
-        {(commentary || aiCommentary || isLoadingAiCommentary) && (
-          <div className="md:hidden mx-2 mb-1 shrink-0">
-            <div
-              className="rounded-lg p-2.5"
-              style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-              data-testid="review-commentary"
-            >
-              {/* Classification label */}
-              {currentMove?.classification && currentMove.classification !== 'good' && currentMove.classification !== 'book' && (
-                <div className="flex items-center gap-1.5 mb-1">
-                  <span
-                    className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[8px] font-bold text-white"
-                    style={{ background: CLASSIFICATION_STYLES[currentMove.classification].color }}
-                  >
-                    {CLASSIFICATION_STYLES[currentMove.classification].symbol}
-                  </span>
-                  <span className="text-xs font-semibold capitalize" style={{ color: CLASSIFICATION_STYLES[currentMove.classification].color }}>
-                    {CLASSIFICATION_STYLES[currentMove.classification].label}
-                  </span>
-                </div>
-              )}
-              {commentary && (
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>{commentary}</p>
-              )}
-              {(aiCommentary || isLoadingAiCommentary) && (
-                <div className="mt-1.5 pt-1.5" style={{ borderTop: '1px solid var(--color-border)' }}>
-                  <div className="flex items-center gap-1 mb-0.5">
-                    <MessageCircle size={10} style={{ color: 'var(--color-accent)' }} />
-                    <span className="text-[9px] font-semibold uppercase" style={{ color: 'var(--color-accent)' }}>Coach</span>
-                    {isLoadingAiCommentary && <Loader2 size={9} className="animate-spin" style={{ color: 'var(--color-accent)' }} />}
+                {/* Classification header */}
+                {currentMove?.classification && currentMove.classification !== 'good' && currentMove.classification !== 'book' && (
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span
+                      className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[8px] font-bold text-white"
+                      style={{ background: CLASSIFICATION_STYLES[currentMove.classification].color }}
+                    >
+                      {CLASSIFICATION_STYLES[currentMove.classification].symbol}
+                    </span>
+                    <span className="text-xs font-bold capitalize" style={{ color: CLASSIFICATION_STYLES[currentMove.classification].color }}>
+                      {CLASSIFICATION_STYLES[currentMove.classification].label}
+                    </span>
                   </div>
-                  {aiCommentary && <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>{aiCommentary}</p>}
+                )}
+
+                {/* Commentary text */}
+                {commentary && (
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>{commentary}</p>
+                )}
+                {(aiCommentary || isLoadingAiCommentary) && (
+                  <div className={commentary ? 'mt-1.5' : ''}>
+                    {isLoadingAiCommentary && !aiCommentary && (
+                      <div className="flex items-center gap-1">
+                        <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+                        <span className="text-[11px]" style={{ color: 'var(--color-text-muted)' }}>Analyzing...</span>
+                      </div>
+                    )}
+                    {aiCommentary && <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>{aiCommentary}</p>}
+                  </div>
+                )}
+
+                {/* Action buttons inside bubble */}
+                {isSuboptimalMove && (
+                  <div className="flex items-center gap-2 mt-2 pt-2" style={{ borderTop: '1px solid var(--color-border)' }}>
+                    <button
+                      onClick={() => void handleToggleBestLine()}
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold"
+                      style={{
+                        background: bestLineActive ? 'var(--color-accent)' : 'var(--color-bg)',
+                        color: bestLineActive ? 'var(--color-bg)' : 'var(--color-text)',
+                        border: bestLineActive ? 'none' : '1px solid var(--color-border)',
+                      }}
+                      data-testid="show-line-btn"
+                    >
+                      {bestLineActive ? 'Exit Line' : 'Best Line'}
+                    </button>
+                    <button
+                      onClick={retryHandler}
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold"
+                      style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+                      data-testid="retry-btn"
+                    >
+                      <RotateCcw size={10} /> Retry
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Mobile: Ask panel (expandable) */}
+          {askExpanded && (
+            <div className="md:hidden px-2 pb-1 shrink-0" data-testid="ask-position-panel">
+              {askResponse !== null && (
+                <div className="rounded-lg p-2 mb-1" style={{ background: 'var(--color-surface)' }}>
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <span className="text-[10px] font-semibold uppercase" style={{ color: 'var(--color-accent)' }}>Coach</span>
+                    {isAskStreaming && <Loader2 size={9} className="animate-spin" style={{ color: 'var(--color-accent)' }} />}
+                  </div>
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }} data-testid="ask-response">{askResponse || ''}</p>
                 </div>
               )}
+              <ChatInput onSend={handleAskSend} disabled={isAskStreaming} placeholder="Ask about this position..." />
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Mobile: action row */}
-        <div className="md:hidden flex gap-2 justify-center px-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,16px))] shrink-0">
-          <button onClick={onPlayAgain} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="play-again-btn"><RotateCcw size={12} />Play Again</button>
-          <button onClick={onBackToCoach} className="flex items-center gap-1 px-3 py-1.5 rounded-lg border text-xs font-medium" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }} data-testid="back-to-coach-btn"><Home size={12} />Back</button>
-          <button onClick={() => setAskExpanded(!askExpanded)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg border text-xs font-medium" style={{ borderColor: 'var(--color-border)', color: 'var(--color-accent)' }} data-testid="ask-position-btn"><MessageCircle size={12} />Ask</button>
+          {/* Spacer for sticky bottom bar on mobile */}
+          <div className="md:hidden h-12 shrink-0" />
         </div>
 
-        {/* Mobile: Ask panel (expandable) */}
-        {askExpanded && (
-          <div className="md:hidden mx-2 mb-2 shrink-0" data-testid="ask-position-panel">
-            {askResponse !== null && (
-              <div className="rounded-lg p-2.5 mb-1" style={{ background: 'var(--color-surface)' }}>
-                <div className="flex items-center gap-1 mb-0.5">
-                  <span className="text-[9px] font-semibold uppercase" style={{ color: 'var(--color-accent)' }}>Coach</span>
-                  {isAskStreaming && <Loader2 size={9} className="animate-spin" style={{ color: 'var(--color-accent)' }} />}
-                </div>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }} data-testid="ask-response">{askResponse || ''}</p>
-              </div>
-            )}
-            <ChatInput onSend={handleAskSend} disabled={isAskStreaming} placeholder="Ask about this position..." />
-          </div>
-        )}
+        {/* ═══ MOBILE: Sticky Bottom Action Bar ═══ */}
+        <div
+          className="md:hidden absolute bottom-0 left-0 right-0 flex items-center justify-center gap-2 px-3 py-1.5 shrink-0"
+          style={{
+            background: 'linear-gradient(transparent, var(--color-bg) 20%)',
+            paddingBottom: 'calc(0.375rem + env(safe-area-inset-bottom, 8px))',
+          }}
+        >
+          <button onClick={onPlayAgain} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold" style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }} data-testid="play-again-btn"><RotateCcw size={11} />Play Again</button>
+          <button onClick={onBackToCoach} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium" style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} data-testid="back-to-coach-btn"><Home size={11} />Back</button>
+          <button onClick={() => setAskExpanded(!askExpanded)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium" style={{ background: 'var(--color-surface)', color: 'var(--color-accent)', border: '1px solid var(--color-border)' }} data-testid="ask-position-btn"><MessageCircle size={11} />Ask</button>
+        </div>
       </div>
 
       {/* ═══ RIGHT COLUMN (desktop only) ═══ Full move list + panels */}
@@ -1379,8 +1458,3 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   );
 }
 
-function getAccuracyColor(accuracy: number): string {
-  if (accuracy >= 80) return '#22c55e';
-  if (accuracy >= 60) return '#fbbf24';
-  return '#ef4444';
-}
