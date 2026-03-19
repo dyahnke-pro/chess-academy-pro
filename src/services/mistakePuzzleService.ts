@@ -19,6 +19,7 @@ const CP_LOSS_THRESHOLD = 50;
 const MASTERY_REPETITIONS = 3;
 const MIN_PV_MOVES = 3;
 const BATCH_GAME_LIMIT = 100;
+const ANALYSIS_DEPTH = 12;
 
 function generateId(): string {
   const timestamp = Date.now().toString(36);
@@ -113,6 +114,45 @@ function determinePlayerColor(
   return null;
 }
 
+/**
+ * Get full PV line from Stockfish for a position, extending if needed.
+ * Returns { bestMove, pvMoves } where pvMoves has at least MIN_PV_MOVES entries when possible.
+ */
+async function getPvLine(fen: string, depth: number): Promise<{ bestMove: string | null; pvMoves: string[] }> {
+  let bestMove: string | null = null;
+  let pvMoves: string[] = [];
+
+  try {
+    const analysis = await stockfishEngine.analyzePosition(fen, depth);
+    bestMove = analysis.bestMove;
+    const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
+    if (topLine && topLine.moves.length >= MIN_PV_MOVES) {
+      pvMoves = topLine.moves;
+    }
+  } catch {
+    // Fall through
+  }
+
+  if (!bestMove) return { bestMove: null, pvMoves: [] };
+
+  // If PV line is too short, extend by playing best move and analyzing follow-up
+  if (pvMoves.length < MIN_PV_MOVES) {
+    pvMoves = [bestMove];
+    try {
+      const tempChess = new Chess(fen);
+      tempChess.move({ from: bestMove.slice(0, 2), to: bestMove.slice(2, 4), promotion: bestMove.length > 4 ? bestMove[4] : undefined });
+      const followUp = await stockfishEngine.analyzePosition(tempChess.fen(), 14);
+      if (followUp.topLines[0]) {
+        pvMoves.push(...followUp.topLines[0].moves.slice(0, 4));
+      }
+    } catch {
+      // Keep what we have
+    }
+  }
+
+  return { bestMove, pvMoves };
+}
+
 // ─── Generation ─────────────────────────────────────────────────────────────
 
 /**
@@ -149,11 +189,10 @@ export async function generateMistakePuzzlesFromGame(
   return generateFromAnnotations(game, gameId, sourceMode, playerColor, fens);
 }
 
-const ANALYSIS_DEPTH = 12;
-
 /**
  * Analyze a game move-by-move with Stockfish to detect mistakes.
  * Used for imported games that lack eval annotations.
+ * Extracts full PV lines for multi-move puzzle depth.
  */
 async function analyzeGameWithStockfish(
   game: GameRecord,
@@ -179,7 +218,6 @@ async function analyzeGameWithStockfish(
   }
 
   // Analyze each position to build an eval curve
-  // fens[0] = starting position, fens[i] = position after move i
   const evals: (number | null)[] = [];
 
   try {
@@ -189,8 +227,6 @@ async function analyzeGameWithStockfish(
     return 0;
   }
 
-  // Analyze every position to build a complete eval curve.
-  // We need evals before and after each player move to detect mistakes.
   for (let i = 0; i < fens.length; i++) {
     try {
       const analysis = await stockfishEngine.analyzePosition(fens[i], ANALYSIS_DEPTH);
@@ -208,8 +244,8 @@ async function analyzeGameWithStockfish(
     const moveColor: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
     if (moveColor !== playerColor) continue;
 
-    const fenBeforeIdx = moveIdx;       // fens[moveIdx] = position before this move
-    const fenAfterIdx = moveIdx + 1;    // fens[moveIdx+1] = position after this move
+    const fenBeforeIdx = moveIdx;
+    const fenAfterIdx = moveIdx + 1;
 
     const evalBefore = evals[fenBeforeIdx];
     const evalAfter = evals[fenAfterIdx];
@@ -226,14 +262,8 @@ async function analyzeGameWithStockfish(
     const classification = classifyCpLoss(cpLoss);
     const fen = fens[fenBeforeIdx];
 
-    // Get best move via Stockfish at higher depth
-    let bestMove: string | null = null;
-    try {
-      const bestAnalysis = await stockfishEngine.analyzePosition(fen, 18);
-      bestMove = bestAnalysis.bestMove;
-    } catch {
-      continue;
-    }
+    // Get best move + full PV line via Stockfish
+    const { bestMove, pvMoves } = await getPvLine(fen, 18);
     if (!bestMove) continue;
 
     const bestMoveSan = uciToSan(fen, bestMove);
@@ -249,7 +279,6 @@ async function analyzeGameWithStockfish(
       playerMove = san;
     }
 
-    // Store annotation for the game record
     annotations.push({
       moveNumber,
       color: moveColor,
@@ -266,7 +295,7 @@ async function analyzeGameWithStockfish(
       playerMove,
       bestMove,
       bestMoveSan,
-      moves: bestMove,
+      moves: pvMoves.join(' '),
       cpLoss: Math.round(cpLoss),
       classification,
       gamePhase: classifyGamePhase(fen, moveNumber),
@@ -335,7 +364,6 @@ async function generateFromAnnotations(
     // Determine cpLoss from eval data
     let cpLoss: number | null = null;
     if (annotation.evaluation !== null) {
-      // Find the annotation for the move right before this one
       let prevEval: number | null = null;
       for (const ann of annotations) {
         const annIdx = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
@@ -346,7 +374,6 @@ async function generateFromAnnotations(
       }
 
       if (prevEval !== null) {
-        // Eval is from white's perspective in coach games
         if (playerColor === 'white') {
           cpLoss = Math.round(Math.max(0, (prevEval - annotation.evaluation) * 100));
         } else {
@@ -355,8 +382,6 @@ async function generateFromAnnotations(
       }
     }
 
-    // For imported games, detectBlunders already gives us eval in pawns
-    // and classifies the drop. Use the classification to estimate cpLoss if needed.
     if (cpLoss === null) {
       if (annotation.classification === 'blunder') cpLoss = 350;
       else if (annotation.classification === 'mistake') cpLoss = 175;
@@ -367,39 +392,11 @@ async function generateFromAnnotations(
 
     // Get bestMove + PV line via Stockfish (or annotation for quick fallback)
     let bestMove = annotation.bestMove;
-    let pvMoves: string[] = [];
-
-    try {
-      const analysis = await stockfishEngine.analyzePosition(fen, 18);
-      if (!bestMove) bestMove = analysis.bestMove;
-      // Get the PV line (multi-move continuation) from top line
-      const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
-      if (topLine && topLine.moves.length >= MIN_PV_MOVES) {
-        pvMoves = topLine.moves;
-      }
-    } catch {
-      if (!bestMove) continue; // Skip if no bestMove at all
-    }
-
+    const { bestMove: sfBestMove, pvMoves } = await getPvLine(fen, 18);
+    if (!bestMove) bestMove = sfBestMove;
     if (!bestMove) continue;
 
-    // If PV line is too short, build a minimum 3-move sequence from bestMove
-    if (pvMoves.length < MIN_PV_MOVES) {
-      pvMoves = [bestMove];
-      // Try to extend by playing the best move and analyzing the response
-      try {
-        const tempChess = new Chess(fen);
-        tempChess.move({ from: bestMove.slice(0, 2), to: bestMove.slice(2, 4), promotion: bestMove.length > 4 ? bestMove[4] : undefined });
-        const followUp = await stockfishEngine.analyzePosition(tempChess.fen(), 14);
-        if (followUp.topLines[0]) {
-          pvMoves.push(...followUp.topLines[0].moves.slice(0, 4));
-        }
-      } catch {
-        // Keep what we have
-      }
-    }
-
-    const movesUci = pvMoves.join(' ');
+    const movesUci = pvMoves.length > 0 ? pvMoves.join(' ') : bestMove;
     const bestMoveSan = uciToSan(fen, bestMove);
     const classification = classifyCpLoss(cpLoss);
     const gamePhase = classifyGamePhase(fen, annotation.moveNumber);
@@ -504,8 +501,6 @@ export async function reanalyzeImportedGames(
   // Also clear annotations on games that had none originally (so Stockfish re-analyzes)
   for (const game of allGames) {
     if (game.annotations && game.annotations.length > 0) {
-      // Check if these annotations came from our Stockfish analysis (no eval comments in PGN)
-      // by seeing if annotations only cover mistakes (not full game annotations)
       const hasFullAnnotations = game.annotations.length > 5;
       if (!hasFullAnnotations) {
         await db.games.update(game.id, { annotations: null });
@@ -517,7 +512,6 @@ export async function reanalyzeImportedGames(
   let username = '';
   for (const game of allGames) {
     if (game.source === 'chesscom' || game.source === 'lichess') {
-      // Username is whichever name isn't a bot/generic
       username = game.white.toLowerCase();
       break;
     }
@@ -528,7 +522,6 @@ export async function reanalyzeImportedGames(
   for (let i = 0; i < allGames.length; i++) {
     onProgress?.({ current: i + 1, total: allGames.length, puzzlesFound: totalPuzzles });
 
-    // Re-fetch game since we may have cleared annotations
     const freshGame = await db.games.get(allGames[i].id);
     if (!freshGame) continue;
 

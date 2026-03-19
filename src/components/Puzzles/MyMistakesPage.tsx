@@ -170,7 +170,7 @@ export function MyMistakesPage(): JSX.Element {
 
       {/* Analysis progress */}
       {analyzing && analysisProgress && (
-        <div className="p-3 rounded-lg bg-theme-surface border border-theme-border" data-testid="analysis-progress">
+        <div className="p-3 rounded-lg bg-theme-surface border border-theme-border mb-4" data-testid="analysis-progress">
           <div className="flex justify-between text-xs text-theme-text-muted mb-1.5">
             <span>Analyzing game {analysisProgress.current} of {analysisProgress.total}</span>
             <span>{analysisProgress.puzzlesFound} mistakes found</span>
