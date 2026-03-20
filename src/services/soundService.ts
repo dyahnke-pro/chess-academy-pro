@@ -30,7 +30,7 @@ interface SoundParams {
   tp: OscillatorType; ns?: number; v?: number;
 }
 const SOUND_PARAMS: Record<SoundSet, Record<SoundType, SoundParams>> = {
-  classic:  { move: {freq:300,dur:.25,dec:18,tp:'sine',ns:.3,v:.7}, capture: {freq:220,dur:.35,dec:14,tp:'sine',ns:.4,v:.8}, castle: {freq:260,freq2:320,dur:.45,dec:12,tp:'sine',ns:.25,v:.75}, check: {freq:550,freq2:660,dur:.3,dec:16,tp:'sine',v:.9} },
+  classic:  { move: {freq:250,dur:.08,dec:40,tp:'sine',ns:.5,v:.8}, capture: {freq:180,dur:.12,dec:35,tp:'sine',ns:.6,v:.9}, castle: {freq:220,freq2:280,dur:.15,dec:35,tp:'sine',ns:.45,v:.85}, check: {freq:350,freq2:450,dur:.1,dec:38,tp:'sine',ns:.35,v:.95} },
   metallic: { move: {freq:800,dur:.2,dec:25,tp:'triangle',v:.6},   capture: {freq:600,dur:.3,dec:20,tp:'triangle',v:.7},       castle: {freq:700,freq2:900,dur:.4,dec:18,tp:'triangle',v:.65},   check: {freq:900,freq2:1100,dur:.25,dec:22,tp:'sawtooth',v:.75} },
   marble:   { move: {freq:200,dur:.3,dec:16,tp:'sine',ns:.2,v:.8}, capture: {freq:160,dur:.4,dec:12,tp:'sine',ns:.3,v:.85},    castle: {freq:180,freq2:240,dur:.5,dec:10,tp:'sine',ns:.2,v:.8},  check: {freq:400,freq2:500,dur:.3,dec:14,tp:'sine',v:.9} },
   cartoon:  { move: {freq:500,dur:.18,dec:30,tp:'square',v:.5},    capture: {freq:350,freq2:500,dur:.25,dec:25,tp:'square',v:.6}, castle: {freq:450,freq2:600,dur:.35,dec:20,tp:'square',v:.55}, check: {freq:650,freq2:900,dur:.3,dec:28,tp:'square',v:.65} },

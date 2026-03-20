@@ -359,8 +359,38 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
         </div>
       </div>
 
+      {/* Explanation */}
+      <div className="px-4 pt-2 min-h-[60px]">
+        {showWrongMove ? (
+          <ExplanationCard
+            text="Incorrect move. Try again."
+            visible={true}
+            variant="error"
+          />
+        ) : (
+          isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
+            <ExplanationCard
+              text={currentExplanation}
+              visible={true}
+            />
+          )
+        )}
+      </div>
+
+      {/* Move navigation */}
+      <div className="px-4">
+        <BoardControls
+          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
+          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
+          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
+          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
+          canGoPrev={currentMoveIndex > 0}
+          canGoNext={currentMoveIndex < expectedMoves.length}
+        />
+      </div>
+
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
+      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 pb-safe-4 min-h-0 overflow-hidden">
         <div className="w-full md:max-w-[420px]">
           <div className="relative">
             <ChessBoard
@@ -414,36 +444,6 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
             </AnimatePresence>
           </div>
         </div>
-      </div>
-
-      {/* Move navigation */}
-      <div className="px-4">
-        <BoardControls
-          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
-          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
-          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
-          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
-          canGoPrev={currentMoveIndex > 0}
-          canGoNext={currentMoveIndex < expectedMoves.length}
-        />
-      </div>
-
-      {/* Bottom: explanation */}
-      <div className="px-4 pb-safe-4 min-h-[80px]">
-        {showWrongMove ? (
-          <ExplanationCard
-            text="Incorrect move. Try again."
-            visible={true}
-            variant="error"
-          />
-        ) : (
-          isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
-            <ExplanationCard
-              text={currentExplanation}
-              visible={true}
-            />
-          )
-        )}
       </div>
     </div>
   );

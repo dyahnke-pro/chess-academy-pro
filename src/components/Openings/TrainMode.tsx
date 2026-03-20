@@ -345,8 +345,45 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
         </div>
       </div>
 
+      {/* Prompt */}
+      <div className="px-4 pt-2 min-h-[60px]">
+        {showWrongMove ? (
+          <ExplanationCard
+            text="Incorrect move. Restarting line..."
+            visible={true}
+            variant="error"
+          />
+        ) : showHintAfterUndo && isPlayerTurn(currentMoveIndex) ? (
+          <ExplanationCard
+            text={hintText}
+            visible={true}
+            variant="info"
+          />
+        ) : (
+          isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
+            <div className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg">
+              <p className="text-sm text-theme-text text-center font-medium" data-testid="train-prompt">
+                What's the best move?
+              </p>
+            </div>
+          )
+        )}
+      </div>
+
+      {/* Move navigation */}
+      <div className="px-4">
+        <BoardControls
+          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
+          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
+          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
+          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
+          canGoPrev={currentMoveIndex > 0}
+          canGoNext={currentMoveIndex < expectedMoves.length}
+        />
+      </div>
+
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
+      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 pb-safe-4 min-h-0 overflow-hidden">
         <div className="w-full md:max-w-[420px]">
           <div className="relative">
             <ChessBoard
@@ -402,43 +439,6 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
             </AnimatePresence>
           </div>
         </div>
-      </div>
-
-      {/* Move navigation */}
-      <div className="px-4">
-        <BoardControls
-          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
-          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
-          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
-          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
-          canGoPrev={currentMoveIndex > 0}
-          canGoNext={currentMoveIndex < expectedMoves.length}
-        />
-      </div>
-
-      {/* Bottom: prompt */}
-      <div className="px-4 pb-safe-4 min-h-[80px]">
-        {showWrongMove ? (
-          <ExplanationCard
-            text="Incorrect move. Restarting line..."
-            visible={true}
-            variant="error"
-          />
-        ) : showHintAfterUndo && isPlayerTurn(currentMoveIndex) ? (
-          <ExplanationCard
-            text={hintText}
-            visible={true}
-            variant="info"
-          />
-        ) : (
-          isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
-            <div className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg">
-              <p className="text-sm text-theme-text text-center font-medium" data-testid="train-prompt">
-                What's the best move?
-              </p>
-            </div>
-          )
-        )}
       </div>
     </div>
   );

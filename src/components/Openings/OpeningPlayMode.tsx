@@ -503,33 +503,24 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
         </div>
       )}
 
-      {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
-        <div className="w-full md:max-w-[420px]">
-          <ChessBoard
-            key={boardKey}
-            initialFen={displayFen}
-            orientation={playerColor}
-            interactive={
-              viewedMoveIndex === null &&
-              (playPhase === 'opening' || playPhase === 'middlegame') &&
-              !game.isGameOver &&
-              !isComputerThinking.current
-            }
-            onMove={handlePlayerMove}
-            showEvalBar={difficulty !== 'hard'}
-            evaluation={latestEval}
-            isMate={latestIsMate}
-            mateIn={latestMateIn}
-            showFlipButton={true}
-            highlightSquares={computerLastMove}
-            showLastMoveHighlight={settings.highlightLastMove}
-            moveQualityFlash={moveFlash}
-            arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
-            ghostMove={hintState.ghostMove}
-          />
-        </div>
+      {/* Deviation card */}
+      <div className="px-4 pt-2 min-h-[40px]">
+        <ExplanationCard
+          text={deviationCard ?? ''}
+          visible={deviationCard !== null}
+          onDismiss={() => setDeviationCard(null)}
+          variant="warning"
+        />
       </div>
+
+      {/* Nudge text */}
+      {hintState.nudgeText && (
+        <div className="px-4 pb-2">
+          <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
+            {hintState.nudgeText}
+          </p>
+        </div>
+      )}
 
       {/* Controls bar */}
       {(playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (
@@ -557,23 +548,32 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
         </div>
       )}
 
-      {/* Nudge text */}
-      {hintState.nudgeText && (
-        <div className="px-4 pb-2">
-          <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
-            {hintState.nudgeText}
-          </p>
+      {/* Board */}
+      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 pb-safe-4 min-h-0 overflow-hidden">
+        <div className="w-full md:max-w-[420px]">
+          <ChessBoard
+            key={boardKey}
+            initialFen={displayFen}
+            orientation={playerColor}
+            interactive={
+              viewedMoveIndex === null &&
+              (playPhase === 'opening' || playPhase === 'middlegame') &&
+              !game.isGameOver &&
+              !isComputerThinking.current
+            }
+            onMove={handlePlayerMove}
+            showEvalBar={difficulty !== 'hard'}
+            evaluation={latestEval}
+            isMate={latestIsMate}
+            mateIn={latestMateIn}
+            showFlipButton={true}
+            highlightSquares={computerLastMove}
+            showLastMoveHighlight={settings.highlightLastMove}
+            moveQualityFlash={moveFlash}
+            arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+            ghostMove={hintState.ghostMove}
+          />
         </div>
-      )}
-
-      {/* Deviation card */}
-      <div className="px-4 pb-safe-4 min-h-[60px]">
-        <ExplanationCard
-          text={deviationCard ?? ''}
-          visible={deviationCard !== null}
-          onDismiss={() => setDeviationCard(null)}
-          variant="warning"
-        />
       </div>
     </div>
   );
