@@ -58,7 +58,7 @@ export default defineConfig({
     }),
   ],
   optimizeDeps: {
-    exclude: ['stockfish'],
+    exclude: ['stockfish', 'kokoro-js'],
     include: ['openai', '@anthropic-ai/sdk'],
   },
   build: {

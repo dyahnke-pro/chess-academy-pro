@@ -49,6 +49,8 @@ function createTestProfile(overrides: Partial<UserProfile> = {}): UserProfile {
       elevenlabsKeyIv: null,
       elevenlabsVoiceId: null,
       voiceSpeed: 1.0,
+      kokoroEnabled: true,
+      kokoroVoiceId: 'af_heart',
       highlightLastMove: true,
       showLegalMoves: true,
       showCoordinates: true,

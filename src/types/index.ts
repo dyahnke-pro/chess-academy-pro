@@ -266,6 +266,9 @@ export interface UserPreferences {
   elevenlabsKeyIv: string | null;
   elevenlabsVoiceId: string | null;
   voiceSpeed: number;
+  // Kokoro TTS (open-source, in-browser)
+  kokoroEnabled: boolean;
+  kokoroVoiceId: string;
   // Board Display (WO-5)
   highlightLastMove: boolean;
   showLegalMoves: boolean;

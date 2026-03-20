@@ -1,10 +1,19 @@
-// AI voice synthesis via ElevenLabs — all coach speech goes through here
-// Falls back to speechService (Web Speech API) if no ElevenLabs key is set
+// AI voice synthesis — all coach speech goes through here
+// Fallback chain: ElevenLabs → Kokoro (open-source) → Web Speech API
 // Only this file may call the ElevenLabs API.
 
 import { speechService } from './speechService';
 import { db } from '../db/schema';
 import type { UserPreferences } from '../types';
+
+// Lazy-load kokoroService to avoid pulling kokoro-js into Vite's module graph at startup
+let _kokoroModule: typeof import('./kokoroService') | null = null;
+async function getKokoro(): Promise<typeof import('./kokoroService')> {
+  if (!_kokoroModule) {
+    _kokoroModule = await import('./kokoroService');
+  }
+  return _kokoroModule;
+}
 
 const ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 
@@ -30,7 +39,7 @@ class VoiceService {
 
     const profile = await db.profiles.get('main');
     if (!profile) {
-      speechService.speak(text, WEB_SPEECH_FALLBACK);
+      this.speakFallback(text);
       return;
     }
 
@@ -43,21 +52,54 @@ class VoiceService {
       this.speed = preferences.voiceSpeed;
     }
 
+    // Tier 1: ElevenLabs (if configured)
     const apiKey = await this.getApiKey(preferences);
     const voiceId = preferences.elevenlabsVoiceId as string | undefined;
 
-    if (!apiKey || !voiceId) {
-      speechService.speak(text, WEB_SPEECH_FALLBACK);
-      return;
+    if (apiKey && voiceId) {
+      const success = await this.speakElevenLabs(text, apiKey, voiceId);
+      if (success) return;
     }
 
+    // Tier 2: Kokoro (if enabled and model loaded)
+    if (preferences.kokoroEnabled) {
+      const { kokoroService } = await getKokoro();
+      if (kokoroService.isReady()) {
+        const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
+        if (success) return;
+      }
+    }
+
+    // Tier 3: Web Speech API
+    this.speakFallback(text);
+  }
+
+  stop(): void {
+    if (this.currentSource) {
+      try {
+        this.currentSource.stop();
+      } catch {
+        // Already stopped
+      }
+      this.currentSource = null;
+    }
+    this.playing = false;
+    // Stop kokoro if it was loaded
+    _kokoroModule?.kokoroService.stop();
+    speechService.stop();
+  }
+
+  isPlaying(): boolean {
+    return this.playing || (_kokoroModule?.kokoroService.isPlaying() ?? false);
+  }
+
+  private async speakElevenLabs(text: string, apiKey: string, voiceId: string): Promise<boolean> {
     // Detect silent mode on iOS
     if (this.audioContext?.state === 'suspended') {
       try {
         await this.audioContext.resume();
       } catch {
-        speechService.speak(text, WEB_SPEECH_FALLBACK);
-        return;
+        return false;
       }
     }
 
@@ -76,34 +118,32 @@ class VoiceService {
       });
 
       if (!response.ok) {
-        console.warn('[VoiceService] ElevenLabs API error', response.status, '— falling back to Web Speech');
-        speechService.speak(text, WEB_SPEECH_FALLBACK);
-        return;
+        console.warn('[VoiceService] ElevenLabs API error', response.status, '— falling back');
+        return false;
       }
 
       const arrayBuffer = await response.arrayBuffer();
       await this.playAudioBuffer(arrayBuffer);
+      return true;
     } catch (error) {
-      console.warn('[VoiceService] ElevenLabs fetch failed, falling back to Web Speech:', error);
-      speechService.speak(text, WEB_SPEECH_FALLBACK);
+      console.warn('[VoiceService] ElevenLabs fetch failed:', error);
+      return false;
     }
   }
 
-  stop(): void {
-    if (this.currentSource) {
-      try {
-        this.currentSource.stop();
-      } catch {
-        // Already stopped
-      }
-      this.currentSource = null;
+  private async speakKokoro(text: string, voiceId: string, speed: number): Promise<boolean> {
+    try {
+      const { kokoroService } = await getKokoro();
+      await kokoroService.speak(text, voiceId, speed);
+      return true;
+    } catch (error) {
+      console.warn('[VoiceService] Kokoro TTS failed:', error);
+      return false;
     }
-    this.playing = false;
-    speechService.stop();
   }
 
-  isPlaying(): boolean {
-    return this.playing;
+  private speakFallback(text: string): void {
+    speechService.speak(text, WEB_SPEECH_FALLBACK);
   }
 
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {

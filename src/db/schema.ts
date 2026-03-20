@@ -176,6 +176,25 @@ class ChessAcademyDB extends Dexie {
         if (!puzzle.moves) puzzle.moves = puzzle.bestMove as string;
       });
     });
+
+    this.version(10).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+    }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (!('kokoroEnabled' in prefs)) {
+          prefs.kokoroEnabled = true;
+          prefs.kokoroVoiceId = 'af_heart';
+        }
+      });
+    });
   }
 }
 
