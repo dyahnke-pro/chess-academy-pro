@@ -11,18 +11,18 @@ import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
 import { encryptApiKey } from '../../services/cryptoService';
-import { User, Palette, Bot, Info, Gamepad2 } from 'lucide-react';
+
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import type { UserProfile, PieceAnimationSpeed, MoveMethod } from '../../types';
 
 type SettingsTab = 'profile' | 'board' | 'coach' | 'appearance' | 'about';
 
-const TABS: { id: SettingsTab; label: string; icon: React.ComponentType<{ size?: number }> }[] = [
-  { id: 'profile', label: 'Profile', icon: User },
-  { id: 'board', label: 'Board', icon: Gamepad2 },
-  { id: 'coach', label: 'Coach', icon: Bot },
-  { id: 'appearance', label: 'Appearance', icon: Palette },
-  { id: 'about', label: 'About', icon: Info },
+const TABS: { id: SettingsTab; label: string }[] = [
+  { id: 'profile', label: 'Profile' },
+  { id: 'board', label: 'Board' },
+  { id: 'coach', label: 'Coach' },
+  { id: 'appearance', label: 'Appearance' },
+  { id: 'about', label: 'About' },
 ];
 
 export function SettingsPage(): JSX.Element {
@@ -42,19 +42,18 @@ export function SettingsPage(): JSX.Element {
 
       {/* Tab bar */}
       <div className="flex gap-1 rounded-lg p-1" style={{ background: 'var(--color-bg-secondary)' }}>
-        {TABS.map(({ id, label, icon: Icon }) => (
+        {TABS.map(({ id, label }) => (
           <button
             key={id}
             onClick={() => setTab(id)}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            className="flex-1 flex items-center justify-center px-3 py-2 rounded-md text-sm font-medium transition-colors"
             style={{
               background: tab === id ? 'var(--color-surface)' : 'transparent',
               color: tab === id ? 'var(--color-text)' : 'var(--color-text-muted)',
             }}
             data-testid={`tab-${id}`}
           >
-            <Icon size={14} />
-            <span className="hidden sm:inline">{label}</span>
+            {label}
           </button>
         ))}
       </div>
