@@ -6,7 +6,7 @@ import { BoardControls } from '../Board/BoardControls';
 import { ExplanationCard } from './ExplanationCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
-import { voiceService } from '../../services/voiceService';
+import { speechService } from '../../services/speechService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -123,7 +123,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       setLineComplete(true);
       playCelebration();
       completedLinesRef.current.add(currentLineIndex);
-      void voiceService.speak(`Well done! You've completed the ${currentLine.name} line.`);
+      speechService.speak(`Well done! You've completed the ${currentLine.name} line.`);
     }
   }, [currentMoveIndex, expectedMoves.length, lineComplete, currentLineIndex, currentLine.name, playCelebration]);
 

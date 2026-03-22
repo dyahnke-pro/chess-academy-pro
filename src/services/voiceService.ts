@@ -45,34 +45,32 @@ class VoiceService {
 
     const { preferences } = profile;
 
+    if (!preferences.voiceEnabled) return;
+
     // Load speed from preferences
     if (preferences.voiceSpeed) {
       this.speed = preferences.voiceSpeed;
     }
 
-    // If voice is disabled in settings, skip premium tiers but still allow
-    // Web Speech fallback (components that call speak() expect audible output)
-    if (preferences.voiceEnabled) {
-      // Tier 1: ElevenLabs (if configured)
-      const apiKey = await this.getApiKey(preferences);
-      const voiceId = preferences.elevenlabsVoiceId as string | undefined;
+    // Tier 1: ElevenLabs (if configured)
+    const apiKey = await this.getApiKey(preferences);
+    const voiceId = preferences.elevenlabsVoiceId as string | undefined;
 
-      if (apiKey && voiceId) {
-        const success = await this.speakElevenLabs(text, apiKey, voiceId);
+    if (apiKey && voiceId) {
+      const success = await this.speakElevenLabs(text, apiKey, voiceId);
+      if (success) return;
+    }
+
+    // Tier 2: Kokoro (if enabled and model loaded)
+    if (preferences.kokoroEnabled) {
+      const { kokoroService } = await getKokoro();
+      if (kokoroService.isReady()) {
+        const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
         if (success) return;
-      }
-
-      // Tier 2: Kokoro (if enabled and model loaded)
-      if (preferences.kokoroEnabled) {
-        const { kokoroService } = await getKokoro();
-        if (kokoroService.isReady()) {
-          const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
-          if (success) return;
-        }
       }
     }
 
-    // Tier 3: Web Speech API (always available as fallback)
+    // Tier 3: Web Speech API
     this.speakFallback(text);
   }
 

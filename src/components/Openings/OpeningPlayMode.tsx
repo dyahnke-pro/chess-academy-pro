@@ -14,7 +14,7 @@ import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { voiceService } from '../../services/voiceService';
+import { speechService } from '../../services/speechService';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -111,7 +111,7 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
   // Speak helper
   const say = useCallback((text: string): void => {
     if (voiceOn) {
-      void voiceService.speak(text);
+      speechService.speak(text);
     }
   }, [voiceOn]);
 

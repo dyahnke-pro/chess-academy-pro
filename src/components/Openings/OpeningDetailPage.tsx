@@ -15,7 +15,6 @@ import {
   getTotalLines,
   toggleFavorite,
 } from '../../services/openingService';
-import { voiceService } from '../../services/voiceService';
 import type { OpeningRecord } from '../../types';
 import {
   ArrowLeft,
@@ -78,7 +77,7 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeTrapLineIndex, setActiveTrapLineIndex] = useState(-1);
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
-  // utteranceRef removed — voiceService manages its own playback state
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -145,19 +144,28 @@ export function OpeningDetailPage(): JSX.Element {
   const toggleNarration = useCallback((sectionId: string, text: string): void => {
     if (narratingSection === sectionId) {
       // Stop
-      voiceService.stop();
+      window.speechSynthesis.cancel();
       setNarratingSection(null);
+      utteranceRef.current = null;
       return;
     }
 
     // Stop any current narration
-    voiceService.stop();
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.onend = () => {
+      setNarratingSection(null);
+      utteranceRef.current = null;
+    };
+    utterance.onerror = () => {
+      setNarratingSection(null);
+      utteranceRef.current = null;
+    };
+    utteranceRef.current = utterance;
     setNarratingSection(sectionId);
-    void voiceService.speak(text).then(() => {
-      setNarratingSection(null);
-    }).catch(() => {
-      setNarratingSection(null);
-    });
+    window.speechSynthesis.speak(utterance);
   }, [narratingSection]);
 
   // Precompute variation FENs for thumbnails
