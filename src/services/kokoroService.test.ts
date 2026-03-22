@@ -236,4 +236,26 @@ describe('kokoroService', () => {
       expect(progresses).toHaveLength(0);
     });
   });
+
+  describe('iOS compatibility', () => {
+    it('configures single-threaded WASM on iOS', async () => {
+      vi.resetModules();
+
+      const mockEnv = { backends: { onnx: { wasm: { numThreads: 4, proxy: true } } } };
+
+      vi.doMock('../utils/constants', () => ({ IS_IOS: true }));
+      vi.doMock('@huggingface/transformers', () => ({ env: mockEnv }));
+      vi.doMock('kokoro-js', () => ({
+        KokoroTTS: { from_pretrained: mockFromPretrained },
+      }));
+
+      mockFromPretrained.mockResolvedValue({ generate: mockGenerate });
+
+      const mod = await import('./kokoroService');
+      await mod.kokoroService.loadModel();
+
+      expect(mockEnv.backends.onnx.wasm.numThreads).toBe(1);
+      expect(mockEnv.backends.onnx.wasm.proxy).toBe(false);
+    });
+  });
 });

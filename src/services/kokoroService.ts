@@ -2,6 +2,8 @@
 // Uses kokoro-js (ONNX model via Transformers.js) with WASM/WebGPU backend
 // Only this file may import from kokoro-js.
 
+import { IS_IOS } from '../utils/constants';
+
 export type KokoroModelStatus = 'idle' | 'downloading' | 'ready' | 'error';
 
 export interface KokoroVoice {
@@ -107,6 +109,16 @@ class KokoroService {
     this.setProgress(0);
 
     try {
+      // On iOS, configure ONNX runtime to use single-threaded WASM
+      // (iOS WKWebView lacks SharedArrayBuffer for multi-threading)
+      if (IS_IOS) {
+        const { env } = await import(/* @vite-ignore */ '@huggingface/transformers') as {
+          env: { backends: { onnx: { wasm: { numThreads: number; proxy: boolean } } } };
+        };
+        env.backends.onnx.wasm.numThreads = 1;
+        env.backends.onnx.wasm.proxy = false;
+      }
+
       const { KokoroTTS } = await import(/* @vite-ignore */ 'kokoro-js') as {
         KokoroTTS: {
           from_pretrained: (

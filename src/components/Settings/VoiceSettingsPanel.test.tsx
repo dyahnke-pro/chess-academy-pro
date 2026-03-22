@@ -101,4 +101,13 @@ describe('VoiceSettingsPanel', () => {
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('voice-speed-slider')).toBeInTheDocument();
   });
+
+  it('shows download button on all platforms including iOS', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile({
+      id: 'main',
+      preferences: { kokoroEnabled: true },
+    }));
+    render(<VoiceSettingsPanel />);
+    expect(screen.getByTestId('kokoro-download-btn')).toBeInTheDocument();
+  });
 });
