@@ -49,6 +49,7 @@ class KokoroService {
   private downloadProgress = 0;
   private progressListeners: Set<(progress: number) => void> = new Set();
   private loadPromise: Promise<void> | null = null;
+  private lastError: string = '';
 
   getStatus(): KokoroModelStatus {
     return this.status;
@@ -64,6 +65,10 @@ class KokoroService {
 
   isPlaying(): boolean {
     return this.playing;
+  }
+
+  getLastError(): string {
+    return this.lastError;
   }
 
   onStatusChange(listener: (status: KokoroModelStatus) => void): () => void {
@@ -142,7 +147,9 @@ class KokoroService {
       this.setProgress(100);
       this.setStatus('ready');
     } catch (error) {
-      console.error('[KokoroService] Failed to load model:', error);
+      const msg = error instanceof Error ? error.message : String(error);
+      console.error('[KokoroService] Failed to load model:', msg, error);
+      this.lastError = msg;
       this.setStatus('error');
       throw error;
     }

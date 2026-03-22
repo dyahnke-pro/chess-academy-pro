@@ -198,6 +198,11 @@ export function VoiceSettingsPanel(): JSX.Element {
                   <AlertCircle size={16} />
                   Failed to load voice model
                 </div>
+                {kokoroService.getLastError() && (
+                  <p className="text-xs px-2 py-1 rounded" style={{ background: 'var(--color-surface)', color: 'var(--color-text-muted)' }} data-testid="kokoro-error-detail">
+                    {kokoroService.getLastError()}
+                  </p>
+                )}
                 <button
                   onClick={() => void handleDownloadModel()}
                   className="w-full py-2 rounded-lg text-sm font-medium border"
