@@ -17,7 +17,6 @@ class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   private playing = false;
   private speed = 1.0;
-  private cachedVoiceId = 'af_heart';
 
   setSpeed(rate: number): void {
     this.speed = Math.max(0.5, Math.min(2.0, rate));
@@ -60,11 +59,6 @@ class VoiceService {
     // Load speed from preferences
     if (preferences.voiceSpeed) {
       this.speed = preferences.voiceSpeed;
-    }
-
-    // Cache voice ID for speakNow()
-    if (preferences.kokoroVoiceId) {
-      this.cachedVoiceId = preferences.kokoroVoiceId;
     }
 
     // Tier 1: ElevenLabs (if configured)
