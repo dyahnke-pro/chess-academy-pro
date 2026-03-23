@@ -82,6 +82,7 @@ export interface OpeningMoveAnnotation {
 export interface OpeningAnnotations {
   openingId: string;
   moveAnnotations: OpeningMoveAnnotation[];
+  subLines?: Record<string, OpeningMoveAnnotation[]>;
 }
 
 // ─── Opening ─────────────────────────────────────────────────────────────────

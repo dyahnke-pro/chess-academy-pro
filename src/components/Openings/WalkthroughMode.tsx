@@ -6,7 +6,7 @@ import { BoardControls } from '../Board/BoardControls';
 import { AnnotationCard } from './AnnotationCard';
 import { speechService } from '../../services/speechService';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { loadAnnotations } from '../../services/annotationService';
+import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../../types';
 import { ArrowRight, Play, Pause } from 'lucide-react';
@@ -15,6 +15,7 @@ export interface WalkthroughModeProps {
   opening: OpeningRecord;
   variationIndex?: number;
   customLine?: OpeningVariation;
+  subLineKey?: string; // e.g. 'variation-0', 'trap-1', 'warning-0'
   onExit: () => void;
 }
 
@@ -52,6 +53,7 @@ export function WalkthroughMode({
   opening,
   variationIndex,
   customLine,
+  subLineKey,
   onExit,
 }: WalkthroughModeProps): JSX.Element {
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
@@ -117,17 +119,20 @@ export function WalkthroughMode({
   const turn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
   useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, turn);
 
-  // Load annotations on mount
+  // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const data = await loadAnnotations(opening.id);
+      const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
+      const data = effectiveKey
+        ? await loadSubLineAnnotations(opening.id, effectiveKey)
+        : await loadAnnotations(opening.id);
       if (!cancelled) {
         setAnnotations(data);
       }
     })();
     return () => { cancelled = true; };
-  }, [opening.id]);
+  }, [opening.id, subLineKey, isVariation, variationIndex]);
 
   // Analyze position when it changes
   useEffect(() => {
@@ -147,23 +152,13 @@ export function WalkthroughMode({
     return () => { cancelled = true; };
   }, [currentFen]);
 
-  // Current annotation for the move that was just played.
-  // For sub-lines (customLine), only show annotation if the SAN matches —
-  // once the sub-line diverges from the main line, annotations don't apply.
+  // Current annotation for the move that was just played
   const currentAnnotation = useMemo((): OpeningMoveAnnotation | null => {
     if (!annotations) return null;
     if (currentMoveIndex === 0) return null;
     const idx = currentMoveIndex - 1;
-    const ann = annotations[idx];
-    if (!ann) return null;
-
-    // If we're in a sub-line, verify the annotation's SAN matches the actual move played
-    if (variation) {
-      const actualMove = expectedMoves[idx];
-      if (!actualMove || ann.san !== actualMove.san) return null;
-    }
-    return ann;
-  }, [annotations, currentMoveIndex, variation, expectedMoves]);
+    return annotations[idx] ?? null;
+  }, [annotations, currentMoveIndex]);
 
   // ─── Real-time arrow/highlight reveal via TTS boundary events ────────────
 

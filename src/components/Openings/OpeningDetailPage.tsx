@@ -229,6 +229,7 @@ export function OpeningDetailPage(): JSX.Element {
       <WalkthroughMode
         opening={opening}
         customLine={opening.trapLines[activeTrapLineIndex]}
+        subLineKey={`trap-${activeTrapLineIndex}`}
         onExit={handleExit}
       />
     );
@@ -238,6 +239,7 @@ export function OpeningDetailPage(): JSX.Element {
       <WalkthroughMode
         opening={opening}
         customLine={opening.warningLines[activeWarningLineIndex]}
+        subLineKey={`warning-${activeWarningLineIndex}`}
         onExit={handleExit}
       />
     );
