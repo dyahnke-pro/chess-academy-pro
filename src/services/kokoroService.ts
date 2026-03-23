@@ -127,12 +127,10 @@ class KokoroService {
       env.useCustomCache = true;
       env.customCache = modelCacheService;
 
-      // On iOS, configure ONNX runtime to use single-threaded WASM
-      // (iOS WKWebView lacks SharedArrayBuffer for multi-threading)
-      if (IS_IOS) {
-        env.backends.onnx.wasm.numThreads = 1;
-        env.backends.onnx.wasm.proxy = false;
-      }
+      // Single-threaded WASM (iOS lacks SharedArrayBuffer)
+      // Proxy mode runs WASM in a Web Worker to avoid blocking the main thread
+      env.backends.onnx.wasm.numThreads = 1;
+      env.backends.onnx.wasm.proxy = true;
 
       const { KokoroTTS } = await import(/* @vite-ignore */ 'kokoro-js') as {
         KokoroTTS: {
