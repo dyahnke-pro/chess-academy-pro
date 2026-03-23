@@ -230,37 +230,27 @@ describe('voiceService', () => {
     });
   });
 
-  describe('speakNow (synchronous)', () => {
-    it('uses Kokoro when ready', () => {
-      vi.spyOn(kokoroService, 'isReady').mockReturnValue(true);
+  describe('speakNow (cache-based)', () => {
+    it('calls speakNow without throwing', () => {
+      expect(() => voiceService.speakNow('Cache test')).not.toThrow();
+    });
 
-      voiceService.speakNow('Sync kokoro test');
+    it('does not call Web Speech directly', () => {
+      voiceService.speakNow('No fallback test');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(kokoroService.speak).toHaveBeenCalledWith('Sync kokoro test', 'af_heart', expect.any(Number));
+      // speakNow uses IndexedDB cache only — no Web Speech fallback
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('falls back to Web Speech when Kokoro not ready', () => {
-      vi.spyOn(kokoroService, 'isReady').mockReturnValue(false);
+    it('does not call Kokoro directly', () => {
+      vi.spyOn(kokoroService, 'isReady').mockReturnValue(true);
 
-      voiceService.speakNow('Sync fallback test');
+      voiceService.speakNow('No kokoro test');
 
+      // speakNow plays from cache — does not call Kokoro generate
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(speechService.speak).toHaveBeenCalledWith(
-        'Sync fallback test',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
-      );
-    });
-
-    it('calls stop before speaking', () => {
-      vi.spyOn(voiceService, 'stop');
-
-      voiceService.speakNow('Stop first');
-
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(voiceService.stop).toHaveBeenCalled();
+      expect(kokoroService.speak).not.toHaveBeenCalled();
     });
   });
 

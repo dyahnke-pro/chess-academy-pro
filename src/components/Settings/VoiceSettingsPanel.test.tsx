@@ -9,23 +9,17 @@ vi.mock('../../services/cryptoService', () => ({
   encryptApiKey: vi.fn().mockResolvedValue({ encrypted: 'enc', iv: 'iv' }),
 }));
 
-vi.mock('../../services/kokoroService', () => ({
-  kokoroService: {
-    getStatus: vi.fn().mockReturnValue('idle'),
-    getDownloadProgress: vi.fn().mockReturnValue(0),
-    isReady: vi.fn().mockReturnValue(false),
-    isPlaying: vi.fn().mockReturnValue(false),
-    onStatusChange: vi.fn().mockReturnValue(() => undefined),
-    onProgress: vi.fn().mockReturnValue(() => undefined),
-    loadModel: vi.fn().mockResolvedValue(undefined),
-    speak: vi.fn().mockResolvedValue(undefined),
+vi.mock('../../services/voicePackService', () => ({
+  installVoicePack: vi.fn().mockResolvedValue({ installed: 100 }),
+  isVoicePackAvailable: vi.fn().mockResolvedValue(false),
+  getVoiceCacheCount: vi.fn().mockResolvedValue(0),
+}));
+
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    speakNow: vi.fn(),
     stop: vi.fn(),
-    unload: vi.fn(),
   },
-  KOKORO_VOICES: [
-    { id: 'af_heart', name: 'Heart', accent: 'American', gender: 'Female' },
-    { id: 'bm_daniel', name: 'Daniel', accent: 'British', gender: 'Male' },
-  ],
 }));
 
 describe('VoiceSettingsPanel', () => {
@@ -41,32 +35,20 @@ describe('VoiceSettingsPanel', () => {
     expect(screen.getByTestId('voice-settings-panel')).toBeInTheDocument();
   });
 
-  it('shows Kokoro HD Voice section', () => {
+  it('shows HD Voice section', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByText('HD Voice (Kokoro)')).toBeInTheDocument();
+    expect(screen.getByText('HD Voice')).toBeInTheDocument();
   });
 
-  it('shows Kokoro toggle', () => {
+  it('shows download button when no voice pack installed', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
-    render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('kokoro-toggle')).toBeInTheDocument();
-  });
-
-  it('shows download button when model not loaded', () => {
-    useAppStore.getState().setActiveProfile(buildUserProfile({
-      id: 'main',
-      preferences: { kokoroEnabled: true },
-    }));
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('kokoro-download-btn')).toBeInTheDocument();
   });
 
   it('shows voice selector', () => {
-    useAppStore.getState().setActiveProfile(buildUserProfile({
-      id: 'main',
-      preferences: { kokoroEnabled: true },
-    }));
+    useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('kokoro-voice-select')).toBeInTheDocument();
   });
@@ -103,10 +85,7 @@ describe('VoiceSettingsPanel', () => {
   });
 
   it('shows download button on all platforms including iOS', () => {
-    useAppStore.getState().setActiveProfile(buildUserProfile({
-      id: 'main',
-      preferences: { kokoroEnabled: true },
-    }));
+    useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('kokoro-download-btn')).toBeInTheDocument();
   });
