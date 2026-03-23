@@ -33,20 +33,10 @@ class VoiceService {
    * Used by openings components.
    */
   speakNow(text: string): void {
-    // Kokoro ready? Stop any current audio and use it
-    if (kokoroService.isReady()) {
-      kokoroService.stop();
-      speechService.stop();
-      void this.speakKokoro(text, this.cachedVoiceId, this.speed).then(success => {
-        if (!success) {
-          this.speakFallback(text);
-        }
-      });
-      return;
-    }
-
-    // Web Speech API — speechService.speak() handles its own cancel()
-    // Do NOT call this.stop() first — double cancel() silently drops speech on iOS
+    // Always use Web Speech for instant feedback in openings.
+    // Kokoro ONNX inference is too slow (~15s on mobile WASM) for real-time use.
+    // speechService.speak() handles its own cancel() internally —
+    // do NOT call this.stop() first (double cancel silently drops speech on iOS).
     this.speakFallback(text);
   }
 
