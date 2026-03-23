@@ -77,6 +77,9 @@ export function WalkthroughMode({
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
   const [boardKey, setBoardKey] = useState(0);
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
+
+  // Ref for TTS boundary callback — updated per annotation
+  const boundaryHandlerRef = useRef<((charIndex: number) => void) | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('normal');
 
@@ -153,86 +156,127 @@ export function WalkthroughMode({
     return annotations[idx] ?? null;
   }, [annotations, currentMoveIndex]);
 
-  // Staggered arrows/highlights — reveal progressively based on delay
+  // ─── Real-time arrow/highlight reveal via TTS boundary events ────────────
+
   const [visibleArrowCount, setVisibleArrowCount] = useState(0);
   const [visibleHighlightCount, setVisibleHighlightCount] = useState(0);
-  const staggerTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const fallbackTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const boundaryActive = useRef(false);
 
-  // Compute auto-stagger delay for items without explicit delay.
-  // Spaces them evenly across the annotation's estimated reading time,
-  // adjusted for the current playback speed.
-  const computeAutoDelay = useCallback((
-    index: number, total: number, annotationText: string,
-  ): number => {
-    if (total <= 1) return 0;
-    const wordCount = annotationText.split(/\s+/).length;
-    const wordsPerSec = READING_WPM[autoPlaySpeed] / 60;
-    const readingTimeSec = wordCount / wordsPerSec;
-    // First item at 0, rest spaced evenly across reading time
-    return (index / total) * readingTimeSec;
-  }, [autoPlaySpeed]);
+  // Compute the character position in the annotation where each arrow/highlight
+  // should appear. Items are spaced evenly across the text length.
+  const computeCharTriggers = useCallback((
+    annotationText: string,
+    arrowCount: number,
+    highlightCount: number,
+  ): { arrowCharPos: number[]; highlightCharPos: number[] } => {
+    const totalLen = annotationText.length;
+    const totalItems = arrowCount + highlightCount;
+    if (totalItems === 0) return { arrowCharPos: [], highlightCharPos: [] };
 
-  // When the annotation changes, reset and schedule staggered reveals
+    const arrowCharPos: number[] = [];
+    for (let i = 0; i < arrowCount; i++) {
+      // First item triggers at position 0 (immediate), rest spaced evenly
+      arrowCharPos.push(Math.floor((i / totalItems) * totalLen));
+    }
+    const highlightCharPos: number[] = [];
+    for (let i = 0; i < highlightCount; i++) {
+      highlightCharPos.push(Math.floor(((arrowCount + i) / totalItems) * totalLen));
+    }
+    return { arrowCharPos, highlightCharPos };
+  }, []);
+
+  // When annotation changes, set up boundary-driven reveals with timer fallback
   useEffect(() => {
-    // Clear previous timers
-    for (const t of staggerTimers.current) clearTimeout(t);
-    staggerTimers.current = [];
+    // Clear previous fallback timers
+    for (const t of fallbackTimers.current) clearTimeout(t);
+    fallbackTimers.current = [];
+    boundaryActive.current = false;
     setVisibleArrowCount(0);
     setVisibleHighlightCount(0);
 
     if (!currentAnnotation) return;
 
-    const annotationText = currentAnnotation.annotation;
-    const allItems = [
-      ...(currentAnnotation.arrows ?? []).map((a, i) => ({ type: 'arrow' as const, index: i, delay: a.delay })),
-      ...(currentAnnotation.highlights ?? []).map((h, i) => ({ type: 'highlight' as const, index: i, delay: h.delay })),
-    ];
-    const totalItems = allItems.length;
-
-    // Schedule arrow reveals
     const arrows = currentAnnotation.arrows ?? [];
-    arrows.forEach((arrow, i) => {
-      const hasExplicitDelay = arrow.delay !== undefined && arrow.delay !== null;
-      const delaySec = hasExplicitDelay
-        ? arrow.delay as number
-        : computeAutoDelay(i, totalItems, annotationText);
-      const delayMs = delaySec * 1000;
-
-      if (delayMs <= 0) {
-        setVisibleArrowCount((prev) => Math.max(prev, i + 1));
-      } else {
-        const timer = setTimeout(() => {
-          setVisibleArrowCount((prev) => Math.max(prev, i + 1));
-        }, delayMs);
-        staggerTimers.current.push(timer);
-      }
-    });
-
-    // Schedule highlight reveals
     const highlights = currentAnnotation.highlights ?? [];
-    const arrowCount = arrows.length;
-    highlights.forEach((highlight, i) => {
-      const hasExplicitDelay = highlight.delay !== undefined && highlight.delay !== null;
-      const delaySec = hasExplicitDelay
-        ? highlight.delay as number
-        : computeAutoDelay(arrowCount + i, totalItems, annotationText);
-      const delayMs = delaySec * 1000;
+    if (arrows.length === 0 && highlights.length === 0) return;
 
-      if (delayMs <= 0) {
-        setVisibleHighlightCount((prev) => Math.max(prev, i + 1));
-      } else {
-        const timer = setTimeout(() => {
-          setVisibleHighlightCount((prev) => Math.max(prev, i + 1));
-        }, delayMs);
-        staggerTimers.current.push(timer);
+    const text = currentAnnotation.annotation;
+    const { arrowCharPos, highlightCharPos } = computeCharTriggers(
+      text, arrows.length, highlights.length,
+    );
+
+    // Track which items have been revealed (to avoid duplicates)
+    const revealedArrows = new Set<number>();
+    const revealedHighlights = new Set<number>();
+
+    // TTS boundary handler — called as each word is spoken
+    const onBoundary = (charIndex: number): void => {
+      boundaryActive.current = true;
+
+      // Reveal any arrows whose trigger position has been passed
+      for (let i = 0; i < arrowCharPos.length; i++) {
+        if (!revealedArrows.has(i) && charIndex >= arrowCharPos[i]) {
+          revealedArrows.add(i);
+          setVisibleArrowCount((prev) => Math.max(prev, i + 1));
+        }
       }
-    });
+      // Reveal any highlights whose trigger position has been passed
+      for (let i = 0; i < highlightCharPos.length; i++) {
+        if (!revealedHighlights.has(i) && charIndex >= highlightCharPos[i]) {
+          revealedHighlights.add(i);
+          setVisibleHighlightCount((prev) => Math.max(prev, i + 1));
+        }
+      }
+    };
+
+    // Store the boundary handler so the TTS effect can use it
+    boundaryHandlerRef.current = onBoundary;
+
+    // Fallback: if TTS boundary events don't fire (some browsers),
+    // use timer-based stagger after a short delay
+    const fallbackDelay = 800; // wait to see if boundary events start
+    const fallbackTimer = setTimeout(() => {
+      if (boundaryActive.current) return; // boundary events are working
+
+      // Timer-based fallback: space evenly across reading time
+      const wordCount = text.split(/\s+/).length;
+      const wordsPerSec = READING_WPM[autoPlaySpeed] / 60;
+      const readingTimeSec = wordCount / wordsPerSec;
+      const totalItems = arrows.length + highlights.length;
+
+      arrows.forEach((_, i) => {
+        const delaySec = (i / totalItems) * readingTimeSec;
+        if (delaySec <= 0) {
+          setVisibleArrowCount((prev) => Math.max(prev, i + 1));
+        } else {
+          const timer = setTimeout(() => {
+            setVisibleArrowCount((prev) => Math.max(prev, i + 1));
+          }, delaySec * 1000);
+          fallbackTimers.current.push(timer);
+        }
+      });
+
+      highlights.forEach((_, i) => {
+        const delaySec = ((arrows.length + i) / totalItems) * readingTimeSec;
+        if (delaySec <= 0) {
+          setVisibleHighlightCount((prev) => Math.max(prev, i + 1));
+        } else {
+          const timer = setTimeout(() => {
+            setVisibleHighlightCount((prev) => Math.max(prev, i + 1));
+          }, delaySec * 1000);
+          fallbackTimers.current.push(timer);
+        }
+      });
+    }, fallbackDelay);
+    fallbackTimers.current.push(fallbackTimer);
 
     return () => {
-      for (const t of staggerTimers.current) clearTimeout(t);
-      staggerTimers.current = [];
+      for (const t of fallbackTimers.current) clearTimeout(t);
+      fallbackTimers.current = [];
+      boundaryHandlerRef.current = null;
     };
-  }, [currentAnnotation, computeAutoDelay]);
+  }, [currentAnnotation, computeCharTriggers, autoPlaySpeed]);
 
   // Convert visible arrows/highlights to board format
   const boardArrows = useMemo(() => {
@@ -331,7 +375,12 @@ export function WalkthroughMode({
     if (!annotations) return;
     const ann = annotations[currentMoveIndex - 1] as OpeningMoveAnnotation | undefined;
     if (ann) {
-      speechService.speak(ann.annotation, { rate: TTS_RATE[autoPlaySpeed] });
+      speechService.speak(ann.annotation, {
+        rate: TTS_RATE[autoPlaySpeed],
+        onBoundary: (charIndex) => {
+          boundaryHandlerRef.current?.(charIndex);
+        },
+      });
     }
   }, [currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
