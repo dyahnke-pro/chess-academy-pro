@@ -135,12 +135,12 @@ export function OpeningDetailPage(): JSX.Element {
     setViewMode('variation-play');
   }, []);
 
-  const handleStartTrapLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play'): void => {
+  const handleStartTrapLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play' | 'walkthrough'): void => {
     setActiveTrapLineIndex(index);
     setViewMode(`trap-${action}` as ViewMode);
   }, []);
 
-  const handleStartWarningLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play'): void => {
+  const handleStartWarningLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play' | 'walkthrough'): void => {
     setActiveWarningLineIndex(index);
     setViewMode(`warning-${action}` as ViewMode);
   }, []);
@@ -549,6 +549,15 @@ export function OpeningDetailPage(): JSX.Element {
                   </div>
                   <div className="flex items-center gap-1.5 ml-2">
                     <button
+                      onClick={() => handleStartTrapLineAction(i, 'walkthrough')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Watch ${line.name}`}
+                      title="Watch"
+                      data-testid={`trap-walkthrough-${i}`}
+                    >
+                      <PlayCircle size={20} />
+                    </button>
+                    <button
                       onClick={() => handleStartTrapLineAction(i, 'learn')}
                       className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Learn ${line.name}`}
@@ -621,6 +630,15 @@ export function OpeningDetailPage(): JSX.Element {
                     <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
                   </div>
                   <div className="flex items-center gap-1.5 ml-2">
+                    <button
+                      onClick={() => handleStartWarningLineAction(i, 'walkthrough')}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Watch ${line.name}`}
+                      title="Watch"
+                      data-testid={`warning-walkthrough-${i}`}
+                    >
+                      <PlayCircle size={20} />
+                    </button>
                     <button
                       onClick={() => handleStartWarningLineAction(i, 'learn')}
                       className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
