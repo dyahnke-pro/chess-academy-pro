@@ -5,7 +5,6 @@ import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
-import { kokoroService } from './services/kokoroService';
 import { db } from './db/schema';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -75,15 +74,6 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
-        // Auto-load Kokoro HD voice from IndexedDB cache after app settles
-        // Deferred to avoid WASM compilation blocking the main thread on startup
-        if (profile.preferences.kokoroEnabled) {
-          setTimeout(() => {
-            void kokoroService.loadModel().catch(() => {
-              // Silent fail — falls back to Web Speech
-            });
-          }, 5000);
-        }
       } catch (error) {
         console.error('App initialization failed:', error);
       } finally {
