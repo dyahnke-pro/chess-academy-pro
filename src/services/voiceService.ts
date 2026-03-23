@@ -33,10 +33,10 @@ class VoiceService {
    * Used by openings components.
    */
   speakNow(text: string): void {
-    this.stop();
-
-    // Kokoro ready? Use it (async internally, but fall back on error)
+    // Kokoro ready? Stop any current audio and use it
     if (kokoroService.isReady()) {
+      kokoroService.stop();
+      speechService.stop();
       void this.speakKokoro(text, this.cachedVoiceId, this.speed).then(success => {
         if (!success) {
           this.speakFallback(text);
@@ -45,7 +45,8 @@ class VoiceService {
       return;
     }
 
-    // Web Speech API (synchronous — works on iOS)
+    // Web Speech API — speechService.speak() handles its own cancel()
+    // Do NOT call this.stop() first — double cancel() silently drops speech on iOS
     this.speakFallback(text);
   }
 
