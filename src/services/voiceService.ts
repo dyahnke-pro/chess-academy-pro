@@ -35,9 +35,13 @@ class VoiceService {
   speakNow(text: string): void {
     this.stop();
 
-    // Kokoro ready? Use it (async internally, but we fire-and-forget)
+    // Kokoro ready? Use it (async internally, but fall back on error)
     if (kokoroService.isReady()) {
-      void this.speakKokoro(text, this.cachedVoiceId, this.speed);
+      void this.speakKokoro(text, this.cachedVoiceId, this.speed).then(success => {
+        if (!success) {
+          this.speakFallback(text);
+        }
+      });
       return;
     }
 
