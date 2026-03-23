@@ -2,7 +2,6 @@
 // Uses kokoro-js (ONNX model via Transformers.js) with WASM/WebGPU backend
 // Only this file may import from kokoro-js.
 
-import { IS_IOS } from '../utils/constants';
 import { modelCacheService } from './modelCacheService';
 
 export type KokoroModelStatus = 'idle' | 'downloading' | 'ready' | 'error';
