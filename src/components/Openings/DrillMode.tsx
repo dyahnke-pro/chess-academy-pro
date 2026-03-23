@@ -10,7 +10,7 @@ import {
   updateVariationProgress,
   markLineDiscovered,
 } from '../../services/openingService';
-import { speechService } from '../../services/speechService';
+import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -192,7 +192,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
       }
 
       const lineName = variation ? variation.name : opening.name;
-      speechService.speak(`Line discovered! You've learned the ${lineName}.`);
+      voiceService.speakNow(`Line discovered! You've learned the ${lineName}.`);
       onComplete(totalMistakes === 0);
     }
   }, [currentMoveIndex, expectedMoves.length, lineComplete, totalMistakes, opening.id, isVariation, variationIndex, variation, opening.name, playCelebration, onComplete]);
@@ -204,7 +204,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
     if (currentExplanation) {
       // Strip the italic markers for speech
       const speechText = currentExplanation.replace(/\*/g, '');
-      speechService.speak(speechText);
+      voiceService.speakNow(speechText);
     }
   }, [currentMoveIndex, currentExplanation, isPlayerTurn, lineComplete, showWrongMove]);
 
@@ -266,7 +266,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
     setLineComplete(false);
     setTotalMistakes(0);
     startTimeRef.current = Date.now();
-    speechService.stop();
+    voiceService.stop();
   }, []);
 
   const progress = expectedMoves.length > 0

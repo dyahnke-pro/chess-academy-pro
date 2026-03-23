@@ -13,7 +13,7 @@ import {
   updateVariationProgress,
   markLinePerfected,
 } from '../../services/openingService';
-import { speechService } from '../../services/speechService';
+import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -163,9 +163,9 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
       const lineName = variation ? variation.name : opening.name;
       if (perfect) {
-        speechService.speak(`Line perfected! You know the ${lineName} by heart.`);
+        voiceService.speakNow(`Line perfected! You know the ${lineName} by heart.`);
       } else {
-        speechService.speak(`Good attempt on the ${lineName}. ${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}.`);
+        voiceService.speakNow(`Good attempt on the ${lineName}. ${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}.`);
       }
       onComplete(perfect);
     }
@@ -255,7 +255,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
     setLineComplete(false);
     setTotalMistakes(0);
     startTimeRef.current = Date.now();
-    speechService.stop();
+    voiceService.stop();
   }, [resetHints]);
 
   const progress = expectedMoves.length > 0

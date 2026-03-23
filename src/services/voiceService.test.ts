@@ -230,6 +230,40 @@ describe('voiceService', () => {
     });
   });
 
+  describe('speakNow (synchronous)', () => {
+    it('uses Kokoro when ready', () => {
+      vi.spyOn(kokoroService, 'isReady').mockReturnValue(true);
+
+      voiceService.speakNow('Sync kokoro test');
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(kokoroService.speak).toHaveBeenCalledWith('Sync kokoro test', 'af_heart', expect.any(Number));
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(speechService.speak).not.toHaveBeenCalled();
+    });
+
+    it('falls back to Web Speech when Kokoro not ready', () => {
+      vi.spyOn(kokoroService, 'isReady').mockReturnValue(false);
+
+      voiceService.speakNow('Sync fallback test');
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(speechService.speak).toHaveBeenCalledWith(
+        'Sync fallback test',
+        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
+      );
+    });
+
+    it('calls stop before speaking', () => {
+      vi.spyOn(voiceService, 'stop');
+
+      voiceService.speakNow('Stop first');
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(voiceService.stop).toHaveBeenCalled();
+    });
+  });
+
   describe('setSpeed', () => {
     it('sets speed within valid range', () => {
       voiceService.setSpeed(1.5);

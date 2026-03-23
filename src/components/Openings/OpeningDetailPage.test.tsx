@@ -49,6 +49,16 @@ vi.mock('../../hooks/usePieceSound', () => ({
   }),
 }));
 
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    speakNow: vi.fn(),
+    speak: vi.fn().mockResolvedValue(undefined),
+    stop: vi.fn(),
+    setSpeed: vi.fn(),
+    isPlaying: vi.fn().mockReturnValue(false),
+  },
+}));
+
 vi.mock('../../services/speechService', () => ({
   speechService: {
     speak: vi.fn(),

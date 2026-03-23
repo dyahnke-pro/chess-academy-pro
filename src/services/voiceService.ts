@@ -3,17 +3,9 @@
 // Only this file may call the ElevenLabs API.
 
 import { speechService } from './speechService';
+import { kokoroService } from './kokoroService';
 import { db } from '../db/schema';
 import type { UserPreferences } from '../types';
-
-// Lazy-load kokoroService to avoid pulling kokoro-js into Vite's module graph at startup
-let _kokoroModule: typeof import('./kokoroService') | null = null;
-async function getKokoro(): Promise<typeof import('./kokoroService')> {
-  if (!_kokoroModule) {
-    _kokoroModule = await import('./kokoroService');
-  }
-  return _kokoroModule;
-}
 
 const ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 
@@ -25,6 +17,7 @@ class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   private playing = false;
   private speed = 1.0;
+  private cachedVoiceId = 'af_heart';
 
   setSpeed(rate: number): void {
     this.speed = Math.max(0.5, Math.min(2.0, rate));
@@ -34,6 +27,28 @@ class VoiceService {
     return this.speed;
   }
 
+  /**
+   * Synchronous speak — tries Kokoro (if loaded), falls back to Web Speech.
+   * No DB query, no async delay. Safe to call from useEffect / event handlers on iOS.
+   * Used by openings components.
+   */
+  speakNow(text: string): void {
+    this.stop();
+
+    // Kokoro ready? Use it (async internally, but we fire-and-forget)
+    if (kokoroService.isReady()) {
+      void this.speakKokoro(text, this.cachedVoiceId, this.speed);
+      return;
+    }
+
+    // Web Speech API (synchronous — works on iOS)
+    this.speakFallback(text);
+  }
+
+  /**
+   * Full async speak with all tiers — queries DB for preferences.
+   * Used by coach components that need ElevenLabs support.
+   */
   async speak(text: string): Promise<void> {
     this.stop();
 
@@ -52,6 +67,11 @@ class VoiceService {
       this.speed = preferences.voiceSpeed;
     }
 
+    // Cache voice ID for speakNow()
+    if (preferences.kokoroVoiceId) {
+      this.cachedVoiceId = preferences.kokoroVoiceId;
+    }
+
     // Tier 1: ElevenLabs (if configured)
     const apiKey = await this.getApiKey(preferences);
     const voiceId = preferences.elevenlabsVoiceId as string | undefined;
@@ -62,12 +82,9 @@ class VoiceService {
     }
 
     // Tier 2: Kokoro (if enabled and model loaded)
-    if (preferences.kokoroEnabled) {
-      const { kokoroService } = await getKokoro();
-      if (kokoroService.isReady()) {
-        const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
-        if (success) return;
-      }
+    if (preferences.kokoroEnabled && kokoroService.isReady()) {
+      const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
+      if (success) return;
     }
 
     // Tier 3: Web Speech API
@@ -84,13 +101,12 @@ class VoiceService {
       this.currentSource = null;
     }
     this.playing = false;
-    // Stop kokoro if it was loaded
-    _kokoroModule?.kokoroService.stop();
+    kokoroService.stop();
     speechService.stop();
   }
 
   isPlaying(): boolean {
-    return this.playing || (_kokoroModule?.kokoroService.isPlaying() ?? false);
+    return this.playing || kokoroService.isPlaying();
   }
 
   private async speakElevenLabs(text: string, apiKey: string, voiceId: string): Promise<boolean> {
@@ -133,7 +149,6 @@ class VoiceService {
 
   private async speakKokoro(text: string, voiceId: string, speed: number): Promise<boolean> {
     try {
-      const { kokoroService } = await getKokoro();
       await kokoroService.speak(text, voiceId, speed);
       return true;
     } catch (error) {
