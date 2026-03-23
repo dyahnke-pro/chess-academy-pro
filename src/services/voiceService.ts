@@ -113,38 +113,16 @@ class VoiceService {
 
     const textHash = hashText(text);
 
-    // Check IndexedDB cache first
+    // Check IndexedDB cache
     try {
       const cached = await db.audioCache.get(textHash);
       if (cached) {
-        await this.playRawAudio(cached.audio);
+        await this.playCachedAudio(cached.audio);
         return;
       }
     } catch {
-      // Cache miss or DB error — continue to generate
+      // Cache miss or DB error — stay silent
     }
-
-    // Generate with Kokoro if loaded
-    if (kokoroService.isReady()) {
-      try {
-        const voiceId = await this.getKokoroVoiceId();
-        const result = await kokoroService.generate(text, voiceId, this.speed);
-        const audioBuffer = result.audio.buffer as ArrayBuffer;
-
-        // Cache for future use
-        void db.audioCache.put({
-          textHash,
-          audio: audioBuffer,
-          voiceId,
-          timestamp: Date.now(),
-        }).catch(() => { /* cache write failure is non-fatal */ });
-
-        await this.playRawAudio(audioBuffer);
-      } catch (error) {
-        console.warn('[VoiceService] Kokoro generate+cache failed:', error);
-      }
-    }
-    // No fallback — stay silent if no cache and no Kokoro
   }
 
   /** Stop only audio playback (no speechService cancel — avoids iOS double-cancel bug) */
@@ -161,16 +139,12 @@ class VoiceService {
     kokoroService.stop();
   }
 
-  private async getKokoroVoiceId(): Promise<string> {
-    try {
-      const profile = await db.profiles.get('main');
-      return profile?.preferences.kokoroVoiceId ?? 'af_heart';
-    } catch {
-      return 'af_heart';
-    }
-  }
-
-  private async playRawAudio(buffer: ArrayBuffer): Promise<void> {
+  /**
+   * Play audio from cache — auto-detects encoded audio (WAV/MP3) vs raw Float32.
+   * WAV starts with "RIFF", MP3 with "ID3" or sync word (0xFF 0xE0+).
+   * Anything else is treated as raw Float32 (legacy Kokoro on-device).
+   */
+  private async playCachedAudio(buffer: ArrayBuffer): Promise<void> {
     if (!this.audioContext) {
       this.audioContext = new AudioContext();
     }
@@ -179,9 +153,23 @@ class VoiceService {
       await this.audioContext.resume();
     }
 
-    const float32 = new Float32Array(buffer);
-    const audioBuffer = this.audioContext.createBuffer(1, float32.length, KOKORO_SAMPLE_RATE);
-    audioBuffer.getChannelData(0).set(float32);
+    const bytes = new Uint8Array(buffer);
+    const isWav = bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46; // RIFF
+    const isMp3 = (bytes[0] === 0x49 && bytes[1] === 0x44 && bytes[2] === 0x33) || // ID3
+                  (bytes[0] === 0xFF && (bytes[1] & 0xE0) === 0xE0); // MPEG sync
+    const isEncoded = isWav || isMp3;
+
+    let audioBuffer: AudioBuffer;
+
+    if (isEncoded) {
+      // Decode WAV/MP3 with AudioContext (works on all browsers including iOS Safari)
+      audioBuffer = await this.audioContext.decodeAudioData(buffer.slice(0));
+    } else {
+      // Legacy raw Float32 from Kokoro on-device generation
+      const float32 = new Float32Array(buffer);
+      audioBuffer = this.audioContext.createBuffer(1, float32.length, KOKORO_SAMPLE_RATE);
+      audioBuffer.getChannelData(0).set(float32);
+    }
 
     const source = this.audioContext.createBufferSource();
     source.buffer = audioBuffer;

@@ -2,10 +2,34 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
-import { kokoroService, KOKORO_VOICES } from '../../services/kokoroService';
-import { pregenerateOpeningAudio } from '../../services/audioPregenService';
-import type { KokoroModelStatus } from '../../services/kokoroService';
-import { Volume2, Download, Play, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { installVoicePack, getVoiceCacheCount } from '../../services/voicePackService';
+import { voiceService } from '../../services/voiceService';
+import { Volume2, Download, Play, Check, Loader2 } from 'lucide-react';
+
+interface VoiceOption {
+  id: string;
+  name: string;
+  accent: 'American' | 'British';
+  gender: 'Female' | 'Male';
+}
+
+const VOICES: VoiceOption[] = [
+  { id: 'af_heart', name: 'Heart', accent: 'American', gender: 'Female' },
+  { id: 'af_bella', name: 'Bella', accent: 'American', gender: 'Female' },
+  { id: 'af_nicole', name: 'Nicole', accent: 'American', gender: 'Female' },
+  { id: 'af_sarah', name: 'Sarah', accent: 'American', gender: 'Female' },
+  { id: 'af_nova', name: 'Nova', accent: 'American', gender: 'Female' },
+  { id: 'am_adam', name: 'Adam', accent: 'American', gender: 'Male' },
+  { id: 'am_eric', name: 'Eric', accent: 'American', gender: 'Male' },
+  { id: 'am_michael', name: 'Michael', accent: 'American', gender: 'Male' },
+  { id: 'am_liam', name: 'Liam', accent: 'American', gender: 'Male' },
+  { id: 'bf_emma', name: 'Emma', accent: 'British', gender: 'Female' },
+  { id: 'bf_isabella', name: 'Isabella', accent: 'British', gender: 'Female' },
+  { id: 'bm_daniel', name: 'Daniel', accent: 'British', gender: 'Male' },
+  { id: 'bm_george', name: 'George', accent: 'British', gender: 'Male' },
+];
+
+type DownloadState = 'idle' | 'downloading' | 'installed';
 
 export function VoiceSettingsPanel(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -17,22 +41,70 @@ export function VoiceSettingsPanel(): JSX.Element {
   const [voiceSpeed, setVoiceSpeed] = useState(() => activeProfile?.preferences.voiceSpeed ?? 1.0);
   const [status, setStatus] = useState<string | null>(null);
 
-  // Kokoro state
-  const [kokoroEnabled, setKokoroEnabled] = useState(() => activeProfile?.preferences.kokoroEnabled ?? true);
-  const [kokoroVoiceId, setKokoroVoiceId] = useState(() => activeProfile?.preferences.kokoroVoiceId ?? 'af_heart');
-  const [modelStatus, setModelStatus] = useState<KokoroModelStatus>(kokoroService.getStatus());
-  const [downloadProgress, setDownloadProgress] = useState(kokoroService.getDownloadProgress());
+  const [selectedVoiceId, setSelectedVoiceId] = useState(() => activeProfile?.preferences.kokoroVoiceId ?? 'af_heart');
+  const [downloadState, setDownloadState] = useState<DownloadState>('idle');
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [clipCount, setClipCount] = useState(0);
   const [previewPlaying, setPreviewPlaying] = useState(false);
-  const [pregenProgress, setPregenProgress] = useState<{ done: number; total: number } | null>(null);
-  const [pregenDone, setPregenDone] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   const hasExistingKey = Boolean(activeProfile?.preferences.elevenlabsKeyEncrypted);
 
+  // Check if voice pack is already installed
   useEffect(() => {
-    const unsubStatus = kokoroService.onStatusChange(setModelStatus);
-    const unsubProgress = kokoroService.onProgress(setDownloadProgress);
-    return () => { unsubStatus(); unsubProgress(); };
-  }, []);
+    void getVoiceCacheCount(selectedVoiceId).then((count) => {
+      if (count > 0) {
+        setDownloadState('installed');
+        setClipCount(count);
+      } else {
+        setDownloadState('idle');
+        setClipCount(0);
+      }
+    });
+  }, [selectedVoiceId]);
+
+  const handleDownload = useCallback(async (): Promise<void> => {
+    setDownloadState('downloading');
+    setDownloadProgress(0);
+    setDownloadError(null);
+
+    try {
+      const result = await installVoicePack(
+        selectedVoiceId,
+        (done, total) => {
+          setDownloadProgress(Math.round((done / total) * 100));
+        },
+      );
+      setDownloadState('installed');
+      setClipCount(result.installed);
+    } catch (error) {
+      setDownloadState('idle');
+      setDownloadError(error instanceof Error ? error.message : 'Download failed');
+    }
+  }, [selectedVoiceId]);
+
+  const handleVoiceChange = async (voiceId: string): Promise<void> => {
+    setSelectedVoiceId(voiceId);
+    setDownloadError(null);
+    if (!activeProfile) return;
+
+    const updatedPrefs = { ...activeProfile.preferences, kokoroVoiceId: voiceId };
+    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+  };
+
+  const handlePreview = async (): Promise<void> => {
+    if (downloadState !== 'installed' || previewPlaying) return;
+    setPreviewPlaying(true);
+    try {
+      // Play a cached clip via voiceService
+      voiceService.speakNow('Great move! You found the key idea in this position.');
+      // Wait a bit for playback
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    } finally {
+      setPreviewPlaying(false);
+    }
+  };
 
   const handleSaveKey = async (): Promise<void> => {
     if (!activeProfile || !elevenlabsKey.trim()) return;
@@ -68,239 +140,111 @@ export function VoiceSettingsPanel(): JSX.Element {
     setTimeout(() => setStatus(null), 2000);
   };
 
-  const handleDownloadModel = useCallback(async (): Promise<void> => {
-    try {
-      await kokoroService.loadModel();
-
-      // Pre-generate all opening phrases silently in the background
-      setPregenProgress({ done: 0, total: 0 });
-      try {
-        const result = await pregenerateOpeningAudio(
-          kokoroVoiceId,
-          voiceSpeed,
-          (done, total) => setPregenProgress({ done, total }),
-        );
-        setPregenDone(true);
-        setPregenProgress(null);
-        console.log(`[VoicePregen] Generated: ${result.generated}, Skipped: ${result.skipped}, Failed: ${result.failed}`);
-      } catch (pregenError) {
-        console.warn('[VoicePregen] Pre-generation failed:', pregenError);
-        setPregenProgress(null);
-      }
-    } catch {
-      setStatus('Failed to download voice model');
-      setTimeout(() => setStatus(null), 3000);
-    }
-  }, [kokoroVoiceId, voiceSpeed]);
-
-  const handleKokoroToggle = async (enabled: boolean): Promise<void> => {
-    setKokoroEnabled(enabled);
-    if (!activeProfile) return;
-
-    const updatedPrefs = { ...activeProfile.preferences, kokoroEnabled: enabled };
-    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
-    setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
-
-    if (!enabled) {
-      kokoroService.unload();
-    }
-  };
-
-  const handleKokoroVoiceChange = async (voiceId: string): Promise<void> => {
-    setKokoroVoiceId(voiceId);
-    if (!activeProfile) return;
-
-    const updatedPrefs = { ...activeProfile.preferences, kokoroVoiceId: voiceId };
-    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
-    setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
-  };
-
-  const handlePreview = async (): Promise<void> => {
-    if (!kokoroService.isReady() || previewPlaying) return;
-    setPreviewPlaying(true);
-    try {
-      await kokoroService.speak(
-        'Great move! You found the key idea in this position.',
-        kokoroVoiceId,
-        voiceSpeed,
-      );
-    } catch {
-      setStatus('Preview failed');
-      setTimeout(() => setStatus(null), 2000);
-    } finally {
-      setPreviewPlaying(false);
-    }
-  };
-
-  const selectedVoice = KOKORO_VOICES.find((v) => v.id === kokoroVoiceId);
+  const selectedVoice = VOICES.find((v) => v.id === selectedVoiceId);
 
   return (
     <div className="space-y-6" data-testid="voice-settings-panel">
-      {/* ── Kokoro HD Voice ────────────────────────────────────── */}
+      {/* ── Voice Pack ────────────────────────────────────────── */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-sm flex items-center gap-2">
-            <Volume2 size={16} />
-            HD Voice (Kokoro)
-          </h3>
-          <label className="flex items-center gap-2 cursor-pointer" data-testid="kokoro-toggle">
-            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              {kokoroEnabled ? 'On' : 'Off'}
-            </span>
-            <div
-              role="switch"
-              aria-checked={kokoroEnabled}
-              tabIndex={0}
-              onClick={() => void handleKokoroToggle(!kokoroEnabled)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); void handleKokoroToggle(!kokoroEnabled); } }}
-              className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-              style={{ background: kokoroEnabled ? 'var(--color-accent)' : 'var(--color-border)' }}
-            >
-              <span
-                className="inline-block h-4 w-4 rounded-full bg-white transition-transform"
-                style={{ transform: kokoroEnabled ? 'translateX(24px)' : 'translateX(4px)' }}
-              />
-            </div>
-          </label>
-        </div>
+        <h3 className="font-semibold text-sm flex items-center gap-2">
+          <Volume2 size={16} />
+          HD Voice
+        </h3>
 
         <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-          Natural-sounding AI voice that runs entirely on your device. No API key needed.
+          High-quality AI voices for opening training. Pick a voice and download the audio pack.
         </p>
 
-        {kokoroEnabled && (
-          <div className="space-y-3">
-            {/* Model download status */}
-            {modelStatus === 'idle' && (
-              <button
-                onClick={() => void handleDownloadModel()}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium"
-                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                data-testid="kokoro-download-btn"
-              >
-                <Download size={16} />
-                Download Voice Model (~87 MB)
-              </button>
-            )}
+        {/* Voice picker */}
+        <div>
+          <label className="text-xs font-medium block mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
+            Voice
+          </label>
+          <select
+            value={selectedVoiceId}
+            onChange={(e) => void handleVoiceChange(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg border text-sm appearance-none"
+            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+            data-testid="kokoro-voice-select"
+          >
+            {VOICES.map((voice) => (
+              <option key={voice.id} value={voice.id}>
+                {voice.name} — {voice.accent} {voice.gender}
+              </option>
+            ))}
+          </select>
+          {selectedVoice && (
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+              {selectedVoice.accent} {selectedVoice.gender.toLowerCase()} voice
+            </p>
+          )}
+        </div>
 
-            {modelStatus === 'downloading' && (
-              <div className="space-y-2" data-testid="kokoro-downloading">
-                <div className="flex items-center gap-2 text-sm">
-                  <Loader2 size={16} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                  <span>Downloading voice model…</span>
-                  <span className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                    {downloadProgress}%
-                  </span>
-                </div>
-                <div
-                  className="w-full h-2 rounded-full overflow-hidden"
-                  style={{ background: 'var(--color-border)' }}
-                >
-                  <div
-                    className="h-full rounded-full transition-all"
-                    style={{ width: `${downloadProgress}%`, background: 'var(--color-accent)' }}
-                  />
-                </div>
-              </div>
-            )}
+        {/* Download / Status */}
+        {downloadState === 'idle' && (
+          <button
+            onClick={() => void handleDownload()}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="kokoro-download-btn"
+          >
+            <Download size={16} />
+            Download Voice Pack
+          </button>
+        )}
 
-            {modelStatus === 'ready' && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-success)' }} data-testid="kokoro-ready">
-                  <Check size={16} />
-                  Voice model loaded
-                </div>
-                {pregenProgress && (
-                  <div className="space-y-1" data-testid="pregen-progress">
-                    <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                      <Loader2 size={12} className="animate-spin" />
-                      <span>Generating voice clips… {pregenProgress.done}/{pregenProgress.total}</span>
-                    </div>
-                    {pregenProgress.total > 0 && (
-                      <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
-                        <div
-                          className="h-full rounded-full transition-all"
-                          style={{ width: `${Math.round((pregenProgress.done / pregenProgress.total) * 100)}%`, background: 'var(--color-accent)' }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-                {pregenDone && !pregenProgress && (
-                  <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-success)' }}>
-                    <Check size={12} />
-                    All voice clips cached
-                  </div>
-                )}
-              </div>
-            )}
-
-            {modelStatus === 'error' && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-error)' }} data-testid="kokoro-error">
-                  <AlertCircle size={16} />
-                  Failed to load voice model
-                </div>
-                {kokoroService.getLastError() && (
-                  <p className="text-xs px-2 py-1 rounded" style={{ background: 'var(--color-surface)', color: 'var(--color-text-muted)' }} data-testid="kokoro-error-detail">
-                    {kokoroService.getLastError()}
-                  </p>
-                )}
-                <button
-                  onClick={() => void handleDownloadModel()}
-                  className="w-full py-2 rounded-lg text-sm font-medium border"
-                  style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
-                >
-                  Retry Download
-                </button>
-              </div>
-            )}
-
-            {/* Voice picker */}
-            {(modelStatus === 'ready' || modelStatus === 'idle') && (
-              <div>
-                <label className="text-xs font-medium block mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                  Voice
-                </label>
-                <select
-                  value={kokoroVoiceId}
-                  onChange={(e) => void handleKokoroVoiceChange(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border text-sm appearance-none"
-                  style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                  data-testid="kokoro-voice-select"
-                >
-                  {KOKORO_VOICES.map((voice) => (
-                    <option key={voice.id} value={voice.id}>
-                      {voice.name} — {voice.accent} {voice.gender}
-                    </option>
-                  ))}
-                </select>
-                {selectedVoice && (
-                  <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-                    {selectedVoice.accent} {selectedVoice.gender.toLowerCase()} voice
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* Preview button */}
-            {modelStatus === 'ready' && (
-              <button
-                onClick={() => void handlePreview()}
-                disabled={previewPlaying}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border disabled:opacity-50"
-                style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
-                data-testid="kokoro-preview-btn"
-              >
-                <Play size={14} />
-                {previewPlaying ? 'Playing…' : 'Preview Voice'}
-              </button>
-            )}
+        {downloadState === 'downloading' && (
+          <div className="space-y-2" data-testid="kokoro-downloading">
+            <div className="flex items-center gap-2 text-sm">
+              <Loader2 size={16} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+              <span>Downloading voice pack…</span>
+              <span className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                {downloadProgress}%
+              </span>
+            </div>
+            <div
+              className="w-full h-2 rounded-full overflow-hidden"
+              style={{ background: 'var(--color-border)' }}
+            >
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${downloadProgress}%`, background: 'var(--color-accent)' }}
+              />
+            </div>
           </div>
+        )}
+
+        {downloadState === 'installed' && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-success)' }} data-testid="kokoro-ready">
+              <Check size={16} />
+              Voice pack installed — {clipCount.toLocaleString()} clips ready
+            </div>
+          </div>
+        )}
+
+        {downloadError && (
+          <p className="text-xs" style={{ color: 'var(--color-error)' }} data-testid="voice-download-error">
+            {downloadError}
+          </p>
+        )}
+
+        {/* Preview button */}
+        {downloadState === 'installed' && (
+          <button
+            onClick={() => void handlePreview()}
+            disabled={previewPlaying}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border disabled:opacity-50"
+            style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+            data-testid="kokoro-preview-btn"
+          >
+            <Play size={14} />
+            {previewPlaying ? 'Playing…' : 'Preview Voice'}
+          </button>
         )}
       </div>
 
-      {/* ── Voice Speed (shared) ───────────────────────────────── */}
+      {/* ── Voice Speed ────────────────────────────────────────── */}
       <div>
         <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
           Voice Speed: {voiceSpeed}x
@@ -334,7 +278,7 @@ export function VoiceSettingsPanel(): JSX.Element {
 
         <div className="mt-3 space-y-3 pl-3 border-l-2" style={{ borderColor: 'var(--color-border)' }}>
           <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            If you have an ElevenLabs API key, it takes priority over Kokoro HD Voice.
+            If you have an ElevenLabs API key, it takes priority over the HD Voice pack.
           </p>
 
           <div>
