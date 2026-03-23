@@ -3,6 +3,7 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
 import { kokoroService, KOKORO_VOICES } from '../../services/kokoroService';
+import { pregenerateOpeningAudio } from '../../services/audioPregenService';
 import type { KokoroModelStatus } from '../../services/kokoroService';
 import { Volume2, Download, Play, Check, AlertCircle, Loader2 } from 'lucide-react';
 
@@ -22,6 +23,8 @@ export function VoiceSettingsPanel(): JSX.Element {
   const [modelStatus, setModelStatus] = useState<KokoroModelStatus>(kokoroService.getStatus());
   const [downloadProgress, setDownloadProgress] = useState(kokoroService.getDownloadProgress());
   const [previewPlaying, setPreviewPlaying] = useState(false);
+  const [pregenProgress, setPregenProgress] = useState<{ done: number; total: number } | null>(null);
+  const [pregenDone, setPregenDone] = useState(false);
 
   const hasExistingKey = Boolean(activeProfile?.preferences.elevenlabsKeyEncrypted);
 
@@ -68,11 +71,27 @@ export function VoiceSettingsPanel(): JSX.Element {
   const handleDownloadModel = useCallback(async (): Promise<void> => {
     try {
       await kokoroService.loadModel();
+
+      // Pre-generate all opening phrases silently in the background
+      setPregenProgress({ done: 0, total: 0 });
+      try {
+        const result = await pregenerateOpeningAudio(
+          kokoroVoiceId,
+          voiceSpeed,
+          (done, total) => setPregenProgress({ done, total }),
+        );
+        setPregenDone(true);
+        setPregenProgress(null);
+        console.log(`[VoicePregen] Generated: ${result.generated}, Skipped: ${result.skipped}, Failed: ${result.failed}`);
+      } catch (pregenError) {
+        console.warn('[VoicePregen] Pre-generation failed:', pregenError);
+        setPregenProgress(null);
+      }
     } catch {
       setStatus('Failed to download voice model');
       setTimeout(() => setStatus(null), 3000);
     }
-  }, []);
+  }, [kokoroVoiceId, voiceSpeed]);
 
   const handleKokoroToggle = async (enabled: boolean): Promise<void> => {
     setKokoroEnabled(enabled);
@@ -186,9 +205,33 @@ export function VoiceSettingsPanel(): JSX.Element {
             )}
 
             {modelStatus === 'ready' && (
-              <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-success)' }} data-testid="kokoro-ready">
-                <Check size={16} />
-                Voice model loaded
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-success)' }} data-testid="kokoro-ready">
+                  <Check size={16} />
+                  Voice model loaded
+                </div>
+                {pregenProgress && (
+                  <div className="space-y-1" data-testid="pregen-progress">
+                    <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                      <Loader2 size={12} className="animate-spin" />
+                      <span>Generating voice clips… {pregenProgress.done}/{pregenProgress.total}</span>
+                    </div>
+                    {pregenProgress.total > 0 && (
+                      <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{ width: `${Math.round((pregenProgress.done / pregenProgress.total) * 100)}%`, background: 'var(--color-accent)' }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+                {pregenDone && !pregenProgress && (
+                  <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-success)' }}>
+                    <Check size={12} />
+                    All voice clips cached
+                  </div>
+                )}
               </div>
             )}
 
