@@ -9,6 +9,7 @@ import type {
   MetaRecord,
   MistakePuzzle,
   ModelCacheEntry,
+  AudioCacheEntry,
 } from '../types';
 
 class ChessAcademyDB extends Dexie {
@@ -21,6 +22,7 @@ class ChessAcademyDB extends Dexie {
   meta!: EntityTable<MetaRecord, 'key'>;
   mistakePuzzles!: EntityTable<MistakePuzzle, 'id'>;
   modelCache!: EntityTable<ModelCacheEntry, 'key'>;
+  audioCache!: EntityTable<AudioCacheEntry, 'textHash'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -208,6 +210,7 @@ class ChessAcademyDB extends Dexie {
       meta: 'key',
       mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
       modelCache: 'key',
+      audioCache: 'textHash, voiceId',
     });
   }
 }

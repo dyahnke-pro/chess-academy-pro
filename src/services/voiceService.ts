@@ -8,9 +8,21 @@ import { db } from '../db/schema';
 import type { UserPreferences } from '../types';
 
 const ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
+const KOKORO_SAMPLE_RATE = 24000;
 
 // Web Speech fallback settings
 const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
+
+/** Simple hash for cache keys */
+function hashText(text: string): string {
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  return String(hash);
+}
 
 class VoiceService {
   private audioContext: AudioContext | null = null;
@@ -27,16 +39,14 @@ class VoiceService {
   }
 
   /**
-   * Synchronous speak — tries Kokoro (if loaded), falls back to Web Speech.
-   * No DB query, no async delay. Safe to call from useEffect / event handlers on iOS.
+   * Speak with cached Kokoro audio. No Web Speech fallback.
+   * - If audio is cached in IndexedDB → play instantly
+   * - If Kokoro is loaded but not cached → generate, cache, play (slow first time)
+   * - If Kokoro not loaded and no cache → silent
    * Used by openings components.
    */
   speakNow(text: string): void {
-    // Always use Web Speech for instant feedback in openings.
-    // Kokoro ONNX inference is too slow (~15s on mobile WASM) for real-time use.
-    // speechService.speak() handles its own cancel() internally —
-    // do NOT call this.stop() first (double cancel silently drops speech on iOS).
-    this.speakFallback(text);
+    void this.speakCached(text);
   }
 
   /**
@@ -98,8 +108,99 @@ class VoiceService {
     return this.playing || kokoroService.isPlaying();
   }
 
+  private async speakCached(text: string): Promise<void> {
+    this.stopPlayback();
+
+    const textHash = hashText(text);
+
+    // Check IndexedDB cache first
+    try {
+      const cached = await db.audioCache.get(textHash);
+      if (cached) {
+        await this.playRawAudio(cached.audio);
+        return;
+      }
+    } catch {
+      // Cache miss or DB error — continue to generate
+    }
+
+    // Generate with Kokoro if loaded
+    if (kokoroService.isReady()) {
+      try {
+        const voiceId = await this.getKokoroVoiceId();
+        const result = await kokoroService.generate(text, voiceId, this.speed);
+        const audioBuffer = result.audio.buffer as ArrayBuffer;
+
+        // Cache for future use
+        void db.audioCache.put({
+          textHash,
+          audio: audioBuffer,
+          voiceId,
+          timestamp: Date.now(),
+        }).catch(() => { /* cache write failure is non-fatal */ });
+
+        await this.playRawAudio(audioBuffer);
+      } catch (error) {
+        console.warn('[VoiceService] Kokoro generate+cache failed:', error);
+      }
+    }
+    // No fallback — stay silent if no cache and no Kokoro
+  }
+
+  /** Stop only audio playback (no speechService cancel — avoids iOS double-cancel bug) */
+  private stopPlayback(): void {
+    if (this.currentSource) {
+      try {
+        this.currentSource.stop();
+      } catch {
+        // Already stopped
+      }
+      this.currentSource = null;
+    }
+    this.playing = false;
+    kokoroService.stop();
+  }
+
+  private async getKokoroVoiceId(): Promise<string> {
+    try {
+      const profile = await db.profiles.get('main');
+      return profile?.preferences.kokoroVoiceId ?? 'af_heart';
+    } catch {
+      return 'af_heart';
+    }
+  }
+
+  private async playRawAudio(buffer: ArrayBuffer): Promise<void> {
+    if (!this.audioContext) {
+      this.audioContext = new AudioContext();
+    }
+
+    if (this.audioContext.state === 'suspended') {
+      await this.audioContext.resume();
+    }
+
+    const float32 = new Float32Array(buffer);
+    const audioBuffer = this.audioContext.createBuffer(1, float32.length, KOKORO_SAMPLE_RATE);
+    audioBuffer.getChannelData(0).set(float32);
+
+    const source = this.audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(this.audioContext.destination);
+
+    this.currentSource = source;
+    this.playing = true;
+
+    return new Promise<void>((resolve) => {
+      source.onended = () => {
+        this.playing = false;
+        this.currentSource = null;
+        resolve();
+      };
+      source.start();
+    });
+  }
+
   private async speakElevenLabs(text: string, apiKey: string, voiceId: string): Promise<boolean> {
-    // Detect silent mode on iOS
     if (this.audioContext?.state === 'suspended') {
       try {
         await this.audioContext.resume();
@@ -128,7 +229,7 @@ class VoiceService {
       }
 
       const arrayBuffer = await response.arrayBuffer();
-      await this.playAudioBuffer(arrayBuffer);
+      await this.playEncodedAudio(arrayBuffer);
       return true;
     } catch (error) {
       console.warn('[VoiceService] ElevenLabs fetch failed:', error);
@@ -150,7 +251,7 @@ class VoiceService {
     speechService.speak(text, WEB_SPEECH_FALLBACK);
   }
 
-  private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {
+  private async playEncodedAudio(buffer: ArrayBuffer): Promise<void> {
     if (!this.audioContext) {
       this.audioContext = new AudioContext();
     }

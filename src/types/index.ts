@@ -142,6 +142,13 @@ export interface ModelCacheEntry {
   timestamp: number;
 }
 
+export interface AudioCacheEntry {
+  textHash: string;
+  audio: ArrayBuffer;
+  voiceId: string;
+  timestamp: number;
+}
+
 // ─── Games ───────────────────────────────────────────────────────────────────
 
 export type MoveClassification =

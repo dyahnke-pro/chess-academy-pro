@@ -173,6 +173,15 @@ class KokoroService {
     await this.playAudio(result.audio, result.sampling_rate);
   }
 
+  /** Generate audio without playing — returns raw Float32Array for caching */
+  async generate(text: string, voice: string = 'af_heart', speed: number = 1.0): Promise<{ audio: Float32Array; sampling_rate: number }> {
+    if (!this.tts) {
+      throw new Error('Kokoro model not loaded. Call loadModel() first.');
+    }
+
+    return this.tts.generate(text, { voice, speed });
+  }
+
   stop(): void {
     if (this.currentSource) {
       try {
