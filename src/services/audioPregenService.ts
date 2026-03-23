@@ -3,8 +3,6 @@
 
 import { kokoroService } from './kokoroService';
 import { db } from '../db/schema';
-import type { OpeningRecord } from '../types';
-
 /** Simple hash matching voiceService */
 function hashText(text: string): string {
   let hash = 0;
