@@ -5,105 +5,215 @@
       "san": "e4",
       "annotation": "We open with e4, seizing the center and preparing for one of the most romantic openings in chess history. The Evans Gambit starts here -- with the King's Pawn controlling d5 and f5, opening lines for the bishop and queen. Every great attacking game from the 1800s to Kasparov's modern revivals begins with this move.",
       "plans": ["Rapid development toward the Italian Game structure", "Control the center and open lines for pieces"],
-      "alternatives": ["d4 - Queen's Pawn, different character entirely"]
+      "alternatives": ["d4 - Queen's Pawn, different character entirely"],
+      "arrows": [
+        { "from": "e4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e4", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f1", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "e5",
       "annotation": "Black responds symmetrically, occupying the center and opening the diagonal for the f8 bishop. This leads to the Open Game where both sides get active piece play early. Black's e5 pawn mirrors White's central claim and sets up the tactical battles that define 1.e4 e5 openings.",
-      "alternatives": ["c5 - the Sicilian, the most popular response at top levels"]
+      "alternatives": ["c5 - the Sicilian, the most popular response at top levels"],
+      "arrows": [
+        { "from": "e5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e5", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f8", "to": "c5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "Knight to f3, attacking e5 and developing toward the kingside. This is the most natural second move -- we threaten the e5 pawn, develop a piece, prepare to castle, and control the d4 square. Black must respond to the threat, which keeps the initiative on our side. Every Italian Game and Evans Gambit flows through this move.",
-      "plans": ["Bc4 next for the Italian setup", "Prepare rapid kingside castling"]
+      "plans": ["Bc4 next for the Italian setup", "Prepare rapid kingside castling"],
+      "arrows": [
+        { "from": "f3", "to": "e5", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "f1", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nc6",
       "annotation": "Black defends e5 with the knight, the most natural and principled response. Nc6 develops a piece to its best square while protecting the center. The knight on c6 also influences d4 and e5, making it a cornerstone of Black's position. We're now in the most common e4 e5 starting structure.",
-      "alternatives": ["Nf6 - the Petrov, very solid but less combative"]
+      "alternatives": ["Nf6 - the Petrov, very solid but less combative"],
+      "arrows": [
+        { "from": "c6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c6", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Bc4",
       "annotation": "Bishop to c4, entering the Italian Game. The bishop aims at f7, Black's Achilles' heel that's only defended by the king. From c4, the bishop controls the critical d5 square and supports future central play. We need this bishop on this diagonal for the Evans Gambit to work -- without the pressure on f7 and the center, the pawn sacrifice wouldn't make sense.",
       "plans": ["Set up the Evans Gambit with b4", "Maintain pressure on the a2-f7 diagonal"],
-      "alternatives": ["Bb5 - the Ruy Lopez, equally strong but different philosophy"]
+      "alternatives": ["Bb5 - the Ruy Lopez, equally strong but different philosophy"],
+      "arrows": [
+        { "from": "c4", "to": "f7", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f7", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Bc5",
       "annotation": "Black develops the bishop actively to c5, creating the Giuoco Piano position ('quiet game' -- though it's about to get very loud). The bishop on c5 mirrors White's pressure by eyeing f2 and controlling the a7-g1 diagonal. This is the position where Captain Evans, playing aboard a mail ship in 1827, invented the gambit we're about to play.",
       "plans": ["Counter-pressure on f2 and the dark squares", "Prepare d6 and solid development"],
-      "alternatives": ["Nf6 - the Two Knights Defence, also sharp", "Be7 - the Hungarian, more passive"]
+      "alternatives": ["Nf6 - the Two Knights Defence, also sharp", "Be7 - the Hungarian, more passive"],
+      "arrows": [
+        { "from": "c5", "to": "f2", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f2", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "b4",
       "annotation": "The Evans Gambit! We sacrifice a whole pawn on b4 to lure Black's bishop away from the c5 square. Why? Because once that bishop moves, we're going to play c3 and d4, blasting open the center with a massive lead in development. This is one of the most principled gambits in chess -- we're not gambling, we're investing. A pawn for time, space, and a devastating initiative. Morphy, Kasparov, and Nakamura have all crushed opponents with this move.",
       "pawnStructure": "White sacrifices the b-pawn to accelerate central play with c3 and d4.",
-      "plans": ["After Bxb4, play c3 to kick the bishop and prepare d4", "Open the center while ahead in development"]
+      "plans": ["After Bxb4, play c3 to kick the bishop and prepare d4", "Open the center while ahead in development"],
+      "arrows": [
+        { "from": "b4", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c2", "to": "c3", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d2", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Bxb4",
       "annotation": "Black takes the pawn -- declining the Evans Gambit with moves like Bb6 is possible but generally gives White a comfortable position for free. By accepting, Black gets a material advantage but falls behind in development. The bishop on b4 is awkwardly placed and will be kicked around, giving White exactly the tempi needed to build a monster center.",
-      "alternatives": ["Bb6 - the Evans Gambit Declined, solid but passive", "Ba5 - keeps the bishop active but White still gets c3-d4"]
+      "alternatives": ["Bb6 - the Evans Gambit Declined, solid but passive", "Ba5 - keeps the bishop active but White still gets c3-d4"],
+      "arrows": [
+        { "from": "c2", "to": "c3", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "b4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "c3",
       "annotation": "Immediately kicking the bishop and preparing d4. This is the whole point of the Evans Gambit -- c3 attacks the bishop with tempo and sets up the d4 pawn push. After the bishop retreats, we'll play d4 with a huge center and rapid development. White's compensation for the pawn is already visible: we're about to have pawns on e4 and d4 while Black is scrambling to develop. The initiative is worth more than a pawn here.",
       "plans": ["d4 next move to blow open the center", "Develop all pieces rapidly while Black deals with the bishop"],
-      "alternatives": ["O-O - castling first is a different gambit approach but c3 is sharper"]
+      "alternatives": ["O-O - castling first is a different gambit approach but c3 is sharper"],
+      "arrows": [
+        { "from": "c3", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d2", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Ba5",
       "annotation": "Black retreats the bishop to a5, maintaining the pin on the c3 pawn (it's pinned to the king along the a5-e1 diagonal). This is considered the main line and the best retreat. The bishop stays active on the a5-e1 diagonal and keeps some pressure on White's queenside. Compared to Be7 or Bc5, Ba5 is the most combative choice -- Black isn't giving up the initiative without a fight.",
       "plans": ["Maintain the pin on c3 to slow White's d4 plans", "Develop quickly and try to consolidate the extra pawn"],
-      "alternatives": ["Be7 - safe retreat but passive, gives White easy d4", "Bc5 - returns to the original square but blocks c7 pawn"]
+      "alternatives": ["Be7 - safe retreat but passive, gives White easy d4", "Bc5 - returns to the original square but blocks c7 pawn"],
+      "arrows": [
+        { "from": "a5", "to": "e1", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d4",
       "annotation": "The center explodes! d4 is the culmination of the Evans Gambit -- we now have a massive pawn center on e4 and d4, attacking Black's e5 pawn. If Black takes on d4, we recapture with the bishop or open even more lines. The position is opening up and our pieces are going to pour into the center. This is what we sacrificed the pawn for -- look at all those open diagonals and the lead in development.",
       "pawnStructure": "White's e4-d4 center is dominant, attacking Black's e5 and opening lines for all pieces.",
-      "plans": ["Open the center and exploit the development advantage", "Castle and bring the full army into the attack"]
+      "plans": ["Open the center and exploit the development advantage", "Castle and bring the full army into the attack"],
+      "arrows": [
+        { "from": "d4", "to": "e5", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "exd4",
       "annotation": "Black takes on d4, which opens the center -- exactly what White wants in a gambit. But Black doesn't have a great alternative: if Black doesn't take, White plays dxe5 winning a pawn back with an even better position. So Black accepts that the center opens and tries to weather the storm. The challenge now is that White has open lines and rapid development, while Black still needs several moves to get organized.",
-      "alternatives": ["d6 - tries to hold the center but dxe5 dxe5, Qxd8+ is unpleasant"]
+      "alternatives": ["d6 - tries to hold the center but dxe5 dxe5, Qxd8+ is unpleasant"],
+      "arrows": [
+        { "from": "c4", "to": "f7", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "f3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "We castle into the attack! Rather than recapturing on d4 immediately, we get the king safe and bring the rook into play. The f1 rook will soon land on d1 or support the center. This is strong psychology too -- we're so confident in our position that we don't even bother taking the pawn back immediately. The threat of cxd4 is always there, and meanwhile we're fully developed while Black is still struggling.",
       "plans": ["cxd4 when the time is right to establish a massive center", "Develop with Ba3, Nbd2, or Qb3 to increase pressure"],
-      "alternatives": ["cxd4 - recapturing immediately is also strong but O-O is more flexible"]
+      "alternatives": ["cxd4 - recapturing immediately is also strong but O-O is more flexible"],
+      "arrows": [
+        { "from": "f1", "to": "e1", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "c3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "d6",
       "annotation": "Black plays d6 to shore up the e5 square (which doesn't have a pawn anymore) and open a retreat for the bishop to b6. d6 is a solid, defensive move that tries to stabilize the position. Black's plan is simple: survive the initial onslaught, keep the extra pawn, and reach an endgame where material matters more than initiative. But White's lead in development means the middlegame comes first.",
       "pawnStructure": "Black's d6 pawn supports the center but creates a relatively passive structure.",
       "plans": ["Stabilize and develop the remaining pieces", "Keep the extra pawn and trade down to an endgame"],
-      "alternatives": ["Nf6 - develops and attacks e4 but d6 is needed for the bishop retreat"]
+      "alternatives": ["Nf6 - develops and attacks e4 but d6 is needed for the bishop retreat"],
+      "arrows": [
+        { "from": "a5", "to": "b6", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d6", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "cxd4",
       "annotation": "Now we recapture, establishing the ideal pawn center: e4 and d4. This is a textbook dream center -- two pawns abreast controlling c5, d5, e5, and f5. Combined with our castled king and developed pieces, this center gives us enormous spatial advantage. Every piece has open lines, the bishop on c4 is a monster, and the d4 pawn controls key squares. The Evans Gambit has delivered exactly what it promised.",
       "pawnStructure": "The e4-d4 center is the pinnacle of the Evans Gambit -- total central domination for the cost of one pawn.",
-      "plans": ["Develop remaining pieces and build a kingside attack", "Use the center pawns to restrict Black's pieces"]
+      "plans": ["Develop remaining pieces and build a kingside attack", "Use the center pawns to restrict Black's pieces"],
+      "arrows": [
+        { "from": "c4", "to": "f7", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Bb6",
       "annotation": "The bishop retreats to b6, where it's solid but no longer putting pressure on the c3-e1 diagonal. From b6 the bishop eyes d4 and f2, which provides some counterplay, but it's mostly a defensive retreat. Black is trying to complete development and get the king castled. The bishop on b6 is decent but compared to White's actively placed pieces, it's clear who has the initiative.",
       "plans": ["Pressure d4 and the f2 point", "Support d5 break in the future"],
-      "alternatives": ["Be7 - very passive but solid", "Bc7 - similar idea to b6 but more cramped"]
+      "alternatives": ["Be7 - very passive but solid", "Bc7 - similar idea to b6 but more cramped"],
+      "arrows": [
+        { "from": "b6", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b6", "to": "f2", "color": "rgba(220, 50, 50, 0.7)" }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "Knight to c3, developing the last minor piece and adding more firepower to the center. The knight controls d5 -- a dream outpost -- and supports the e4 pawn. From c3 it can jump to d5 at the perfect moment for a devastating blow. We now have every piece developed or near-developed (just the c1 bishop and rooks to activate), while Black is still struggling to castle. This development lead is the entire compensation for the Evans Gambit pawn.",
       "plans": ["Nd5 at the right moment for a crushing blow", "Bg5 or Ba3 to complete development and increase pressure"],
-      "alternatives": ["Bg5 - pins the knight immediately but Nc3 is more flexible"]
+      "alternatives": ["Bg5 - pins the knight immediately but Nc3 is more flexible"],
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black finally develops the kingside knight to f6, attacking e4 and preparing to castle. This is long overdue -- Black needed this knight in the game several moves ago. Nf6 is the most natural and necessary move, defending against White's central dominance and getting one step closer to castling. But White still has a significant development advantage and the powerful center. The Evans Gambit middlegame is just beginning, and White's initiative is very real.",
       "plans": ["Castle kingside urgently", "Challenge e4 with the Nf6 and look for d5 counterplay"],
-      "alternatives": ["Na5 - harasses the Bc4 but leaves the kingside undeveloped"]
+      "alternatives": ["Na5 - harasses the Bc4 but leaves the kingside undeveloped"],
+      "arrows": [
+        { "from": "f6", "to": "e4", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "e8", "to": "g8", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     }
   ]
 }

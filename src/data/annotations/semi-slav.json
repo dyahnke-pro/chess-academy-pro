@@ -5,125 +5,260 @@
       "san": "d4",
       "annotation": "White opens with the queen's pawn, the gateway to all Queen's Gambit systems. The d4 pawn controls c5 and e5, and White is planning to follow up with c4 to build a broad center and challenge whatever Black does on d5.",
       "plans": ["Play c4 next to set up the Queen's Gambit"],
-      "alternatives": ["e4 -- more tactical, different character entirely"]
+      "alternatives": ["e4 -- more tactical, different character entirely"],
+      "arrows": [
+        { "from": "d4", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d5",
       "annotation": "Black occupies the center symmetrically. The d5 pawn matches White's d4 and controls c4 and e4. This signals Black's intention to play a Queen's Gambit structure rather than an Indian Defense. Black establishes a solid foundation before deciding which specific system to employ.",
-      "plans": ["Hold the center, decide between Slav, Semi-Slav, or QGD setups"]
+      "plans": ["Hold the center, decide between Slav, Semi-Slav, or QGD setups"],
+      "arrows": [
+        { "from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c4", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c4",
       "annotation": "The Queen's Gambit. White challenges d5 with the c-pawn, creating the fundamental tension of the position. Black must decide how to respond to this pressure: take the pawn, support d5 with e6 or c6, or play something else entirely. Every choice leads to a completely different type of game.",
       "pawnStructure": "Central tension on the c4-d5 axis defines the entire opening",
-      "plans": ["Pressure d5 to gain central space"]
+      "plans": ["Pressure d5 to gain central space"],
+      "arrows": [
+        { "from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c6",
       "annotation": "Black supports d5 with the c-pawn -- this is the Slav approach. But unlike the pure Slav, Black is going to follow up with ...e6 as well, creating the Semi-Slav. The ...c6 move keeps the option of ...Bf5 or ...Bg4 open, and the double support of d5 with both c6 and e6 makes Black's center incredibly resilient. The Semi-Slav is one of the most complex openings in chess.",
       "pawnStructure": "c6 supports d5; Black will add e6 to create a fortress",
       "plans": ["Support d5, prepare ...e6 for the Semi-Slav structure"],
-      "alternatives": ["e6 -- QGD move order, slightly less flexible", "dxc4 -- the Slav proper"]
+      "alternatives": ["e6 -- QGD move order, slightly less flexible", "dxc4 -- the Slav proper"],
+      "arrows": [
+        { "from": "c6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c8", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e7", "to": "e6", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops naturally. Nf3 supports d4 and controls e5. White is keeping options open before committing to Nc3 -- in some lines, White plays Nbd2 instead to avoid certain Semi-Slav complications. Nf3 is the most flexible move, ready for almost anything Black does.",
       "plans": ["Develop flexibly, prepare Nc3 or e3"],
-      "alternatives": ["Nc3 -- also strong but commits early"]
+      "alternatives": ["Nc3 -- also strong but commits early"],
+      "arrows": [
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the knight, defending d5 and controlling e4. The knight on f6 is essential in almost every Semi-Slav setup. It's Black's most natural developing move, preparing to castle and keeping the central balance.",
-      "plans": ["Defend d5, prepare ...e6 and eventual ...dxc4"]
+      "plans": ["Defend d5, prepare ...e6 and eventual ...dxc4"],
+      "arrows": [
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "White adds more pressure to d5 with the second knight. Now three White pieces are aimed at d5 (c4, Nc3, and indirectly Nf3 supporting e4). Black is under serious pressure to either reinforce d5 or release the tension. This is the critical juncture where the Semi-Slav character emerges.",
       "plans": ["Maximum pressure on d5", "Prepare e4 or Bg5"],
-      "alternatives": ["e3 -- quieter, less forcing"]
+      "alternatives": ["e3 -- quieter, less forcing"],
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "e6",
       "annotation": "This defines the Semi-Slav: Black has both ...c6 and ...e6 supporting d5. The center is now a fortress -- d5 is supported three times (c6, e6, Nf6). The trade-off is the same as the QGD: the c8-bishop is locked in. But in the Semi-Slav, Black has specific ways to deal with this, including the sharp Meran and Anti-Meran systems where ...dxc4, ...b5, and ...Bb7 activate the bishop.",
       "pawnStructure": "The c6-d5-e6 triangle is extremely solid but the c8-bishop is temporarily locked in",
       "plans": ["Hold d5 with a fortress, look for dynamic breaks like ...dxc4 + ...b5 or ...e5"],
-      "alternatives": ["dxc4 -- the Slav, developing the bishop first before e6"]
+      "alternatives": ["dxc4 -- the Slav, developing the bishop first before e6"],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "c8", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Bg5",
       "annotation": "White pins the Nf6, which is a key defender of d5. The bishop on g5 creates real problems -- if the knight moves, d5 falls. This pin is the most testing move against the Semi-Slav and it forces Black into the most theoretically dense lines in all of chess. Black has to make a critical choice about how to deal with the pin.",
       "plans": ["Pin Nf6 to increase pressure on d5", "Force Black into sharp theoretical territory"],
-      "alternatives": ["e3 -- the Meran variation, quieter and positional"]
+      "alternatives": ["e3 -- the Meran variation, quieter and positional"],
+      "arrows": [
+        { "from": "g5", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "d5", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f6", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "h6",
       "annotation": "Black asks the bishop what it wants to do. This is a committal move -- Black is spending a tempo to challenge the pin, but the h6 pawn also weakens the kingside slightly. The idea is to force White to make a decision: retreat (losing the pin), exchange on f6 (giving up the bishop pair), or maintain the pin with Bh4 (where it can be challenged later by ...g5).",
       "plans": ["Challenge the Bg5 to resolve the pin on Black's terms"],
-      "alternatives": ["Nbd7 -- avoiding the confrontation, more solid but the pin persists", "Qa5 -- the Cambridge Springs, sidestepping theory"]
+      "alternatives": ["Nbd7 -- avoiding the confrontation, more solid but the pin persists", "Qa5 -- the Cambridge Springs, sidestepping theory"],
+      "arrows": [
+        { "from": "h6", "to": "g5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "h6", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Bh4",
       "annotation": "White maintains the pin! This is the aggressive choice -- the bishop stays on the h4-d8 diagonal, keeping Nf6 tied down. White is saying 'I'm not retreating.' The downside is the bishop is slightly offside on h4, and Black can now plan ...g5 to chase it even further. This leads to the incredibly sharp Botvinnik variation.",
       "plans": ["Keep the pin, dare Black to play ...g5"],
-      "alternatives": ["Bxf6 -- trading, solid but gives up the bishop pair and relieves Black's tension"]
+      "alternatives": ["Bxf6 -- trading, solid but gives up the bishop pair and relieves Black's tension"],
+      "arrows": [
+        { "from": "h4", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "g5", "color": "rgba(220, 50, 50, 0.7)" }
+      ]
     },
     {
       "san": "dxc4",
       "annotation": "Black captures on c4, entering the Botvinnik system of the Semi-Slav. This is one of the sharpest openings in chess! Black gives up the center but is planning ...b5 and ...g5 to create a massive queenside-kingside pawn storm. The idea is incredibly ambitious: Black will sacrifice the center for a wild attack with pawns on b5, g5, and eventually b4 and e5.",
       "pawnStructure": "Black surrenders d5 but plans a double-wing pawn storm with ...b5 and ...g5",
       "plans": ["Follow with ...g5 and ...b5 for a wild attack", "The position becomes a tactical maze"],
-      "alternatives": ["Nd5 -- solid but less ambitious"]
+      "alternatives": ["Nd5 -- solid but less ambitious"],
+      "arrows": [
+        { "from": "b7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "g7", "to": "g5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "e4",
       "annotation": "White seizes the center immediately! With the d5 pawn gone, White plays e4 to build a powerful pawn duo on d4-e4. This is the correct reaction -- White can't let Black consolidate after ...dxc4 without punishment. The e4 pawn grabs massive central space and opens lines for White's pieces. The battle lines are drawn: White has the center, Black will have the wings.",
       "pawnStructure": "White's d4-e4 center is imposing; the position is now a battle of center vs flanks",
       "plans": ["Use the central pawn majority to launch an attack", "e5 is a constant threat"],
-      "alternatives": ["e3 -- too passive, doesn't punish Black's central concession"]
+      "alternatives": ["e3 -- too passive, doesn't punish Black's central concession"],
+      "arrows": [
+        { "from": "e4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "g5",
       "annotation": "Black goes for it! This audacious pawn thrust chases the Bh4 and prepares ...b5 for a full queenside-kingside pawn storm. It looks insane to push the g-pawn when your king hasn't castled yet, but this is the whole point of the Botvinnik variation. Black is playing for a complex middlegame where the material and structural imbalances create enormous tactical possibilities. This line has been analyzed to incredible depth by the world's best players.",
       "pawnStructure": "Black's ...g5 weakens the kingside permanently but gains the bishop pair and space",
       "plans": ["Chase the bishop, play ...b5 for a double-wing attack", "The king will stay in the center or castle queenside"],
-      "alternatives": ["b5 -- also possible, but ...g5 first is the main line and most forcing"]
+      "alternatives": ["b5 -- also possible, but ...g5 first is the main line and most forcing"],
+      "arrows": [
+        { "from": "g5", "to": "h4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g5", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Bg3",
       "annotation": "The bishop retreats to g3, the only safe square. On g3, the bishop still does useful work -- it eyes e5 and controls the h2-b8 diagonal. White has lost time with the bishop (Bg5-Bh4-Bg3), but the center with d4-e4 compensates. White's plan now is to use the huge center to generate play while Black pursues queenside and wing expansion.",
       "plans": ["Use the d4-e4 center for a central or kingside attack", "The bishop on g3 supports e5 advance"],
-      "alternatives": ["No real alternative -- the bishop had to retreat from the g5 pawn attack"]
+      "alternatives": ["No real alternative -- the bishop had to retreat from the g5 pawn attack"],
+      "arrows": [
+        { "from": "g3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "b5",
       "annotation": "Black expands on the queenside, protecting the c4 pawn and preparing ...Bb7. This is the other half of Black's double-wing strategy: pawns on b5 and g5 create threats on both sides of the board. The b5 pawn also prevents a4, which would try to recover the c4 pawn. Black's position looks chaotic but is deeply prepared -- decades of grandmaster analysis back up this approach.",
       "pawnStructure": "Black's b5+g5 pawn storm creates a complex wing vs center battle",
       "plans": ["Defend c4 with b5, develop Bb7 on the long diagonal", "Prepare ...Bb7 and ...b4 to attack Nc3"],
-      "alternatives": ["Bb7 -- developing immediately, but b5 is needed to secure c4 first"]
+      "alternatives": ["Bb7 -- developing immediately, but b5 is needed to secure c4 first"],
+      "arrows": [
+        { "from": "b5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "b5", "to": "b4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Be2",
       "annotation": "White develops the bishop to e2, a modest but useful square. The bishop eyes the g4 square and supports a future h3 or f3 to shore up the center. On e2, it doesn't block anything and can reroute to f3 or d3 as needed. White is building up before launching the central attack. In these wildly sharp positions, calm preparation is sometimes the most dangerous approach.",
       "plans": ["Prepare f3 to support e4, or Bf3 for central control", "Castle and organize the attack"],
-      "alternatives": ["d5 -- breaking through immediately, very sharp", "Be2 keeps more options open"]
+      "alternatives": ["d5 -- breaking through immediately, very sharp", "Be2 keeps more options open"],
+      "arrows": [
+        { "from": "e2", "to": "g4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "f2", "to": "f3", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Bb7",
       "annotation": "Black develops the bishop to b7, completing the queenside development plan. The bishop on b7 is powerful -- it pressures the e4 pawn through the long diagonal and controls d5. Combined with the c4 pawn and b5 pawn, Black has a significant queenside presence. This is the payoff for Black's whole strategy: active pieces and wing pawns against White's central majority.",
       "plans": ["Pressure e4 and the long diagonal", "Support ...b4 to attack the knight on c3"],
-      "alternatives": ["The bishop was always coming to b7 -- this completes the plan"]
+      "alternatives": ["The bishop was always coming to b7 -- this completes the plan"],
+      "arrows": [
+        { "from": "b7", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b5", "to": "b4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "White castles to safety before the position explodes. With pawns flying on both wings, getting the king out of the center is essential. The rook also comes to f1, supporting a potential f3 or f4 advance. White's position is strong in the center but needs precise play to convert the spatial advantage into a concrete attack. The game is razor-sharp from here on out.",
       "plans": ["King safety first, then launch the central attack", "f3 to support e4, then prepare d5 or e5 breaks"],
-      "alternatives": ["d5 -- an immediate central break, very sharp but castling first is safer"]
+      "alternatives": ["d5 -- an immediate central break, very sharp but castling first is safer"],
+      "arrows": [
+        { "from": "f1", "to": "f3", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d4", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Nbd7",
       "annotation": "Black develops the last minor piece, supporting e5 and c5 breaks. The knight on d7 is ready to reroute: it can go to b6 to hit d5, to e5 for a powerful central outpost, or to f8-g6 to support the kingside pawns. Black has completed development with a wild, unbalanced position. Both sides have chances -- White has the center, Black has the wings, the bishop pair, and an extra pawn on c4. This is modern chess at its most complex.",
       "plans": ["Reroute Nd7 to active squares like b6 or e5", "Prepare ...c5 to challenge d4 or ...e5 to attack the center"],
-      "alternatives": ["Nbd7 is the standard move, keeping maximum flexibility"]
+      "alternatives": ["Nbd7 is the standard move, keeping maximum flexibility"],
+      "arrows": [
+        { "from": "d7", "to": "b6", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "c6", "to": "c5", "color": "rgba(255, 165, 0, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     }
   ]
 }

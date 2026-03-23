@@ -11,6 +11,14 @@
       ],
       "alternatives": [
         "1.d4 — leads to closed, positional games where White fights for the c4-d5 complex instead"
+      ],
+      "arrows": [
+        { "from": "e4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e4", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -24,6 +32,10 @@
       "alternatives": [
         "1...c5 (Sicilian) — creates asymmetry immediately, fighting for d4 from the flank",
         "1...e6 (French) — solid but accepts a slightly cramped position"
+      ],
+      "arrows": [
+        { "from": "e5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e5", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" }
       ]
     },
     {
@@ -36,6 +48,13 @@
       "alternatives": [
         "2.Nc3 (Vienna Game) — develops toward the center but doesn't attack e5 directly",
         "2.f4 (King's Gambit) — aggressive pawn sacrifice for rapid development and open lines"
+      ],
+      "arrows": [
+        { "from": "f3", "to": "e5", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "f1", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -48,6 +67,13 @@
       "alternatives": [
         "2...Nf6 (Petrov Defence) — counterattacks e4 instead of defending e5, leading to symmetrical play",
         "2...d6 (Philidor Defence) — solid but passive, blocking the dark-squared bishop"
+      ],
+      "arrows": [
+        { "from": "c6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c6", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -61,6 +87,13 @@
       "alternatives": [
         "3.Bb5 (Ruy Lopez) — pins the knight defending e5, a more positional approach that fights for long-term central control",
         "3.d4 (Scotch Game) — immediately opens the center, leading to sharp tactical play"
+      ],
+      "arrows": [
+        { "from": "c4", "to": "f7", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f7", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -74,6 +107,12 @@
       "alternatives": [
         "3...Nf6 (Two Knights Defence) — more aggressive, inviting the sharp Fried Liver Attack after 4.Ng5",
         "3...Be7 (Hungarian Defence) — very solid but passive, giving White a free hand in the center"
+      ],
+      "arrows": [
+        { "from": "c5", "to": "f2", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f2", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -87,6 +126,12 @@
       "alternatives": [
         "4.d3 (Giuoco Pianissimo) — quieter approach, keeping the center closed and maneuvering slowly",
         "4.b4 (Evans Gambit) — sacrifices a pawn for rapid development and a strong center"
+      ],
+      "arrows": [
+        { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -99,6 +144,10 @@
       "alternatives": [
         "4...Qe7 — protects e5 but blocks the f8-bishop and slows development",
         "4...d6 — solid but allows White to play d4 with a comfortable advantage"
+      ],
+      "arrows": [
+        { "from": "f6", "to": "e4", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "e8", "to": "g8", "color": "rgba(0, 100, 255, 0.7)" }
       ]
     },
     {
@@ -111,6 +160,13 @@
       ],
       "alternatives": [
         "5.d3 — keeps tension but is slower; Black equalizes more easily"
+      ],
+      "arrows": [
+        { "from": "d4", "to": "e5", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "d4", "to": "c5", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -120,6 +176,9 @@
       "plans": [
         "After cxd4, play ...Bb4+ to disrupt White's development",
         "Prepare ...d5 to challenge the center and equalize"
+      ],
+      "arrows": [
+        { "from": "d7", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
       ]
     },
     {
@@ -132,6 +191,12 @@
       ],
       "alternatives": [
         "6.e5 — gains space but pushes the pawn away from protection; after ...d5, Black equalizes"
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -144,6 +209,9 @@
       "alternatives": [
         "6...Bb6 — safe retreat but allows White to develop smoothly with Nc3 and O-O",
         "6...d5 — immediately challenging the center, but 7.exd5 Nxd5 8.O-O gives White good play"
+      ],
+      "arrows": [
+        { "from": "b4", "to": "e1", "color": "rgba(0, 180, 80, 0.8)" }
       ]
     },
     {
@@ -156,6 +224,9 @@
       "alternatives": [
         "7.Nc3 — blocks with the knight but after ...Nxe4, Black wins a pawn temporarily with complications",
         "7.Kf1 — gives up castling rights but avoids exchanges; rare and risky"
+      ],
+      "arrows": [
+        { "from": "d2", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" }
       ]
     },
     {
@@ -164,6 +235,13 @@
       "pawnStructure": "No structural change, but the absence of dark-squared bishops means the dark squares (especially d4, e5, f4) become harder to control. Both sides must use knights and pawns to contest these squares.",
       "plans": [
         "After Nbxd2, play ...d5 to immediately challenge White's center before White consolidates"
+      ],
+      "arrows": [
+        { "from": "d7", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -175,6 +253,10 @@
       ],
       "alternatives": [
         "8.Qxd2 — keeps the queen active but moves it to a square where it can be hit by ...d5 discoveries"
+      ],
+      "arrows": [
+        { "from": "d2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d2", "to": "f1", "color": "rgba(255, 165, 0, 0.7)" }
       ]
     },
     {
@@ -187,6 +269,13 @@
       ],
       "alternatives": [
         "8...O-O — safe but allows White to castle and play Re1, maintaining the central advantage"
+      ],
+      "arrows": [
+        { "from": "d5", "to": "e4", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -196,6 +285,10 @@
       "plans": [
         "After ...Nxd5, use the IQP as a battering ram with d5 push or as support for piece activity",
         "Control the e5 and c5 squares supported by the d4 pawn"
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -208,6 +301,13 @@
       ],
       "alternatives": [
         "9...Qxd5 — develops the queen early but it can be harassed with Nc4 or O-O + Re1"
+      ],
+      "arrows": [
+        { "from": "d5", "to": "d4", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -219,6 +319,10 @@
       ],
       "alternatives": [
         "10.Qb3 — aggressive, hitting b7 and d5, but O-O is more flexible and develops naturally"
+      ],
+      "arrows": [
+        { "from": "f1", "to": "e1", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d2", "to": "f1", "color": "rgba(0, 100, 255, 0.7)" }
       ]
     },
     {
@@ -230,6 +334,13 @@
       ],
       "alternatives": [
         "10...Nce7 — reroutes the knight but delays development of the queenside"
+      ],
+      "arrows": [
+        { "from": "f8", "to": "d8", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "c8", "to": "e6", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     }
   ]

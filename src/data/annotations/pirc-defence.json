@@ -11,6 +11,14 @@
       ],
       "alternatives": [
         "1.d4 — leads to queen's pawn openings, avoids the Pirc entirely"
+      ],
+      "arrows": [
+        { "from": "e2", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d2", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -24,6 +32,13 @@
       "alternatives": [
         "1...e5 — the most direct reply, immediately fighting for the center",
         "1...c5 (Sicilian) — creates asymmetry and fights for d4"
+      ],
+      "arrows": [
+        { "from": "d6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f8", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -33,6 +48,15 @@
       "plans": [
         "Develop pieces behind the center and prepare a kingside attack",
         "Push f4 to build an even bigger center and threaten f5"
+      ],
+      "arrows": [
+        { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f2", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -45,6 +69,13 @@
       ],
       "alternatives": [
         "2...g6 — transposes to the same thing usually, but Nf6 first keeps options open"
+      ],
+      "arrows": [
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "g6", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -57,7 +88,13 @@
       ],
       "alternatives": [
         "3.f3 — preparing a big center with Be3 and Qd2, the Saemisch-like approach"
-      ]
+      ],
+      "arrows": [
+        { "from": "c3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f2", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "g6",
@@ -66,6 +103,13 @@
       "plans": [
         "Complete the fianchetto with ...Bg7",
         "Castle quickly and then look for ...e5 or ...c5 counterplay"
+      ],
+      "arrows": [
+        { "from": "f8", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g7", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -79,6 +123,15 @@
       "alternatives": [
         "4.Nf3 — the Classical system, less aggressive but very solid",
         "4.Be2 — quiet development, keeping options open"
+      ],
+      "arrows": [
+        { "from": "e4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "f4", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "f4", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -88,6 +141,13 @@
       "plans": [
         "Castle immediately and get the king safe",
         "Prepare ...c5 or ...e5 to blow open the long diagonal for the bishop"
+      ],
+      "arrows": [
+        { "from": "g7", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "a1", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -99,6 +159,13 @@
       ],
       "alternatives": [
         "5.e5 — immediate central advance, very sharp but premature"
+      ],
+      "arrows": [
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -108,6 +175,13 @@
       "plans": [
         "Play ...c5 to attack White's d4 pawn",
         "Prepare ...e5 to challenge the center head-on"
+      ],
+      "arrows": [
+        { "from": "c7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e7", "to": "e5", "color": "rgba(255, 165, 0, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g8", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -120,6 +194,13 @@
       ],
       "alternatives": [
         "6.Be2 — safer but less aggressive, the bishop is passive on e2"
+      ],
+      "arrows": [
+        { "from": "d3", "to": "h7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -132,6 +213,13 @@
       ],
       "alternatives": [
         "6...Nc6 — more natural looking but blocks the c-pawn, making ...c5 impossible"
+      ],
+      "arrows": [
+        { "from": "a6", "to": "c7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -141,6 +229,13 @@
       "plans": [
         "Play e5 to gain more space and kick the f6 knight",
         "Push f5 to pry open Black's kingside"
+      ],
+      "arrows": [
+        { "from": "e4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "f4", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g1", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -153,6 +248,13 @@
       ],
       "alternatives": [
         "7...e5 — also possible, but ...c5 is the more standard and flexible break"
+      ],
+      "arrows": [
+        { "from": "c5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -165,6 +267,14 @@
       ],
       "alternatives": [
         "8.dxc5 dxc5 — opens the position, which actually favors Black's bishop on g7"
+      ],
+      "arrows": [
+        { "from": "f4", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "a7", "to": "a6", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "b7", "to": "b5", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -177,6 +287,14 @@
       ],
       "alternatives": [
         "8...Nc7 is essentially the only move — the knight needs to get off a6"
+      ],
+      "arrows": [
+        { "from": "c7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "a7", "to": "a6", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e7", "to": "e6", "color": "rgba(255, 165, 0, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "b5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     }
   ]

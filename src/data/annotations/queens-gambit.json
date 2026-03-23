@@ -6,117 +6,233 @@
       "annotation": "The Queen's Pawn opening. We take central space and open the diagonal for our c1 bishop. Compared to e4, d4 is already defended by the queen, so our center is inherently more stable. The downside? It doesn't open lines for the kingside bishop yet, so our development plan is a bit slower but more solid.",
       "pawnStructure": "Single d4 pawn controls c5 and e5.",
       "plans": ["Build a broad pawn center with c4", "Develop pieces behind the pawn chain"],
-      "alternatives": ["e4 -- more open, sharper", "Nf3 -- flexible, can transpose to many systems"]
+      "alternatives": ["e4 -- more open, sharper", "Nf3 -- flexible, can transpose to many systems"],
+      "arrows": [
+        { "from": "d4", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c1", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d5",
       "annotation": "Black meets us head-on in the center. This is the most classical response -- Black plants a pawn on d5 to directly contest our central control. The d5 pawn fights for e4 and c4, and it's the starting point for all Queen's Gambit structures. Black is saying: I want a fair share of the center.",
       "pawnStructure": "Symmetrical d4 vs d5 central pawns. The tension will be resolved by c4.",
       "plans": ["Hold d5 and develop solidly", "Prepare to challenge White's c4 pawn if it comes"],
-      "alternatives": ["Nf6 -- Indian defenses, more flexible", "f5 -- the Dutch, aggressive but weakens the kingside"]
+      "alternatives": ["Nf6 -- Indian defenses, more flexible", "f5 -- the Dutch, aggressive but weakens the kingside"],
+      "arrows": [
+        { "from": "d5", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "c4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c4",
       "annotation": "The Queen's Gambit. This is one of the oldest and most respected openings in chess. We're offering a pawn -- but it's not a real sacrifice because Black can't hold the c4 pawn long-term. The real point is to undermine Black's d5 pawn. If dxc4, we play e3-Bxc4 and have a beautiful center. If Black holds d5 with e6, the c8 bishop gets locked in.",
       "pawnStructure": "We're creating tension between c4 and d5. This is THE fundamental question of the QGD: how does Black resolve this tension?",
       "plans": ["Challenge and potentially eliminate the d5 pawn", "If Black takes, recapture with the bishop and dominate the center", "If Black plays e6, exploit the locked-in c8 bishop"],
-      "alternatives": ["Nf3 -- develops first, can still play c4 later", "Bf4 -- the London System, avoids the gambit entirely"]
+      "alternatives": ["Nf3 -- develops first, can still play c4 later", "Bf4 -- the London System, avoids the gambit entirely"],
+      "arrows": [
+        { "from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f1", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "e6",
       "annotation": "The Queen's Gambit Declined. Black says 'no thanks' to capturing on c4 and instead shores up d5 with the e-pawn. This is extremely solid but comes with a real cost: the c8 bishop is now stuck behind the e6 pawn. Solving the problem of that light-squared bishop is Black's main strategic challenge for the next 20 moves.",
       "pawnStructure": "Black has a solid e6-d5 pawn chain. The weakness is the c8 bishop trapped behind e6. This is the defining feature of the QGD.",
       "plans": ["Maintain d5 and develop around the pawn chain", "Find a way to activate the c8 bishop -- the key strategic problem"],
-      "alternatives": ["dxc4 -- Queen's Gambit Accepted, gives up the center but develops freely", "c6 -- the Slav, supports d5 without blocking the bishop"]
+      "alternatives": ["dxc4 -- Queen's Gambit Accepted, gives up the center but develops freely", "c6 -- the Slav, supports d5 without blocking the bishop"],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c8", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "We develop the knight to its ideal square, adding more pressure to d5. The knight on c3 is perfectly placed -- it hits d5 and e4, supports our center, and prepares for multiple plans. This is the main line of the QGD and has been played at the highest levels for over a century.",
       "plans": ["Increase pressure on d5", "Prepare Bg5 to pin the f6 knight, the main defender of d5"],
-      "alternatives": ["Nf3 -- equally good, a matter of move order preference"]
+      "alternatives": ["Nf3 -- equally good, a matter of move order preference"],
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c1", "to": "g5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to defend d5 and fight for e4. The f6 knight is absolutely critical in the QGD -- it's the primary defender of the d5 pawn. That's exactly why White's next few moves will try to undermine it. Everything in the QGD revolves around the battle for d5.",
       "plans": ["Defend d5 with the knight", "Prepare Be7 and castle quickly"],
-      "alternatives": ["c6 -- the Semi-Slav, very solid double defense of d5"]
+      "alternatives": ["c6 -- the Semi-Slav, very solid double defense of d5"],
+      "arrows": [
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "cxd5",
       "annotation": "We exchange on d5. This is the Exchange Variation of the QGD, and it's a very important line to know. By resolving the central tension ourselves, we get a clear, simple plan: minority attack on the queenside with a-b4-b5, targeting Black's c6 pawn. The position becomes strategic rather than tactical, which is perfect for understanding pawn structure play.",
       "pawnStructure": "After exd5, Black has an isolated d5 pawn duo with the c-pawn. White will have a queenside pawn majority that can advance. This is the classic QGD Exchange structure.",
       "plans": ["Launch a minority attack with a4-b4-b5", "Target the backward c-pawn after b5 exchange", "Control the c-file with rooks"],
-      "alternatives": ["Bg5 -- the main line, keeps the tension and plays for more", "Nf3 -- continues development without committing"]
+      "alternatives": ["Bg5 -- the main line, keeps the tension and plays for more", "Nf3 -- continues development without committing"],
+      "arrows": [
+        { "from": "a2", "to": "a4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "b2", "to": "b4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "exd5",
       "annotation": "Black recaptures, maintaining the pawn on d5. Now we have the classic QGD Exchange structure: White's d4 vs Black's d5, and White has a queenside pawn majority (a2-b2 vs Black's a7). This structure defines the entire middlegame -- White pushes the b-pawn, Black tries to create kingside counterplay.",
       "pawnStructure": "Symmetric d4 vs d5 with White having a queenside majority. The c-file will become the main battleground. Black's c-pawn will become a target after b4-b5.",
       "plans": ["Play for the minority attack on the queenside", "Target the c6 pawn that will appear after b5"],
-      "alternatives": ["Nxd5 -- gives up a piece, obviously not the idea"]
+      "alternatives": ["Nxd5 -- gives up a piece, obviously not the idea"],
+      "arrows": [
+        { "from": "b2", "to": "b5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c7", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Bg5",
       "annotation": "We pin the knight that defends d5. This is one of the most important moves in the QGD -- the bishop on g5 creates real pressure. The pin means that if Black isn't careful, we could play Bxf6 and then push through in the center. Black has to deal with this pin, and every way of dealing with it has drawbacks.",
       "plans": ["Maintain pressure on the d5 pawn via the pin", "Potentially exchange on f6 to damage Black's pawn structure", "Prepare e3, Bd3, and complete development"],
-      "alternatives": ["Bf4 -- develops without the pin, less aggressive but solid"]
+      "alternatives": ["Bf4 -- develops without the pin, less aggressive but solid"],
+      "arrows": [
+        { "from": "g5", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g5", "to": "d8", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Be7",
       "annotation": "Black breaks the pin in the most natural way. The bishop on e7 is modest but perfectly functional -- it unpins the knight, prepares castling, and can potentially become active later via f6. This is the main line of the QGD Exchange and it's been played thousands of times at the GM level.",
       "plans": ["Unpin and castle quickly", "Consider Nf8-e6 or Ne8-f6 rerouting later"],
-      "alternatives": ["c6 -- solidifies d5 but the bishop needs to come to e7 anyway", "h6 -- forces the bishop to declare but weakens g6"]
+      "alternatives": ["c6 -- solidifies d5 but the bishop needs to come to e7 anyway", "h6 -- forces the bishop to declare but weakens g6"],
+      "arrows": [
+        { "from": "e7", "to": "g5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": []
     },
     {
       "san": "e3",
       "annotation": "We solidify our d4 pawn and open the diagonal for our light-squared bishop. The move e3 looks modest, but it's very purposeful: it creates a rock-solid center, and now Bd3 is coming to hit the h7 pawn. In the Exchange QGD, White doesn't need to be flashy -- just develop logically and launch the minority attack.",
       "pawnStructure": "White's e3-d4 pawn chain is very stable. The e3 pawn supports d4 and frees the f1 bishop.",
       "plans": ["Develop Bd3 next, aiming at h7", "Complete development with Nf3 and O-O", "Start the minority attack with a4-b4-b5"],
-      "alternatives": ["Qc2 -- prevents Bf5 before e3, a matter of move order"]
+      "alternatives": ["Qc2 -- prevents Bf5 before e3, a matter of move order"],
+      "arrows": [
+        { "from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d3", "to": "h7", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Black castles. Absolutely the right move -- get the king safe before the position opens up. In the QGD Exchange, the middlegame is all about strategic maneuvering, and you need your king secure to focus on the positional battle. The rook also comes to f8 where it can support f5 counterplay ideas.",
       "plans": ["King safety secured", "Prepare counterplay with c6, Bf5 or Ne4 ideas"],
-      "alternatives": ["Bf5 -- develops the bishop actively before castling, but king safety is more urgent"]
+      "alternatives": ["Bf5 -- develops the bishop actively before castling, but king safety is more urgent"],
+      "arrows": [
+        { "from": "f8", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Bd3",
       "annotation": "Our bishop goes to its best square, aiming directly at h7. This diagonal is a permanent feature of the QGD Exchange -- the Bd3 battery with a queen on c2 is one of White's main attacking ideas. Even if it doesn't lead to a direct attack, it restricts Black's options and controls key light squares.",
       "plans": ["Aim at h7 with Qc2 battery", "Complete development with Nf3 and O-O", "Then begin the minority attack"],
-      "alternatives": ["Be2 -- less ambitious, doesn't target h7"]
+      "alternatives": ["Be2 -- less ambitious, doesn't target h7"],
+      "arrows": [
+        { "from": "d3", "to": "h7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d1", "to": "c2", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Nbd7",
       "annotation": "Black develops the knight to d7 rather than c6. Why d7? Because in the Exchange QGD, the c6 square is reserved for the c-pawn. Black needs c6 to support d5 and to create a target for White's minority attack. If the knight were on c6, Black couldn't play c6 and the whole defensive setup falls apart.",
       "pawnStructure": "Black keeps the option of c6 open, which is essential for the defensive structure.",
       "plans": ["Support the center and prepare Nf8 rerouting", "Play c6 to shore up d5 and prepare for the minority attack defense"],
-      "alternatives": ["Nc6 -- blocks the c-pawn and creates structural problems", "c6 -- immediate, but the knight hasn't developed yet"]
+      "alternatives": ["Nc6 -- blocks the c-pawn and creates structural problems", "c6 -- immediate, but the knight hasn't developed yet"],
+      "arrows": [
+        { "from": "d7", "to": "f8", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c6", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "We develop our last minor piece to its natural square. Now we're almost fully developed and ready to castle. The knight on f3 supports d4 and e5, and it's a key piece in both the minority attack and any kingside operations. Simple, logical chess.",
       "plans": ["Castle next move", "Then begin the minority attack with a4, Rab1, b4-b5"],
-      "alternatives": ["Nge2 -- unusual, blocks the bishop and is less active"]
+      "alternatives": ["Nge2 -- unusual, blocks the bishop and is less active"],
+      "arrows": [
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Re8",
       "annotation": "Black places the rook on the semi-open e-file. The rook on e8 does multiple things: it supports a potential e5 break, it backs up the e7 bishop, and it eyes the e-file in case the center opens. This is very standard technique -- put your rooks on open or semi-open files.",
       "plans": ["Support a potential e5 or Ne4 break", "Contest the e-file if it opens"],
-      "alternatives": ["c6 -- immediately shoring up d5", "Nf8 -- rerouting the knight toward e6 or g6"]
+      "alternatives": ["c6 -- immediately shoring up d5", "Nf8 -- rerouting the knight toward e6 or g6"],
+      "arrows": [
+        { "from": "e8", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e8", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Qc2",
       "annotation": "The queen goes to c2, completing the famous Bd3-Qc2 battery aimed at h7. This is one of the most important setups in the QGD Exchange. The queen on c2 also vacates d1 for a rook, overprotects c3, and keeps an eye on the c-file. After castling, we're ready to begin the minority attack in earnest.",
       "plans": ["Create the Bd3+Qc2 battery targeting h7", "Castle and then begin a4-b4-b5 minority attack", "Use the c-file for rook pressure"],
-      "alternatives": ["O-O -- castles first, plays Qc2 later, just a move order difference"]
+      "alternatives": ["O-O -- castles first, plays Qc2 later, just a move order difference"],
+      "arrows": [
+        { "from": "d3", "to": "h7", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "c2", "to": "h7", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "c6",
       "annotation": "Black plays the critical defensive move. The c6 pawn shores up d5, which is the whole foundation of Black's position. But here's the thing -- c6 is also the target of White's minority attack. After b4-b5, White will exchange on c6, leaving Black with either an isolated d5 pawn or a backward pawn on c6. That's the fundamental tension of this structure.",
       "pawnStructure": "Black's c6-d5 pawn duo is solid but static. White's minority attack (b4-b5) will target c6 specifically. After bxc6 bxc6, Black gets a weak c6 pawn. After cxb5 axb5, Black gets an isolated b-pawn.",
       "plans": ["Maintain the c6-d5 structure as long as possible", "Prepare counterplay on the kingside with Nf8-g6 or Ne4 ideas"],
-      "alternatives": ["Nf8 -- rerouting before committing the c-pawn", "a5 -- prevents b4 but weakens b5"]
+      "alternatives": ["Nf8 -- rerouting before committing the c-pawn", "a5 -- prevents b4 but weakens b5"],
+      "arrows": [
+        { "from": "c6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b2", "to": "b4", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "b4", "to": "b5", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c6", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     }
   ]
 }

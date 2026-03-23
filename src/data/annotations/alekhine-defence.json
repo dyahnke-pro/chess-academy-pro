@@ -8,6 +8,14 @@
       "plans": [
         "Build a strong center and develop pieces behind it",
         "Respond to Black's provocations by advancing the center pawns"
+      ],
+      "arrows": [
+        { "from": "e4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e4", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -21,6 +29,12 @@
       "alternatives": [
         "1...e5 — classical and solid, doesn't provoke White's center",
         "1...c5 (Sicilian) — fights for the center differently, without knight provocation"
+      ],
+      "arrows": [
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -33,6 +47,13 @@
       ],
       "alternatives": [
         "2.Nc3 — the Vienna-like approach, solid but lets Black equalize easily"
+      ],
+      "arrows": [
+        { "from": "e5", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e5", "to": "d6", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -45,6 +66,14 @@
       ],
       "alternatives": [
         "2...Ng8 — the Brooklyn Defense, retreating all the way back; too passive"
+      ],
+      "arrows": [
+        { "from": "d5", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -54,6 +83,14 @@
       "plans": [
         "Support the center with c4 to kick the knight and maintain space",
         "Develop pieces behind the strong center"
+      ],
+      "arrows": [
+        { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -66,6 +103,12 @@
       ],
       "alternatives": [
         "3...d6 could also be played on move 2, but Nd5 first is more flexible"
+      ],
+      "arrows": [
+        { "from": "d6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -79,6 +122,10 @@
       "alternatives": [
         "4.c4 (Four Pawns Attack) — the most aggressive, chasing the knight with c4-c5 but risking overextension",
         "4.Bc4 — targets the knight on d5 directly"
+      ],
+      "arrows": [
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
       ]
     },
     {
@@ -92,6 +139,10 @@
       "alternatives": [
         "4...Bf5 — develops the bishop but doesn't create the pin pressure",
         "4...dxe5 — releases the tension too early"
+      ],
+      "arrows": [
+        { "from": "g4", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g4", "to": "d1", "color": "rgba(220, 50, 50, 0.7)" }
       ]
     },
     {
@@ -104,6 +155,12 @@
       ],
       "alternatives": [
         "5.h3 — forces the bishop to choose, but weakens the kingside slightly"
+      ],
+      "arrows": [
+        { "from": "e2", "to": "g4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "g1", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -116,6 +173,12 @@
       ],
       "alternatives": [
         "5...dxe5 — opens the center but gives White free development with dxe5"
+      ],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -124,6 +187,12 @@
       "plans": [
         "Play c4 to expand and kick the d5 knight",
         "Use the rook on f1 to support f4 if needed"
+      ],
+      "arrows": [
+        { "from": "f1", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g1", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -136,6 +205,9 @@
       ],
       "alternatives": [
         "6...Bd6 — more ambitious, but the bishop can be hit by c4 and Nc3"
+      ],
+      "arrows": [
+        { "from": "e7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)" }
       ]
     },
     {
@@ -145,6 +217,12 @@
       "plans": [
         "Drive the knight away and maintain the space advantage",
         "Develop Nc3 and control the center completely"
+      ],
+      "arrows": [
+        { "from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -158,6 +236,10 @@
       ],
       "alternatives": [
         "7...Nb4 — aggressive but the knight gets hit by a3"
+      ],
+      "arrows": [
+        { "from": "b6", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
       ]
     },
     {
@@ -166,6 +248,12 @@
       "plans": [
         "Build on the space advantage with Be3, Rc1",
         "Play for a d5 or f4 advance in the middlegame"
+      ],
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -175,6 +263,13 @@
       "plans": [
         "Play ...Bxf3 to double White's pawns and weaken the center",
         "Prepare ...c5 or ...f6 to break down the pawn chain"
+      ],
+      "arrows": [
+        { "from": "g4", "to": "f3", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     }
   ]

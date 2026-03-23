@@ -8,6 +8,14 @@
       "plans": [
         "Build a strong center and develop pieces quickly",
         "Open lines for the queen and bishop"
+      ],
+      "arrows": [
+        { "from": "e4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e4", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -21,6 +29,12 @@
       "alternatives": [
         "1...c5 (Sicilian) — less committal, creates asymmetry without moving the queen early",
         "1...e5 — classical and symmetrical, doesn't challenge e4 immediately"
+      ],
+      "arrows": [
+        { "from": "d5", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -33,6 +47,13 @@
       ],
       "alternatives": [
         "2.Nc3 — declining the exchange, rare but playable"
+      ],
+      "arrows": [
+        { "from": "b1", "to": "c3", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d2", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -45,7 +66,11 @@
       ],
       "alternatives": [
         "2...Nf6 (Modern Scandinavian) — gambits the pawn temporarily, avoids the early queen move"
-      ]
+      ],
+      "arrows": [
+        { "from": "d5", "to": "a5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Nc3",
@@ -54,7 +79,12 @@
       "plans": [
         "Follow up with d4 to build a powerful center",
         "Develop rapidly while Black's queen is wandering"
-      ]
+      ],
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Qa5",
@@ -67,7 +97,11 @@
       "alternatives": [
         "3...Qd6 — blocks the d-pawn and the dark-squared bishop",
         "3...Qd8 — too passive, wastes the tempo entirely"
-      ]
+      ],
+      "arrows": [
+        { "from": "a5", "to": "e1", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": []
     },
     {
       "san": "d4",
@@ -76,6 +110,13 @@
       "plans": [
         "Complete development with Nf3, Bc4 or Bd3",
         "Use the space advantage for a middlegame initiative"
+      ],
+      "arrows": [
+        { "from": "d4", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -84,6 +125,14 @@
       "plans": [
         "Continue with ...Bf5 to develop the light-squared bishop actively",
         "Prepare ...e6 and ...Bb4 or ...Be7 for a solid setup"
+      ],
+      "arrows": [
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -92,7 +141,12 @@
       "plans": [
         "Develop the bishops and castle quickly",
         "Prepare Bc4 or Bd3 targeting Black's kingside"
-      ]
+      ],
+      "arrows": [
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Bf5",
@@ -104,7 +158,12 @@
       ],
       "alternatives": [
         "5...Bg4 — pins the knight but can be challenged by Be2 and h3"
-      ]
+      ],
+      "arrows": [
+        { "from": "f5", "to": "c2", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f5", "to": "b1", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Bc4",
@@ -117,6 +176,13 @@
       "alternatives": [
         "6.Bd3 — targets the f5 bishop directly, aiming for a trade",
         "6.Be2 — solid but less ambitious"
+      ],
+      "arrows": [
+        { "from": "c4", "to": "f7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f7", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -126,6 +192,14 @@
       "plans": [
         "Play ...c6 to complete the solid pawn structure",
         "Develop the dark-squared bishop and castle"
+      ],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e6", "to": "f7", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "f7", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -138,7 +212,12 @@
       "alternatives": [
         "7.O-O — simple kingside castling, very solid",
         "7.Be3 — more active but the bishop can be targeted by ...Ng4"
-      ]
+      ],
+      "arrows": [
+        { "from": "d2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e1", "to": "c1", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "c6",
@@ -147,6 +226,12 @@
       "plans": [
         "Develop ...Bb4 or ...Be7 and castle kingside",
         "Look for ...Nd5 or ...c5 breaks in the middlegame"
+      ],
+      "arrows": [
+        { "from": "c6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -155,6 +240,14 @@
       "plans": [
         "Force Black to deal with the strong knight",
         "If ...Nxd5, recapture and maintain central dominance"
+      ],
+      "arrows": [
+        { "from": "d5", "to": "a5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "c7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "f6", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     },
     {
@@ -167,6 +260,12 @@
       ],
       "alternatives": [
         "9...Qb6 — keeps the queen active but exposed to potential Nb4-c2 ideas"
+      ],
+      "arrows": [
+        { "from": "d8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
@@ -176,6 +275,13 @@
       "plans": [
         "Exploit Black's structural weaknesses after the recapture",
         "Use the open lines created by the exchange"
+      ],
+      "arrows": [
+        { "from": "f6", "to": "g7", "color": "rgba(255, 165, 0, 0.7)" },
+        { "from": "f6", "to": "e7", "color": "rgba(255, 165, 0, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
@@ -188,6 +294,14 @@
       ],
       "alternatives": [
         "9...exf6 — keeps the structure intact but Black's center is less dynamic and the bishop on f5 is passive"
+      ],
+      "arrows": [
+        { "from": "h8", "to": "g8", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f6", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "f7", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "g8", "color": "rgba(0, 200, 100, 0.3)" }
       ]
     }
   ]

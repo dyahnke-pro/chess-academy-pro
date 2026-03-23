@@ -5,96 +5,182 @@
       "san": "Nf3",
       "annotation": "We start with the knight to f3, which is the most flexible first move in chess. Unlike 1.e4 or 1.d4, this doesn't commit to a pawn structure yet -- we're saying 'I'm going to develop sensibly and choose my structure based on what you do.' This is the hallmark of the King's Indian Attack: we have a system, and we're going to play it regardless of Black's setup.",
       "plans": ["Fianchetto the king's bishop to g2", "Transpose into a KIA structure with d3, Nbd2, e4"],
-      "alternatives": ["d4 - enters mainline queen's pawn openings", "g3 - reaches the same setup but tips your hand earlier"]
+      "alternatives": ["d4 - enters mainline queen's pawn openings", "g3 - reaches the same setup but tips your hand earlier"],
+      "arrows": [
+        { "from": "g2", "to": "g3", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "f1", "to": "g2", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d5",
       "annotation": "Black grabs the center immediately with the d-pawn. This is the most principled response -- occupying d5 while it's uncontested. Black is essentially saying 'if you're not going to fight for the center with pawns right away, I will.' This gives Black a classical pawn center and good piece development prospects.",
       "pawnStructure": "Black establishes a d5 outpost, aiming for a solid central presence.",
-      "alternatives": ["Nf6 - a more flexible approach that mirrors White's strategy", "d6 - more passive, allows White easy KIA setup"]
+      "alternatives": ["Nf6 - a more flexible approach that mirrors White's strategy", "d6 - more passive, allows White easy KIA setup"],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "g3",
       "annotation": "Here's the signature KIA move. We're fianchettoing the bishop to g2 where it becomes an absolute monster on the long diagonal. The bishop on g2 will stare down at d5 and the entire queenside, putting constant pressure on Black's center. The g3 pawn also supports a future kingside castle and creates a rock-solid pawn shield.",
       "pawnStructure": "The g3-d3 structure forms the backbone of the KIA, creating a flexible but solid formation.",
       "plans": ["Bg2 completes the fianchetto", "Castle kingside quickly for king safety"],
-      "alternatives": ["d3 - reaches the same setup but delays the fianchetto"]
+      "alternatives": ["d3 - reaches the same setup but delays the fianchetto"],
+      "arrows": [
+        { "from": "f1", "to": "g2", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g2", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the kingside knight to its most natural square, defending d5 and preparing to castle. Nf6 also eyes e4, which is currently unoccupied. This is classical development -- knights before bishops, toward the center. Black is building a solid, flexible position.",
-      "alternatives": ["c6 - reinforces d5 immediately but delays development", "Bg4 - pins the knight but can be met with various ideas"]
+      "alternatives": ["c6 - reinforces d5 immediately but delays development", "Bg4 - pins the knight but can be met with various ideas"],
+      "arrows": [
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "Bg2",
       "annotation": "Now our bishop reaches the powerhouse g2 square. Look at that diagonal -- a1 to h8, and crucially it X-rays right through d5. This bishop is going to be a constant source of pressure. Even though it's behind our own pawns right now, once we play e4 and open the center, this bishop becomes a beast. It also provides excellent support for our king once we castle.",
-      "plans": ["Castle immediately", "Follow up with d3 and Nbd2 to prepare the e4 break"]
+      "plans": ["Castle immediately", "Follow up with d3 and Nbd2 to prepare the e4 break"],
+      "arrows": [
+        { "from": "g2", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c6",
       "annotation": "Black shores up the d5 pawn with c6, creating a Slav-like structure. This is very solid -- d5 is now defended by both the c6 pawn and the Nf6. Black is saying 'you're not going to undermine my center easily.' The downside is the knight on b8 loses the c6 square, so it'll likely develop to d7 instead.",
       "pawnStructure": "The c6-d5 pawn chain is a fortress in the center, characteristic of Slav structures.",
-      "alternatives": ["e6 - creates a French-like structure but locks in the light-squared bishop", "Bg4 - active development before committing the pawn structure"]
+      "alternatives": ["e6 - creates a French-like structure but locks in the light-squared bishop", "Bg4 - active development before committing the pawn structure"],
+      "arrows": [
+        { "from": "c6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Castle immediately -- get the king safe before we start any central action. This is a KIA principle: we don't rush e4. We tuck the king away, connect the rooks, and then prepare our central break methodically. The king is beautifully sheltered behind the g3-f2 pawn chain with the bishop on g2 providing extra cover.",
-      "plans": ["d3 followed by Nbd2 to prepare e4", "Re1 to support the e4 push"]
+      "plans": ["d3 followed by Nbd2 to prepare e4", "Re1 to support the e4 push"],
+      "arrows": [
+        { "from": "d2", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Bg4",
       "annotation": "Black pins the f3 knight against the queen, which is a natural developing move. The idea is to create some pressure and potentially trade the bishop for the knight if White plays e4, since after the trade Black would have less pressure on d5. It also develops a piece toward the center and gets ready to castle queenside or kingside.",
       "plans": ["Maintain pin on Nf3 to slow White's e4 plans", "Potentially trade on f3 to double White's pawns"],
-      "alternatives": ["Be7 - simple development preparing to castle", "Bd6 - more aggressive post but blocks the d-pawn"]
+      "alternatives": ["Be7 - simple development preparing to castle", "Bd6 - more aggressive post but blocks the d-pawn"],
+      "arrows": [
+        { "from": "g4", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "f3", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d3",
       "annotation": "We play d3 rather than d4 -- this is what makes it the King's Indian Attack and not a standard opening. The pawn on d3 supports a future e4 push and keeps our structure flexible. d3 also opens the diagonal for our c1 bishop. We're building a coiled spring: once e4 comes, the position opens up and our pieces come alive.",
       "pawnStructure": "The d3-e4 structure (once e4 is played) creates a small center that's very hard to attack.",
       "plans": ["Nbd2 to prepare e4", "h3 if needed to challenge the Bg4"],
-      "alternatives": ["h3 - immediately challenges the bishop but weakens the kingside slightly"]
+      "alternatives": ["h3 - immediately challenges the bishop but weakens the kingside slightly"],
+      "arrows": [
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d3", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nbd7",
       "annotation": "Black develops the knight to d7 since c6 is taken by the pawn. From d7 the knight supports e5 and can reroute to various squares -- c5, f8, or even b6. It's a flexible placement that doesn't block any of Black's pieces. This is typical in Slav-type structures where the c6 pawn takes the knight's natural square.",
       "plans": ["Support e5 push to challenge White's center", "Reroute the knight to c5 or f8 depending on the position"],
-      "alternatives": ["Be7 - simple development, but Nbd7 is more flexible"]
+      "alternatives": ["Be7 - simple development, but Nbd7 is more flexible"],
+      "arrows": [
+        { "from": "d7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d7", "to": "c5", "color": "rgba(255, 165, 0, 0.7)" }
+      ]
     },
     {
       "san": "Nbd2",
       "annotation": "The knight goes to d2 rather than c3 -- this is critical KIA technique. On c3, the knight would block our c-pawn and compete with the g2 bishop for influence on d5. On d2, it directly supports the e4 push and can later reroute to f1-e3 or even g5 in attacking positions. Every piece is aimed at making e4 happen.",
       "plans": ["Play e4 to challenge Black's center", "After e4, potentially reroute Nd2 to f1-e3-d5"],
-      "alternatives": ["Nc3 - more active but blocks the c-pawn and is less harmonious in the KIA"]
+      "alternatives": ["Nc3 - more active but blocks the c-pawn and is less harmonious in the KIA"],
+      "arrows": [
+        { "from": "d2", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d2", "to": "f1", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "e5",
       "annotation": "Black claims space in the center with e5, establishing a big pawn duo on d5 and e5. This looks impressive but it also creates a target -- the d5 pawn is now potentially weak if White can play e4 and exchange. Black is also committing to a structure where the dark-squared bishop might struggle to find an active diagonal.",
       "pawnStructure": "The d5-e5 center is imposing but can become a target after White's e4 break.",
       "plans": ["Develop the dark-squared bishop to c5 or d6", "Maintain the strong center and play for a kingside or queenside attack"],
-      "alternatives": ["e6 - more solid but passive, locks in the light-squared bishop"]
+      "alternatives": ["e6 - more solid but passive, locks in the light-squared bishop"],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "e5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "e4",
       "annotation": "Finally, the move we've been building toward! e4 strikes at the heart of Black's center. After the exchange on e4, our g2 bishop will come roaring to life on the long diagonal, and we'll have excellent central control. This is the payoff for all that patient preparation -- d3, Nbd2, everything was about making this break work.",
       "pawnStructure": "After dxe4 dxe4, White gets a central pawn on e4 with open lines for all pieces.",
-      "plans": ["Recapture on e4 with the d-pawn to open the d-file", "Activate the g2 bishop on the opened diagonal"]
+      "plans": ["Recapture on e4 with the d-pawn to open the d-file", "Activate the g2 bishop on the opened diagonal"],
+      "arrows": [
+        { "from": "e4", "to": "d5", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "g2", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "dxe4",
       "annotation": "Black essentially has to take. If Black doesn't capture, White takes on d5 and gets a great position with a passed or advanced e-pawn. By taking dxe4, Black opens the position but also gives White exactly what we wanted -- the d3 pawn recaptures and the g2 bishop lights up. Sometimes you have to accept that your opponent's plan worked and find counterplay elsewhere.",
-      "alternatives": ["d4 - trying to keep the center closed, but after c3 White undermines it anyway"]
+      "alternatives": ["d4 - trying to keep the center closed, but after c3 White undermines it anyway"],
+      "arrows": [
+        { "from": "g2", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "dxe4",
       "annotation": "We recapture with the d-pawn, and now look at the transformation. Our g2 bishop is a monster on the long diagonal, staring at c6 and beyond. We have a solid e4 pawn in the center, our pieces are all developed, and we have clear plans. The position has opened up perfectly for our setup -- this is what KIA dreams are made of.",
       "pawnStructure": "White's e4 pawn controls d5 and f5, giving excellent central influence with open diagonals.",
-      "plans": ["Play for a kingside attack with Qe2, Re1", "Use the strong e4 pawn as a springboard for piece activity"]
+      "plans": ["Play for a kingside attack with Qe2, Re1", "Use the strong e4 pawn as a springboard for piece activity"],
+      "arrows": [
+        { "from": "g2", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Bc5",
       "annotation": "Black puts the bishop on c5 where it's actively placed, eyeing f2 and controlling the a7-g1 diagonal. This is the best square for the dark-squared bishop now that e5 is occupied by a pawn. From c5 it also supports a potential d4 push and keeps an eye on the kingside. It's a good practical choice in a position where Black needs active pieces to compensate for the slightly loosened center.",
       "plans": ["Pressure f2 and the a7-g1 diagonal", "Support potential d4 or b5 breaks"],
-      "alternatives": ["Be7 - safer but more passive, the bishop does less on e7", "Bd6 - eyes the kingside but blocks the d-file"]
+      "alternatives": ["Be7 - safer but more passive, the bishop does less on e7", "Bd6 - eyes the kingside but blocks the d-file"],
+      "arrows": [
+        { "from": "c5", "to": "f2", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "f2", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     }
   ]
 }

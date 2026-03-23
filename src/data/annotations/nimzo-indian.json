@@ -6,135 +6,278 @@
       "annotation": "White opens with the queen's pawn, immediately staking a claim in the center and opening the diagonal for the dark-squared bishop. This is the starting move for all the major Indian defenses, and it's more flexible than e4 because the pawn is already defended by the queen.",
       "pawnStructure": "Single central pawn on d4; White aims to follow up with c4 for the ideal pawn center.",
       "plans": ["Follow up with c4 to build a broad pawn center", "Develop pieces behind the center pawns"],
-      "alternatives": ["e4 — the other main first move, leading to more open positions"]
+      "alternatives": ["e4 — the other main first move, leading to more open positions"],
+      "arrows": [
+        { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to its most natural square, controlling e4 and d5. This is the hallmark of the Indian defenses — Black refuses to immediately commit pawns to the center, instead developing a piece first and keeping options open for how to challenge White's center later.",
       "pawnStructure": "No pawn commitments yet for Black; maximum flexibility retained.",
       "plans": ["Control e4 to prevent White from playing e4 freely", "Choose a defense system based on White's next move"],
-      "alternatives": ["d5 — the classical approach, immediately contesting the center"]
+      "alternatives": ["d5 — the classical approach, immediately contesting the center"],
+      "arrows": [
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c4",
       "annotation": "White plays c4, the Queen's Gambit move, grabbing more space and aiming for the ideal d4+e4 pawn center. Together d4 and c4 control the critical d5 and e5 squares. The c-pawn also opens the diagonal for the queen and prepares Nc3.",
       "pawnStructure": "White pawns on c4 and d4 form the classic broad center. The c4 pawn eyes d5.",
       "plans": ["Build the full center with e4 if allowed", "Develop Nc3 to support the center"],
-      "alternatives": ["Nf3 — a more restrained approach delaying c4"]
+      "alternatives": ["Nf3 — a more restrained approach delaying c4"],
+      "arrows": [
+        { "from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "e6",
       "annotation": "Black plays e6, preparing to develop the dark-squared bishop while maintaining control of d5. This is the key move order distinction — by playing e6 before d5, Black keeps the option of putting the bishop on b4 (Nimzo-Indian) or playing d5 later (Queen's Indian or QGD). It's all about flexibility.",
       "pawnStructure": "Black's e6 pawn supports a future d5 push and creates a solid but slightly cramped structure.",
       "plans": ["Develop Bb4 pinning the knight if Nc3 is played", "Play d5 later to challenge the center directly"],
-      "alternatives": ["g6 — the King's Indian or Grunfeld approach with a fianchetto"]
+      "alternatives": ["g6 — the King's Indian or Grunfeld approach with a fianchetto"],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f8", "to": "b4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "White develops the knight to c3, the most natural square, defending e4 and pressuring d5. But here's the thing — Nc3 allows Black to enter the Nimzo-Indian with Bb4, which is one of the most respected defenses in chess. Some top players avoid Nc3 precisely for this reason.",
       "pawnStructure": "No change; the knight supports a future e4 advance.",
       "plans": ["Support e4 to build the ideal center", "Prepare to develop the remaining pieces"],
-      "alternatives": ["Nf3 — avoids the Nimzo-Indian, can lead to Queen's Indian or Bogo-Indian"]
+      "alternatives": ["Nf3 — avoids the Nimzo-Indian, can lead to Queen's Indian or Bogo-Indian"],
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f8", "to": "b4", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Bb4",
       "annotation": "This is the defining move of the Nimzo-Indian Defense. Black pins the c3 knight to the king, which means White can't easily play e4. The whole point is that Black disrupts White's plan for a broad pawn center without having to commit a pawn to d5 yet. Nimzowitsch's idea was brilliant — use a piece to control the center instead of pawns.",
       "pawnStructure": "Still flexible for Black; no central pawn committed yet beyond e6.",
       "plans": ["Maintain the pin to prevent e4", "Castle quickly and then decide on the central pawn structure"],
-      "alternatives": ["d5 — transposes to the Queen's Gambit Declined", "b6 — the Queen's Indian Defense"]
+      "alternatives": ["d5 — transposes to the Queen's Gambit Declined", "b6 — the Queen's Indian Defense"],
+      "arrows": [
+        { "from": "b4", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e1", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "c3", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Qc2",
       "annotation": "The Classical variation — White places the queen on c2 for several reasons. First, it prevents Black from doubling White's pawns with Bxc3. Second, the queen supports a future e4 push. Third, it keeps the pawn structure intact, which is a major strategic consideration in the Nimzo-Indian.",
       "pawnStructure": "White preserves the option of a clean pawn structure by discouraging Bxc3+.",
       "plans": ["Push e4 with queen support", "Develop pieces while maintaining structural integrity"],
-      "alternatives": ["e3 — the Rubinstein variation, accepting doubled pawns may come", "a3 — immediately asking the bishop what it wants to do"]
+      "alternatives": ["e3 — the Rubinstein variation, accepting doubled pawns may come", "a3 — immediately asking the bishop what it wants to do"],
+      "arrows": [
+        { "from": "c2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "b4", "to": "c3", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c2", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Black castles, getting the king to safety before deciding on the central pawn structure. This is a very principled approach — you don't want to be caught in the center when the position opens up. By castling first, Black can then choose between d5, c5, or even d6 setups depending on what White does next.",
       "plans": ["Prepare central action with d5 or c5", "Complete development and connect rooks"],
-      "alternatives": ["d5 — immediately challenging the center before castling", "c5 — striking at d4 right away"]
+      "alternatives": ["d5 — immediately challenging the center before castling", "c5 — striking at d4 right away"],
+      "arrows": [
+        { "from": "d7", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "c7", "to": "c5", "color": "rgba(255, 165, 0, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g8", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "a3",
       "annotation": "White finally asks the question: what are you going to do with that bishop? The bishop on b4 has to make a decision. It can retreat, but then White has gained a tempo and the a3 pawn can be useful for a b4 expansion later. White is essentially calling Black's bluff on the pin.",
       "pawnStructure": "The a3 pawn prepares a potential b4 advance and gains the bishop pair.",
       "plans": ["Win the bishop pair after Bxc3", "Use a3-b4 to expand on the queenside"],
-      "alternatives": ["e4 — aggressively pushing for the center immediately", "Nf3 — continuing development"]
+      "alternatives": ["e4 — aggressively pushing for the center immediately", "Nf3 — continuing development"],
+      "arrows": [
+        { "from": "a3", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "a3", "to": "b4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "b4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Bxc3+",
       "annotation": "Black takes on c3, giving White doubled pawns. This is the fundamental trade-off of the Nimzo-Indian — Black gives up the bishop pair, but in return White's pawn structure is damaged and the doubled c-pawns can become a long-term weakness. The check forces the queen to recapture.",
       "pawnStructure": "After Qxc3, White will have doubled c-pawns (c3 and c4), which are a structural weakness but also control important central squares.",
       "plans": ["Target the doubled c-pawns in the endgame", "Play d5 to establish a central presence"],
-      "alternatives": ["Bf8 — retreating, but this loses too much time after a3"]
+      "alternatives": ["Bf8 — retreating, but this loses too much time after a3"],
+      "arrows": [
+        { "from": "b4", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c3", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Qxc3",
       "annotation": "White recaptures with the queen rather than the b-pawn. Taking with the queen keeps the c-file pawn structure cleaner — well, relatively — and places the queen actively on c3 where it eyes the kingside along the diagonal and controls e5. The queen is well-placed here, but it could become a target.",
       "pawnStructure": "White has pawns on a3 and c4 on the queenside; the doubled pawns are avoided but the c3 queen may need to relocate.",
       "plans": ["Develop rapidly and push e4", "Use the bishop pair in an open position"],
-      "alternatives": ["bxc3 — accepting doubled pawns but keeping the queen flexible"]
+      "alternatives": ["bxc3 — accepting doubled pawns but keeping the queen flexible"],
+      "arrows": [
+        { "from": "c3", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d5",
       "annotation": "Now Black strikes in the center with d5. The timing is perfect — White spent time with Qc2, a3, and Qxc3, so Black has completed development and castled. Now d5 challenges the c4 pawn directly and fights for central control. This is the classic Nimzo strategy: disrupt White's center, then plant your own pawn there.",
       "pawnStructure": "Black establishes a strong pawn on d5 challenging White's c4. A symmetric-looking center but with dynamic tension.",
       "plans": ["Exchange on c4 and target the isolated or hanging pawns", "Develop the queenside pieces actively"],
-      "alternatives": ["b6 — fianchettoing the bishop for a slower approach", "c5 — attacking d4 instead"]
+      "alternatives": ["b6 — fianchettoing the bishop for a slower approach", "c5 — attacking d4 instead"],
+      "arrows": [
+        { "from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops the knight to its natural square, preparing to castle and supporting the center. The knight on f3 is solid — it controls e5 and d4, and helps White complete kingside development. White needs to decide how to handle the tension in the center: take on d5, or maintain it.",
       "plans": ["Castle kingside and complete development", "Decide on central pawn tension — take on d5 or play e3"],
-      "alternatives": ["Bg5 — pinning the knight first before developing the kingside knight"]
+      "alternatives": ["Bg5 — pinning the knight first before developing the kingside knight"],
+      "arrows": [
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "dxc4",
       "annotation": "Black takes on c4, resolving the central tension in a very concrete way. This isn't about winning a pawn — White will get it back — it's about opening the position and creating targets. After White recaptures, Black can develop the bishop to a6 or b7 and put pressure on the open files and diagonals.",
       "pawnStructure": "The center is now open. White will recapture on c4, leading to a position where piece activity matters more than pawn structure.",
       "plans": ["Develop the light-squared bishop actively to a6 or b7", "Use the semi-open c-file and d-file for rooks"],
-      "alternatives": ["b6 — developing the bishop before capturing", "c5 — maintaining more tension"]
+      "alternatives": ["b6 — developing the bishop before capturing", "c5 — maintaining more tension"],
+      "arrows": [
+        { "from": "c8", "to": "a6", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "c8", "to": "b7", "color": "rgba(255, 165, 0, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Qxc4",
       "annotation": "White recaptures the pawn with the queen. The queen on c4 is active but potentially exposed — Black can gain tempi by attacking it. This is a key dynamic in many Nimzo-Indian lines: White gets the bishop pair and an active position, but Black gets time and targets.",
       "pawnStructure": "Symmetric center with d4 vs. nothing — White has the central pawn majority potential with e4.",
       "plans": ["Push e4 to seize the center", "Develop the bishops actively using the bishop pair advantage"],
-      "alternatives": ["e3 — a more modest recapture keeping the queen on c3"]
+      "alternatives": ["e3 — a more modest recapture keeping the queen on c3"],
+      "arrows": [
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "b6",
       "annotation": "Black prepares to fianchetto the light-squared bishop or develop it to a6. The move b6 is multipurpose — it supports c5 to hit the d4 pawn, and the long diagonal b7-g2 can be very powerful if the bishop lands there. But here Black has a more specific idea: Ba6, hitting the queen on c4 directly.",
       "pawnStructure": "Black's b6 prepares a queenside fianchetto and supports the c5 break.",
       "plans": ["Develop the bishop to a6 attacking the c4 queen", "Play c5 to challenge d4"],
-      "alternatives": ["c5 — immediately striking at d4", "Nbd7 — developing a piece first"]
+      "alternatives": ["c5 — immediately striking at d4", "Nbd7 — developing a piece first"],
+      "arrows": [
+        { "from": "c8", "to": "a6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "a6", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "Bg5",
       "annotation": "White develops the bishop aggressively, pinning the f6 knight against the queen. This is a very active square for the bishop — it creates real pressure on the kingside and makes Black think carefully about pawn structure. If Black plays h6, the bishop can retreat to h4 maintaining the pin, or exchange on f6 damaging Black's kingside.",
       "plans": ["Maintain pressure on f6 and the kingside", "Use the pin to support e4"],
-      "alternatives": ["e3 — a more solid developing move", "Bf4 — developing without creating a pin"]
+      "alternatives": ["e3 — a more solid developing move", "Bf4 — developing without creating a pin"],
+      "arrows": [
+        { "from": "g5", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "d8", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "f6", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Ba6",
       "annotation": "Black develops the bishop to a6 with tempo, attacking the queen on c4. This is the whole point of the b6 + Ba6 setup in the Nimzo-Indian — the bishop is very active on a6, hitting c4 and e2, and it's hard for White to find a comfortable square for the queen. Black gains time and disrupts White's coordination.",
       "plans": ["Harass the White queen and slow down White's development", "Prepare c5 to complete the queenside pawn structure"],
-      "alternatives": ["Bb7 — fianchettoing to the long diagonal instead"]
+      "alternatives": ["Bb7 — fianchettoing to the long diagonal instead"],
+      "arrows": [
+        { "from": "a6", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "a6", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Qa4",
       "annotation": "The queen retreats to a4, getting out of the bishop's line while maintaining some activity. From a4, the queen eyes the a-file and keeps some pressure on the queenside. It's not the most comfortable square, but the alternatives aren't great either — the a6 bishop really is annoying.",
       "plans": ["Regroup and push e4 to seize the center", "Potentially reroute the queen to a better square later"],
-      "alternatives": ["Qc2 — returning to the original square", "Qb3 — keeping central pressure"]
+      "alternatives": ["Qc2 — returning to the original square", "Qb3 — keeping central pressure"],
+      "arrows": [
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "a6", "to": "e2", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": []
     },
     {
       "san": "c5",
       "annotation": "Black strikes at d4, the key break in the Nimzo-Indian. This move challenges White's central pawn and opens the position for Black's pieces. Combined with the active bishop on a6 and the pressure on the center, Black achieves a very comfortable position. The Nimzo-Indian has delivered exactly what Black wanted: an active, flexible middlegame with no structural weaknesses.",
       "pawnStructure": "Black's c5 challenges the d4 pawn, creating central tension. If dxc5, Black recaptures with excellent piece activity.",
       "plans": ["Increase central pressure after the pawn exchange", "Activate rooks on the c-file and d-file"],
-      "alternatives": ["Nbd7 — developing first before the central break", "Rc8 — preparing c5 with rook support"]
+      "alternatives": ["Nbd7 — developing first before the central break", "Rc8 — preparing c5 with rook support"],
+      "arrows": [
+        { "from": "c5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "a6", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     }
   ]
 }

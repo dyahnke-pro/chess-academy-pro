@@ -6,132 +6,239 @@
       "annotation": "White opens with the queen's pawn, staking a central claim and preparing to build a broad center. The d4 pawn is the foundation for all the main queen pawn openings, and against the Benoni, it's the pawn that Black will immediately challenge with c5.",
       "pawnStructure": "Single central pawn; White plans c4 and possibly e4 for full central control.",
       "plans": ["Build a broad center with c4 and e4", "Develop pieces behind the center"],
-      "alternatives": ["e4 — more open play", "Nf3 — flexible development"]
+      "alternatives": ["e4 — more open play", "Nf3 — flexible development"],
+      "arrows": [
+        { "from": "d4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the knight first, keeping all options open. The knight on f6 controls d5 and e4, and Black hasn't committed to any particular defense yet. This move order allows Black to choose between the Benoni, King's Indian, Grunfeld, or Nimzo depending on what White does.",
       "plans": ["Wait to see White's setup before committing to a pawn structure", "Control the center with pieces first"],
-      "alternatives": ["c5 — immediately entering the Benoni", "d5 — the classical approach"]
+      "alternatives": ["c5 — immediately entering the Benoni", "d5 — the classical approach"],
+      "arrows": [
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "c4",
       "annotation": "White plays c4, the Queen's Gambit formation. Together with d4, these pawns control the key central squares d5 and e5. White is building the ideal setup and challenging Black to find a way to contest this massive central presence.",
       "pawnStructure": "White's c4+d4 form the broad center duo, controlling d5 and e5.",
       "plans": ["Add e4 for the full center", "Develop Nc3 to support the center"],
-      "alternatives": ["Nf3 — developing before committing c4"]
+      "alternatives": ["Nf3 — developing before committing c4"],
+      "arrows": [
+        { "from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c5",
       "annotation": "This is the Benoni move — Black immediately strikes at d4 with c5. The whole idea is to provoke White into pushing d5, creating a fixed pawn structure where Black gets queenside counterplay on the semi-open files and a kingside attack. Black accepts less space in exchange for dynamic piece play and pawn breaks.",
       "pawnStructure": "The c5 pawn challenges d4, aiming to create an asymmetric structure after d5.",
       "plans": ["Provoke d5 and then attack the extended center", "Generate queenside counterplay with a6 and b5"],
-      "alternatives": ["e6 — a more cautious approach leading to the QGD", "g6 — King's Indian territory"]
+      "alternatives": ["e6 — a more cautious approach leading to the QGD", "g6 — King's Indian territory"],
+      "arrows": [
+        { "from": "c5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d5",
       "annotation": "White pushes d5, accepting the Benoni structure. This gains space but also creates a target — the d5 pawn is advanced and can become overextended. White gets a space advantage and central control, but Black gets the e5 square for a knight and the half-open e-file after a future e6-exd5 exchange.",
       "pawnStructure": "White's d5 pawn creates an asymmetric structure. White has more space but the d5 pawn must be supported.",
       "plans": ["Maintain the d5 pawn and use the space advantage", "Play e4 to build a massive center"],
-      "alternatives": ["dxc5 — exchanging, which gives Black an easy game", "e3 — a more modest approach"]
+      "alternatives": ["dxc5 — exchanging, which gives Black an easy game", "e3 — a more modest approach"],
+      "arrows": [
+        { "from": "d5", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "e6",
       "annotation": "Black strikes at d5 immediately with e6. This is the Modern Benoni approach — by exchanging on d5, Black opens the e-file and creates a pawn structure where the d6 and c5 pawns give Black queenside space while White has the central majority. The resulting positions are sharp and unbalanced.",
       "pawnStructure": "After exd5, the characteristic Benoni structure emerges with White's e4+d5 vs Black's d6+c5.",
       "plans": ["Open the position with exd5 to activate pieces", "Use the e-file and queenside for counterplay"],
-      "alternatives": ["d6 — the Czech Benoni, a slower but solid setup", "g6 — delaying the e6 break"]
+      "alternatives": ["d6 — the Czech Benoni, a slower but solid setup", "g6 — delaying the e6 break"],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "White develops the knight to c3 before capturing on d5. The knight supports e4, reinforces d5, and develops naturally. White wants to recapture with the pawn on d5 to maintain the central wedge, and Nc3 ensures the center stays solid after the exchange.",
       "plans": ["Recapture cxd5 or exd5 maintaining the center", "Push e4 to build the ideal Benoni center"],
-      "alternatives": ["cxd5 — capturing immediately", "Nf3 — developing the other knight first"]
+      "alternatives": ["cxd5 — capturing immediately", "Nf3 — developing the other knight first"],
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "exd5",
       "annotation": "Black captures on d5, opening the e-file. This is the key exchange in the Modern Benoni — it defines the entire pawn structure for the rest of the game. Black accepts a backward d6 pawn but gains the semi-open e-file, the b7-h1 diagonal for the fianchettoed bishop, and dynamic piece play.",
       "pawnStructure": "After cxd5, the classic Benoni structure emerges: White pawns on c4+d5 vs Black pawns on c5+d6.",
       "plans": ["Use the open e-file for rook activity", "Prepare the b5 break for queenside counterplay"],
-      "alternatives": ["d6 — keeping the tension, though this is less dynamic"]
+      "alternatives": ["d6 — keeping the tension, though this is less dynamic"],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e8", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "cxd5",
       "annotation": "White recaptures with the c-pawn, maintaining the central pawn wedge on d5. This is the standard recapture — the d5 pawn cramps Black's position and controls key squares like c6 and e6. White now has a clear plan: play e4 and build an imposing central pawn chain.",
       "pawnStructure": "White's d5 pawn is the backbone of the position. White aims for e4 to create d5+e4, a powerful central duo.",
       "plans": ["Push e4 to complete the pawn center", "Use the space advantage for piece maneuvering"],
-      "alternatives": ["Nxd5 — capturing with the knight, less ambitious but solid"]
+      "alternatives": ["Nxd5 — capturing with the knight, less ambitious but solid"],
+      "arrows": [
+        { "from": "d5", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d5", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "d6",
       "annotation": "Black plays d6, supporting the c5 pawn and completing the Benoni pawn chain. The d6 pawn is technically backward on a semi-open file, which is the main structural weakness Black accepts. But it controls e5 — a critical square where Black wants to plant a knight — and supports the entire Black position.",
       "pawnStructure": "Classic Benoni: c5+d6 vs d5+e4. Black's d6 is a potential weakness but controls e5.",
       "plans": ["Use e5 as an outpost for the knight", "Prepare the b5 break to create queenside counterplay"],
-      "alternatives": ["g6 — fianchettoing first, though d6 is needed eventually"]
+      "alternatives": ["g6 — fianchettoing first, though d6 is needed eventually"],
+      "arrows": [
+        { "from": "d6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d6", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops the knight to f3, a solid and natural developing move. The knight controls e5 and d4, and supports the center. In the Benoni, White's plan is straightforward: complete development, maintain the big center, and try to exploit the space advantage. Nf3 prepares castling and fits into every plan.",
       "plans": ["Castle and develop the remaining pieces", "Control e5 to deny Black the outpost"],
-      "alternatives": ["e4 — pushing the center pawn immediately", "f3 — the Four Pawns Attack setup"]
+      "alternatives": ["e4 — pushing the center pawn immediately", "f3 — the Four Pawns Attack setup"],
+      "arrows": [
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "g6",
       "annotation": "Black prepares the fianchetto, one of the most important setups in the Benoni. The g7 bishop will be incredibly powerful — it rakes down the long diagonal, pressuring d4, c3, and potentially supporting a kingside attack. Combined with the semi-open e-file, this gives Black a very active piece configuration.",
       "pawnStructure": "Black prepares the fianchetto; the g6+f7 pawns shelter the king while the bishop gets active.",
       "plans": ["Complete the fianchetto with Bg7", "Use the long diagonal for central and queenside pressure"],
-      "alternatives": ["Be7 — a more classical bishop development", "Bg4 — pinning the knight immediately"]
+      "alternatives": ["Be7 — a more classical bishop development", "Bg4 — pinning the knight immediately"],
+      "arrows": [
+        { "from": "g7", "to": "a1", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "e4",
       "annotation": "White plays e4, establishing the imposing d5+e4 pawn center. This is what the Benoni is all about — White has a massive space advantage and central control. But here's the thing: this center is static and can become a target. Black will chip away at it with b5 on the queenside and f5 on the kingside.",
       "pawnStructure": "White's e4+d5 pawn chain dominates the center. Black must find counterplay against this structure.",
       "plans": ["Use the space advantage to organize a kingside attack", "Maintain the center and restrict Black's pieces"],
-      "alternatives": ["Bf4 — developing before pushing e4", "Bg5 — pinning the f6 knight"]
+      "alternatives": ["Bf4 — developing before pushing e4", "Bg5 — pinning the f6 knight"],
+      "arrows": [
+        { "from": "e4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto, and this bishop is the star of the show. On g7, it puts pressure on the entire long diagonal from a1 to h8, targeting the d4 and c3 squares. If White ever weakens the dark squares, this bishop becomes a game-deciding piece. It also provides excellent defense for the king.",
       "plans": ["Use the bishop to pressure White's dark squares", "Support the e5 outpost and queenside breaks"],
-      "alternatives": ["a6 — preparing the b5 break first"]
+      "alternatives": ["a6 — preparing the b5 break first"],
+      "arrows": [
+        { "from": "g7", "to": "a1", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "Be2",
       "annotation": "White develops the bishop to e2, a solid but not overly ambitious square. The bishop supports castling and can later be repositioned to f3 if needed. In the Benoni, White doesn't need the bishop to be super active immediately — the space advantage means White can take time to optimize piece placement.",
       "plans": ["Castle kingside and complete development", "Prepare f4 or Nd2-c4 to increase pressure"],
-      "alternatives": ["Bd3 — a more active square but potentially blocking the d-file", "Bb5+ — checking to disrupt Black's development"]
+      "alternatives": ["Bd3 — a more active square but potentially blocking the d-file", "Bb5+ — checking to disrupt Black's development"],
+      "arrows": [
+        { "from": "e2", "to": "f3", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g1", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Black castles, getting the king to safety. This is essential before starting any aggressive action — the Benoni is a sharp opening, and you can't afford to have your king in the center when things open up. The rook on f8 will also be useful for a future f5 break.",
       "plans": ["Prepare the b5 or f5 pawn breaks", "Activate the rooks on e8 and b8"],
-      "alternatives": ["a6 — preparing b5 before castling", "Nbd7 — developing first"]
+      "alternatives": ["a6 — preparing b5 before castling", "Nbd7 — developing first"],
+      "arrows": [
+        { "from": "f8", "to": "e8", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g8", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "White castles too, completing kingside development. Both kings are now safe, and the real battle can begin. White has a beautiful center and space advantage, but Black has dynamic potential with the b5 and f5 breaks. The middlegame in the Benoni is always exciting — both sides have clear plans.",
       "plans": ["Develop the remaining pieces and prepare to use the space", "Choose between a kingside attack or queenside expansion"],
-      "alternatives": ["Bf4 — developing the bishop before castling"]
+      "alternatives": ["Bf4 — developing the bishop before castling"],
+      "arrows": [
+        { "from": "f1", "to": "e1", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Re8",
       "annotation": "Black places the rook on e8, the most natural square. The rook eyes the e4 pawn along the semi-open e-file, creating latent pressure. If Black ever plays f5, the e4 pawn could become a real target. The rook on e8 is also useful for supporting a potential e5 knight outpost.",
       "pawnStructure": "No change; the rook adds pressure to the e4 pawn along the open e-file.",
       "plans": ["Pressure e4 and support piece play on the e-file", "Prepare the f5 break to open the kingside"],
-      "alternatives": ["a6 — preparing the b5 break immediately", "Nbd7 — developing the knight"]
+      "alternatives": ["a6 — preparing the b5 break immediately", "Nbd7 — developing the knight"],
+      "arrows": [
+        { "from": "e8", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Nd2",
       "annotation": "White retreats the knight to d2, which looks odd but is very purposeful. The knight is heading to c4, where it will be incredibly strong — attacking d6, supporting e5, and pressuring Black's queenside. The Nd2-c4 maneuver is one of White's most important plans in the Benoni, putting a knight on a dominating outpost.",
       "plans": ["Reroute the knight to c4 to pressure d6", "Support e5 control and restrict Black's pieces"],
-      "alternatives": ["Bf4 — developing the bishop to pressure d6", "a4 — preventing Black's b5 break"]
+      "alternatives": ["Bf4 — developing the bishop to pressure d6", "a4 — preventing Black's b5 break"],
+      "arrows": [
+        { "from": "d2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c4", "to": "d6", "color": "rgba(220, 50, 50, 0.7)" }
+      ]
     },
     {
       "san": "Na6",
       "annotation": "Black develops the knight to a6, heading for the c7 or b4 squares. This is a typical Benoni maneuver — the knight on a6 supports the b5 break and can reroute to c7 to support both the d5 defense and the b5 advance. It looks unusual on the rim, but in the Benoni, this is a well-known and effective path.",
       "pawnStructure": "No change; the knight enables the critical b5 queenside counterplay.",
       "plans": ["Reroute the knight to c7 to support b5", "Execute the b5 break for queenside counterplay"],
-      "alternatives": ["Nbd7 — a more classical development square", "a6 — preparing b5 directly"]
+      "alternatives": ["Nbd7 — a more classical development square", "a6 — preparing b5 directly"],
+      "arrows": [
+        { "from": "a6", "to": "c7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     }
   ]
 }

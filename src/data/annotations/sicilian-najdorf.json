@@ -6,125 +6,234 @@
       "annotation": "The King's Pawn opening — White stakes a claim in the center and opens diagonals for the bishop and queen. This is the most principled first move, immediately fighting for d5 and f5 while enabling rapid development.",
       "pawnStructure": "Single center pawn on e4; White aims to support it with d4 or f3 later.",
       "plans": ["Control the center with d4", "Develop kingside pieces quickly", "Castle early"],
-      "alternatives": ["d4 — Queen's Pawn, leading to slower positional games", "Nf3 — flexible, often transposing to e4 or d4 systems"]
+      "alternatives": ["d4 — Queen's Pawn, leading to slower positional games", "Nf3 — flexible, often transposing to e4 or d4 systems"],
+      "arrows": [
+        { "from": "e4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e4", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c5",
       "annotation": "The Sicilian Defense — Black immediately fights for the d4 square without mirroring White's central pawn. Unlike 1...e5, this creates an asymmetric position where Black gets queenside counterplay in exchange for White's central space. The Sicilian is statistically Black's best-scoring reply to 1.e4.",
       "pawnStructure": "Asymmetric from move one: White's e-pawn vs Black's c-pawn creates different pawn majorities after the eventual d4 exchange.",
       "plans": ["Fight for d4 control", "Create queenside pawn majority after ...cxd4", "Generate counterplay on the c-file"],
-      "alternatives": ["e5 — symmetric, classical approach", "e6 — French Defense, solid but passive light-squared bishop"]
+      "alternatives": ["e5 — symmetric, classical approach", "e6 — French Defense, solid but passive light-squared bishop"],
+      "arrows": [
+        { "from": "c5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops a knight to its best square, preparing d4 to open the center. The knight on f3 controls d4 and e5, and by developing before d4, White avoids the 2.d4 lines where Black can play ...cxd4 Qxd4, which invites ...Nc6 with tempo against the queen.",
       "plans": ["Play d4 next to open the center", "Keep options open for various anti-Sicilian systems"],
-      "alternatives": ["Nc3 — Closed Sicilian, avoiding the Open Sicilian entirely", "c3 — Alapin variation, supporting d4 differently"]
+      "alternatives": ["Nc3 — Closed Sicilian, avoiding the Open Sicilian entirely", "c3 — Alapin variation, supporting d4 differently"],
+      "arrows": [
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "d6",
       "annotation": "Black prepares ...Nf6 and ...a6 (the Najdorf setup) by first reinforcing the e5 square. Playing ...d6 before ...Nf6 keeps options open — Black isn't committed to any particular Sicilian structure yet. The pawn on d6 also supports a future ...e5 thrust.",
       "pawnStructure": "The d6/c5 pawn duo is the hallmark small center of the Sicilian. Black accepts less space for dynamic piece play.",
       "plans": ["Develop with ...Nf6 next", "Prepare ...a6 for the Najdorf", "Keep ...e5 and ...e6 options open"],
-      "alternatives": ["Nc6 — enters the Classical or Dragon variations", "e6 — Kan/Taimanov setups with a different pawn structure"]
+      "alternatives": ["Nc6 — enters the Classical or Dragon variations", "e6 — Kan/Taimanov setups with a different pawn structure"],
+      "arrows": [
+        { "from": "d6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "d4",
       "annotation": "White opens the center immediately, which is the whole point of the Open Sicilian. After ...cxd4 Nxd4, White gets a lead in development and central control, while Black gets an open c-file and a queenside pawn majority. This pawn sacrifice of structure for activity defines the Open Sicilian's character.",
       "pawnStructure": "After the exchange, White will have an e-pawn vs Black's d-pawn — a slight structural edge in the center.",
       "plans": ["Recapture on d4 with the knight", "Use the development lead to build a kingside attack"],
-      "alternatives": ["Bb5+ — Moscow variation, a modern sideline avoiding main theory"]
+      "alternatives": ["Bb5+ — Moscow variation, a modern sideline avoiding main theory"],
+      "arrows": [
+        { "from": "d4", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "cxd4",
       "annotation": "Black captures toward the center, which is essentially forced — allowing White to play d5 or dxc5 would surrender the center entirely. This exchange gives Black the half-open c-file, which becomes a long-term asset for rook pressure against White's c2 pawn.",
       "pawnStructure": "Black now has a queenside pawn majority (a,b,d pawns vs White's e-pawn). This majority can become a passed pawn in the endgame.",
-      "plans": ["Use the c-file for rook pressure", "Advance the queenside majority in the endgame"]
+      "plans": ["Use the c-file for rook pressure", "Advance the queenside majority in the endgame"],
+      "arrows": [
+        { "from": "c5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nxd4",
       "annotation": "Recapturing with the knight is standard — it centralizes the knight on a powerful square controlling key squares like b5, c6, e6, and f5. The knight on d4 is a temporary visitor though; in many Sicilian lines it will reroute to b3, f3, or f5 depending on the variation.",
       "plans": ["Develop Nc3 to pressure d5", "Choose a system based on Black's setup"],
-      "alternatives": ["Qxd4 — rarely played because ...Nc6 develops with tempo against the queen"]
+      "alternatives": ["Qxd4 — rarely played because ...Nc6 develops with tempo against the queen"],
+      "arrows": [
+        { "from": "d4", "to": "b5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d4", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to its most natural square, attacking the e4 pawn immediately. This is the most common Sicilian move — the knight on f6 is perfectly placed for both defense and counterattack. It pressures e4, controls d5, and prepares kingside development.",
       "plans": ["Pressure e4 to tie down White's pieces", "Prepare ...a6 for the Najdorf setup"],
-      "alternatives": ["a6 — O'Kelly variation, an immediate Najdorf-like move order"]
+      "alternatives": ["a6 — O'Kelly variation, an immediate Najdorf-like move order"],
+      "arrows": [
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "White defends e4 with the most natural developing move. The knight on c3 supports the center and eyes the d5 square. This is the standard move in all main-line Open Sicilians — it develops a piece while addressing the tactical pressure on e4.",
       "pawnStructure": "Nc3 means White commits to not playing c3, so the c2-pawn stays back and the d4 knight may need other support.",
-      "plans": ["Maintain the e4 center", "Choose between Be2, Bc4, Bg5, f3, or g3 setups depending on Black's response"]
+      "plans": ["Maintain the e4 center", "Choose between Be2, Bc4, Bg5, f3, or g3 setups depending on Black's response"],
+      "arrows": [
+        { "from": "c3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "a6",
       "annotation": "The signature move of the Najdorf — arguably the most important pawn move in all of opening theory. It prevents Nb5 (which would target the d6 pawn and the c7 square), prepares ...e5 or ...b5 expansion, and keeps White guessing about Black's setup. Bobby Fischer and Garry Kasparov made careers playing this move.",
       "pawnStructure": "The a6 pawn supports a future ...b5 advance, which can gain queenside space and challenge a bishop on c4.",
       "plans": ["Prepare ...e5 for central control", "Prepare ...b5 for queenside expansion", "Keep maximum flexibility — Black hasn't committed to ...e5, ...e6, or ...g6 yet"],
-      "alternatives": ["g6 — Dragon variation", "e6 — Scheveningen variation", "Nc6 — Classical variation"]
+      "alternatives": ["g6 — Dragon variation", "e6 — Scheveningen variation", "Nc6 — Classical variation"],
+      "arrows": [
+        { "from": "a6", "to": "b5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "b5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Be2",
       "annotation": "A calm, positional choice for White. The bishop on e2 is modest but solid — it supports a future f4 push, prepares kingside castling, and avoids the sharp theoretical battles of 6.Bg5 (the main line) or 6.Bc4 (Fischer's favorite). This leads to the English Attack when combined with Be3 and f3, or quieter systems with O-O and f4.",
       "plans": ["Castle kingside quickly", "Play Be3, f3, Qd2, and O-O-O for the English Attack", "Or play O-O and f4 for a calmer approach"],
-      "alternatives": ["Bg5 — the main theoretical battleground, extremely sharp", "Bc4 — Fischer's choice, aggressive with ideas of Bb3 and f4-f5", "f3 — English Attack move order"]
+      "alternatives": ["Bg5 — the main theoretical battleground, extremely sharp", "Bc4 — Fischer's choice, aggressive with ideas of Bb3 and f4-f5", "f3 — English Attack move order"],
+      "arrows": [
+        { "from": "f2", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "e5",
       "annotation": "Black strikes in the center immediately, the most principled and popular response to 6.Be2. By playing ...e5, Black gains space, kicks the knight from d4, and establishes a strong pawn duo on d6-e5. The downside is the d5 square becomes a permanent weakness — but in practice, Black's active pieces and kingside chances compensate.",
       "pawnStructure": "The d6+e5 pawn chain gives Black a space advantage on the kingside but creates a backward d6 pawn and a hole on d5.",
       "plans": ["Drive the knight away from d4", "Develop pieces actively to compensate for the d5 weakness", "Aim for ...Be7, ...O-O, and ...Be6 with solid development"],
-      "alternatives": ["e6 — Scheveningen structure, more solid but less dynamic", "b5 — immediate queenside expansion"]
+      "alternatives": ["e6 — Scheveningen structure, more solid but less dynamic", "b5 — immediate queenside expansion"],
+      "arrows": [
+        { "from": "e5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "e5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nb3",
       "annotation": "The knight retreats to b3 where it serves a useful purpose — controlling d4 and a5, and keeping an eye on the c5 square. From b3, the knight supports a future Be3-Qd2-O-O-O plan where it can reroute to d2-f1 or stay on b3 to restrain Black's queenside play. Other retreats like Nf3 would block the f-pawn, and Nf5 can be challenged by ...Be6.",
       "plans": ["Support Be3 development", "Restrain ...b5 expansion by controlling a5", "Reroute to d2 in some lines"],
-      "alternatives": ["Nde2 — rare but playable, supporting f4", "Nf3 — blocks the f-pawn advance"]
+      "alternatives": ["Nde2 — rare but playable, supporting f4", "Nf3 — blocks the f-pawn advance"],
+      "arrows": [
+        { "from": "b3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b3", "to": "a5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b3", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "Be7",
       "annotation": "A solid developing move that prepares castling. The bishop on e7 is not flashy, but it serves critical defensive and offensive functions — it protects the d6 pawn, keeps the option of ...Bg5 exchanges in some lines, and clears the back rank for castling. In the Najdorf, Black doesn't need an aggressive bishop placement because the pawns on e5 and d6 already control key dark squares.",
       "plans": ["Castle kingside next", "Develop Be6 to control d5 and pressure the kingside"],
-      "alternatives": ["b5 — immediate queenside expansion before castling", "Qc7 — preparing ...b5 with queen support"]
+      "alternatives": ["b5 — immediate queenside expansion before castling", "Qc7 — preparing ...b5 with queen support"],
+      "arrows": [
+        { "from": "e7", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "White castles kingside, securing the king and connecting the rooks. In this particular line with Be2 (rather than the English Attack with f3-Qd2-O-O-O), White chooses a safer setup. The king on g1 is well-protected, and White can now focus on central and queenside play with plans like f4 or a4.",
       "plans": ["Play f4 to challenge Black's e5 center", "Play a4 to restrain Black's ...b5 expansion", "Use the rooks on the center files"],
-      "alternatives": ["O-O-O — the English Attack setup, extremely sharp with opposite-side castling"]
+      "alternatives": ["O-O-O — the English Attack setup, extremely sharp with opposite-side castling"],
+      "arrows": [
+        { "from": "f2", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "a2", "to": "a4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Black completes development of the kingside and gets the king to safety. With both sides castled kingside, the game takes on a more strategic character compared to opposite-side castling lines. Black is now fully developed on the kingside and can focus on piece placement — typically ...Be6, ...Nbd7, and then deciding between ...Qc7, ...Rc8, or ...b5 plans.",
-      "plans": ["Develop remaining pieces with ...Be6 and ...Nbd7", "Choose between ...b5 queenside expansion or ...Qc7 maneuvering", "Use the c-file for eventual rook pressure"]
+      "plans": ["Develop remaining pieces with ...Be6 and ...Nbd7", "Choose between ...b5 queenside expansion or ...Qc7 maneuvering", "Use the c-file for eventual rook pressure"],
+      "arrows": [
+        { "from": "c8", "to": "e6", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "b8", "to": "d7", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Be3",
       "annotation": "White develops the last minor piece to an active square where it supports the d4 square, eyes the a7 pawn along the diagonal, and works well with the Nb3. The bishop on e3 is the most natural square — it doesn't block any pawns, supports a potential f4 break, and pairs with Qd2 for possible d-file pressure or a kingside attack.",
       "plans": ["Play Qd2 for battery on the d-file", "Support f4 pawn break", "Maintain pressure on the a7-g1 diagonal"],
-      "alternatives": ["Bg5 — pins the knight but can be challenged by ...Be6 and ...h6"]
+      "alternatives": ["Bg5 — pins the knight but can be challenged by ...Be6 and ...h6"],
+      "arrows": [
+        { "from": "e3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e3", "to": "a7", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "Be6",
       "annotation": "Black develops the bishop to its most active square, pressuring the a2-g8 diagonal and controlling the critical d5 square. The bishop on e6 also connects to potential ...Qa5 or ...Qc7 plans and supports a future ...d5 break if the position allows it. This is the standard square for the light-squared bishop in the Najdorf — it's active, centralized, and hard to dislodge.",
       "pawnStructure": "Be6 reinforces d5 control, making it harder for White to plant a piece on that outpost.",
-      "plans": ["Support ...d5 break in favorable conditions", "Connect with ...Nbd7 for full development", "Prepare ...Rc8 for c-file pressure"]
+      "plans": ["Support ...d5 break in favorable conditions", "Connect with ...Nbd7 for full development", "Prepare ...Rc8 for c-file pressure"],
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e6", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Qd2",
       "annotation": "White places the queen behind the bishop on e3, creating a battery along the d-file and keeping options open for Rd1. The queen on d2 also connects the rooks and can swing to the kingside if needed. This is a flexible multipurpose square — Qd2 supports the Be3, prepares doubling rooks, and in some lines enables Qf2 or Qe1 rerouting.",
       "plans": ["Double rooks on the d-file with Rad1", "Maintain the Be3 securely", "Play f4 at the right moment to challenge e5"],
-      "alternatives": ["a4 — immediately restraining ...b5", "f4 — direct central challenge"]
+      "alternatives": ["a4 — immediately restraining ...b5", "f4 — direct central challenge"],
+      "arrows": [
+        { "from": "a1", "to": "d1", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "f2", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Nbd7",
       "annotation": "Black completes minor piece development by bringing the knight to d7, where it supports both the e5 and c5 squares. From d7, the knight has excellent flexibility — it can go to f8 for kingside defense, c5 to pressure e4 and b3, or b6 to support ...d5. This is the standard Najdorf structure: all pieces developed, both sides castled, and the real middlegame battle is about to begin.",
       "plans": ["Reroute knight to c5 to pressure e4 and b3", "Play ...Rc8 for c-file pressure", "Prepare ...b5 at the right moment"],
-      "alternatives": ["Rc8 — immediately seizing the c-file", "Qc7 — supporting ...b5 and connecting rooks"]
+      "alternatives": ["Rc8 — immediately seizing the c-file", "Qc7 — supporting ...b5 and connecting rooks"],
+      "arrows": [
+        { "from": "d7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "d7", "to": "f8", "color": "rgba(255, 165, 0, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     }
   ]
 }

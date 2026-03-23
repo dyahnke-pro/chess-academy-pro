@@ -6,132 +6,241 @@
       "annotation": "White opens with the queen's pawn, claiming central space and preparing to build the ideal pawn center with c4 and eventually e4. The d4 pawn is immediately protected by the queen, making it a very stable first move.",
       "pawnStructure": "Single central pawn on d4; White plans to expand with c4.",
       "plans": ["Build a broad pawn center with c4 and e4", "Develop pieces behind the central pawns"],
-      "alternatives": ["e4 — leading to more open, tactical positions"]
+      "alternatives": ["e4 — leading to more open, tactical positions"],
+      "arrows": [
+        { "from": "c2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to f6, controlling e4 and d5. This is the Indian move order — Black keeps maximum flexibility, refusing to commit pawns to the center immediately. Depending on what White plays, Black can enter the Grunfeld, King's Indian, Nimzo-Indian, or other systems.",
       "plans": ["Control e4 to prevent White from achieving the full center easily", "Keep options open for the central pawn structure"],
-      "alternatives": ["d5 — the classical response, immediately contesting the center"]
+      "alternatives": ["d5 — the classical response, immediately contesting the center"],
+      "arrows": [
+        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "c4",
       "annotation": "White expands on the queenside and reinforces control of d5. Together with d4, the two pawns control a massive chunk of the center. White is daring Black to try and break this center down — which is exactly what the Grunfeld is designed to do.",
       "pawnStructure": "White pawns on c4 and d4 form the broad center, controlling d5 and e5.",
       "plans": ["Add e4 to build the dream center", "Develop Nc3 to reinforce the central pawns"],
-      "alternatives": ["Nf3 — a more restrained approach"]
+      "alternatives": ["Nf3 — a more restrained approach"],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "g6",
       "annotation": "This is the signal — Black is going for a hypermodern setup with a kingside fianchetto. By playing g6, Black prepares to put the bishop on g7 where it will become a monster, raking along the long diagonal aimed straight at White's d4 pawn. The Grunfeld philosophy is: let White build the big center, then blow it up.",
       "pawnStructure": "Black delays central pawn play, opting for piece pressure against White's center instead.",
       "plans": ["Fianchetto the bishop to g7 targeting d4", "Strike the center with d5 at the right moment"],
-      "alternatives": ["e6 — entering Nimzo/QGD territory", "c5 — the Benoni approach"]
+      "alternatives": ["e6 — entering Nimzo/QGD territory", "c5 — the Benoni approach"],
+      "arrows": [
+        { "from": "f8", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "g7", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "White develops the knight to c3, supporting both e4 and d5. This is the most principled move — the knight is on its best square, reinforcing the center. White is building up for the ideal e4 push, which would give a commanding central presence.",
       "plans": ["Push e4 to build the full pawn center", "Complete development and castle"],
-      "alternatives": ["Nf3 — developing the other knight first, more flexible"]
+      "alternatives": ["Nf3 — developing the other knight first, more flexible"],
+      "arrows": [
+        { "from": "c3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "d5",
       "annotation": "The defining move of the Grunfeld Defense. Black strikes immediately at the center with d5 before even completing the fianchetto. This is the key difference from the King's Indian — in the Grunfeld, Black challenges the center right away. Black is saying: take the center, I dare you, because my pieces will tear it apart.",
       "pawnStructure": "Central tension: d5 vs c4/d4. Black invites White to capture and build a big center that becomes a target.",
       "plans": ["After cxd5 Nxd5, sacrifice the center to attack it with pieces", "Use the g7 bishop as a long-range weapon against d4"],
-      "alternatives": ["Bg7 — completing the fianchetto first, entering King's Indian territory", "O-O — castling before committing to d5"]
+      "alternatives": ["Bg7 — completing the fianchetto first, entering King's Indian territory", "O-O — castling before committing to d5"],
+      "arrows": [
+        { "from": "d5", "to": "c4", "color": "rgba(220, 50, 50, 0.7)" },
+        { "from": "d5", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "cxd5",
       "annotation": "White captures, and this is the Exchange Variation — the most critical and principled test of the Grunfeld. White grabs the pawn and plans to follow up with e4, building a massive pawn center. The question is whether this center is a strength or a target. That's the entire debate of the Grunfeld.",
       "pawnStructure": "After Nxd5, White will play e4 gaining a huge center. Black will need to undermine it with c5 and piece pressure.",
       "plans": ["Build the big center with e4", "Use the center as a launchpad for attacking chances"],
-      "alternatives": ["Nf3 — keeping the tension, a positional approach", "Bf4 — developing before capturing"]
+      "alternatives": ["Nf3 — keeping the tension, a positional approach", "Bf4 — developing before capturing"],
+      "arrows": [
+        { "from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "Nxd5",
       "annotation": "Black recaptures with the knight, placing it on a central square and inviting White to kick it with e4. This looks counterintuitive — why put the knight where it'll be attacked? Because after e4 Nxc3 bxc3, White gets the big center but Black gets pressure and structural weaknesses to target. It's a calculated exchange.",
       "plans": ["Allow e4, then retreat the knight via Nxc3 to damage White's structure", "Complete the fianchetto and target d4"],
-      "alternatives": ["Qxd5 — rarely played, the queen is exposed"]
+      "alternatives": ["Qxd5 — rarely played, the queen is exposed"],
+      "arrows": [
+        { "from": "d5", "to": "c3", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "e4",
       "annotation": "White pushes e4, establishing the dream pawn center. Pawns on d4 and e4 control everything from c5 to f5. This looks incredibly imposing, but here's the Grunfeld secret — this center is overextended and can become a liability. White has to spend time defending it rather than developing.",
       "pawnStructure": "White's ideal center: d4+e4. Impressive but potentially vulnerable to piece pressure and pawn breaks.",
       "plans": ["Maintain the center and use it for a kingside attack", "Develop pieces to support d4 and e4"],
-      "alternatives": ["Nf3 — a more modest approach keeping a flexible center"]
+      "alternatives": ["Nf3 — a more modest approach keeping a flexible center"],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "e4", "color": "rgba(0, 200, 100, 0.3)" },
+        { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "Nxc3",
       "annotation": "Black captures the knight, and this is a very important decision. By taking on c3, Black forces White to recapture with the b-pawn, which damages White's queenside pawn structure. Yes, White has the huge center, but the doubled c-pawns and open b-file give Black long-term counterplay.",
       "pawnStructure": "After bxc3, White has doubled c-pawns. The c3 pawn supports d4 but the c-pawn structure is permanently weakened.",
       "plans": ["Target the doubled c-pawns in the middlegame and endgame", "Use the open b-file for rook pressure"],
-      "alternatives": ["Nb6 — retreating, but this is too passive and wastes the whole point of the Grunfeld"]
+      "alternatives": ["Nb6 — retreating, but this is too passive and wastes the whole point of the Grunfeld"],
+      "arrows": [
+        { "from": "d5", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c3", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "c2", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "bxc3",
       "annotation": "White recaptures with the b-pawn, maintaining the big center. The c3 pawn actually reinforces d4, so the center is structurally sound for now. But White has lost the b-pawn's ability to advance on the queenside, and the open b-file can be used by Black's rook. It's a real double-edged structure.",
       "pawnStructure": "White: e4, d4, c3 — a powerful central chain. But doubled c-pawns and an open b-file give Black targets.",
       "plans": ["Push the center pawns forward for an attack", "Use the bishop pair in the open position"],
-      "alternatives": ["Bxc3 — very rare, gives up the bishop pair for a cleaner structure"]
+      "alternatives": ["Bxc3 — very rare, gives up the bishop pair for a cleaner structure"],
+      "arrows": [
+        { "from": "a8", "to": "b8", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c3", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto, and now the bishop on g7 is a beast. It stares right down the long diagonal at d4 and c3, putting constant pressure on White's center. This bishop is the soul of the Grunfeld — it does the heavy lifting in undermining White's central pawns. Combined with c5, it becomes incredibly powerful.",
       "pawnStructure": "No change; the bishop enhances Black's pressure on the dark squares and the d4 pawn.",
       "plans": ["Combine Bg7 pressure with c5 to attack d4", "Castle and bring rooks to open files"],
-      "alternatives": ["c5 — immediately attacking d4 before completing the fianchetto"]
+      "alternatives": ["c5 — immediately attacking d4 before completing the fianchetto"],
+      "arrows": [
+        { "from": "g7", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "c3", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops the knight to f3, supporting d4 and preparing to castle. The knight is solidly placed, but it also blocks the f-pawn, which White sometimes wants to push to f4 or f3 to support the center. Still, Nf3 is the most natural and popular choice in this position.",
       "plans": ["Castle kingside and start a central or kingside advance", "Use Bc4 or Bd3 to develop the light-squared bishop actively"],
-      "alternatives": ["Bc4 — developing the bishop first, eyeing f7", "f3 — supporting the center more aggressively"]
+      "alternatives": ["Bc4 — developing the bishop first, eyeing f7", "f3 — supporting the center more aggressively"],
+      "arrows": [
+        { "from": "f3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "c5",
       "annotation": "Black strikes at the base of White's center with the thematic c5 break. This is the most important pawn move in the Grunfeld — it attacks d4, and combined with the g7 bishop's pressure, puts enormous stress on White's central structure. If White isn't careful, the center collapses.",
       "pawnStructure": "Black's c5 creates direct tension against d4. The Grunfeld's central battle is now fully engaged.",
       "plans": ["Increase pressure on d4 after dxc5 or if White maintains the center", "Open the c-file for rook activity"],
-      "alternatives": ["O-O — castling first before the central break", "Bg4 — pinning the knight that defends d4"]
+      "alternatives": ["O-O — castling first before the central break", "Bg4 — pinning the knight that defends d4"],
+      "arrows": [
+        { "from": "c5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g7", "to": "d4", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Be3",
       "annotation": "White develops the bishop to e3, adding another defender to d4. This is critical — the d4 pawn was under fire from the g7 bishop and the c5 pawn, so it needed reinforcement. Be3 is the most natural way to do this, and the bishop also supports a potential d5 advance.",
       "plans": ["Solidify d4 and maintain the center", "Prepare Qd2 and potentially castle queenside for aggressive play"],
-      "alternatives": ["Be2 — a quieter developing move preparing to castle kingside", "Rb1 — preparing b-file activity"]
+      "alternatives": ["Be2 — a quieter developing move preparing to castle kingside", "Rb1 — preparing b-file activity"],
+      "arrows": [
+        { "from": "e3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     },
     {
       "san": "Qa5",
       "annotation": "Black puts the queen on a5, pinning the c3 pawn to the king and adding pressure to White's queenside. The queen hits c3 and a3, and creates tactical threats. This is a very active square — the queen coordinates beautifully with the g7 bishop to put maximum pressure on the dark squares.",
       "pawnStructure": "No change, but the queen on a5 makes it harder for White to hold c3 and d4 simultaneously.",
       "plans": ["Win the c3 pawn or force White into an awkward defense", "Combine queen pressure with Bg4 or Nc6 to pile on d4"],
-      "alternatives": ["O-O — castling first for safety", "Qa5 is the main line and most principled"]
+      "alternatives": ["O-O — castling first for safety", "Qa5 is the main line and most principled"],
+      "arrows": [
+        { "from": "a5", "to": "c3", "color": "rgba(220, 50, 50, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "c3", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
     },
     {
       "san": "Qd2",
       "annotation": "White plays Qd2, defending c3 and preparing to castle queenside. This is the aggressive setup — by castling long, White can use the kingside pawns as a battering ram with f3, g4, h4. The queen on d2 also connects with Be3 to support d4. It's a signal that White wants a fight.",
       "plans": ["Castle queenside and launch a kingside pawn storm", "Maintain the center and use the bishop pair"],
-      "alternatives": ["Rc1 — defending c3 with the rook instead", "Qb3 — putting the queen on a more active diagonal"]
+      "alternatives": ["Rc1 — defending c3 with the rook instead", "Qb3 — putting the queen on a more active diagonal"],
+      "arrows": [
+        { "from": "d2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e1", "to": "c1", "color": "rgba(0, 100, 255, 0.7)" }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Black castles, getting the king to safety before the real battle begins. With White likely castling queenside, both sides will be attacking on opposite flanks — one of the most exciting pawn structure dynamics in chess. Black's king is safe, and the f8 rook can quickly swing to central or queenside files.",
       "plans": ["Launch queenside counterplay against White's king", "Activate the rooks on c8, d8, or b8"],
-      "alternatives": ["Nc6 — developing a piece before castling to increase central pressure", "cxd4 — simplifying the center first"]
+      "alternatives": ["Nc6 — developing a piece before castling to increase central pressure", "cxd4 — simplifying the center first"],
+      "arrows": [
+        { "from": "f8", "to": "c8", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "f8", "to": "d8", "color": "rgba(255, 165, 0, 0.7)" }
+      ]
     },
     {
       "san": "Rc1",
       "annotation": "White places the rook on c1, defending the c3 pawn and preparing for action along the c-file. This also frees up the queen from baby-sitting c3 and allows White to think about castling queenside. The rook is well-placed regardless of how the center resolves.",
       "plans": ["Castle queenside with a solid defensive setup", "Use the c-file for potential counterplay"],
-      "alternatives": ["O-O-O — castling immediately", "Bd3 — developing the bishop to a more active square"]
+      "alternatives": ["O-O-O — castling immediately", "Bd3 — developing the bishop to a more active square"],
+      "arrows": [
+        { "from": "c1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
     },
     {
       "san": "cxd4",
       "annotation": "Black captures on d4, opening the position. This is the critical moment — Black has been building pressure, and now the center breaks open. After cxd4 cxd4, White has an isolated d-pawn that can be both strong (controlling c5 and e5) and weak (a target for Black's pieces). The g7 bishop comes alive on the open diagonal.",
       "pawnStructure": "After cxd4 cxd4, White has an isolated d4 pawn — dynamically strong but a long-term target. Black has no central pawns but excellent piece play.",
       "plans": ["Blockade and target the isolated d4 pawn", "Use the open c-file and long diagonal for piece activity"],
-      "alternatives": ["Nc6 — maintaining the tension and developing another piece", "Rd8 — adding pressure to d4 before capturing"]
+      "alternatives": ["Nc6 — maintaining the tension and developing another piece", "Rd8 — adding pressure to d4 before capturing"],
+      "arrows": [
+        { "from": "g7", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "d5", "color": "rgba(0, 200, 100, 0.3)" }
+      ]
     }
   ]
 }
