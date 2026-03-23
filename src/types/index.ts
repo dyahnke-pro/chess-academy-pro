@@ -56,12 +56,27 @@ export interface MistakePuzzle {
 
 // ─── Opening Annotations ────────────────────────────────────────────────────
 
+export interface AnnotationArrow {
+  from: string;
+  to: string;
+  color?: string; // defaults to 'green' if omitted
+  delay?: number; // seconds after annotation appears (default 0 = immediate)
+}
+
+export interface AnnotationHighlight {
+  square: string;
+  color?: string; // defaults to 'rgba(255, 255, 0, 0.4)' if omitted
+  delay?: number; // seconds after annotation appears (default 0 = immediate)
+}
+
 export interface OpeningMoveAnnotation {
   san: string;
   annotation: string;
   pawnStructure?: string;
   plans?: string[];
   alternatives?: string[];
+  arrows?: AnnotationArrow[];
+  highlights?: AnnotationHighlight[];
 }
 
 export interface OpeningAnnotations {

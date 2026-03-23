@@ -153,6 +153,105 @@ export function WalkthroughMode({
     return annotations[idx] ?? null;
   }, [annotations, currentMoveIndex]);
 
+  // Staggered arrows/highlights — reveal progressively based on delay
+  const [visibleArrowCount, setVisibleArrowCount] = useState(0);
+  const [visibleHighlightCount, setVisibleHighlightCount] = useState(0);
+  const staggerTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Compute auto-stagger delay for items without explicit delay.
+  // Spaces them evenly across the annotation's estimated reading time,
+  // adjusted for the current playback speed.
+  const computeAutoDelay = useCallback((
+    index: number, total: number, annotationText: string,
+  ): number => {
+    if (total <= 1) return 0;
+    const wordCount = annotationText.split(/\s+/).length;
+    const wordsPerSec = READING_WPM[autoPlaySpeed] / 60;
+    const readingTimeSec = wordCount / wordsPerSec;
+    // First item at 0, rest spaced evenly across reading time
+    return (index / total) * readingTimeSec;
+  }, [autoPlaySpeed]);
+
+  // When the annotation changes, reset and schedule staggered reveals
+  useEffect(() => {
+    // Clear previous timers
+    for (const t of staggerTimers.current) clearTimeout(t);
+    staggerTimers.current = [];
+    setVisibleArrowCount(0);
+    setVisibleHighlightCount(0);
+
+    if (!currentAnnotation) return;
+
+    const annotationText = currentAnnotation.annotation;
+    const allItems = [
+      ...(currentAnnotation.arrows ?? []).map((a, i) => ({ type: 'arrow' as const, index: i, delay: a.delay })),
+      ...(currentAnnotation.highlights ?? []).map((h, i) => ({ type: 'highlight' as const, index: i, delay: h.delay })),
+    ];
+    const totalItems = allItems.length;
+
+    // Schedule arrow reveals
+    const arrows = currentAnnotation.arrows ?? [];
+    arrows.forEach((arrow, i) => {
+      const hasExplicitDelay = arrow.delay !== undefined && arrow.delay !== null;
+      const delaySec = hasExplicitDelay
+        ? arrow.delay as number
+        : computeAutoDelay(i, totalItems, annotationText);
+      const delayMs = delaySec * 1000;
+
+      if (delayMs <= 0) {
+        setVisibleArrowCount((prev) => Math.max(prev, i + 1));
+      } else {
+        const timer = setTimeout(() => {
+          setVisibleArrowCount((prev) => Math.max(prev, i + 1));
+        }, delayMs);
+        staggerTimers.current.push(timer);
+      }
+    });
+
+    // Schedule highlight reveals
+    const highlights = currentAnnotation.highlights ?? [];
+    const arrowCount = arrows.length;
+    highlights.forEach((highlight, i) => {
+      const hasExplicitDelay = highlight.delay !== undefined && highlight.delay !== null;
+      const delaySec = hasExplicitDelay
+        ? highlight.delay as number
+        : computeAutoDelay(arrowCount + i, totalItems, annotationText);
+      const delayMs = delaySec * 1000;
+
+      if (delayMs <= 0) {
+        setVisibleHighlightCount((prev) => Math.max(prev, i + 1));
+      } else {
+        const timer = setTimeout(() => {
+          setVisibleHighlightCount((prev) => Math.max(prev, i + 1));
+        }, delayMs);
+        staggerTimers.current.push(timer);
+      }
+    });
+
+    return () => {
+      for (const t of staggerTimers.current) clearTimeout(t);
+      staggerTimers.current = [];
+    };
+  }, [currentAnnotation, computeAutoDelay]);
+
+  // Convert visible arrows/highlights to board format
+  const boardArrows = useMemo(() => {
+    if (!currentAnnotation?.arrows || visibleArrowCount === 0) return undefined;
+    return currentAnnotation.arrows.slice(0, visibleArrowCount).map((a) => ({
+      startSquare: a.from,
+      endSquare: a.to,
+      color: a.color ?? 'rgba(0, 180, 80, 0.8)',
+    }));
+  }, [currentAnnotation, visibleArrowCount]);
+
+  const boardHighlights = useMemo(() => {
+    if (!currentAnnotation?.highlights || visibleHighlightCount === 0) return undefined;
+    return currentAnnotation.highlights.slice(0, visibleHighlightCount).map((h) => ({
+      square: h.square,
+      color: h.color ?? 'rgba(255, 255, 0, 0.4)',
+    }));
+  }, [currentAnnotation, visibleHighlightCount]);
+
   // Current move number and color for display
   const displayMoveNumber = currentMoveIndex === 0
     ? 1
@@ -219,15 +318,22 @@ export function WalkthroughMode({
     }
   }, [currentMoveIndex, expectedMoves.length]);
 
+  // Map auto-play speed to TTS speech rate
+  const TTS_RATE: Record<AutoPlaySpeed, number> = useMemo(() => ({
+    slow: 0.75,
+    normal: 0.95,
+    fast: 1.4,
+  }), []);
+
   // TTS narration when move changes
   useEffect(() => {
     if (currentMoveIndex === 0) return;
     if (!annotations) return;
     const ann = annotations[currentMoveIndex - 1] as OpeningMoveAnnotation | undefined;
     if (ann) {
-      speechService.speak(ann.annotation);
+      speechService.speak(ann.annotation, { rate: TTS_RATE[autoPlaySpeed] });
     }
-  }, [currentMoveIndex, annotations]);
+  }, [currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
   // Clean up speech on unmount
   useEffect(() => {
@@ -335,6 +441,8 @@ export function WalkthroughMode({
             isMate={latestIsMate}
             mateIn={latestMateIn}
             highlightSquares={lastMove}
+            arrows={boardArrows}
+            annotationHighlights={boardHighlights}
           />
         </div>
       </div>
