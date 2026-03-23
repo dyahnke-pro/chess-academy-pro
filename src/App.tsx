@@ -75,11 +75,14 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
-        // Auto-load Kokoro HD voice from IndexedDB cache (fast, no network)
+        // Auto-load Kokoro HD voice from IndexedDB cache after app settles
+        // Deferred to avoid WASM compilation blocking the main thread on startup
         if (profile.preferences.kokoroEnabled) {
-          void kokoroService.loadModel().catch(() => {
-            // Silent fail — falls back to Web Speech
-          });
+          setTimeout(() => {
+            void kokoroService.loadModel().catch(() => {
+              // Silent fail — falls back to Web Speech
+            });
+          }, 5000);
         }
       } catch (error) {
         console.error('App initialization failed:', error);
