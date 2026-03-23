@@ -147,14 +147,23 @@ export function WalkthroughMode({
     return () => { cancelled = true; };
   }, [currentFen]);
 
-  // Current annotation for the move that was just played
+  // Current annotation for the move that was just played.
+  // For sub-lines (customLine), only show annotation if the SAN matches —
+  // once the sub-line diverges from the main line, annotations don't apply.
   const currentAnnotation = useMemo((): OpeningMoveAnnotation | null => {
     if (!annotations) return null;
-    // Show annotation for the move that led to the current position
     if (currentMoveIndex === 0) return null;
     const idx = currentMoveIndex - 1;
-    return annotations[idx] ?? null;
-  }, [annotations, currentMoveIndex]);
+    const ann = annotations[idx];
+    if (!ann) return null;
+
+    // If we're in a sub-line, verify the annotation's SAN matches the actual move played
+    if (variation) {
+      const actualMove = expectedMoves[idx];
+      if (!actualMove || ann.san !== actualMove.san) return null;
+    }
+    return ann;
+  }, [annotations, currentMoveIndex, variation, expectedMoves]);
 
   // ─── Real-time arrow/highlight reveal via TTS boundary events ────────────
 
