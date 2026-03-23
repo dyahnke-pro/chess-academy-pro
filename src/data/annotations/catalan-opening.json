@@ -1,0 +1,122 @@
+{
+  "openingId": "catalan-opening",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We start with d4, which is the foundation of the Catalan. But unlike the London or QGD where we build a d4-e3 chain, in the Catalan we're going to fianchetto the kingside bishop to g2. The combination of d4 + g3 + Bg2 is one of the most powerful setups in modern chess. The bishop on g2 will x-ray the entire a8-h1 diagonal.",
+      "pawnStructure": "Single d4 center pawn. The Catalan will combine this with a fianchettoed bishop rather than a broad e4 center.",
+      "plans": ["Set up the Catalan formation: d4, c4, g3, Bg2", "Control the long diagonal and pressure Black's queenside"],
+      "alternatives": ["Nf3 -- can transpose to the Catalan", "c4 -- English opening, also transposes frequently"]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to its most natural square. By playing Nf6 before d5, Black keeps options open -- they could go for a King's Indian, Nimzo-Indian, or QGD setup depending on what we do. The flexibility of Nf6 is what makes it the most popular reply to d4 at the top level.",
+      "plans": ["Keep flexibility in the opening choice", "Respond to White's setup rather than committing early"],
+      "alternatives": ["d5 -- more committal, directly enters QGD territory", "f5 -- Dutch Defense, aggressive but risky"]
+    },
+    {
+      "san": "c4",
+      "annotation": "We play c4, staking a claim on d5 and establishing the classic d4+c4 pawn duo. This is the standard way to build a queenside space advantage. With c4, we control d5 and offer Black a choice: play d5 and we have QGD-type positions, play e6 and we can go into the Catalan with g3. The c4 pawn is the engine of White's queenside initiative.",
+      "pawnStructure": "The d4+c4 duo controls the center and cramps Black's queenside. This pawn pair is the backbone of the Catalan.",
+      "plans": ["Build the Catalan with g3 next", "Maintain central space advantage"],
+      "alternatives": ["Nf3 -- delays c4, more flexible", "g3 -- immediate fianchetto, slightly unusual move order"]
+    },
+    {
+      "san": "e6",
+      "annotation": "Black plays e6, signaling a QGD structure. The e6 pawn supports d5 (which is coming) and opens the dark-squared bishop's diagonal. Now we know the game will be a Catalan rather than an Indian defense. Black accepts a slightly cramped position in exchange for rock-solid central control.",
+      "pawnStructure": "Black prepares the e6-d5 chain. As in the QGD, the c8 bishop is restricted, but in the Catalan this is even more pronounced because of the Bg2 pressure.",
+      "plans": ["Set up a solid e6-d5 center", "Develop Be7, castle, and look for breaks"],
+      "alternatives": ["g6 -- enters King's Indian territory", "Bb4 -- Nimzo-Indian, pinning the knight that isn't there yet"]
+    },
+    {
+      "san": "g3",
+      "annotation": "Here it is -- the defining move of the Catalan. We fianchetto the bishop to g2, where it becomes an absolute monster on the long diagonal. The Bg2 will pressure d5, b7, and the entire queenside. This is what makes the Catalan special: instead of the typical Bd3 in the QGD, we get a bishop that works from distance and never gets blocked.",
+      "pawnStructure": "The g3 pawn creates the fianchetto structure. Combined with d4-c4, White has a unique blend of central space and diagonal pressure.",
+      "plans": ["Develop Bg2 to dominate the long diagonal", "Castle kingside and build pressure against b7 and d5", "The Bg2 is the soul of the Catalan"],
+      "alternatives": ["Nc3 -- goes into main line QGD instead", "Bg5 -- another approach but gives up the Catalan bishop"]
+    },
+    {
+      "san": "d5",
+      "annotation": "Black plays d5, establishing the classical center. This is the main line -- Black fights for their share of central space. But here's the thing: with our bishop coming to g2, Black's d5 and b7 pawns are under long-term pressure. The whole Catalan middlegame revolves around White probing these light-square weaknesses on the queenside.",
+      "pawnStructure": "The c4 vs d5 tension is the critical factor. If Black takes cxd4, White gets the powerful Bg2 raking the diagonal. If Black holds, the pressure builds.",
+      "plans": ["Hold d5 and develop solidly", "Prepare dxc4 at the right moment to relieve tension"],
+      "alternatives": ["b6 -- Queen's Indian approach, avoids the d5 commitment", "c5 -- Benoni structure, very different character"]
+    },
+    {
+      "san": "Bg2",
+      "annotation": "The Catalan bishop takes its throne. From g2, this bishop is a long-range sniper targeting d5, c6, b7, and ultimately a8. In many Catalan lines, this bishop single-handedly wins material on the queenside. It's not uncommon for White to sacrifice a pawn or two because the Bg2 generates so much pressure that Black can't consolidate.",
+      "plans": ["Pressure the a8-h1 diagonal permanently", "Target b7 and any weakness on the queenside light squares", "Support d5 breaks and queenside expansion"],
+      "alternatives": ["There is no alternative -- Bg2 is the whole point of playing g3"]
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black develops the bishop to e7. It's a modest square, but in the Catalan, Black needs to be solid rather than flashy. The bishop on e7 supports castling and can redeploy to f6 or b4 later. Black's dark-squared bishop is actually the less problematic one -- it's the light-squared bishop on c8 that's the real headache, stuck behind e6.",
+      "plans": ["Castle quickly and stabilize", "Later consider Bf6 or Bb4 to create activity"],
+      "alternatives": ["Bb4+ -- aggressive, but after Bd2 or Nbd2 it's not so effective", "dxc4 -- grabs the pawn immediately, a major alternative"]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop the knight naturally to f3. It supports d4, eyes e5, and completes our kingside development. After O-O, we'll have a compact, powerful setup with the Bg2 working overtime. The knight on f3 is also positioned to support a future Ne5, which is one of White's key maneuvers in the Catalan.",
+      "plans": ["Support d4 and prepare O-O", "Consider Ne5 to increase central dominance", "After castling, the Catalan pressure machine is fully operational"],
+      "alternatives": ["Nh3 -- unusual, heading for f4 but slower"]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles. Essential timing -- in the Catalan, White's pressure on the long diagonal can become dangerous quickly, so Black needs the king safe. The rook on f8 can also support a potential f5 or f6 break later. Black's position is solid but slightly cramped; the plan now is to figure out how to resolve the central tension.",
+      "plans": ["Secure the king before taking action in the center", "Prepare c6, b6, or dxc4 to address the central tension"],
+      "alternatives": ["dxc4 -- taking before castling is the main alternative, leads to sharp play", "O-O is safer and more popular at the top level"]
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle, completing our development setup. The Catalan is now fully armed: Bg2 raking the diagonal, d4 controlling the center, c4 creating tension. Both kings are safe, and the real strategic battle begins. White's plan from here is to gradually increase pressure on the queenside while Black tries to find counterplay.",
+      "plans": ["Begin queenside pressure: Qc2, Rd1, b3", "Maintain the c4 vs d5 tension or provoke dxc4", "The Bg2 will continue to generate long-term pressure"],
+      "alternatives": ["Qc2 -- immediate queen development, but castling first is more standard"]
+    },
+    {
+      "san": "dxc4",
+      "annotation": "Black takes the pawn. This is one of the most critical decisions in the Catalan -- by capturing on c4, Black relieves the central tension and wins a pawn, but the Bg2 becomes a beast with the d5 square cleared and the entire diagonal open. White will get tremendous compensation through the bishop's pressure and superior development. This leads to the Open Catalan.",
+      "pawnStructure": "The d-file opens and Black has an extra c4 pawn. But White's Bg2 now has an unobstructed diagonal. The battle is: can Black hold the pawn, or does White's activity compensate?",
+      "plans": ["Use the extra pawn as a defensive resource", "Develop Bb7 and solidify", "Trying to hold c4 is risky -- returning it at the right moment is often best"],
+      "alternatives": ["c6 -- holds d5 solidly, the Closed Catalan", "b6 -- fianchetto, steady approach"]
+    },
+    {
+      "san": "Qc2",
+      "annotation": "We put the queen on c2, the perfect square. From c2, the queen targets c4 (our pawn we want back), supports the Bg2 diagonal, and eyes h7. The queen also prevents Bd3 blocks on the diagonal. This is the main way White builds pressure in the Open Catalan -- Qc2 followed by Qxc4 to win the pawn back, or a4 to prevent Black from consolidating with b5.",
+      "plans": ["Recapture on c4 with the queen", "Alternatively play a4 to prevent b5", "The Qc2+Bg2 battery is extremely powerful"],
+      "alternatives": ["a4 -- prevents b5 immediately, also strong", "Nbd2 -- targets c4 with the knight instead"]
+    },
+    {
+      "san": "a6",
+      "annotation": "Black plays a6, preparing b5 to defend the c4 pawn. This is Black's main idea in the Open Catalan -- hold onto the extra pawn with b5 and develop the bishop to b7. But this costs time, and White can exploit that. The a6-b5 plan also weakens the a-file and gives the Bg2 even more targets on the long diagonal.",
+      "pawnStructure": "Black prepares b5 to form a queenside pawn chain supporting c4. But the a6-b5 structure can become a target.",
+      "plans": ["Support c4 with b5", "Develop Bb7 and try to consolidate the extra pawn"],
+      "alternatives": ["b5 -- immediately, but a6 first is more flexible", "Nd5 -- centralizes but doesn't address the c4 pawn"]
+    },
+    {
+      "san": "Qxc4",
+      "annotation": "We take the pawn back. Simple and effective. The queen on c4 is active, hitting a6 and eyeing the kingside. Black's a6 move now looks like a slight weakness rather than preparation for b5. From c4, the queen can also support a4, Ne5, or Rd1 -- we have many active plans and Black still has the problem of the c8 bishop.",
+      "plans": ["Use the active queen to generate pressure", "Prepare Bf4, Rd1, or Ne5 for maximum activity", "The Bg2 diagonal remains wide open and dangerous"],
+      "alternatives": ["a4 -- prevents b5 and maintains pressure without taking immediately, an equally valid approach"]
+    },
+    {
+      "san": "b5",
+      "annotation": "Black kicks our queen with b5. Now the queen must move, and Black gains queenside space. The b5 push is a key resource in the Open Catalan -- it develops the bishop to b7 with tempo. But look at the long diagonal now: b7 is exactly where the Bg2 is aiming. If Black puts a bishop on b7, it's trading into White's hands, and if they don't, b7 is a permanent weakness.",
+      "pawnStructure": "Black has a queenside majority with a6-b5. The b7 square is contested between Black's bishop development plans and White's Bg2 pressure.",
+      "plans": ["Gain space and develop Bb7", "Challenge the long diagonal"],
+      "alternatives": ["Bb7 -- without b5, but then the queen stays active on c4"]
+    },
+    {
+      "san": "Qc2",
+      "annotation": "We retreat the queen back to c2. This might look like we're just going back and forth, but the position has changed: Black has committed the b-pawn to b5, which weakens c5, a5, and the light squares. Our queen on c2 still pairs with Bg2 and now we can plan a4 to undermine the b5-a6 structure. The Catalan is a slow squeeze -- every move Black makes to solve one problem creates another.",
+      "plans": ["Play a4 to attack the b5-a6 structure", "Develop Bf4 or Bg5 and increase pressure", "The long-term Bg2 pressure makes Black's life uncomfortable"],
+      "alternatives": ["Qc1 -- less active", "Qc6 -- aggressive but the queen can get trapped"]
+    },
+    {
+      "san": "Bb7",
+      "annotation": "Black finally develops the problem bishop to b7. This is the whole point of the a6-b5 maneuver. The bishop on b7 contests the long diagonal with our Bg2, and it helps support the central squares. But here's the subtle point: in many Catalan endgames, the Bg2 is actually stronger than the Bb7 because it's supported by pawns on d4 and e2, while Black's queenside pawns have advanced and become targets.",
+      "pawnStructure": "Black's queenside is expanded (a6-b5) but potentially overextended. The b7 bishop contests the diagonal but the pawns are committal.",
+      "plans": ["Contest the long diagonal with Bg2", "Prepare c5 to challenge White's center"],
+      "alternatives": ["Ba6 -- interesting, blocks the a-file and eyes c4/d3, but the diagonal isn't as strong as b7"]
+    }
+  ]
+}

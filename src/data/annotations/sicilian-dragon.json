@@ -1,0 +1,119 @@
+{
+  "openingId": "sicilian-dragon",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn, seizing central space and opening lines for the bishop and queen. This is the most ambitious first move, immediately contesting the d5 and f5 squares.",
+      "pawnStructure": "Single center pawn on e4; White wants to expand with d4.",
+      "plans": ["Follow up with d4 for full center control", "Develop pieces rapidly"],
+      "alternatives": ["d4 — Queen's Pawn, more positional", "Nf3 — flexible, may transpose"]
+    },
+    {
+      "san": "c5",
+      "annotation": "The Sicilian Defense fights for d4 asymmetrically. Rather than matching White pawn-for-pawn, Black immediately creates an imbalance — after the eventual d4 cxd4 exchange, Black gets a half-open c-file and a queenside pawn majority, setting the stage for sharp, unbalanced play.",
+      "pawnStructure": "Asymmetric structure from move one — Black's c-pawn will trade for White's d-pawn, creating different pawn majorities.",
+      "plans": ["Contest d4", "Gain the c-file after the exchange", "Create queenside counterplay"]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops toward d4, preparing the central break. The knight on f3 is perfectly placed — controlling d4 and e5 while avoiding premature central commitments.",
+      "plans": ["Play d4 to open the position", "Develop naturally and castle"]
+    },
+    {
+      "san": "d6",
+      "annotation": "Black supports the c5 pawn and prepares the flexible ...Nf6 and ...g6 Dragon setup. The pawn on d6 reinforces e5 control and keeps structural options open — Black hasn't committed to a specific Sicilian variation yet.",
+      "pawnStructure": "The d6+c5 duo is the Sicilian's signature small center, trading space for activity.",
+      "plans": ["Prepare ...Nf6 and ...g6 for the Dragon", "Keep the center flexible"]
+    },
+    {
+      "san": "d4",
+      "annotation": "The defining move of the Open Sicilian. White sacrifices pawn structure for a development lead and central control. After the exchange on d4, White will have a half-open d-file and more space, while Black gets the c-file and queenside majority.",
+      "plans": ["Recapture with Nxd4 for central dominance", "Use the tempo advantage to build an attack"]
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Essentially forced — letting White maintain the d4 pawn would give up too much central territory. The exchange gives Black the critical half-open c-file, which becomes the backbone of Black's counterplay in every Dragon line.",
+      "pawnStructure": "Black now has a queenside majority (a+b+d pawns) that can create a passed pawn in the endgame."
+    },
+    {
+      "san": "Nxd4",
+      "annotation": "The knight lands on the dominant central outpost d4, radiating influence across the board. From here it controls b5, c6, e6, and f5 — all critical squares in the Sicilian. The knight will eventually relocate based on the variation Black chooses.",
+      "plans": ["Develop Nc3 to support e4", "Choose a system based on Black's setup"]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to its best square, putting immediate pressure on e4. This is the most natural developing move — the knight on f6 fights for the center, prepares kingside development, and forces White to defend or support the e4 pawn.",
+      "plans": ["Pressure e4", "Prepare ...g6 for the Dragon fianchetto"]
+    },
+    {
+      "san": "Nc3",
+      "annotation": "White protects e4 with a developing move, bringing the knight to its ideal square. The knight on c3 supports the center, eyes d5, and is essential in virtually every Open Sicilian structure.",
+      "plans": ["Maintain central control", "Choose between various anti-Dragon systems"]
+    },
+    {
+      "san": "g6",
+      "annotation": "The defining move of the Sicilian Dragon — Black fianchettoes the dark-squared bishop to g7, where it becomes a monster on the long diagonal. The bishop on g7 will pressure the entire a1-h8 diagonal, supporting both ...d5 breaks and queenside counterplay along the diagonal. This is one of the most theoretically dense positions in chess.",
+      "pawnStructure": "The g6+d6 setup creates a 'small center' with the bishop controlling key dark squares from the flank.",
+      "plans": ["Fianchetto with ...Bg7 next", "Castle kingside and launch queenside counterplay", "Use the long diagonal for pressure"],
+      "alternatives": ["e6 — Scheveningen, more solid", "Nc6 — Classical, different development scheme"]
+    },
+    {
+      "san": "Be3",
+      "annotation": "White develops the bishop to e3, signaling the Yugoslav Attack — the most critical and dangerous system against the Dragon. The bishop on e3 supports d4, prepares Qd2 and O-O-O, and the whole plan is to launch a kingside pawn storm with g4-h4-h5 against Black's castled king. This is the sharpest possible approach.",
+      "plans": ["Play Qd2 and O-O-O for opposite-side castling", "Launch g4-h4-h5 pawn storm", "Create a direct kingside attack"],
+      "alternatives": ["Be2 — Classical system, quieter and positional", "Bc4 — also sharp, targets f7 directly"]
+    },
+    {
+      "san": "Bg7",
+      "annotation": "The dragon bishop takes its throne on g7 — this is the whole point of the variation. From g7, the bishop rakes the entire long diagonal from h8 to a1, putting pressure on White's queenside and especially the d4/c3 complex. In the Yugoslav Attack, this bishop is Black's most important piece — protecting the king while simultaneously supporting queenside counterplay.",
+      "plans": ["Castle kingside next", "Use the diagonal for queenside pressure after ...Rc8", "Support ...d5 breaks when the timing is right"]
+    },
+    {
+      "san": "f3",
+      "annotation": "A key move in the Yugoslav Attack setup. The pawn on f3 reinforces e4 (freeing the Nc3 from guard duty), prevents ...Ng4 harassing the Be3, and prepares the g4-h4 pawn storm. It also creates a solid pawn chain e4-f3 that's very hard to undermine. The cost is blocking the f3 square from the knight, but in the Yugoslav Attack, White's pieces have other routes.",
+      "pawnStructure": "The e4-f3 pawn chain creates a fortress-like center. White's kingside pawns will advance while the center stays locked.",
+      "plans": ["Complete the Yugoslav setup with Qd2, Bc4/Be2, and O-O-O", "Begin g4-h4-h5 pawn storm"],
+      "alternatives": ["Bc4 — direct pressure on f7 before f3"]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles into what will become a war zone — but this is necessary and correct. The king is safer on g8 behind the fianchettoed bishop than in the center. Black must castle before White launches the pawn storm; every tempo matters in the Dragon's razor-sharp theory. The race is on: White attacks the kingside, Black counterattacks on the queenside.",
+      "plans": ["Begin queenside counterplay with ...Nc6 and ...Rc8", "Use the c-file as the main avenue of attack", "Time ...d5 break for maximum impact"]
+    },
+    {
+      "san": "Qd2",
+      "annotation": "The queen goes to d2, completing the Yugoslav Attack battery with the Be3. This serves multiple purposes: it connects the rooks, supports O-O-O, creates a potential Bh6 threat (trading off the dragon bishop), and the queen can later swing to the kingside. The Qd2+Be3 battery is the signature formation of the Yugoslav Attack.",
+      "plans": ["Castle queenside with O-O-O", "Play Bh6 to trade the dragon bishop", "Support the g4-h4-h5 pawn storm"]
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the last minor piece and pressures the d4 knight. The knight on c6 is aggressively placed — it eyes d4 and e5, and supports the key ...d5 break. In the Dragon, the knight often reroutes to e5 or a5 depending on where White's bishop goes. Developing the knight before ...Rc8 also keeps options open for piece placement.",
+      "plans": ["Pressure d4 and support ...d5", "Reroute to e5 or a5 depending on White's bishop placement", "Prepare ...Rc8 for c-file operations"],
+      "alternatives": ["a5 — preventing Nb3 in some lines", "Qa5 — connecting the attack on a2 with development"]
+    },
+    {
+      "san": "Bc4",
+      "annotation": "White places the bishop on its most aggressive diagonal, aiming directly at f7 — Black's most vulnerable point near the castled king. The Bc4 works hand-in-hand with the Yugoslav Attack: it supports potential Bh6 ideas, can sacrifice on e6 or f7 in tactical lines, and in some variations retreats to b3 to maintain the diagonal pressure while staying safe from ...Na5 attacks.",
+      "plans": ["Maintain pressure on f7", "Castle queenside next", "Prepare Bh6 to trade the dragon bishop"],
+      "alternatives": ["Be2 — safer but less aggressive, the bishop is passive here"]
+    },
+    {
+      "san": "Bd7",
+      "annotation": "Black develops the last minor piece while keeping maximum flexibility. The bishop on d7 connects the rooks, supports a future ...Rc8, and keeps ...b5 ideas alive. In some lines, the bishop reroutes to c6 to add pressure on the long diagonal. This is more flexible than the immediate ...Qa5 or ...Ne5 — Black waits to see White's exact setup before committing.",
+      "plans": ["Play ...Rc8 to seize the open c-file", "Reroute bishop to c6 if helpful", "Support ...b5 or ...Na5 queenside play"],
+      "alternatives": ["Ne5 — aggressive, challenging Bc4 directly", "Qa5 — immediate queenside pressure"]
+    },
+    {
+      "san": "O-O-O",
+      "annotation": "White castles queenside, completing the Yugoslav Attack formation. This is the moment the Dragon becomes one of chess's most violent openings — with kings on opposite sides, both players race to tear open files against the enemy king. White will push g4-h4-h5 to crack open Black's kingside, while Black pushes ...a5-a4 or plays ...Rxc3 sacrifices to blast open the c-file.",
+      "pawnStructure": "Opposite-side castling means pawn storms are free — neither player's king is weakened by their own attacking pawns.",
+      "plans": ["Launch g4-h4-h5 pawn storm immediately", "Play Bh6 to eliminate the dragon bishop", "Open the h-file for a rook lift"]
+    },
+    {
+      "san": "Rc8",
+      "annotation": "Black seizes the open c-file — the single most important move in Black's counterattacking plan. The rook on c8 generates enormous pressure against c3 (the base of White's pawn chain) and the entire queenside. In many Dragon games, Black's ...Rxc3 exchange sacrifice is a standard tactical device that rips open the position around White's king. The race is now fully engaged.",
+      "plans": ["Pressure c3 and the queenside", "Prepare ...Ne5 hitting Bc4 with tempo", "Consider ...Rxc3 exchange sacrifice at the right moment"],
+      "alternatives": ["Ne5 — hitting the bishop first before ...Rc8"]
+    }
+  ]
+}

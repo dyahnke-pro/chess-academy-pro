@@ -54,6 +54,21 @@ export interface MistakePuzzle {
   successes: number;
 }
 
+// ─── Opening Annotations ────────────────────────────────────────────────────
+
+export interface MoveAnnotation {
+  san: string;
+  annotation: string;
+  pawnStructure?: string;
+  plans?: string[];
+  alternatives?: string[];
+}
+
+export interface OpeningAnnotations {
+  openingId: string;
+  moveAnnotations: MoveAnnotation[];
+}
+
 // ─── Opening ─────────────────────────────────────────────────────────────────
 
 export interface OpeningVariation {

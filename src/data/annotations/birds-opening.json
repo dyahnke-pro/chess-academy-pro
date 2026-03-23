@@ -1,0 +1,101 @@
+{
+  "openingId": "birds-opening",
+  "moveAnnotations": [
+    {
+      "san": "f4",
+      "annotation": "The Bird's Opening! We push f4 on move one, immediately staking a claim on the e5 square. This is a hypermodern-ish approach -- we're not occupying the center with e4/d4 right away, but we're controlling e5 from the flank. The downside is it weakens the king's diagonal (e1-h4), so we need to be careful about early Qh4+ ideas. But the upside is a clear attacking plan from the very first move.",
+      "pawnStructure": "The f4 pawn grabs dark-square control on e5, setting up a Stonewall or Leningrad-style formation.",
+      "plans": ["Control e5 and build a kingside attack", "Develop with Nf3, e3, Be2, O-O"],
+      "alternatives": ["e4 - the standard King's Pawn opening", "d4 - the standard Queen's Pawn opening"]
+    },
+    {
+      "san": "d5",
+      "annotation": "Black takes the center with d5, which is the most principled response. Since White played f4 instead of e4, the d5 square is wide open and Black seizes it. This gives Black a strong central outpost and opens lines for the c8 bishop. Black is essentially saying 'you played on the flank, so I'll take the center -- classical chess principles.'",
+      "pawnStructure": "Black's d5 pawn establishes central dominance while White's influence is on the kingside.",
+      "alternatives": ["e5 - the From Gambit, aggressive but risky after fxe5", "Nf6 - flexible, transposes to many lines"]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop the knight to f3, covering e5 and d4 while also preventing any Qh4+ tricks. This is essential -- after f4, the e1-h4 diagonal is weak, and Nf3 is the natural fix. The knight is beautifully placed here: it supports a future d3 or d4, controls the center, and prepares kingside castling. Solid, principled development.",
+      "plans": ["Castle kingside quickly", "Follow with e3, Be2, O-O, d3"],
+      "alternatives": ["e3 - also fine but delays the knight development"]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black mirrors with the most natural knight development. Nf6 defends d5, eyes e4 (which White hasn't played), and prepares to castle. It's flexible and classical -- you can never go wrong putting a knight on f6 this early. Black is keeping all options open for the pawn structure.",
+      "alternatives": ["g6 - heading for a King's Indian setup against the Bird", "c5 - more aggressive central play"]
+    },
+    {
+      "san": "e3",
+      "annotation": "We play e3 to support d4 in the future and open the diagonal for the f1 bishop. Now, e3 might look modest, but it's actually very flexible. We're not committing to d4 yet -- we might play d3 instead for a quieter setup. The e3 pawn also solidifies our center and makes f4 more secure. This is the Classical Bird approach rather than the more aggressive Leningrad with g3.",
+      "pawnStructure": "The e3-f4 structure creates a solid base, potentially transitioning to a Stonewall with d4 or a quieter d3 setup.",
+      "plans": ["Be2 and O-O for quick development", "Choose between d3 (quiet) or d4 (Stonewall) based on Black's setup"]
+    },
+    {
+      "san": "g6",
+      "annotation": "Black fianchettoes the king's bishop, which is a very modern and flexible approach. The bishop on g7 will be a powerhouse on the long diagonal, pressuring White's center and queenside. Combined with d5 already in place, Black gets a hybrid setup with central presence and flank firepower. The g7 bishop will be especially strong if Black can open the center later.",
+      "pawnStructure": "Black's g6 + d5 setup combines central occupation with the fianchetto's long-diagonal pressure.",
+      "plans": ["Complete the fianchetto with Bg7", "Castle kingside and play for c5 to challenge White's center"],
+      "alternatives": ["e6 - more classical but locks in the c8 bishop", "Bf5 - develops the bishop actively before deciding on pawn structure"]
+    },
+    {
+      "san": "Be2",
+      "annotation": "The bishop goes to e2 -- not the most aggressive square, but the most harmonious one in the Bird. On e2 it doesn't block anything, supports a future d3 setup, and prepares immediate castling. We're not trying to attack on move six; we're building a solid, flexible position. The bishop can later go to f3 or d3 if the position opens up.",
+      "plans": ["Castle immediately", "Follow with d3, Qe1-g3 for a kingside buildup"],
+      "alternatives": ["Bb5+ - aggressive but misplaced after Bd7 or c6", "d3 - also fine, order doesn't matter much"]
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Black completes the fianchetto and the bishop is a monster on g7. It eyes the entire a1-h8 diagonal and puts latent pressure on White's queenside and center. This bishop will be Black's best piece if the center opens. It also supports e5 breaks and provides excellent defensive cover for the king after castling.",
+      "plans": ["Castle kingside", "Play c5 to challenge White's center and activate the Bg7"]
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle without delay. The king is safe, the rook is connected, and we're ready to execute our middlegame plan. In the Bird, you want to castle early because f4 has already weakened the kingside a touch -- getting the king tucked away before any tactics arise on that diagonal is just good sense. Now we can focus entirely on our attacking setup.",
+      "plans": ["d3 followed by Qe1-g3 for kingside pressure", "Nbd2 to support e4 ideas"]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black also castles, getting the king to safety. Both sides have completed their basic development and castled kingside. Now the real fight begins -- White will try to build a kingside attack with the f4 pawn as a battering ram, while Black will look to use the strong g7 bishop and central pawns to generate counterplay. It's a strategic battle.",
+      "plans": ["Play c5 to challenge White's center", "Look for e5 or d4 breaks to open the position for the Bg7"]
+    },
+    {
+      "san": "d3",
+      "annotation": "We choose d3 over d4, keeping the position flexible and solid. With d3, we avoid any immediate central confrontation and instead prepare the trademark Bird maneuver: Qe1 followed by Qg3, pointing the queen at the kingside. d3 also supports e4 in the future if we want to expand. This is a quiet but dangerous setup -- Black often underestimates the kingside attack brewing.",
+      "pawnStructure": "The d3-e3-f4 triangle is a compact, hard-to-break formation that supports a slow kingside buildup.",
+      "plans": ["Qe1-g3 to aim at the kingside", "Nbd2 to support e4 expansion"],
+      "alternatives": ["d4 - the Stonewall formation, more committal but also strong"]
+    },
+    {
+      "san": "c5",
+      "annotation": "Black plays c5, grabbing queenside space and preparing to expand there. This is the right strategic idea -- while White builds on the kingside, Black should seek counterplay on the queenside and in the center. The c5 pawn also supports a future d4 break and takes away the d4 square from White's pieces. It's a classic flank-vs-center battle.",
+      "pawnStructure": "Black's c5 + d5 center gives strong central control and queenside expansion potential.",
+      "plans": ["Expand with Nc6, Qb6, b5", "Play d4 at the right moment to blow open the center"],
+      "alternatives": ["b6 - fianchetto the other bishop, very solid", "Nc6 - natural development first"]
+    },
+    {
+      "san": "Qe1",
+      "annotation": "Here it comes -- the signature Bird's Opening maneuver. The queen goes to e1, heading for g3 on the next move. From g3 the queen will support f4-f5 pushes, eye the g6 pawn, and create real threats on the kingside. This queen lift is the engine of White's attack in the Bird. It looks weird moving the queen to e1, but trust the process -- Qg3 is coming and it's going to be dangerous.",
+      "plans": ["Qg3 next move to target the kingside", "Follow with f5 to crack open Black's kingside"],
+      "alternatives": ["Nbd2 - develops first, but delays the attack"]
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the knight to its natural c6 square, controlling d4 and e5. The knight supports Black's central strategy and prepares queenside play. From c6 it also has flexibility to go to d4, e7, or b4 depending on the position. This is a sensible developing move that doesn't commit to a specific plan yet.",
+      "plans": ["Support d4 break", "Reroute to d4 or e7 as needed"],
+      "alternatives": ["Bf5 - develops the bishop actively", "b5 - aggressive queenside expansion"]
+    },
+    {
+      "san": "Qg3",
+      "annotation": "And the queen arrives on g3 with devastating intent. Look at what this does: the queen stares at g6, supports an f5 push that would rip open the kingside, and also eyes the d6 square. Combined with our f4 pawn, we have a real attacking formation. The plan is straightforward -- build up with Nbd2, possibly Bd2-c3, and then launch f5 at the right moment. This is why the Bird is so much fun to play.",
+      "plans": ["Push f5 to attack the g6 pawn and kingside", "Build up with Nbd2, possibly Bd2 and Rae1"],
+      "alternatives": ["Qh3 - alternative square but g3 is better for supporting f5"]
+    },
+    {
+      "san": "Re8",
+      "annotation": "Black plays Re8, getting the rook off the f-file (where it could become a target after f5 opens things up) and onto the e-file where it supports e5 counterplay. This is smart prophylaxis -- the rook on e8 prepares e5 at the right moment to challenge White's center and divert attention from the kingside. It also keeps the f8 square available for the knight or bishop if the king needs extra defenders.",
+      "plans": ["Prepare e5 break to counter White's kingside plans", "Keep the rook active on the semi-open e-file"],
+      "alternatives": ["Nd4 - aggressive knight jump to the center", "b5 - queenside expansion"]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
 import { OpeningPlayMode } from './OpeningPlayMode';
 import { TrainMode } from './TrainMode';
+import { WalkthroughMode } from './WalkthroughMode';
 import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
 import {
@@ -33,6 +34,7 @@ import {
   Square as StopIcon,
   Crosshair,
   Heart,
+  PlayCircle,
 } from 'lucide-react';
 
 type ViewMode =
@@ -49,6 +51,10 @@ type ViewMode =
   | 'warning-learn'
   | 'warning-practice'
   | 'warning-play'
+  | 'walkthrough'
+  | 'variation-walkthrough'
+  | 'trap-walkthrough'
+  | 'warning-walkthrough'
   | 'train-traps'
   | 'train-warnings';
 
@@ -108,6 +114,11 @@ export function OpeningDetailPage(): JSX.Element {
     setActiveWarningLineIndex(-1);
     void loadOpening();
   }, [loadOpening]);
+
+  const handleStartVariationWalkthrough = useCallback((index: number): void => {
+    setActiveVariationIndex(index);
+    setViewMode('variation-walkthrough');
+  }, []);
 
   const handleStartVariationLearn = useCallback((index: number): void => {
     setActiveVariationIndex(index);
@@ -198,6 +209,37 @@ export function OpeningDetailPage(): JSX.Element {
       <div className="flex flex-1 items-center justify-center">
         <p className="text-theme-text-muted">Opening not found.</p>
       </div>
+    );
+  }
+
+  // Walkthrough mode (main line or variation)
+  if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough') {
+    return (
+      <WalkthroughMode
+        opening={opening}
+        variationIndex={viewMode === 'variation-walkthrough' ? activeVariationIndex : undefined}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Walkthrough mode (trap/warning lines)
+  if (viewMode === 'trap-walkthrough' && opening.trapLines?.[activeTrapLineIndex]) {
+    return (
+      <WalkthroughMode
+        opening={opening}
+        customLine={opening.trapLines[activeTrapLineIndex]}
+        onExit={handleExit}
+      />
+    );
+  }
+  if (viewMode === 'warning-walkthrough' && opening.warningLines?.[activeWarningLineIndex]) {
+    return (
+      <WalkthroughMode
+        opening={opening}
+        customLine={opening.warningLines[activeWarningLineIndex]}
+        onExit={handleExit}
+      />
     );
   }
 
@@ -401,11 +443,19 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
-      {/* LEARN, PRACTICE, PLAY buttons */}
-      <div className="grid grid-cols-3 gap-2 mb-6">
+      {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons */}
+      <div className="grid grid-cols-4 gap-2 mb-6">
+        <button
+          onClick={() => setViewMode('walkthrough')}
+          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-accent text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+          data-testid="walkthrough-btn"
+        >
+          <PlayCircle size={20} />
+          Watch
+        </button>
         <button
           onClick={() => setViewMode('learn')}
-          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-accent text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-sm hover:bg-theme-border transition-colors"
           data-testid="learn-btn"
         >
           <LearnIcon size={20} />
@@ -637,6 +687,15 @@ export function OpeningDetailPage(): JSX.Element {
                     <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                   </div>
                   <div className="flex items-center gap-1.5 ml-2">
+                    <button
+                      onClick={() => handleStartVariationWalkthrough(i)}
+                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      aria-label={`Watch ${variation.name}`}
+                      title="Watch"
+                      data-testid={`variation-walkthrough-${i}`}
+                    >
+                      <PlayCircle size={20} />
+                    </button>
                     <button
                       onClick={() => handleStartVariationLearn(i)}
                       className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"

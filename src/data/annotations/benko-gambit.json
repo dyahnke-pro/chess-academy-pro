@@ -1,0 +1,140 @@
+{
+  "openingId": "benko-gambit",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "White opens with the queen's pawn, claiming central space and preparing to build a broad center. The d4 pawn is the starting point for the Benko Gambit — Black will soon offer a pawn sacrifice to blow open the queenside.",
+      "pawnStructure": "Single central pawn on d4; White plans c4 to control d5.",
+      "plans": ["Build a broad center with c4", "Develop pieces behind the pawns"],
+      "alternatives": ["e4 — more open positions", "Nf3 — flexible start"]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to f6, controlling e4 and d5 while keeping all defensive systems available. This is the standard Indian move order that can transpose into many openings depending on how the game develops.",
+      "plans": ["Control the center with pieces first", "Choose a defense based on White's setup"],
+      "alternatives": ["c5 — immediately heading for Benoni/Benko territory", "d5 — classical center"]
+    },
+    {
+      "san": "c4",
+      "annotation": "White expands with c4, forming the powerful d4+c4 central pawn duo. These pawns control d5, e5, and c5 — a massive central grip. The c4 pawn will become a critical factor in the Benko Gambit because Black's b5 sacrifice is aimed directly at this pawn.",
+      "pawnStructure": "The c4+d4 broad center controls key squares d5 and e5.",
+      "plans": ["Maintain the broad center and develop pieces", "Push d5 if Black plays c5"],
+      "alternatives": ["Nf3 — developing before committing c4"]
+    },
+    {
+      "san": "c5",
+      "annotation": "Black plays c5, challenging the d4 pawn. This is the Benoni move order, but Black has a specific idea in mind — after White pushes d5, Black will sacrifice the b-pawn with b5. The Benko Gambit is one of the most practical gambits in chess because Black gets long-lasting positional compensation rather than just a fleeting attack.",
+      "pawnStructure": "The c5 pawn challenges d4, aiming for the asymmetric Benoni/Benko structure.",
+      "plans": ["Provoke d5, then sacrifice b5 to open queenside files", "Generate long-term pressure on the a- and b-files"],
+      "alternatives": ["e6 — transposing to the Benoni proper", "g6 — King's Indian setup"]
+    },
+    {
+      "san": "d5",
+      "annotation": "White pushes d5, gaining space and accepting the asymmetric pawn structure. This is the natural response to c5, but it also walks into Black's preparation. The d5 pawn gives White a space advantage, but Black is about to offer a pawn sacrifice that turns the queenside into a war zone.",
+      "pawnStructure": "White's d5 creates the classic Benoni wedge. The center is fixed, and play will occur on the flanks.",
+      "plans": ["Maintain the d5 pawn and develop behind it", "Build a strong center with e4"],
+      "alternatives": ["dxc5 — avoiding the Benko altogether", "e3 — a cautious approach"]
+    },
+    {
+      "san": "b5",
+      "annotation": "The Benko Gambit! Black sacrifices a pawn to rip open the a- and b-files on the queenside. This is genius from a practical standpoint — Black gives up material but gets two open files, a fianchettoed bishop on the long diagonal, and pressure that lasts deep into the endgame. Unlike most gambits, the Benko actually gets better as pieces come off.",
+      "pawnStructure": "Black offers the b-pawn to destroy White's queenside pawn structure and open the a- and b-files.",
+      "plans": ["Open the a- and b-files for rook pressure", "Fianchetto the bishop and create lasting queenside pressure"],
+      "alternatives": ["e6 — the standard Modern Benoni, without the pawn sacrifice", "d6 — a slower approach"]
+    },
+    {
+      "san": "cxb5",
+      "annotation": "White accepts the gambit, taking the pawn. This is the principled and most common response — if you're going to face pressure, you might as well have the extra pawn. But now Black gets to open more lines. The question for the entire game will be: can White hold on to the material advantage, or will Black's pressure be too much?",
+      "pawnStructure": "White has an extra b5 pawn but Black will open the a-file next.",
+      "plans": ["Hold the extra pawn and develop solidly", "Try to return the pawn at the right moment to consolidate"],
+      "alternatives": ["b6 — a rare sideline trying to keep the queenside closed", "a4 — a positional decline of the gambit"]
+    },
+    {
+      "san": "a6",
+      "annotation": "Black plays a6, the second pawn sacrifice! This is the full Benko — Black gives up TWO pawns to completely demolish White's queenside pawn structure and open both the a-file and b-file. After bxa6 Bxa6, Black's compensation is enormous: two open files, the powerful a6 bishop, and permanent pressure. This is a real investment in long-term activity.",
+      "pawnStructure": "Black sacrifices a second pawn to open both the a- and b-files completely.",
+      "plans": ["After bxa6 Bxa6, develop the bishop actively and control the a- and b-files", "Create relentless queenside pressure with rooks on a8 and b8"],
+      "alternatives": ["g6 — accepting only one pawn sacrifice and fianchettoing", "Qa5 — trying to regain the pawn immediately"]
+    },
+    {
+      "san": "bxa6",
+      "annotation": "White takes the second pawn. Now White is two pawns up, but the a6 pawn is isolated and weak, and both the a-file and b-file are blown wide open for Black's rooks. White's extra pawns are not really an advantage — they're more like targets. The a6 pawn in particular is hard to defend and often falls back to Black.",
+      "pawnStructure": "White has pawns on a6 and d5 — both advanced and potentially vulnerable. Black has open a- and b-files.",
+      "plans": ["Try to consolidate the extra pawns", "Develop quickly to deal with Black's queenside pressure"],
+      "alternatives": ["Nc3 — declining the second pawn and developing instead"]
+    },
+    {
+      "san": "Bxa6",
+      "annotation": "Black recaptures with the bishop, and this piece is immediately active. On a6, it pressures e2 and f1, making it very hard for White to develop the kingside. This is one of the key features of the Benko — the a6 bishop is a thorn in White's position, disrupting natural development plans like Be2 and O-O.",
+      "pawnStructure": "The pawn exchange is complete. Black has two open files and active pieces for the two-pawn investment.",
+      "plans": ["Use the a6 bishop to disrupt White's development", "Double rooks on the a- and b-files"],
+      "alternatives": ["g6 — fianchettoing first, though Bxa6 is the standard move order"]
+    },
+    {
+      "san": "Nc3",
+      "annotation": "White develops the knight to c3, the most natural square. The knight defends the d5 and e4 squares and is an important defensive piece. White needs to develop quickly because Black's pressure is already building — the bishop on a6 and the open files mean White can't afford to be slow.",
+      "plans": ["Develop rapidly to counter Black's queenside initiative", "Push e4 to build a strong center"],
+      "alternatives": ["g3 — fianchettoing to develop the bishop and castle quickly"]
+    },
+    {
+      "san": "d6",
+      "annotation": "Black plays d6, completing the Benko pawn structure. The d6 pawn supports c5 and controls e5, giving Black a solid foundation. Now Black can fianchetto the g7 bishop and start doubling rooks on the queenside. The position is very thematic — Black has less material but superior piece activity and lasting pressure.",
+      "pawnStructure": "Black's c5+d6 form a solid chain. White has d5+e4 potential but must deal with queenside pressure first.",
+      "plans": ["Fianchetto the bishop and prepare to double rooks on a- and b-files", "Create long-term positional pressure"],
+      "alternatives": ["g6 — fianchettoing before playing d6"]
+    },
+    {
+      "san": "e4",
+      "annotation": "White plays e4, building the powerful d5+e4 central pawn chain. This gives White a significant space advantage, but in the Benko, central space is less important than queenside file control. White needs to use this center actively — if the game becomes static, Black's persistent queenside pressure will dominate.",
+      "pawnStructure": "White's e4+d5 chain is imposing but static. White must use it actively or risk being ground down on the queenside.",
+      "plans": ["Use the center for a kingside attack", "Develop quickly and try to neutralize Black's queenside play"],
+      "alternatives": ["Nf3 — developing before pushing e4", "g3 — fianchettoing immediately"]
+    },
+    {
+      "san": "Bxf1",
+      "annotation": "Black takes the f1 bishop! This is the signature move of this particular Benko line. By exchanging on f1, Black eliminates White's light-squared bishop and forces the king to recapture, which means White can never castle. This is a huge positional concession for White — the king on f1 is awkward and needs time to find safety via g2.",
+      "pawnStructure": "No pawn change, but the exchange fundamentally alters the position — White loses castling rights.",
+      "plans": ["Exploit White's inability to castle", "Continue building pressure while White's king finds safety"],
+      "alternatives": ["Bc4 — maintaining the bishop, but this allows White to develop normally"]
+    },
+    {
+      "san": "Kxf1",
+      "annotation": "White is forced to recapture with the king, losing the right to castle. This is one of the most interesting aspects of this Benko line — White has two extra pawns but can't castle. The king will need to march to g2 manually, which costs valuable time. Black's compensation is very real: open files, active pieces, and a misplaced king.",
+      "pawnStructure": "No change; the positional cost is the king's position rather than pawn structure.",
+      "plans": ["Manually castle by playing Kf1-g2", "Develop the remaining pieces while the king walks to safety"],
+      "alternatives": ["No alternative — the king must take"]
+    },
+    {
+      "san": "g6",
+      "annotation": "Black prepares the fianchetto. The g7 bishop will be a monster on the long diagonal, adding to the pressure on d4 and supporting the queenside. Combined with rooks on a8 and b8, the fianchettoed bishop creates a devastating battery. Black is in no rush — the compensation is long-lasting.",
+      "pawnStructure": "Black prepares a fianchetto; the g6+d6 structure is solid and supports the long-term plan.",
+      "plans": ["Complete the fianchetto and activate all pieces", "Double rooks on the open files"],
+      "alternatives": ["Nbd7 — developing the knight first", "Qa5 — putting the queen on an active square"]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops the knight to f3, a solid move that supports the center and prepares the king's march to g2. The knight controls e5 and d4, both critical squares. White is trying to catch up in development and get the king to a safer square as quickly as possible.",
+      "plans": ["Support the king's walk to g2", "Maintain central control and develop the remaining pieces"],
+      "alternatives": ["g3 — immediately preparing Kg2", "Kf2 — starting the king walk"]
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Black completes the fianchetto, and the bishop on g7 is gorgeous. It controls the entire long diagonal from a1 to h8, putting pressure on d4, c3, and b2. Combined with the open a- and b-files and the strong pawn structure, Black has beautiful long-term compensation. The position is objectively balanced despite being two pawns down.",
+      "plans": ["Combine the g7 bishop with rook pressure on the queenside", "Prepare Nbd7, Qa5, and Rfb8 to maximize pressure"],
+      "alternatives": ["Nbd7 — developing before the fianchetto"]
+    },
+    {
+      "san": "g3",
+      "annotation": "White plays g3, preparing to tuck the king on g2 where it will be reasonably safe behind the fianchetto structure. This is the standard way to handle the king position in this Benko line — Kg2 gives the king a sheltered home and connects the rooks. The g3 pawn also supports a future Bg2-like structure if White's light bishop were still on the board.",
+      "plans": ["Play Kg2 to complete the artificial castle", "Connect the rooks and start active play"],
+      "alternatives": ["Kf2 — stepping toward g2 immediately, but less solid"]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles, and this is an interesting moment — Black has castling rights and White doesn't. The king is safe on g8, the f8 rook is activated, and Black can now fully focus on the queenside offensive. The rook on f8 can swing to b8 via f8-b8, and the a8 rook is already on the open a-file. Black's position is harmonious and the pressure is just beginning.",
+      "pawnStructure": "Both sides' pawn structures are set. The game will be decided by piece activity vs material advantage.",
+      "plans": ["Double rooks on the a- and b-files", "Maintain long-term pressure — the Benko gets better with time"],
+      "alternatives": ["Nbd7 — developing before castling", "Qa5 — activating the queen first"]
+    }
+  ]
+}

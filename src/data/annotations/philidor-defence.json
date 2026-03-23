@@ -1,0 +1,181 @@
+{
+  "openingId": "philidor-defence",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn, claiming the center and opening lines for the bishop and queen. The most popular first move, setting the stage for open games.",
+      "pawnStructure": "Single e4 pawn controls d5 and f5. White plans to follow with Nf3 and d4.",
+      "plans": [
+        "Develop quickly with Nf3 and d4 for a classical center",
+        "Open lines for rapid piece activity"
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "Black mirrors White's approach, creating a symmetrical center. This is the most direct response — Black immediately fights for the same central squares. The e5 pawn controls d4 and f4, preventing White from dominating unchallenged.",
+      "pawnStructure": "Symmetrical e4 vs e5. The battle for d4 and d5 will determine the middlegame.",
+      "plans": [
+        "Defend e5 and develop pieces naturally",
+        "Look for ...d5 break when prepared"
+      ],
+      "alternatives": [
+        "1...c5 (Sicilian) — asymmetrical and more combative",
+        "1...e6 (French) — solid but locks in the light bishop"
+      ]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops the knight to its ideal square, attacking e5. The knight controls d4 and helps prepare d4 to open the center. This is the most natural move — develop with purpose, attack something, and prepare to castle.",
+      "plans": [
+        "Attack e5 and prepare d4",
+        "Castle kingside quickly"
+      ]
+    },
+    {
+      "san": "d6",
+      "annotation": "The Philidor Defense! Instead of the more common 2...Nc6, Black supports e5 with the d-pawn. The philosophy is defensive: build a solid, compact structure and avoid early tactical complications. The downside is clear — the dark-squared bishop is blocked behind d6. Philidor called this the best defense in his 1749 treatise, but modern players find it a bit passive.",
+      "pawnStructure": "The d6-e5 chain is very solid but slightly cramped. Black has a 'small center' that's hard to attack but limits piece mobility, especially the dark-squared bishop.",
+      "plans": [
+        "Develop ...Nf6 and ...Be7, keeping the position solid",
+        "Eventually free the position with ...d5 or ...f5"
+      ],
+      "alternatives": [
+        "2...Nc6 — the more popular choice, develops a piece and defends e5 actively",
+        "2...d5 — the Petroff-like Philidor Counter-Gambit, very rare"
+      ]
+    },
+    {
+      "san": "d4",
+      "annotation": "White immediately challenges the center, which is the right approach against the Philidor. By pushing d4, White forces Black to make a decision: exchange on d4 (opening the position when Black is cramped), maintain the tension, or push ...exd4. White wants to open the center where the space advantage matters most.",
+      "pawnStructure": "Central tension between d4/e4 and d6/e5. White's center is aggressive and space-gaining.",
+      "plans": [
+        "Open the center to exploit the space advantage",
+        "Develop pieces behind the pawns and attack"
+      ],
+      "alternatives": [
+        "3.Bc4 — develops first, less direct but still strong",
+        "3.d3 — quiet, leads to a King's Indian Attack setup"
+      ]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to f6, the most natural square. It attacks e4, prepares castling, and keeps the position flexible. Black doesn't capture on d4 yet because that would open the center when Black's development is lagging — instead, Black maintains the tension and develops pieces.",
+      "pawnStructure": "The tension in the center remains. Black's knight on f6 pressures e4, adding to the central fight.",
+      "plans": [
+        "Complete development with ...Be7 and ...O-O",
+        "Maintain the central tension as long as possible"
+      ],
+      "alternatives": [
+        "3...exd4 — releases the tension but opens lines when Black is less developed",
+        "3...Nd7 — the Hanham Variation, very solid but more passive"
+      ]
+    },
+    {
+      "san": "Nc3",
+      "annotation": "White develops the knight to c3, supporting e4 and controlling d5. The knight on c3 is essential — it keeps the center intact and prepares for further development. With both knights out, White is ready to develop the bishops and castle. The position is becoming a standard Philidor structure.",
+      "pawnStructure": "White's center is well-supported. The d4-e4 complex is strong and Black must find a way to challenge it.",
+      "plans": [
+        "Develop Bc4 or Be2 and castle",
+        "Maintain central pressure and prepare for middlegame"
+      ]
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Black develops the knight to d7 rather than c6. This is the Hanham Variation approach within the Philidor — the knight on d7 supports e5 and keeps the c-pawn free to advance later with ...c6 or ...c5. On c6, the knight would block the c-pawn and also be tactically exposed to d5 advances. The d7 knight is humble but functional.",
+      "pawnStructure": "Black's structure remains compact: d6-e5 with knights on f6 and d7. The c-pawn is free for ...c6 or ...c5.",
+      "plans": [
+        "Play ...Be7 and ...O-O for solid development",
+        "Prepare ...c6 followed by ...d5 to free the position"
+      ],
+      "alternatives": [
+        "4...Nc6 — more active but blocks the c-pawn and can be hit by d5"
+      ]
+    },
+    {
+      "san": "Bc4",
+      "annotation": "White puts the bishop on its most aggressive diagonal, targeting f7 — the weakest square in Black's position. The bishop on c4 combines with the knight on f3 to create real threats, and it also supports a potential d5 push. This is the most principled development — active pieces aimed at Black's weak points.",
+      "pawnStructure": "No structural change. The bishop on c4 creates tactical pressure on f7 and supports central advances.",
+      "plans": [
+        "Castle and create threats against f7",
+        "Prepare d5 or dxe5 to open lines"
+      ],
+      "alternatives": [
+        "5.Be2 — solid but less ambitious, doesn't pressure f7"
+      ]
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black develops the bishop to e7 — modest but necessary. The bishop on e7 prepares castling and covers the d6-b4 diagonal. In the Philidor, Black doesn't get flashy bishop placements; the compensation is the rock-solid structure. The bishop on e7 is passive compared to Bc5 or Bb4, but it's the most reliable in this cramped position.",
+      "pawnStructure": "No change. Black's setup is compact: d6-e5, knights on d7 and f6, bishop on e7.",
+      "plans": [
+        "Castle immediately and get the king safe",
+        "Prepare ...c6 and eventually ...d5 to free the position"
+      ],
+      "alternatives": [
+        "5...Bb4 — more aggressive pin but can be resolved with a3"
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "White castles, completing kingside development. The king is safe, the rook is now on f1 supporting f4 ideas, and White has a clear development advantage. White can now focus entirely on increasing the pressure — the question is whether to play for d5, f4, or a slower buildup.",
+      "plans": [
+        "Play Re1 to support e4 and prepare for central action",
+        "Consider dxe5 dxe5 followed by central pressure on the open d-file"
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles, finally getting the king to safety. The position is now a typical Philidor middlegame: White has more space and slightly more active pieces, Black has a solid structure and no weaknesses. Black needs to find a way to free the position — usually with ...c6 and ...d5, or ...exd4 followed by activity.",
+      "pawnStructure": "Both sides are castled. The d4-e4 vs d6-e5 tension is the defining feature of the position.",
+      "plans": [
+        "Play ...c6 to prepare ...d5",
+        "Alternatively play ...Re8 and ...Bf8 to regroup"
+      ]
+    },
+    {
+      "san": "Re1",
+      "annotation": "White places the rook on e1, reinforcing the e4 pawn and preparing for central action. The rook on e1 is the most natural square — it supports e4, controls the e-file, and prepares for any central opening. If the center opens after dxe5 dxe5, the rook is already perfectly placed on the half-open file.",
+      "pawnStructure": "No change. The rook supports the central structure from behind.",
+      "plans": [
+        "Prepare dxe5 to open the d-file if advantageous",
+        "Play a4 to gain space on the queenside and restrict ...b5"
+      ],
+      "alternatives": [
+        "7.d5 — closes the center, changes the character completely"
+      ]
+    },
+    {
+      "san": "c6",
+      "annotation": "Black plays ...c6, the key preparatory move for the liberating ...d5 push. Without ...c6 first, ...d5 would leave the d5 pawn unsupported and easy to attack. The c6 pawn also controls d5, preventing any White knight from landing there. This is patient chess — Black is slowly building toward the freeing break.",
+      "pawnStructure": "The c6 pawn completes Black's compact structure. Black is now one move from ...d5, which would equalize the center.",
+      "plans": [
+        "Play ...d5 to challenge the center and free the pieces",
+        "If ...d5 isn't possible yet, play ...Qc7 and ...Rd8 to prepare it"
+      ]
+    },
+    {
+      "san": "a4",
+      "annotation": "White plays a4, a typical move to grab queenside space and prevent ...b5. The pawn on a4 also controls b5, making it harder for Black's knight to reroute via b6. More importantly, a4 prepares Ba2 or a5, creating queenside pressure. White is playing on both flanks while maintaining the center.",
+      "pawnStructure": "The a4 pawn claims queenside space. White has a spatial advantage on both wings now, squeezing Black's position.",
+      "plans": [
+        "Play a5 to further restrict Black on the queenside",
+        "Maintain central tension and look for the right moment to open the position"
+      ],
+      "alternatives": [
+        "8.d5 — aggressive central closure, leads to a different type of game"
+      ]
+    },
+    {
+      "san": "b6",
+      "annotation": "Black plays ...b6, preparing to fianchetto the queen's bishop to b7. This is a practical solution to the Philidor's biggest problem — the light-squared bishop has been doing nothing. From b7, it will support ...d5 and have some diagonal activity. The move ...b6 also prepares ...Bb7 and ...a6 for a compact queenside setup.",
+      "pawnStructure": "Black's b6 creates a slight weakness on c6 and a6, but the benefit of activating the bishop outweighs this. The structure is b6-c6-d6-e5.",
+      "plans": [
+        "Fianchetto with ...Bb7 to activate the light-squared bishop",
+        "Prepare ...d5 with all pieces supporting the break"
+      ],
+      "alternatives": [
+        "8...Qc7 — prepares ...d5 more directly but the bishop stays passive"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "openingId": "sicilian-alapin",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn, claiming central territory and preparing rapid development. The e4 pawn fights for d5 and f5, opening lines for the light-squared bishop and queen.",
+      "plans": ["Control the center", "Develop quickly and castle"],
+      "alternatives": ["d4 — Queen's Pawn, different character", "Nf3 — flexible approach"]
+    },
+    {
+      "san": "c5",
+      "annotation": "The Sicilian Defense — Black fights for d4 without committing to a symmetric structure. Black wants an asymmetric battle where the queenside pawn majority and c-file counterplay offset White's central space.",
+      "pawnStructure": "Asymmetric: Black's c-pawn will contest White's d4 ambitions.",
+      "plans": ["Fight for d4 control", "Create queenside counterplay"]
+    },
+    {
+      "san": "c3",
+      "annotation": "The Alapin Sicilian — White prepares d4 supported by the c3 pawn, avoiding the massive theory of the Open Sicilian entirely. The idea is simple but effective: if White achieves d4 with c3 support, they get an ideal center (e4+d4) without the structural concessions of Nxd4. The downside is that c3 blocks the Nc3 development, costing a tempo and limiting the knight's options.",
+      "pawnStructure": "White aims for a full e4+d4 center supported by c3 — a pawn formation similar to some Caro-Kann or French structures.",
+      "plans": ["Play d4 with c3 support for a strong center", "Develop the knight to d2 instead of c3", "Push e5 to gain kingside space"],
+      "alternatives": ["Nf3 — standard Open Sicilian approach", "Nc3 — Closed Sicilian"]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black immediately targets e4 — the most aggressive and popular response to the Alapin. By attacking the e4 pawn before White plays d4, Black forces White to choose: defend e4 passively, or push e5 and enter a completely different type of game. This is considered the main line and the most theoretically sound approach.",
+      "plans": ["Force White to push e5 or defend passively", "Prepare ...d5 counterplay in the center"],
+      "alternatives": ["d5 — direct central strike, equally good", "e6 — solid but passive"]
+    },
+    {
+      "san": "e5",
+      "annotation": "White pushes the pawn forward, gaining kingside space and attacking the f6 knight. This is the principled response — defending with Bd3 or Qe2 would be passive. The e5 pawn cramps Black's kingside and creates potential for a later d4+e5 pawn duo. The position now resembles an Advanced French or Caro-Kann more than a typical Sicilian.",
+      "pawnStructure": "The e5 pawn gains space but creates a target — Black will aim to undermine it with ...d6 and challenge the center.",
+      "plans": ["Follow with d4 for a powerful pawn center", "Use the e5 pawn to cramp Black's pieces"],
+      "alternatives": ["Bd3 — passive defense of e4"]
+    },
+    {
+      "san": "Nd5",
+      "annotation": "The knight jumps to the ideal central outpost on d5, where it's beautifully placed and not easily challenged. From d5, the knight controls key squares (b4, c3, e3, f4) and eyes weak points in White's position. The knight can't be kicked by c4 (the pawn is on c3) and Black plans to play ...d6 next to challenge the e5 pawn. This is the hallmark of the Alapin — Black accepts the space disadvantage for piece activity.",
+      "plans": ["Use d5 as a stable outpost", "Challenge e5 with ...d6", "Develop pieces actively around the knight"],
+      "alternatives": ["Ng4 — aggressive but White gets good play after d4 with tempo"]
+    },
+    {
+      "san": "d4",
+      "annotation": "White establishes the ideal pawn center with d4+e5, supported by c3. This is exactly what the Alapin aimed for — a powerful pawn chain controlling the center. The d4+e5 duo restricts Black's pieces and provides a launching pad for a kingside attack. However, this center is also a target, and Black will systematically work to undermine it.",
+      "pawnStructure": "The d4-e5-c3 pawn chain is imposing but potentially overextended. Black will target d4 as the base.",
+      "plans": ["Maintain the strong center", "Develop pieces behind the pawn chain", "Use the space advantage for a kingside attack"]
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Black immediately strikes at the base of White's pawn chain. By capturing on d4, Black forces cxd4 and creates potential weaknesses in White's structure. The d4 pawn becomes isolated from e5, and Black can target it while also pressuring the e5 pawn with ...d6. This exchange is thematic — Black trades the c5 pawn for the d4 pawn and opens lines for counterplay.",
+      "pawnStructure": "After cxd4, White has an isolated d4 pawn that must be defended. The e5-d4 pawns are no longer a connected chain.",
+      "plans": ["Target the isolated d4 pawn", "Play ...d6 to challenge e5"]
+    },
+    {
+      "san": "cxd4",
+      "annotation": "White recaptures, maintaining the center but now with an isolated d4 pawn. The IQP (Isolated Queen's Pawn) on d4 is a double-edged feature — it controls e5 and c5 and gives White active piece play, but in an endgame it can become a fatal weakness. White needs to use the space and piece activity before Black can simplify into a favorable endgame.",
+      "pawnStructure": "Classical IQP structure with d4+e5. White has space and activity; Black targets the d4 weakness.",
+      "plans": ["Use piece activity to compensate for the IQP", "Avoid exchanges that transition to a bad endgame", "Develop rapidly to exploit the space"]
+    },
+    {
+      "san": "d6",
+      "annotation": "Black strikes at the e5 pawn, the most logical continuation. By challenging e5, Black aims to dissolve White's space advantage and free the pieces. If White takes on d6, Black recaptures with excellent piece activity. If White maintains e5, Black continues with ...Nc6 and ...dxe5 to break up the center.",
+      "plans": ["Undermine the e5 pawn", "Open the position for the bishop pair", "Develop the dark-squared bishop"],
+      "alternatives": ["Nc6 — developing first before ...d6", "e6 — solid but blocks the light-squared bishop"]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops the knight to its natural square, defending d4 and controlling e5. The knight on f3 is well-placed in this structure — it supports the center, prepares castling, and keeps options open. White accepts that the e5 pawn will likely be exchanged and focuses on rapid development instead.",
+      "plans": ["Castle kingside quickly", "Develop Bc4 targeting d5", "Maintain central tension"],
+      "alternatives": ["exd6 — releasing the tension, but gives Black easy development"]
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the knight with tempo, attacking both the d4 and e5 pawns simultaneously. The knight on c6 is perfectly placed — it pressures White's center from both sides and supports the ...dxe5 break. With two pieces attacking d4 and e5, Black is close to resolving the central tension favorably.",
+      "plans": ["Increase pressure on d4 and e5", "Prepare ...dxe5 to open the position", "Develop the dark-squared bishop"]
+    },
+    {
+      "san": "Bc4",
+      "annotation": "White develops the bishop to an aggressive diagonal, targeting the d5 knight and the f7 square. The Bc4 also supports the d4 pawn indirectly by enabling tactical tricks along the a2-g8 diagonal. This is the most active square for the bishop in this structure — it generates concrete threats rather than sitting passively.",
+      "plans": ["Pressure d5 and f7", "Prepare O-O or Qe2+ ideas", "Maintain initiative through piece activity"],
+      "alternatives": ["Be2 — safer but passive", "exd6 — simplifying the center"]
+    },
+    {
+      "san": "Nb6",
+      "annotation": "Black attacks the Bc4, forcing it to retreat and gaining a tempo. The knight on b6 also controls d5 and a4, and from b6 it can later reroute to d5 or c4 depending on the position. This is a practical move — Black doesn't just develop, they develop with initiative by chasing White's pieces.",
+      "plans": ["Drive back the bishop to gain tempo", "Maintain knight influence on d5", "Continue development with ...dxe5"]
+    },
+    {
+      "san": "Bb3",
+      "annotation": "The bishop retreats to b3, maintaining pressure on the a2-g8 diagonal. From b3, the bishop still eyes f7 and keeps the knight on b6 somewhat misplaced (it's away from the center). The bishop is safe here and continues to exert long-diagonal pressure throughout the middlegame.",
+      "plans": ["Maintain diagonal pressure on f7", "Support the center from a distance", "Castle and develop the remaining pieces"]
+    },
+    {
+      "san": "dxe5",
+      "annotation": "Black captures on e5, resolving the central tension. This exchange eliminates White's space advantage and opens the position. After dxe5, the d4 pawn is now truly isolated and under direct pressure from the Nc6. Black's position is opening up nicely — the dark-squared bishop will develop actively, and Black has potential pressure on the d-file.",
+      "pawnStructure": "White now has a clear IQP on d4. Black's structure is healthy with no weaknesses.",
+      "plans": ["Target the isolated d4 pawn", "Develop actively and use the open lines", "Head toward a favorable endgame"]
+    },
+    {
+      "san": "dxe5",
+      "annotation": "White recaptures with the pawn, maintaining material equality but confirming the isolated e5 pawn. Actually in this position White recaptures to keep the pawn chain remnant, but the pawn on e5 is now even more advanced and potentially weak. The position is double-edged: White has space but structural issues.",
+      "pawnStructure": "The e5 pawn is advanced and isolated — it can be a strength (cramping) or weakness (target) depending on the piece play."
+    },
+    {
+      "san": "Qxd1+",
+      "annotation": "Black forces the queen exchange, heading into an endgame where the structural disadvantages of White's position (the isolated/advanced e5 pawn, the lack of central pawn support) are more pronounced. This is a practical decision — by trading queens, Black removes White's attacking chances and converts the positional advantages into a lasting endgame edge.",
+      "plans": ["Simplify into a favorable endgame", "Target White's pawn weaknesses without queen-side attacks to worry about"],
+      "alternatives": ["Be7 — keeping queens on for a more complex middlegame"]
+    },
+    {
+      "san": "Kxd1",
+      "annotation": "White must recapture with the king since the queen was checked, losing the right to castle. This is a significant concession — the king on d1 is exposed in the center, the rook on h1 is disconnected, and White will need several tempi to coordinate the pieces. The loss of castling rights is the main punishment for allowing the queen trade.",
+      "pawnStructure": "Same structure, but without queens. White's inability to castle makes the king a long-term concern.",
+      "plans": ["Develop and try to activate the king artificially via Ke2-Kf1", "Use the open d-file for the rook", "Try to maintain the e5 pawn as an asset"]
+    },
+    {
+      "san": "Bg4",
+      "annotation": "Black pins the f3 knight against the exposed king on d1 — a powerful developing move that exploits White's lost castling rights. The bishop on g4 is immediately active, creating uncomfortable pressure. If the knight moves, e5 falls; if it stays, the pin restricts White's coordination. This is exactly why ...Qxd1+ was so strong — the resulting endgame is unpleasant for White because of positions like this.",
+      "plans": ["Maintain the pin on Nf3 to restrict White's coordination", "Develop ...e6 and ...Be7 to complete development", "Target the e5 pawn once the pin is resolved"],
+      "alternatives": ["Be6 — also developing, but without the pin pressure"]
+    }
+  ]
+}
