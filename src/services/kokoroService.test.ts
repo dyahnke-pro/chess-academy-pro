@@ -10,6 +10,15 @@ vi.mock('kokoro-js', () => ({
   },
 }));
 
+vi.mock('./modelCacheService', () => ({
+  modelCacheService: {
+    match: vi.fn().mockResolvedValue(undefined),
+    put: vi.fn().mockResolvedValue(undefined),
+    clear: vi.fn().mockResolvedValue(undefined),
+    hasEntries: vi.fn().mockResolvedValue(false),
+  },
+}));
+
 let kokoroService: typeof import('./kokoroService').kokoroService;
 let KOKORO_VOICES: typeof import('./kokoroService').KOKORO_VOICES;
 

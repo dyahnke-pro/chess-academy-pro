@@ -8,6 +8,7 @@ import type {
   SessionRecord,
   MetaRecord,
   MistakePuzzle,
+  ModelCacheEntry,
 } from '../types';
 
 class ChessAcademyDB extends Dexie {
@@ -19,6 +20,7 @@ class ChessAcademyDB extends Dexie {
   sessions!: EntityTable<SessionRecord, 'id'>;
   meta!: EntityTable<MetaRecord, 'key'>;
   mistakePuzzles!: EntityTable<MistakePuzzle, 'id'>;
+  modelCache!: EntityTable<ModelCacheEntry, 'key'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -194,6 +196,18 @@ class ChessAcademyDB extends Dexie {
           prefs.kokoroVoiceId = 'af_heart';
         }
       });
+    });
+
+    this.version(11).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelCache: 'key',
     });
   }
 }

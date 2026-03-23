@@ -3,6 +3,7 @@
 // Only this file may import from kokoro-js.
 
 import { IS_IOS } from '../utils/constants';
+import { modelCacheService } from './modelCacheService';
 
 export type KokoroModelStatus = 'idle' | 'downloading' | 'ready' | 'error';
 
@@ -114,12 +115,21 @@ class KokoroService {
     this.setProgress(0);
 
     try {
+      // Configure transformers.js to use IndexedDB-backed cache
+      // (Cache API doesn't persist on iOS WKWebView / gets cleared by SW updates)
+      const { env } = await import(/* @vite-ignore */ '@huggingface/transformers') as {
+        env: {
+          useCustomCache: boolean;
+          customCache: unknown;
+          backends: { onnx: { wasm: { numThreads: number; proxy: boolean } } };
+        };
+      };
+      env.useCustomCache = true;
+      env.customCache = modelCacheService;
+
       // On iOS, configure ONNX runtime to use single-threaded WASM
       // (iOS WKWebView lacks SharedArrayBuffer for multi-threading)
       if (IS_IOS) {
-        const { env } = await import(/* @vite-ignore */ '@huggingface/transformers') as {
-          env: { backends: { onnx: { wasm: { numThreads: number; proxy: boolean } } } };
-        };
         env.backends.onnx.wasm.numThreads = 1;
         env.backends.onnx.wasm.proxy = false;
       }
@@ -213,6 +223,12 @@ class KokoroService {
     this.tts = null;
     this.setStatus('idle');
     this.setProgress(0);
+  }
+
+  /** Unload model and clear cached files from IndexedDB */
+  async unloadAndClearCache(): Promise<void> {
+    this.unload();
+    await modelCacheService.clear();
   }
 }
 

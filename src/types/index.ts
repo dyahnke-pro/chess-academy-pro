@@ -135,6 +135,13 @@ export interface MetaRecord {
   value: string;
 }
 
+export interface ModelCacheEntry {
+  key: string;
+  data: Blob;
+  headers: string;
+  timestamp: number;
+}
+
 // ─── Games ───────────────────────────────────────────────────────────────────
 
 export type MoveClassification =
