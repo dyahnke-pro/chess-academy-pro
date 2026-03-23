@@ -26,11 +26,27 @@ interface MoveInfo {
 
 type AutoPlaySpeed = 'slow' | 'normal' | 'fast';
 
-const SPEED_MS: Record<AutoPlaySpeed, number> = {
-  slow: 5000,
-  normal: 3000,
-  fast: 1500,
+// Words-per-minute reading speed for each auto-play speed
+const READING_WPM: Record<AutoPlaySpeed, number> = {
+  slow: 120,
+  normal: 180,
+  fast: 300,
 };
+
+// Minimum delay per move even if annotation is short/missing
+const MIN_DELAY_MS: Record<AutoPlaySpeed, number> = {
+  slow: 4000,
+  normal: 2500,
+  fast: 1200,
+};
+
+function getAnnotationDelay(text: string | undefined, speed: AutoPlaySpeed): number {
+  if (!text) return MIN_DELAY_MS[speed];
+  const wordCount = text.split(/\s+/).length;
+  const readingMs = (wordCount / READING_WPM[speed]) * 60 * 1000;
+  // Add 800ms buffer for the move animation + visual processing
+  return Math.max(MIN_DELAY_MS[speed], readingMs + 800);
+}
 
 export function WalkthroughMode({
   opening,
@@ -143,30 +159,58 @@ export function WalkthroughMode({
     : Math.floor((currentMoveIndex - 1) / 2) + 1;
   const displayIsWhite = currentMoveIndex === 0 || (currentMoveIndex - 1) % 2 === 0;
 
-  // Auto-play interval ref
-  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Auto-play timeout ref (dynamic per-move delay)
+  const autoPlayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Auto-play logic
+  // Schedule the next auto-play advance with annotation-aware delay
+  const scheduleNextMove = useCallback(() => {
+    if (autoPlayRef.current) {
+      clearTimeout(autoPlayRef.current);
+      autoPlayRef.current = null;
+    }
+
+    setCurrentMoveIndex((prev) => {
+      if (prev >= expectedMoves.length) {
+        setIsAutoPlaying(false);
+        return prev;
+      }
+      const nextIndex = prev + 1;
+
+      // Calculate delay based on the annotation for the move we just showed
+      const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
+      const fullText = ann
+        ? [ann.annotation, ann.pawnStructure, ...(ann.plans ?? []), ...(ann.alternatives ?? [])].filter(Boolean).join(' ')
+        : undefined;
+      const delay = getAnnotationDelay(fullText, autoPlaySpeed);
+
+      autoPlayRef.current = setTimeout(() => {
+        if (nextIndex < expectedMoves.length) {
+          scheduleNextMove();
+        } else {
+          setIsAutoPlaying(false);
+        }
+      }, delay);
+
+      setBoardKey((k) => k + 1);
+      return nextIndex;
+    });
+  }, [expectedMoves.length, annotations, autoPlaySpeed]);
+
+  // Auto-play logic: kick off the chain when play starts
   useEffect(() => {
     if (isAutoPlaying) {
-      autoPlayRef.current = setInterval(() => {
-        setCurrentMoveIndex((prev) => {
-          if (prev >= expectedMoves.length) {
-            setIsAutoPlaying(false);
-            return prev;
-          }
-          return prev + 1;
-        });
-        setBoardKey((k) => k + 1);
-      }, SPEED_MS[autoPlaySpeed]);
+      // Small initial delay before first advance
+      autoPlayRef.current = setTimeout(() => {
+        scheduleNextMove();
+      }, 500);
     }
     return () => {
       if (autoPlayRef.current) {
-        clearInterval(autoPlayRef.current);
+        clearTimeout(autoPlayRef.current);
         autoPlayRef.current = null;
       }
     };
-  }, [isAutoPlaying, autoPlaySpeed, expectedMoves.length]);
+  }, [isAutoPlaying, scheduleNextMove]);
 
   // Stop auto-play when reaching the end
   useEffect(() => {
