@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import type { MoveAnnotation } from '../../types';
+import type { OpeningMoveAnnotation } from '../../types';
 
 export interface AnnotationCardProps {
-  annotation: MoveAnnotation | null;
+  annotation: OpeningMoveAnnotation | null;
   moveNumber: number;
   isWhite: boolean;
   visible: boolean;

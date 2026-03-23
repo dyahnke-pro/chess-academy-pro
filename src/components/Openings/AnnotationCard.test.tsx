@@ -3,9 +3,9 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { render } from '../../test/utils';
 import { AnnotationCard } from './AnnotationCard';
-import type { MoveAnnotation } from '../../types';
+import type { OpeningMoveAnnotation } from '../../types';
 
-const fullAnnotation: MoveAnnotation = {
+const fullAnnotation: OpeningMoveAnnotation = {
   san: 'e4',
   annotation: 'White opens with the king pawn, claiming the center.',
   pawnStructure: 'Single e4 pawn controls d5 and f5.',
@@ -13,7 +13,7 @@ const fullAnnotation: MoveAnnotation = {
   alternatives: ['1.d4 leads to closed positions'],
 };
 
-const minimalAnnotation: MoveAnnotation = {
+const minimalAnnotation: OpeningMoveAnnotation = {
   san: 'Nf6',
   annotation: 'Black develops the knight to attack e4.',
 };

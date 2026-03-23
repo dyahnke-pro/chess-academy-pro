@@ -8,7 +8,7 @@ import { speechService } from '../../services/speechService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { loadAnnotations } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
-import type { OpeningRecord, OpeningVariation, MoveAnnotation } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../../types';
 import { ArrowRight, Play, Pause } from 'lucide-react';
 
 export interface WalkthroughModeProps {
@@ -60,7 +60,7 @@ export function WalkthroughMode({
 
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
   const [boardKey, setBoardKey] = useState(0);
-  const [annotations, setAnnotations] = useState<MoveAnnotation[] | null>(null);
+  const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('normal');
 
@@ -129,7 +129,7 @@ export function WalkthroughMode({
   }, [currentFen]);
 
   // Current annotation for the move that was just played
-  const currentAnnotation = useMemo((): MoveAnnotation | null => {
+  const currentAnnotation = useMemo((): OpeningMoveAnnotation | null => {
     if (!annotations) return null;
     // Show annotation for the move that led to the current position
     if (currentMoveIndex === 0) return null;
@@ -179,7 +179,7 @@ export function WalkthroughMode({
   useEffect(() => {
     if (currentMoveIndex === 0) return;
     if (!annotations) return;
-    const ann = annotations[currentMoveIndex - 1] as MoveAnnotation | undefined;
+    const ann = annotations[currentMoveIndex - 1] as OpeningMoveAnnotation | undefined;
     if (ann) {
       speechService.speak(ann.annotation);
     }

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { render } from '../../test/utils';
 import { WalkthroughMode } from './WalkthroughMode';
 import { buildOpeningRecord } from '../../test/factories';
-import type { OpeningRecord, MoveAnnotation } from '../../types';
+import type { OpeningRecord, OpeningMoveAnnotation } from '../../types';
 
 /* eslint-disable @typescript-eslint/require-await */
 
@@ -59,7 +59,7 @@ vi.mock('../../services/stockfishEngine', () => ({
   },
 }));
 
-const mockAnnotations: MoveAnnotation[] = [
+const mockAnnotations: OpeningMoveAnnotation[] = [
   {
     san: 'e4',
     annotation: 'White opens with the king pawn.',

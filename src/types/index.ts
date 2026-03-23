@@ -56,7 +56,7 @@ export interface MistakePuzzle {
 
 // ─── Opening Annotations ────────────────────────────────────────────────────
 
-export interface MoveAnnotation {
+export interface OpeningMoveAnnotation {
   san: string;
   annotation: string;
   pawnStructure?: string;
@@ -66,7 +66,7 @@ export interface MoveAnnotation {
 
 export interface OpeningAnnotations {
   openingId: string;
-  moveAnnotations: MoveAnnotation[];
+  moveAnnotations: OpeningMoveAnnotation[];
 }
 
 // ─── Opening ─────────────────────────────────────────────────────────────────
