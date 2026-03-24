@@ -79,10 +79,15 @@ export interface OpeningMoveAnnotation {
   highlights?: AnnotationHighlight[];
 }
 
+export interface OpeningSubLine {
+  name: string;
+  moveAnnotations: OpeningMoveAnnotation[];
+}
+
 export interface OpeningAnnotations {
   openingId: string;
   moveAnnotations: OpeningMoveAnnotation[];
-  subLines?: Record<string, OpeningMoveAnnotation[]>;
+  subLines?: OpeningSubLine[];
 }
 
 // ─── Opening ─────────────────────────────────────────────────────────────────

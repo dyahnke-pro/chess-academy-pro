@@ -403,12 +403,14 @@ export function WalkthroughMode({
     let cancelled = false;
 
     void (async () => {
-      // Check if Kokoro is enabled and ready
+      // Check voice preferences — bail out entirely if voice is disabled
       const profile = await db.profiles.get('main');
+      const voiceEnabled = profile?.preferences.voiceEnabled ?? true;
       const kokoroEnabled = profile?.preferences.kokoroEnabled ?? false;
       const kokoroVoiceId = profile?.preferences.kokoroVoiceId ?? 'af_bella';
 
       if (cancelled) return;
+      if (!voiceEnabled) return;
 
       if (kokoroEnabled && kokoroService.isReady()) {
         // Use Kokoro HD voice — no boundary events but great quality

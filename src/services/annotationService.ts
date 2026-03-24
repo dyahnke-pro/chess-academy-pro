@@ -26,8 +26,15 @@ export async function loadSubLineAnnotations(
   subLineKey: string,
 ): Promise<OpeningMoveAnnotation[] | null> {
   const data = await loadModule(openingId);
-  if (!data?.subLines) return null;
-  return data.subLines[subLineKey] ?? null;
+  if (!data?.subLines || data.subLines.length === 0) return null;
+
+  // subLineKey format: 'variation-N', 'trap-N', 'warning-N'
+  // subLines array holds variation annotations ordered by variation index
+  const match = /^variation-(\d+)$/.exec(subLineKey);
+  if (!match) return null;
+
+  const idx = parseInt(match[1], 10);
+  return data.subLines[idx]?.moveAnnotations ?? null;
 }
 
 export function clearAnnotationCache(): void {

@@ -136,7 +136,7 @@ class KokoroService {
     }
   }
 
-  async speak(text: string, voice: string = 'af_heart', speed: number = 1.0): Promise<void> {
+  async speak(text: string, voice: string = 'af_bella', speed: number = 1.0): Promise<void> {
     if (!this.tts) {
       throw new Error('Kokoro model not loaded. Call loadModel() first.');
     }
