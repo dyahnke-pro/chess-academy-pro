@@ -61,16 +61,12 @@ class VoiceService {
       if (success) return;
     }
 
-    // Tier 2: Kokoro (if enabled and model loaded or loading)
+    // Tier 2: Kokoro (only if model was already explicitly downloaded and is ready)
+    // Never auto-trigger a download here — loading 87 MB WASM in the background
+    // causes iOS Safari OOM crashes. Users download it explicitly from Settings.
     if (preferences.kokoroEnabled) {
       const { kokoroService } = await getKokoro();
-      // Trigger load now if it hasn't started yet (lazy — avoids startup memory pressure)
-      if (kokoroService.getStatus() === 'idle') {
-        void kokoroService.loadModel().catch(() => {});
-      }
-      // Wait up to 15 s if model is still initialising
-      const ready = kokoroService.isReady() || await kokoroService.waitUntilReady(15000);
-      if (ready) {
+      if (kokoroService.isReady()) {
         const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
         if (success) return;
       }

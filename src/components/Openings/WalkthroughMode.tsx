@@ -88,16 +88,9 @@ export function WalkthroughMode({
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('normal');
 
-  // Kick off Kokoro model load as soon as the user opens a walkthrough.
-  // Loading here (not at app startup) avoids competing with Stockfish WASM
-  // and crashing iOS Safari due to memory pressure.
-  useEffect(() => {
-    void db.profiles.get('main').then((profile) => {
-      if (profile?.preferences.kokoroEnabled && kokoroService.getStatus() === 'idle') {
-        void kokoroService.loadModel().catch(() => {});
-      }
-    });
-  }, []);
+  // Do NOT auto-load Kokoro here — the 87 MB WASM model causes OOM crashes
+  // on iOS Safari. Kokoro only loads when the user explicitly taps
+  // "Download Voice Model" in Settings > Coach > HD Voice.
 
   // Stockfish eval state
   const [latestEval, setLatestEval] = useState<number | null>(null);
@@ -425,11 +418,8 @@ export function WalkthroughMode({
       if (!voiceEnabled) return;
 
       if (kokoroEnabled) {
-        // Wait for model if it is still loading in the background
-        let kokoroReady = kokoroService.isReady();
-        if (!kokoroReady) {
-          kokoroReady = await kokoroService.waitUntilReady(15000);
-        }
+        // Only use Kokoro if already ready — never wait/auto-load (OOM risk on iOS)
+        const kokoroReady = kokoroService.isReady();
 
         if (cancelled) return;
 
