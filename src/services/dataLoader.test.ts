@@ -64,7 +64,7 @@ describe('isDatabaseSeeded', () => {
   });
 
   it('returns true after seeding', async () => {
-    await db.meta.put({ key: 'db_seeded_v6', value: 'true' });
+    await db.meta.put({ key: 'db_seeded_v8', value: 'true' });
     const seeded = await isDatabaseSeeded();
     expect(seeded).toBe(true);
   });
@@ -135,8 +135,8 @@ describe('loadRepertoireData', () => {
     await loadRepertoireData();
     const whites = await db.openings.where('color').equals('white').toArray();
     const blacks = await db.openings.where('color').equals('black').toArray();
-    expect(whites.length).toBe(20);
-    expect(blacks.length).toBe(20);
+    expect(whites.length).toBe(15);
+    expect(blacks.length).toBe(25);
   }, 30000);
 
   it('is idempotent — second run does not duplicate records', async () => {

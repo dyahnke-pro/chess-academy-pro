@@ -83,7 +83,7 @@ function slugify(name: string): string {
 
 // ─── Seeding State ────────────────────────────────────────────────────────────
 
-const SEED_KEY = 'db_seeded_v7';
+const SEED_KEY = 'db_seeded_v9';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
   const record = await db.meta.get(SEED_KEY);

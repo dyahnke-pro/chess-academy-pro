@@ -1,0 +1,3639 @@
+{
+  "openingId": "queens-gambit",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "The Queen's Pawn opening. We take central space and open the diagonal for our c1 bishop. Compared to e4, d4 is already defended by the queen, so our center is inherently more stable. The downside? It doesn't open lines for the kingside bishop yet, so our development plan is a bit slower but more solid.",
+      "pawnStructure": "Single d4 pawn controls c5 and e5.",
+      "plans": [
+        "Build a broad pawn center with c4",
+        "Develop pieces behind the pawn chain"
+      ],
+      "alternatives": [
+        "e4 -- more open, sharper",
+        "Nf3 -- flexible, can transpose to many systems"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c1",
+          "to": "f4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "d5",
+      "annotation": "Black meets us head-on in the center. This is the most classical response -- Black plants a pawn on d5 to directly contest our central control. The d5 pawn fights for e4 and c4, and it's the starting point for all Queen's Gambit structures. Black is saying: I want a fair share of the center.",
+      "pawnStructure": "Symmetrical d4 vs d5 central pawns. The tension will be resolved by c4.",
+      "plans": [
+        "Hold d5 and develop solidly",
+        "Prepare to challenge White's c4 pawn if it comes"
+      ],
+      "alternatives": [
+        "Nf6 -- Indian defenses, more flexible",
+        "f5 -- the Dutch, aggressive but weakens the kingside"
+      ],
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "c4",
+      "annotation": "The Queen's Gambit. This is one of the oldest and most respected openings in chess. We're offering a pawn -- but it's not a real sacrifice because Black can't hold the c4 pawn long-term. The real point is to undermine Black's d5 pawn. If dxc4, we play e3-Bxc4 and have a beautiful center. If Black holds d5 with e6, the c8 bishop gets locked in.",
+      "pawnStructure": "We're creating tension between c4 and d5. This is THE fundamental question of the QGD: how does Black resolve this tension?",
+      "plans": [
+        "Challenge and potentially eliminate the d5 pawn",
+        "If Black takes, recapture with the bishop and dominate the center",
+        "If Black plays e6, exploit the locked-in c8 bishop"
+      ],
+      "alternatives": [
+        "Nf3 -- develops first, can still play c4 later",
+        "Bf4 -- the London System, avoids the gambit entirely"
+      ],
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e6",
+      "annotation": "The Queen's Gambit Declined. Black says 'no thanks' to capturing on c4 and instead shores up d5 with the e-pawn. This is extremely solid but comes with a real cost: the c8 bishop is now stuck behind the e6 pawn. Solving the problem of that light-squared bishop is Black's main strategic challenge for the next 20 moves.",
+      "pawnStructure": "Black has a solid e6-d5 pawn chain. The weakness is the c8 bishop trapped behind e6. This is the defining feature of the QGD.",
+      "plans": [
+        "Maintain d5 and develop around the pawn chain",
+        "Find a way to activate the c8 bishop -- the key strategic problem"
+      ],
+      "alternatives": [
+        "dxc4 -- Queen's Gambit Accepted, gives up the center but develops freely",
+        "c6 -- the Slav, supports d5 without blocking the bishop"
+      ],
+      "arrows": [
+        {
+          "from": "e6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c8",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We develop the knight to its ideal square, adding more pressure to d5. The knight on c3 is perfectly placed -- it hits d5 and e4, supports our center, and prepares for multiple plans. This is the main line of the QGD and has been played at the highest levels for over a century.",
+      "plans": [
+        "Increase pressure on d5",
+        "Prepare Bg5 to pin the f6 knight, the main defender of d5"
+      ],
+      "alternatives": [
+        "Nf3 -- equally good, a matter of move order preference"
+      ],
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c1",
+          "to": "g5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to defend d5 and fight for e4. The f6 knight is absolutely critical in the QGD -- it's the primary defender of the d5 pawn. That's exactly why White's next few moves will try to undermine it. Everything in the QGD revolves around the battle for d5.",
+      "plans": [
+        "Defend d5 with the knight",
+        "Prepare Be7 and castle quickly"
+      ],
+      "alternatives": [
+        "c6 -- the Semi-Slav, very solid double defense of d5"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(0, 200, 100, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "cxd5",
+      "annotation": "We exchange on d5. This is the Exchange Variation of the QGD, and it's a very important line to know. By resolving the central tension ourselves, we get a clear, simple plan: minority attack on the queenside with a-b4-b5, targeting Black's c6 pawn. The position becomes strategic rather than tactical, which is perfect for understanding pawn structure play.",
+      "pawnStructure": "After exd5, Black has an isolated d5 pawn duo with the c-pawn. White will have a queenside pawn majority that can advance. This is the classic QGD Exchange structure.",
+      "plans": [
+        "Launch a minority attack with a4-b4-b5",
+        "Target the backward c-pawn after b5 exchange",
+        "Control the c-file with rooks"
+      ],
+      "alternatives": [
+        "Bg5 -- the main line, keeps the tension and plays for more",
+        "Nf3 -- continues development without committing"
+      ],
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "a4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": []
+    },
+    {
+      "san": "exd5",
+      "annotation": "Black recaptures, maintaining the pawn on d5. Now we have the classic QGD Exchange structure: White's d4 vs Black's d5, and White has a queenside pawn majority (a2-b2 vs Black's a7). This structure defines the entire middlegame -- White pushes the b-pawn, Black tries to create kingside counterplay.",
+      "pawnStructure": "Symmetric d4 vs d5 with White having a queenside majority. The c-file will become the main battleground. Black's c-pawn will become a target after b4-b5.",
+      "plans": [
+        "Play for the minority attack on the queenside",
+        "Target the c6 pawn that will appear after b5"
+      ],
+      "alternatives": [
+        "Nxd5 -- gives up a piece, obviously not the idea"
+      ],
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Bg5",
+      "annotation": "We pin the knight that defends d5. This is one of the most important moves in the QGD -- the bishop on g5 creates real pressure. The pin means that if Black isn't careful, we could play Bxf6 and then push through in the center. Black has to deal with this pin, and every way of dealing with it has drawbacks.",
+      "plans": [
+        "Maintain pressure on the d5 pawn via the pin",
+        "Potentially exchange on f6 to damage Black's pawn structure",
+        "Prepare e3, Bd3, and complete development"
+      ],
+      "alternatives": [
+        "Bf4 -- develops without the pin, less aggressive but solid"
+      ],
+      "arrows": [
+        {
+          "from": "g5",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g5",
+          "to": "d8",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black breaks the pin in the most natural way. The bishop on e7 is modest but perfectly functional -- it unpins the knight, prepares castling, and can potentially become active later via f6. This is the main line of the QGD Exchange and it's been played thousands of times at the GM level.",
+      "plans": [
+        "Unpin and castle quickly",
+        "Consider Nf8-e6 or Ne8-f6 rerouting later"
+      ],
+      "alternatives": [
+        "c6 -- solidifies d5 but the bishop needs to come to e7 anyway",
+        "h6 -- forces the bishop to declare but weakens g6"
+      ],
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": []
+    },
+    {
+      "san": "e3",
+      "annotation": "We solidify our d4 pawn and open the diagonal for our light-squared bishop. The move e3 looks modest, but it's very purposeful: it creates a rock-solid center, and now Bd3 is coming to hit the h7 pawn. In the Exchange QGD, White doesn't need to be flashy -- just develop logically and launch the minority attack.",
+      "pawnStructure": "White's e3-d4 pawn chain is very stable. The e3 pawn supports d4 and frees the f1 bishop.",
+      "plans": [
+        "Develop Bd3 next, aiming at h7",
+        "Complete development with Nf3 and O-O",
+        "Start the minority attack with a4-b4-b5"
+      ],
+      "alternatives": [
+        "Qc2 -- prevents Bf5 before e3, a matter of move order"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "d3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d3",
+          "to": "h7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles. Absolutely the right move -- get the king safe before the position opens up. In the QGD Exchange, the middlegame is all about strategic maneuvering, and you need your king secure to focus on the positional battle. The rook also comes to f8 where it can support f5 counterplay ideas.",
+      "plans": [
+        "King safety secured",
+        "Prepare counterplay with c6, Bf5 or Ne4 ideas"
+      ],
+      "alternatives": [
+        "Bf5 -- develops the bishop actively before castling, but king safety is more urgent"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "f5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": []
+    },
+    {
+      "san": "Bd3",
+      "annotation": "Our bishop goes to its best square, aiming directly at h7. This diagonal is a permanent feature of the QGD Exchange -- the Bd3 battery with a queen on c2 is one of White's main attacking ideas. Even if it doesn't lead to a direct attack, it restricts Black's options and controls key light squares.",
+      "plans": [
+        "Aim at h7 with Qc2 battery",
+        "Complete development with Nf3 and O-O",
+        "Then begin the minority attack"
+      ],
+      "alternatives": [
+        "Be2 -- less ambitious, doesn't target h7"
+      ],
+      "arrows": [
+        {
+          "from": "d3",
+          "to": "h7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d1",
+          "to": "c2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Black develops the knight to d7 rather than c6. Why d7? Because in the Exchange QGD, the c6 square is reserved for the c-pawn. Black needs c6 to support d5 and to create a target for White's minority attack. If the knight were on c6, Black couldn't play c6 and the whole defensive setup falls apart.",
+      "pawnStructure": "Black keeps the option of c6 open, which is essential for the defensive structure.",
+      "plans": [
+        "Support the center and prepare Nf8 rerouting",
+        "Play c6 to shore up d5 and prepare for the minority attack defense"
+      ],
+      "alternatives": [
+        "Nc6 -- blocks the c-pawn and creates structural problems",
+        "c6 -- immediate, but the knight hasn't developed yet"
+      ],
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "f8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(0, 200, 100, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our last minor piece to its natural square. Now we're almost fully developed and ready to castle. The knight on f3 supports d4 and e5, and it's a key piece in both the minority attack and any kingside operations. Simple, logical chess.",
+      "plans": [
+        "Castle next move",
+        "Then begin the minority attack with a4, Rab1, b4-b5"
+      ],
+      "alternatives": [
+        "Nge2 -- unusual, blocks the bishop and is less active"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": []
+    },
+    {
+      "san": "Re8",
+      "annotation": "Black places the rook on the semi-open e-file. The rook on e8 does multiple things: it supports a potential e5 break, it backs up the e7 bishop, and it eyes the e-file in case the center opens. This is very standard technique -- put your rooks on open or semi-open files.",
+      "plans": [
+        "Support a potential e5 or Ne4 break",
+        "Contest the e-file if it opens"
+      ],
+      "alternatives": [
+        "c6 -- immediately shoring up d5",
+        "Nf8 -- rerouting the knight toward e6 or g6"
+      ],
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e8",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": []
+    },
+    {
+      "san": "Qc2",
+      "annotation": "The queen goes to c2, completing the famous Bd3-Qc2 battery aimed at h7. This is one of the most important setups in the QGD Exchange. The queen on c2 also vacates d1 for a rook, overprotects c3, and keeps an eye on the c-file. After castling, we're ready to begin the minority attack in earnest.",
+      "plans": [
+        "Create the Bd3+Qc2 battery targeting h7",
+        "Castle and then begin a4-b4-b5 minority attack",
+        "Use the c-file for rook pressure"
+      ],
+      "alternatives": [
+        "O-O -- castles first, plays Qc2 later, just a move order difference"
+      ],
+      "arrows": [
+        {
+          "from": "d3",
+          "to": "h7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "c2",
+          "to": "h7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "c6",
+      "annotation": "Black plays the critical defensive move. The c6 pawn shores up d5, which is the whole foundation of Black's position. But here's the thing -- c6 is also the target of White's minority attack. After b4-b5, White will exchange on c6, leaving Black with either an isolated d5 pawn or a backward pawn on c6. That's the fundamental tension of this structure.",
+      "pawnStructure": "Black's c6-d5 pawn duo is solid but static. White's minority attack (b4-b5) will target c6 specifically. After bxc6 bxc6, Black gets a weak c6 pawn. After cxb5 axb5, Black gets an isolated b-pawn.",
+      "plans": [
+        "Maintain the c6-d5 structure as long as possible",
+        "Prepare counterplay on the kingside with Nf8-g6 or Ne4 ideas"
+      ],
+      "alternatives": [
+        "Nf8 -- rerouting before committing the c-pawn",
+        "a5 -- prevents b4 but weakens b5"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "b4",
+          "to": "b5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    }
+  ],
+  "subLines": [
+    {
+      "name": "Exchange Variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, immediately claiming central space and preparing to support a future pawn center. This move controls the important central squares e5 and c5, while opening lines for the queen and light-squared bishop. The d4 pawn serves as the foundation for White's central strategy in the Queen's Gambit complex.",
+          "pawnStructure": "Classical central pawn structure begins with White controlling key central squares and preparing c4 to challenge Black's future d5.",
+          "plans": [
+            "Play c4 to offer the Queen's Gambit",
+            "Develop pieces harmoniously behind the pawn center"
+          ],
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds symmetrically, occupying the center and preventing White from establishing a broad pawn center with e4. This classical response fights for central control and opens lines for Black's pieces. The d5 pawn now stands firm in the center, ready to be challenged by White's upcoming c4.",
+          "plans": [
+            "Maintain the central pawn on d5",
+            "Develop pieces to support the center"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit! White offers a pawn to deflect Black's central d5 pawn, aiming to gain central control with d4-e4 later. This move also opens the c-file for the queen and develops White's queenside. Even if Black doesn't capture, White gains space and puts pressure on Black's position.",
+          "pawnStructure": "White creates the classic Queen's Gambit pawn structure, offering the c-pawn to disrupt Black's central control.",
+          "plans": [
+            "Recapture on c4 if Black takes, maintaining central control",
+            "Prepare e3 and development if Black declines"
+          ],
+          "alternatives": [
+            "Nf3 leads to different systems like the Colle or London"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black declines the gambit and supports the d5 pawn with a solid move that also prepares to develop the light-squared bishop. This move creates a strong pawn chain but slightly restricts the dark-squared bishop on c8. The e6 pawn ensures Black maintains a foothold in the center while preparing natural development.",
+          "pawnStructure": "Black creates the French Defense-style pawn chain with pawns on d5 and e6, providing solid central control but limiting the dark-squared bishop.",
+          "plans": [
+            "Develop the light-squared bishop before it gets blocked in",
+            "Castle kingside for safety"
+          ],
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to its most natural square, adding pressure to the d5 pawn and preparing to support the center. This knight also eyes the important e4 and b5 squares, fitting perfectly into White's strategic plans. The knight from c3 will be ideally placed for the upcoming minority attack on the queenside.",
+          "plans": [
+            "Continue development with Nf3 and prepare to castle",
+            "Support future pawn advances like a3 and b4"
+          ],
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "b5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the kingside knight to its optimal square, attacking the c4 pawn and preparing to castle. This knight also controls important central squares like e4 and d5, while opening the path for the king to castle safely. The knight on f6 is perfectly placed to support Black's central strategy.",
+          "plans": [
+            "Castle kingside quickly",
+            "Develop the light-squared bishop"
+          ],
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White initiates the Exchange Variation by capturing on d5, leading to a symmetrical pawn structure. This exchange eliminates central tension but gives White a slight space advantage and easier piece development. The resulting position will feature a clear strategic plan for White: the minority attack on the queenside with a3, b4, and b5.",
+          "pawnStructure": "The central tension is resolved, creating symmetrical pawn structures but White retains a slight initiative and easier development.",
+          "plans": [
+            "Develop pieces actively to exploit the slight initiative",
+            "Prepare the minority attack with a3 and b4"
+          ],
+          "alternatives": [
+            "Maintaining tension with Nf3 keeps more complex middlegame possibilities"
+          ],
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black recaptures toward the center, maintaining material balance and keeping the position relatively symmetrical. This recapture opens the e-file for potential future use and maintains Black's central presence. However, Black must be prepared to defend against White's forthcoming minority attack plan.",
+          "pawnStructure": "Symmetrical pawn structure emerges with both sides having d-pawns, but White maintains better piece coordination prospects.",
+          "plans": [
+            "Complete development quickly",
+            "Prepare to defend against White's queenside expansion"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White develops the bishop actively, pinning the knight on f6 to the queen and creating immediate tactical pressure. This aggressive development also supports the central control and prepares to complete kingside development. The bishop on g5 is a key piece in White's attacking setup, often leading to tactical opportunities.",
+          "plans": [
+            "Complete kingside development with Nf3 and castle",
+            "Maintain pressure on the pinned knight"
+          ],
+          "alternatives": [
+            "Nf3 followed by Bf4 is a more positional approach"
+          ],
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d8",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black breaks the pin by developing the light-squared bishop, preparing to castle and defending the knight on f6. This solid developing move also opens the possibility of ...h6 to challenge the bishop on g5 later. The bishop on e7 will play a defensive role while Black consolidates the kingside.",
+          "plans": [
+            "Castle kingside immediately",
+            "Consider ...h6 to challenge the bishop on g5"
+          ],
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White solidifies the center and prepares to complete development with Bd3 and Nf3. This move also creates a secure home for the king after castling and supports the d4 pawn. The pawn on e3 forms part of White's solid pawn structure that will support the upcoming minority attack plan.",
+          "pawnStructure": "White builds a solid pawn foundation with pawns on d4 and e3, creating a stable platform for piece development.",
+          "plans": [
+            "Develop the light-squared bishop to d3",
+            "Complete kingside development"
+          ],
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks. This natural developing move is essential before White can create serious threats on the kingside. With the king safe, Black can now focus on completing development and preparing to meet White's strategic plans.",
+          "plans": [
+            "Complete development with ...Nbd7",
+            "Prepare to defend against White's minority attack"
+          ],
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White develops the light-squared bishop to an active diagonal, eyeing the h7 square and supporting central control. This bishop placement is ideal for the Exchange Variation, as it aims at the kingside while supporting White's central strategy. The bishop on d3 also prepares for potential sacrificial attacks on h7.",
+          "plans": [
+            "Complete development with Nf3 and castle",
+            "Eye tactical opportunities on the kingside"
+          ],
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the queenside knight, preparing to reroute it via f8 or support central play. This knight development also prepares potential pawn advances like ...c6 and ...b6, while avoiding the more passive ...Nc6 which would block the c-pawn. The knight on d7 provides flexibility in Black's setup.",
+          "plans": [
+            "Reroute the knight to f8 if needed",
+            "Prepare ...c6 to support the queenside"
+          ],
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "f8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White places the queen on an excellent square, supporting the minority attack plan while eyeing the kingside. The queen on c2 aligns with the bishop on d3 along the c2-h7 diagonal and prepares to support b4-b5 advances. This centralized queen position is typical of White's strategic setup in the Exchange Variation.",
+          "plans": [
+            "Prepare the minority attack with a3 and b4",
+            "Support potential kingside tactics"
+          ],
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "h7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c2",
+              "to": "c7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black activates the rook on the open e-file, preparing to support the center and potentially create counterplay. This move also prepares to support the e-file and gives Black more active piece play. The rook on e8 eyes the e3 pawn and adds pressure to White's position.",
+          "plans": [
+            "Support central control with the rook",
+            "Prepare ...Nf8 to reroute the knight"
+          ],
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "e3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White completes kingside development by bringing the knight to its optimal square, supporting the center and preparing to castle. The knight on f3 controls key central squares and supports the d4 pawn while preparing to complete White's development. This move sets up the final pieces for White's strategic plan.",
+          "plans": [
+            "Castle kingside to complete development",
+            "Begin the minority attack with a3"
+          ],
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black solidifies the queenside structure and prepares to meet White's minority attack. This move supports the d5 pawn and creates a solid pawn chain, but it also gives White targets for the b4-b5 plan. The c6 pawn is both a strength and a potential weakness in the coming middlegame.",
+          "pawnStructure": "Black creates the solid but potentially vulnerable pawn structure that White will target with the minority attack.",
+          "plans": [
+            "Prepare to defend against b4-b5",
+            "Complete piece development"
+          ],
+          "alternatives": [
+            "...c5 would challenge the center immediately but weaken d5"
+          ],
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside, bringing the king to safety and connecting the rooks. With development nearly complete, White is now ready to begin the thematic minority attack plan. The king is safe on g1, allowing White to focus on executing the strategic queenside advance.",
+          "plans": [
+            "Begin the minority attack with a3 and b4",
+            "Pressure Black's queenside pawn structure"
+          ],
+          "arrows": [
+            {
+              "from": "h1",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nf8",
+          "annotation": "Black begins the typical knight maneuver to improve piece coordination and prepare for White's minority attack. The knight heads towards e6 or g6, where it will be better placed to defend the kingside and support the central structure. This regrouping is a key defensive resource in the Exchange Variation.",
+          "plans": [
+            "Reroute the knight to e6 for better central control",
+            "Prepare to meet White's queenside expansion"
+          ],
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "f8",
+              "to": "g6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Classical Mainline",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, immediately claiming the central e5 square and preparing to support it with c2-c4. This classical approach prioritizes central control over rapid piece development, setting the stage for positional maneuvering. The d4 pawn also opens lines for the queen and dark-squared bishop while maintaining flexibility in pawn structure.",
+          "pawnStructure": "White establishes a central pawn on d4, controlling the key e5 and c5 squares. This creates the foundation for a classical pawn center.",
+          "plans": [
+            "Support the d4 pawn with c2-c4 to create the ideal pawn duo",
+            "Develop pieces harmoniously behind the pawn center"
+          ],
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds symmetrically, occupying the central d5 square and controlling e4 and c4. This move directly challenges White's central ambitions and prepares to meet c2-c4 with solid resistance. The d5 pawn creates immediate central tension and gives Black equal fighting chances in the center.",
+          "pawnStructure": "The central tension is established with pawns facing off on d4 and d5. Black controls the e4 and c4 squares, creating a balanced central structure.",
+          "plans": [
+            "Defend the d5 pawn when White plays c4",
+            "Develop pieces to support the central structure"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "White strikes at Black's central pawn, offering the Queen's Gambit. This aggressive pawn advance challenges Black's grip on d5 and aims to deflect the pawn from the center. If Black captures with dxc4, White can recapture and gain central dominance, while if Black maintains with ...e6 or ...c6, White still achieves excellent piece development and space advantage.",
+          "pawnStructure": "White creates the Queen's Gambit pawn structure, putting immediate pressure on Black's d5 pawn and fighting for central control.",
+          "plans": [
+            "If Black takes dxc4, recapture with piece to dominate center",
+            "Develop pieces rapidly while maintaining central pressure"
+          ],
+          "alternatives": [
+            "Nf3 leads to quieter development without immediate central tension"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black chooses the solid Queen's Gambit Declined, supporting the d5 pawn and maintaining central control. This move prepares to complete kingside development with ...Nf6 and ...Be7, leading to the Classical Defense. While it slightly restricts the light-squared bishop, it creates a rock-solid pawn chain and maintains the central tension that is characteristic of the QGD.",
+          "pawnStructure": "Black establishes the classical QGD pawn chain with pawns on d5 and e6, creating a solid but slightly passive structure that controls key central squares.",
+          "plans": [
+            "Complete kingside development with ...Nf6 and ...Be7",
+            "Castle kingside for safety while maintaining the central pawn"
+          ],
+          "alternatives": [
+            "...dxc4 accepts the gambit but allows White central dominance",
+            "...c6 leads to the Slav Defense with different characteristics"
+          ],
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to its most active square, adding pressure to Black's d5 pawn and preparing to support White's central expansion. The knight on c3 also eyes the important e4 square and can potentially reroute to e2-g3 or a4-b6 depending on the position's demands. This natural development move maintains maximum flexibility while increasing the pressure on Black's center.",
+          "plans": [
+            "Continue applying pressure to the d5 pawn",
+            "Maintain flexibility for piece placement based on Black's setup"
+          ],
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to its ideal square, attacking White's e4 square and preparing to castle kingside. This move is the most natural in the position, supporting the central pawn structure while developing toward the king for safety. The knight on f6 also prepares potential tactical themes involving ...Ne4 if White's knight ever leaves c3.",
+          "plans": [
+            "Complete kingside development with ...Be7 and castling",
+            "Monitor the e4 square for potential knight jumps"
+          ],
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the knight to Black's future queen position, creating immediate tactical pressure and limiting Black's options. This aggressive bishop development is a hallmark of the Classical Queen's Gambit, forcing Black to make a decision about the bishop pair. The pin can become quite annoying, as moving the knight would lose the queen, giving White excellent practical chances.",
+          "plans": [
+            "Maintain the pin to restrict Black's piece coordination",
+            "Potentially exchange the bishop for knight to damage Black's pawn structure"
+          ],
+          "alternatives": [
+            "Nf3 leads to quieter development without the immediate tactical pressure"
+          ],
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d8",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black breaks the pin with the most natural developing move, preparing to castle and maintaining piece harmony. The bishop on e7 defends the kingside and keeps the knight protected, while also maintaining flexibility for future pawn breaks like ...c5 or ...f6. This solid approach is preferred over alternatives like ...h6, which would weaken the kingside pawn structure.",
+          "plans": [
+            "Castle kingside for king safety",
+            "Maintain solid piece coordination while preparing central counterplay"
+          ],
+          "alternatives": [
+            "...h6 forces the bishop to move but weakens the kingside",
+            "...Nbd7 develops first but leaves the pin intact"
+          ],
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "e3",
+          "annotation": "White reinforces the d4 pawn and prepares to complete kingside development with Nf3 and Bd3. This solid move creates a secure pawn triangle in the center and opens a retreat square for the bishop on g5 if needed. The pawn on e3 also supports a future f2-f3 advance if White wants to build a more aggressive pawn center, while maintaining excellent piece coordination.",
+          "pawnStructure": "White creates a solid pawn triangle on c4-d4-e3, providing excellent support for the central pawns and maintaining structural integrity.",
+          "plans": [
+            "Complete development with Nf3 and Bd3",
+            "Maintain central control while preparing kingside castling"
+          ],
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black prioritizes king safety with castling, moving the king away from the center where tactics might arise. This natural move completes the most urgent part of development and prepares to bring the rooks into play via moves like ...Re8 or ...Rd8. With the king safe, Black can focus on solving the positional challenges of the QGD, such as developing the light-squared bishop and finding active piece play.",
+          "plans": [
+            "Develop the queenside pieces, particularly Nbd7",
+            "Prepare central counterplay or piece activity on the kingside"
+          ],
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "h8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f8",
+              "to": "f1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White completes kingside development with the knight's most natural placement, preparing to castle and maintaining pressure on Black's position. The knight on f3 supports the central pawns, controls important squares like e5 and g5, and prepares to castle kingside. This move maintains White's slight initiative while keeping maximum flexibility in piece placement.",
+          "plans": [
+            "Castle kingside to complete development",
+            "Maintain central pressure and look for opportunities to advance"
+          ],
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the queenside knight to its most flexible square, supporting the center and preparing various regrouping ideas. From d7, the knight can potentially reroute to f8-g6 for kingside defense, or to b6 to put pressure on White's queenside. This move also prepares ...c6 to support the central pawn structure and creates space for the queen's rook to potentially use the d8 square.",
+          "plans": [
+            "Consider ...c6 to bolster the pawn center",
+            "Potentially reroute the knight to more active squares like b6 or f8"
+          ],
+          "alternatives": [
+            "...c6 immediately reinforces d5 but blocks the queen's connection to the queenside"
+          ],
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "f8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Rc1",
+          "annotation": "White places the rook on the open c-file, adding pressure to Black's c7 pawn and preparing for the eventual recapture after ...dxc4 Bxc4. This prophylactic move also anticipates Black's ...c6, when the rook will eye the entire c-file. The rook on c1 supports White's queenside initiative and maintains pressure on Black's position, making it harder for Black to achieve comfortable equality.",
+          "plans": [
+            "Maintain pressure on the c-file",
+            "Prepare for central operations after piece exchanges"
+          ],
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "c7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c1",
+              "to": "c6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black reinforces the d5 pawn with this solid pawn move, creating a secure central structure and preparing to maintain the tension in the center. This move also prepares potential queenside expansion with ...b5 and gives the queen access to c7 or a5 if needed. While it slightly restricts the queenside knight's development, it provides excellent central security and maintains the solid character of Black's position.",
+          "pawnStructure": "Black creates a solid pawn chain with pawns on c6, d5, and e6, forming a secure but slightly passive central structure that's difficult to break down.",
+          "plans": [
+            "Maintain the central pawn structure",
+            "Look for opportunities to activate pieces despite the solid setup"
+          ],
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White develops the bishop to its most active diagonal, eyeing Black's kingside and preparing to castle. The bishop on d3 controls important central squares and can potentially support a kingside attack later in the game. This move completes White's kingside development and prepares to castle, while maintaining the pressure created by the pieces already developed. The bishop also prepares potential sacrificial ideas on h7 in some variations.",
+          "plans": [
+            "Castle kingside to complete development",
+            "Maintain pressure on Black's kingside with well-coordinated pieces"
+          ],
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black finally releases the central tension by capturing the c4 pawn, transforming the position's character completely. This exchange eliminates Black's central pawn but also removes White's most advanced pawn, leading to a more open position where piece activity becomes crucial. Black must be prepared for White's recapture with the bishop, which will place a powerful piece in the center and create tactical opportunities.",
+          "pawnStructure": "The central pawn tension is resolved, leaving White with a pawn on d4 and Black with pawns on c6 and e6. This creates a more open position favoring piece activity.",
+          "plans": [
+            "Prepare to deal with White's active bishop on c4",
+            "Look for piece activity to compensate for the loss of central control"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recaptures with the bishop, placing it on an excellent central square where it eyes Black's kingside and controls key diagonal squares. The bishop on c4 is perfectly placed, targeting f7 and supporting White's initiative. This recapture is far superior to Qxc4, as the bishop is more active and doesn't block the queen's development. White now has excellent piece coordination and a slight but lasting advantage.",
+          "plans": [
+            "Maintain pressure on Black's kingside, particularly f7",
+            "Complete development while keeping the initiative"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Black activates the knight to its most central square, creating counterplay and challenging White's bishop. From d5, the knight controls many important squares and puts pressure on White's position, particularly eyeing the bishop on g5 and the pawn on e3. This active move is Black's best try for equality, as it centralizes the most important piece and creates tactical possibilities that can help neutralize White's slight advantage.",
+          "plans": [
+            "Use the centralized knight to create counterplay",
+            "Challenge White's pieces and fight for equality"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "White exchanges the bishop for Black's solid defensive piece, removing a key defender of the kingside and eliminating Black's bishop pair. This exchange slightly damages Black's pawn structure when the queen recaptures, but more importantly, it removes Black's most solid piece and creates potential weaknesses around the black king. White maintains a small but persistent advantage with better piece coordination.",
+          "plans": [
+            "Capitalize on improved piece coordination after the exchange",
+            "Look for opportunities to pressure Black's slightly weakened kingside"
+          ],
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "e7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Black recaptures with the queen, maintaining material balance but accepting a slightly inferior position. The queen on e7 is reasonably placed but not ideal, as it can become a target for White's pieces and doesn't contribute much to Black's counterplay. This position represents the typical tabiya of the Classical Queen's Gambit Declined, where White has a slight but lasting initiative due to better piece placement and more active possibilities, while Black has a solid but somewhat passive position.",
+          "plans": [
+            "Seek piece activity to equalize the position",
+            "Defend carefully while looking for counterplay opportunities"
+          ],
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        }
+      ]
+    },
+    {
+      "name": "Tartakower Variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, immediately staking a claim to the center and preparing to support it with c4. This move controls the e5 and c5 squares, preventing Black from establishing a knight on these strong central outposts. The d4 pawn also opens diagonal lines for the queen and dark-squared bishop while preparing the Queen's Gambit setup.",
+          "pawnStructure": "White establishes a central pawn on d4, creating the foundation for classical central control and potential pawn majority.",
+          "plans": [
+            "Follow up with c4 to offer the Queen's Gambit",
+            "Develop pieces harmoniously while maintaining central pressure"
+          ],
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds symmetrically in the center, establishing an equal claim to central squares. This pawn directly opposes White's d4 and prepares to meet the coming Queen's Gambit. By playing d5, Black controls c4 and e4, ensuring White cannot dominate the center completely. This is the most principled response, leading to rich positional play.",
+          "pawnStructure": "The pawn tension in the center creates the classic d4 vs d5 structure, where both sides have equal central influence.",
+          "plans": [
+            "Be ready to respond to White's c4 with either acceptance or decline",
+            "Develop pieces to support the d5 pawn"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit! White offers the c4 pawn to deflect Black's d5 pawn and gain central control. This isn't a true gambit since White can usually regain the pawn, but it aims to disrupt Black's central pawn structure. If Black captures with dxc4, White gets excellent central control with d4-e4, while if Black maintains the tension, complex positional battles arise.",
+          "pawnStructure": "White creates pawn tension with c4 vs d5, offering to trade the c-pawn for greater central influence.",
+          "plans": [
+            "If dxc4, recapture and establish central dominance",
+            "If tension maintained, develop pieces to pressure d5"
+          ],
+          "alternatives": [
+            "Nf3 leads to quieter systems without the Queen's Gambit complications"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d1",
+              "to": "a4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "e6",
+          "annotation": "Black declines the gambit and supports the d5 pawn, leading to the Queen's Gambit Declined. This solid approach maintains the central pawn but comes at the cost of restricting the light-squared bishop on c8. The e6 pawn creates a solid pawn chain but also defines Black's strategy as more positional rather than tactical. This move prepares kingside development.",
+          "pawnStructure": "Black forms the characteristic e6-d5 pawn chain, solid but potentially restrictive for piece development.",
+          "plans": [
+            "Develop the kingside pieces starting with Nf6 and Be7",
+            "Find a good home for the light-squared bishop, often via b6 and Bb7"
+          ],
+          "alternatives": [
+            "dxc4 accepts the gambit for more tactical complications"
+          ],
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to its most active square, adding pressure to the d5 pawn and preparing to support the center. The knight on c3 is perfectly placed, controlling key central squares and ready to support a future e4 advance or d5 pressure. This move also keeps options open for both kingside development and potential queenside expansion.",
+          "plans": [
+            "Develop the kingside with Nf3 and prepare to pressure d5",
+            "Consider future e4 advance to gain space"
+          ],
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to its ideal square, defending the d5 pawn and controlling key central squares. The knight on f6 is actively placed, putting pressure on e4 and preparing kingside castling. This natural developing move fits perfectly into Black's solid system while maintaining flexibility in the position.",
+          "plans": [
+            "Continue development with Be7 and prepare castling",
+            "Maintain central control and look for counterplay"
+          ],
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White develops the bishop aggressively, pinning the knight on f6 to the queen on d8. This creates immediate tactical pressure and is a key move in many Queen's Gambit lines. The bishop on g5 controls important dark squares and puts Black's knight in an uncomfortable pin, potentially forcing Black to break it with h6 or defend it with Be7.",
+          "plans": [
+            "Maintain the pin pressure and develop other pieces",
+            "Be ready to exchange on f6 if it becomes advantageous"
+          ],
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d8",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop and breaks the pin on the knight, allowing normal piece coordination. The bishop on e7 is solid but somewhat passive, prioritizing safety over activity. This move prepares castling and maintains the knight's defense of d5, though it doesn't solve the problem of the light-squared bishop on c8.",
+          "plans": [
+            "Castle kingside for safety",
+            "Consider h6 to chase away the annoying bishop on g5"
+          ],
+          "alternatives": [
+            "h6 immediately challenges the bishop but weakens the kingside slightly"
+          ],
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "e3",
+          "annotation": "White reinforces the d4 pawn and prepares to develop the kingside pieces. This solid move supports the center and opens a path for the light-squared bishop to develop to d3 or e2. While not as aggressive as alternatives like Qc2 or f3, e3 maintains a strong positional foundation and keeps the center secure.",
+          "pawnStructure": "White builds a solid pawn triangle with d4-e3-c4, providing excellent central support.",
+          "plans": [
+            "Develop the kingside with Nf3 and Be2 or Bd3",
+            "Maintain central control and prepare for middlegame maneuvering"
+          ],
+          "alternatives": [
+            "f3 supports e4 advance but weakens the kingside",
+            "Qc2 increases pressure on the center"
+          ],
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "e2",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, prioritizing king safety and connecting the rooks. This natural move completes the basic development requirements and prepares for the middlegame. With the king safely tucked away, Black can focus on solving the remaining developmental issues, particularly the light-squared bishop stuck on c8.",
+          "plans": [
+            "Challenge the g5 bishop with h6",
+            "Find a way to develop the light-squared bishop, often via b6-Bb7"
+          ],
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "h8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White completes basic development by bringing the knight to its ideal square. The knight on f3 supports the center, prepares kingside castling, and maintains flexible piece coordination. This move keeps all options open while maintaining solid central control and preparing to increase the pressure on Black's position.",
+          "plans": [
+            "Castle kingside and complete development",
+            "Look for ways to increase pressure on the d5 pawn"
+          ],
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "h6",
+          "annotation": "Black challenges the annoying bishop on g5, forcing it to make a decision. This move is typical in the Tartakower system, where Black is willing to slightly weaken the kingside to improve piece coordination. The h6 advance also prepares to fianchetto the light-squared bishop via b6-Bb7 without interference from the g5 bishop.",
+          "plans": [
+            "Follow up with b6 and Bb7 to develop the light-squared bishop",
+            "Maintain solid central control"
+          ],
+          "arrows": [
+            {
+              "from": "h6",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Bh4",
+          "annotation": "White maintains the bishop and keeps the pressure on the f6 knight. By retreating to h4, the bishop maintains the pin along the diagonal and stays actively placed. This move preserves the tension and forces Black to continue dealing with the bishop's influence on the position while White completes development.",
+          "plans": [
+            "Keep the bishop active and maintain pressure",
+            "Complete development and look for tactical opportunities"
+          ],
+          "alternatives": [
+            "Bxf6 immediately trades the bishop for the knight, simplifying the position"
+          ],
+          "arrows": [
+            {
+              "from": "h4",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "b6",
+          "annotation": "The key move of the Tartakower system! Black prepares to fianchetto the light-squared bishop to b7, where it will be actively placed on the long diagonal. This move solves Black's main developmental problem and creates counterplay against White's center. The bishop on b7 will eye the d5 square and support central operations.",
+          "plans": [
+            "Develop the bishop to b7 for active play",
+            "Create central counterplay and maintain solid structure"
+          ],
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White releases the central tension by exchanging pawns, aiming for the favorable Exchange variation structure. This trade eliminates Black's central pawn but also opens the c-file for White's rook and creates potential weaknesses in Black's pawn structure. The exchange often leads to endgames where White has slightly better piece coordination.",
+          "pawnStructure": "The pawn exchange opens the c-file for White and may leave Black with isolated or backward pawns depending on how the recapture occurs.",
+          "plans": [
+            "Develop active piece play and use the open c-file",
+            "Target any pawn weaknesses in Black's structure"
+          ],
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "c8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "c6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black recaptures with the knight, centralizing it powerfully on d5. This recapture is more active than exd5, as the knight becomes a strong central piece that controls important squares. However, the knight may become a target for White's pieces, and Black must be careful not to let it become overloaded with defensive duties.",
+          "plans": [
+            "Use the centralized knight for active piece play",
+            "Complete development and maintain central control"
+          ],
+          "alternatives": [
+            "exd5 leads to a different pawn structure but keeps the knight for other duties"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "White exchanges bishops, removing Black's solid defensive piece and potentially weakening Black's kingside dark squares. This trade eliminates the bishop that was defending the knight on d5 and may give White better piece coordination. The exchange also opens tactical possibilities and simplifies the position slightly in White's favor.",
+          "plans": [
+            "Follow up by challenging the centralized knight on d5",
+            "Use improved piece coordination for active play"
+          ],
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "e7",
+              "to": "d8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Black recaptures with the queen, maintaining material equality but bringing the queen to a somewhat exposed square. The queen on e7 defends the knight on d5 and maintains central influence, but it may become a target for White's pieces. This recapture keeps Black's position solid but slightly passive.",
+          "plans": [
+            "Defend the knight on d5 and look for counterplay",
+            "Complete development with Bb7"
+          ],
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "White exchanges knights, removing Black's active central piece and simplifying toward a favorable endgame. This trade eliminates Black's best-placed piece and may leave Black with a slightly inferior pawn structure. The exchange also opens the e-file and gives White better piece coordination in the resulting position.",
+          "plans": [
+            "Use superior piece activity in the simplified position",
+            "Target any remaining weaknesses in Black's structure"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c1",
+              "to": "c7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black recaptures with the pawn, maintaining material balance but creating a somewhat isolated pawn structure. The d5 pawn becomes central but potentially weak, requiring constant defense. However, it also controls important central squares and gives Black some space in the center. The pawn structure is now simplified but requires careful handling.",
+          "pawnStructure": "Black now has an isolated d5 pawn that needs support but also provides central control and space.",
+          "plans": [
+            "Support the d5 pawn and use it for central control",
+            "Complete development and create piece activity"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Rc1",
+          "annotation": "White develops the rook to the open c-file, immediately creating pressure and improving piece coordination. The rook on c1 eyes the c7 square and potential weaknesses along the c-file. This natural developing move also prepares to double rooks or create threats along the file, putting pressure on Black's queenside.",
+          "plans": [
+            "Create pressure along the c-file",
+            "Look for tactical opportunities and improve piece coordination"
+          ],
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "c7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c1",
+              "to": "c8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black finally develops the light-squared bishop to an active square, completing the basic development. The bishop on e6 supports the d5 pawn and controls important central squares, particularly c4 and f5. This move improves Black's piece coordination and provides additional support for the central structure, though the bishop may become a target on this square.",
+          "plans": [
+            "Use the bishop to support central operations",
+            "Coordinate pieces for potential counterplay"
+          ],
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e6",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        }
+      ]
+    },
+    {
+      "name": "Queen's Gambit Accepted",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, immediately claiming central space and controlling the important e5 and c5 squares. This move prepares the Queen's Gambit by potentially supporting a c4 advance. Unlike 1.e4, this opening leads to more positional, strategic battles where pawn structure and piece coordination matter more than quick attacks.",
+          "pawnStructure": "White establishes a central pawn on d4, creating the foundation for potential central expansion with e3-e4 later or supporting the c4 gambit pawn.",
+          "plans": [
+            "Prepare c4 to offer the Queen's Gambit",
+            "Develop pieces harmoniously while maintaining central control"
+          ],
+          "alternatives": [
+            "1.e4 leads to sharper tactical play",
+            "1.Nf3 is more flexible but less committal to central control"
+          ],
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black mirrors White's central pawn placement, creating immediate tension in the center. This solid response fights for equal central control and prevents White from dominating with a big pawn center. The d5 pawn also opens lines for Black's dark-squared bishop and queen while establishing a classical pawn structure.",
+          "pawnStructure": "The central tension d4 vs d5 creates the backbone of many Queen's Pawn openings, with both sides having equal central presence for now.",
+          "plans": [
+            "Maintain central tension and piece equality",
+            "Prepare to respond to White's Queen's Gambit if it comes"
+          ],
+          "alternatives": [
+            "1...Nf6 (Indian systems) avoids immediate central commitment",
+            "1...f5 (Dutch Defense) is more aggressive but riskier"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit! White offers the c-pawn to deflect Black's central d5 pawn, aiming to gain central dominance with pawns on d4 and e4. This isn't a true gambit since White can easily regain the pawn, but it forces Black to make an important decision about pawn structure. The move also opens lines for White's pieces and increases pressure on Black's position.",
+          "pawnStructure": "White creates pawn tension, offering to trade the c4 pawn for Black's central d5 pawn, potentially leading to a central pawn majority.",
+          "plans": [
+            "Regain the pawn with pieces while gaining time",
+            "Establish pawns on d4 and e4 for central dominance"
+          ],
+          "alternatives": [
+            "2.Nf3 is solid but less forcing",
+            "2.e3 is safe but allows Black easy equality"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black accepts the Queen's Gambit, capturing the c4 pawn and removing the central tension. This leads to the Queen's Gambit Accepted, where Black temporarily holds an extra pawn but will face pressure to return it. By taking on c4, Black opens the d-file and clears the way for piece development, though White will get good compensation with active piece play and central control.",
+          "pawnStructure": "Black has removed the central d5 vs c4 tension, leaving White with a potential central majority after e3-e4.",
+          "plans": [
+            "Hold onto the extra c4 pawn as long as possible",
+            "Develop pieces actively to counter White's central pressure"
+          ],
+          "alternatives": [
+            "3...e6 (Queen's Gambit Declined) maintains central tension",
+            "3...c6 (Slav Defense) supports the d5 pawn"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "e3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to its most natural square, controlling important central squares e5 and d4 while preparing to castle kingside. This move also begins the process of regaining the c4 pawn, as the knight can support an eventual e3-Bxc4 sequence. The knight on f3 is perfectly placed to support White's central ambitions and maintain pressure on Black's position.",
+          "plans": [
+            "Support e3 to prepare Bxc4 regaining the pawn",
+            "Castle kingside for king safety"
+          ],
+          "alternatives": [
+            "4.e3 immediately is also good but less flexible",
+            "4.Nc3 develops but doesn't directly address the c4 pawn"
+          ],
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to its ideal square, mirroring White's development and controlling the central e4 square. This move also prepares to castle kingside and maintains symmetrical development. The knight on f6 is well-placed to contest White's central control and can later support pawn breaks like ...c5 or ...e5.",
+          "plans": [
+            "Castle kingside for safety",
+            "Support central pawn breaks with ...c5 or ...e5"
+          ],
+          "alternatives": [
+            "4...a6 immediately starts queenside play",
+            "4...e6 solidifies the center but is more passive"
+          ],
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White advances the e-pawn to support the center and prepare Bxc4, regaining the gambit pawn with tempo. This move also opens a diagonal for the light-squared bishop while solidifying White's pawn structure. The e3 pawn provides crucial support for the d4 pawn and prepares White's pieces for active development.",
+          "pawnStructure": "White creates a solid pawn triangle d4-e3, preparing to establish a central pawn majority after regaining on c4.",
+          "plans": [
+            "Play Bxc4 to regain the pawn with development",
+            "Establish central control with pawns on d4 and potentially e4"
+          ],
+          "alternatives": [
+            "5.Qa4+ wins the pawn immediately but is less positional",
+            "5.Nc3 develops but doesn't address the pawn directly"
+          ],
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "e6",
+          "annotation": "Black solidifies the center with this pawn move, supporting potential ...d5 pawn advances and opening a diagonal for the light-squared bishop. This move also prepares ...Be7 and castling kingside while maintaining a solid pawn structure. The e6 pawn helps Black fight for central control and provides a safe foundation for piece development.",
+          "pawnStructure": "Black creates a solid pawn chain with potential for ...d5 later, while the e6 pawn supports central play.",
+          "plans": [
+            "Develop the light-squared bishop to e7",
+            "Castle kingside and maintain solid central structure"
+          ],
+          "alternatives": [
+            "5...Bg4 is more active but allows White strong central play",
+            "5...b5 immediately fights for the c4 pawn but is risky"
+          ],
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White regains the gambit pawn with tempo, developing the bishop to an active square where it eyes the f7 weakness and controls important central squares. The bishop on c4 is ideally placed in the Queen's Gambit Accepted, creating immediate pressure on Black's kingside while supporting White's central control. This move completes the basic theme of the opening: sacrificing time to gain active piece play.",
+          "plans": [
+            "Maintain pressure on f7 and the black king",
+            "Support central advances with the active bishop"
+          ],
+          "alternatives": [
+            "8.Nc3 develops first but allows ...b5",
+            "8.Be2 is solid but less active"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes at White's central pawn with this classical pawn break, challenging the d4 pawn and opening lines for piece activity. This move is thematic in the Queen's Gambit Accepted, as it fights for central space and gives Black counterplay. The c5 advance also prepares ...Nc6 and puts pressure on White to make a decision about the central pawn structure.",
+          "pawnStructure": "Black creates central tension with c5 vs d4, potentially leading to an isolated queen's pawn structure if pawns are traded.",
+          "plans": [
+            "Continue with ...Nc6 to increase pressure on d4",
+            "Open lines for pieces with the pawn break"
+          ],
+          "alternatives": [
+            "8...Be7 is solid but less active",
+            "8...a6 prepares queenside expansion but is slower"
+          ],
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside for safety, removing the king from the center before Black can create more threats. This move also connects the rooks and prepares to bring the king's rook into the game via d1. Castling is particularly important here because the center is becoming tactical with Black's pawn breaks, so king safety is paramount.",
+          "plans": [
+            "Bring the rook to d1 to support the d4 pawn",
+            "Maintain central control with pieces coordinated"
+          ],
+          "alternatives": [
+            "9.dxc5 releases tension but gives Black easy development",
+            "9.d5 advances aggressively but may be premature"
+          ],
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "g1",
+              "to": "h1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "a6",
+          "annotation": "Black begins queenside expansion with this preparatory pawn move, intending ...b5 to challenge White's bishop and gain space on the queenside. This move also prevents any Nb5 ideas and gives Black's pieces more room to maneuver. The a6 advance is typical in the Queen's Gambit Accepted, as Black seeks counterplay on the flank while White dominates the center.",
+          "plans": [
+            "Follow up with ...b5 to challenge the Bc4",
+            "Create queenside counterplay while White controls the center"
+          ],
+          "alternatives": [
+            "9...Be7 completes development but is less active",
+            "9...Nc6 immediately pressures d4 but allows dxc5"
+          ],
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "a6",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White develops the queen to a flexible square, supporting the center while preparing potential tactics. The queen on e2 eyes the e6 pawn and can later swing to the kingside if needed. This move also prepares Rd1 to increase pressure on the d4-pawn and maintains White's piece coordination. The queen is well-placed here to support both central and kingside operations.",
+          "plans": [
+            "Play Rd1 to support the d4 pawn",
+            "Maintain flexibility for kingside or central operations"
+          ],
+          "alternatives": [
+            "10.Qd3 is more active but less flexible",
+            "10.Re1 prepares e4 but doesn't address Black's queenside play"
+          ],
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d1",
+              "to": "d4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "b5",
+          "annotation": "Black executes the planned queenside advance, attacking White's bishop and gaining valuable space on the queenside. This move forces White's bishop to retreat and gives Black active counterplay against White's central dominance. The b5 advance also opens lines for Black's pieces and creates potential outposts on c4 and a4.",
+          "plans": [
+            "Continue queenside expansion with ...Bb7 and ...Nbd7",
+            "Use the space gained to create active piece play"
+          ],
+          "alternatives": [
+            "10...Be7 is solid but gives White a free hand",
+            "10...Nc6 pressures d4 but allows White central control"
+          ],
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White retreats the bishop to safety while maintaining pressure on the f7 square and keeping the bishop active on the long diagonal. The b3 square is excellent for the bishop, as it cannot be easily attacked and continues to eye Black's kingside. This retreat is better than Bd3 because it keeps more pressure on Black's position.",
+          "plans": [
+            "Maintain pressure on f7 and the black kingside",
+            "Support central operations with the active bishop"
+          ],
+          "alternatives": [
+            "11.Bd3 is safer but less active",
+            "11.Be2 blocks the queen's influence on the e-file"
+          ],
+          "arrows": [
+            {
+              "from": "b3",
+              "to": "f7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b3",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black develops the bishop to an excellent square on the long diagonal, where it pressures White's center and supports Black's pawn structure. The bishop on b7 also prepares ...Nbd7 and creates potential tactics along the a8-h1 diagonal. This move completes Black's queenside development and maintains the balance between central and flank operations.",
+          "plans": [
+            "Complete development with ...Nbd7",
+            "Maintain pressure on White's central pawns"
+          ],
+          "alternatives": [
+            "11...cxd4 opens the center but may favor White",
+            "11...Ba6 exchanges bishops but weakens the dark squares"
+          ],
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White brings the rook to the central file, supporting the d4 pawn and preparing potential central operations. This move increases White's control over the center and puts additional pressure on Black's position. The rook on d1 also coordinates well with the queen on e2 and prepares for potential pawn advances in the center.",
+          "plans": [
+            "Support the d4 pawn against Black's pressure",
+            "Prepare central advances or pawn captures"
+          ],
+          "alternatives": [
+            "12.dxc5 releases tension but gives Black easy piece play",
+            "12.Nc3 develops but doesn't address the d4 pawn's needs"
+          ],
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black completes the development of the queenside knight, bringing it toward the center where it can support ...c4 ideas or prepare ...Rc8 to increase pressure on the c-file. The knight on d7 also supports the bishop on b7 and maintains flexibility for Black's piece coordination. This move prepares to challenge White's central dominance with active piece play.",
+          "plans": [
+            "Consider ...c4 to create counterplay",
+            "Coordinate pieces for central pressure with ...Rc8"
+          ],
+          "alternatives": [
+            "12...Nc6 is more direct but allows White strong central control",
+            "12...Be7 completes kingside development but is passive"
+          ],
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        }
+      ]
+    },
+    {
+      "name": "Slav Defence Response",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, immediately staking a claim in the center and preparing to support it with c4. This move controls the important e5 and c5 squares while opening lines for the queen and light-squared bishop. The d4 pawn becomes the foundation of White's central strategy.",
+          "pawnStructure": "White establishes a central pawn on d4, creating the basis for a classical pawn center. This structure allows for flexible piece development and central control.",
+          "plans": [
+            "Follow up with c4 to create the Queen's Gambit",
+            "Develop pieces to support the central advance"
+          ],
+          "alternatives": [
+            "1.e4 leads to open games with tactical complications",
+            "1.Nf3 is a more flexible approach avoiding immediate central commitment"
+          ],
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds symmetrically, placing a pawn in the center and fighting for control of e4 and c4. This solid move establishes equality in the center and prepares various defensive setups. Black's pawn on d5 will become a key battleground in the coming struggle.",
+          "pawnStructure": "The symmetrical pawn structure d4 vs d5 creates a balanced central tension. Both sides control key central squares and have equal space.",
+          "plans": [
+            "Prepare to support the d5 pawn with pieces",
+            "Choose between accepting or declining White's coming Queen's Gambit"
+          ],
+          "alternatives": [
+            "1...Nf6 (Indian systems) avoids immediate central commitment",
+            "1...f5 (Dutch Defense) leads to unbalanced kingside play"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit! White attacks the d5 pawn, offering a pawn trade that would give White central superiority and faster development. This move defines the opening character and forces Black to make a fundamental decision about the pawn structure. The c4 pawn also supports a future d5 advance.",
+          "pawnStructure": "White creates the classic Queen's Gambit pawn formation, attacking Black's central stronghold on d5 and preparing to establish pawn dominance.",
+          "plans": [
+            "If Black takes on c4, recapture and develop with tempo",
+            "If Black declines, maintain pressure on d5 and develop pieces"
+          ],
+          "alternatives": [
+            "2.Nf3 leads to more positional Réti-style systems",
+            "2.c3 prepares e4 but is slower than the Queen's Gambit"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav Defense! Black supports the d5 pawn with the c-pawn, declining the gambit while maintaining central presence. This solid move prepares ...dxc4 at a more favorable moment and keeps the light-squared bishop's diagonal open. The Slav is considered one of the most reliable defenses against the Queen's Gambit.",
+          "pawnStructure": "Black creates the characteristic Slav pawn chain c6-d5, providing solid support for the central pawn while keeping options open for piece development.",
+          "plans": [
+            "Consider ...dxc4 when White is less prepared to recapture",
+            "Develop the light-squared bishop before playing ...e6"
+          ],
+          "alternatives": [
+            "2...e6 (Queen's Gambit Declined) blocks the bishop but is very solid",
+            "2...dxc4 (Queen's Gambit Accepted) gives up the center for quick development"
+          ],
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "f5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the kingside knight to its ideal square, controlling e5 and d4 while preparing kingside castling. This natural move also supports the center and prepares various tactical ideas involving the d5 pawn. The knight from f3 can later jump to e5 or g5 depending on the position.",
+          "plans": [
+            "Castle kingside for safety",
+            "Maintain pressure on Black's center with piece development"
+          ],
+          "alternatives": [
+            "4.Nc3 immediately develops but allows ...dxc4 more comfortably",
+            "4.cxd5 cxd5 leads to an isolated queen pawn structure"
+          ],
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the kingside knight to its most active square, attacking the c4 pawn and controlling e4. This move prepares kingside castling and maintains flexibility in the center. The knight on f6 is perfectly placed to support Black's position and can later relocate to e4 or d7 as needed.",
+          "plans": [
+            "Develop the light-squared bishop before playing ...e6",
+            "Prepare kingside castling"
+          ],
+          "alternatives": [
+            "4...e6 immediately prepares ...Nf6 but blocks the bishop",
+            "4...Bf5 develops the bishop but allows White to gain space with e4"
+          ],
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the queenside knight, adding pressure to the d5 pawn and preparing further central advances. This move also prepares e4 in some lines and supports the overall piece coordination. However, it does allow Black to capture on c4, which is why this timing is critical.",
+          "plans": [
+            "Recapture on c4 if Black takes",
+            "Support e4 advance in favorable circumstances"
+          ],
+          "alternatives": [
+            "5.e3 prevents ...Bf5 but is more passive",
+            "5.a4 immediately prevents ...b5 but is less developing"
+          ],
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures the c4 pawn, accepting the gambit when White has committed the knight to c3. This timing is crucial because White cannot immediately recapture with the queen. Black gains material temporarily and will try to hold the extra pawn with ...b5. This capture transforms the position into sharp tactical terrain.",
+          "pawnStructure": "Black temporarily has an extra pawn, but the center is now more open with only White's d4 pawn remaining centrally placed.",
+          "plans": [
+            "Support the c4 pawn with ...b5",
+            "Complete development quickly before White's compensation becomes overwhelming"
+          ],
+          "alternatives": [
+            "7...Be6 develops but allows White to maintain central tension",
+            "7...a6 prepares ...b5 but is slower than the immediate capture"
+          ],
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "a7",
+              "to": "a6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "A critical move! White prevents ...b5, which would support Black's extra pawn on c4. This move is the key to White's compensation - by stopping Black from consolidating the material advantage, White maintains dynamic pressure. The a4 pawn also prepares to advance further and create queenside tension.",
+          "plans": [
+            "Develop pieces to attack the c4 pawn",
+            "Consider a4-a5 to create further queenside pressure"
+          ],
+          "alternatives": [
+            "8.e4 develops actively but allows ...b5",
+            "8.e3 is more solid but gives Black time to consolidate"
+          ],
+          "arrows": [
+            {
+              "from": "a4",
+              "to": "b5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "a4",
+              "to": "a5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black develops the light-squared bishop to its ideal square outside the pawn chain, a key advantage of the Slav Defense. This move activates the bishop while it's still possible, as ...e6 would block this diagonal. The bishop on f5 eyes the c2 square and supports Black's kingside development.",
+          "plans": [
+            "Complete kingside development with ...e6 and ...Be7",
+            "Maintain the bishop's active position"
+          ],
+          "alternatives": [
+            "8...e6 blocks the bishop but solidifies the center",
+            "8...Nd5 centralizes but allows White strong pressure"
+          ],
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White prepares to recapture the c4 pawn with the bishop while supporting the central structure. This move creates a solid pawn foundation and prepares Be2 or Bxc4. The e3 pawn also supports potential f4 advances and maintains control over d4. White's position becomes more harmonious with this central support.",
+          "pawnStructure": "White creates a solid pawn triangle d4-e3 supporting the center and preparing piece coordination.",
+          "plans": [
+            "Recapture on c4 with the bishop",
+            "Develop remaining pieces and castle"
+          ],
+          "alternatives": [
+            "9.e4 is more aggressive but allows ...Nxe4",
+            "9.Ne5 attacks immediately but may be premature"
+          ],
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black solidifies the center and prepares to complete kingside development with ...Be7. This move creates a secure pawn structure and supports the central position while preparing castling. Although it blocks the c8-h3 diagonal, Black has already developed the light-squared bishop, making this a comfortable choice.",
+          "pawnStructure": "Black creates a solid pawn chain c6-d5-e6, providing excellent central stability at the cost of some piece mobility.",
+          "plans": [
+            "Develop the dark-squared bishop to e7",
+            "Castle kingside for safety"
+          ],
+          "alternatives": [
+            "9...Nbd7 develops but leaves e6 weak",
+            "9...Qd7 is possible but less natural"
+          ],
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recaptures the pawn, completing the development of the light-squared bishop to an active square. The bishop on c4 eyes the f7 weakness and controls important central squares. This recapture restores material equality while maintaining excellent piece coordination and development advantage.",
+          "plans": [
+            "Castle kingside",
+            "Target Black's kingside, particularly f7"
+          ],
+          "alternatives": [
+            "12.Nxc4 would centralize the knight but is less active than the bishop",
+            "12.Qc2 first would be more cautious but allows Black counterplay"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Black develops the dark-squared bishop with tempo, pinning the knight on c3 to the king. This active move creates tactical pressure while completing minor piece development. The bishop on b4 also eyes the e1-a5 diagonal and can later retreat to d6 or advance to a3, maintaining flexible piece play.",
+          "plans": [
+            "Castle kingside quickly",
+            "Maintain the pin on the c3 knight"
+          ],
+          "alternatives": [
+            "12...Be7 is more solid but less active",
+            "12...Nbd7 develops but doesn't create immediate pressure"
+          ],
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside, bringing the king to safety while connecting the rooks. This natural developing move is essential before launching any offensive operations. With the king secure, White can now focus on coordinating the remaining pieces and potentially targeting Black's position with moves like Qe2 or Re1.",
+          "plans": [
+            "Develop the queen to support the position",
+            "Consider central advances or kingside pressure"
+          ],
+          "alternatives": [
+            "14.Qe2 first develops the queen but leaves the king in the center",
+            "14.Bd2 breaks the pin but is passive"
+          ],
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d1",
+              "to": "e2",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, securing the king and completing the basic development phase. This move allows the rook to potentially support the center via e8 and creates a safer environment for Black's pieces. Both sides have now completed their basic development and are ready for the middlegame battle.",
+          "plans": [
+            "Develop the queenside knight",
+            "Coordinate pieces for central counterplay"
+          ],
+          "alternatives": [
+            "14...Nbd7 develops first but leaves the king in potential danger",
+            "14...Qc7 centralizes the queen but delays castling"
+          ],
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White develops the queen to a central square, supporting the e3 pawn and preparing potential tactics along the e-file. This move also unpins the c3 knight, allowing it more flexibility, and prepares moves like Rd1 or Rfd1 to increase pressure on the center. The queen on e2 coordinates well with White's pieces.",
+          "plans": [
+            "Double rooks on the d-file",
+            "Support central advances or piece activity"
+          ],
+          "alternatives": [
+            "16.Qc2 supports the bishop but is less central",
+            "16.Re1 activates the rook but doesn't develop the queen"
+          ],
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e8",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "a1",
+              "to": "d1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black completes the development of the minor pieces by bringing the queenside knight into play. This knight heads toward more active squares like b6 or c5, and can also support the kingside if needed. The knight development also prepares potential central counterplay with moves like ...Qc7 or ...a6-a5 to challenge White's queenside space.",
+          "plans": [
+            "Relocate the knight to c5 or b6 for more activity",
+            "Prepare queenside counterplay with ...a6 and ...b5"
+          ],
+          "alternatives": [
+            "17...Qc7 centralizes the queen first",
+            "17...a6 prepares queenside expansion but is slower"
+          ],
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Semi-Slav Response",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, immediately claiming central space and controlling the key e5 and c5 squares. This classical approach allows for flexible development and prepares multiple pawn structures depending on Black's response. The d4 move is the foundation of many strategic systems, from the Queen's Gambit to the King's Indian Attack.",
+          "pawnStructure": "White establishes a central pawn on d4, creating the basis for a classical pawn center and controlling important central squares.",
+          "plans": [
+            "Prepare c4 to challenge Black's central pawn",
+            "Develop pieces harmoniously to support the center"
+          ],
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black mirrors White's central play by occupying d5, creating immediate tension in the center. This solid response contests White's space advantage and prepares to support the center with pieces. The d5 pawn also restricts White's pieces, particularly limiting the scope of a future bishop on c4.",
+          "pawnStructure": "A symmetrical pawn structure emerges in the center with pawns facing off on d4 and d5, creating immediate central tension.",
+          "plans": [
+            "Support the d5 pawn with pieces and other pawns",
+            "Challenge White's central control"
+          ],
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit begins! White attacks the d5 pawn, offering to trade a flank pawn for Black's central pawn. This aggressive approach aims to dissolve Black's central presence and gain a lead in development. If Black captures, White can recapture with the queen, developing it actively while maintaining central control.",
+          "pawnStructure": "White creates the Queen's Gambit pawn structure, attacking d5 and potentially transforming the center if Black captures on c4.",
+          "plans": [
+            "Recapture on c4 with the queen if Black takes",
+            "Maintain pressure on Black's central pawn"
+          ],
+          "alternatives": [
+            "Nf3 leads to quieter systems",
+            "e3 prepares a solid setup without immediate central tension"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black chooses the Slav Defense, supporting the d5 pawn with the c-pawn rather than accepting the gambit. This solid approach maintains the central pawn while preparing ...dxc4 at a more favorable moment. The c6 pawn also prepares ...b5 to challenge White's pieces if they venture to c4, creating counterplay on the queenside.",
+          "pawnStructure": "Black creates the Slav pawn chain with c6 supporting d5, maintaining central control while preparing queenside expansion.",
+          "plans": [
+            "Prepare ...dxc4 followed by ...b5",
+            "Develop pieces while maintaining the solid pawn center"
+          ],
+          "alternatives": [
+            "...dxc4 accepts the gambit immediately",
+            "...e6 leads to the Queen's Gambit Declined"
+          ],
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "b5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the kingside knight to its most natural square, attacking the e5 square and supporting the center. This flexible move keeps all options open while preparing kingside castling. The knight on f3 also eyes the weakened d4 square if Black plays ...dxc4, ensuring White can maintain central influence.",
+          "plans": [
+            "Complete kingside development with Be2 or Bd3",
+            "Prepare castling to safety"
+          ],
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black mirrors White's development, bringing the knight to f6 where it attacks the e4 square and prepares kingside castling. This natural developing move also adds another defender to the d5 pawn, making White's central pressure less effective. The knight on f6 fits perfectly with Black's solid Slav setup.",
+          "plans": [
+            "Complete development with ...Be7 or ...Bd6",
+            "Prepare castling kingside"
+          ],
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White brings the queenside knight into play, adding more pressure to the d5 pawn and preparing to support an eventual e4 advance. This active development follows the principle of bringing pieces toward the center while creating multiple threats. The knight on c3 also supports a future b4 pawn advance if needed.",
+          "plans": [
+            "Increase pressure on d5 with more pieces",
+            "Prepare e4 to dominate the center"
+          ],
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black enters the Semi-Slav Defense by playing ...e6, creating a solid pawn chain while preparing to develop the dark-squared bishop. This move signals Black's intention to maintain the central tension while building a flexible position. The combination of ...c6 and ...e6 gives Black excellent piece coordination but slightly restricts the light-squared bishop.",
+          "pawnStructure": "Black creates the characteristic Semi-Slav pawn structure with pawns on c6, d5, and e6, forming a solid but slightly passive formation.",
+          "plans": [
+            "Develop the dark-squared bishop to d6 or e7",
+            "Prepare ...dxc4 followed by ...b5 when opportune"
+          ],
+          "alternatives": [
+            "...a6 prepares ...dxc4 and ...b5 immediately",
+            "...g6 aims for a King's Indian setup"
+          ],
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "d7",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "e3",
+          "annotation": "White chooses a solid setup, supporting the d4 pawn and preparing to develop the light-squared bishop. This positional approach avoids forcing tactics and maintains central control while building a harmonious piece structure. The e3 move also prepares Bd3, creating a strong diagonal battery toward Black's kingside.",
+          "plans": [
+            "Develop the bishop to d3, eyeing h7",
+            "Complete development before launching central operations"
+          ],
+          "alternatives": [
+            "e4 immediately leads to sharp tactical play",
+            "Bg5 pins the knight and increases pressure"
+          ],
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the queenside knight to d7, a typical Semi-Slav setup that supports the center while preparing piece coordination. The knight on d7 doesn't block the c-pawn, allowing for future ...c5 breaks, and can later jump to more active squares like f6 or b6. This flexible development maintains Black's solid structure while keeping tactical options open.",
+          "plans": [
+            "Prepare ...dxc4 followed by ...b5",
+            "Consider ...c5 to challenge White's center"
+          ],
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "f6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White develops the bishop to its ideal square, targeting the h7 square near Black's king and controlling important central squares. This aggressive placement puts immediate pressure on Black's kingside and prepares potential attacking chances. The bishop on d3 also supports a future e4 advance and coordinates beautifully with the other pieces.",
+          "plans": [
+            "Prepare h2-h4-h5 kingside attack",
+            "Support the central e4 advance"
+          ],
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black finally captures the c4 pawn, beginning the typical Semi-Slav freeing sequence. This move eliminates the central tension while preparing ...b5 to attack White's pieces and gain queenside space. By timing this capture correctly, Black ensures that the follow-up ...b5 will come with tempo against White's pieces.",
+          "pawnStructure": "The central pawn tension resolves, with Black gaining a temporary pawn while preparing to challenge White's pieces with ...b5.",
+          "plans": [
+            "Follow up with ...b5 to attack White's pieces",
+            "Use the extra pawn to create counterplay"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recaptures immediately, maintaining material balance while developing the bishop to an active square. The bishop on c4 targets f7, a key weakness in Black's position, and controls important central squares. This natural recapture keeps White's pieces well-coordinated and maintains pressure on Black's position.",
+          "plans": [
+            "Target f7 and control key central squares",
+            "Prepare to retreat the bishop when attacked by ...b5"
+          ],
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black executes the key ...b5 advance, attacking the bishop and gaining valuable queenside space. This move is the point of Black's strategy - after forcing the bishop to retreat, Black will have achieved equality and good piece coordination. The b5 pawn also prepares further queenside expansion with moves like ...a6 and ...c5.",
+          "pawnStructure": "Black creates an advanced pawn on b5, gaining queenside space and preparing to challenge White's pieces while opening lines for the pieces.",
+          "plans": [
+            "Force White's bishop to retreat",
+            "Prepare further queenside expansion"
+          ],
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "a8",
+              "to": "a6",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": []
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White retreats the bishop to d3, returning to the earlier setup while maintaining the bishop's activity. This retreat keeps the bishop on a strong diagonal targeting h7 and supporting central operations. The move shows White's flexibility, adapting to Black's counterplay while maintaining piece coordination and preparing for the next phase of the game.",
+          "plans": [
+            "Maintain pressure on Black's kingside",
+            "Prepare central operations with e4"
+          ],
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h7",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black develops the light-squared bishop to b7, finding its most active square on the long diagonal. This excellent placement puts pressure on White's e4 square and supports Black's central control. The bishop on b7 is a key piece in the Semi-Slav, often becoming very powerful as the position opens up with tactical complications.",
+          "plans": [
+            "Control the long diagonal and support central play",
+            "Prepare to challenge White's center with ...c5"
+          ],
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "g2",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside, bringing the king to safety and activating the rook. This natural developing move completes White's basic development and prepares for more aggressive central operations. With the king safe, White can now consider advancing in the center with e4 or launching attacking operations without worrying about king safety.",
+          "plans": [
+            "Prepare the central advance e4",
+            "Consider kingside attacking chances"
+          ],
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays a useful preparatory move, securing the b5 pawn and preparing potential queenside expansion. This move also prepares ...c5, challenging White's center while ensuring the b5 pawn remains secure. The a6 move is typical in Semi-Slav structures, giving Black flexibility and preparing counterplay against White's central ambitions.",
+          "plans": [
+            "Prepare ...c5 to challenge the center",
+            "Secure the queenside pawn chain"
+          ],
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "c5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White breaks through in the center with the key e4 advance! This powerful move seizes central space and opens tactical possibilities throughout the position. The e4 pawn controls crucial central squares and prepares potential piece sacrifices and attacking chances. This is exactly what White has been building toward throughout the opening.",
+          "pawnStructure": "White achieves the ideal pawn center with pawns on d4 and e4, dominating the central squares and creating attacking potential.",
+          "plans": [
+            "Launch a kingside attack with pieces",
+            "Use the central pawns to create tactical shots"
+          ],
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "f5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes back immediately in the center with ...c5, challenging White's pawn duo and creating sharp tactical complications. This counter-thrust is Black's key resource in the Semi-Slav, using the queenside pawn majority to create counterplay against White's central dominance. The position now becomes extremely sharp with tactical opportunities for both sides.",
+          "pawnStructure": "Both sides have advanced their pawns, creating a complex structure with central tension and tactical possibilities on both flanks.",
+          "plans": [
+            "Create counterplay on the queenside",
+            "Challenge White's central pawns before they become too strong"
+          ],
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "g2",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 50, 50, 0.3)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

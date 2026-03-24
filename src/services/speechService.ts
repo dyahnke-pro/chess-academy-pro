@@ -6,6 +6,7 @@ interface SpeechOptions {
   pitch?: number;
   volume?: number;
   voice?: SpeechSynthesisVoice | null;
+  onBoundary?: (charIndex: number, charLength: number) => void;
 }
 
 class SpeechService {
@@ -73,6 +74,13 @@ class SpeechService {
     utterance.pitch = options.pitch ?? 0.78;
     utterance.volume = options.volume ?? 1.0;
     utterance.voice = options.voice ?? this.preferredVoice;
+
+    if (options.onBoundary) {
+      const handler = options.onBoundary;
+      utterance.addEventListener('boundary', (event: SpeechSynthesisEvent) => {
+        handler(event.charIndex, event.charLength ?? 0);
+      });
+    }
 
     this.synthesis.speak(utterance);
   }

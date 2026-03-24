@@ -1,0 +1,114 @@
+import { describe, it, expect } from 'vitest';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { render } from '../../test/utils';
+import { AnnotationCard } from './AnnotationCard';
+import type { OpeningMoveAnnotation } from '../../types';
+
+const fullAnnotation: OpeningMoveAnnotation = {
+  san: 'e4',
+  annotation: 'White opens with the king pawn, claiming the center.',
+  pawnStructure: 'Single e4 pawn controls d5 and f5.',
+  plans: ['Develop Nf3 and Bc4', 'Prepare d4 advance'],
+  alternatives: ['1.d4 leads to closed positions'],
+};
+
+const minimalAnnotation: OpeningMoveAnnotation = {
+  san: 'Nf6',
+  annotation: 'Black develops the knight to attack e4.',
+};
+
+describe('AnnotationCard', () => {
+  it('renders nothing when annotation is null', () => {
+    render(
+      <AnnotationCard annotation={null} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-card-empty')).toBeInTheDocument();
+    expect(screen.queryByTestId('annotation-card')).not.toBeInTheDocument();
+  });
+
+  it('renders move label for white move', () => {
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-move-label')).toHaveTextContent('1. e4');
+  });
+
+  it('renders move label for black move', () => {
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={3} isWhite={false} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-move-label')).toHaveTextContent('3...e4');
+  });
+
+  it('renders annotation text', () => {
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-text')).toHaveTextContent(
+      'White opens with the king pawn, claiming the center.',
+    );
+  });
+
+  it('renders pawn structure section when present', () => {
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-pawn-structure')).toBeInTheDocument();
+    expect(screen.getByText('Pawn Structure')).toBeInTheDocument();
+    expect(screen.getByText('Single e4 pawn controls d5 and f5.')).toBeInTheDocument();
+  });
+
+  it('renders plans section when present', () => {
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-plans')).toBeInTheDocument();
+    expect(screen.getByText('Develop Nf3 and Bc4')).toBeInTheDocument();
+    expect(screen.getByText('Prepare d4 advance')).toBeInTheDocument();
+  });
+
+  it('renders alternatives section when present', () => {
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-alternatives')).toBeInTheDocument();
+    expect(screen.getByText('1.d4 leads to closed positions')).toBeInTheDocument();
+  });
+
+  it('does not render optional sections when absent', () => {
+    render(
+      <AnnotationCard annotation={minimalAnnotation} moveNumber={2} isWhite={false} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-card')).toBeInTheDocument();
+    expect(screen.queryByTestId('annotation-pawn-structure')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('annotation-plans')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('annotation-alternatives')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('annotation-toggle')).not.toBeInTheDocument();
+  });
+
+  it('toggle button collapses and expands extra sections', async () => {
+    const user = userEvent.setup();
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    // Extra sections visible by default
+    expect(screen.getByTestId('annotation-pawn-structure')).toBeInTheDocument();
+
+    // Click collapse
+    await user.click(screen.getByTestId('annotation-toggle'));
+
+    // Sections hidden (wait for animation exit)
+    await waitFor(() => {
+      expect(screen.queryByTestId('annotation-pawn-structure')).not.toBeInTheDocument();
+    });
+
+    // Click expand
+    await user.click(screen.getByTestId('annotation-toggle'));
+
+    // Sections visible again
+    await waitFor(() => {
+      expect(screen.getByTestId('annotation-pawn-structure')).toBeInTheDocument();
+    });
+  });
+});
