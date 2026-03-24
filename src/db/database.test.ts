@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(9);
+    expect(db.verno).toBe(11);
   });
 
   it('has puzzles table', () => {
