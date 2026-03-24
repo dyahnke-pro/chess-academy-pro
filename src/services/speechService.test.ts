@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // We need to test the SpeechService class directly, not the singleton
 // Re-import the module to get a fresh instance each test
@@ -26,9 +26,13 @@ describe('speechService', () => {
   });
 
   describe('speak', () => {
+    beforeEach(() => { vi.useFakeTimers(); });
+    afterEach(() => { vi.useRealTimers(); });
+
     it('calls cancel then speak with correct options', () => {
       const { speechService } = SpeechServiceModule;
       speechService.speak('Hello world');
+      vi.runAllTimers();
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.cancel).toHaveBeenCalled();
@@ -42,6 +46,7 @@ describe('speechService', () => {
       vi.clearAllMocks();
 
       speechService.speak('Hello');
+      vi.runAllTimers();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.speak).not.toHaveBeenCalled();
     });
@@ -53,6 +58,7 @@ describe('speechService', () => {
       vi.clearAllMocks();
 
       speechService.speak('Hello again');
+      vi.runAllTimers();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
     });

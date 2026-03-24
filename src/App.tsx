@@ -6,6 +6,7 @@ import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
 import { getSharedAudioContext } from './services/audioContextManager';
+import { speechService } from './services/speechService';
 import { db } from './db/schema';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -73,6 +74,11 @@ export function App(): JSX.Element {
         setActiveTheme(theme);
         setActiveProfile(profile);
 
+        // Restore saved system voice preference so it's ready when voices load
+        if (profile.preferences.systemVoiceURI) {
+          speechService.setVoice(profile.preferences.systemVoiceURI);
+        }
+
         const skippedMeta = await db.meta.get('onboarding_skipped');
         setOnboardingSkipped(skippedMeta?.value === 'true');
 
@@ -96,7 +102,8 @@ export function App(): JSX.Element {
   }
 
   // First-run: redirect to onboarding if no API key and user hasn't completed/skipped it
-  const hasApiKey = Boolean(activeProfile?.preferences.apiKeyEncrypted);
+  const hasApiKey = Boolean(activeProfile?.preferences.apiKeyEncrypted) ||
+    Boolean(activeProfile?.preferences.anthropicApiKeyEncrypted);
 
   return (
     <BrowserRouter>
