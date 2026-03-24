@@ -300,6 +300,8 @@ export interface UserPreferences {
   // Kokoro TTS (open-source, in-browser)
   kokoroEnabled: boolean;
   kokoroVoiceId: string;
+  // System voice (Web Speech API)
+  systemVoiceURI: string | null;
   // Board Display (WO-5)
   highlightLastMove: boolean;
   showLegalMoves: boolean;

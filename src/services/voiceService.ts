@@ -70,7 +70,10 @@ class VoiceService {
       }
     }
 
-    // Tier 3: Web Speech API
+    // Tier 3: Web Speech API (with user's selected system voice)
+    if (preferences.systemVoiceURI) {
+      speechService.setVoice(preferences.systemVoiceURI);
+    }
     this.speakFallback(text);
   }
 

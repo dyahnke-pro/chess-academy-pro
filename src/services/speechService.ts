@@ -9,11 +9,21 @@ interface SpeechOptions {
   onBoundary?: (charIndex: number, charLength: number) => void;
 }
 
+export interface SystemVoice {
+  name: string;
+  lang: string;
+  voiceURI: string;
+  isNatural: boolean;
+}
+
 class SpeechService {
   private synthesis: SpeechSynthesis | null;
   private preferredVoice: SpeechSynthesisVoice | null = null;
+  private selectedVoiceURI: string | null = null;
   private rate: number = 0.95;
   private enabled: boolean = true;
+  private availableVoices: SpeechSynthesisVoice[] = [];
+  private voiceChangeListeners: Array<() => void> = [];
 
   constructor() {
     this.synthesis = typeof window !== 'undefined' ? window.speechSynthesis : null;
@@ -23,27 +33,42 @@ class SpeechService {
 
       const loadVoices = (): void => {
         const voices = synthesis.getVoices();
+        // Filter to English voices only
+        this.availableVoices = voices.filter(v =>
+          v.lang.startsWith('en')
+        );
 
-        // Priority: best natural-sounding English voices first
-        const preferred = [
-          'Google US English',         // WO spec: primary fallback voice
-          'Google UK English Female',  // Chrome -- very natural
-          'Samantha',                  // iOS/macOS -- natural
-          'Microsoft Aria Online (Natural) - English (United States)',
-          'Microsoft Aria Online',
-          'Karen',                     // macOS
-          'Moira',                     // macOS Irish -- warm tone
-          'Daniel',                    // macOS UK
-          'Victoria',
-          'Alex',
-        ];
+        // If user has a selected voice, use it
+        if (this.selectedVoiceURI) {
+          const selected = voices.find(v => v.voiceURI === this.selectedVoiceURI);
+          if (selected) {
+            this.preferredVoice = selected;
+            console.log('[SpeechService] Using selected voice:', selected.name);
+          }
+        }
 
-        for (const name of preferred) {
-          const found = voices.find(v => v.name === name);
-          if (found) {
-            this.preferredVoice = found;
-            console.log('[SpeechService] Using voice:', found.name);
-            break;
+        // Otherwise fall back to priority list
+        if (!this.preferredVoice) {
+          const preferred = [
+            'Google US English',
+            'Google UK English Female',
+            'Samantha',
+            'Microsoft Aria Online (Natural) - English (United States)',
+            'Microsoft Aria Online',
+            'Karen',
+            'Moira',
+            'Daniel',
+            'Victoria',
+            'Alex',
+          ];
+
+          for (const name of preferred) {
+            const found = voices.find(v => v.name === name);
+            if (found) {
+              this.preferredVoice = found;
+              console.log('[SpeechService] Using voice:', found.name);
+              break;
+            }
           }
         }
 
@@ -54,6 +79,9 @@ class SpeechService {
           warmup.volume = 0;
           synthesis.speak(warmup);
         }
+
+        // Notify listeners that voices are loaded
+        this.voiceChangeListeners.forEach(fn => fn());
       };
 
       if (synthesis.getVoices().length > 0) {
@@ -62,6 +90,43 @@ class SpeechService {
         synthesis.addEventListener('voiceschanged', loadVoices, { once: true });
       }
     }
+  }
+
+  /** Get all available English system voices */
+  getAvailableVoices(): SystemVoice[] {
+    return this.availableVoices.map(v => ({
+      name: v.name,
+      lang: v.lang,
+      voiceURI: v.voiceURI,
+      isNatural: v.name.includes('Natural') || v.name.includes('Online'),
+    }));
+  }
+
+  /** Set the preferred system voice by voiceURI */
+  setVoice(voiceURI: string | null): void {
+    this.selectedVoiceURI = voiceURI;
+    if (voiceURI) {
+      const found = this.availableVoices.find(v => v.voiceURI === voiceURI);
+      if (found) {
+        this.preferredVoice = found;
+        console.log('[SpeechService] Voice changed to:', found.name);
+      }
+    } else {
+      this.preferredVoice = null;
+    }
+  }
+
+  /** Get currently selected voice URI */
+  getSelectedVoiceURI(): string | null {
+    return this.preferredVoice?.voiceURI ?? null;
+  }
+
+  /** Register a listener for when voices become available */
+  onVoicesChanged(fn: () => void): () => void {
+    this.voiceChangeListeners.push(fn);
+    return () => {
+      this.voiceChangeListeners = this.voiceChangeListeners.filter(l => l !== fn);
+    };
   }
 
   speak(text: string, options: SpeechOptions = {}): void {

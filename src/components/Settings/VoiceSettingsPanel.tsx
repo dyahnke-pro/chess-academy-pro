@@ -3,8 +3,33 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
 import { kokoroService, KOKORO_VOICES } from '../../services/kokoroService';
+import { speechService } from '../../services/speechService';
+import type { SystemVoice } from '../../services/speechService';
 import type { KokoroModelStatus } from '../../services/kokoroService';
-import { Volume2, Download, Play, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Volume2, Download, Play, Check, AlertCircle, Loader2, Mic } from 'lucide-react';
+
+/** Curated quality voice names — prioritized at top of system voice list */
+const QUALITY_VOICES = [
+  'Microsoft Aria Online (Natural)',
+  'Microsoft Jenny Online (Natural)',
+  'Microsoft Guy Online (Natural)',
+  'Microsoft Steffan Online (Natural)',
+  'Microsoft Ana Online (Natural)',
+  'Microsoft Andrew Online (Natural)',
+  'Microsoft Ava Online (Natural)',
+  'Microsoft Brian Online (Natural)',
+  'Microsoft Emma Online (Natural)',
+  'Microsoft Michelle Online (Natural)',
+  'Microsoft Roger Online (Natural)',
+  'Microsoft Christopher Online (Natural)',
+  'Google US English',
+  'Google UK English Female',
+  'Google UK English Male',
+  'Samantha',
+  'Karen',
+  'Daniel',
+  'Moira',
+];
 
 export function VoiceSettingsPanel(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -23,12 +48,37 @@ export function VoiceSettingsPanel(): JSX.Element {
   const [downloadProgress, setDownloadProgress] = useState(kokoroService.getDownloadProgress());
   const [previewPlaying, setPreviewPlaying] = useState(false);
 
+  // System voice state
+  const [systemVoices, setSystemVoices] = useState<SystemVoice[]>([]);
+  const [systemVoiceURI, setSystemVoiceURI] = useState<string | null>(
+    () => activeProfile?.preferences.systemVoiceURI ?? null
+  );
+  const [systemPreviewPlaying, setSystemPreviewPlaying] = useState(false);
+
   const hasExistingKey = Boolean(activeProfile?.preferences.elevenlabsKeyEncrypted);
 
   useEffect(() => {
     const unsubStatus = kokoroService.onStatusChange(setModelStatus);
     const unsubProgress = kokoroService.onProgress(setDownloadProgress);
-    return () => { unsubStatus(); unsubProgress(); };
+
+    // Load system voices
+    const loadSystemVoices = (): void => {
+      const voices = speechService.getAvailableVoices();
+      // Sort: quality voices first, then alphabetically
+      const sorted = [...voices].sort((a, b) => {
+        const aIdx = QUALITY_VOICES.findIndex(q => a.name.includes(q));
+        const bIdx = QUALITY_VOICES.findIndex(q => b.name.includes(q));
+        const aQuality = aIdx >= 0 ? aIdx : 999;
+        const bQuality = bIdx >= 0 ? bIdx : 999;
+        if (aQuality !== bQuality) return aQuality - bQuality;
+        return a.name.localeCompare(b.name);
+      });
+      setSystemVoices(sorted);
+    };
+    loadSystemVoices();
+    const unsubVoices = speechService.onVoicesChanged(loadSystemVoices);
+
+    return () => { unsubStatus(); unsubProgress(); unsubVoices(); };
   }, []);
 
   const handleSaveKey = async (): Promise<void> => {
@@ -111,6 +161,30 @@ export function VoiceSettingsPanel(): JSX.Element {
     } finally {
       setPreviewPlaying(false);
     }
+  };
+
+  const handleSystemVoiceChange = async (voiceURI: string): Promise<void> => {
+    const uri = voiceURI === '' ? null : voiceURI;
+    setSystemVoiceURI(uri);
+    speechService.setVoice(uri);
+    if (!activeProfile) return;
+
+    const updatedPrefs = { ...activeProfile.preferences, systemVoiceURI: uri };
+    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+  };
+
+  const handleSystemPreview = (): void => {
+    if (systemPreviewPlaying) return;
+    setSystemPreviewPlaying(true);
+    if (systemVoiceURI) {
+      speechService.setVoice(systemVoiceURI);
+    }
+    speechService.speak('Great move! You found the key idea in this position.', {
+      rate: voiceSpeed,
+    });
+    // Web Speech is fire-and-forget, estimate duration
+    setTimeout(() => setSystemPreviewPlaying(false), 3000);
   };
 
   const selectedVoice = KOKORO_VOICES.find((v) => v.id === kokoroVoiceId);
@@ -271,6 +345,64 @@ export function VoiceSettingsPanel(): JSX.Element {
           />
           <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>1.5x</span>
         </div>
+      </div>
+
+      {/* ── System Voices (Free) ─────────────────────────────── */}
+      <div className="space-y-3">
+        <h3 className="font-semibold text-sm flex items-center gap-2">
+          <Mic size={16} />
+          System Voices (Free)
+        </h3>
+        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          Built-in voices from your browser. Microsoft Natural voices are high quality and free.
+          {!kokoroEnabled && ' Used as the primary voice when HD Voice is off.'}
+        </p>
+
+        {systemVoices.length > 0 ? (
+          <div>
+            <label className="text-xs font-medium block mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
+              Voice
+            </label>
+            <select
+              value={systemVoiceURI ?? ''}
+              onChange={(e) => void handleSystemVoiceChange(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border text-sm appearance-none"
+              style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+              data-testid="system-voice-select"
+            >
+              <option value="">Auto (best available)</option>
+              {systemVoices.map((voice) => (
+                <option key={voice.voiceURI} value={voice.voiceURI}>
+                  {voice.name}
+                  {voice.isNatural ? ' ★' : ''}
+                </option>
+              ))}
+            </select>
+            {systemVoiceURI && (
+              <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+                {systemVoices.find(v => v.voiceURI === systemVoiceURI)?.isNatural
+                  ? '★ Natural voice — high quality'
+                  : 'Standard voice'}
+              </p>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            Loading system voices…
+          </p>
+        )}
+
+        {/* System voice preview */}
+        <button
+          onClick={handleSystemPreview}
+          disabled={systemPreviewPlaying || systemVoices.length === 0}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border disabled:opacity-50"
+          style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+          data-testid="system-voice-preview-btn"
+        >
+          <Play size={14} />
+          {systemPreviewPlaying ? 'Playing…' : 'Preview System Voice'}
+        </button>
       </div>
 
       {/* ── ElevenLabs (Advanced) ──────────────────────────────── */}

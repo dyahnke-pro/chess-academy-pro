@@ -193,6 +193,9 @@ class ChessAcademyDB extends Dexie {
           prefs.kokoroEnabled = true;
           prefs.kokoroVoiceId = 'af_heart';
         }
+        if (!('systemVoiceURI' in prefs)) {
+          prefs.systemVoiceURI = null;
+        }
       });
     });
   }
