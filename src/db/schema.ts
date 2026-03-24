@@ -198,6 +198,26 @@ class ChessAcademyDB extends Dexie {
         }
       });
     });
+
+    this.version(11).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+    }).upgrade(async (tx) => {
+      // Reset voiceEnabled to true — was incorrectly left as false by Master All Off toggle.
+      // Only reset if masterAllOff is also false (don't fight an intentional override).
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (prefs.voiceEnabled === false && prefs.masterAllOff !== true) {
+          prefs.voiceEnabled = true;
+        }
+      });
+    });
   }
 }
 

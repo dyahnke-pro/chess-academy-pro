@@ -144,6 +144,18 @@ Use `src/test/factories.ts` for all test data. Available builders:
 - Import from `openai` anywhere except `src/services/coachApi.ts`
 - Run Stockfish anywhere except through `src/services/stockfishEngine.ts`
 
+## Deployment Policy
+
+**Always merge and deploy without asking.** After every fix:
+1. Run tests, typecheck, lint — fix any failures
+2. Commit with a clear message
+3. Push to the feature branch
+4. Create a PR (or push directly to `main` for trivial fixes)
+5. Merge the PR immediately — do NOT wait for the user to ask
+6. Merging to `main` triggers the TestFlight workflow automatically
+
+Never ask "want me to merge?" — just do it.
+
 ## Before Finishing a Session
 
 1. All tests pass (`npm run test:run`)
@@ -151,3 +163,4 @@ Use `src/test/factories.ts` for all test data. Available builders:
 3. No lint errors (`npm run lint`)
 4. Update MANIFEST.md — mark completed work orders, note any blockers
 5. If you created new files, verify they follow the file organization rules above
+6. Merge and deploy (see Deployment Policy above)
