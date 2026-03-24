@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { loadAnnotations, clearAnnotationCache } from './annotationService';
+import { loadAnnotations, loadSubLineAnnotations, clearAnnotationCache } from './annotationService';
 
 describe('annotationService', () => {
   beforeEach(() => {
@@ -44,6 +44,35 @@ describe('annotationService', () => {
       expect(ann.annotation).toBeTruthy();
       expect(typeof ann.annotation).toBe('string');
     }
+  });
+
+  it('loads subline annotation for variation-0', async () => {
+    const annotations = await loadSubLineAnnotations('london-system', 'variation-0');
+    expect(annotations).not.toBeNull();
+    expect(annotations!.length).toBeGreaterThan(0);
+    expect(annotations![0].san).toBeTruthy();
+    expect(annotations![0].annotation).toBeTruthy();
+  });
+
+  it('loads subline annotation for variation-2 (Jobava London)', async () => {
+    const annotations = await loadSubLineAnnotations('london-system', 'variation-2');
+    expect(annotations).not.toBeNull();
+    expect(annotations!.length).toBeGreaterThan(0);
+  });
+
+  it('returns null for trap/warning subline keys (no data yet)', async () => {
+    const annotations = await loadSubLineAnnotations('london-system', 'trap-0');
+    expect(annotations).toBeNull();
+  });
+
+  it('returns null for unknown subline key format', async () => {
+    const annotations = await loadSubLineAnnotations('london-system', 'unknown-key');
+    expect(annotations).toBeNull();
+  });
+
+  it('returns null for out-of-range variation index', async () => {
+    const annotations = await loadSubLineAnnotations('london-system', 'variation-99');
+    expect(annotations).toBeNull();
   });
 
   it('some annotations have optional enrichment fields', async () => {

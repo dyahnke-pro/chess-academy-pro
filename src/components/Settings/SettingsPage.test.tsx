@@ -185,6 +185,22 @@ describe('SettingsPage', () => {
       expect(screen.getByTestId('auto-promote-queen-toggle')).not.toBeDisabled();
     });
 
+    it('turning master all-off back off re-enables affected toggles', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      render(<SettingsPage />);
+      fireEvent.click(screen.getByTestId('tab-board'));
+
+      const masterBtn = screen.getByTestId('master-all-off-toggle');
+      fireEvent.click(masterBtn); // turn ON
+      expect(screen.getByTestId('voice-narration-toggle')).toBeDisabled();
+
+      fireEvent.click(masterBtn); // turn OFF
+      expect(screen.getByTestId('voice-narration-toggle')).not.toBeDisabled();
+      expect(screen.getByTestId('voice-narration-toggle')).toBeChecked();
+      expect(screen.getByTestId('show-hints-toggle')).not.toBeDisabled();
+      expect(screen.getByTestId('highlight-last-move-toggle')).not.toBeDisabled();
+    });
+
     it('has a save button', () => {
       useAppStore.getState().setActiveProfile(buildUserProfile());
       render(<SettingsPage />);

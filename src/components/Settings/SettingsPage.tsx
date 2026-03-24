@@ -199,6 +199,13 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       setHighlightLastMove(false);
       setShowLegalMoves(false);
       setPieceAnimationSpeed('none');
+    } else {
+      // Restore all features when turning Master Off off
+      setVoiceEnabled(true);
+      setShowHints(true);
+      setHighlightLastMove(true);
+      setShowLegalMoves(true);
+      setPieceAnimationSpeed('medium');
     }
   };
 
