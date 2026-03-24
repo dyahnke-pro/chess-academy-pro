@@ -7,6 +7,7 @@ import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import type { KokoroModelStatus } from '../../services/kokoroService';
 import { Volume2, Download, Play, Check, AlertCircle, Loader2, Mic } from 'lucide-react';
+import { unlockAudioContext } from '../../services/audioContextManager';
 
 /** Curated quality voice names — prioritized at top of system voice list */
 const QUALITY_VOICES = [
@@ -116,6 +117,8 @@ export function VoiceSettingsPanel(): JSX.Element {
   };
 
   const handleDownloadModel = useCallback(async (): Promise<void> => {
+    // Unlock AudioContext during user gesture so it's ready when playback starts
+    unlockAudioContext();
     try {
       await kokoroService.loadModel();
     } catch {
@@ -148,6 +151,8 @@ export function VoiceSettingsPanel(): JSX.Element {
 
   const handlePreview = async (): Promise<void> => {
     if (!kokoroService.isReady() || previewPlaying) return;
+    // Unlock AudioContext during user gesture before async generation begins
+    unlockAudioContext();
     setPreviewPlaying(true);
     try {
       await kokoroService.speak(
