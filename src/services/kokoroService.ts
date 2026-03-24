@@ -2,6 +2,8 @@
 // Uses kokoro-js (ONNX model via Transformers.js) with WASM/WebGPU backend
 // Only this file may import from kokoro-js.
 
+import { getSharedAudioContext } from './audioContextManager';
+
 export type KokoroModelStatus = 'idle' | 'downloading' | 'ready' | 'error';
 
 export interface KokoroVoice {
@@ -41,7 +43,6 @@ class KokoroService {
   private tts: KokoroTTSInstance | null = null;
   private status: KokoroModelStatus = 'idle';
   private statusListeners: Set<(status: KokoroModelStatus) => void> = new Set();
-  private audioContext: AudioContext | null = null;
   private currentSource: AudioBufferSourceNode | null = null;
   private playing = false;
   private downloadProgress = 0;
@@ -160,20 +161,18 @@ class KokoroService {
   }
 
   private async playAudio(samples: Float32Array, sampleRate: number = SAMPLE_RATE): Promise<void> {
-    if (!this.audioContext) {
-      this.audioContext = new AudioContext();
+    const ctx = getSharedAudioContext();
+
+    if (ctx.state === 'suspended') {
+      await ctx.resume();
     }
 
-    if (this.audioContext.state === 'suspended') {
-      await this.audioContext.resume();
-    }
-
-    const buffer = this.audioContext.createBuffer(1, samples.length, sampleRate);
+    const buffer = ctx.createBuffer(1, samples.length, sampleRate);
     buffer.getChannelData(0).set(samples);
 
-    const source = this.audioContext.createBufferSource();
+    const source = ctx.createBufferSource();
     source.buffer = buffer;
-    source.connect(this.audioContext.destination);
+    source.connect(ctx.destination);
 
     this.currentSource = source;
     this.playing = true;

@@ -26,6 +26,9 @@ jobs:
       - name: Build web app
         run: npm run build
 
+      - name: Select Xcode
+        run: sudo xcode-select --reset
+
       - name: Add iOS platform
         run: npx cap add ios
 

@@ -2,6 +2,7 @@
  * soundService – piece sound playback for Chess Academy Pro.
  * Uses Web Audio API synthesis – no external audio files required.
  */
+import { getSharedAudioContext } from './audioContextManager';
 export type SoundSet = 'classic' | 'metallic' | 'marble' | 'cartoon';
 export type SoundType = 'move' | 'capture' | 'castle' | 'check';
 export function pieceSetToSoundSet(pieceSet: string, isKidMode: boolean): SoundSet {
@@ -39,12 +40,6 @@ export class SoundService {
   private enabled = true;
   private volume = 0.7;
   private currentSet: SoundSet = 'classic';
-  private ctx: AudioContext | null = null;
-  private getCtx(): AudioContext {
-    if (!this.ctx || this.ctx.state === 'closed')
-      this.ctx = new AudioContext();
-    return this.ctx;
-  }
   setEnabled(e: boolean): void { this.enabled = e; }
   setVolume(v: number): void { this.volume = Math.min(1, Math.max(0, v)); }
   setSoundSet(s: SoundSet): void { this.currentSet = s; }
@@ -63,7 +58,7 @@ export class SoundService {
   }
   private synth(p: SoundParams): void {
     try {
-      const c = this.getCtx();
+      const c = getSharedAudioContext();
       if (c.state === 'suspended') void c.resume();
       const mv = (p.v ?? 0.7) * this.volume, n = c.currentTime;
 

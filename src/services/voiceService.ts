@@ -3,6 +3,7 @@
 // Only this file may call the ElevenLabs API.
 
 import { speechService } from './speechService';
+import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 import type { UserPreferences } from '../types';
 
@@ -21,7 +22,6 @@ const ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
 
 class VoiceService {
-  private audioContext: AudioContext | null = null;
   private currentSource: AudioBufferSourceNode | null = null;
   private playing = false;
   private speed = 1.0;
@@ -97,15 +97,6 @@ class VoiceService {
   }
 
   private async speakElevenLabs(text: string, apiKey: string, voiceId: string): Promise<boolean> {
-    // Detect silent mode on iOS
-    if (this.audioContext?.state === 'suspended') {
-      try {
-        await this.audioContext.resume();
-      } catch {
-        return false;
-      }
-    }
-
     try {
       const response = await fetch(`${ELEVENLABS_TTS_URL}/${voiceId}/stream`, {
         method: 'POST',
@@ -150,14 +141,16 @@ class VoiceService {
   }
 
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {
-    if (!this.audioContext) {
-      this.audioContext = new AudioContext();
+    const ctx = getSharedAudioContext();
+
+    if (ctx.state === 'suspended') {
+      await ctx.resume();
     }
 
-    const audioBuffer = await this.audioContext.decodeAudioData(buffer);
-    const source = this.audioContext.createBufferSource();
+    const audioBuffer = await ctx.decodeAudioData(buffer);
+    const source = ctx.createBufferSource();
     source.buffer = audioBuffer;
-    source.connect(this.audioContext.destination);
+    source.connect(ctx.destination);
 
     this.currentSource = source;
     this.playing = true;
