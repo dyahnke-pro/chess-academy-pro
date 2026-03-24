@@ -603,17 +603,20 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
     if (!apiKey.trim()) return;
     try {
       const { encrypted, iv } = await encryptApiKey(apiKey.trim());
+      // Always write aiProvider atomically with the key so the coach never reads
+      // a mismatched provider/key pair after a rapid toggle-then-save sequence.
       const updatedPrefs = isAnthropic
-        ? { ...profile.preferences, anthropicApiKeyEncrypted: encrypted, anthropicApiKeyIv: iv }
-        : { ...profile.preferences, apiKeyEncrypted: encrypted, apiKeyIv: iv };
+        ? { ...profile.preferences, aiProvider: 'anthropic' as const, anthropicApiKeyEncrypted: encrypted, anthropicApiKeyIv: iv }
+        : { ...profile.preferences, aiProvider: 'deepseek' as const, apiKeyEncrypted: encrypted, apiKeyIv: iv };
       await db.profiles.update(profile.id, { preferences: updatedPrefs });
       setProfile({ ...profile, preferences: updatedPrefs });
       setApiKey('');
-      setStatus('API key saved');
-    } catch {
+      setStatus('API key saved ✓');
+    } catch (err) {
+      console.error('[Settings] Failed to save API key:', err);
       setStatus('Error saving key');
     }
-    setTimeout(() => setStatus(null), 2000);
+    setTimeout(() => setStatus(null), 3000);
   };
 
   const handleSaveCoachSettings = async (): Promise<void> => {
