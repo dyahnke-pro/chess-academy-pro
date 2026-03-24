@@ -77,6 +77,7 @@ vi.mock('../../services/annotationService', () => ({
       alternatives: ['Nc3 is also possible'],
     },
   ]),
+  loadSubLineAnnotations: vi.fn().mockResolvedValue(null),
   clearAnnotationCache: vi.fn(),
 }));
 
