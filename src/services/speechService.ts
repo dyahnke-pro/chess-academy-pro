@@ -25,6 +25,7 @@ class SpeechService {
   private enabled: boolean = true;
   private availableVoices: SpeechSynthesisVoice[] = [];
   private voiceChangeListeners: Array<() => void> = [];
+  private needsWarmup = false;
 
   constructor() {
     this.synthesis = typeof window !== 'undefined' ? window.speechSynthesis : null;
@@ -73,13 +74,10 @@ class SpeechService {
           }
         }
 
-        // Warm up to prevent first-word clipping on iOS/macOS
-        if (this.preferredVoice) {
-          const warmup = new SpeechSynthesisUtterance('\u00A0');
-          warmup.voice = this.preferredVoice;
-          warmup.volume = 0;
-          synthesis.speak(warmup);
-        }
+        // Warm up to prevent first-word clipping on iOS/macOS.
+        // Must be inside a user-gesture handler; guard with a flag so we
+        // only fire it once and only after the user has interacted.
+        this.needsWarmup = true;
 
         // Notify listeners that voices are loaded
         this.voiceChangeListeners.forEach(fn => fn());
@@ -133,7 +131,19 @@ class SpeechService {
   speak(text: string, options: SpeechOptions = {}): void {
     if (!this.synthesis || !this.enabled) return;
 
-    this.synthesis.cancel();
+    const synthesis = this.synthesis;
+    synthesis.cancel();
+
+    // Lazy warm-up: fire a silent utterance on the very first real speak()
+    // call so it happens inside a user-gesture context, not at init time.
+    // iOS Safari ignores speechSynthesis calls made outside gesture handlers.
+    if (this.needsWarmup && this.preferredVoice) {
+      this.needsWarmup = false;
+      const warmup = new SpeechSynthesisUtterance('\u00A0');
+      warmup.voice = this.preferredVoice;
+      warmup.volume = 0;
+      synthesis.speak(warmup);
+    }
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = options.rate ?? this.rate;
@@ -153,7 +163,9 @@ class SpeechService {
       utterance.addEventListener('end', () => endHandler());
     }
 
-    this.synthesis.speak(utterance);
+    // On iOS, calling speak() synchronously after cancel() can silently drop
+    // the utterance. A minimal delay lets the cancel flush first.
+    setTimeout(() => { synthesis.speak(utterance); }, 0);
   }
 
   stop(): void {
