@@ -5,7 +5,9 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { BoardControls } from '../Board/BoardControls';
 import { AnnotationCard } from './AnnotationCard';
 import { speechService } from '../../services/speechService';
+import { kokoroService } from '../../services/kokoroService';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { db } from '../../db/schema';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../../types';
@@ -391,28 +393,61 @@ export function WalkthroughMode({
   // Track when TTS finishes speaking — used to advance auto-play immediately
   const ttsFinishedRef = useRef<(() => void) | null>(null);
 
-  // TTS narration when move changes
+  // TTS narration when move changes — tries Kokoro first, falls back to Web Speech
   useEffect(() => {
     if (currentMoveIndex === 0) return;
     if (!annotations) return;
     const ann = annotations[currentMoveIndex - 1] as OpeningMoveAnnotation | undefined;
-    if (ann) {
-      speechService.speak(ann.annotation, {
-        rate: TTS_RATE[autoPlaySpeed],
-        onBoundary: (charIndex) => {
-          boundaryHandlerRef.current?.(charIndex);
-        },
-        onEnd: () => {
-          ttsFinishedRef.current?.();
-        },
-      });
-    }
+    if (!ann) return;
+
+    let cancelled = false;
+
+    void (async () => {
+      // Check if Kokoro is enabled and ready
+      const profile = await db.profiles.get('main');
+      const kokoroEnabled = profile?.preferences.kokoroEnabled ?? false;
+      const kokoroVoiceId = profile?.preferences.kokoroVoiceId ?? 'af_bella';
+
+      if (cancelled) return;
+
+      if (kokoroEnabled && kokoroService.isReady()) {
+        // Use Kokoro HD voice — no boundary events but great quality
+        try {
+          await kokoroService.speak(ann.annotation, kokoroVoiceId, TTS_RATE[autoPlaySpeed]);
+          if (!cancelled) {
+            // Reveal all arrows/highlights immediately after Kokoro finishes
+            setVisibleArrowCount(ann.arrows?.length ?? 0);
+            setVisibleHighlightCount(ann.highlights?.length ?? 0);
+            ttsFinishedRef.current?.();
+          }
+        } catch {
+          // Kokoro failed, fall through to Web Speech
+          if (!cancelled) {
+            speechService.speak(ann.annotation, {
+              rate: TTS_RATE[autoPlaySpeed],
+              onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
+              onEnd: () => ttsFinishedRef.current?.(),
+            });
+          }
+        }
+      } else {
+        // Web Speech API with boundary events for arrow syncing
+        speechService.speak(ann.annotation, {
+          rate: TTS_RATE[autoPlaySpeed],
+          onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
+          onEnd: () => ttsFinishedRef.current?.(),
+        });
+      }
+    })();
+
+    return () => { cancelled = true; };
   }, [currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
   // Clean up speech on unmount
   useEffect(() => {
     return () => {
       speechService.stop();
+      kokoroService.stop();
     };
   }, []);
 
@@ -420,6 +455,7 @@ export function WalkthroughMode({
   const goToMove = useCallback((idx: number) => {
     setIsAutoPlaying(false);
     speechService.stop();
+    kokoroService.stop();
     setCurrentMoveIndex(idx);
     setBoardKey((k) => k + 1);
   }, []);
@@ -427,6 +463,7 @@ export function WalkthroughMode({
   const handleFirst = useCallback(() => goToMove(0), [goToMove]);
   const handlePrev = useCallback(() => {
     speechService.stop();
+    kokoroService.stop();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.max(0, prev - 1));
     setBoardKey((k) => k + 1);
