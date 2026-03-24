@@ -23,6 +23,8 @@ describe('voiceService', () => {
     vi.spyOn(kokoroService, 'speak').mockResolvedValue(undefined);
     vi.spyOn(kokoroService, 'stop').mockImplementation(() => undefined);
     vi.spyOn(kokoroService, 'isPlaying').mockReturnValue(false);
+    vi.spyOn(kokoroService, 'loadModel').mockResolvedValue(undefined);
+    vi.spyOn(kokoroService, 'waitUntilReady').mockResolvedValue(false);
 
     // Re-import to get the singleton (it persists state between tests)
     const mod = await import('./voiceService');

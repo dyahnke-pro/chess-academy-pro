@@ -64,7 +64,11 @@ class VoiceService {
     // Tier 2: Kokoro (if enabled and model loaded or loading)
     if (preferences.kokoroEnabled) {
       const { kokoroService } = await getKokoro();
-      // Wait up to 15 s if model is still initialising in the background
+      // Trigger load now if it hasn't started yet (lazy — avoids startup memory pressure)
+      if (kokoroService.getStatus() === 'idle') {
+        void kokoroService.loadModel().catch(() => {});
+      }
+      // Wait up to 15 s if model is still initialising
       const ready = kokoroService.isReady() || await kokoroService.waitUntilReady(15000);
       if (ready) {
         const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);

@@ -6,6 +6,8 @@ import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
+import { kokoroService } from '../../services/kokoroService';
+import type { KokoroModelStatus } from '../../services/kokoroService';
 import { SkillBar } from '../ui/SkillBar';
 import { MiniBoard } from '../Board/MiniBoard';
 import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X } from 'lucide-react';
@@ -23,6 +25,8 @@ export function DashboardPage(): JSX.Element {
   const [recentSessions, setRecentSessions] = useState<SessionRecord[]>([]);
   const [favorites, setFavorites] = useState<OpeningRecord[]>([]);
   const [betaBannerVisible, setBetaBannerVisible] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState<KokoroModelStatus>(kokoroService.getStatus());
+  const [voiceProgress, setVoiceProgress] = useState(kokoroService.getDownloadProgress());
 
   useEffect(() => {
     void seedDatabase();
@@ -62,6 +66,21 @@ export function DashboardPage(): JSX.Element {
     }
   }, [activeProfile, setActiveProfile, setPendingAchievement]);
 
+  // Auto-download Kokoro voice model on the Dashboard (no Stockfish here = no memory pressure).
+  // Subscribe to status so we can show a progress bar while downloading.
+  useEffect(() => {
+    const unsubStatus = kokoroService.onStatusChange(setVoiceStatus);
+    const unsubProgress = kokoroService.onProgress(setVoiceProgress);
+
+    void db.profiles.get('main').then((profile) => {
+      if (profile?.preferences.kokoroEnabled && kokoroService.getStatus() === 'idle') {
+        void kokoroService.loadModel().catch(() => {});
+      }
+    });
+
+    return () => { unsubStatus(); unsubProgress(); };
+  }, []);
+
   const handleStartSession = useCallback(async (): Promise<void> => {
     if (!activeProfile) return;
     const session = await createSession(activeProfile);
@@ -81,6 +100,22 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
+      {voiceStatus === 'downloading' && (
+        <div className="rounded-xl p-3 text-sm" style={{ background: 'var(--color-surface)' }}>
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
+              Downloading Bella voice... {voiceProgress}%
+            </span>
+          </div>
+          <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-300"
+              style={{ width: `${voiceProgress}%`, background: 'var(--color-accent)' }}
+            />
+          </div>
+        </div>
+      )}
+
       {betaBannerVisible && (
         <div
           className="rounded-xl p-3 text-sm flex items-center justify-between"

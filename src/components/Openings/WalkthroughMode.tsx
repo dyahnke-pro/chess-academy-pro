@@ -88,6 +88,17 @@ export function WalkthroughMode({
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('normal');
 
+  // Kick off Kokoro model load as soon as the user opens a walkthrough.
+  // Loading here (not at app startup) avoids competing with Stockfish WASM
+  // and crashing iOS Safari due to memory pressure.
+  useEffect(() => {
+    void db.profiles.get('main').then((profile) => {
+      if (profile?.preferences.kokoroEnabled && kokoroService.getStatus() === 'idle') {
+        void kokoroService.loadModel().catch(() => {});
+      }
+    });
+  }, []);
+
   // Stockfish eval state
   const [latestEval, setLatestEval] = useState<number | null>(null);
   const [latestIsMate, setLatestIsMate] = useState(false);

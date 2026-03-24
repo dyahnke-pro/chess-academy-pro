@@ -80,13 +80,7 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
-        // Auto-load Kokoro voice model in background if enabled.
-        // Model files are cached after first download so this is fast on repeat loads.
-        if (profile.preferences.kokoroEnabled) {
-          void import('./services/kokoroService').then(({ kokoroService }) => {
-            void kokoroService.loadModel().catch(() => {});
-          });
-        }
+
       } catch (error) {
         console.error('App initialization failed:', error);
       } finally {
