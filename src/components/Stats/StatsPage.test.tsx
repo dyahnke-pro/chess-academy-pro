@@ -73,6 +73,7 @@ function createProfile(overrides: Partial<UserProfile> = {}): UserProfile {
       voiceSpeed: 1.0,
       kokoroEnabled: true,
       kokoroVoiceId: 'af_heart',
+      systemVoiceURI: null,
       highlightLastMove: true,
       showLegalMoves: true,
       showCoordinates: true,
