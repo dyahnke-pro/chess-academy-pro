@@ -188,6 +188,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
   const [autoPromoteQueen, setAutoPromoteQueen] = useState(prefs.autoPromoteQueen);
 
   const [masterAllOff, setMasterAllOff] = useState(prefs.masterAllOff);
+  const [boardSaveStatus, setBoardSaveStatus] = useState<string | null>(null);
 
   const handleToggleMasterOff = (): void => {
     const next = !masterAllOff;
@@ -232,6 +233,8 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
     };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
+    setBoardSaveStatus('Board settings saved');
+    setTimeout(() => setBoardSaveStatus(null), 2000);
   };
 
   const affectedByMaster = masterAllOff;
@@ -435,6 +438,11 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       >
         Save Board Settings
       </button>
+      {boardSaveStatus && (
+        <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="board-save-status">
+          {boardSaveStatus}
+        </p>
+      )}
     </div>
   );
 }
@@ -446,6 +454,7 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
   const [elo, setElo] = useState(profile.currentRating);
   const [dailyMin, setDailyMin] = useState(profile.preferences.dailySessionMinutes);
   const [kidMode, setKidMode] = useState(profile.isKidMode);
+  const [profileSaveStatus, setProfileSaveStatus] = useState<string | null>(null);
 
   const handleSaveProfile = async (): Promise<void> => {
     const updated = {
@@ -462,6 +471,8 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
       preferences: updated.preferences,
     });
     setProfile(updated);
+    setProfileSaveStatus('Profile saved');
+    setTimeout(() => setProfileSaveStatus(null), 2000);
   };
 
   const handleExport = async (): Promise<void> => {
@@ -530,6 +541,11 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
       >
         Save Profile
       </button>
+      {profileSaveStatus && (
+        <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="profile-save-status">
+          {profileSaveStatus}
+        </p>
+      )}
       <button
         onClick={() => void handleExport()}
         className="w-full py-2 rounded-lg text-sm font-medium border"

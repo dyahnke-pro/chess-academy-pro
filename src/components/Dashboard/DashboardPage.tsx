@@ -66,18 +66,12 @@ export function DashboardPage(): JSX.Element {
     }
   }, [activeProfile, setActiveProfile, setPendingAchievement]);
 
-  // Auto-download Kokoro voice model on the Dashboard (no Stockfish here = no memory pressure).
-  // Subscribe to status so we can show a progress bar while downloading.
+  // Subscribe to Kokoro status for progress display. Do NOT auto-download —
+  // the model is 87 MB and loading it silently causes OOM crashes on iOS Safari.
+  // Users download it explicitly from Settings > Coach > HD Voice.
   useEffect(() => {
     const unsubStatus = kokoroService.onStatusChange(setVoiceStatus);
     const unsubProgress = kokoroService.onProgress(setVoiceProgress);
-
-    void db.profiles.get('main').then((profile) => {
-      if (profile?.preferences.kokoroEnabled && kokoroService.getStatus() === 'idle') {
-        void kokoroService.loadModel().catch(() => {});
-      }
-    });
-
     return () => { unsubStatus(); unsubProgress(); };
   }, []);
 

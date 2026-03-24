@@ -74,9 +74,12 @@ export function App(): JSX.Element {
         setActiveTheme(theme);
         setActiveProfile(profile);
 
-        // Restore saved system voice preference so it's ready when voices load
+        // Restore saved voice preferences so they're applied from the first speak() call
         if (profile.preferences.systemVoiceURI) {
           speechService.setVoice(profile.preferences.systemVoiceURI);
+        }
+        if (profile.preferences.voiceSpeed) {
+          speechService.setRate(profile.preferences.voiceSpeed);
         }
 
         const skippedMeta = await db.meta.get('onboarding_skipped');

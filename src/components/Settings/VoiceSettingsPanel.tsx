@@ -102,6 +102,15 @@ export function VoiceSettingsPanel(): JSX.Element {
     setTimeout(() => setStatus(null), 2000);
   };
 
+  const handleVoiceSpeedChange = async (speed: number): Promise<void> => {
+    setVoiceSpeed(speed);
+    speechService.setRate(speed);
+    if (!activeProfile) return;
+    const updatedPrefs = { ...activeProfile.preferences, voiceSpeed: speed };
+    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+  };
+
   const handleSaveVoiceIds = async (): Promise<void> => {
     if (!activeProfile) return;
 
@@ -344,7 +353,7 @@ export function VoiceSettingsPanel(): JSX.Element {
             max="1.5"
             step="0.25"
             value={voiceSpeed}
-            onChange={(e) => setVoiceSpeed(parseFloat(e.target.value))}
+            onChange={(e) => void handleVoiceSpeedChange(parseFloat(e.target.value))}
             className="flex-1"
             data-testid="voice-speed-slider"
           />
