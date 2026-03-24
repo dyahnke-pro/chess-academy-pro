@@ -428,11 +428,20 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       {/* Bottom: prompt */}
       <div className="px-4 pb-safe-4 min-h-[80px]">
         {showWrongMove ? (
-          <ExplanationCard
-            text="Incorrect move. Try again."
-            visible={true}
-            variant="error"
-          />
+          <div className="flex flex-col gap-2">
+            <ExplanationCard
+              text="Incorrect move. Try again."
+              visible={true}
+              variant="error"
+            />
+            <button
+              data-testid="undo-btn"
+              onClick={handleUndo}
+              className="w-full py-2 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text font-medium"
+            >
+              Undo
+            </button>
+          </div>
         ) : (
           isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
             <div className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg">

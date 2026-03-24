@@ -191,7 +191,7 @@ class ChessAcademyDB extends Dexie {
         const prefs = profile.preferences as unknown as Record<string, unknown>;
         if (!('kokoroEnabled' in prefs)) {
           prefs.kokoroEnabled = true;
-          prefs.kokoroVoiceId = 'af_heart';
+          prefs.kokoroVoiceId = 'af_bella';
         }
         if (!('systemVoiceURI' in prefs)) {
           prefs.systemVoiceURI = null;

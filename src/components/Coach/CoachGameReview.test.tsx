@@ -76,6 +76,7 @@ vi.mock('../../services/accuracyService', () => ({
     brilliant: 1, great: 2, good: 4, book: 0,
     inaccuracy: 1, mistake: 1, blunder: 0,
   }),
+  detectMisses: vi.fn().mockReturnValue(0),
 }));
 
 vi.mock('../../services/boardUtils', () => ({

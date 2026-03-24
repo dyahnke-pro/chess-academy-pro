@@ -419,11 +419,20 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       {/* Bottom: prompt */}
       <div className="px-4 pb-safe-4 min-h-[80px]">
         {showWrongMove ? (
-          <ExplanationCard
-            text="Incorrect move. Restarting line..."
-            visible={true}
-            variant="error"
-          />
+          <div className="flex flex-col gap-2">
+            <ExplanationCard
+              text="Incorrect move — restart this line to try again."
+              visible={true}
+              variant="error"
+            />
+            <button
+              data-testid="undo-btn"
+              onClick={handleUndo}
+              className="w-full py-2 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text font-medium"
+            >
+              Restart Line
+            </button>
+          </div>
         ) : showHintAfterUndo && isPlayerTurn(currentMoveIndex) ? (
           <ExplanationCard
             text={hintText}

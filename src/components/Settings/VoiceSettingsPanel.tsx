@@ -43,7 +43,7 @@ export function VoiceSettingsPanel(): JSX.Element {
 
   // Kokoro state
   const [kokoroEnabled, setKokoroEnabled] = useState(() => activeProfile?.preferences.kokoroEnabled ?? true);
-  const [kokoroVoiceId, setKokoroVoiceId] = useState(() => activeProfile?.preferences.kokoroVoiceId ?? 'af_heart');
+  const [kokoroVoiceId, setKokoroVoiceId] = useState(() => activeProfile?.preferences.kokoroVoiceId ?? 'af_bella');
   const [modelStatus, setModelStatus] = useState<KokoroModelStatus>(kokoroService.getStatus());
   const [downloadProgress, setDownloadProgress] = useState(kokoroService.getDownloadProgress());
   const [previewPlaying, setPreviewPlaying] = useState(false);

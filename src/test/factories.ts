@@ -68,7 +68,7 @@ function buildDefaultPreferences(overrides?: Partial<UserPreferences>): UserPref
     autoPromoteQueen: true,
     masterAllOff: false,
     kokoroEnabled: true,
-    kokoroVoiceId: 'af_heart',
+    kokoroVoiceId: 'af_bella',
     systemVoiceURI: null,
     chessComUsername: undefined,
     lichessUsername: undefined,

@@ -42,7 +42,7 @@ const mockProfile: UserProfile = {
     elevenlabsVoiceId: null,
     voiceSpeed: 1.0,
     kokoroEnabled: true,
-    kokoroVoiceId: 'af_heart',
+    kokoroVoiceId: 'af_bella',
       systemVoiceURI: null,
     highlightLastMove: true,
     showLegalMoves: true,

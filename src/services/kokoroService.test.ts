@@ -178,7 +178,7 @@ describe('kokoroService', () => {
       await kokoroService.loadModel();
       await kokoroService.speak('Hello world').catch(() => undefined);
 
-      expect(mockGenerate).toHaveBeenCalledWith('Hello world', { voice: 'af_heart', speed: 1.0 });
+      expect(mockGenerate).toHaveBeenCalledWith('Hello world', { voice: 'af_bella', speed: 1.0 });
     });
 
     it('uses custom voice and speed', async () => {
