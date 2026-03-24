@@ -32,6 +32,12 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync ios
 
+      - name: Patch iOS native files
+        run: |
+          # Configure AVAudioSession for media playback (not ringer) so Web Audio
+          # API / Speech Synthesis use the media volume and ignore the mute switch.
+          cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
+
       - name: Install CocoaPods dependencies
         run: |
           cd ios/App
