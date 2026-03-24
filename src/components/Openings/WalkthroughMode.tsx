@@ -6,6 +6,7 @@ import { BoardControls } from '../Board/BoardControls';
 import { AnnotationCard } from './AnnotationCard';
 import { speechService } from '../../services/speechService';
 import { kokoroService } from '../../services/kokoroService';
+import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { db } from '../../db/schema';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
@@ -412,28 +413,34 @@ export function WalkthroughMode({
       if (cancelled) return;
       if (!voiceEnabled) return;
 
-      if (kokoroEnabled && kokoroService.isReady()) {
-        // Use Kokoro HD voice — no boundary events but great quality
-        try {
-          await kokoroService.speak(ann.annotation, kokoroVoiceId, TTS_RATE[autoPlaySpeed]);
-          if (!cancelled) {
-            // Reveal all arrows/highlights immediately after Kokoro finishes
-            setVisibleArrowCount(ann.arrows?.length ?? 0);
-            setVisibleHighlightCount(ann.highlights?.length ?? 0);
-            ttsFinishedRef.current?.();
-          }
-        } catch {
-          // Kokoro failed, fall through to Web Speech
-          if (!cancelled) {
-            speechService.speak(ann.annotation, {
-              rate: TTS_RATE[autoPlaySpeed],
-              onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-              onEnd: () => ttsFinishedRef.current?.(),
-            });
+      if (kokoroEnabled) {
+        // Wait for model if it is still loading in the background
+        let kokoroReady = kokoroService.isReady();
+        if (!kokoroReady) {
+          kokoroReady = await kokoroService.waitUntilReady(15000);
+        }
+
+        if (cancelled) return;
+
+        if (kokoroReady) {
+          // Use Kokoro HD voice — no boundary events but great quality
+          try {
+            await kokoroService.speak(ann.annotation, kokoroVoiceId, TTS_RATE[autoPlaySpeed]);
+            if (!cancelled) {
+              // Reveal all arrows/highlights immediately after Kokoro finishes
+              setVisibleArrowCount(ann.arrows?.length ?? 0);
+              setVisibleHighlightCount(ann.highlights?.length ?? 0);
+              ttsFinishedRef.current?.();
+            }
+            return;
+          } catch {
+            // Kokoro failed, fall through to Web Speech
           }
         }
-      } else {
-        // Web Speech API with boundary events for arrow syncing
+      }
+
+      // Web Speech API with boundary events for arrow syncing (fallback)
+      if (!cancelled) {
         speechService.speak(ann.annotation, {
           rate: TTS_RATE[autoPlaySpeed],
           onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
@@ -464,6 +471,7 @@ export function WalkthroughMode({
 
   const handleFirst = useCallback(() => goToMove(0), [goToMove]);
   const handlePrev = useCallback(() => {
+    unlockAudioContext();
     speechService.stop();
     kokoroService.stop();
     setIsAutoPlaying(false);
@@ -471,6 +479,7 @@ export function WalkthroughMode({
     setBoardKey((k) => k + 1);
   }, []);
   const handleNext = useCallback(() => {
+    unlockAudioContext();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.min(expectedMoves.length, prev + 1));
     setBoardKey((k) => k + 1);
@@ -478,6 +487,7 @@ export function WalkthroughMode({
   const handleLast = useCallback(() => goToMove(expectedMoves.length), [goToMove, expectedMoves.length]);
 
   const toggleAutoPlay = useCallback(() => {
+    unlockAudioContext();
     setIsAutoPlaying((prev) => {
       if (!prev && currentMoveIndex >= expectedMoves.length) {
         // Reset to beginning if at end

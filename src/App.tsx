@@ -5,6 +5,7 @@ import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
+import { getSharedAudioContext } from './services/audioContextManager';
 import { db } from './db/schema';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -60,6 +61,11 @@ export function App(): JSX.Element {
 
   useEffect(() => {
     async function init(): Promise<void> {
+      // Create the shared AudioContext immediately so its touchstart unlock
+      // listener is attached before the user's first tap. On iOS Safari the
+      // context starts suspended; the listener resumes it on first touch.
+      getSharedAudioContext();
+
       try {
         const profile = await getOrCreateMainProfile();
         const theme = getThemeById(profile.preferences.theme);

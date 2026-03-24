@@ -61,6 +61,22 @@ class KokoroService {
     return this.status === 'ready';
   }
 
+  /**
+   * If the model is currently loading, wait up to maxMs for it to become ready.
+   * Returns true if ready, false if timed out, errored, or not loading.
+   */
+  waitUntilReady(maxMs: number = 15000): Promise<boolean> {
+    if (this.status === 'ready') return Promise.resolve(true);
+    if (this.status !== 'downloading') return Promise.resolve(false);
+    return new Promise<boolean>((resolve) => {
+      const timer = setTimeout(() => { unsub(); resolve(false); }, maxMs);
+      const unsub = this.onStatusChange((status) => {
+        if (status === 'ready') { clearTimeout(timer); unsub(); resolve(true); }
+        else if (status !== 'downloading') { clearTimeout(timer); unsub(); resolve(false); }
+      });
+    });
+  }
+
   isPlaying(): boolean {
     return this.playing;
   }
