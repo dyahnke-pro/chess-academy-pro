@@ -36,17 +36,17 @@ const READING_WPM: Record<AutoPlaySpeed, number> = {
 
 // Minimum delay per move even if annotation is short/missing
 const MIN_DELAY_MS: Record<AutoPlaySpeed, number> = {
-  slow: 4000,
-  normal: 2500,
-  fast: 1200,
+  slow: 3000,
+  normal: 1500,
+  fast: 800,
 };
 
 function getAnnotationDelay(text: string | undefined, speed: AutoPlaySpeed): number {
   if (!text) return MIN_DELAY_MS[speed];
   const wordCount = text.split(/\s+/).length;
   const readingMs = (wordCount / READING_WPM[speed]) * 60 * 1000;
-  // Add 800ms buffer for the move animation + visual processing
-  return Math.max(MIN_DELAY_MS[speed], readingMs + 800);
+  // Add small buffer for the move animation
+  return Math.max(MIN_DELAY_MS[speed], readingMs + 500);
 }
 
 export function WalkthroughMode({
@@ -309,12 +309,14 @@ export function WalkthroughMode({
   // Auto-play timeout ref (dynamic per-move delay)
   const autoPlayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Schedule the next auto-play advance with annotation-aware delay
+  // Schedule the next auto-play advance — TTS end event advances immediately,
+  // with a timer fallback in case TTS doesn't fire (e.g. voice disabled)
   const scheduleNextMove = useCallback(() => {
     if (autoPlayRef.current) {
       clearTimeout(autoPlayRef.current);
       autoPlayRef.current = null;
     }
+    ttsFinishedRef.current = null;
 
     setCurrentMoveIndex((prev) => {
       if (prev >= expectedMoves.length) {
@@ -323,20 +325,33 @@ export function WalkthroughMode({
       }
       const nextIndex = prev + 1;
 
-      // Calculate delay based on the annotation for the move we just showed
-      const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
-      const fullText = ann
-        ? [ann.annotation, ann.pawnStructure, ...(ann.plans ?? []), ...(ann.alternatives ?? [])].filter(Boolean).join(' ')
-        : undefined;
-      const delay = getAnnotationDelay(fullText, autoPlaySpeed);
+      const advanceToNext = (): void => {
+        // Clear both triggers to prevent double-advance
+        if (autoPlayRef.current) {
+          clearTimeout(autoPlayRef.current);
+          autoPlayRef.current = null;
+        }
+        ttsFinishedRef.current = null;
 
-      autoPlayRef.current = setTimeout(() => {
         if (nextIndex < expectedMoves.length) {
-          scheduleNextMove();
+          // Small pause after TTS ends for the board move to register visually
+          autoPlayRef.current = setTimeout(() => {
+            scheduleNextMove();
+          }, 600);
         } else {
           setIsAutoPlaying(false);
         }
-      }, delay);
+      };
+
+      // Register TTS end callback — advances as soon as narration finishes
+      ttsFinishedRef.current = advanceToNext;
+
+      // Fallback timer in case TTS doesn't fire onEnd (voice disabled, no annotation, etc.)
+      const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
+      const spokenText = ann?.annotation;
+      const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
+      // Add extra buffer so TTS end event has priority
+      autoPlayRef.current = setTimeout(advanceToNext, delay + 1500);
 
       setBoardKey((k) => k + 1);
       return nextIndex;
@@ -373,6 +388,9 @@ export function WalkthroughMode({
     fast: 1.4,
   }), []);
 
+  // Track when TTS finishes speaking — used to advance auto-play immediately
+  const ttsFinishedRef = useRef<(() => void) | null>(null);
+
   // TTS narration when move changes
   useEffect(() => {
     if (currentMoveIndex === 0) return;
@@ -383,6 +401,9 @@ export function WalkthroughMode({
         rate: TTS_RATE[autoPlaySpeed],
         onBoundary: (charIndex) => {
           boundaryHandlerRef.current?.(charIndex);
+        },
+        onEnd: () => {
+          ttsFinishedRef.current?.();
         },
       });
     }

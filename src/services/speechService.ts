@@ -7,6 +7,7 @@ interface SpeechOptions {
   volume?: number;
   voice?: SpeechSynthesisVoice | null;
   onBoundary?: (charIndex: number, charLength: number) => void;
+  onEnd?: () => void;
 }
 
 export interface SystemVoice {
@@ -145,6 +146,11 @@ class SpeechService {
       utterance.addEventListener('boundary', (event: SpeechSynthesisEvent) => {
         handler(event.charIndex, event.charLength ?? 0);
       });
+    }
+
+    if (options.onEnd) {
+      const endHandler = options.onEnd;
+      utterance.addEventListener('end', () => endHandler());
     }
 
     this.synthesis.speak(utterance);
