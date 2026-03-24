@@ -69,11 +69,11 @@ const london: OpeningRecord = buildOpeningRecord({
   color: 'white',
   overview: 'A solid, positional system for White.',
   variations: [
-    { name: "London vs Queen's Pawn", pgn: 'd4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bxd6 Qxd6 Bd3 O-O O-O e4 Qe7', description: '' },
-    { name: "London vs King's Indian", pgn: 'd4 Nf6 Bf4 g6 e3 Bg7 Nf3 O-O Be2 d6 O-O Nbd7 h3 c5 c3', description: '' },
-    { name: 'Jobava London', pgn: 'd4 Nf6 Bf4 d5 Nc3 e6 e3 c5 Nf3 Nc6 Be2 Bd6 Bxd6 Qxd6 O-O', description: '' },
-    { name: 'London vs Grunfeld Setup', pgn: 'd4 Nf6 Bf4 g6 e3 Bg7 Nf3 d5 Be2 O-O O-O Nbd7 h3 Re8 c3', description: '' },
-    { name: 'London vs Dutch', pgn: 'd4 f5 Bf4 Nf6 e3 e6 Nf3 d5 Bd3 Bd6 Bxd6 cxd6 O-O', description: '' },
+    { name: "London vs Queen's Pawn", pgn: 'd4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bxd6 Qxd6 Bd3 O-O O-O e4 Qe7', explanation: '' },
+    { name: "London vs King's Indian", pgn: 'd4 Nf6 Bf4 g6 e3 Bg7 Nf3 O-O Be2 d6 O-O Nbd7 h3 c5 c3', explanation: '' },
+    { name: 'Jobava London', pgn: 'd4 Nf6 Bf4 d5 Nc3 e6 e3 c5 Nf3 Nc6 Be2 Bd6 Bxd6 Qxd6 O-O', explanation: '' },
+    { name: 'London vs Grunfeld Setup', pgn: 'd4 Nf6 Bf4 g6 e3 Bg7 Nf3 d5 Be2 O-O O-O Nbd7 h3 Re8 c3', explanation: '' },
+    { name: 'London vs Dutch', pgn: 'd4 f5 Bf4 Nf6 e3 e6 Nf3 d5 Bd3 Bd6 Bxd6 cxd6 O-O', explanation: '' },
   ],
 });
 
