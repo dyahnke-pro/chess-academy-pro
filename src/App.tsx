@@ -14,7 +14,6 @@ import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 // Page-level imports
 import { DashboardPage } from './components/Dashboard/DashboardPage';
-import { BoardTestPage } from './components/BoardTest/BoardTestPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
@@ -152,7 +151,6 @@ export function App(): JSX.Element {
             }
           />
           <Route path="/settings/onboarding" element={<ErrorBoundary><OnboardingPage /></ErrorBoundary>} />
-          <Route path="/board" element={<ErrorBoundary><BoardTestPage /></ErrorBoundary>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route element={<KidLayout />}>

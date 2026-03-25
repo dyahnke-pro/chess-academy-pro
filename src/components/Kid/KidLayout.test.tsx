@@ -28,10 +28,10 @@ describe('KidLayout', () => {
     expect(screen.getByTestId('kid-layout')).toBeInTheDocument();
   });
 
-  it('renders Chess Quest branding in header', () => {
+  it('renders Kids Mode branding in header', () => {
     render(<KidLayout />);
     expect(screen.getByTestId('kid-header')).toBeInTheDocument();
-    expect(screen.getByText('Chess Quest')).toBeInTheDocument();
+    expect(screen.getByText('Kids Mode')).toBeInTheDocument();
   });
 
   it('renders the chess knight icon', () => {

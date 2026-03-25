@@ -454,7 +454,6 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
   const [name, setName] = useState(profile.name);
   const [elo, setElo] = useState(profile.currentRating);
   const [dailyMin, setDailyMin] = useState(profile.preferences.dailySessionMinutes);
-  const [kidMode, setKidMode] = useState(profile.isKidMode);
   const [profileSaveStatus, setProfileSaveStatus] = useState<string | null>(null);
 
   const handleSaveProfile = async (): Promise<void> => {
@@ -462,13 +461,11 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
       ...profile,
       name,
       currentRating: elo,
-      isKidMode: kidMode,
       preferences: { ...profile.preferences, dailySessionMinutes: dailyMin },
     };
     await db.profiles.update(profile.id, {
       name,
       currentRating: elo,
-      isKidMode: kidMode,
       preferences: updated.preferences,
     });
     setProfile(updated);
@@ -524,15 +521,6 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
             <option key={m} value={m}>{m} minutes</option>
           ))}
         </select>
-      </div>
-      <div className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          checked={kidMode}
-          onChange={(e) => setKidMode(e.target.checked)}
-          data-testid="kid-mode-toggle"
-        />
-        <label className="text-sm">Kid Mode</label>
       </div>
       <button
         onClick={() => void handleSaveProfile()}
