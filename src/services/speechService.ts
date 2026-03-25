@@ -128,15 +128,31 @@ class SpeechService {
     };
   }
 
+  /**
+   * Call this synchronously inside a user-gesture handler (tap, click) to
+   * "unlock" Web Speech API on iOS/WKWebView before any async work starts.
+   * iOS requires the very first speechSynthesis.speak() to occur inside the
+   * gesture task; subsequent calls (even from useEffect) then work freely.
+   * Safe to call multiple times — becomes a no-op after the first activation.
+   */
+  warmupInGestureContext(): void {
+    if (!this.synthesis || !this.needsWarmup) return;
+    if (!this.preferredVoice) return;
+    this.needsWarmup = false;
+    const warmup = new SpeechSynthesisUtterance('\u00A0');
+    warmup.voice = this.preferredVoice;
+    warmup.volume = 0;
+    this.synthesis.speak(warmup);
+  }
+
   speak(text: string, options: SpeechOptions = {}): void {
     if (!this.synthesis || !this.enabled) return;
 
     const synthesis = this.synthesis;
     synthesis.cancel();
 
-    // Lazy warm-up: fire a silent utterance on the very first real speak()
-    // call so it happens inside a user-gesture context, not at init time.
-    // iOS Safari ignores speechSynthesis calls made outside gesture handlers.
+    // Lazy warm-up fallback: fires if warmupInGestureContext() was never called
+    // (e.g. on desktop where the restriction doesn't apply).
     if (this.needsWarmup && this.preferredVoice) {
       this.needsWarmup = false;
       const warmup = new SpeechSynthesisUtterance('\u00A0');

@@ -573,6 +573,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
   const [analysisModel, setAnalysisModel] = useState(profile.preferences.preferredModel.analysis);
   const [reportsModel, setReportsModel] = useState(profile.preferences.preferredModel.reports);
   const [status, setStatus] = useState<string | null>(null);
+  const [keySaved, setKeySaved] = useState(false);
 
   const isAnthropic = provider === 'anthropic';
   const hasExistingKey = isAnthropic
@@ -611,12 +612,14 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
       await db.profiles.update(profile.id, { preferences: updatedPrefs });
       setProfile({ ...profile, preferences: updatedPrefs });
       setApiKey('');
+      setKeySaved(true);
       setStatus('API key saved ✓');
+      setTimeout(() => setKeySaved(false), 4000);
     } catch (err) {
       console.error('[Settings] Failed to save API key:', err);
       setStatus('Error saving key');
     }
-    setTimeout(() => setStatus(null), 3000);
+    setTimeout(() => setStatus(null), 4000);
   };
 
   const handleSaveCoachSettings = async (): Promise<void> => {
@@ -679,10 +682,14 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
           <button
             onClick={() => void handleSaveApiKey()}
             className="px-4 py-2 rounded-lg text-sm font-medium"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            style={{
+              background: keySaved ? '#16a34a' : 'var(--color-accent)',
+              color: 'var(--color-bg)',
+              transition: 'background 0.3s',
+            }}
             data-testid="save-api-key-btn"
           >
-            Save
+            {keySaved ? 'Saved ✓' : 'Save'}
           </button>
         </div>
         <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>

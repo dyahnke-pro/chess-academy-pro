@@ -474,6 +474,7 @@ export function WalkthroughMode({
   const handleFirst = useCallback(() => goToMove(0), [goToMove]);
   const handlePrev = useCallback(() => {
     unlockAudioContext();
+    speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
     speechService.stop();
     kokoroService.stop();
     setIsAutoPlaying(false);
@@ -482,6 +483,7 @@ export function WalkthroughMode({
   }, []);
   const handleNext = useCallback(() => {
     unlockAudioContext();
+    speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.min(expectedMoves.length, prev + 1));
     setBoardKey((k) => k + 1);
@@ -490,6 +492,7 @@ export function WalkthroughMode({
 
   const toggleAutoPlay = useCallback(() => {
     unlockAudioContext();
+    speechService.warmupInGestureContext(); // unlock iOS Web Speech
     setIsAutoPlaying((prev) => {
       if (!prev && currentMoveIndex >= expectedMoves.length) {
         // Reset to beginning if at end

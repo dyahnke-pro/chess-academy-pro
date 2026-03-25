@@ -17,6 +17,7 @@ vi.mock('../../services/speechService', () => ({
   speechService: {
     speak: vi.fn(),
     stop: vi.fn(),
+    warmupInGestureContext: vi.fn(),
     isKokoroActive: vi.fn().mockReturnValue(false),
   },
 }));
