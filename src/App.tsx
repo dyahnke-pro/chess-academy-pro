@@ -20,6 +20,7 @@ import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
 import { AdaptivePuzzlePage } from './components/Puzzles/AdaptivePuzzlePage';
 import { MyMistakesPage } from './components/Puzzles/MyMistakesPage';
+import { LichessDashboardPage } from './components/Puzzles/LichessDashboardPage';
 import { GamesPage } from './components/Play/GamesPage';
 import { AnalysisBoardPage } from './components/Analysis/AnalysisBoardPage';
 import { CoachPage } from './components/Coach/CoachPage';
@@ -123,6 +124,7 @@ export function App(): JSX.Element {
           <Route path="/puzzles" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
           <Route path="/puzzles/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/puzzles/mistakes" element={<ErrorBoundary><MyMistakesPage /></ErrorBoundary>} />
+          <Route path="/puzzles/lichess-dashboard" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/pro/:playerId" element={<ErrorBoundary><ProPlayerPage /></ErrorBoundary>} />
           <Route path="/openings/pro/:playerId/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />

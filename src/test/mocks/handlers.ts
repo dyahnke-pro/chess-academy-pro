@@ -33,6 +33,70 @@ export const handlers = [
     });
   }),
 
+  // Lichess Opening Explorer — Lichess database
+  http.get('https://explorer.lichess.ovh/lichess', () => {
+    return HttpResponse.json({
+      white: 4200,
+      draws: 1800,
+      black: 4000,
+      moves: [
+        { uci: 'e2e4', san: 'e4', averageRating: 1850, white: 2100, draws: 900, black: 2000, game: null },
+        { uci: 'd2d4', san: 'd4', averageRating: 1820, white: 1400, draws: 600, black: 1200, game: null },
+      ],
+      topGames: [],
+      opening: { eco: 'A00', name: 'Starting Position' },
+    });
+  }),
+
+  // Lichess Opening Explorer — Masters database
+  http.get('https://explorer.lichess.ovh/masters', () => {
+    return HttpResponse.json({
+      white: 800,
+      draws: 600,
+      black: 600,
+      moves: [
+        { uci: 'e2e4', san: 'e4', averageRating: 2650, white: 400, draws: 300, black: 300, game: null },
+      ],
+      topGames: [],
+      opening: { eco: 'A00', name: 'Starting Position' },
+    });
+  }),
+
+  // Lichess Cloud Eval
+  http.get('https://lichess.org/api/cloud-eval', () => {
+    return HttpResponse.json({
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      knodes: 2547,
+      depth: 40,
+      pvs: [
+        { moves: 'e2e4 e7e5 g1f3', cp: 28 },
+        { moves: 'd2d4 d7d5 c2c4', cp: 14 },
+        { moves: 'g1f3 d7d5 d2d4', cp: 12 },
+      ],
+    });
+  }),
+
+  // Lichess Puzzle Activity (NDJSON)
+  http.get('https://lichess.org/api/puzzle/activity', () => {
+    return HttpResponse.text(
+      JSON.stringify({ date: 1700000000000, puzzleId: 'puz001', win: true }) + '\n' +
+      JSON.stringify({ date: 1700000100000, puzzleId: 'puz002', win: false }) + '\n',
+    );
+  }),
+
+  // Lichess Puzzle Dashboard
+  http.get('https://lichess.org/api/puzzle/dashboard/:days', () => {
+    return HttpResponse.json({
+      days: 30,
+      global: { firstWins: 42, replayWins: 12, nb: 60 },
+      themes: {
+        fork: { results: { firstWins: 8, replayWins: 2, nb: 10 } },
+        pin: { results: { firstWins: 3, replayWins: 1, nb: 8 } },
+        mateIn2: { results: { firstWins: 5, replayWins: 2, nb: 7 } },
+      },
+    });
+  }),
+
   // DeepSeek API — chat completions
   http.post('https://api.deepseek.com/chat/completions', ({ request }) => {
     const url = new URL(request.url);

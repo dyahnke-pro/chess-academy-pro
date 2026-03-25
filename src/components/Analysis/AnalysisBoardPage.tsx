@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChessBoard } from '../Board/ChessBoard';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { ArrowLeft, Play, Square, BarChart3, Zap } from 'lucide-react';
+import { ArrowLeft, Play, Square, BarChart3, Zap, BookOpen } from 'lucide-react';
 import { useBoardContext } from '../../hooks/useBoardContext';
+import { OpeningExplorerPanel } from './OpeningExplorerPanel';
 import type { StockfishAnalysis, AnalysisLine } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const DEFAULT_DEPTH = 18;
+
+type AnalysisPanel = 'engine' | 'explorer';
 
 export function AnalysisBoardPage(): JSX.Element {
   const navigate = useNavigate();
@@ -22,6 +25,7 @@ export function AnalysisBoardPage(): JSX.Element {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<StockfishAnalysis | null>(null);
   const [fenInput, setFenInput] = useState('');
+  const [panel, setPanel] = useState<AnalysisPanel>('engine');
   const unsubRef = useRef<(() => void) | null>(null);
 
   // Subscribe to live analysis updates
@@ -167,8 +171,36 @@ export function AnalysisBoardPage(): JSX.Element {
         )}
       </div>
 
-      {/* Evaluation display */}
-      {analysis && (
+      {/* Panel tabs */}
+      <div className="flex gap-1 rounded-lg p-1 bg-theme-surface border border-theme-border" data-testid="panel-tabs">
+        <button
+          onClick={() => setPanel('engine')}
+          className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-medium transition-colors"
+          style={{
+            background: panel === 'engine' ? 'var(--color-accent)' : 'transparent',
+            color: panel === 'engine' ? 'var(--color-bg)' : 'var(--color-text-muted)',
+          }}
+          data-testid="panel-tab-engine"
+        >
+          <BarChart3 size={12} />
+          Engine
+        </button>
+        <button
+          onClick={() => setPanel('explorer')}
+          className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-medium transition-colors"
+          style={{
+            background: panel === 'explorer' ? 'var(--color-accent)' : 'transparent',
+            color: panel === 'explorer' ? 'var(--color-bg)' : 'var(--color-text-muted)',
+          }}
+          data-testid="panel-tab-explorer"
+        >
+          <BookOpen size={12} />
+          Explorer
+        </button>
+      </div>
+
+      {/* Engine panel */}
+      {panel === 'engine' && analysis && (
         <div className="bg-theme-surface rounded-lg p-4 border border-theme-border space-y-3" data-testid="analysis-result">
           <div className="flex items-center gap-3">
             <BarChart3 size={16} className="text-theme-accent" />
@@ -203,6 +235,19 @@ export function AnalysisBoardPage(): JSX.Element {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {panel === 'engine' && !analysis && !isAnalyzing && (
+        <p className="text-xs text-center text-theme-text-muted py-4" data-testid="engine-idle">
+          Press Analyze to start engine evaluation
+        </p>
+      )}
+
+      {/* Explorer panel */}
+      {panel === 'explorer' && (
+        <div className="bg-theme-surface rounded-lg p-4 border border-theme-border">
+          <OpeningExplorerPanel fen={fen} />
         </div>
       )}
     </div>
