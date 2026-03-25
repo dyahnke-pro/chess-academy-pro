@@ -207,10 +207,6 @@ class KokoroService {
   unload(): void {
     this.stop();
     this.tts = null;
-    if (this.audioContext) {
-      void this.audioContext.close();
-      this.audioContext = null;
-    }
     this.setStatus('idle');
     this.setProgress(0);
   }
