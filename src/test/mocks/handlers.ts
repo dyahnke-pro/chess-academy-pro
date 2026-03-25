@@ -62,6 +62,25 @@ export const handlers = [
     });
   }),
 
+  // Lichess Tablebase
+  http.get('https://tablebase.lichess.ovh/standard', () => {
+    return HttpResponse.json({
+      dtz: 10,
+      dtm: 12,
+      dtw: null,
+      checkmate: false,
+      stalemate: false,
+      variant_win: false,
+      variant_loss: false,
+      insufficient_material: false,
+      category: 'win',
+      moves: [
+        { uci: 'e1e2', san: 'Ke2', dtz: -8, dtm: -10, zeroing: false, checkmate: false, stalemate: false, variant_win: false, variant_loss: false, insufficient_material: false, category: 'loss' },
+        { uci: 'e1f1', san: 'Kf1', dtz: -6, dtm: -8, zeroing: false, checkmate: false, stalemate: false, variant_win: false, variant_loss: false, insufficient_material: false, category: 'loss' },
+      ],
+    });
+  }),
+
   // Lichess Cloud Eval
   http.get('https://lichess.org/api/cloud-eval', () => {
     return HttpResponse.json({
@@ -73,6 +92,50 @@ export const handlers = [
         { moves: 'd2d4 d7d5 c2c4', cp: 14 },
         { moves: 'g1f3 d7d5 d2d4', cp: 12 },
       ],
+    });
+  }),
+
+  // Lichess Daily Puzzle
+  http.get('https://lichess.org/api/puzzle/daily', () => {
+    return HttpResponse.json({
+      game: {
+        id: 'testgame',
+        pgn: 'e4 e5 Nf3 Nc6',
+        players: [
+          { userId: 'white_user', name: 'WhitePlayer', color: 'white', rating: 1850 },
+          { userId: 'black_user', name: 'BlackPlayer', color: 'black', rating: 1780 },
+        ],
+      },
+      puzzle: {
+        id: 'test_daily',
+        rating: 1542,
+        plays: 4321,
+        solution: ['e2e4', 'd7d5'],
+        themes: ['fork', 'middlegame'],
+        initialPly: 4,
+      },
+    });
+  }),
+
+  // Lichess Next Puzzle
+  http.get('https://lichess.org/api/puzzle/next', () => {
+    return HttpResponse.json({
+      game: {
+        id: 'testgame2',
+        pgn: 'd4 d5 c4 c6',
+        players: [
+          { userId: 'user1', name: 'Player1', color: 'white', rating: 1600 },
+          { userId: 'user2', name: 'Player2', color: 'black', rating: 1580 },
+        ],
+      },
+      puzzle: {
+        id: 'stream_001',
+        rating: 1350,
+        plays: 8000,
+        solution: ['d1h5', 'g8f6', 'h5f7'],
+        themes: ['pin', 'short'],
+        initialPly: 8,
+      },
     });
   }),
 

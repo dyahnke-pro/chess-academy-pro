@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Cloud } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Loader2, Cloud, BookOpen } from 'lucide-react';
 import {
   fetchLichessExplorer,
   fetchCloudEval,
   formatCloudEval,
 } from '../../services/lichessExplorerService';
-import type { LichessExplorerResult, LichessCloudEval } from '../../types';
+import { getOpeningByEco } from '../../services/openingService';
+import type { LichessExplorerResult, LichessCloudEval, OpeningRecord } from '../../types';
 import type { ExplorerSource } from '../../services/lichessExplorerService';
 
 interface OpeningExplorerPanelProps {
@@ -13,22 +15,36 @@ interface OpeningExplorerPanelProps {
 }
 
 export function OpeningExplorerPanel({ fen }: OpeningExplorerPanelProps): JSX.Element {
+  const navigate = useNavigate();
   const [source, setSource] = useState<ExplorerSource>('lichess');
   const [explorer, setExplorer] = useState<LichessExplorerResult | null>(null);
   const [cloudEval, setCloudEval] = useState<LichessCloudEval | null>(null);
   const [explorerLoading, setExplorerLoading] = useState(false);
   const [cloudLoading, setCloudLoading] = useState(false);
   const [explorerError, setExplorerError] = useState<string | null>(null);
+  const [repertoireMatch, setRepertoireMatch] = useState<OpeningRecord | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     setExplorer(null);
     setExplorerError(null);
     setExplorerLoading(true);
+    setRepertoireMatch(null);
 
     fetchLichessExplorer(fen, source)
       .then((result) => {
-        if (!cancelled) setExplorer(result);
+        if (!cancelled) {
+          setExplorer(result);
+          // Check if the detected opening is in our repertoire
+          if (result.opening?.eco) {
+            void getOpeningByEco(result.opening.eco).then((matches) => {
+              if (!cancelled) {
+                const repertoire = matches.find((m) => m.isRepertoire);
+                setRepertoireMatch(repertoire ?? null);
+              }
+            });
+          }
+        }
       })
       .catch((err: unknown) => {
         if (!cancelled) setExplorerError(err instanceof Error ? err.message : 'Failed to load');
@@ -121,10 +137,23 @@ export function OpeningExplorerPanel({ fen }: OpeningExplorerPanelProps): JSX.El
         <div className="space-y-2">
           {/* Opening name + total games */}
           {explorer.opening && (
-            <div className="text-xs text-theme-text-muted">
-              <span className="font-medium text-theme-text">{explorer.opening.name}</span>
-              {' · '}
-              {explorer.opening.eco}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="text-xs text-theme-text-muted">
+                <span className="font-medium text-theme-text">{explorer.opening.name}</span>
+                {' · '}
+                {explorer.opening.eco}
+              </div>
+              {repertoireMatch && (
+                <button
+                  onClick={() => void navigate(`/openings/${repertoireMatch.id}`)}
+                  className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium hover:opacity-80 transition-opacity"
+                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                  data-testid="repertoire-match-badge"
+                >
+                  <BookOpen size={10} />
+                  In your repertoire
+                </button>
+              )}
             </div>
           )}
           {totalGames > 0 && (

@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { MoveTree } from '../Openings/MoveTree';
-import { ArrowLeft, ArrowRight, ChevronsLeft, ChevronsRight, Download } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronsLeft, ChevronsRight, Download, Bot, Loader2 } from 'lucide-react';
 import { useBoardContext } from '../../hooks/useBoardContext';
+import { requestGameReview } from '../../services/gameReviewService';
 import type { GameRecord } from '../../types';
 
 interface GameViewerProps {
@@ -13,6 +14,8 @@ interface GameViewerProps {
 export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
   const moves = parsePgnMoves(game.pgn);
   const [moveIdx, setMoveIdx] = useState(-1);
+  const [coachAnalysis, setCoachAnalysis] = useState(game.coachAnalysis);
+  const [reviewing, setReviewing] = useState(false);
 
   const currentFen = moveIdx >= 0 && moveIdx < moves.length
     ? moves[moveIdx].fen
@@ -39,6 +42,22 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
+  const handleCoachReview = useCallback(async (): Promise<void> => {
+    if (reviewing || !game.id) return;
+    setReviewing(true);
+    let streamed = '';
+    try {
+      await requestGameReview(game.id, (chunk) => {
+        streamed += chunk;
+        setCoachAnalysis(streamed);
+      });
+    } catch {
+      // If streaming fails, coachAnalysis stays as-is
+    } finally {
+      setReviewing(false);
+    }
+  }, [game.id, reviewing]);
+
   const handleExportPgn = (): void => {
     const blob = new Blob([game.pgn], { type: 'application/x-chess-pgn' });
     const url = URL.createObjectURL(blob);
@@ -64,14 +83,26 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
           <div className="font-semibold text-sm">{game.white} vs {game.black}</div>
           <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{game.result} · {game.date}</div>
         </div>
-        <button
-          onClick={handleExportPgn}
-          className="p-2 rounded-lg hover:opacity-80"
-          style={{ background: 'var(--color-surface)' }}
-          data-testid="export-pgn-btn"
-        >
-          <Download size={18} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => void handleCoachReview()}
+            disabled={reviewing}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium hover:opacity-80 disabled:opacity-50"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="coach-review-btn"
+          >
+            {reviewing ? <Loader2 size={14} className="animate-spin" /> : <Bot size={14} />}
+            {reviewing ? 'Reviewing…' : 'Coach Review'}
+          </button>
+          <button
+            onClick={handleExportPgn}
+            className="p-2 rounded-lg hover:opacity-80"
+            style={{ background: 'var(--color-surface)' }}
+            data-testid="export-pgn-btn"
+          >
+            <Download size={18} />
+          </button>
+        </div>
       </div>
 
       <div className="w-full md:max-w-[420px] mx-auto">
@@ -117,14 +148,15 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
         </div>
       )}
 
-      {game.coachAnalysis && (
+      {coachAnalysis && (
         <div
           className="rounded-xl p-4 border"
           style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+          data-testid="coach-analysis-panel"
         >
           <h3 className="font-semibold text-sm mb-2">Coach Analysis</h3>
           <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--color-text-muted)' }}>
-            {game.coachAnalysis}
+            {coachAnalysis}
           </p>
         </div>
       )}

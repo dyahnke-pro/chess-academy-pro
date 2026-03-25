@@ -59,6 +59,24 @@ vi.mock('../../hooks/useIsMobile', () => ({
   useIsMobile: () => false,
 }));
 
+vi.mock('../../services/tablebases', async () => {
+  const actual = await vi.importActual<typeof import('../../services/tablebases')>('../../services/tablebases');
+  return {
+    ...actual,
+    fetchTablebase: vi.fn().mockResolvedValue({
+      dtz: 10,
+      dtm: 14,
+      checkmate: false,
+      stalemate: false,
+      variant_win: false,
+      variant_loss: false,
+      insufficient_material: false,
+      category: 'win',
+      moves: [],
+    }),
+  };
+});
+
 beforeEach(() => {
   vi.clearAllMocks();
 });

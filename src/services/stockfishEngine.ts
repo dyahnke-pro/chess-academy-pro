@@ -13,6 +13,13 @@ interface PendingAnalysis {
   blackToMove: boolean;
 }
 
+interface QueueEntry {
+  fen: string;
+  depth: number;
+  resolve: (analysis: StockfishAnalysis) => void;
+  reject: (error: Error) => void;
+}
+
 const INIT_TIMEOUT_MS = 45_000;
 
 class StockfishEngine {
@@ -24,6 +31,9 @@ class StockfishEngine {
   private initPromise: Promise<void> | null = null;
   private _status: StockfishStatus = 'idle';
   private _error: string | null = null;
+  // Analysis queue — serializes requests so they don't cancel each other
+  private _queue: QueueEntry[] = [];
+  private _queueRunning = false;
 
   get status(): StockfishStatus {
     return this._status;
@@ -164,6 +174,35 @@ class StockfishEngine {
     });
   }
 
+  /**
+   * Queue an analysis request. Unlike `analyzePosition` (which cancels any
+   * in-flight analysis), `queueAnalysis` serializes requests — each one waits
+   * for the previous to finish before starting. Useful for background tasks
+   * (e.g. coach analysis) that should not interfere with the analysis board.
+   */
+  queueAnalysis(fen: string, depth: number = 18): Promise<StockfishAnalysis> {
+    return new Promise<StockfishAnalysis>((resolve, reject) => {
+      this._queue.push({ fen, depth, resolve, reject });
+      void this._drainQueue();
+    });
+  }
+
+  private async _drainQueue(): Promise<void> {
+    if (this._queueRunning) return;
+    this._queueRunning = true;
+    while (this._queue.length > 0) {
+      const entry = this._queue.shift();
+      if (!entry) break;
+      try {
+        const result = await this.analyzePosition(entry.fen, entry.depth);
+        entry.resolve(result);
+      } catch (err) {
+        entry.reject(err instanceof Error ? err : new Error(String(err)));
+      }
+    }
+    this._queueRunning = false;
+  }
+
   stop(): void {
     if (this.worker && this.isReady) {
       this.send('stop');
@@ -172,6 +211,17 @@ class StockfishEngine {
 
   destroy(): void {
     this.stop();
+    // Reject the currently running analysis, if any
+    if (this.pending) {
+      this.pending.reject(new Error('Engine destroyed'));
+      this.pending = null;
+    }
+    // Reject all queued analyses
+    for (const entry of this._queue) {
+      entry.reject(new Error('Engine destroyed'));
+    }
+    this._queue = [];
+    this._queueRunning = false;
     this.worker?.terminate();
     this.worker = null;
     this.isReady = false;

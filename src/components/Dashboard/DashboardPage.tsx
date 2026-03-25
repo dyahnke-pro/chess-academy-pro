@@ -11,6 +11,7 @@ import type { KokoroModelStatus } from '../../services/kokoroService';
 import { SkillBar } from '../ui/SkillBar';
 import { MiniBoard } from '../Board/MiniBoard';
 import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X } from 'lucide-react';
+import { DailyPuzzleCard } from './DailyPuzzleCard';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
 import type { SessionRecord, Achievement, OpeningRecord } from '../../types';
@@ -181,6 +182,9 @@ export function DashboardPage(): JSX.Element {
           Start Session
         </button>
       </div>
+
+      {/* Lichess Daily Puzzle */}
+      <DailyPuzzleCard />
 
       {/* Quick actions */}
       <div className="grid grid-cols-3 gap-3">
