@@ -89,7 +89,14 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
-
+        // Eagerly load Kokoro voice model if user has it enabled
+        if (profile.preferences.kokoroEnabled) {
+          void import('./services/kokoroService').then(({ kokoroService }) => {
+            if (!kokoroService.isReady()) {
+              void kokoroService.loadModel();
+            }
+          });
+        }
       } catch (error) {
         console.error('App initialization failed:', error);
       } finally {
