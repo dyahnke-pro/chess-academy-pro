@@ -61,9 +61,10 @@ class VoiceService {
       if (success) return;
     }
 
-    // Tier 2: Kokoro (if enabled and model loaded)
+    // Tier 2: Kokoro (if enabled)
     if (preferences.kokoroEnabled) {
       const { kokoroService } = await getKokoro();
+      if (!kokoroService.isReady()) await kokoroService.loadModel();
       if (kokoroService.isReady()) {
         const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
         if (success) return;
