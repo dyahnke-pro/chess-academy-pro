@@ -29,18 +29,21 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
+// Primary learning features — ordered by frequency of use
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
+  { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
   { to: '/play', label: 'Play', icon: Swords },
-  { to: '/coach', label: 'Coach', icon: GraduationCap },
-  { to: '/games', label: 'Games', icon: Database },
   { to: '/analysis', label: 'Analysis', icon: Search },
+  { to: '/games', label: 'Games', icon: Database },
   { to: '/stats', label: 'Stats', icon: BarChart3 },
-  { to: '/kid', label: 'Chess Quest', icon: Baby },
+  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/kid', label: 'Kids Mode', icon: Baby },
 ];
 
+// Bottom tab bar shows the 5 most-used destinations
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
 
 export function AppLayout(): JSX.Element {
@@ -138,7 +141,7 @@ export function AppLayout(): JSX.Element {
                 <X size={18} />
               </button>
             </div>
-            <div className="flex flex-col gap-1 px-2 flex-1">
+            <div className="flex flex-col gap-0.5 px-2 flex-1 overflow-y-auto">
               {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
                 <NavLink
                   key={to}
@@ -157,22 +160,6 @@ export function AppLayout(): JSX.Element {
                   {label}
                 </NavLink>
               ))}
-            </div>
-            <div className="px-2 border-t pt-4 mt-4" style={{ borderColor: 'var(--color-border)' }}>
-              <NavLink
-                to="/settings"
-                onClick={closeSidebar}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-theme-accent text-theme-bg'
-                      : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
-                  }`
-                }
-              >
-                <Settings size={16} />
-                Settings
-              </NavLink>
             </div>
           </nav>
         </>
@@ -201,7 +188,7 @@ export function AppLayout(): JSX.Element {
             </div>
           </div>
 
-          <div className="flex flex-col gap-1 px-2 flex-1">
+          <div className="flex flex-col gap-0.5 px-2 flex-1">
             {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}
@@ -221,32 +208,18 @@ export function AppLayout(): JSX.Element {
             ))}
           </div>
 
-          <div className="px-2 border-t pt-4 mt-4" style={{ borderColor: 'var(--color-border)' }}>
+          <div className="px-2 border-t pt-3 mt-3" style={{ borderColor: 'var(--color-border)' }}>
             <ThemeToggle />
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-theme-accent text-theme-bg'
-                    : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
-                }`
-              }
-            >
-              <Settings size={16} />
-              Settings
-            </NavLink>
-
             {activeProfile && (
-              <div className="flex items-center gap-2 px-3 py-2 mt-2">
+              <div className="flex items-center gap-2 px-3 py-2 mt-1">
                 <div
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                  className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
                   style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
                 >
                   {activeProfile.name.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <div className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+                <div className="min-w-0">
+                  <div className="text-xs font-medium truncate" style={{ color: 'var(--color-text)' }}>
                     {activeProfile.name}
                   </div>
                   <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -269,9 +242,11 @@ export function AppLayout(): JSX.Element {
 
       {/* Mobile bottom nav */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 flex justify-around border-t py-2 pb-safe"
+        className="md:hidden fixed bottom-0 left-0 right-0 flex justify-around border-t py-2 pb-safe z-30"
         style={{
-          background: 'var(--color-bg-secondary)',
+          background: 'color-mix(in srgb, var(--color-bg-secondary) 92%, transparent)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           borderColor: 'var(--color-border)',
         }}
       >
@@ -281,13 +256,13 @@ export function AppLayout(): JSX.Element {
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-xs transition-colors ${
+              `flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-medium transition-colors min-w-0 ${
                 isActive ? 'text-theme-accent' : 'text-theme-text-muted'
               }`
             }
           >
-            <Icon size={20} />
-            {label}
+            <Icon size={22} />
+            <span className="truncate w-full text-center leading-tight">{label}</span>
           </NavLink>
         ))}
       </nav>

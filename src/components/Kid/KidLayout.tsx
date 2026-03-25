@@ -35,7 +35,7 @@ export function KidLayout(): JSX.Element {
       style={{ background: 'var(--color-bg)' }}
       data-testid="kid-layout"
     >
-      {/* Chess Quest header */}
+      {/* Kids Mode header */}
       <header
         className="flex items-center justify-between px-4 py-3 border-b"
         style={{
@@ -60,7 +60,7 @@ export function KidLayout(): JSX.Element {
               className="font-bold text-lg"
               style={{ color: 'var(--color-text)' }}
             >
-              Chess Quest
+              Kids Mode
             </span>
           </div>
         </div>
