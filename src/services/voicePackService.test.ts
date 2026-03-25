@@ -23,16 +23,16 @@ if (typeof globalThis.AudioContext === 'undefined') {
         length,
         sampleRate,
         duration: length / sampleRate,
-        getChannelData: () => new Float32Array(length),
+        getChannelData: (): Float32Array => new Float32Array(length),
       } as unknown as AudioBuffer;
     }
-    createBufferSource() { return mockSource; }
-    get destination() { return {} as AudioDestinationNode; }
-    async resume() { this.state = 'running'; }
-    async decodeAudioData(buffer: ArrayBuffer): Promise<AudioBuffer> {
-      return this.createBuffer(1, buffer.byteLength, 24000);
+    createBufferSource(): typeof mockSource { return mockSource; }
+    get destination(): AudioDestinationNode { return {} as AudioDestinationNode; }
+    resume(): Promise<void> { this.state = 'running'; return Promise.resolve(); }
+    decodeAudioData(buffer: ArrayBuffer): Promise<AudioBuffer> {
+      return Promise.resolve(this.createBuffer(1, buffer.byteLength, 24000));
     }
-    async close() { this.state = 'closed'; }
+    close(): Promise<void> { this.state = 'closed'; return Promise.resolve(); }
   };
 }
 

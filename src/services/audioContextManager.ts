@@ -5,7 +5,7 @@
 // attaches capture-phase touchstart/mousedown listeners so it is unlocked
 // on the very first user interaction — before any async TTS work begins.
 //
-// All services that use Web Audio (kokoroService, voiceService, soundService)
+// All services that use Web Audio (voicePackService, voiceService, soundService)
 // share this single context so that piece-move sounds, previews, and coach
 // speech all benefit from the same unlock.
 

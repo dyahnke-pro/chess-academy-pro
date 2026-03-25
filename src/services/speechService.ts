@@ -170,7 +170,7 @@ class SpeechService {
     if (options.onBoundary) {
       const handler = options.onBoundary;
       utterance.addEventListener('boundary', (event: SpeechSynthesisEvent) => {
-        handler(event.charIndex, event.charLength ?? 0);
+        handler(event.charIndex, event.charLength || 0);
       });
     }
 
