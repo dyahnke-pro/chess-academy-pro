@@ -6,8 +6,8 @@ import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
-import { kokoroService } from '../../services/kokoroService';
-import type { KokoroModelStatus } from '../../services/kokoroService';
+import { voicePackService } from '../../services/voicePackService';
+import type { VoicePackStatus } from '../../services/voicePackService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { SkillBar } from '../ui/SkillBar';
 import { MiniBoard } from '../Board/MiniBoard';
@@ -27,8 +27,8 @@ export function DashboardPage(): JSX.Element {
   const [recentSessions, setRecentSessions] = useState<SessionRecord[]>([]);
   const [favorites, setFavorites] = useState<OpeningRecord[]>([]);
   const [betaBannerVisible, setBetaBannerVisible] = useState(false);
-  const [voiceStatus, setVoiceStatus] = useState<KokoroModelStatus>(kokoroService.getStatus());
-  const [voiceProgress, setVoiceProgress] = useState(kokoroService.getDownloadProgress());
+  const [voiceStatus, setVoiceStatus] = useState<VoicePackStatus>(voicePackService.getStatus());
+  const [voiceProgress, setVoiceProgress] = useState(voicePackService.getDownloadProgress());
 
   useEffect(() => {
     void seedDatabase();
@@ -68,23 +68,28 @@ export function DashboardPage(): JSX.Element {
     }
   }, [activeProfile, setActiveProfile, setPendingAchievement]);
 
-  // Subscribe to Kokoro status for progress display. Do NOT auto-download —
-  // the model is 87 MB and loading it silently causes OOM crashes on iOS Safari.
-  // Users download it explicitly from Settings > Coach > HD Voice.
+  // Subscribe to voice pack status. Try loading from IndexedDB cache on mount.
   useEffect(() => {
-    const unsubStatus = kokoroService.onStatusChange(setVoiceStatus);
-    const unsubProgress = kokoroService.onProgress(setVoiceProgress);
+    const unsubStatus = voicePackService.onStatusChange(setVoiceStatus);
+    const unsubProgress = voicePackService.onProgress(setVoiceProgress);
+
+    // Auto-load from cache if previously downloaded
+    if (activeProfile?.preferences.kokoroEnabled && voicePackService.getStatus() === 'idle') {
+      void voicePackService.loadCached(activeProfile.preferences.kokoroVoiceId);
+    }
+
     return () => { unsubStatus(); unsubProgress(); };
-  }, []);
+  }, [activeProfile?.preferences.kokoroEnabled, activeProfile?.preferences.kokoroVoiceId]);
 
   const handleDownloadBella = useCallback(async (): Promise<void> => {
     unlockAudioContext();
+    const voiceId = activeProfile?.preferences.kokoroVoiceId || 'af_bella';
     try {
-      await kokoroService.loadModel();
+      await voicePackService.loadFromUrl(voiceId, `/voice-packs/${voiceId}.bin`);
     } catch {
       // error shown via voiceStatus listener
     }
-  }, []);
+  }, [activeProfile?.preferences.kokoroVoiceId]);
 
   const handleStartSession = useCallback(async (): Promise<void> => {
     if (!activeProfile) return;
@@ -123,7 +128,7 @@ export function DashboardPage(): JSX.Element {
               <>
                 <p className="text-sm font-semibold">Activate Bella — Your AI Voice Coach</p>
                 <p className="text-xs mt-0.5 mb-3" style={{ color: 'var(--color-text-muted)' }}>
-                  Download the HD voice model (~87 MB) once. Bella will narrate puzzles, openings, and coach feedback — no internet required after download.
+                  Download the voice pack once. Bella will narrate openings and coach feedback — no internet required after download.
                 </p>
                 <button
                   onClick={() => void handleDownloadBella()}

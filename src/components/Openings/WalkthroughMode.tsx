@@ -6,7 +6,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { BoardControls } from '../Board/BoardControls';
 import { AnnotationCard } from './AnnotationCard';
 import { speechService } from '../../services/speechService';
-import { kokoroService } from '../../services/kokoroService';
+import { voicePackService } from '../../services/voicePackService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
@@ -419,22 +419,28 @@ export function WalkthroughMode({
     // user-gesture task — any preceding await breaks that context and the
     // utterance is silently dropped. We read voice prefs from Zustand
     // (synchronous) so the common Web Speech path never awaits.
-    const kokoroReady = kokoroEnabled && kokoroService.isReady();
+    const voicePackReady = kokoroEnabled && voicePackService.isReady();
 
-    if (kokoroReady) {
-      // Kokoro is loaded — async path only entered when model is ready
+    if (voicePackReady) {
+      // Voice pack loaded — try pre-rendered clip first, fall back to Web Speech
       void (async () => {
         try {
-          await kokoroService.speak(ann.annotation, kokoroVoiceId, TTS_RATE[autoPlaySpeed]);
+          const played = await voicePackService.speak(ann.annotation, TTS_RATE[autoPlaySpeed]);
           if (!cancelled) {
-            setVisibleArrowCount(ann.arrows?.length ?? 0);
-            setVisibleHighlightCount(ann.highlights?.length ?? 0);
-            ttsFinishedRef.current?.();
+            if (played) {
+              setVisibleArrowCount(ann.arrows?.length ?? 0);
+              setVisibleHighlightCount(ann.highlights?.length ?? 0);
+              ttsFinishedRef.current?.();
+            } else {
+              // Clip not in pack — fall back to Web Speech
+              speechService.speak(ann.annotation, {
+                rate: TTS_RATE[autoPlaySpeed],
+                onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
+                onEnd: () => ttsFinishedRef.current?.(),
+              });
+            }
           }
-        } catch (err) {
-          // Kokoro failed (possibly OOM) — free WASM memory and fall back to Web Speech
-          console.warn('[WalkthroughMode] Kokoro speak failed, falling back to Web Speech:', err);
-          kokoroService.unload();
+        } catch {
           if (!cancelled) {
             speechService.speak(ann.annotation, {
               rate: TTS_RATE[autoPlaySpeed],
@@ -456,11 +462,11 @@ export function WalkthroughMode({
     return () => { cancelled = true; };
   }, [voiceEnabled, kokoroEnabled, kokoroVoiceId, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
-  // Clean up speech and free Kokoro WASM memory on unmount
+  // Clean up speech on unmount
   useEffect(() => {
     return () => {
       speechService.stop();
-      kokoroService.unload();
+      voicePackService.stop();
     };
   }, []);
 
@@ -468,7 +474,7 @@ export function WalkthroughMode({
   const goToMove = useCallback((idx: number) => {
     setIsAutoPlaying(false);
     speechService.stop();
-    kokoroService.stop();
+    voicePackService.stop();
     setCurrentMoveIndex(idx);
     setBoardKey((k) => k + 1);
   }, []);
@@ -478,7 +484,7 @@ export function WalkthroughMode({
     unlockAudioContext();
     speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
     speechService.stop();
-    kokoroService.stop();
+    voicePackService.stop();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.max(0, prev - 1));
     setBoardKey((k) => k + 1);

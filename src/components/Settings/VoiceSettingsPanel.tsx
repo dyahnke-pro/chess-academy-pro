@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
-import { kokoroService, KOKORO_VOICES } from '../../services/kokoroService';
+import { voicePackService, VOICE_PACK_VOICES } from '../../services/voicePackService';
+import type { VoicePackStatus } from '../../services/voicePackService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
-import type { KokoroModelStatus } from '../../services/kokoroService';
 import { Volume2, Download, Play, Check, AlertCircle, Loader2, Mic } from 'lucide-react';
 import { unlockAudioContext } from '../../services/audioContextManager';
 
@@ -42,11 +42,11 @@ export function VoiceSettingsPanel(): JSX.Element {
   const [voiceSpeed, setVoiceSpeed] = useState(() => activeProfile?.preferences.voiceSpeed ?? 1.0);
   const [status, setStatus] = useState<string | null>(null);
 
-  // Kokoro state
+  // Voice pack state
   const [kokoroEnabled, setKokoroEnabled] = useState(() => activeProfile?.preferences.kokoroEnabled ?? true);
   const [kokoroVoiceId, setKokoroVoiceId] = useState(() => activeProfile?.preferences.kokoroVoiceId ?? 'af_bella');
-  const [modelStatus, setModelStatus] = useState<KokoroModelStatus>(kokoroService.getStatus());
-  const [downloadProgress, setDownloadProgress] = useState(kokoroService.getDownloadProgress());
+  const [modelStatus, setModelStatus] = useState<VoicePackStatus>(voicePackService.getStatus());
+  const [downloadProgress, setDownloadProgress] = useState(voicePackService.getDownloadProgress());
   const [previewPlaying, setPreviewPlaying] = useState(false);
 
   // System voice state
@@ -59,8 +59,8 @@ export function VoiceSettingsPanel(): JSX.Element {
   const hasExistingKey = Boolean(activeProfile?.preferences.elevenlabsKeyEncrypted);
 
   useEffect(() => {
-    const unsubStatus = kokoroService.onStatusChange(setModelStatus);
-    const unsubProgress = kokoroService.onProgress(setDownloadProgress);
+    const unsubStatus = voicePackService.onStatusChange(setModelStatus);
+    const unsubProgress = voicePackService.onProgress(setDownloadProgress);
 
     // Load system voices
     const loadSystemVoices = (): void => {
@@ -126,15 +126,15 @@ export function VoiceSettingsPanel(): JSX.Element {
   };
 
   const handleDownloadModel = useCallback(async (): Promise<void> => {
-    // Unlock AudioContext during user gesture so it's ready when playback starts
     unlockAudioContext();
+    const voiceId = kokoroVoiceId;
     try {
-      await kokoroService.loadModel();
+      await voicePackService.loadFromUrl(voiceId, `/voice-packs/${voiceId}.bin`);
     } catch {
-      setStatus('Failed to download voice model');
+      setStatus('Failed to download voice pack');
       setTimeout(() => setStatus(null), 3000);
     }
-  }, []);
+  }, [kokoroVoiceId]);
 
   const handleKokoroToggle = async (enabled: boolean): Promise<void> => {
     setKokoroEnabled(enabled);
@@ -145,7 +145,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
 
     if (!enabled) {
-      kokoroService.unload();
+      voicePackService.unload();
     }
   };
 
@@ -156,19 +156,24 @@ export function VoiceSettingsPanel(): JSX.Element {
     const updatedPrefs = { ...activeProfile.preferences, kokoroVoiceId: voiceId };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+
+    // Load the new voice pack if one is cached
+    void voicePackService.loadCached(voiceId);
   };
 
   const handlePreview = async (): Promise<void> => {
-    if (!kokoroService.isReady() || previewPlaying) return;
-    // Unlock AudioContext during user gesture before async generation begins
+    if (!voicePackService.isReady() || previewPlaying) return;
     unlockAudioContext();
     setPreviewPlaying(true);
     try {
-      await kokoroService.speak(
+      const played = await voicePackService.speak(
         'Great move! You found the key idea in this position.',
-        kokoroVoiceId,
         voiceSpeed,
       );
+      if (!played) {
+        setStatus('Preview clip not found in voice pack');
+        setTimeout(() => setStatus(null), 2000);
+      }
     } catch {
       setStatus('Preview failed');
       setTimeout(() => setStatus(null), 2000);
@@ -201,16 +206,16 @@ export function VoiceSettingsPanel(): JSX.Element {
     setTimeout(() => setSystemPreviewPlaying(false), 3000);
   };
 
-  const selectedVoice = KOKORO_VOICES.find((v) => v.id === kokoroVoiceId);
+  const selectedVoice = VOICE_PACK_VOICES.find((v) => v.id === kokoroVoiceId);
 
   return (
     <div className="space-y-6" data-testid="voice-settings-panel">
-      {/* ── Kokoro HD Voice ────────────────────────────────────── */}
+      {/* ── Bella HD Voice ────────────────────────────────────── */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-sm flex items-center gap-2">
             <Volume2 size={16} />
-            HD Voice (Kokoro)
+            HD Voice (Bella)
           </h3>
           <label className="flex items-center gap-2 cursor-pointer" data-testid="kokoro-toggle">
             <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -234,12 +239,12 @@ export function VoiceSettingsPanel(): JSX.Element {
         </div>
 
         <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-          Natural-sounding AI voice that runs entirely on your device. No API key needed.
+          Pre-rendered HD voice. Download once, works offline — no heavy model required.
         </p>
 
         {kokoroEnabled && (
           <div className="space-y-3">
-            {/* Model download status */}
+            {/* Voice pack download status */}
             {modelStatus === 'idle' && (
               <button
                 onClick={() => void handleDownloadModel()}
@@ -248,7 +253,7 @@ export function VoiceSettingsPanel(): JSX.Element {
                 data-testid="kokoro-download-btn"
               >
                 <Download size={16} />
-                Download Voice Model (~87 MB)
+                Download Voice Pack
               </button>
             )}
 
@@ -256,7 +261,7 @@ export function VoiceSettingsPanel(): JSX.Element {
               <div className="space-y-2" data-testid="kokoro-downloading">
                 <div className="flex items-center gap-2 text-sm">
                   <Loader2 size={16} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                  <span>Downloading voice model…</span>
+                  <span>Downloading voice pack…</span>
                   <span className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
                     {downloadProgress}%
                   </span>
@@ -276,7 +281,7 @@ export function VoiceSettingsPanel(): JSX.Element {
             {modelStatus === 'ready' && (
               <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-success)' }} data-testid="kokoro-ready">
                 <Check size={16} />
-                Voice model loaded
+                Voice pack loaded ({voicePackService.getClipCount()} clips)
               </div>
             )}
 
@@ -284,7 +289,7 @@ export function VoiceSettingsPanel(): JSX.Element {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-error)' }} data-testid="kokoro-error">
                   <AlertCircle size={16} />
-                  Failed to load voice model
+                  Failed to download voice pack
                 </div>
                 <button
                   onClick={() => void handleDownloadModel()}
@@ -309,7 +314,7 @@ export function VoiceSettingsPanel(): JSX.Element {
                   style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                   data-testid="kokoro-voice-select"
                 >
-                  {KOKORO_VOICES.map((voice) => (
+                  {VOICE_PACK_VOICES.map((voice) => (
                     <option key={voice.id} value={voice.id}>
                       {voice.name} — {voice.accent} {voice.gender}
                     </option>
@@ -432,7 +437,7 @@ export function VoiceSettingsPanel(): JSX.Element {
 
         <div className="mt-3 space-y-3 pl-3 border-l-2" style={{ borderColor: 'var(--color-border)' }}>
           <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            If you have an ElevenLabs API key, it takes priority over Kokoro HD Voice.
+            If you have an ElevenLabs API key, it takes priority over the HD voice pack.
           </p>
 
           <div>
