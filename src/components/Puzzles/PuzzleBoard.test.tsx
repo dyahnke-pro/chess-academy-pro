@@ -3,22 +3,55 @@ import { render, screen, waitFor } from '../../test/utils';
 import { PuzzleBoard } from './PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
 
-// Mock sound and speech
-vi.mock('../../hooks/usePieceSound', () => ({
-  usePieceSound: () => ({
-    playMoveSound: vi.fn(),
-    playCelebration: vi.fn(),
-    playEncouragement: vi.fn(),
-  }),
+// ─── Mocks ───────────────────────────────────────────────────────────────────
+
+vi.mock('../Board/ChessBoard', () => ({
+  ChessBoard: ({ initialFen, orientation, interactive }: {
+    initialFen?: string;
+    orientation?: string;
+    interactive?: boolean;
+  }) => (
+    <div
+      data-testid="chess-board"
+      data-fen={initialFen}
+      data-orientation={orientation}
+      data-interactive={String(interactive)}
+    >
+      Board
+    </div>
+  ),
 }));
 
-vi.mock('../../services/speechService', () => ({
-  speechService: {
-    speak: vi.fn(),
+vi.mock('../Coach/HintButton', () => ({
+  HintButton: () => <button data-testid="hint-button">Hint</button>,
+}));
+
+// Stable references — prevents infinite re-render when these are in useEffect deps
+vi.mock('../../hooks/usePieceSound', () => {
+  const playMoveSound = vi.fn();
+  const playCelebration = vi.fn();
+  const playEncouragement = vi.fn();
+  return { usePieceSound: () => ({ playMoveSound, playCelebration, playEncouragement }) };
+});
+
+vi.mock('../../hooks/useHintSystem', () => {
+  const requestHint = vi.fn();
+  const resetHints = vi.fn();
+  const hintState = { level: 0 as const, arrows: [] as never[], ghostMove: null, nudgeText: '', isAnalyzing: false };
+  return { useHintSystem: () => ({ hintState, requestHint, resetHints }) };
+});
+
+vi.mock('../../hooks/useBoardContext', () => ({ useBoardContext: vi.fn() }));
+
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    speak: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
-    setEnabled: vi.fn(),
+    isPlaying: vi.fn().mockReturnValue(false),
   },
 }));
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function makePuzzle(overrides: Partial<PuzzleRecord> = {}): PuzzleRecord {
   const today = new Date().toISOString().split('T')[0];
@@ -42,6 +75,8 @@ function makePuzzle(overrides: Partial<PuzzleRecord> = {}): PuzzleRecord {
     ...overrides,
   };
 }
+
+// ─── Tests ───────────────────────────────────────────────────────────────────
 
 describe('PuzzleBoard', () => {
   beforeEach(() => {
@@ -67,37 +102,30 @@ describe('PuzzleBoard', () => {
     expect(screen.getByText('pin, middlegame')).toBeInTheDocument();
   });
 
-  it('determines user color from FEN turn', () => {
-    // FEN has black to move → user plays white (opposite)
+  it('orients board for user (black to move in FEN → user plays white)', () => {
     const puzzle = makePuzzle({
       fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
     });
     render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
-    // Board should be rendered (orientation tested implicitly via rendering)
-    expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-orientation', 'white');
   });
 
-  it('transitions to playing state after auto-play delay', async () => {
+  it('transitions from loading to playing after auto-play delay', async () => {
     const puzzle = makePuzzle();
     render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
-    // Initially loading
     expect(screen.getByTestId('puzzle-loading')).toBeInTheDocument();
 
-    // After auto-play, should transition to playing (loading goes away)
     await waitFor(
-      () => {
-        expect(screen.queryByTestId('puzzle-loading')).not.toBeInTheDocument();
-      },
+      () => expect(screen.queryByTestId('puzzle-loading')).not.toBeInTheDocument(),
       { timeout: 2000 },
     );
   });
 
-  it('does not interact when disabled', () => {
+  it('renders board as non-interactive when disabled', () => {
     const puzzle = makePuzzle();
     const onComplete = vi.fn();
     render(<PuzzleBoard puzzle={puzzle} onComplete={onComplete} disabled />);
-    // Board renders but is non-interactive
     expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });

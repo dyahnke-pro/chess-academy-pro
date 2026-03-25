@@ -61,12 +61,15 @@ class VoiceService {
       if (success) return;
     }
 
-    // Tier 2: Kokoro (only if model was already explicitly downloaded and is ready)
-    // Never auto-trigger a download here — loading 87 MB WASM in the background
-    // causes iOS Safari OOM crashes. Users download it explicitly from Settings.
+    // Tier 2: Kokoro — use Bella if the model is ready, or wait briefly if it's
+    // currently loading (e.g. during the startup eager-load from cache).
+    // Never trigger a new download here — the 87 MB WASM causes iOS Safari OOM.
     if (preferences.kokoroEnabled) {
       const { kokoroService } = await getKokoro();
-      if (kokoroService.isReady()) {
+      const isDownloading = kokoroService.getStatus() === 'downloading';
+      const ready = kokoroService.isReady()
+        || (isDownloading && await kokoroService.waitUntilReady(2500));
+      if (ready) {
         const success = await this.speakKokoro(text, preferences.kokoroVoiceId, this.speed);
         if (success) return;
       }

@@ -8,6 +8,7 @@ import { useHintSystem } from '../../hooks/useHintSystem';
 import { CheckCircle, XCircle } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
+import { voiceService } from '../../services/voiceService';
 import type { PuzzleRecord } from '../../types';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
@@ -104,6 +105,12 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
     return () => clearTimeout(timer);
   }, [puzzle, playMoveSound, resetHints]);
+
+  // Voice feedback when puzzle state changes
+  useEffect(() => {
+    if (state === 'correct') void voiceService.speak('Excellent! Puzzle solved!');
+    else if (state === 'incorrect') void voiceService.speak('Not quite, try again.');
+  }, [state]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;

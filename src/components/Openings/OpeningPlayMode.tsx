@@ -14,7 +14,7 @@ import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { speechService } from '../../services/speechService';
+import { voiceService } from '../../services/voiceService';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -111,7 +111,7 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
   // Speak helper
   const say = useCallback((text: string): void => {
     if (voiceOn) {
-      speechService.speak(text);
+      void voiceService.speak(text);
     }
   }, [voiceOn]);
 
@@ -121,6 +121,7 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
     void (async () => {
       try {
         const analysis = await stockfishEngine.analyzePosition(game.fen, 12);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!cancelled) {
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
@@ -296,7 +297,8 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
           }
           if (result) {
             setComputerLastMove({ from: result.from, to: result.to });
-            setMoveHistory((prev) => [...prev, { fen: result!.fen, from: result!.from, to: result!.to }]);
+            const r = result;
+            setMoveHistory((prev) => [...prev, { fen: r.fen, from: r.from, to: r.to }]);
             moveCountRef.current += 1;
             setBoardKey((k) => k + 1);
           }
