@@ -1,0 +1,17 @@
+{
+  "openingId": "van-geet-opening-d-sseldorf-gambit",
+  "moveAnnotations": [
+    {
+      "san": "Nc3",
+      "annotation": "We start with an unconventional approach: the Van Geet Opening, where we develop our knight before moving the center pawns. This move prepares to control the d5 and e4 squares while keeping maximum flexibility—we can later play e4, d4, or even support a kingside attack depending on Black's response. You'll notice we're breaking traditional opening principles, but this unorthodox setup can catch unprepared opponents off-guard and lead to dynamic, tactical positions where practical understanding matters more than theory."
+    },
+    {
+      "san": "c5",
+      "annotation": "Black stakes a claim in the center and prevents you from playing d4 comfortably, mirroring the Sicilian Defense's flexibility. By playing on c5, Black is also preparing to support piece development and potentially fight for the d4 square. This move is natural and fighting—Black isn't intimidated by our unusual setup and wants to seize the initiative in the center."
+    },
+    {
+      "san": "b4",
+      "annotation": "Now we enter the Düsseldorf Gambit, offering a pawn on b4 to disrupt Black's coordination and create immediate tactical complications. This move attacks the c5 pawn and threatens to open lines on the queenside if Black captures; it's a gambit because we're willing to sacrifice material for rapid piece play and initiative. We're betting on the fact that our early Nc3 gives us better development and central control than the extra pawn is worth to our opponent."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "openingId": "english-opening-kings-english-variation-taimanov-variation",
+  "moveAnnotations": [
+    {
+      "san": "c4",
+      "annotation": "We're opening with the English Opening, one of the most flexible and strategically rich openings in chess. By controlling the central d5 square from the side, we're following hypermodern principles — instead of occupying the center immediately with pawns, we're preparing to influence it from the flanks. This move also prepares potential expansion with d2-d3 and supports a future knight on c3, while keeping our options open for various pawn structures depending on how Black responds. The English is beloved by positional players because it often leads to rich, maneuvering games where understanding pawn structures and piece coordination matters more than memorizing sharp tactical lines."
+    },
+    {
+      "san": "e5",
+      "annotation": "Our opponent immediately stakes a claim in the center with this classical response, occupying the e5 square and controlling the important d4 and f4 squares. Black is essentially saying 'I'll take space in the center while you're playing on the flanks,' which is a perfectly reasonable approach. This move also opens lines for the dark-squared bishop and prepares kingside development, while challenging us to prove that our flank approach can match Black's direct central play. We should view this as an invitation to transpose into reversed Sicilian structures where we'll be playing a Sicilian Defense with an extra tempo."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and prepares to increase pressure on the central d5 square. This knight placement is fundamental to most English Opening setups because it allows us to maintain control over key central squares while supporting potential pawn advances like d2-d3 or even d2-d4 later. The knight on c3 also keeps our options open for various pawn structures — we might play d3 for a solid setup, or even consider f2-f4 in some lines to challenge Black's central pawn. From c3, our knight can also reroute to more active squares like e4 or d5 if the position calls for it."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black mirrors our development by bringing the knight to c6, where it defends the e5 pawn and prepares to contest central squares. Our opponent is following classical development principles while maintaining the central pawn on e5, and this knight can later support advances like d7-d6 and f7-f5, or potentially jump to active squares like d4. This setup by Black is leading us toward what's known as the Taimanov Variation of the English, where both sides develop harmoniously but maintain subtle tension over central control. We should note that Black's knight on c6 also prepares potential tactical shots involving the d4 square, so we'll need to be mindful of that central outpost."
+    },
+    {
+      "san": "g3",
+      "annotation": "We're fianchettoing our light-squared bishop, which is one of the most characteristic ideas in the English Opening and perfectly complements our hypermodern approach. The bishop will soon land on g2, where it will exert tremendous pressure along the long diagonal toward Black's kingside, particularly targeting the d5 and e6 squares. This setup also prepares castling kingside while supporting a potential d2-d3 pawn structure that would give us a solid, flexible position. The fianchetto fits beautifully with our knight on c3 because together they'll control key central squares and support various pawn breaks like d2-d3 followed by e2-e4, or even f2-f4 in more aggressive setups."
+    },
+    {
+      "san": "g6",
+      "annotation": "Our opponent responds with the same idea, preparing to fianchetto the dark-squared bishop on g7, which will create a fascinating mirror structure. Black is essentially saying 'if you're going to control the long diagonal, so am I,' and this leads to positions where both bishops will be staring at each other along their respective long diagonals. This symmetrical approach by Black is entirely sound and leads to rich positional battles where both sides have chances for active play. We should appreciate that Black's dark-squared bishop on g7 will be a powerful piece, controlling important central squares like d4 and e5, while also supporting the kingside and potentially participating in pawn breaks like f7-f5."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "We complete our fianchetto setup, placing our light-squared bishop on its dream square where it commands the entire long diagonal from a8 to h1. This bishop is now perfectly placed to support central control, particularly over the d5 square, while also eyeing Black's kingside and supporting our own king safety after castling. The bishop on g2 works in perfect harmony with our knight on c3 and pawn on c4 to create a flexible, hypermodern setup that can adapt to various pawn structures. From g2, our bishop also supports potential tactical ideas involving the long diagonal and can become a powerful attacking piece if Black castles kingside."
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Black completes the mirror fianchetto setup, and we now have reached a classical Taimanov Variation position where both sides have developed their pieces harmoniously with mutual fianchettoed bishops. Our opponent's dark-squared bishop on g7 is beautifully placed to control the long diagonal, support the central e5 pawn, and coordinate with the other pieces for potential kingside or central operations. This symmetrical structure creates fascinating strategic tension because both sides have similar piece setups but will need to find ways to create imbalances and generate winning chances. The position is roughly equal but full of potential, with both sides having excellent development and multiple plans available — we might consider d2-d3 and e2-e4, or f2-f4, or even Rb1 and b2-b4 for queenside play, while Black has similar flexibility with moves like d7-d6, f7-f5, or even h7-h5 in some lines."
+    }
+  ]
+}

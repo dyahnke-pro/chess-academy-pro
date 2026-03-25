@@ -1,0 +1,33 @@
+{
+  "openingId": "polish-opening-schuehler-gambit",
+  "moveAnnotations": [
+    {
+      "san": "b4",
+      "annotation": "We start with the Polish Opening, an unconventional move that immediately challenges Black's center and signals our intention to play actively from the first move. By advancing the b-pawn, we're preparing to develop our light-squared bishop to b2 with tempo, and we'll control the long diagonal—a key theme throughout this gambit. This move is rarely seen at the highest levels, but it offers dynamic, unbalanced play that can unsettle unprepared opponents."
+    },
+    {
+      "san": "c6",
+      "annotation": "Black solidifies the center and prepares to advance ...d5, preventing our e4 push immediately while maintaining flexibility. By playing ...c6, Black also supports a potential ...b5 counterattack and keeps the position closed—a sensible defensive approach against our unconventional setup."
+    },
+    {
+      "san": "Bb2",
+      "annotation": "Now we develop our bishop to its most natural square, where it aims powerfully down the long diagonal toward g7 and controls important central squares. Playing Bb2 gains time because it threatens to capture on b5, forcing Black into an immediate decision. This is the essence of the Schuehler Gambit: we're willing to sacrifice material (the b-pawn) for rapid development and piece activity."
+    },
+    {
+      "san": "a5",
+      "annotation": "Black attacks our advanced b-pawn before we can consolidate it, forcing us to make a critical choice about whether to defend, advance, or sacrifice. By playing ...a5, Black prevents b6 ideas and keeps our queenside somewhat disorganized, though it also weakens Black's own queenside pawns."
+    },
+    {
+      "san": "b5",
+      "annotation": "We boldly advance the pawn, accepting the gambit nature of our play and committing to rapid central expansion. The b5 pawn is a passed pawn and serves as a outpost for future piece pressure; we're betting that our open lines and the bishop pair will provide sufficient compensation once we push e4."
+    },
+    {
+      "san": "cxb5",
+      "annotation": "Black accepts the gambit and captures our pawn, which is the most natural response, though it opens the c-file and allows us to continue with our central ambitions. By taking on b5, Black has committed to a slightly looser pawn structure on the queenside."
+    },
+    {
+      "san": "e4",
+      "annotation": "Finally, we strike at the center with e4, claiming space and preparing to develop our remaining pieces toward active squares like Nc3 and Bc4. With Bb2 already placed and e4 secured, we've achieved rapid piece coordination and pressure on Black's position despite being down a pawn—this is the critical payoff for the Schuehler Gambit. Our plan now is to continue developing quickly (Nc3, Bc4, f4) while Black must deal with the central threat."
+    }
+  ]
+}

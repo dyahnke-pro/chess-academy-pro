@@ -1,0 +1,25 @@
+{
+  "openingId": "english-orangutan",
+  "moveAnnotations": [
+    {
+      "san": "c4",
+      "annotation": "We're opening with the English Opening, one of the most flexible and sophisticated ways to begin a chess game. This move controls the central d5 square while keeping our options completely open - we can transpose into various systems like the Reversed Sicilian, King's Indian Attack, or even a Queen's Gambit structure depending on how Black responds. The English is beloved by positional players because it allows us to develop harmoniously while putting the question to Black about what kind of game they want to play. Unlike 1.e4 or 1.d4, this opening prioritizes long-term strategic control over immediate central occupation."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our potential e4 advance and preparing to contest the center from a flexible position. This is one of the most common responses to the English Opening, as it keeps Black's options open for various setups including the King's Indian Defense structure with ...g6 and ...Bg7, or even a Queen's Indian approach with ...b6 and ...Bb7. Black is essentially saying 'I'll develop first and see what you're planning before committing to a specific pawn structure.' This move is both principled and practical, avoiding any early commitments while maintaining pressure on our center."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our knight to its ideal square, supporting a future d4 advance and keeping our central options fluid. This move fits perfectly with the English Opening philosophy - we're developing pieces harmoniously while maintaining maximum flexibility in our pawn structure. The knight on f3 also prevents any potential ...e4 advances from Black and prepares various piece configurations depending on how the game unfolds. By developing pieces before committing to further pawn moves, we're following classical opening principles while keeping transpositional possibilities alive."
+    },
+    {
+      "san": "g6",
+      "annotation": "Black signals their intention to fianchetto the dark-squared bishop, heading for a King's Indian Defense-style setup that's very popular against the English Opening. This move prepares ...Bg7, which will create a powerful diagonal battery aimed at our center and queenside. Black is choosing a hypermodern approach, allowing us to occupy the center with pawns while preparing to challenge it later with pieces from the flanks. This setup is strategically sound and gives Black excellent long-term prospects, particularly if they can later play ...e5 or ...d5 to challenge our central control."
+    },
+    {
+      "san": "b4",
+      "annotation": "We launch the distinctive 'Orangutan' or 'Polish Opening' thrust, an aggressive space-gaining move on the queenside that defines this variation of the English Opening. This pawn advance serves multiple purposes: it gains space on the queenside, potentially prepares Bb2 to increase pressure along the long diagonal, and can support a future queenside pawn storm with moves like a4-a5. The move also prevents Black from comfortably playing ...c5, which would be their most natural way to challenge our central control. While this looks aggressive, it fits into our overall English Opening strategy of controlling key central squares (particularly d5) while building long-term positional pressure rather than seeking immediate tactical complications."
+    }
+  ]
+}

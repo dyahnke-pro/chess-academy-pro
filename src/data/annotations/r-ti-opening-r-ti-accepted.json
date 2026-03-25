@@ -1,0 +1,21 @@
+{
+  "openingId": "r-ti-opening-r-ti-accepted",
+  "moveAnnotations": [
+    {
+      "san": "Nf3",
+      "annotation": "The Réti Opening is a sophisticated, flexible approach that avoids the heavy theory of 1.e4 or 1.d4—you control the center indirectly while keeping maximum options. By placing the knight on f3, we support a potential d4 advance later while preparing to reroute the knight to e5 or g5 depending on Black's setup. This move exemplifies the hypermodern philosophy: we don't rush to occupy d4, but instead control it from afar and develop our pieces harmoniously."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black stakes an immediate claim to the center, which is a natural and solid response that forces us to declare our intentions. This central push actually fits well with Réti plans—you want Black to commit their pawns early so your piece play and positional maneuvering shine through. Now we need to decide whether to challenge the center directly with c4 or allow a more flexible structure."
+    },
+    {
+      "san": "c4",
+      "annotation": "Now we challenge Black's d5 pawn, applying typical Réti-style pressure on the center without committing to a fixed pawn structure ourselves. The c4 move controls the d5 square and opens lines for our light-squared bishop and queen, while threatening to capture on d5 or support a later d4 advance. This is the key move that turns the Réti into the Réti Accepted—we're inviting Black into a battle for central control."
+    },
+    {
+      "san": "dxc4",
+      "annotation": "Black accepts our gambit and captures the pawn, which seems tempting but gives us compensation through rapid development and piece activity. You'll find that after accepting, Black has a pawn on c4 that can become a target or embarrassment, and we get chances to recapture it favorably while developing freely. This pawn on c4 is slightly loose, and in the ensuing positions we'll typically play e3 and Bxc4, establishing control over the d5 square and the long diagonal with excellent piece placement."
+    }
+  ]
+}

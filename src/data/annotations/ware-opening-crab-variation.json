@@ -1,0 +1,17 @@
+{
+  "openingId": "ware-opening-crab-variation",
+  "moveAnnotations": [
+    {
+      "san": "a4",
+      "annotation": "The Ware Opening is an unconventional first move that immediately stakes a claim on the queenside, particularly the b5 square. While it doesn't control the center like 1.e4 or 1.d4, we're following an offbeat strategy: a4 prepares potential future expansion with moves like Ra3 or a5, and it can be surprisingly effective against opponents unfamiliar with these quiet openings. This move is rarely played at higher levels, but it has the advantage of avoiding well-prepared mainstream defenses while keeping your intentions flexible."
+    },
+    {
+      "san": "e5",
+      "annotation": "Black immediately seizes the center, playing the most natural response to an unconventional opening. By occupying e5, Black controls the critical d4 and f4 squares, establishes a classical center pawn, and prepares to develop pieces naturally. This is the principled approach: when your opponent plays unusually, don't get distracted—secure the center and proceed with sound development."
+    },
+    {
+      "san": "h4",
+      "annotation": "Now we reach the Crab Variation, where we launch an immediate flank attack on the kingside by advancing the h-pawn. We're not trying to control the center directly; instead, we're creating immediate kingside threats and preparing to potentially reroute pieces to launch an assault on Black's king. The h-file will eventually become important for our rooks, and moves like Rh3 or h5 can become very annoying for Black—this unorthodox approach relies on practical threats rather than classical opening principles."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "openingId": "englund-gambit",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, staking an immediate claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move is the hallmark of positional chess, as it controls key central territory and allows our light-squared bishop and queen to potentially enter the game along the d1-h5 diagonal. Unlike 1.e4 which often leads to sharp tactical battles, 1.d4 typically steers the game toward more strategic, maneuvering-based middlegames where pawn structure and piece coordination become paramount. We're signaling our intention to build a solid, classical setup and are preparing various strong continuations like 2.c4 (Queen's Gambit), 2.Nf3, or even 2.Bg5 in some lines."
+    },
+    {
+      "san": "e5",
+      "annotation": "Our opponent has just played the Englund Gambit, a highly provocative and unorthodox response that immediately sacrifices the e5 pawn for rapid development and attacking chances! Black is essentially saying 'I don't care about material - I want to create immediate complications and drag you into sharp, tactical territory where one mistake can be decisive.' This gambit violates opening principles by allowing us to capture the pawn with 2.dxe5, but Black's compensation comes in the form of rapid piece development, potential tactics against our king, and the psychological pressure of facing an unfamiliar opening. While objectively dubious for Black, the Englund Gambit is a dangerous practical weapon that has scored well in club-level games because White players often underestimate the tactical threats and fall into Black's prepared variations."
+    }
+  ]
+}

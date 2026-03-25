@@ -1,0 +1,37 @@
+{
+  "openingId": "blackmar-diemer-gambit-declined-elbert-countergambit",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, which immediately stakes a claim to the central e5 square and opens lines for our dark-squared bishop. This move signals our intention to control the center with pawns, which is the foundation of classical opening play. The d4 opening is slightly less forcing than 1.e4, giving us solid positional foundations while keeping many different pawn structures and plans available. We're preparing to support this central pawn with moves like Nf3, c3, or even the more aggressive e4 advance that characterizes the Blackmar-Diemer Gambit."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black responds symmetrically in the center, immediately challenging our d4 pawn and establishing equal central control. This is the most principled response, as it prevents us from simply advancing e4 unopposed and grabbing a large share of the center. Our opponent is following classical opening principles by meeting our central advance with their own, creating immediate tension in the position. Black's d5 also opens lines for their dark-squared bishop and queen, mirroring the benefits we gained from our first move."
+    },
+    {
+      "san": "e4",
+      "annotation": "We're launching the Blackmar-Diemer Gambit with this aggressive pawn advance, offering a pawn sacrifice for rapid development and attacking chances. This move transforms the position from a quiet Queen's Pawn opening into a sharp tactical battle, where we're willing to give up material for tempo and initiative. The e4 advance attacks Black's d5 pawn and opens the e-file for our rook, while also freeing our light-squared bishop. This gambit appeals to players who prefer concrete tactical play over slow positional maneuvering, as we're essentially trading a pawn for faster piece development and central pressure."
+    },
+    {
+      "san": "dxe4",
+      "annotation": "Black accepts our pawn sacrifice, which is the most testing continuation and puts the burden on us to prove compensation for the material. By capturing on e4, our opponent has won a pawn but also opened the e-file and given us potential targets to attack. This acceptance leads to the main lines of the Blackmar-Diemer Gambit, where the position becomes highly tactical and both sides need to play precisely. Black could have declined with moves like e6 or c6, but accepting the gambit is generally considered the strongest try to refute our opening idea."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We're developing our knight with tempo, attacking Black's advanced e4 pawn and forcing our opponent to make a decision about how to maintain their extra material. This knight development is the key move of the Blackmar-Diemer Gambit, as it immediately puts pressure on the pawn Black just captured while developing toward the center. The knight on c3 also supports a future d5 advance and can potentially jump to more active squares like e4 or b5 depending on how the position develops. We're following the gambit principle of rapid development over material considerations, and this move forces Black to respond to our immediate threats."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops their knight to its most natural square, defending against potential threats while bringing a piece into active play. This is one of the most solid responses to our gambit, as the knight on f6 controls important central squares like e4 and d5, while also preparing to castle kingside. Our opponent is following sound development principles by getting pieces out quickly rather than trying to hold onto the extra pawn with moves like e3, which would be more provocative. The Nf6 development also supports Black's central control and prepares potential counterplay in the center with moves like e5."
+    },
+    {
+      "san": "f3",
+      "annotation": "We're recapturing our pawn with the f-pawn, which is the characteristic move of the Blackmar-Diemer Gambit and gives the opening its aggressive character. This recapture opens the f-file for our rook and prepares to support our center with the recovered pawn, though it does weaken our kingside pawn structure. The f3 move is more forcing than alternatives like Bg5 or Nf3, as we're immediately threatening to advance fxe4 and restore material equality while maintaining central pressure. While this pawn move goes against the principle of developing pieces before pawns, it's justified by the concrete tactical threats we create and the opening of attacking lines."
+    },
+    {
+      "san": "e5",
+      "annotation": "Black plays the Elbert Countergambit, offering their own pawn sacrifice to seize the initiative and turn the tables on our aggressive setup. This brilliant counter-blow strikes at our d4 pawn and opens lines for Black's pieces, particularly the dark-squared bishop which can now develop actively to c5 or b4. Our opponent is essentially saying 'if you want to gambit, I'll gambit too!' and this leads to extremely sharp positions where both sides have sacrificed pawns for piece activity. The e5 advance also opens the e-file for Black's rook and creates immediate tactical complications, as we must now decide whether to capture the pawn or find another way to maintain our central presence."
+    }
+  ]
+}

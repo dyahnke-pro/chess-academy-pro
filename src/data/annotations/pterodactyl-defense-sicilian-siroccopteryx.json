@@ -1,0 +1,37 @@
+{
+  "openingId": "pterodactyl-defense-sicilian-siroccopteryx",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and freeing both our bishop and queen for development. This classical move controls the crucial central squares d5 and f5, giving us excellent chances for a space advantage in the middlegame. The e4 advance is the most direct way to fight for the initiative from move one, and it leads to sharp, tactical games that reward active piece play. Our plan will be to quickly develop our pieces while maintaining central control and looking for attacking chances against the enemy king."
+    },
+    {
+      "san": "g6",
+      "annotation": "Black chooses the hypermodern Pterodactyl Defense, immediately fianchettoing the king's bishop rather than contesting the center directly with moves like e5 or c5. This unusual opening gets its name from the wing-like pawn structure Black creates, and it's designed to control the center from afar while keeping maximum flexibility. Our opponent is essentially saying 'go ahead and take the center - I'll attack it later with my pieces.' While this looks passive, the Pterodactyl can lead to complex middlegames where Black's pieces coordinate beautifully from their unusual squares."
+    },
+    {
+      "san": "d4",
+      "annotation": "We continue with our natural central expansion, creating a classical pawn center that controls key squares like c5, e5, c4, and f4. This move opens lines for our dark-squared bishop and queen while furthering our space advantage in the center. The combination of e4 and d4 gives us maximum central control and excellent piece development prospects. Black will now need to decide how to challenge this impressive pawn duo - they can't let us consolidate this position without some counterplay."
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Black completes the fianchetto setup, placing the bishop on the long diagonal where it eyes our central pawns and controls important squares like d4 and f3. This bishop will become a key defensive piece, protecting Black's king and exerting long-range pressure on our position. The fianchettoed bishop is particularly effective in the Pterodactyl because it supports Black's strategy of controlling the center from a distance. We need to be careful about our piece placement since this bishop can become quite annoying if we're not precise with our development."
+    },
+    {
+      "san": "c5",
+      "annotation": "Now Black reveals the Sicilian connection in this opening, striking at our d4 pawn and creating immediate central tension. This move transforms the position from a pure King's Indian setup into something more complex, where Black is actively challenging our central dominance. The c5 advance also opens the c-file for potential future pressure and gives Black's pieces more scope for activity. Our opponent is now playing true to the Pterodactyl spirit - using piece pressure and pawn breaks to undermine our seemingly solid center."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our knight to its most natural square, supporting our e4 pawn and controlling the important central squares d4 and e5. This knight also eyes the weak h7 square in Black's position, which could become relevant if we castle kingside and launch an attack. The f3 square is ideal because it allows our knight to jump to various strong outposts later in the game, including e5, g5, or h4. Additionally, this development prepares us to castle kingside while maintaining all our central tension - exactly what we want in sharp openings like this."
+    },
+    {
+      "san": "Qa5",
+      "annotation": "Black plays the characteristic Pterodactyl queen move, immediately putting pressure on our knight on c3 and creating tactical complications. This early queen development might look premature, but it serves several purposes: it pins our c3 knight to the king, potentially disrupts our natural development, and eyes the a2-g8 diagonal for future tactics. The queen on a5 also supports the advance ...b5, which could become annoying for our light-squared bishop. However, this early queen sortie does give us targets to attack, and we should look for ways to gain tempo against the exposed queen while completing our development."
+    },
+    {
+      "san": "Bc4",
+      "annotation": "We develop our light-squared bishop to an active square, eyeing the weak f7 point in Black's position and maintaining our rapid development schedule. This bishop placement is particularly strong because it controls the important central diagonal and keeps maximum pressure on Black's kingside. The c4 square also allows our bishop to potentially retreat to b3 or d3 if attacked, maintaining flexibility in our position. From c4, our bishop coordinates beautifully with our other pieces for potential tactical shots, especially if Black castles kingside into our line of fire. This move keeps the initiative firmly in our hands while Black struggles to coordinate their unusual piece setup."
+    }
+  ]
+}

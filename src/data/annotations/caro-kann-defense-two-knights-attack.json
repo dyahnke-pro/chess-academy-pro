@@ -1,0 +1,25 @@
+{
+  "openingId": "caro-kann-defense-two-knights-attack",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "We're opening with the king's pawn two squares forward, immediately claiming control of the central d5 and f5 squares while opening lines for our bishop and queen. This is the most popular first move in chess because it fights for the center right away and develops our pieces with tempo. Our plan is to build a strong pawn center and develop our pieces quickly toward the opponent's king. The move e4 also prepares us to meet various defenses, though we'll need to be ready for both symmetrical responses like e5 and asymmetrical setups like the Caro-Kann that's coming."
+    },
+    {
+      "san": "c6",
+      "annotation": "Our opponent chooses the Caro-Kann Defense, a solid and somewhat passive system that aims to undermine our central pawn on e4 with the upcoming d5 advance. This move prepares d5 while avoiding the tactical complications that arise in openings like the Sicilian Defense or King's Indian. Black is signaling a preference for solid, positional play over sharp tactical battles. The Caro-Kann typically leads to slightly cramped but very secure positions for Black, and our opponent is likely hoping to reach an endgame where the solid pawn structure pays dividends."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black immediately challenges our central pawn, following through on the plan initiated with c6. This move creates central tension and forces us to make an important decision about how to handle our e4 pawn. Our opponent is trying to trade off central pawns to reduce our space advantage and reach a more equal position. The move d5 also opens the c8-bishop's diagonal and begins Black's development, though the bishop is still blocked for now. We now need to decide whether to capture, advance, or defend our e4 pawn, each leading to different pawn structures and strategic plans."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We're developing our knight to a natural square while defending our attacked e4 pawn, choosing the most flexible continuation in the position. This move keeps all our options open - we can still capture on d5, advance with e5, or maintain the tension depending on how our opponent continues. The knight on c3 also eyes important central squares like d5 and e4, and can potentially jump to aggressive squares like d5 or b5 later in the game. By developing rather than immediately resolving the central tension, we're following the principle of improving our position before committing to a specific pawn structure. This leads us into the Two Knights Attack variation, where we'll quickly complete our kingside development."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We're bringing out our second knight to complete our kingside development and add another defender to our central e4 pawn, which is now solidly supported twice. This knight move also controls the important central squares d4 and e5, while preparing to castle kingside for safety. The Two Knights Attack setup with Nc3 and Nf3 is one of the most natural ways to meet the Caro-Kann, as it develops our pieces harmoniously while maintaining flexibility in the center. Our opponent still hasn't resolved the central tension, so we're continuing to improve our position and keeping our options open for when Black finally commits to a plan. This system often leads to sharp middlegame play where our superior development and central control can create attacking chances."
+    }
+  ]
+}
