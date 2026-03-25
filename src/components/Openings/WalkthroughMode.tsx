@@ -431,8 +431,10 @@ export function WalkthroughMode({
             setVisibleHighlightCount(ann.highlights?.length ?? 0);
             ttsFinishedRef.current?.();
           }
-        } catch {
-          // Kokoro failed — fall back to Web Speech
+        } catch (err) {
+          // Kokoro failed (possibly OOM) — free WASM memory and fall back to Web Speech
+          console.warn('[WalkthroughMode] Kokoro speak failed, falling back to Web Speech:', err);
+          kokoroService.unload();
           if (!cancelled) {
             speechService.speak(ann.annotation, {
               rate: TTS_RATE[autoPlaySpeed],
@@ -454,11 +456,11 @@ export function WalkthroughMode({
     return () => { cancelled = true; };
   }, [voiceEnabled, kokoroEnabled, kokoroVoiceId, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
-  // Clean up speech on unmount
+  // Clean up speech and free Kokoro WASM memory on unmount
   useEffect(() => {
     return () => {
       speechService.stop();
-      kokoroService.stop();
+      kokoroService.unload();
     };
   }, []);
 
