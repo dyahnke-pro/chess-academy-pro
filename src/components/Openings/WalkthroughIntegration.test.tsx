@@ -222,16 +222,12 @@ describe('WalkthroughMode integration — real annotation data', () => {
   });
 
   it('voice off when masterAllOff=true: speak is NOT called', async () => {
-    const { db } = await import('../../db/schema');
-    vi.mocked(db.profiles.get).mockResolvedValue({
-      id: 'main',
-      preferences: {
-        voiceEnabled: false,
-        kokoroEnabled: false,
-        kokoroVoiceId: 'af_bella',
-        masterAllOff: true,
-      },
-    } as Parameters<typeof db.profiles.get>[0] extends infer T ? T : never);
+    // Voice prefs are now read from Zustand, not the DB — set the store directly
+    const { useAppStore } = await import('../../stores/appStore');
+    const { buildUserProfile } = await import('../../test/factories');
+    useAppStore.getState().setActiveProfile(
+      buildUserProfile({ preferences: { voiceEnabled: false, masterAllOff: true } }),
+    );
 
     const mockSpeak = vi.mocked(speechService.speak);
     mockSpeak.mockClear();

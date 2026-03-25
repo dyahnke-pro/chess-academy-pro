@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
 import { ChessBoard } from '../Board/ChessBoard';
@@ -8,7 +9,6 @@ import { speechService } from '../../services/speechService';
 import { kokoroService } from '../../services/kokoroService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { db } from '../../db/schema';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../../types';
@@ -59,6 +59,13 @@ export function WalkthroughMode({
   subLineKey,
   onExit,
 }: WalkthroughModeProps): JSX.Element {
+  // Read voice prefs from Zustand (synchronous — avoids async DB read that
+  // would break iOS Safari's user-gesture context for Web Speech API).
+  const activeProfile = useAppStore((s) => s.activeProfile);
+  const voiceEnabled = activeProfile?.preferences.voiceEnabled ?? true;
+  const kokoroEnabled = activeProfile?.preferences.kokoroEnabled ?? false;
+  const kokoroVoiceId = activeProfile?.preferences.kokoroVoiceId ?? 'af_bella';
+
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
   const activePgn = variation ? variation.pgn : opening.pgn;
@@ -404,54 +411,48 @@ export function WalkthroughMode({
     if (!annotations) return;
     const ann = annotations[currentMoveIndex - 1] as OpeningMoveAnnotation | undefined;
     if (!ann) return;
+    if (!voiceEnabled) return;
 
     let cancelled = false;
 
-    void (async () => {
-      // Check voice preferences — bail out entirely if voice is disabled
-      const profile = await db.profiles.get('main');
-      const voiceEnabled = profile?.preferences.voiceEnabled ?? true;
-      const kokoroEnabled = profile?.preferences.kokoroEnabled ?? false;
-      const kokoroVoiceId = profile?.preferences.kokoroVoiceId ?? 'af_bella';
+    // iOS Safari requires Web Speech to be called synchronously within the
+    // user-gesture task — any preceding await breaks that context and the
+    // utterance is silently dropped. We read voice prefs from Zustand
+    // (synchronous) so the common Web Speech path never awaits.
+    const kokoroReady = kokoroEnabled && kokoroService.isReady();
 
-      if (cancelled) return;
-      if (!voiceEnabled) return;
-
-      if (kokoroEnabled) {
-        // Only use Kokoro if already ready — never wait/auto-load (OOM risk on iOS)
-        const kokoroReady = kokoroService.isReady();
-
-        if (cancelled) return;
-
-        if (kokoroReady) {
-          // Use Kokoro HD voice — no boundary events but great quality
-          try {
-            await kokoroService.speak(ann.annotation, kokoroVoiceId, TTS_RATE[autoPlaySpeed]);
-            if (!cancelled) {
-              // Reveal all arrows/highlights immediately after Kokoro finishes
-              setVisibleArrowCount(ann.arrows?.length ?? 0);
-              setVisibleHighlightCount(ann.highlights?.length ?? 0);
-              ttsFinishedRef.current?.();
-            }
-            return;
-          } catch {
-            // Kokoro failed, fall through to Web Speech
+    if (kokoroReady) {
+      // Kokoro is loaded — async path only entered when model is ready
+      void (async () => {
+        try {
+          await kokoroService.speak(ann.annotation, kokoroVoiceId, TTS_RATE[autoPlaySpeed]);
+          if (!cancelled) {
+            setVisibleArrowCount(ann.arrows?.length ?? 0);
+            setVisibleHighlightCount(ann.highlights?.length ?? 0);
+            ttsFinishedRef.current?.();
+          }
+        } catch {
+          // Kokoro failed — fall back to Web Speech
+          if (!cancelled) {
+            speechService.speak(ann.annotation, {
+              rate: TTS_RATE[autoPlaySpeed],
+              onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
+              onEnd: () => ttsFinishedRef.current?.(),
+            });
           }
         }
-      }
-
-      // Web Speech API with boundary events for arrow syncing (fallback)
-      if (!cancelled) {
-        speechService.speak(ann.annotation, {
-          rate: TTS_RATE[autoPlaySpeed],
-          onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-          onEnd: () => ttsFinishedRef.current?.(),
-        });
-      }
-    })();
+      })();
+    } else {
+      // Web Speech — called synchronously so iOS gesture context is preserved
+      speechService.speak(ann.annotation, {
+        rate: TTS_RATE[autoPlaySpeed],
+        onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
+        onEnd: () => ttsFinishedRef.current?.(),
+      });
+    }
 
     return () => { cancelled = true; };
-  }, [currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
+  }, [voiceEnabled, kokoroEnabled, kokoroVoiceId, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
   // Clean up speech on unmount
   useEffect(() => {
