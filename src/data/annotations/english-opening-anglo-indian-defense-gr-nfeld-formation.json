@@ -1,0 +1,29 @@
+{
+  "openingId": "english-opening-anglo-indian-defense-gr-nfeld-formation",
+  "moveAnnotations": [
+    {
+      "san": "c4",
+      "annotation": "We're opening with the English Opening, one of the most flexible and strategic first moves in chess. By controlling the central d5 and b5 squares from the flank, we're preparing to build a solid positional foundation without committing to the sharp tactical lines that often arise after 1.e4 or 1.d4. This move allows us to transpose into many different pawn structures depending on how Black responds, giving us excellent practical chances to steer the game toward positions we're comfortable with. The English is particularly popular among players who enjoy strategic maneuvering and long-term planning rather than immediate tactical skirmishes."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black responds with the most natural developing move, bringing the knight toward the center and preparing to contest our control of the e4 square. This is the beginning of the Anglo-Indian Defense, where Black adopts a hypermodern approach by developing pieces first before committing to a specific pawn structure. Our opponent is keeping maximum flexibility - they could later play ...e6 for an Indian setup, ...c5 for a symmetrical structure, or even ...d5 to challenge our center directly. From f6, the knight also supports potential ...e5 advances and keeps an eye on important central squares."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our knight to its most active square, supporting the center and preparing to castle kingside. This move fits perfectly with our flexible approach - we're not committing to any specific pawn breaks yet, but we're improving our position and maintaining control over key central squares like e5 and d4. The knight on f3 also prepares potential d2-d4 advances later, when we might want to transpose into a Queen's Gambit or other d4 opening. By developing pieces before pushing more pawns, we're following sound opening principles while keeping our options open for the middlegame structure we'll eventually choose."
+    },
+    {
+      "san": "g6",
+      "annotation": "Black signals their intention to fianchetto the dark-squared bishop, preparing ...Bg7 to create a powerful diagonal battery aimed at our queenside. This is a key move in many hypermodern openings, where Black allows us to occupy the center with pawns while preparing to attack that center from the flanks with pieces. The g6-Bg7 setup will give Black excellent long-term pressure against our c4 pawn and potential control over the long diagonal. We should be aware that this setup often leads to sharp tactical possibilities if Black ever gets ...d5 in effectively, so we need to be prepared to either support our center or challenge Black's central ambitions."
+    },
+    {
+      "san": "g3",
+      "annotation": "We mirror Black's fianchetto plan, preparing to develop our own light-squared bishop to g2 where it will control the long diagonal and support our central ambitions. This move creates a symmetrical pawn structure that often leads to rich positional battles where both sides have active piece play. Our bishop on g2 will be particularly well-placed to support a future d2-d4 advance and will provide excellent support for our king after castling. The fianchetto setup also helps us maintain flexibility in our pawn structure - we can still play for e2-e4, d2-d4, or even maintain the pure English structure depending on how the position develops."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black immediately challenges our c4 pawn and stakes a claim in the center, reaching the characteristic Grünfeld Formation where Black combines the kingside fianchetto with central pawn pressure. This is a critical moment in the opening - our opponent is trying to prove that our c4 pawn is loose and that they can gain central equality or even superiority through piece pressure. We now need to decide whether to maintain the tension with moves like Bg2 and 0-0, exchange on d5 to simplify the center, or push d2-d4 to create a more complex pawn structure. The position has taken on a distinctly Grünfeld-like character, where Black will aim for active piece play and central counterplay while we seek to maintain our space advantage and convert it into lasting pressure."
+    }
+  ]
+}

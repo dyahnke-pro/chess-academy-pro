@@ -1,0 +1,33 @@
+{
+  "openingId": "bird-opening-siegener-gambit",
+  "moveAnnotations": [
+    {
+      "san": "f4",
+      "annotation": "We start with the Bird Opening, an unconventional but sound first move that immediately stakes a claim in the center and prepares to support it with e4. The f4 pawn controls e5 and g5, giving us space on the kingside while keeping our position flexible—we're not committing to a classical e4 setup right away. This move has the advantage of surprising many opponents and leading to positions quite different from 1.e4 or 1.d4 lines."
+    },
+    {
+      "san": "e5",
+      "annotation": "Black strikes back in the center, attacking our f4 pawn and forcing us to make an immediate decision about how to defend it. This is one of Black's most natural and aggressive responses, preventing us from simply advancing e4 and taking space. By playing e5, Black challenges us to either defend the pawn or give it up—setting the tone for sharp, tactical play."
+    },
+    {
+      "san": "d4",
+      "annotation": "We sacrifice the f4 pawn by pushing through in the center, which is the defining move of the Siegener Gambit. By offering the pawn, we gain rapid central control with d4 and open lines for our pieces while keeping Black's pieces somewhat uncoordinated. This gambit gives us dynamic compensation through quick piece development and attacking chances, even though we're temporarily down material."
+    },
+    {
+      "san": "exd4",
+      "annotation": "Black captures the d4 pawn, accepting our gambit and taking material. This is the main and most natural continuation—Black grabs the extra pawn while keeping the center relatively closed. By doing so, Black removes one of our central supports, but this also locks in Black's center, which we can target with our superior development and piece placement."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our knight to its natural square, controlling e5 and d4 while preparing to support our center and kingside attack. The knight on f3 also eyeballs the d4 pawn that Black just captured, and it's positioned to jump to g5 or e5 depending on how Black develops. This move keeps our gambit's initiative alive by developing with purpose rather than rushing to regain material immediately."
+    },
+    {
+      "san": "c5",
+      "annotation": "Black attacks our center and gains space on the queenside, creating tension in the position while also preparing to develop the queenside pieces. By playing c5, Black threatens to undermine our position and makes room for the c8-bishop to develop. This move is logical and fighting, showing that Black isn't content to simply sit with the extra pawn."
+    },
+    {
+      "san": "c3",
+      "annotation": "We support the d4 square with our c-pawn, reinforcing our control of the center and preparing to potentially recapture if Black plays ...dxc3. This move is also positional flexibility—we keep our options open while solidifying our space advantage and preparing moves like Qxd4 or even e4 if the position allows. The c3 pawn also supports future piece maneuvers and keeps Black's center pawn under pressure."
+    }
+  ]
+}

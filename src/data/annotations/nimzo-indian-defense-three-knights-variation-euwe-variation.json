@@ -1,0 +1,45 @@
+{
+  "openingId": "nimzo-indian-defense-three-knights-variation-euwe-variation",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, staking an immediate claim to the center and preparing to develop our pieces harmoniously. This move controls the crucial e5 and c5 squares while opening lines for both our queen and dark-squared bishop. The d4 opening leads to rich, complex middlegames where central control and piece coordination are paramount. Unlike 1.e4, which often leads to tactical melees, 1.d4 typically produces more positional, strategic battles where understanding pawn structures and long-term plans becomes crucial."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black immediately challenges our central pawn with this classical developing move, putting pressure on both d4 and e4 squares. This knight move is the hallmark of many Indian Defense systems, where Black allows White to establish a broad pawn center before striking back with pieces. Our opponent is following hypermodern principles - controlling the center from afar rather than occupying it immediately with pawns. The knight on f6 also prepares kingside castling and keeps maximum flexibility for Black's setup."
+    },
+    {
+      "san": "c4",
+      "annotation": "We're expanding our central influence by supporting the d4 pawn and controlling the crucial d5 and b5 squares. This move defines the Queen's Gambit family of openings and prepares to challenge Black if they try to establish their own pawn center with ...d5. By playing c4, we're also opening lines for our queen and preparing potential queenside expansion. This pawn advance puts immediate pressure on Black to make a fundamental choice about their pawn structure and piece development."
+    },
+    {
+      "san": "e6",
+      "annotation": "Black chooses a solid, flexible approach by supporting an eventual ...d5 advance while keeping the position relatively closed. This move prepares to challenge our pawn center directly and opens a diagonal for the light-squared bishop, though it does somewhat restrict the dark-squared bishop's development. Our opponent is signaling they want to play one of the Indian Defense systems, likely the Nimzo-Indian or Queen's Indian. The e6 pawn also provides additional support for the f5 square and maintains central tension."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We're developing our knight to its most natural square, where it supports the d4 pawn and prepares to contest the center. This knight placement is almost universal in Queen's Pawn openings because it controls key central squares like e4 and d5. However, by placing our knight here, we're also allowing Black's next move, which will create the characteristic tension of the Nimzo-Indian Defense. The knight on c3 also prepares potential pawn storms on either flank and supports our central pawn structure."
+    },
+    {
+      "san": "Bb4",
+      "annotation": "Black strikes with the defining move of the Nimzo-Indian Defense, pinning our knight to the king and creating immediate tactical threats. This bishop move puts pressure on our knight, potentially doubling our pawns if we're forced to recapture on c3, which would damage our pawn structure. Our opponent is following in the footsteps of chess legends like Nimzowitsch, using this active bishop placement to create early imbalances and combat our central dominance. The bishop on b4 also prevents us from easily advancing our e-pawn and creates concrete problems we must address immediately."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We're developing our king's knight to its ideal square, where it supports our center and prepares kingside castling while avoiding the immediate complications of moves like f3 or Bd2. This natural developing move maintains flexibility in how we handle Black's pin on the c3 knight - we can still play a3, Qc2, or other responses later. The knight on f3 also controls important central squares like e5 and d4, and prepares to support our pawn center or launch kingside attacks. By developing pieces before committing to a specific plan against the pin, we're keeping maximum options open."
+    },
+    {
+      "san": "c5",
+      "annotation": "Black immediately strikes at our pawn center with this thematic pawn break, challenging our d4 stronghold and opening lines for their pieces. This advance is crucial in the Nimzo-Indian as it prevents us from maintaining our ideal pawn center and creates counterplay on the queenside. Our opponent is following classical Indian Defense strategy - allowing us to build a center, then immediately attacking it with pawn breaks. The c5 move also opens the c-file for potential rook activity and prepares to establish Black's own pawn presence in the center."
+    },
+    {
+      "san": "d5",
+      "annotation": "We're closing the center with this advance, transforming the position into a more positional struggle where piece maneuvering becomes paramount. This pawn push gains space and prevents Black from easily equalizing with ...d6 and ...e5, while also preparing potential breakthroughs on either flank later in the game. By advancing d5, we're committing to a specific pawn structure that will define the middlegame - Black's pieces will need to find new routes since the center is now blocked. This move also opens up potential plans involving f4-f5 or expanding on the queenside with b4."
+    },
+    {
+      "san": "Ne4",
+      "annotation": "Black's knight boldly jumps to this central outpost, challenging our knight on c3 and creating immediate tactical complications. This move is characteristic of the Euwe Variation, where Black seeks active piece play to compensate for any spatial disadvantage from our d5 advance. The knight on e4 attacks our pinned knight on c3 and controls important squares like d2 and f2, while also eyeing potential tactics involving our king. Our opponent is embracing sharp, tactical play rather than quiet positional maneuvering, forcing us to calculate precisely and make critical decisions about our piece coordination."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "openingId": "van-geet-opening-napoleon-attack",
+  "moveAnnotations": [
+    {
+      "san": "Nc3",
+      "annotation": "We begin with the Van Geet Opening, a rare but principled approach where we develop our knight before moving pawns to the center. This move controls d5 and e4, preparing to support a central push while keeping Black guessing about our setup. Unlike 1.e4 or 1.d4, the Van Geet sidesteps mainstream theory and puts the burden on Black to establish their own center first—this can be psychologically useful in practical play."
+    },
+    {
+      "san": "e5",
+      "annotation": "Black claims the center immediately, which is sound and natural. By playing e5, Black controls d4 and f4, establishing a strong pawn presence. This is the most common response to 1.Nc3, as it seizes space and opens lines for the queen and bishop on f8."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our second knight with tempo, attacking Black's e5 pawn and preparing to support a central breakthrough with d4. The knight on f3 controls key squares like e5, g5, and h4, and it's perfectly placed to recapture on e5 if Black takes on d4 later. This move keeps up the pressure while continuing natural development."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the kingside knight to defend e5 and prepare counterplay in the center. The knight on c6 is well-placed to fight for d4 and support Black's position after our d4 push. This is the main line, keeping the tension and maintaining central symmetry."
+    },
+    {
+      "san": "d4",
+      "annotation": "Now we strike at the center with our central pawn thrust, directly challenging Black's e5 pawn. Playing d4 forces Black to make an immediate decision: they can capture on d4, defend e5 again, or play e4 to block. This move transforms the position from a quiet setup into a real game, and we've reached a typical Napoleonic-style position where we're ready to fight for central control with our well-placed pieces."
+    }
+  ]
+}
