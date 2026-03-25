@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { buildUserProfile } from '../test/factories';
 import { speechService } from './speechService';
-import { kokoroService } from './kokoroService';
+import { voicePackService } from './voicePackService';
 
 // We need a fresh instance for each test since voiceService is a singleton.
 // Re-import the module to get the singleton.
@@ -18,13 +18,11 @@ describe('voiceService', () => {
     vi.spyOn(speechService, 'speak').mockImplementation(() => undefined);
     vi.spyOn(speechService, 'stop').mockImplementation(() => undefined);
 
-    // Spy on kokoroService methods
-    vi.spyOn(kokoroService, 'isReady').mockReturnValue(false);
-    vi.spyOn(kokoroService, 'speak').mockResolvedValue(undefined);
-    vi.spyOn(kokoroService, 'stop').mockImplementation(() => undefined);
-    vi.spyOn(kokoroService, 'isPlaying').mockReturnValue(false);
-    vi.spyOn(kokoroService, 'loadModel').mockResolvedValue(undefined);
-    vi.spyOn(kokoroService, 'waitUntilReady').mockResolvedValue(false);
+    // Spy on voicePackService methods
+    vi.spyOn(voicePackService, 'isReady').mockReturnValue(false);
+    vi.spyOn(voicePackService, 'speak').mockResolvedValue(false);
+    vi.spyOn(voicePackService, 'stop').mockImplementation(() => undefined);
+    vi.spyOn(voicePackService, 'isPlaying').mockReturnValue(false);
 
     // Re-import to get the singleton (it persists state between tests)
     const mod = await import('./voiceService');
@@ -58,7 +56,7 @@ describe('voiceService', () => {
       expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('falls back when no ElevenLabs API key is set and Kokoro not ready', async () => {
+    it('falls back when no ElevenLabs API key is set and voice pack not ready', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
@@ -79,7 +77,7 @@ describe('voiceService', () => {
       );
     });
 
-    it('falls back when ElevenLabs API returns error and Kokoro not ready', async () => {
+    it('falls back when ElevenLabs API returns error and voice pack not ready', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
@@ -139,9 +137,10 @@ describe('voiceService', () => {
     });
   });
 
-  describe('Kokoro fallback tier', () => {
-    it('uses Kokoro when enabled and ready, no ElevenLabs key', async () => {
-      vi.spyOn(kokoroService, 'isReady').mockReturnValue(true);
+  describe('Voice pack fallback tier', () => {
+    it('uses voice pack when enabled and ready, no ElevenLabs key', async () => {
+      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
+      vi.spyOn(voicePackService, 'speak').mockResolvedValue(true);
 
       const profile = buildUserProfile({
         id: 'main',
@@ -150,21 +149,22 @@ describe('voiceService', () => {
           elevenlabsKeyEncrypted: null,
           elevenlabsKeyIv: null,
           kokoroEnabled: true,
-          kokoroVoiceId: 'bm_daniel',
+          kokoroVoiceId: 'af_bella',
         },
       });
       await db.profiles.put(profile);
 
-      await voiceService.speak('Kokoro test');
+      await voiceService.speak('Voice pack test');
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(kokoroService.speak).toHaveBeenCalledWith('Kokoro test', 'bm_daniel', expect.any(Number));
+      expect(voicePackService.speak).toHaveBeenCalledWith('Voice pack test', expect.any(Number));
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('skips Kokoro when not ready', async () => {
-      vi.spyOn(kokoroService, 'isReady').mockReturnValue(false);
+    it('falls back to Web Speech when voice pack clip not found', async () => {
+      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
+      vi.spyOn(voicePackService, 'speak').mockResolvedValue(false);
 
       const profile = buildUserProfile({
         id: 'main',
@@ -177,16 +177,36 @@ describe('voiceService', () => {
       });
       await db.profiles.put(profile);
 
-      await voiceService.speak('Skip kokoro');
+      await voiceService.speak('Missing clip');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(kokoroService.speak).not.toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalled();
     });
 
-    it('skips Kokoro when disabled in preferences', async () => {
-      vi.spyOn(kokoroService, 'isReady').mockReturnValue(true);
+    it('skips voice pack when not ready', async () => {
+      vi.spyOn(voicePackService, 'isReady').mockReturnValue(false);
+
+      const profile = buildUserProfile({
+        id: 'main',
+        preferences: {
+          voiceEnabled: true,
+          elevenlabsKeyEncrypted: null,
+          elevenlabsKeyIv: null,
+          kokoroEnabled: true,
+        },
+      });
+      await db.profiles.put(profile);
+
+      await voiceService.speak('Skip voice pack');
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(voicePackService.speak).not.toHaveBeenCalled();
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(speechService.speak).toHaveBeenCalled();
+    });
+
+    it('skips voice pack when disabled in preferences', async () => {
+      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
 
       const profile = buildUserProfile({
         id: 'main',
@@ -199,17 +219,17 @@ describe('voiceService', () => {
       });
       await db.profiles.put(profile);
 
-      await voiceService.speak('Kokoro disabled');
+      await voiceService.speak('Voice pack disabled');
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(kokoroService.speak).not.toHaveBeenCalled();
+      expect(voicePackService.speak).not.toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalled();
     });
 
-    it('falls back to Web Speech when Kokoro throws', async () => {
-      vi.spyOn(kokoroService, 'isReady').mockReturnValue(true);
-      vi.spyOn(kokoroService, 'speak').mockRejectedValue(new Error('Kokoro error'));
+    it('falls back to Web Speech when voice pack throws', async () => {
+      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
+      vi.spyOn(voicePackService, 'speak').mockRejectedValue(new Error('Playback error'));
 
       const profile = buildUserProfile({
         id: 'main',
@@ -222,11 +242,11 @@ describe('voiceService', () => {
       });
       await db.profiles.put(profile);
 
-      await voiceService.speak('Kokoro fail');
+      await voiceService.speak('Voice pack fail');
 
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
-        'Kokoro fail',
+        'Voice pack fail',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
       );
     });
@@ -270,12 +290,12 @@ describe('voiceService', () => {
       expect(voiceService.isPlaying()).toBe(false);
     });
 
-    it('calls speechService.stop and kokoroService.stop on stop', () => {
+    it('calls speechService.stop and voicePackService.stop on stop', () => {
       voiceService.stop();
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.stop).toHaveBeenCalled();
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(kokoroService.stop).toHaveBeenCalled();
+      expect(voicePackService.stop).toHaveBeenCalled();
     });
 
     it('can be called multiple times safely', () => {
