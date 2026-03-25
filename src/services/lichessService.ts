@@ -177,3 +177,73 @@ export async function importLichessStats(
 
   return stats;
 }
+
+// ─── Puzzle Stream ───────────────────────────────────────────────────────────
+
+export interface LichessStreamPuzzle {
+  id: string;
+  rating: number;
+  themes: string[];
+  solution: string[];
+  pgn: string;
+  initialPly: number;
+  white: string;
+  black: string;
+}
+
+interface LichessNextPuzzleResponse {
+  game: {
+    id: string;
+    pgn: string;
+    players: Array<{
+      userId: string;
+      name: string;
+      color: 'white' | 'black';
+      rating: number;
+    }>;
+  };
+  puzzle: {
+    id: string;
+    rating: number;
+    plays: number;
+    solution: string[];
+    themes: string[];
+    initialPly: number;
+  };
+}
+
+/**
+ * Fetch the next Lichess puzzle (optionally filtered by theme or rating).
+ * No auth required — uses the public `/api/puzzle/next` endpoint.
+ */
+export async function fetchNextLichessPuzzle(options?: {
+  theme?: string;
+  difficulty?: 'easiest' | 'easier' | 'normal' | 'harder' | 'hardest';
+}): Promise<LichessStreamPuzzle> {
+  const params = new URLSearchParams();
+  if (options?.theme) params.set('angle', options.theme);
+  if (options?.difficulty) params.set('difficulty', options.difficulty);
+
+  const url = `https://lichess.org/api/puzzle/next${params.toString() ? '?' + params.toString() : ''}`;
+  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+
+  if (!response.ok) {
+    throw new Error(`Lichess puzzle stream error: ${response.status}`);
+  }
+
+  const data = (await response.json()) as LichessNextPuzzleResponse;
+
+  const white = data.game.players.find((p) => p.color === 'white')?.name ?? 'White';
+  const black = data.game.players.find((p) => p.color === 'black')?.name ?? 'Black';
+
+  return {
+    id: data.puzzle.id,
+    rating: data.puzzle.rating,
+    themes: data.puzzle.themes,
+    solution: data.puzzle.solution,
+    pgn: data.game.pgn,
+    initialPly: data.puzzle.initialPly,
+    white,
+    black,
+  };
+}

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
-import { importLichessGames, importLichessStats } from './lichessService';
+import { importLichessGames, importLichessStats, fetchNextLichessPuzzle } from './lichessService';
 
 vi.mock('./mistakePuzzleService', () => ({
   generateMistakePuzzlesForBatch: vi.fn().mockResolvedValue(0),
@@ -315,6 +315,89 @@ describe('lichessService', () => {
       } as Response);
 
       await expect(importLichessStats('baduser')).rejects.toThrow('not found');
+    });
+  });
+
+  describe('fetchNextLichessPuzzle', () => {
+    const MOCK_PUZZLE_RESPONSE = {
+      game: {
+        id: 'gameid1',
+        pgn: 'e4 e5 Nf3 Nc6',
+        players: [
+          { userId: 'u1', name: 'PlayerW', color: 'white', rating: 1600 },
+          { userId: 'u2', name: 'PlayerB', color: 'black', rating: 1580 },
+        ],
+      },
+      puzzle: {
+        id: 'puzz01',
+        rating: 1400,
+        plays: 9999,
+        solution: ['d1h5', 'g8f6', 'h5f7'],
+        themes: ['pin', 'short'],
+        initialPly: 6,
+      },
+    };
+
+    it('fetches from /api/puzzle/next', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(MOCK_PUZZLE_RESPONSE),
+      } as Response);
+
+      await fetchNextLichessPuzzle();
+
+      expect(fetch).toHaveBeenCalledWith(
+        'https://lichess.org/api/puzzle/next',
+        expect.anything(),
+      );
+    });
+
+    it('returns correct puzzle shape', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(MOCK_PUZZLE_RESPONSE),
+      } as Response);
+
+      const puzzle = await fetchNextLichessPuzzle();
+      expect(puzzle.id).toBe('puzz01');
+      expect(puzzle.rating).toBe(1400);
+      expect(puzzle.themes).toEqual(['pin', 'short']);
+      expect(puzzle.solution).toEqual(['d1h5', 'g8f6', 'h5f7']);
+      expect(puzzle.white).toBe('PlayerW');
+      expect(puzzle.black).toBe('PlayerB');
+    });
+
+    it('appends theme param when provided', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(MOCK_PUZZLE_RESPONSE),
+      } as Response);
+
+      await fetchNextLichessPuzzle({ theme: 'fork' });
+
+      const calledUrl = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]?.[0] as string;
+      expect(calledUrl).toContain('angle=fork');
+    });
+
+    it('appends difficulty param when provided', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(MOCK_PUZZLE_RESPONSE),
+      } as Response);
+
+      await fetchNextLichessPuzzle({ difficulty: 'harder' });
+
+      const calledUrl = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]?.[0] as string;
+      expect(calledUrl).toContain('difficulty=harder');
+    });
+
+    it('throws on non-OK response', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: false,
+        status: 503,
+      } as Response);
+
+      await expect(fetchNextLichessPuzzle()).rejects.toThrow('Lichess puzzle stream error: 503');
     });
   });
 });

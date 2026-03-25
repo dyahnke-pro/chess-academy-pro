@@ -877,4 +877,83 @@ describe('StockfishEngine', () => {
       expect(Array.isArray(line.moves)).toBe(true);
     });
   });
+
+  // -----------------------------------------------------------------------
+  // queueAnalysis
+  // -----------------------------------------------------------------------
+  describe('queueAnalysis', () => {
+    it('resolves with analysis result', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+
+      scheduleAnalysisResponse({ bestmove: 'e2e4' });
+
+      const result = await stockfishEngine.queueAnalysis(STARTING_FEN, 18);
+      expect(result.bestMove).toBe('e2e4');
+    });
+
+    it('serializes two requests — second waits for first', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+
+      const order: string[] = [];
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+      pmMock.mockImplementation((msg: string) => {
+        mockWorker.postMessageCalls.push(msg);
+        if (msg === 'isready') {
+          queueMicrotask(() => mockWorker.emit('readyok'));
+        }
+        if (msg.startsWith('go depth')) {
+          queueMicrotask(() => {
+            order.push('analysis');
+            emitAnalysisResponse({ bestmove: 'e2e4' });
+          });
+        }
+      });
+
+      const p1 = stockfishEngine.queueAnalysis(STARTING_FEN).then((r) => {
+        order.push('p1-resolved');
+        return r;
+      });
+      const p2 = stockfishEngine.queueAnalysis(STARTING_FEN).then((r) => {
+        order.push('p2-resolved');
+        return r;
+      });
+
+      await Promise.all([p1, p2]);
+
+      // Both should resolve, p1 before p2
+      expect(order).toEqual(['analysis', 'p1-resolved', 'analysis', 'p2-resolved']);
+    });
+
+    it('rejects all queued entries on destroy', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+
+      // Block the engine so queue builds up
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+      pmMock.mockImplementation((msg: string) => {
+        mockWorker.postMessageCalls.push(msg);
+        if (msg === 'isready') {
+          queueMicrotask(() => mockWorker.emit('readyok'));
+        }
+        // Don't respond to "go" — hang intentionally
+      });
+
+      const p1 = stockfishEngine.queueAnalysis(STARTING_FEN);
+      const p2 = stockfishEngine.queueAnalysis(STARTING_FEN);
+
+      // Give the first analysis time to start running
+      await new Promise((r) => setTimeout(r, 20));
+
+      stockfishEngine.destroy();
+
+      // p1 is interrupted, p2 is rejected from the queue drain cleanup
+      await expect(p1).rejects.toThrow();
+      await expect(p2).rejects.toThrow();
+    });
+  });
 });

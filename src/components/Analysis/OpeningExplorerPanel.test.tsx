@@ -1,8 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { OpeningExplorerPanel } from './OpeningExplorerPanel';
 import * as explorerService from '../../services/lichessExplorerService';
+
+vi.mock('../../services/openingService', () => ({
+  getOpeningByEco: vi.fn().mockResolvedValue([]),
+}));
 
 vi.mock('../../services/lichessExplorerService', () => ({
   fetchLichessExplorer: vi.fn(),
@@ -49,19 +54,19 @@ describe('OpeningExplorerPanel', () => {
   });
 
   it('renders source tabs', () => {
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     expect(screen.getByTestId('explorer-source-lichess')).toBeInTheDocument();
     expect(screen.getByTestId('explorer-source-masters')).toBeInTheDocument();
   });
 
   it('shows loading spinner initially', () => {
     mockFetchExplorer.mockReturnValue(new Promise(() => {}));
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     expect(screen.getByTestId('explorer-loading')).toBeInTheDocument();
   });
 
   it('displays moves after loading', async () => {
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await waitFor(() => {
       expect(screen.getByTestId('explorer-moves')).toBeInTheDocument();
     });
@@ -70,14 +75,14 @@ describe('OpeningExplorerPanel', () => {
   });
 
   it('shows opening name and total games', async () => {
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await waitFor(() => {
       expect(screen.getByText('Starting Position')).toBeInTheDocument();
     });
   });
 
   it('displays cloud eval when available', async () => {
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await waitFor(() => {
       expect(screen.getByTestId('cloud-eval')).toBeInTheDocument();
     });
@@ -85,7 +90,7 @@ describe('OpeningExplorerPanel', () => {
 
   it('switches to masters source on tab click', async () => {
     const user = userEvent.setup();
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await user.click(screen.getByTestId('explorer-source-masters'));
     await waitFor(() => {
       expect(mockFetchExplorer).toHaveBeenCalledWith(TEST_FEN, 'masters');
@@ -94,7 +99,7 @@ describe('OpeningExplorerPanel', () => {
 
   it('shows no-data message when moves array is empty', async () => {
     mockFetchExplorer.mockResolvedValue({ ...mockExplorerResult, moves: [] });
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await waitFor(() => {
       expect(screen.getByTestId('no-explorer-data')).toBeInTheDocument();
     });
@@ -102,7 +107,7 @@ describe('OpeningExplorerPanel', () => {
 
   it('shows error state on fetch failure', async () => {
     mockFetchExplorer.mockRejectedValue(new Error('Network error'));
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await waitFor(() => {
       expect(screen.getByTestId('explorer-error')).toBeInTheDocument();
     });
@@ -111,7 +116,7 @@ describe('OpeningExplorerPanel', () => {
 
   it('does not show cloud eval when null', async () => {
     mockFetchCloudEval.mockResolvedValue(null);
-    render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await waitFor(() => {
       expect(screen.getByTestId('explorer-moves')).toBeInTheDocument();
     });
@@ -119,11 +124,11 @@ describe('OpeningExplorerPanel', () => {
   });
 
   it('refetches when FEN changes', async () => {
-    const { rerender } = render(<OpeningExplorerPanel fen={TEST_FEN} />);
+    const { rerender } = render(<MemoryRouter><OpeningExplorerPanel fen={TEST_FEN} /></MemoryRouter>);
     await waitFor(() => expect(mockFetchExplorer).toHaveBeenCalledTimes(1));
 
     const newFen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
-    rerender(<OpeningExplorerPanel fen={newFen} />);
+    rerender(<MemoryRouter><OpeningExplorerPanel fen={newFen} /></MemoryRouter>);
     await waitFor(() => expect(mockFetchExplorer).toHaveBeenCalledTimes(2));
     expect(mockFetchExplorer).toHaveBeenLastCalledWith(newFen, 'lichess');
   });

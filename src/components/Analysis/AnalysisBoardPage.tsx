@@ -2,16 +2,18 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChessBoard } from '../Board/ChessBoard';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { ArrowLeft, Play, Square, BarChart3, Zap, BookOpen } from 'lucide-react';
+import { ArrowLeft, Play, Square, BarChart3, Zap, BookOpen, Database } from 'lucide-react';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { OpeningExplorerPanel } from './OpeningExplorerPanel';
+import { TablebasePanel } from './TablebasePanel';
+import { countPieces } from '../../services/tablebases';
 import type { StockfishAnalysis, AnalysisLine } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const DEFAULT_DEPTH = 18;
 
-type AnalysisPanel = 'engine' | 'explorer';
+type AnalysisPanel = 'engine' | 'explorer' | 'tablebase';
 
 export function AnalysisBoardPage(): JSX.Element {
   const navigate = useNavigate();
@@ -197,6 +199,18 @@ export function AnalysisBoardPage(): JSX.Element {
           <BookOpen size={12} />
           Explorer
         </button>
+        <button
+          onClick={() => setPanel('tablebase')}
+          className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-medium transition-colors"
+          style={{
+            background: panel === 'tablebase' ? 'var(--color-accent)' : 'transparent',
+            color: panel === 'tablebase' ? 'var(--color-bg)' : 'var(--color-text-muted)',
+          }}
+          data-testid="panel-tab-tablebase"
+        >
+          <Database size={12} />
+          {countPieces(fen) <= 7 ? 'Tablebase' : 'TB'}
+        </button>
       </div>
 
       {/* Engine panel */}
@@ -248,6 +262,13 @@ export function AnalysisBoardPage(): JSX.Element {
       {panel === 'explorer' && (
         <div className="bg-theme-surface rounded-lg p-4 border border-theme-border">
           <OpeningExplorerPanel fen={fen} />
+        </div>
+      )}
+
+      {/* Tablebase panel */}
+      {panel === 'tablebase' && (
+        <div className="bg-theme-surface rounded-lg p-4 border border-theme-border" data-testid="tablebase-container">
+          <TablebasePanel fen={fen} />
         </div>
       )}
     </div>

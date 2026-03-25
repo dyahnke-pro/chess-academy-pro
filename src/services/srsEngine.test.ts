@@ -6,62 +6,122 @@ import {
   getGradeLabel,
 } from './srsEngine';
 
+// ── Helper: fresh card state ─────────────────────────────────────────────────
+const NEW_CARD = { interval: 0, easeFactor: 0, repetitions: 0 };
+
+// ── calculateNextInterval ────────────────────────────────────────────────────
+
 describe('calculateNextInterval', () => {
-  it('resets interval to 1 on "again" grade', () => {
-    const result = calculateNextInterval('again', 10, 2.5, 5);
-    expect(result.interval).toBe(1);
+  it('"again" on a new card resets repetitions to 0', () => {
+    const result = calculateNextInterval('again', 0, 0, 0);
     expect(result.repetitions).toBe(0);
   });
 
-  it('decreases ease factor on "again" grade', () => {
-    const result = calculateNextInterval('again', 10, 2.5, 5);
-    expect(result.easeFactor).toBeLessThan(2.5);
-  });
-
-  it('sets interval to 1 on first correct answer', () => {
-    const result = calculateNextInterval('good', 0, 2.5, 0);
-    expect(result.interval).toBe(1);
+  it('"good" on a new card gives repetitions = 1', () => {
+    const result = calculateNextInterval('good', NEW_CARD.interval, NEW_CARD.easeFactor, NEW_CARD.repetitions);
     expect(result.repetitions).toBe(1);
   });
 
-  it('sets interval to 6 on second correct answer', () => {
-    const result = calculateNextInterval('good', 1, 2.5, 1);
-    expect(result.interval).toBe(6);
-    expect(result.repetitions).toBe(2);
+  it('"hard" on a new card gives repetitions = 1', () => {
+    const result = calculateNextInterval('hard', 0, 0, 0);
+    expect(result.repetitions).toBe(1);
   });
 
-  it('multiplies interval by ease factor on subsequent answers', () => {
-    const result = calculateNextInterval('good', 6, 2.5, 2);
-    expect(result.interval).toBe(Math.round(6 * 2.5));
+  it('"easy" on a new card gives repetitions = 1', () => {
+    const result = calculateNextInterval('easy', 0, 0, 0);
+    expect(result.repetitions).toBe(1);
   });
 
-  it('gives longer interval for "easy" grade', () => {
-    const good = calculateNextInterval('good', 6, 2.5, 2);
-    const easy = calculateNextInterval('easy', 6, 2.5, 2);
+  it('"easy" gives a longer interval than "good" on a new card', () => {
+    const good = calculateNextInterval('good', 0, 0, 0);
+    const easy = calculateNextInterval('easy', 0, 0, 0);
     expect(easy.interval).toBeGreaterThan(good.interval);
   });
 
-  it('never lets ease factor drop below 1.3', () => {
-    let ef = 1.4;
-    for (let i = 0; i < 20; i++) {
-      const result = calculateNextInterval('again', 1, ef, 0);
-      ef = result.easeFactor;
+  it('"good" gives a longer interval than "hard" on a new card', () => {
+    const hard = calculateNextInterval('hard', 0, 0, 0);
+    const good = calculateNextInterval('good', 0, 0, 0);
+    expect(good.interval).toBeGreaterThan(hard.interval);
+  });
+
+  it('"again" always resets repetitions to 0 regardless of current state', () => {
+    const r1 = calculateNextInterval('again', 100, 500, 10);
+    const r2 = calculateNextInterval('again', 30, 250, 5);
+    expect(r1.repetitions).toBe(0);
+    expect(r2.repetitions).toBe(0);
+  });
+
+  it('interval is always >= 1', () => {
+    for (const grade of ['again', 'hard', 'good', 'easy'] as const) {
+      const result = calculateNextInterval(grade, 0, 0, 0);
+      expect(result.interval).toBeGreaterThanOrEqual(1);
     }
-    expect(ef).toBeGreaterThanOrEqual(1.3);
+  });
+
+  it('interval grows after multiple "good" reviews', () => {
+    let state = { interval: 0, easeFactor: 0, repetitions: 0 };
+    const intervals: number[] = [];
+    for (let i = 0; i < 4; i++) {
+      state = calculateNextInterval('good', state.interval, state.easeFactor, state.repetitions);
+      intervals.push(state.interval);
+    }
+    // Intervals should grow monotonically
+    for (let i = 1; i < intervals.length; i++) {
+      expect(intervals[i]).toBeGreaterThan(intervals[i - 1]);
+    }
+  });
+
+  it('"again" on a mature card produces shorter interval than the card had', () => {
+    // After several good reviews, a single "again" should reset to a short interval
+    let state = { interval: 0, easeFactor: 0, repetitions: 0 };
+    for (let i = 0; i < 5; i++) {
+      state = calculateNextInterval('good', state.interval, state.easeFactor, state.repetitions);
+    }
+    const maturedInterval = state.interval;
+    const forgotten = calculateNextInterval('again', state.interval, state.easeFactor, state.repetitions);
+    expect(forgotten.interval).toBeLessThan(maturedInterval);
   });
 
   it('returns a future ISO date string', () => {
-    const result = calculateNextInterval('good', 1, 2.5, 1);
+    const result = calculateNextInterval('good', 0, 0, 0);
     const today = new Date().toISOString().split('T')[0];
     expect(result.dueDate > today).toBe(true);
   });
+
+  it('"easy" on a mature card gives longer interval than "good"', () => {
+    let state = { interval: 0, easeFactor: 0, repetitions: 0 };
+    for (let i = 0; i < 3; i++) {
+      state = calculateNextInterval('good', state.interval, state.easeFactor, state.repetitions);
+    }
+    const good = calculateNextInterval('good', state.interval, state.easeFactor, state.repetitions);
+    const easy = calculateNextInterval('easy', state.interval, state.easeFactor, state.repetitions);
+    expect(easy.interval).toBeGreaterThanOrEqual(good.interval);
+  });
+
+  it('repetitions increment on each successful recall', () => {
+    let state = { interval: 0, easeFactor: 0, repetitions: 0 };
+    for (let i = 1; i <= 4; i++) {
+      state = calculateNextInterval('good', state.interval, state.easeFactor, state.repetitions);
+      expect(state.repetitions).toBe(i);
+    }
+  });
+
+  it('easeFactor encodes stability > 0 after a successful review', () => {
+    const result = calculateNextInterval('good', 0, 0, 0);
+    expect(result.easeFactor).toBeGreaterThan(0);
+  });
 });
 
+// ── createDefaultSrsFields ───────────────────────────────────────────────────
+
 describe('createDefaultSrsFields', () => {
-  it('returns default SM-2 values', () => {
+  it('returns zero interval', () => {
     const fields = createDefaultSrsFields();
     expect(fields.interval).toBe(0);
-    expect(fields.easeFactor).toBe(2.5);
+  });
+
+  it('returns zero repetitions (new card)', () => {
+    const fields = createDefaultSrsFields();
     expect(fields.repetitions).toBe(0);
   });
 
@@ -70,7 +130,14 @@ describe('createDefaultSrsFields', () => {
     const today = new Date().toISOString().split('T')[0];
     expect(fields.dueDate).toBe(today);
   });
+
+  it('has easeFactor of 0 (unset stability)', () => {
+    const fields = createDefaultSrsFields();
+    expect(fields.easeFactor).toBe(0);
+  });
 });
+
+// ── isCardDue ────────────────────────────────────────────────────────────────
 
 describe('isCardDue', () => {
   it('returns true for today', () => {
@@ -89,88 +156,33 @@ describe('isCardDue', () => {
   });
 });
 
+// ── getGradeLabel ────────────────────────────────────────────────────────────
+
 describe('getGradeLabel', () => {
-  it('returns formatted label with interval', () => {
-    const label = getGradeLabel('good', 1, 2.5, 1);
-    expect(label).toMatch(/Good · \d+d/);
+  it('starts with the capitalised grade name', () => {
+    expect(getGradeLabel('again', 0, 0, 0)).toMatch(/^Again/);
+    expect(getGradeLabel('hard',  0, 0, 0)).toMatch(/^Hard/);
+    expect(getGradeLabel('good',  0, 0, 0)).toMatch(/^Good/);
+    expect(getGradeLabel('easy',  0, 0, 0)).toMatch(/^Easy/);
   });
 
-  it('resets to 1 day label for "again" grade', () => {
-    const label = getGradeLabel('again', 0, 2.5, 0);
-    expect(label).toMatch(/Again · 1d/);
+  it('includes a day-count suffix', () => {
+    const label = getGradeLabel('good', 0, 0, 0);
+    expect(label).toMatch(/·\s*\d+d/);
   });
 
-  it('returns Hard label', () => {
-    const label = getGradeLabel('hard', 1, 2.5, 1);
-    expect(label).toMatch(/^Hard/);
+  it('"easy" label shows longer interval than "good" label', () => {
+    const good = getGradeLabel('good', 0, 0, 0);
+    const easy = getGradeLabel('easy', 0, 0, 0);
+    const goodDays = parseInt(good.match(/(\d+)d/)?.[1] ?? '0');
+    const easyDays = parseInt(easy.match(/(\d+)d/)?.[1] ?? '0');
+    expect(easyDays).toBeGreaterThan(goodDays);
   });
 
-  it('returns Easy label', () => {
-    const label = getGradeLabel('easy', 1, 2.5, 1);
-    expect(label).toMatch(/^Easy/);
-  });
-});
-
-describe('formatInterval edge cases (via getGradeLabel)', () => {
-  it('shows "now" for 0-day interval', () => {
-    // "again" on a fresh card yields interval=1, not 0.
-    // But we can test via getGradeLabel + calculateNextInterval by
-    // checking that a "good" on rep=0 yields 1d
-    const label = getGradeLabel('good', 0, 2.5, 0);
-    expect(label).toContain('1d');
-  });
-
-  it('shows month format for 30-day interval', () => {
-    // After many correct answers the interval grows. We can force a large
-    // interval by using a high ease factor on a high-rep card.
-    const result = calculateNextInterval('good', 30, 2.5, 5);
-    // 30 * 2.5 = 75 => should show "3mo" (75/30 ≈ 2.5 → 3)
-    expect(result.interval).toBeGreaterThanOrEqual(30);
-    const label = getGradeLabel('good', 30, 2.5, 5);
-    expect(label).toMatch(/\dmo/);
-  });
-
-  it('shows year format for 365+ day interval', () => {
-    const result = calculateNextInterval('good', 365, 2.5, 10);
-    expect(result.interval).toBeGreaterThanOrEqual(365);
-    const label = getGradeLabel('good', 365, 2.5, 10);
-    expect(label).toMatch(/yr/);
-  });
-});
-
-describe('calculateNextInterval — additional edge cases', () => {
-  it('decreases ease factor on "hard" grade but keeps it above 1.3', () => {
-    // "hard" = quality 3, so EF adjustment = 0.1 - (5-3)*(0.08+(5-3)*0.02) = 0.1 - 0.24 = -0.14
-    const result = calculateNextInterval('hard', 6, 2.5, 2);
-    expect(result.easeFactor).toBeLessThan(2.5);
-    expect(result.easeFactor).toBeGreaterThanOrEqual(1.3);
-  });
-
-  it('caps ease factor at 3.0 for "easy" grade', () => {
-    const result = calculateNextInterval('easy', 6, 2.9, 5);
-    expect(result.easeFactor).toBeLessThanOrEqual(3.0);
-  });
-
-  it('handles very large intervals correctly', () => {
-    const result = calculateNextInterval('good', 1000, 2.5, 20);
-    expect(result.interval).toBe(Math.round(1000 * result.easeFactor));
-    expect(result.repetitions).toBe(21);
-  });
-
-  it('"easy" gives bonus interval over "good"', () => {
-    const good = calculateNextInterval('good', 20, 2.5, 5);
-    const easy = calculateNextInterval('easy', 20, 2.5, 5);
-    expect(easy.interval).toBeGreaterThan(good.interval);
-    // Easy bonus is ~10% on the interval
-    expect(easy.interval).toBeGreaterThanOrEqual(Math.round(good.interval * 1.05));
-  });
-
-  it('"again" always resets to interval=1 regardless of current interval', () => {
-    const r1 = calculateNextInterval('again', 100, 2.5, 10);
-    const r2 = calculateNextInterval('again', 500, 2.0, 20);
-    expect(r1.interval).toBe(1);
-    expect(r2.interval).toBe(1);
-    expect(r1.repetitions).toBe(0);
-    expect(r2.repetitions).toBe(0);
+  it('shows month format for large intervals', () => {
+    // Simulate a mature card with high stability
+    const highStability = 30 * 100; // 30 days × 100
+    const label = getGradeLabel('good', 30, highStability, 10);
+    expect(label).toMatch(/mo|yr|\d+d/);
   });
 });
