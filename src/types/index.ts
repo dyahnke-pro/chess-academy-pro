@@ -325,6 +325,9 @@ export interface UserPreferences {
   // Import accounts
   chessComUsername?: string;
   lichessUsername?: string;
+  // Lichess API token (encrypted, for puzzle activity/dashboard)
+  lichessTokenEncrypted?: string | null;
+  lichessTokenIv?: string | null;
 }
 
 export interface UserProfile {
@@ -829,6 +832,73 @@ export interface MiniGameLevelProgress {
 
 export interface MiniGameProgress {
   levels: Partial<Record<number, MiniGameLevelProgress>>;
+}
+
+// ─── Lichess Opening Explorer ────────────────────────────────────────────────
+
+export interface LichessExplorerGame {
+  id: string;
+  white: { name: string; rating: number };
+  black: { name: string; rating: number };
+  winner: 'white' | 'black' | null;
+  year: number;
+  month: string;
+}
+
+export interface LichessExplorerMove {
+  uci: string;
+  san: string;
+  averageRating: number;
+  white: number;
+  draws: number;
+  black: number;
+  game: LichessExplorerGame | null;
+}
+
+export interface LichessExplorerResult {
+  white: number;
+  draws: number;
+  black: number;
+  moves: LichessExplorerMove[];
+  topGames: LichessExplorerGame[];
+  opening: { eco: string; name: string } | null;
+}
+
+// ─── Lichess Cloud Eval ──────────────────────────────────────────────────────
+
+export interface LichessCloudEvalPv {
+  moves: string;
+  cp?: number;
+  mate?: number;
+}
+
+export interface LichessCloudEval {
+  fen: string;
+  knodes: number;
+  depth: number;
+  pvs: LichessCloudEvalPv[];
+}
+
+// ─── Lichess Puzzle Dashboard ────────────────────────────────────────────────
+
+export interface LichessPuzzleThemeResult {
+  firstWins: number;
+  replayWins: number;
+  nb: number;
+}
+
+export interface LichessPuzzleDashboard {
+  days: number;
+  global: LichessPuzzleThemeResult;
+  themes: Record<string, { results: LichessPuzzleThemeResult }>;
+}
+
+// ─── Lichess Puzzle Activity ─────────────────────────────────────────────────
+
+export interface LichessPuzzleActivityEntry {
+  date: number;
+  puzzleId: string;
+  win: boolean;
 }
 
 // ─── Bishop Mini-Games ──────────────────────────────────────────────────────

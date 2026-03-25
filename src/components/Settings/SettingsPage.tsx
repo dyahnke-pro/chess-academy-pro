@@ -11,6 +11,7 @@ import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
 import { encryptApiKey } from '../../services/cryptoService';
+import { Link } from 'react-router-dom';
 
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import type { UserProfile, PieceAnimationSpeed, MoveMethod } from '../../types';
@@ -558,6 +559,10 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <SyncSettingsPanel />
       </div>
+
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+        <LichessTokenPanel profile={profile} setProfile={setProfile} />
+      </div>
     </div>
   );
 }
@@ -758,6 +763,117 @@ function AppearanceTab(): JSX.Element {
   return (
     <div className="space-y-4" data-testid="appearance-tab">
       <ThemePickerPanel />
+    </div>
+  );
+}
+
+// ─── Lichess Token Panel ──────────────────────────────────────────────────────
+
+function LichessTokenPanel({ profile, setProfile }: TabProps): JSX.Element {
+  const [token, setToken] = useState('');
+  const [showToken, setShowToken] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+  const hasToken = Boolean(profile.preferences.lichessTokenEncrypted);
+
+  const handleSave = async (): Promise<void> => {
+    if (!token.trim()) return;
+    try {
+      const { encryptApiKey } = await import('../../services/cryptoService');
+      const { encrypted, iv } = await encryptApiKey(token.trim());
+      const updatedPrefs = {
+        ...profile.preferences,
+        lichessTokenEncrypted: encrypted,
+        lichessTokenIv: iv,
+      };
+      await db.profiles.update(profile.id, { preferences: updatedPrefs });
+      setProfile({ ...profile, preferences: updatedPrefs });
+      setToken('');
+      setStatus('Token saved ✓');
+    } catch {
+      setStatus('Error saving token');
+    }
+    setTimeout(() => setStatus(null), 3000);
+  };
+
+  const handleClear = async (): Promise<void> => {
+    const updatedPrefs = {
+      ...profile.preferences,
+      lichessTokenEncrypted: null,
+      lichessTokenIv: null,
+    };
+    await db.profiles.update(profile.id, { preferences: updatedPrefs });
+    setProfile({ ...profile, preferences: updatedPrefs });
+    setStatus('Token removed');
+    setTimeout(() => setStatus(null), 2000);
+  };
+
+  return (
+    <div className="space-y-3" data-testid="lichess-token-panel">
+      <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
+        Lichess Integration
+      </h3>
+      <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+        Optional personal API token for puzzle dashboard and activity sync.{' '}
+        <a
+          href="https://lichess.org/account/oauth/token/create?scopes[]=puzzle:read&description=Chess+Academy+Pro"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          Create token at lichess.org
+        </a>
+      </p>
+      <div className="flex gap-2">
+        <input
+          type={showToken ? 'text' : 'password'}
+          value={token}
+          onChange={(e) => setToken(e.target.value)}
+          placeholder={hasToken ? 'Token saved (••••••••)' : 'lip_...'}
+          className="flex-1 px-3 py-2 rounded-lg border text-sm"
+          style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+          data-testid="lichess-token-input"
+        />
+        <button
+          onClick={() => setShowToken((s) => !s)}
+          className="px-3 py-2 rounded-lg border text-xs"
+          style={{ borderColor: 'var(--color-border)' }}
+        >
+          {showToken ? 'Hide' : 'Show'}
+        </button>
+        <button
+          onClick={() => void handleSave()}
+          disabled={!token.trim()}
+          className="px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+          style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          data-testid="save-lichess-token-btn"
+        >
+          Save
+        </button>
+      </div>
+      {hasToken && (
+        <div className="flex items-center justify-between">
+          <Link
+            to="/puzzles/lichess-dashboard"
+            className="text-xs underline"
+            style={{ color: 'var(--color-accent)' }}
+          >
+            View Puzzle Dashboard →
+          </Link>
+          <button
+            onClick={() => void handleClear()}
+            className="text-xs"
+            style={{ color: 'var(--color-text-muted)' }}
+            data-testid="clear-lichess-token-btn"
+          >
+            Remove token
+          </button>
+        </div>
+      )}
+      {status && (
+        <p className="text-xs font-medium" style={{ color: 'var(--color-accent)' }} data-testid="lichess-token-status">
+          {status}
+        </p>
+      )}
     </div>
   );
 }

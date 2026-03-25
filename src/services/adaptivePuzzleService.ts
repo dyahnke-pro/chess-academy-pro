@@ -19,6 +19,8 @@ export interface AdaptiveSessionState {
   totalPuzzles: number;
   startedAt: string;
   themesEncountered: Record<string, { correct: number; total: number }>;
+  /** When set, always target these themes first (e.g. from Lichess Dashboard). */
+  forcedWeakThemes?: string[];
 }
 
 export interface AdaptiveConfig {
@@ -100,7 +102,10 @@ export const DIFFICULTY_LABELS: Record<AdaptiveDifficulty, { label: string; desc
 
 // ─── Session Management ─────────────────────────────────────────────────────
 
-export function createAdaptiveSession(difficulty: AdaptiveDifficulty): AdaptiveSessionState {
+export function createAdaptiveSession(
+  difficulty: AdaptiveDifficulty,
+  forcedWeakThemes?: string[],
+): AdaptiveSessionState {
   const config = ADAPTIVE_CONFIGS[difficulty];
   return {
     difficulty,
@@ -115,6 +120,7 @@ export function createAdaptiveSession(difficulty: AdaptiveDifficulty): AdaptiveS
     totalPuzzles: 0,
     startedAt: new Date().toISOString(),
     themesEncountered: {},
+    forcedWeakThemes: forcedWeakThemes && forcedWeakThemes.length > 0 ? forcedWeakThemes : undefined,
   };
 }
 
@@ -208,8 +214,14 @@ export async function getNextAdaptivePuzzle(
   const config = ADAPTIVE_CONFIGS[session.difficulty];
   const targetRating = session.sessionRating;
 
-  // If weakness boost, try to find a puzzle matching a weak theme
-  if (session.weakThemeBoost) {
+  // If forced weak themes (from Lichess Dashboard), always target those first
+  if (session.forcedWeakThemes && session.forcedWeakThemes.length > 0) {
+    for (const theme of session.forcedWeakThemes) {
+      const puzzle = await findPuzzleInBand(targetRating, config.bandWidth * 2, seenIds, theme);
+      if (puzzle) return puzzle;
+    }
+  } else if (session.weakThemeBoost) {
+    // Standard periodic weakness boost using local DB history
     const weakThemes = await getWeakestThemes(3);
     for (const theme of weakThemes) {
       const puzzle = await findPuzzleInBand(targetRating, config.bandWidth, seenIds, theme);

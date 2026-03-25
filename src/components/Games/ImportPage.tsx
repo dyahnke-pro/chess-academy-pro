@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { importLichessGames, importLichessStats } from '../../services/lichessService';
 import { importChessComGames, importChessComStats } from '../../services/chesscomService';
+import { fetchPuzzleActivity, fetchPuzzleDashboard } from '../../services/lichessPuzzleService';
+import { decryptApiKey } from '../../services/cryptoService';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { ArrowLeft, Loader2, CheckCircle, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Loader2, CheckCircle, TrendingUp, Brain, ExternalLink } from 'lucide-react';
 import type { PlatformStats, UserProfile } from '../../types';
 
 type Platform = 'lichess' | 'chesscom';
@@ -39,10 +41,44 @@ export function ImportPage(): JSX.Element {
   const [stats, setStats] = useState<PlatformStats | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Puzzle activity sync state (Lichess only, requires token)
+  const [syncingPuzzles, setSyncingPuzzles] = useState(false);
+  const [puzzleSyncResult, setPuzzleSyncResult] = useState<{
+    total: number;
+    wins: number;
+    themes: number;
+  } | null>(null);
+  const [puzzleSyncError, setPuzzleSyncError] = useState<string | null>(null);
+
+  const tokenEncrypted = activeProfile?.preferences.lichessTokenEncrypted;
+  const tokenIv = activeProfile?.preferences.lichessTokenIv;
+  const hasLichessToken = Boolean(tokenEncrypted && tokenIv);
+
   const handleProgress = useCallback((count: number, status?: string) => {
     setProgressCount(count);
     if (status) setProgressStatus(status);
   }, []);
+
+  const handleSyncPuzzles = useCallback(async (): Promise<void> => {
+    if (!tokenEncrypted || !tokenIv) return;
+    setSyncingPuzzles(true);
+    setPuzzleSyncResult(null);
+    setPuzzleSyncError(null);
+    try {
+      const token = await decryptApiKey(tokenEncrypted, tokenIv);
+      const [activity, dashboard] = await Promise.all([
+        fetchPuzzleActivity(token, 100),
+        fetchPuzzleDashboard(token, 30),
+      ]);
+      const wins = activity.filter((a) => a.win).length;
+      const themes = Object.keys(dashboard.themes).length;
+      setPuzzleSyncResult({ total: activity.length, wins, themes });
+    } catch (err) {
+      setPuzzleSyncError(err instanceof Error ? err.message : 'Sync failed');
+    } finally {
+      setSyncingPuzzles(false);
+    }
+  }, [tokenEncrypted, tokenIv]);
 
   const handleImport = async (): Promise<void> => {
     if (!username.trim()) return;
@@ -271,6 +307,76 @@ export function ImportPage(): JSX.Element {
         <p className="text-sm font-medium text-center" style={{ color: 'var(--color-error)' }} data-testid="import-error">
           {error}
         </p>
+      )}
+
+      {/* Lichess Puzzle Sync (only when Lichess platform + token available) */}
+      {platform === 'lichess' && (
+        <div
+          className="p-4 rounded-lg border space-y-3"
+          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+          data-testid="puzzle-sync-section"
+        >
+          <div className="flex items-center gap-2">
+            <Brain size={16} style={{ color: 'var(--color-accent)' }} />
+            <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+              Puzzle Activity
+            </span>
+          </div>
+          {!hasLichessToken ? (
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Add a Lichess token in{' '}
+              <Link to="/settings" className="underline" style={{ color: 'var(--color-accent)' }}>
+                Settings
+              </Link>{' '}
+              to sync puzzle stats.
+            </p>
+          ) : (
+            <>
+              <button
+                onClick={() => void handleSyncPuzzles()}
+                disabled={syncingPuzzles}
+                className="w-full py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                data-testid="sync-puzzles-btn"
+              >
+                {syncingPuzzles ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    Syncing...
+                  </>
+                ) : (
+                  'Sync Puzzle Stats'
+                )}
+              </button>
+
+              {puzzleSyncResult && (
+                <div className="space-y-1" data-testid="puzzle-sync-result">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle size={14} style={{ color: 'var(--color-success)' }} />
+                    <span className="text-xs font-medium" style={{ color: 'var(--color-success)' }}>
+                      {puzzleSyncResult.total} puzzles · {puzzleSyncResult.total > 0 ? Math.round((puzzleSyncResult.wins / puzzleSyncResult.total) * 100) : 0}% win rate · {puzzleSyncResult.themes} themes
+                    </span>
+                  </div>
+                  <Link
+                    to="/puzzles/lichess-dashboard"
+                    className="flex items-center gap-1 text-xs"
+                    style={{ color: 'var(--color-accent)' }}
+                    data-testid="view-dashboard-link"
+                  >
+                    View Full Dashboard
+                    <ExternalLink size={11} />
+                  </Link>
+                </div>
+              )}
+
+              {puzzleSyncError && (
+                <p className="text-xs" style={{ color: 'var(--color-error)' }} data-testid="puzzle-sync-error">
+                  {puzzleSyncError}
+                </p>
+              )}
+            </>
+          )}
+        </div>
       )}
     </div>
   );

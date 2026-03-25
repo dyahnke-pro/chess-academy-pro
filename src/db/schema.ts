@@ -218,6 +218,26 @@ class ChessAcademyDB extends Dexie {
         }
       });
     });
+
+    this.version(12).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+    }).upgrade(async (tx) => {
+      // Add Lichess token fields to existing profiles
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (!('lichessTokenEncrypted' in prefs)) {
+          prefs.lichessTokenEncrypted = null;
+          prefs.lichessTokenIv = null;
+        }
+      });
+    });
   }
 }
 

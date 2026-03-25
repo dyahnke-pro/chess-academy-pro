@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, Brain, BookOpen, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { seedPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
@@ -29,6 +29,10 @@ const CHECKPOINT_INTERVAL = 10;
 export function AdaptivePuzzlePage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
+  const location = useLocation();
+  const forcedWeakThemes = (location.state as { forcedWeakThemes?: string[] } | null)?.forcedWeakThemes;
+  const autoStartedRef = useRef(false);
+
   const [phase, setPhase] = useState<Phase>('select');
   const [session, setSession] = useState<AdaptiveSessionState | null>(null);
   const [currentPuzzle, setCurrentPuzzle] = useState<PuzzleRecord | null>(null);
@@ -57,12 +61,20 @@ export function AdaptivePuzzlePage(): JSX.Element {
   }, []);
 
   const handleSelectDifficulty = useCallback(async (difficulty: AdaptiveDifficulty): Promise<void> => {
-    const newSession = createAdaptiveSession(difficulty);
+    const newSession = createAdaptiveSession(difficulty, forcedWeakThemes);
     setSession(newSession);
     seenIdsRef.current = new Set();
     setPhase('loading');
     await fetchNextPuzzle(newSession);
-  }, [fetchNextPuzzle]);
+  }, [fetchNextPuzzle, forcedWeakThemes]);
+
+  // Auto-start with medium difficulty when forcedWeakThemes are provided (from Lichess Dashboard)
+  useEffect(() => {
+    if (!autoStartedRef.current && forcedWeakThemes && forcedWeakThemes.length > 0) {
+      autoStartedRef.current = true;
+      void handleSelectDifficulty('medium');
+    }
+  }, [forcedWeakThemes, handleSelectDifficulty]);
 
   const handlePuzzleComplete = useCallback(async (correct: boolean): Promise<void> => {
     if (!session || !currentPuzzle) return;
