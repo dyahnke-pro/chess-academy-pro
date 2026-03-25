@@ -8,9 +8,10 @@ import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
 import { kokoroService } from '../../services/kokoroService';
 import type { KokoroModelStatus } from '../../services/kokoroService';
+import { unlockAudioContext } from '../../services/audioContextManager';
 import { SkillBar } from '../ui/SkillBar';
 import { MiniBoard } from '../Board/MiniBoard';
-import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X } from 'lucide-react';
+import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X, Download, Volume2, CheckCircle } from 'lucide-react';
 import { DailyPuzzleCard } from './DailyPuzzleCard';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
@@ -76,6 +77,15 @@ export function DashboardPage(): JSX.Element {
     return () => { unsubStatus(); unsubProgress(); };
   }, []);
 
+  const handleDownloadBella = useCallback(async (): Promise<void> => {
+    unlockAudioContext();
+    try {
+      await kokoroService.loadModel();
+    } catch {
+      // error shown via voiceStatus listener
+    }
+  }, []);
+
   const handleStartSession = useCallback(async (): Promise<void> => {
     if (!activeProfile) return;
     const session = await createSession(activeProfile);
@@ -95,19 +105,79 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
-      {voiceStatus === 'downloading' && (
-        <div className="rounded-xl p-3 text-sm" style={{ background: 'var(--color-surface)' }}>
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
-              Downloading Bella voice... {voiceProgress}%
-            </span>
+      {/* Bella voice card — shows until model is ready */}
+      {activeProfile.preferences.kokoroEnabled && voiceStatus !== 'ready' && (
+        <div
+          className="rounded-xl p-4 border flex items-start gap-3"
+          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+          data-testid="bella-voice-card"
+        >
+          <div
+            className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          >
+            <Volume2 size={18} />
           </div>
-          <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
-            <div
-              className="h-full rounded-full transition-all duration-300"
-              style={{ width: `${voiceProgress}%`, background: 'var(--color-accent)' }}
-            />
+          <div className="flex-1 min-w-0">
+            {voiceStatus === 'idle' && (
+              <>
+                <p className="text-sm font-semibold">Activate Bella — Your AI Voice Coach</p>
+                <p className="text-xs mt-0.5 mb-3" style={{ color: 'var(--color-text-muted)' }}>
+                  Download the HD voice model (~87 MB) once. Bella will narrate puzzles, openings, and coach feedback — no internet required after download.
+                </p>
+                <button
+                  onClick={() => void handleDownloadBella()}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium"
+                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                  data-testid="bella-download-btn"
+                >
+                  <Download size={15} />
+                  Download Bella Voice
+                </button>
+              </>
+            )}
+            {voiceStatus === 'downloading' && (
+              <>
+                <p className="text-sm font-semibold">Downloading Bella voice… {voiceProgress}%</p>
+                <div className="w-full h-2 rounded-full overflow-hidden mt-2" style={{ background: 'var(--color-border)' }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{ width: `${voiceProgress}%`, background: 'var(--color-accent)' }}
+                  />
+                </div>
+                <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
+                  Keep this screen open — download runs in the foreground.
+                </p>
+              </>
+            )}
+            {voiceStatus === 'error' && (
+              <>
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-error)' }}>Bella download failed</p>
+                <p className="text-xs mt-0.5 mb-3" style={{ color: 'var(--color-text-muted)' }}>
+                  Check your connection and try again.
+                </p>
+                <button
+                  onClick={() => void handleDownloadBella()}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border"
+                  style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+                  data-testid="bella-retry-btn"
+                >
+                  <Download size={15} />
+                  Retry Download
+                </button>
+              </>
+            )}
           </div>
+        </div>
+      )}
+      {activeProfile.preferences.kokoroEnabled && voiceStatus === 'ready' && (
+        <div
+          className="rounded-xl px-4 py-2.5 border flex items-center gap-2 text-sm"
+          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+          data-testid="bella-ready-card"
+        >
+          <CheckCircle size={15} style={{ color: 'var(--color-success)' }} />
+          <span style={{ color: 'var(--color-text-muted)' }}>Bella voice is active</span>
         </div>
       )}
 

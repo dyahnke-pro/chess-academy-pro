@@ -6,7 +6,7 @@ import { BoardControls } from '../Board/BoardControls';
 import { ExplanationCard } from './ExplanationCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
-import { speechService } from '../../services/speechService';
+import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -123,7 +123,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       setLineComplete(true);
       playCelebration();
       completedLinesRef.current.add(currentLineIndex);
-      speechService.speak(`Well done! You've completed the ${currentLine.name} line.`);
+      void voiceService.speak(`Well done! You've completed the ${currentLine.name} line.`);
     }
   }, [currentMoveIndex, expectedMoves.length, lineComplete, currentLineIndex, currentLine.name, playCelebration]);
 
@@ -179,6 +179,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
     void (async () => {
       try {
         const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!cancelled) {
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
@@ -209,7 +210,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
     setWrongSquare(null);
     setComputerLastMove(null);
     setLineComplete(false);
-    speechService.stop();
+    voiceService.stop();
   }, []);
 
   const handleNextLine = useCallback((): void => {
