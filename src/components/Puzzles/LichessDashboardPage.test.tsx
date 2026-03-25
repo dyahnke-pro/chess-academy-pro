@@ -11,6 +11,11 @@ vi.mock('../../stores/appStore', () => ({
   useAppStore: vi.fn(),
 }));
 
+/* Cast partial store shape for selector mocks — only tested fields matter */
+function mockStore(partial: Record<string, unknown>): unknown {
+  return partial;
+}
+
 vi.mock('../../services/lichessPuzzleService', () => ({
   fetchPuzzleDashboard: vi.fn(),
   fetchPuzzleActivity: vi.fn(),
@@ -55,7 +60,7 @@ describe('LichessDashboardPage', () => {
   describe('no token', () => {
     it('shows no-token state when token is not set', () => {
       mockUseAppStore.mockImplementation((selector) =>
-        selector({ activeProfile: { preferences: { lichessTokenEncrypted: null, lichessTokenIv: null } } }),
+        selector(mockStore({ activeProfile: { preferences: { lichessTokenEncrypted: null, lichessTokenIv: null } } })),
       );
       renderPage();
       expect(screen.getByTestId('lichess-dashboard-no-token')).toBeInTheDocument();
@@ -64,7 +69,7 @@ describe('LichessDashboardPage', () => {
 
     it('shows link to settings when no token', () => {
       mockUseAppStore.mockImplementation((selector) =>
-        selector({ activeProfile: { preferences: {} } }),
+        selector(mockStore({ activeProfile: { preferences: {} } })),
       );
       renderPage();
       expect(screen.getByText('Go to Settings')).toBeInTheDocument();
@@ -74,14 +79,14 @@ describe('LichessDashboardPage', () => {
   describe('with token', () => {
     beforeEach(() => {
       mockUseAppStore.mockImplementation((selector) =>
-        selector({
+        selector(mockStore({
           activeProfile: {
             preferences: {
               lichessTokenEncrypted: 'enc123',
               lichessTokenIv: 'iv123',
             },
           },
-        }),
+        })),
       );
       mockDecrypt.mockResolvedValue('real-token');
       mockFetchDashboard.mockResolvedValue(mockDashboard);
