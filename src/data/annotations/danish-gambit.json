@@ -1,0 +1,261 @@
+{
+  "openingId": "danish-gambit",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn, claiming central space and preparing for one of the most audacious gambits in chess. The Danish Gambit will sacrifice not one but TWO pawns for a devastating lead in development. It all starts with this classical first move.",
+      "plans": [
+        "Prepare d4 to open the center",
+        "Aim for the Danish Gambit with c3 after d4 exd4"
+      ],
+      "alternatives": [
+        "d4 — Queen's Pawn openings, quieter approach"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "Black responds symmetrically, occupying the center and opening the diagonal for the dark-squared bishop. This is the most natural reply, but Black is walking into dangerous territory — the Danish Gambit thrives against this classical setup.",
+      "plans": [
+        "Hold the center and develop pieces",
+        "Prepare to meet White's central advance"
+      ],
+      "alternatives": [
+        "c5 — the Sicilian, avoiding gambit territory entirely"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "d4",
+      "annotation": "White strikes in the center immediately! By pushing d4, we challenge Black's e5 pawn and begin to open lines. This is the first step of the Danish Gambit sequence — we WANT Black to capture. Every pawn Black takes opens another line for our pieces to come crashing through.",
+      "plans": [
+        "After exd4, play c3 to offer a second pawn",
+        "Open the center for rapid piece development"
+      ],
+      "alternatives": [
+        "Nf3 — the quieter Italian/Scotch approach"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c2",
+          "to": "c3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "exd4",
+      "annotation": "Black captures the pawn — the most natural and principled response. Black is up a pawn and the center is open. But this is exactly what White wants. The d-file is now open and White's next move will offer yet another pawn sacrifice to blast the position wide open.",
+      "pawnStructure": "Black has an extra pawn on d4, but it's advanced and hard to defend. White's e4 pawn still controls key central squares.",
+      "plans": [
+        "Hold the extra pawn if possible",
+        "Develop quickly to consolidate"
+      ],
+      "alternatives": [
+        "d6 — declining the gambit, keeping the center closed"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "c3",
+      "annotation": "Here it comes — the first real gambit move! White offers a SECOND pawn with c3, daring Black to grab it. The idea is brilliant: if Black takes on c3, the b2 pawn will be next to fall, but then White's bishops will be firing on all cylinders across the open board. White is playing for total piece domination.",
+      "pawnStructure": "White is about to sacrifice a second pawn. The center will be wide open, and White's development advantage will be enormous if Black keeps taking.",
+      "plans": [
+        "After dxc3, offer the b2 pawn as well with Bc4",
+        "Achieve a massive development lead with two bishops on open diagonals"
+      ],
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "b2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "dxc3",
+      "annotation": "Black takes the second pawn! Greed is tempting, and objectively the material advantage is real. But Black has spent three moves just capturing pawns while developing ZERO pieces. Meanwhile, White is about to unleash a development hurricane. This is the critical crossroads of the Danish Gambit.",
+      "pawnStructure": "Black is up two pawns but has no development. The c3 pawn is about to be captured again, and White's piece activity will be overwhelming.",
+      "plans": [
+        "Grab more material and try to survive",
+        "Develop quickly to consolidate the two-pawn lead"
+      ],
+      "alternatives": [
+        "d5 — the best practical response, giving back a pawn to slow White down"
+      ],
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "b2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bc4",
+      "annotation": "White develops the bishop to its most aggressive square, aiming directly at f7 — the weakest point in Black's position. But this move also sets up the final trap: the b2 pawn is hanging, and White WANTS Black to take it! After cxb2 Bxb2, White will have two raking bishops, a wide-open center, and a massive lead in development. This is the heart of the Danish Gambit.",
+      "plans": [
+        "Let Black take on b2, then recapture with the bishop",
+        "Aim both bishops at Black's kingside",
+        "Castle quickly and pile up on the open files"
+      ],
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "f7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c1",
+          "to": "b2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "cxb2",
+      "annotation": "Black takes a third pawn — now up a full THREE pawns! But look at the board: Black has moved nothing but pawns. Every single one of Black's pieces is still on its starting square. Meanwhile, White is about to have both bishops developed, aiming at f7 and the long diagonal. The material advantage means nothing if Black gets checkmated first.",
+      "pawnStructure": "Black has three extra pawns but catastrophically zero development. White's two-bishop setup on open diagonals is worth far more than the material deficit.",
+      "plans": [
+        "Hold on to the pawns and survive White's attack",
+        "Try to get pieces out as fast as possible"
+      ],
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "b2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bxb2",
+      "annotation": "The Danish Gambit is fully deployed! White has sacrificed TWO pawns and now has a monster bishop pair. The dark-squared bishop on b2 rakes across the entire board along the a1-h8 diagonal, targeting g7 and the rook on h8. The light-squared bishop on c4 x-rays f7. White will castle next and bring the rooks into the game with overwhelming force. At club level, this position is nearly winning for White despite being down material.",
+      "pawnStructure": "White is down two pawns but has complete development and two bishops controlling every important diagonal. The open center means Black's king has nowhere to hide.",
+      "plans": [
+        "Castle kingside and connect the rooks",
+        "Play Nc3 or Qb3 to increase pressure on f7",
+        "Launch a direct kingside attack before Black can develop"
+      ],
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c4",
+          "to": "f7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "g7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    }
+  ]
+}
