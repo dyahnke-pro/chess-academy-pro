@@ -43,6 +43,18 @@ const ANNOTATION_MODULES: Record<string, AnnotationLoader> = {
   'birds-opening': () => import('./birds-opening.json') as unknown as Promise<{ default: OpeningAnnotations }>,
   'two-knights-defence': () => import('./two-knights-defence.json') as unknown as Promise<{ default: OpeningAnnotations }>,
   'evans-gambit': () => import('./evans-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'stafford-gambit': () => import('./stafford-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'englund-gambit': () => import('./englund-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'smith-morra-gambit': () => import('./smith-morra-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'scotch-gambit': () => import('./scotch-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'vienna-gambit': () => import('./vienna-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'danish-gambit': () => import('./danish-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'marshall-attack': () => import('./marshall-attack.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'albin-countergambit': () => import('./albin-countergambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-kings-gambit': () => import('./kings-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-evans-gambit': () => import('./evans-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-budapest-gambit': () => import('./budapest-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-benko-gambit': () => import('./benko-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
 };
 
 export { ANNOTATION_MODULES };
