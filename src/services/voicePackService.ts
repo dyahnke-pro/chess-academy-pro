@@ -23,6 +23,19 @@ export interface VoicePackVoice {
   gender: 'Female' | 'Male';
 }
 
+/**
+ * Remote URLs for voice pack .bin files hosted on GitHub Releases.
+ * GitHub release assets support CORS and files up to 2GB.
+ */
+const VOICE_PACK_URLS: Record<string, string> = {
+  af_bella: 'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1/af_bella.bin',
+};
+
+/** Get the download URL for a voice pack — remote (GitHub Releases) or local fallback. */
+export function getVoicePackUrl(voiceId: string): string {
+  return VOICE_PACK_URLS[voiceId] ?? `/voice-packs/${voiceId}.bin`;
+}
+
 /** Available voice packs — same voices as Kokoro, but pre-rendered as audio clips. */
 export const VOICE_PACK_VOICES: VoicePackVoice[] = [
   { id: 'af_heart', name: 'Heart', accent: 'American', gender: 'Female' },
