@@ -148,6 +148,8 @@ export interface OpeningRecord {
   linesPerfected?: number[];
   // Favorites (WO-3)
   isFavorite: boolean;
+  // Gambit flag (true for openings loaded from gambits.json)
+  isGambit?: boolean;
   // Pro repertoire link (null for personal/ECO openings)
   proPlayerId?: string | null;
 }

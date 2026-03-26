@@ -11,9 +11,10 @@ import { seedDatabase } from '../../services/dataLoader';
 import { OpeningCard } from './OpeningCard';
 import type { OpeningRecord } from '../../types';
 import { ProRepertoiresTab } from './ProRepertoiresTab';
-import { Search, BookOpen, Library, ChevronDown, ChevronRight, Star, Users } from 'lucide-react';
+import { GambitsTab } from './GambitsTab';
+import { Search, BookOpen, Library, ChevronDown, ChevronRight, Star, Users, Swords } from 'lucide-react';
 
-type TabMode = 'repertoire' | 'all' | 'pro';
+type TabMode = 'repertoire' | 'all' | 'gambits' | 'pro';
 
 const ECO_LETTERS = ['A', 'B', 'C', 'D', 'E'] as const;
 
@@ -157,6 +158,18 @@ export function OpeningExplorerPage(): JSX.Element {
           All Openings
         </button>
         <button
+          onClick={() => setTab('gambits')}
+          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+            tab === 'gambits'
+              ? 'bg-theme-accent text-white'
+              : 'text-theme-text-muted hover:text-theme-text'
+          }`}
+          data-testid="tab-gambits"
+        >
+          <Swords size={14} />
+          Gambits
+        </button>
+        <button
           onClick={() => setTab('pro')}
           className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
             tab === 'pro'
@@ -269,6 +282,9 @@ export function OpeningExplorerPage(): JSX.Element {
           )}
         </>
       )}
+
+      {/* ─── Gambits tab ─────────────────────────────────────────────────── */}
+      {tab === 'gambits' && <GambitsTab />}
 
       {/* ─── Pro Repertoires tab ──────────────────────────────────────────── */}
       {tab === 'pro' && <ProRepertoiresTab />}
