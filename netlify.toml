@@ -3,6 +3,11 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/voice-packs/*"
+  to = "/voice-packs/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
