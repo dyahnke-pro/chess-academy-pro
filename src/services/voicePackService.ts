@@ -31,14 +31,6 @@ export interface VoicePackVoice {
   gender: 'Female' | 'Male';
 }
 
-/**
- * Get the download URL for a voice pack.
- * Netlify proxies /voice-packs/af_bella.bin to the GitHub Releases asset.
- */
-export function getVoicePackUrl(voiceId: string): string {
-  return `/voice-packs/${voiceId}.bin`;
-}
-
 /** Available voice packs — same voices as Kokoro, but pre-rendered as audio clips. */
 export const VOICE_PACK_VOICES: VoicePackVoice[] = [
   { id: 'af_heart', name: 'Heart', accent: 'American', gender: 'Female' },
