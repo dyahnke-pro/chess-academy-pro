@@ -159,7 +159,7 @@ export function DashboardPage(): JSX.Element {
               <>
                 <p className="text-sm font-semibold" style={{ color: 'var(--color-error)' }}>Bella download failed</p>
                 <p className="text-xs mt-0.5 mb-3" style={{ color: 'var(--color-text-muted)' }}>
-                  Check your connection and try again.
+                  The voice pack file may not be uploaded yet. Check the console for details, or try again.
                 </p>
                 <button
                   onClick={() => void handleDownloadBella()}
