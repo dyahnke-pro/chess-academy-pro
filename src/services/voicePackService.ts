@@ -28,7 +28,7 @@ export interface VoicePackVoice {
  * GitHub release assets support CORS and files up to 2GB.
  */
 const VOICE_PACK_URLS: Record<string, string> = {
-  af_bella: 'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1/af_bella.bin',
+  af_bella: 'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1/af_bella.copy.bin',
 };
 
 /** Get the download URL for a voice pack — remote (GitHub Releases) or local fallback. */
