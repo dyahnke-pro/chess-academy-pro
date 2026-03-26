@@ -272,6 +272,14 @@ export async function updateVariationProgress(
   await db.openings.update(id, { variationAccuracy: accuracy });
 }
 
+// ─── Gambits ────────────────────────────────────────────────────────────────
+
+/** Returns all gambit openings, sorted by ECO code. */
+export async function getGambitOpenings(): Promise<OpeningRecord[]> {
+  const all = await db.openings.filter((o) => o.isGambit === true).toArray();
+  return all.sort((a, b) => a.eco.localeCompare(b.eco) || a.name.localeCompare(b.name));
+}
+
 // ─── Favorites (WO-3) ───────────────────────────────────────────────────────
 
 /** Toggles the isFavorite flag on an opening. Returns the new value. */

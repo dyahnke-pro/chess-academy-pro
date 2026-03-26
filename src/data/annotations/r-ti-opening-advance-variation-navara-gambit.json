@@ -1,0 +1,29 @@
+{
+  "openingId": "r-ti-opening-advance-variation-navara-gambit",
+  "moveAnnotations": [
+    {
+      "san": "Nf3",
+      "annotation": "We start with the Réti, a flexible hypermodern opening that controls the center from afar rather than occupying it immediately. The knight on f3 eyes the d4 and e5 squares while keeping our options open—we can still play c4 or e4 depending on Black's setup. This move embodies the principle of controlling the center indirectly, giving us maximum flexibility to adapt to Black's plans."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black immediately stakes a claim in the center, the classical response to the Réti. By playing d5, Black challenges our influence over e4 and d4, forcing us to decide whether we'll contest the center or allow Black to establish a strong pawn there. This move is solid and gives Black central space, though it does commit the d-pawn early."
+    },
+    {
+      "san": "c4",
+      "annotation": "We challenge Black's d5 pawn directly, attacking it and threatening to undermine Black's center. By playing c4, we're following the typical Réti strategy of contesting the center with our c-pawn rather than meeting d5 with e4. This move prepares to transform the pawn structure and seize the initiative if Black captures or advances the d-pawn."
+    },
+    {
+      "san": "d4",
+      "annotation": "Rather than capture on c4, Black advances the d-pawn to gain space and refuse our offer. This aggressive move shows Black wants to build a strong pawn center and avoid giving us an isolated queen's pawn position to attack. However, it also means Black's d-pawn is now more advanced and potentially vulnerable, and it locks the center momentarily."
+    },
+    {
+      "san": "b4",
+      "annotation": "This is the key move of the Navara Gambit—we sacrifice the b-pawn to launch a fierce kingside attack! By playing b4, we're preparing to support a future attack with moves like Bb2 and potentially a4 or a5, while our pieces coordinate toward Black's king. This is a high-risk, high-reward continuation that demands accurate play but gives White excellent practical attacking chances."
+    },
+    {
+      "san": "g5",
+      "annotation": "Black counterattacks on the kingside with a sharp, aggressive move that threatens our f3 knight and prepares to launch a pawn storm. This is the critical test of our gambit—Black doesn't accept the b4 pawn but instead fights for the initiative with a wild, double-edged position. Both sides are now committed to tactical complications, and precise calculation will determine who benefits from the chaos."
+    }
+  ]
+}

@@ -17,7 +17,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "postinstall": "npm run stockfish:copy",
-    "setup:ios": "npx cap add ios; npx cap sync ios; cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift"
+    "setup:ios": "npx cap add ios; npx cap sync ios; cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift",
+    "audit:voice": "node scripts/audit-voice-coverage.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -25,7 +26,6 @@
     "chess.js": "1.4.0",
     "dexie": "4.3.0",
     "framer-motion": "12.34.4",
-    "kokoro-js": "^1.2.1",
     "lucide-react": "0.576.0",
     "openai": "^6.27.0",
     "react": "19.2.4",

@@ -1,0 +1,29 @@
+{
+  "openingId": "englund-gambit-soller-gambit-deferred",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, staking an immediate claim to the center and preparing to develop our pieces harmoniously. This move controls the important e5 and c5 squares while opening lines for our dark-squared bishop and queen. The d4 opening is less forcing than 1.e4, often leading to more positional, strategic battles where we can build our position methodically. Our plan is typically to follow up with moves like Nf3, c4, or Bf4, depending on how Black responds."
+    },
+    {
+      "san": "e5",
+      "annotation": "Black strikes back immediately with the Englund Gambit, one of the most aggressive and double-edged responses to 1.d4. This gambit sacrifices a pawn to accelerate development and create immediate tactical complications, catching many d4 players off guard. Black is essentially saying 'I don't want a slow positional game - let's fight!' The Englund can be tricky for White if we're not prepared, as Black often gets rapid piece development and attacking chances. We need to be ready to either accept the gambit material or find precise moves to maintain our advantage."
+    },
+    {
+      "san": "dxe5",
+      "annotation": "We accept the gambit by capturing the pawn, which is objectively the strongest approach since we're winning material in the center. This capture also opens the d-file for our queen and removes Black's central pawn presence, giving us more space to maneuver. By taking on e5, we're challenging Black to prove they have sufficient compensation for the sacrificed pawn. Our extra pawn should give us a lasting advantage if we can consolidate our position and weather any initial tactical storms. The key now is to develop sensibly while holding onto our material gain."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the knight with tempo, attacking our advanced e5 pawn and continuing the gambit's aggressive spirit. This move puts immediate pressure on our pawn structure and forces us to make a decision about how to defend our extra material. The knight on c6 also eyes important central squares like d4 and e5, while preparing potential tactics involving the f7 square. Black is following typical gambit principles: develop quickly, create threats, and don't give the opponent time to consolidate their material advantage. We need to be careful not to fall behind in development while trying to hold our pawn."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our knight to its most natural square, defending the e5 pawn while bringing another piece into the game. This move maintains our material advantage while following sound opening principles of piece development. The knight on f3 controls important central squares like e5, d4, and g5, while also preparing to castle kingside for safety. By defending the e5 pawn with a piece rather than a pawn (like f4), we avoid weakening our king position and maintain flexibility in our pawn structure. This solid approach puts the burden on Black to prove their compensation for the sacrificed pawn."
+    },
+    {
+      "san": "f6",
+      "annotation": "Black plays the Soller Gambit Deferred, immediately attacking our e5 pawn with another pawn sacrifice offer! This aggressive continuation shows Black is doubling down on the gambit approach, willing to sacrifice even more material for rapid development and attacking chances. The move f6 opens the f-file for Black's rook and prepares to potentially follow up with moves like Bc5 or Qe7, putting maximum pressure on our position. While objectively this gives us another pawn to win, it also creates tactical complications that we must navigate carefully. We need to decide whether to capture on f6, retreat our knight, or find another way to maintain our advantage while avoiding Black's tactical tricks."
+    }
+  ]
+}

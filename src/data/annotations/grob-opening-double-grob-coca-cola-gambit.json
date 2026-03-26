@@ -1,0 +1,17 @@
+{
+  "openingId": "grob-opening-double-grob-coca-cola-gambit",
+  "moveAnnotations": [
+    {
+      "san": "g4",
+      "annotation": "We're playing the Grob Opening, an offbeat but surprisingly resilient system where we immediately challenge Black's central control from the flank. By advancing the g-pawn, we prepare to support a later f4 advance and create unusual pawn tension that many opponents won't be familiar with—this can be a practical advantage in middlegame positions where unconventional structures arise. You'll want to be ready for sharp, non-theoretical play rather than the main lines."
+    },
+    {
+      "san": "g5",
+      "annotation": "Black mirrors our flank strategy, staking a claim on the kingside and preventing us from easily implementing our f4 plan without opposition. This symmetrical response suggests Black is comfortable in unusual positions and is willing to compete for space on the wings rather than seize the center—a bold choice that fits the provocative spirit of this opening."
+    },
+    {
+      "san": "f4",
+      "annotation": "Now we execute our plan, the Double Grob structure, and Black's last move actually helps us here by weakening the kingside around h7 and h8. By playing f4, we open lines along the f-file and create immediate tactical possibilities while supporting control of e5; this is the Coca-Cola Gambit because we're offering pawn tension and activity for positional compensation. The resulting positions are wild and tactical, rewarding players who understand modern dynamic compensation over material."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "openingId": "queens-indian-defense-kasparov-petrosian-variation-kasparov-attack",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our queen and dark-squared bishop. This move characterizes the Queen's Pawn Game family of openings, which tend to lead to more strategic, positional battles compared to 1.e4 openings. Our plan is to build a strong pawn center and develop our pieces harmoniously, often leading to rich middlegame positions where understanding pawn structures and piece coordination becomes crucial. The d4 move also prepares potential pawn advances like e4 or c4, giving us flexibility in how we shape the center."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking the d4 pawn while bringing the knight to its most active square. This is the hallmark of the Indian Defense systems - rather than occupying the center with pawns like ...d5 or ...e5, Black develops pieces that put pressure on our central pawns. The knight on f6 also prepares castling kingside and keeps Black's options open for various pawn structures depending on how we continue. This flexible approach allows Black to react to our setup rather than committing to a specific pawn structure immediately."
+    },
+    {
+      "san": "c4",
+      "annotation": "We're playing the English Opening move order within the Queen's Pawn complex, supporting our d4 pawn while gaining space on the queenside and controlling the crucial d5 square. This move prevents Black from easily playing ...d5 and creates the potential for a strong pawn center with a future e4 advance. The c4 pawn also opens the c-file for potential future pressure and gives our queen and light-squared bishop more scope. By combining d4 and c4, we're entering the rich world of the Queen's Gambit and Indian Defense systems, where understanding pawn structures and piece placement becomes paramount."
+    },
+    {
+      "san": "e6",
+      "annotation": "Black chooses the solid Queen's Indian setup, supporting an eventual ...d5 advance while keeping the position flexible and avoiding the sharper lines of the King's Indian Defense. This move prepares to fianchetto the light-squared bishop on b7, where it will exert long-range pressure on our kingside and central light squares. The pawn on e6 also provides additional control over the d5 and f5 squares, making it harder for us to establish a dominating pawn center. This is a more positionally oriented approach compared to ...g6 systems, focusing on solid development and gradual improvement of piece positions."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while preparing kingside castling. This move also supports a potential e4 advance, which would give us a classical two-pawn center and maximum space advantage. The knight on f3 is perfectly placed to support our central ambitions while maintaining flexibility - it can potentially reroute to e5, d2, or h4 depending on how the position develops. By developing this knight before committing to other moves, we keep our options open and maintain pressure on Black's position."
+    },
+    {
+      "san": "b6",
+      "annotation": "Black commits to the Queen's Indian Defense proper, preparing to fianchetto the light-squared bishop on b7 where it will become a long-range weapon aimed at our kingside and center. This setup is one of Black's most solid responses to our pawn center, creating counterplay along the long diagonal without weakening the kingside pawn structure. The move also prepares potential queenside expansion with ...c5 or ...a5, giving Black active piece play even from a slightly cramped position. This is Petrosian's preferred defensive system - solid, flexible, and rich in strategic nuances."
+    },
+    {
+      "san": "a3",
+      "annotation": "We're playing the Kasparov-Petrosian Variation, a subtle but important move that serves multiple strategic purposes in this opening. First, it prevents Black from playing ...Bb4, pinning our knight and creating immediate tactical complications. Second, it prepares b4, potentially gaining space on the queenside and supporting our c4 pawn structure. Most importantly, this move allows us to develop more harmoniously without worrying about annoying pins or tactics, giving us time to complete our development and decide on our central pawn strategy. While it may look slow, this prophylactic thinking is characteristic of modern opening theory."
+    },
+    {
+      "san": "Bb7",
+      "annotation": "Black develops the light-squared bishop to its ideal square, completing the fianchetto and creating immediate pressure along the long diagonal toward our kingside. This bishop becomes Black's most important piece in the Queen's Indian, exerting influence on key central squares like e4 and d5 while potentially supporting future tactical operations. The bishop also adds extra protection to the black king position and creates the foundation for Black's counterplay strategy. From b7, this bishop will be a constant factor we need to consider in all our plans, particularly any advance of our e-pawn."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black strikes in the center with perfect timing, challenging our c4 pawn and opening up the position to activate the light-squared bishop on b7. This central break is thematic in the Queen's Indian - Black waits for the right moment to challenge our pawn center and create dynamic piece play. The move also opens the diagonal for the bishop, potentially creating tactical opportunities while forcing us to make an important decision about our pawn structure. By playing ...d5 now, Black transforms the position from a purely positional struggle into something more dynamic and double-edged."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We develop our knight to its most active square, supporting the c4 pawn while adding pressure to the center and preparing for the tactical complications that will arise from Black's central challenge. This natural developing move keeps our options open - we can still recapture on d5 with the c-pawn or allow Black to take on c4, leading to different pawn structures and strategic themes. The knight on c3 also eyes important central squares like e4 and d5, and supports potential queenside expansion or tactical operations. By completing our minor piece development, we're preparing for the critical decisions about how to handle the central tension."
+    },
+    {
+      "san": "cxd5",
+      "annotation": "We're practically forced to capture, as allowing ...dxc4 would give Black a comfortable position with an extra central pawn and active piece play. By taking with the c-pawn, we maintain our central presence while opening the c-file for potential future use. This capture also leads to the characteristic pawn structure of this variation, where we have a pawn on d4 and Black will likely recapture with the knight. The resulting position will feature opposite-colored bishop tensions and dynamic piece play, typical of the Queen's Indian middlegame themes."
+    },
+    {
+      "san": "Nxd5",
+      "annotation": "Black recaptures with the knight, centralizing this piece powerfully while maintaining good coordination with the rest of the army. The knight on d5 becomes a strong outpost, controlling key central squares and potentially supporting future tactical operations or piece exchanges. This recapture also keeps Black's pawn structure intact and maintains the pressure along the long diagonal from the bishop on b7. From d5, the knight can potentially jump to various squares like f4, b4, or f6, giving Black flexible and active piece play in the resulting middlegame positions."
+    },
+    {
+      "san": "Qc2",
+      "annotation": "We're launching the Kasparov Attack, bringing our queen to an active square where it supports potential central advances while eyeing the Black king position along the c-file and long diagonal. This aggressive queen placement is characteristic of Kasparov's dynamic style - the queen on c2 supports a future e4 advance, controls important central squares, and creates subtle tactical threats. The move also connects our rooks and prepares for potential kingside attacking chances, transforming what could be a quiet positional game into something much sharper. From c2, our queen coordinates beautifully with our pieces and maintains maximum pressure on Black's position."
+    }
+  ]
+}

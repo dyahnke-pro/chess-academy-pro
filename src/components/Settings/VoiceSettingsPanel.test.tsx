@@ -9,20 +9,22 @@ vi.mock('../../services/cryptoService', () => ({
   encryptApiKey: vi.fn().mockResolvedValue({ encrypted: 'enc', iv: 'iv' }),
 }));
 
-vi.mock('../../services/kokoroService', () => ({
-  kokoroService: {
+vi.mock('../../services/voicePackService', () => ({
+  voicePackService: {
     getStatus: vi.fn().mockReturnValue('idle'),
     getDownloadProgress: vi.fn().mockReturnValue(0),
+    getClipCount: vi.fn().mockReturnValue(0),
     isReady: vi.fn().mockReturnValue(false),
     isPlaying: vi.fn().mockReturnValue(false),
     onStatusChange: vi.fn().mockReturnValue(() => undefined),
     onProgress: vi.fn().mockReturnValue(() => undefined),
-    loadModel: vi.fn().mockResolvedValue(undefined),
-    speak: vi.fn().mockResolvedValue(undefined),
+    loadFromUrl: vi.fn().mockResolvedValue(undefined),
+    loadCached: vi.fn().mockResolvedValue(false),
+    speak: vi.fn().mockResolvedValue(false),
     stop: vi.fn(),
     unload: vi.fn(),
   },
-  KOKORO_VOICES: [
+  VOICE_PACK_VOICES: [
     { id: 'af_heart', name: 'Heart', accent: 'American', gender: 'Female' },
     { id: 'bm_daniel', name: 'Daniel', accent: 'British', gender: 'Male' },
   ],
@@ -44,7 +46,7 @@ describe('VoiceSettingsPanel', () => {
   it('shows Kokoro HD Voice section', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByText('HD Voice (Kokoro)')).toBeInTheDocument();
+    expect(screen.getByText('HD Voice (Bella)')).toBeInTheDocument();
   });
 
   it('shows Kokoro toggle', () => {

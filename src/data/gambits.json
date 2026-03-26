@@ -1,0 +1,764 @@
+[
+  {
+    "id": "gambit-kings-gambit",
+    "eco": "C30",
+    "name": "King's Gambit",
+    "pgn": "e4 e5 f4",
+    "color": "white",
+    "style": "Aggressive, Romantic",
+    "overview": "The King's Gambit is the most famous attacking opening in chess history — you throw a pawn at Black on move two and say 'come and get it.' The idea is simple: sacrifice the f-pawn to rip open the f-file, blast open the center, and launch a ferocious kingside attack before Black can consolidate. Fischer called it 'a bust,' but club players keep getting destroyed by it because the resulting positions are incredibly sharp and fun to play.",
+    "keyIdeas": [
+      "Sacrifice the f-pawn to open the f-file for your rook",
+      "Play d4 quickly to dominate the center with two pawns",
+      "Develop rapidly with Bc4, Nf3, and O-O to attack the weakened f7 square",
+      "If Black holds the pawn with g5, play h4 to undermine the pawn chain"
+    ],
+    "traps": [
+      "After 2...exf4 3.Nf3 g5 4.Bc4 g4, the Muzio Gambit 5.O-O gxf3 6.Qxf3 gives White a devastating attack with queen and bishop aimed at f7.",
+      "If Black plays 2...exf4 3.Nf3 d6, the simple 4.d4 followed by Bxf4 gives White a huge center and easy development.",
+      "The Kieseritzky Gambit: after 2...exf4 3.Nf3 g5 4.h4 g4 5.Ne5, White's knight on e5 is a monster targeting f7 and d7."
+    ],
+    "warnings": [
+      "Your king is exposed after f4 — be careful about early queen checks on h4",
+      "If Black declines with 2...Bc5, don't try to force the gambit — play Nf3 and aim for a normal Italian-type position",
+      "Don't overextend trying to win back the f4 pawn — your compensation comes from development and open lines, not material recovery"
+    ],
+    "variations": [
+      {
+        "name": "King's Gambit Accepted: Knight Gambit",
+        "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O h6 c3 Nc6",
+        "explanation": "The most common continuation where Black grabs the pawn and tries to hold it with g5. White develops rapidly with Bc4 and O-O, aiming to blast open the center with d4. The knight on f3 is perfectly placed to support the attack."
+      },
+      {
+        "name": "King's Gambit Accepted: Bishop Gambit",
+        "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Nf6 Nc3",
+        "explanation": "White plays 3.Bc4 instead of Nf3, inviting Qh4+ but willingly losing castling rights. After Kf1, White still has excellent compensation — the bishop targets f7, and the king on f1 can walk to g2 later. A favorite of Fischer."
+      },
+      {
+        "name": "King's Gambit Declined: Classical",
+        "pgn": "e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6 Bc4 O-O d3 Nc6 Na4",
+        "explanation": "Black declines the gambit with 2...Bc5, keeping a solid position. White should not insist on fxe5 but instead develop normally. The position resembles an Italian Game where White has the extra f4 push, which can be useful later to open the f-file."
+      },
+      {
+        "name": "Falkbeer Countergambit",
+        "pgn": "e4 e5 f4 d5 exd5 e4 d3 Nf6 dxe4 Nxe4 Nf3 Bc5 Qe2 Bf5 Nc3 Qe7",
+        "explanation": "Black counter-sacrifices with 2...d5, fighting for the center immediately. After 3.exd5 e4, Black has an advanced passed pawn and active piece play. White needs to handle this carefully — accept the pawn and develop quickly."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Muzio Gambit Crush",
+        "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3 Qf6 e5 Qxe5 Bxf7+ Kxf7 d4 Qf5 Bxf4",
+        "explanation": "The legendary Muzio Gambit — White sacrifices an entire knight with 5.O-O to rip open lines. After Qxf3, White has queen, bishop, and rook all aimed at the Black king. Most club players simply cannot survive this onslaught."
+      },
+      {
+        "name": "Scholar's Mate Cousin",
+        "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 b5 Bxb5 Nf6 Nf3 Qh5 d4 Bb7 Nc3",
+        "explanation": "After 3.Bc4, Black tries the cheeky Qh4+ but White calmly plays Kf1. Black's queen is out too early and will be chased back. White develops rapidly and the queen becomes a target. This is a common mistake at the amateur level."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Cunningham Defense",
+        "pgn": "e4 e5 f4 exf4 Nf3 Be7 Bc4 Bh4+ g3 fxg3 O-O gxh2+ Kh1 d5 Bxd5 Nf6",
+        "explanation": "Black plays the tricky 3...Be7 followed by Bh4+, forcing White's king to move or weaken the kingside. After g3 fxg3 and gxh2+, Black gets a dangerous passed pawn on h2. This line requires precise play from White to maintain compensation."
+      },
+      {
+        "name": "Fischer Defense",
+        "pgn": "e4 e5 f4 exf4 Nf3 d6 d4 g5 h4 g4 Ng1 Bh6 Nc3 Nc6 Nge2 f3 gxf3 gxf3 Ng3",
+        "explanation": "Fischer's recommendation 3...d6 is considered one of the best defenses. Black stabilizes the f4 pawn and prepares g5. White must play energetically or risk being left down a pawn with nothing to show for it."
+      }
+    ]
+  },
+  {
+    "id": "gambit-evans-gambit",
+    "eco": "C51",
+    "name": "Evans Gambit",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O",
+    "color": "white",
+    "style": "Aggressive, Classical",
+    "overview": "The Evans Gambit is one of the most dangerous weapons in the Italian Game — you sacrifice a whole pawn on b4 to gain a massive center and lightning-fast development. After c3 and d4, your pawns control the center while your pieces fly out to attacking squares. Even Garry Kasparov has played it at the highest level, and at club level, Black is often simply overwhelmed by the initiative.",
+    "keyIdeas": [
+      "Sacrifice b4 to gain time — Black's bishop must move twice while you build the center",
+      "After c3 and d4, White has a dream pawn center and open diagonals",
+      "Rapid development with O-O, Ba3, Qb3 creates threats faster than Black can handle",
+      "The a3 bishop often pins Black's position, preventing castling"
+    ],
+    "traps": [
+      "If Black plays the careless ...Nge7 instead of ...Nf6, White gets a crushing Bg5 pin followed by Nd5.",
+      "After d4, if Black captures dxc3, White plays Bxc3 with a tempo hitting the a5 bishop, and Ba3 prevents castling.",
+      "If Black tries to hold the pawn with ...d3, White plays Qb3 targeting both f7 and d3, creating a nasty double attack."
+    ],
+    "warnings": [
+      "Don't play b4 if Black has already played ...d6 — the gambit works best when Black's bishop comes to c5",
+      "If Black returns the pawn with ...d5, don't panic — you still have excellent development and open lines",
+      "Be careful of the Lasker Defense (...d5 exd5 Nxd5) which gives Black active counterplay"
+    ],
+    "variations": [
+      {
+        "name": "Evans Gambit: Normal Variation",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Ne7 Bd3",
+        "explanation": "The main line where Black retreats to a5 and plays d6 to hold the center. White gets a powerful d4-d5 pawn chain and develops with Bb2 and Bd3. The attack on the kingside practically plays itself."
+      },
+      {
+        "name": "Evans Gambit: Slow Variation with Be2",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4 Nd5 Qg3",
+        "explanation": "Black retreats to e7 — a conservative choice that avoids the sharpest lines. White can play d4 and build up gradually. The position is slightly less forcing but White still has good compensation with central control."
+      },
+      {
+        "name": "Evans Gambit Declined",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 Nd5 Nxd5 exd5 Nd4 a5 Ba7 Nxd4 Bxd4",
+        "explanation": "Black declines with Bb6 — a sensible choice that avoids the sharpest play. White can push a4-a5 to gain queenside space and play for a positional edge. The game becomes less tactical but White retains a slight initiative."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Anderssen's Attacking Pattern",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3",
+        "explanation": "After Black grabs the c3 pawn, White plays Qb3 targeting f7. Black's position is extremely difficult — the queen on b3 combines with the bishop on c4 to create lethal threats. Ba3 prevents castling and Black's king is stuck in the center."
+      },
+      {
+        "name": "Evans Gambit: Quick d5 Trick",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Nf6 dxe5 Nxe4 Qd5 Nxc3 Qxf7",
+        "explanation": "If Black greedily takes on e4 instead of retreating the bishop, White plays the stunning Qd5 with a double attack on f7 and the knight. After Nxc3, Qxf7 is checkmate in spirit — Black loses massive material."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Lasker Defense",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d5 exd5 exd4 O-O Be6 Bb5 Nge7",
+        "explanation": "Lasker's Defense is considered the strongest reply — Black returns the pawn with d5 to simplify and neutralize White's initiative. After exd5 Nxd5, Black has active centralized pieces. White still has chances but must play accurately to maintain compensation."
+      },
+      {
+        "name": "Compromised Defense Backfire",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Re1 Nge7 Ba3 O-O",
+        "explanation": "If Black manages to castle safely and hold the extra d3 pawn, White's initiative can fizzle out. The d3 pawn cramps White's position and Black can consolidate. This is why it's critical to attack quickly — tempo is everything in the Evans."
+      }
+    ]
+  },
+  {
+    "id": "scotch-gambit",
+    "eco": "C44",
+    "name": "Scotch Gambit",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5",
+    "color": "white",
+    "style": "Aggressive, Tactical",
+    "overview": "The Scotch Gambit is a sneaky way to avoid heavy theory while getting a razor-sharp position. Instead of recapturing on d4, you play Bc4 and e5, kicking Black's knight and seizing space. It's like the Italian Game on steroids — you get rapid development, open lines, and attacking chances while Black struggles to find safe squares for the pieces.",
+    "keyIdeas": [
+      "Push e5 to kick the f6 knight and gain a space advantage",
+      "Develop with O-O, Re1, and Bg5 to maximize pressure on the pinned pieces",
+      "The bishop on c4 targets f7 — the eternal weak spot in Black's camp",
+      "After e5, the d5 square becomes a potential outpost but Black's knight has no good squares"
+    ],
+    "traps": [
+      "After 5.e5 d5, if Black plays the natural ...Ng4 too early, White can play Bxd5 winning a pawn because the c6 knight is pinned.",
+      "If Black plays 4...Bc5 instead of Nf6, the Max Lange Attack with O-O and e5 leads to wild sacrificial play that's very hard to defend.",
+      "After e5 Ng4, the h3 push followed by e6 can blow open Black's position if played at the right moment."
+    ],
+    "warnings": [
+      "Don't push e5 if Black hasn't yet committed the knight to f6 — it wastes a tempo",
+      "Be careful of Black's counterplay with ...d5 equalizing in the center",
+      "If Black returns the d4 pawn early, you might end up in a standard position with no advantage — keep the tension"
+    ],
+    "variations": [
+      {
+        "name": "Scotch Gambit: Main Line with d5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3",
+        "explanation": "The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. The resulting positions are dynamic — White has better pawn structure while Black has the bishop pair. Active play is essential for both sides."
+      },
+      {
+        "name": "Scotch Gambit: Ng4 Variation",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ng4 O-O d6 exd6 Bxd6 Re1+ Be7 Nxd4",
+        "explanation": "Black retreats the knight to g4 to put pressure on e5 and f2. White castles calmly and plays Re1 to pin the king. After exd6 Bxd6 and Re1+, White regains the pawn with a superior position thanks to better development."
+      },
+      {
+        "name": "Scotch Gambit: Dubois-Reti Defense",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O d6 c3 dxc3 Nxc3 Bg4 Qb3 Bxf3 Bxf7+ Kf8 gxf3",
+        "explanation": "Black plays 4...Bc5 leading to Max Lange-style positions. After O-O and c3, White sacrifices the c-pawn for rapid development. The pin on the f7 pawn and open g-file create attacking chances that are difficult for Black to neutralize."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Pin Trap After e5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ne4 Bd5 Nc5 Nxd4 Ne6 Nxe6 fxe6 Bxc6 dxc6 Qh5+ Ke7 Qf7",
+        "explanation": "After 5...Ne4, White plays the strong Bd5 hitting the knight. If Black stumbles with passive play, Nxd4 recovers the pawn with a dominant position. The queen check on h5 can be devastating if Black's king is caught in the center."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Black Equalizes with Precise d5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bc5 Nxc6 bxc6 Bd3 Qh4 O-O Bg4",
+        "explanation": "If Black plays the precise d5 followed by Ne4 and Bc5, the position simplifies quickly. Black's active pieces compensate for the slightly weakened pawn structure. White needs to play accurately to maintain even a small edge."
+      },
+      {
+        "name": "Max Lange Attack Backfire",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Re1+ Be6 Bg5 Qd5",
+        "explanation": "In the Max Lange Attack, if Black knows the theory with d5 and Rg8, the position becomes a razor's edge. Black's rook on g8 targets the g7 pawn and the bishop on e6 is excellently placed. One wrong move from White and the attack collapses."
+      }
+    ]
+  },
+  {
+    "id": "vienna-gambit",
+    "eco": "C25",
+    "name": "Vienna Gambit",
+    "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5",
+    "color": "white",
+    "style": "Aggressive, Surprising",
+    "overview": "The Vienna Gambit is the King's Gambit's sneaky cousin — you delay f4 by one move, first developing the knight to c3 to control d5. When f4 comes, it's with more support and the e5 push gains time against Black's knight. This is a fantastic surprise weapon because most players prepare against the King's Gambit but have no clue what to do against the Vienna.",
+    "keyIdeas": [
+      "Delay f4 until Nc3 supports the center — the e5 push comes with tempo",
+      "After e5, the knight on f6 is kicked and d5 is under White's control",
+      "Develop with d4, Bc4 or Bd3, and O-O for a strong attacking setup",
+      "The f-file opens naturally for the rook after castling"
+    ],
+    "traps": [
+      "After 3...exf4 4.e5 Ng8, White plays d4 and Bxf4 with a huge development lead — Black's knight went home like a sad horse.",
+      "If Black plays 3...d6, White can play fxe5 dxe5 and then Bc4 aiming at the weak f7 pawn with a clear plan.",
+      "The Frankenstein-Dracula Variation (3...Nxe4) leads to insane complications that heavily favor White if Black doesn't know the theory."
+    ],
+    "warnings": [
+      "Don't play f4 if Black has played ...d5 first — the center opens in Black's favor",
+      "After e5, be careful about overextending — make sure d4 is properly supported",
+      "If Black declines with 3...d5, the position transposes to a Frankenstein-Dracula that requires specific knowledge"
+    ],
+    "variations": [
+      {
+        "name": "Vienna Gambit: Main Line",
+        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5 Nxe5 Bd6 Bc4 Bxe5 dxe5 Qxd1+ Kxd1",
+        "explanation": "In the main line, Black retreats the knight and White pushes d4 to dominate the center. Even after queens are exchanged, White's lead in development and active pieces give excellent compensation for the pawn. The endgame is surprisingly dangerous for Black."
+      },
+      {
+        "name": "Vienna Gambit: Qe7 Variation",
+        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Qe7 Qe2 Ng8 Nf3 d6 d4 Bg4 Bxf4 Nc6 O-O-O",
+        "explanation": "Black tries to pin the e5 pawn with Qe7, preventing its advance. White plays Qe2 to support the pawn and continues developing. After d4, Bxf4, and O-O-O, White has a strong attacking setup with open lines against Black's king."
+      },
+      {
+        "name": "Frankenstein-Dracula Variation",
+        "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8",
+        "explanation": "The wildly named Frankenstein-Dracula arises after 3.Bc4 Nxe4. This is one of the sharpest positions in all of chess — both sides are throwing punches from move 4. White plays Qh5 threatening Qxf7 mate. Knowing this line is essential if you play the Vienna."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Knight Retreat Punishment",
+        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 d4 d6 Bxf4 dxe5 dxe5 Qxd1+ Kxd1 Nc6 Nf3 Bg4 Bb5 O-O-O+ Ke1",
+        "explanation": "When Black's knight retreats to g8, White plays d4 and Bxf4 recapturing the pawn with a massive development advantage. Black has wasted three tempi on the knight while White has a powerful center and active pieces. This position wins itself."
+      },
+      {
+        "name": "f4 Accepted Quick Attack",
+        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Nd5 Nf3 Nxc3 dxc3 Be7 Bxf4 O-O Bd3 d6 Qe2 dxe5 Bxh7+ Kxh7 Ng5+",
+        "explanation": "If Black places the knight on d5, White recaptures on c3 and develops rapidly. The Greek Gift sacrifice Bxh7+ followed by Ng5+ is a classic attacking pattern that demolishes Black's kingside. This only works if Black castles into it, but many players do."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Black Plays d5 Early",
+        "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4 Bb4 Bd2 Nxd2 Qxd2 Bxc3 Qxc3 O-O",
+        "explanation": "If Black plays the strong 3...d5, the game opens up in the center and Black gets active piece play. After fxe5 Nxe4, Black's knight is powerfully centralized. White must play carefully to avoid ending up with a worse position."
+      }
+    ]
+  },
+  {
+    "id": "danish-gambit",
+    "eco": "C21",
+    "name": "Danish Gambit",
+    "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2",
+    "color": "white",
+    "style": "Ultra-Aggressive, Romantic",
+    "overview": "The Danish Gambit is chess on steroids — you sacrifice not one but TWO pawns to get a dream position with bishops on c4 and b2, both aimed at Black's king like heat-seeking missiles. If Black grabs both pawns, you'll have every piece developed while Black is still figuring out where to put the knights. This is the ultimate 'punish the greedy player' opening.",
+    "keyIdeas": [
+      "Sacrifice two pawns for a devastating lead in development",
+      "The bishop pair on c4 and b2 creates deadly pressure on f7 and the long diagonal",
+      "Qb3 adds a third attacker to the f7 square — often decisive",
+      "Play O-O and put the rook on e1 or f1 to add more firepower"
+    ],
+    "traps": [
+      "After Bc4 and Bxb2, if Black plays ...Nf6, White plays e5 kicking the knight, then Qb3 targets f7 with three pieces — often winning on the spot.",
+      "If Black develops passively with ...d6, the simple Qb3 puts unbearable pressure on f7. Combined with Bxg7, it's often lights out.",
+      "The Nxf7 sacrifice is always in the air — with two bishops and a queen aimed at f7, tactical blows appear out of nowhere."
+    ],
+    "warnings": [
+      "If Black returns one pawn with ...d5 early, the position simplifies and White's initiative diminishes significantly",
+      "Don't go all-in if Black plays the Schlechter Defense (...d5) — accept the equal position",
+      "Clock management matters — if you spend too long thinking, the initiative evaporates"
+    ],
+    "variations": [
+      {
+        "name": "Danish Gambit: Full Accepted",
+        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 Nf6 e5 Nh5 Qb3 Qe7 Nf3 g6 O-O Bg7 Re1",
+        "explanation": "Black takes both pawns and tries to hold on. White plays e5 to kick the knight and Qb3 to triple on f7. After O-O and Re1, White's position is a textbook attacking setup. Black must find several only moves to survive."
+      },
+      {
+        "name": "Danish Gambit: d5 Return",
+        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 d5 Bxd5 Nf6 Bxf7+ Kxf7 Qxd8 Bb4+ Qd2 Bxd2+ Nxd2 c5",
+        "explanation": "The strongest defense — Black returns a pawn with d5 to break up White's attack. After Bxd5 Nf6, the position simplifies. White gets some initiative but Black is solid. This is why the Danish isn't played at the highest level, but at club level players rarely find d5."
+      },
+      {
+        "name": "Danish Gambit: One Pawn Accepted",
+        "pgn": "e4 e5 d4 exd4 c3 d5 exd5 Qxd5 cxd4 Nc6 Nf3 Bb4+ Bd2 Bxd2+ Nbxd2 Nf6 Bc4 Qd6",
+        "explanation": "Black takes one pawn but plays d5 instead of dxc3. This leads to a more positional game where White has an isolated d-pawn but active pieces. A reasonable approach for Black who doesn't want to enter the wild tactical lines."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "f7 Avalanche",
+        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 Bb4+ Kf1 Nf6 e5 d5 exf6 dxc4 Qh5 O-O fxg7 Re8 Nf3",
+        "explanation": "After Black plays Bb4+ and Nf6, White pushes e5 kicking the knight and creating chaos. The fxg7 pawn threatens to promote and the open lines toward Black's king are lethal. Even engines struggle to find the best defense here."
+      },
+      {
+        "name": "Greedy Grab Punishment",
+        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 Nc6 Nf3 d6 Qb3 Qe7 O-O Na5 Bxf7+ Kd8 Qa4",
+        "explanation": "If Black develops slowly with Nc6 and d6, the Bxf7+ sacrifice rips open the king. After Kd8, the Black king is stuck in the center and Qa4 creates multiple threats. This pattern comes up frequently against players who don't know the Danish."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Schlechter Defense",
+        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 d5 Bxd5 Nf6 Nc3 Bb4 Nf3 O-O O-O Nxd5 Nxd5 Bd6",
+        "explanation": "The Schlechter Defense with ...d5 is the reason the Danish isn't played at the top level. Black returns the pawn to neutralize the attack and reaches a comfortable position. White's two-pawn investment yields only a small initiative that's easy to defend against."
+      }
+    ]
+  },
+  {
+    "id": "smith-morra-gambit",
+    "eco": "B21",
+    "name": "Smith-Morra Gambit",
+    "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3",
+    "color": "white",
+    "style": "Aggressive, Anti-Sicilian",
+    "overview": "Tired of getting outbooked in the Sicilian? The Smith-Morra Gambit blows up all of Black's preparation in one move. You sacrifice a pawn with d4 and c3 to get rapid piece development, open lines, and a dangerous initiative against the Sicilian. White's pieces pour out like water while Black struggles to untangle — it's the ultimate anti-Sicilian weapon for attacking players.",
+    "keyIdeas": [
+      "Sacrifice a pawn to get a full tempo lead in development against the Sicilian",
+      "The open c-file combined with Bc4 creates pressure against f7",
+      "Develop with Nf3, Bc4, O-O, Qe2, and Rd1 — every piece finds a natural attacking square",
+      "Black's typical Sicilian counterplay on the queenside is neutralized because the c-file belongs to White"
+    ],
+    "traps": [
+      "After Nxc3 d6 Bc4 Nf6 Nf3, if Black plays the natural ...e6, White has Qe2 and O-O with huge pressure on the e-file and f7.",
+      "If Black fianchettos with ...g6, the Bc4 and Qb3 battery targeting f7 is devastating — especially combined with Nd5.",
+      "The Nd5 jump is always lurking — combined with Bc4 and the open c-file, tactical shots on f7 and e7 appear constantly."
+    ],
+    "warnings": [
+      "If Black declines with ...d3, you end up in a worse version of the Alapin — be prepared",
+      "Don't overcommit to the attack — if Black successfully trades pieces, the missing pawn becomes relevant in the endgame",
+      "Against well-prepared opponents who play ...a6, ...Nc6, ...d6, ...e6, Black can reach a solid position"
+    ],
+    "variations": [
+      {
+        "name": "Smith-Morra: Classical Setup",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 O-O",
+        "explanation": "The main line where Black plays a standard Sicilian setup. White develops naturally with Bc4, O-O, Qe2, and Rd1. The pressure on the d6 pawn and the f7 square gives White long-lasting initiative. Black must be careful not to get steamrolled."
+      },
+      {
+        "name": "Smith-Morra: Fianchetto Defense",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 g6 Bc4 Bg7 e5 Nf6 Bf4 O-O O-O d5 exd6",
+        "explanation": "Black fianchettos with g6 and Bg7. White can push e5 to cramp Black's position and prevent d5. After Bf4 and O-O, White has a harmonious setup with pressure on both sides of the board."
+      },
+      {
+        "name": "Smith-Morra Declined: d3 Push",
+        "pgn": "e4 c5 d4 cxd4 c3 d3 Bxd3 Nc6 Nf3 d6 O-O Nf6 Nbd2 g6 Bc2 Bg7 b3",
+        "explanation": "Black declines by pushing d3 instead of taking on c3. This avoids the gambit but gives White a free developing move after Bxd3. The resulting position is like a Maroczy Bind where White has a comfortable space advantage."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Nd5 Tactical Bomb",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Be7 Qe2 Nf6 Rd1 O-O Bf4 e5 Nd5 Nxd5 exd5",
+        "explanation": "The thematic Nd5 jump is the signature move of the Smith-Morra. When it lands, the position explodes. After Nxd5 exd5, White's pieces converge on Black's position. Combined with Bf4 hitting d6, Black faces a crisis."
+      },
+      {
+        "name": "Piece Sacrifice on f7",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 a6 Rd1 Qc7 Bf4 Ne5 Nxe5 dxe5 Bxe5 Qb6 Bxf6 gxf6 Nd5",
+        "explanation": "After Black weakens with ...a6 and ...Qc7, the sacrifice Bxe5 followed by Bxf6 and Nd5 creates a wrecking ball on d5. Black's shattered kingside and exposed king make the position unplayable despite the extra pawn."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Chicago Defense Neutralization",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 e6 Nf3 a6 Bc4 b5 Bb3 Bb7 O-O d6 Qe2 Nd7 Rd1 Ngf6",
+        "explanation": "Black's most solid setup with ...e6, ...a6, ...b5, and ...Bb7 neutralizes a lot of White's initiative. The bishop on b7 covers d5 and Black slowly untangles. Against this precise defense, White's compensation is at its thinnest — you need to play actively to justify the pawn."
+      },
+      {
+        "name": "Endgame Danger",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 O-O Be3 a6 Rac1 Qa5 Bb3 Bd7 Nd4 Nxd4 Bxd4 Bc6",
+        "explanation": "If Black trades pieces carefully and reaches an endgame, the extra pawn becomes the dominant factor. This is the fundamental weakness of the Smith-Morra — it's an opening built for the middlegame. If you let the position simplify, you're fighting for a draw."
+      }
+    ]
+  },
+  {
+    "id": "stafford-gambit",
+    "eco": "C42",
+    "name": "Stafford Gambit",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6",
+    "color": "black",
+    "style": "Trappy, Surprise Weapon",
+    "overview": "The Stafford Gambit is the ultimate trap opening — objectively dubious, but practically devastating. After White takes on e5 and c6, Black gets wide-open lines and incredible piece activity targeting f2 and the White king. Every natural-looking move for White can walk into a hidden trap. Eric Rosen made this gambit famous, and for good reason — it produces an absurd win rate at rapid and blitz time controls.",
+    "keyIdeas": [
+      "Sacrifice a pawn for rapid development and open lines targeting the White king",
+      "The open d-file and diagonals create immediate tactical threats",
+      "Bc5 aiming at f2 combined with Ng4 is the classic attacking pattern",
+      "White must know specific theory or faces dozens of traps — most players don't"
+    ],
+    "traps": [
+      "After 4...dxc6 5.d3 Bc5, if White plays the natural 6.Be2, then Ng4 threatens Bxf2+ followed by Ne3 forking the queen.",
+      "If White plays 5.Nc3, Black can play ...Bc5 6.d3 Ng4 7.Be2 Qd4 threatening both Qxf2 mate and Nxf2.",
+      "After 5.d3 Bc5 6.Bg5 Nxe4 7.dxe4 Bxf2+ — the Stafford's most famous trap, winning White's queen after Kxf2 Qxd1."
+    ],
+    "warnings": [
+      "Objectively, the Stafford is unsound — engines give White a clear advantage with accurate play",
+      "If White plays 5.d3 and 6.Be2 followed by O-O without touching the f2 pawn, the tricks mostly evaporate",
+      "Don't play this against prepared opponents who know the refutation — save it for blitz and rapid"
+    ],
+    "variations": [
+      {
+        "name": "Stafford Gambit: Bc5 Main Line",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4",
+        "explanation": "The signature Stafford trap — Black sacrifices the queen with Nxe4, then plays Bxf2+ Ke2 Bg4 mate. White thinks they've won a queen but gets checkmated instead. This is the line that made the Stafford famous."
+      },
+      {
+        "name": "Stafford Gambit: Ng4 Attack",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 Bxg4 Bxg4 Qxg4 Bxf2+ Kd1 Qd4",
+        "explanation": "Another tricky line where Black plays Ng4 directly. After White captures, Bxf2+ drags the king out. Qd4 creates threats against d3 and the exposed king. Even if it's not winning by force, the practical complications are enormous."
+      },
+      {
+        "name": "Stafford Gambit: h5 Line",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 O-O Ng4 h3 Qd6 hxg4 hxg4",
+        "explanation": "The h5 variation where Black prepares to open the h-file. After Be2 h5, White must be extremely careful. If White castles kingside, the h-file opens up for a direct attack. The idea is hxg4 with a rook lift to h1 and lethal threats."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Oh No My Queen",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4",
+        "explanation": "The most iconic Stafford trap. White plays Bg5 pinning the knight and thinks they're winning material. After Nxe4, White happily takes the queen with Bxd8. But Bxf2+ Ke2 Bg4 is checkmate! The bishop on g4 and f2 combine to create a mating net."
+      },
+      {
+        "name": "Knight Fork Trap",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Bc5 dxe4 Bxf2+ Ke2 Bg4+ Kxf2 Qd4+ Be3 Qxe4",
+        "explanation": "After 5.e5, Black plays Ne4 and when White takes with d3, the Bxf2+ sacrifice begins a devastating king hunt. The White king gets dragged all the way across the board and can't escape the checks. A beautiful illustration of the Stafford's tactical potential."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "White Plays Accurately",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Bb6 Bxg4 hxg4 Qxg4",
+        "explanation": "When White knows the theory — d3, Be2, c3, d4 — the Stafford's tricks are defused. White returns the pawn to consolidate and reaches a stable position where Black's initiative has evaporated. This is the honest truth about the Stafford — it doesn't work against preparation."
+      },
+      {
+        "name": "Endgame Collapse",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 O-O O-O Re8 Nc3 Bf5 Bg5 h6 Bh4 Nd7",
+        "explanation": "If White just develops sensibly — d3, Be2, O-O, Nc3 — and doesn't fall for any tricks, Black is simply down a pawn with no compensation. The Stafford is a one-trick pony, and if the tricks don't work, you're left with a worse position."
+      }
+    ]
+  },
+  {
+    "id": "marshall-attack",
+    "eco": "C89",
+    "name": "Marshall Attack",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5",
+    "color": "black",
+    "style": "Sacrificial, Dynamic",
+    "overview": "The Marshall Attack is one of the greatest prepared opening inventions in chess history — Frank Marshall supposedly kept it secret for years before unleashing it against Capablanca in 1918. Black sacrifices a full pawn with d5 to get a ferocious kingside attack with open lines, active pieces, and relentless pressure. At the highest levels, this is considered fully sound, and even Carlsen has been on the receiving end.",
+    "keyIdeas": [
+      "Sacrifice the e5 pawn to activate every piece toward White's king",
+      "After exd5 Nxd5, the knight on d5 is a monster and e4 is coming with tempo",
+      "The open e-file, combined with Re8 and Bf5 or Bg4, creates unbearable pressure",
+      "Black's attack often runs on autopilot — the piece placement almost plays itself"
+    ],
+    "traps": [
+      "After exd5 Nxd5 exd5 Nxd5, if White plays the greedy Qxd5, Black has Re1+ winning the queen or mating.",
+      "After Re8, the threat of ...Bf5 followed by ...Re6 and ...Rg6 is hard to stop — the rook lift is devastating.",
+      "If White weakens with g3 to prevent Qh4 ideas, Black switches to ...Bh3 threatening ...Qg5 and mate."
+    ],
+    "warnings": [
+      "White can avoid the Marshall entirely with the Anti-Marshall 8.a4 — have a backup plan",
+      "If White finds the correct defensive setup with Qf3 and d3, the attack can be held — patience is needed",
+      "Don't sacrifice more material hoping to force things — the Marshall attack flows naturally with correct play"
+    ],
+    "variations": [
+      {
+        "name": "Marshall Attack: Main Line",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8",
+        "explanation": "The classical main line where Black builds the attack step by step. After Nxd5, Nxe5, and Bd6, every Black piece is aimed at White's king. The queen on h3 combined with the bishops and rooks creates an overwhelming attack that requires computer-level defense."
+      },
+      {
+        "name": "Marshall Attack: Bf5 Setup",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Bf5 Qf3 Qh4 g3 Qh3 Nd2 Rae8",
+        "explanation": "An alternative setup where Black develops the bishop to f5 before committing the queen. This is considered more precise by modern theory, as it avoids some of White's defensive resources. The bishop on f5 also controls the d3 square."
+      },
+      {
+        "name": "Marshall Attack: Re6 Rook Lift",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Qf3 Bg4 Qg2 Qxg2+ Kxg2 Rae8",
+        "explanation": "In some lines, Black can trade queens and still maintain a dangerous initiative. The rook lift Re8-e6-g6 or Re8-e2 is a common attacking idea. Even in the endgame, Black's piece activity and White's structural weaknesses persist."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Back Rank Devastation",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d3 Bd6 Re1 Qh4 g3 Qh3 Re4 Bf5 Re1 Bg4 Qd2 Rae8 Rxe8 Rxe8 Qf4 Re1+",
+        "explanation": "A classic Marshall trick — after White captures on e8, Black recaptures with devastating effect. The back rank threats combine with the bishop pair to create an inescapable mating net. White's lack of coordination is punished ruthlessly."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Anti-Marshall 8.a4",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d3 d6 Nbd2",
+        "explanation": "White sidesteps the Marshall entirely with 8.a4 before Black can play d5. This is the most popular choice at the top level because White avoids the razor-sharp Marshall theory. Black must be prepared with a different setup — typically ...d6 and ...Na5."
+      },
+      {
+        "name": "White's Fortress Defense",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 f5 f3 Bh5 Nd2",
+        "explanation": "If White finds the correct defensive setup with Be3, Qd3, f3, and Nd2, the attack can be contained. White blocks all the entry points and slowly consolidates the extra pawn. This is the nightmare scenario for Marshall players — a well-prepared defender who knows the antidotes."
+      }
+    ]
+  },
+  {
+    "id": "englund-gambit",
+    "eco": "A40",
+    "name": "Englund Gambit",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7",
+    "color": "black",
+    "style": "Trappy, Unorthodox",
+    "overview": "The Englund Gambit is the black sheep of the gambit family — objectively terrible, but loaded with traps that club players fall into like clockwork. After 1...e5 against d4, Black gives up a pawn to create immediate chaos and trick White into losing material. It's the perfect weapon for blitz games where your opponent expects a Queen's Gambit and instead gets blindsided by tactical mayhem.",
+    "keyIdeas": [
+      "Sacrifice the e5 pawn to disrupt White's normal d4 development plans",
+      "Qe7 pins the e5 pawn to White's king — if White isn't careful, the pawn drops back",
+      "Rapid development with Nf6, Ng4, and Bc5 creates tactical threats against f2",
+      "The surprise factor alone wins many games — opponents waste time figuring out what's happening"
+    ],
+    "traps": [
+      "After 3.Nf3 Qe7 4.Bf4 Qb4+ — the famous Englund trap. If White blocks with Bd2, Qxb2 attacks the rook and the d2 bishop simultaneously.",
+      "If White plays 3.Nc3, Black has Qe7 followed by Nf6 and Ng4, targeting e5 and f2 simultaneously.",
+      "After 3.Nf3 Qe7 4.Bg5 f6 — Black regains the pawn while disrupting White's development."
+    ],
+    "warnings": [
+      "This gambit is objectively unsound — engines give White a large advantage with accurate play",
+      "If White plays 3.e4, Black has no compensation and is just down a pawn in a strong center position",
+      "Don't play this against players rated 2000+ who know the refutation — you'll lose without a fight"
+    ],
+    "variations": [
+      {
+        "name": "Englund Gambit: Qb4+ Trap Line",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Bxd2+ Qxd2 Kd8",
+        "explanation": "The infamous Qb4+ trick — Black threatens Qxb2 winning the rook. Even if White defends accurately, Black has created chaos and won material in many games. The key is that after Bd2 Qxb2, the rook on a1 and the bishop on d2 are both hanging."
+      },
+      {
+        "name": "Englund Gambit: Soller Variation",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bg5 f6 exf6 Nxf6 Nc3 d5 e3 Bf5 Bd3 Bxd3 Qxd3 O-O-O",
+        "explanation": "Black plays f6 to regain the pawn immediately. After exf6 Nxf6, Black has decent development and an open f-file. The position is playable for Black, though White still has a slight edge. This is the most respectable line of the Englund."
+      },
+      {
+        "name": "Englund Gambit: Zilbermints Variation",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Nge7 Nc3 Ng6 Bg5 Be7 Bxe7 Qxe7 e3 Ncxe5 Nxe5 Nxe5 Be2 O-O O-O d6",
+        "explanation": "The Zilbermints Variation with Nge7 and Ng6 aims to recover the pawn more slowly but with better piece placement. After Ng6, the knight targets e5 and Black can recapture without weakening the pawn structure. A more positional approach to the Englund."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Rook Heist",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4 Qd2 Bxc3 Qxc3 Qc1+",
+        "explanation": "The ultimate Englund trap — after Qb4+ and Qxb2, if White plays Bc3, Black has Bb4 pinning the queen. Then Qc1+ wins the rook on a1 or forces further material loss. Most White players never see this coming."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Simple Refutation",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 e4 Nxe5 Nxe5 Qxe5 Nc3 Nf6 Bd3 d6 O-O Be7 f4 Qe6 f5 Qe5 Bf4",
+        "explanation": "White simply plays e4, grabbing the center and maintaining the extra pawn. After Nc3 and Bd3, White has a huge space advantage and full development. Black has zero compensation — this is why the Englund is considered unsound at higher levels."
+      },
+      {
+        "name": "White Keeps It Simple",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 e4 Nxf3+ Qxf3 Nf6 Bd3 d6 O-O Be6 Bg5 O-O-O",
+        "explanation": "White develops normally and simply holds the extra pawn. Without tactical tricks, Black's position is passive and the missing pawn is a permanent disadvantage. This is the reality check every Englund player faces against a careful opponent."
+      }
+    ]
+  },
+  {
+    "id": "gambit-budapest-gambit",
+    "eco": "A51",
+    "name": "Budapest Gambit",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4",
+    "color": "black",
+    "style": "Aggressive, Counterattacking",
+    "overview": "The Budapest Gambit is one of the nastiest surprise weapons against 1.d4 — you sacrifice a pawn with e5 and immediately launch an attack with Ng4, putting pressure on e5 and f2. White players who are expecting a quiet Queen's Indian or Nimzo suddenly face razor-sharp tactics. The knight on g4 is incredibly annoying, and combined with Bc5 and Qh4, the threats pile up faster than White can handle.",
+    "keyIdeas": [
+      "After dxe5 Ng4, the knight attacks e5 and eyes f2 for tactical shots",
+      "Bc5 aims at f2 creating a two-piece battery that's hard to defend",
+      "If White plays Nf3, Black has Ne3 forking the queen and the f1 bishop in some lines",
+      "The surprise factor is enormous — most d4 players have zero preparation against the Budapest"
+    ],
+    "traps": [
+      "After 4.Bf4 Nc6 5.Nf3 Bb4+, if White blocks with Nbd2, then Qe7 regains the pawn with a great position.",
+      "After 4.Nf3 Bc5 5.e3 Nc6, the threat of Ngxe5 combined with Qh4 is very hard for White to handle.",
+      "If White tries to hold the pawn with f4, the center becomes weakened and Black gets excellent play after d6."
+    ],
+    "warnings": [
+      "If White plays the precise 4.Bf4 followed by Nf3 and e3, the gambit is well contained",
+      "Don't overpress if White returns the pawn — settle for equal chances with active pieces",
+      "Avoid the Fajarowicz Variation (3...Ne4) unless you know the specific theory — it's even more dubious"
+    ],
+    "variations": [
+      {
+        "name": "Budapest Gambit: Alekhine Variation",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6",
+        "explanation": "The main line where White plays Bf4 to hold the e5 pawn. Black continues developing with Nc6 and Bb4+. After Ngxe5 Nxe5, Black has recovered the pawn and has active piece play. The position is roughly equal but easier to play for Black."
+      },
+      {
+        "name": "Budapest Gambit: Rubinstein Variation",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Be2 d6 O-O O-O a3 Bxd2 Qxd2",
+        "explanation": "In the Rubinstein line, White plays Nd2 instead of Nbd2. This is considered one of the most critical tests. Black plays Qe7 and recovers the pawn while maintaining active piece placement. The middlegame features balanced chances."
+      },
+      {
+        "name": "Budapest Gambit: Adler Variation",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Be2 Ngxe5 Nxe5 Nxe5 O-O d6 b3 O-O Bb2 Bf5",
+        "explanation": "White plays Nf3 instead of Bf4, and Black develops with Bc5 aiming at f2. After Nc6 and Ngxe5, Black recovers the pawn naturally. The bishop on c5 is actively placed and Black has comfortable development."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "f2 Assault",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 a3 a5 Nc3 O-O Be2 Ngxe5 Nxe5 Nxe5 O-O Re8 b3 d6 Bb2 Bf5",
+        "explanation": "Black recovers the pawn and gets a beautiful attacking position. The bishop on c5 targets f2, and after Re8 and Bf5, Black has harmonious piece placement. The knight on e5 is a powerful centralized piece that supports the entire position."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "White Holds with Bf4 Setup",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 axb4 Nxf3+ gxf3 Nxb4 Rg1 d6 e4",
+        "explanation": "White plays the precise Bf4 system and after some exchanges, emerges with the bishop pair and a solid center. The doubled f-pawns are a minor weakness, but the bishops and central control more than compensate. Black's gambit has given no lasting advantage."
+      },
+      {
+        "name": "Fajarowicz Refutation",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 a3 d6 exd6 Bxd6 Nf3 O-O e3 Nc6 Be2 Bf5 O-O Qf6 Nc3 Nxc3 bxc3",
+        "explanation": "The Fajarowicz Variation with 3...Ne4 is even riskier than the main Budapest. After a3 and exd6, White can achieve a solid position where Black's compensation is questionable. This line requires very specific knowledge and is not recommended without deep study."
+      }
+    ]
+  },
+  {
+    "id": "albin-countergambit",
+    "eco": "D08",
+    "name": "Albin Countergambit",
+    "pgn": "d4 d5 c4 e5 dxe5 d4",
+    "color": "black",
+    "style": "Aggressive, Counterattacking",
+    "overview": "The Albin Countergambit is the Queen's Gambit turned on its head — instead of timidly defending with e6 or c6, Black strikes back with e5 and pushes the d-pawn forward like a battering ram. The advanced d4 pawn cramps White's position and creates the famous Lasker Trap, one of the most beautiful tactical motifs in chess. This is a fantastic weapon for players who hate defending in the Queen's Gambit.",
+    "keyIdeas": [
+      "The advanced d4 pawn cramps White's entire position and restricts natural development",
+      "Black aims to support the d4 pawn with c5 and develop actively with Nc6, Nge7, Bg4",
+      "The d4 pawn can become a passed pawn in the endgame — a major strategic asset",
+      "Tactical shots involving d3 are always possible, disrupting White's coordination"
+    ],
+    "traps": [
+      "The Lasker Trap: After 4.e3 Bb4+ 5.Bd2 dxe3 6.Bxb4 exf2+ 7.Ke2 fxg1=N+ — underpromotion to a knight with check, winning the rook on h1!",
+      "If White plays Nf3 too early, ...d3 can be very disruptive, blocking the f1 bishop and creating chaos.",
+      "After Nc6 and Bf5, Black's piece activity combined with the cramping d4 pawn creates constant tactical threats."
+    ],
+    "warnings": [
+      "If White plays the accurate 4.Nf3 and 5.a3, the d4 pawn becomes a target rather than an asset",
+      "Don't fall in love with the d4 pawn — sometimes returning it for active play is correct",
+      "White can neutralize the gambit with the solid 4.Nf3 Nc6 5.Nbd2 — the pawn will be captured"
+    ],
+    "variations": [
+      {
+        "name": "Albin Countergambit: Lasker Trap",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+ Rxg1 Bg4+ Kf2 Qxd1 Nc3 Nc6",
+        "explanation": "The legendary Lasker Trap — one of the most famous traps in chess history. After Bb4+ Bd2 dxe3 Bxb4 exf2+, the key move is fxg1=N+, underpromoting to a knight with check. The knight forks the king and rook. An absolute classic."
+      },
+      {
+        "name": "Albin Countergambit: Normal Development",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Bg4 a3 Qd7 b4 Nge7 Bb2 Ng6 g3 Be7 Bg2 O-O O-O",
+        "explanation": "The standard line where White plays Nf3 and Nbd2 to handle the d4 pawn. Black develops with Nc6, Bg4, and Nge7. The position is dynamic — White targets the d4 pawn while Black aims for kingside play. A solid approach for both sides."
+      },
+      {
+        "name": "Albin Countergambit: d3 Push",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 a3 Nge7 b4 Ng6 Bb2 a5 b5 Ncxe5 Nxe5 Nxe5 e3 Be6 exd4 Nxc4",
+        "explanation": "Black can sometimes push d3 to disrupt White's development, but in this line, Black recaptures on e5 and wins the c4 pawn. The resulting position is complex with chances for both sides. Black's active pieces compensate for any structural weaknesses."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Lasker Trap Full Sequence",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+ Ke3 Qxd1 Nc3 Bf5",
+        "explanation": "The full Lasker Trap continuation — after the knight promotion, if White tries Ke3, Black plays Qxd1 winning the queen. White's king is stuck in the center and the position is completely winning for Black. One of the most beautiful traps in all of chess."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "White's Accurate Refutation",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Nge7 a3 Ng6 b4 a5 b5 Ncxe5 Nxe5 Nxe5 Nb3 Be6 Nxd4",
+        "explanation": "White plays the precise Nf3, Nbd2, a3, and b4, controlling the position methodically. The d4 pawn is blockaded and eventually won. Without the d4 pawn, Black has sacrificed material for nothing. This is why top players rarely employ the Albin."
+      },
+      {
+        "name": "e3 Without Falling for Lasker",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Kxf2 Qxd1 Nc3 Qd4+ Ke1 Qxe5+ Be2 Nc6 Nf3 Qd4 Nd5 Nge7",
+        "explanation": "If White knows to avoid the Lasker Trap by playing Kxf2 instead of Ke2, the position is messy but manageable. White has the bishop pair and better structure, while Black's queen is active but alone. This knowledge is essential for Albin players — White doesn't always fall for it."
+      }
+    ]
+  },
+  {
+    "id": "gambit-benko-gambit",
+    "eco": "A57",
+    "name": "Benko Gambit",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6",
+    "color": "black",
+    "style": "Positional, Queenside Pressure",
+    "overview": "The Benko Gambit is the most positionally sound gambit in chess — Black sacrifices a pawn not for a quick attack, but for long-lasting queenside pressure that can grind White down over the entire game. After b5 and a6, Black opens the a and b files and gets sustained initiative with rooks and bishops. Unlike most gambits, the Benko works in the endgame too — those open files and active pieces give Black compensation even without queens on the board.",
+    "keyIdeas": [
+      "Open the a-file and b-file for rooks to create lasting queenside pressure",
+      "Fianchetto the bishop to g7 — it controls the long diagonal and supports queenside operations",
+      "Black's initiative is structural, not tactical — the pressure lasts into the endgame",
+      "The a6 and b5 pawn sacrifice opens lines that can never be closed"
+    ],
+    "traps": [
+      "If White tries to hold both pawns greedily, Black's rooks on a8 and b8 combined with Bg7 create irresistible pressure on the a2 and b2 targets.",
+      "After Bg7 and O-O, Black's bishop on g7 often has a crushing tactical shot on the long diagonal involving Bxa1 or a discovery.",
+      "White often loses the b5 pawn back anyway, but in a worse position — the time spent defending it costs development."
+    ],
+    "warnings": [
+      "If White declines with 4.Nd2 or 4.a4, the gambit lines don't arise — have a backup plan",
+      "Don't play the Benko if White avoids d5 — the gambit only works in the Benoni structure",
+      "If White gets a strong central pawn majority rolling, the queenside pressure may not be enough compensation"
+    ],
+    "variations": [
+      {
+        "name": "Benko Gambit: Fully Accepted",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5",
+        "explanation": "The main line where White accepts both pawns. Black plays Bxa6 to trade off the bad bishop and then fianchettos. After O-O and Nbd7, Black has beautiful piece placement with rooks coming to a8 and b8. White's extra pawns are hard to use while Black's pressure is easy to play."
+      },
+      {
+        "name": "Benko Gambit: King Walk",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5",
+        "explanation": "White's king takes a walk: Kxf1, g3, Kg2 — an unusual but sound maneuver. The king is actually well-placed on g2. Black continues with the standard plan of fianchetto, O-O, and queenside pressure. The resulting middlegame is one of the most strategically rich in chess."
+      },
+      {
+        "name": "Benko Gambit: Declined with Nd2",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 Nd2 bxc4 Nxc4 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Ba6",
+        "explanation": "White declines by playing Nd2, avoiding the double pawn sacrifice. Black still gets an active position with d6, Bg7, and Ba6. The Benko spirit lives on even in the declined lines — Black has good piece placement and queenside prospects."
+      },
+      {
+        "name": "Benko Gambit: Fianchetto System",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 g3 d6 Bg2 g6 Nf3 Bg7 O-O O-O Nc3 Nbd7 Re1 Qa5 Qc2 Rfb8",
+        "explanation": "White fianchettos the kingside bishop, creating a solid setup. Black responds with the standard Benko plan — Bg7, O-O, and rooks to a8 and b8. The Rfb8 move is key: Black prepares b-file pressure while keeping the a-file rook available for a-file operations."
+      }
+    ],
+    "trapLines": [
+      {
+        "name": "Queenside Avalanche",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Qa5 Qc2 Rfb8 Rb1 Nb6 Nd2 Nc4 Nxc4 Qxc3",
+        "explanation": "A typical Benko middlegame where Black's queenside pressure becomes overwhelming. The queen invades to c3, the rooks dominate the open files, and the bishop on g7 controls the diagonal. White's extra pawn means nothing when every piece is tied down to defense."
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "White's Central Breakthrough",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Ng4 h3 Nge5 Nxe5 Nxe5 f4 Nd3 Re2 e6 e5",
+        "explanation": "If White manages to push e4-e5, the central majority comes alive and Black's queenside pressure can be insufficient. This is the main danger in the Benko — if White plays actively in the center, the gambit pawn deficit becomes real. Black must time the queenside operations to prevent this."
+      },
+      {
+        "name": "Benko Declined: a4 Line",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 a4 bxc4 Nc3 g6 e4 d6 Bxc4 Bg7 Nf3 O-O O-O Ba6 Bxa6 Nxa6 Re1",
+        "explanation": "White declines the full gambit with a4, avoiding the worst of Black's pressure. After Nc3, e4, and Bxc4, White recovers the pawn and maintains a solid center. Black still has some activity but the characteristic Benko pressure on the a and b files is greatly reduced."
+      }
+    ]
+  }
+]

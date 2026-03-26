@@ -89,11 +89,11 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
-        // Eagerly load Kokoro voice model if user has it enabled
+        // Load cached voice pack if user has it enabled (no network, no WASM)
         if (profile.preferences.kokoroEnabled) {
-          void import('./services/kokoroService').then(({ kokoroService }) => {
-            if (!kokoroService.isReady()) {
-              void kokoroService.loadModel();
+          void import('./services/voicePackService').then(({ voicePackService }) => {
+            if (!voicePackService.isReady()) {
+              void voicePackService.loadCached(profile.preferences.kokoroVoiceId);
             }
           });
         }

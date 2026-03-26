@@ -1,0 +1,33 @@
+{
+  "openingId": "queens-gambit-declined-chigorin-defense-janowski-variation",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the center and controlling the important e5 and c5 squares. This move begins one of the most classical and positionally sound openings in chess, giving us excellent prospects for piece development while maintaining flexibility in our pawn structure. The d4 opening typically leads to rich middlegame positions where we can build long-term positional advantages through superior piece coordination and central control. Our plan is to follow up with moves like Nf3, c4, and potentially e3 or g3, depending on how Black responds."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black responds symmetrically in the center, immediately challenging our d4 pawn and establishing an equal claim to the central squares. This is the most principled response, as it prevents us from dominating the center with a follow-up like e4, and prepares natural development of Black's pieces. Our opponent is signaling they want to fight for central equality rather than allow us to build a big pawn center, which means we'll need to find other ways to create imbalances and generate winning chances. Black's d5 also opens lines for the dark-squared bishop and prepares potential moves like Nf6 or c6."
+    },
+    {
+      "san": "c4",
+      "annotation": "We're launching the Queen's Gambit, one of chess's most venerable openings that has been trusted by world champions for over a century. This move attacks Black's central d5 pawn and offers a trade - if Black captures on c4, we can recapture later and often gain time in the process. The c4 advance also controls the crucial b5 and d5 squares while preparing to develop our queenside pieces naturally with moves like Nc3, Nf3, and potentially Bf4 or Bg5. Even if Black doesn't take the pawn immediately, we've created tension in the center that will influence all future piece development and strategic planning."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Our opponent plays the Chigorin Defense, an unorthodox but perfectly playable response that develops a piece while defending the d5 pawn from an unusual square. Black is choosing a more active, piece-oriented approach rather than the classical pawn moves like e6 or c6, which means they're willing to accept slightly less central control in exchange for rapid piece development. This knight on c6 eyes important central squares like e5 and d4, and can later support advances like ...e5 or ...f5 depending on how the position develops. We need to be aware that Black's setup is quite flexible and can transpose into various pawn structures, making it harder for us to predict their exact plans."
+    },
+    {
+      "san": "dxc4",
+      "annotation": "Black accepts the Queen's Gambit by capturing our c4 pawn, temporarily winning material but also surrendering central control. This capture opens up the position and gives Black some breathing room, but it also allows us to potentially recapture later with tempo-gaining moves. Our opponent is banking on being able to hold onto this extra pawn long enough to complete development, or to return it at a favorable moment to achieve piece activity. The capture also opens the c-file for potential future play and removes some of the central tension, which can be a double-edged decision since it clarifies the pawn structure earlier than necessary."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We develop our knight to its most natural square, where it controls important central squares like e4, d5, and b5 while supporting our future plans to recapture the c4 pawn. This knight development is flexible and doesn't commit us to any particular pawn structure yet - we can still play e4 for a center pawn storm, or e3 for a more solid positional approach. The knight on c3 also prepares potential discoveries along the c-file and supports advances like d5 in some variations. By developing pieces before worrying about the c4 pawn, we're following the classical principle of not chasing pawns too early in the opening, instead building up our position systematically."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We complete our basic piece development with this natural knight move, controlling the central e5 and d4 squares while preparing to castle kingside for safety. This move also attacks the c4 pawn indirectly, since after moves like e3 and Bxc4, we'll have recovered our gambit pawn with interest. The knight on f3 is perfectly placed to support various middlegame plans - it can jump to e5 for an outpost, reroute to d2-e4 if needed, or support a kingside attack in sharper variations. This completes the opening phase where we've achieved harmonious piece development and maintained good central influence despite Black's temporary material advantage."
+    }
+  ]
+}

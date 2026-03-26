@@ -1,0 +1,174 @@
+{
+  "openingId": "englund-gambit",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "White opens with the queen's pawn, aiming for a solid, strategic game. Most d4 players expect classical responses like d5, Nf6, or the Indian defenses. They are NOT expecting what Black is about to throw at them. The Englund Gambit is a surprise weapon that catches d4 players completely off guard.",
+      "plans": [
+        "Build a strong center with c4",
+        "Develop pieces in the Queen's Gambit or Indian style"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "The Englund Gambit! Black immediately challenges the d4 pawn with e5, offering a pawn sacrifice on move ONE. This is objectively dubious — engines do not approve — but that's not the point. The Englund is a surprise weapon designed for quick games and unprepared opponents. Most d4 players have never seen this and will be in unfamiliar territory instantly. Black gets open lines, quick development, and a bag of dirty tricks.",
+      "pawnStructure": "Black offers the e5 pawn to disrupt White's classical d4 setup. If White takes, Black gets immediate counterplay with Nc6 and Qe7, pressuring the e-file.",
+      "plans": [
+        "Sacrifice the e5 pawn for rapid development",
+        "After dxe5, play Nc6 and Qe7 to pressure e5",
+        "Set up tactical tricks that d4 players won't know"
+      ],
+      "alternatives": [
+        "d5 — classical and solid Queen's Gambit territory",
+        "Nf6 — Indian Defense, the most popular reply"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "dxe5",
+      "annotation": "White accepts the gambit, which is the most critical response. White is now up a pawn, but the e5 pawn is advanced and can become a target. Black will immediately start putting pressure on this pawn, and White needs to be careful not to waste time defending it. Many d4 players are uncomfortable in open, tactical positions — and that's exactly what Black is counting on.",
+      "plans": [
+        "Hold the extra e5 pawn",
+        "Develop pieces while maintaining material advantage"
+      ],
+      "alternatives": [
+        "e3 — declining, safe but passive"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the knight and immediately pressures the e5 pawn. This is the key move in the Englund — the knight on c6 attacks e5 while also preparing to support the queen's entry to e7. Black is building up piece activity to compensate for the sacrificed pawn. Notice how Black already has a developed piece while White has none.",
+      "plans": [
+        "Play Qe7 next to add more pressure to e5",
+        "Develop pieces rapidly while White figures out how to defend"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d8",
+          "to": "e7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops the knight and defends the e5 pawn — a sensible move. The knight on f3 is well-placed, supporting the extra pawn and preparing to castle. But White is playing reactively, which is exactly what Black wants in the Englund. Black's initiative keeps growing.",
+      "plans": [
+        "Consolidate the extra pawn on e5",
+        "Develop the bishop and castle kingside"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qe7",
+      "annotation": "The queen enters the battle, pinning the e5 pawn against the king on e1. This is the main line of the Englund Gambit — the queen on e7 puts enormous pressure on e5 and prepares to recapture if the pawn advances or gets exchanged. Black also opens the possibility of Nxe5 or even tricks with Nb4 and Nd3+. The position is full of tactical landmines for White, and one careless move can turn the tables completely.",
+      "pawnStructure": "White's e5 pawn is the focal point of the entire battle. Black's pieces are all aimed at it, and if it falls, Black equalizes or even gets an edge from the active piece placement.",
+      "plans": [
+        "Regain the e5 pawn with excellent piece activity",
+        "Set up Nb4-Nd3+ fork tricks",
+        "Develop the bishops to active squares"
+      ],
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c6",
+          "to": "b4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "e1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    }
+  ]
+}

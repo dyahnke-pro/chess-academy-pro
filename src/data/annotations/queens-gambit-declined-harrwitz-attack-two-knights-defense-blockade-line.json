@@ -1,0 +1,57 @@
+{
+  "openingId": "queens-gambit-declined-harrwitz-attack-two-knights-defense-blockade-line",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move is the foundation of the Queen's Gambit system, where we'll soon offer our c-pawn to gain central control and rapid development. The d4 opening typically leads to rich positional play where we can build long-term advantages through superior piece coordination and pawn structure. Unlike 1.e4 openings that often explode into tactical complications, 1.d4 usually rewards players who understand strategic concepts like weak squares, pawn chains, and piece activity."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black immediately challenges our central d4 pawn and begins developing with tempo, following one of the most principled responses to 1.d4. This knight attacks our pawn while developing toward the center, embodying the key opening principle of developing pieces with purpose. Black is preparing to support the ...e6 and ...d5 setup that defines the Queen's Gambit Declined, where they'll build a solid but somewhat cramped position. We need to be ready for Black's solid but resilient pawn structure that can be difficult to break down."
+    },
+    {
+      "san": "c4",
+      "annotation": "We're playing the Queen's Gambit, offering our c-pawn to deflect Black's future ...d5 pawn from the center and gain space on the queenside. This move supports our d4 pawn while preparing to establish a powerful pawn center with pawns on d4 and e4 if Black captures on c4. The gambit isn't really a sacrifice since we can easily regain the pawn, but more importantly, it gives us excellent piece development and central control. This move also prepares the development of our queen's bishop via the fianchetto on g2 or more directly to squares like f4 or g5."
+    },
+    {
+      "san": "e6",
+      "annotation": "Black declines the Queen's Gambit and prepares the solid ...d5 advance, choosing a classical setup that prioritizes piece safety over immediate counterplay. This move supports the coming ...d5 while opening a diagonal for the light-squared bishop, though that bishop will often become somewhat passive in this opening structure. Black is signaling their intention to build a solid, resilient position rather than grab material with ...dxc4, which shows good strategic understanding of the position's demands. We should expect Black to complete their development methodically while maintaining a solid but slightly cramped position."
+    },
+    {
+      "san": "d5",
+      "annotation": "Our opponent establishes their central presence and creates the characteristic QGD pawn structure, refusing to be pushed around in the center. This move challenges our c4 pawn directly and creates immediate central tension, forcing us to make a decision about the pawn structure. Black's setup with ...e6 and ...d5 creates a solid but somewhat passive position where their light-squared bishop will be restricted by their own pawns. We now have several options including maintaining the tension with moves like Nc3, or supporting our center with e3, each leading to different types of middlegame positions."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We're developing our knight to its most active square while supporting the c4 pawn and maintaining central tension, keeping maximum flexibility in our position. This knight will be excellently placed on c3, controlling important central squares like e4 and d5 while preparing various pawn advances like e4 or f4 later in the game. By not immediately resolving the tension with cxd5, we keep Black guessing about our intentions and maintain more options for our pawn structure. The knight development also prepares potential tactics involving the d5 square and supports our eventual kingside development with pieces like Nf3 and Be2."
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black develops their light-squared bishop to a safe square, completing their kingside development and preparing to castle, though this bishop placement is somewhat passive in the QGD structure. The bishop on e7 supports the f6 knight and prepares castling, but it's also blocked by Black's own e6 pawn, which is a characteristic drawback of the QGD setup. Our opponent is prioritizing safety and solid development over active piece play, which is typical in this opening where Black often accepts a slightly inferior but very solid position. We should continue developing while looking for ways to exploit the somewhat passive nature of Black's light-squared bishop."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We're completing our natural kingside development while attacking Black's e5 square and preparing to castle, maintaining our slight initiative through superior piece activity. This knight beautifully complements our setup, controlling key central squares and preparing potential advances like e4 which would give us an ideal pawn center. The Nf3 development also supports our king's safety by preparing castling while keeping tactical options open against Black's solid but passive setup. With both knights developed to excellent squares (Nc3 and Nf3), we're building the foundation for a sustained positional advantage based on superior piece coordination."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black prioritizes king safety by castling kingside, which is almost mandatory in the QGD since the center will likely remain tense for many moves. This move gets their king to safety while connecting the rooks, preparing to challenge us on the central files or support their pawn structure from the back rank. Our opponent's king is now secure, but their pieces remain somewhat passively placed, particularly the light-squared bishop on e7 and the undeveloped queenside pieces. We should continue our development while looking for ways to increase the pressure on Black's solid but cramped position."
+    },
+    {
+      "san": "Bf4",
+      "annotation": "We're developing our light-squared bishop to an active square outside the pawn chain, where it controls important central squares and puts pressure on Black's position. This is a key move in the Harrwitz Attack variation, where the bishop on f4 eyes the weak c7 square and supports potential advances like e4 or h4-h5 depending on how the position develops. The bishop placement also prepares us to meet ...c6 setups by Black, as we'll have excellent piece coordination with our knights and bishops all actively placed. This development keeps more tension in the position compared to the quieter Be2, signaling our intention to maintain pressure and initiative."
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Black develops their queen's knight to a somewhat passive but safe square, preparing to reroute it later via c5 or e5, while also preparing potential pawn breaks like ...c6 or ...c5. This knight development is typical in the QGD, as the more active ...Nc6 is often not possible due to our pressure on the d5 pawn and central control. Our opponent is following a patient plan, completing development before committing to any specific pawn structure changes, though this does leave their position somewhat cramped for now. We should continue building our advantage through superior piece activity while preparing to restrict Black's piece mobility even further."
+    },
+    {
+      "san": "e3",
+      "annotation": "We're solidifying our center and preparing to complete our development with Be2 and castling, while also supporting our d4 pawn and preparing potential advances. This move creates a solid pawn triangle (c4-d4-e3) that gives us excellent central control while freeing our light-squared bishop to find its best square. The e3 advance also prepares us to meet various Black setups, whether they play ...c6, ...c5, or try to break with ...dxc4 at some point. While this move is less aggressive than immediate alternatives like h4 or Qc2, it builds a rock-solid foundation for sustained pressure against Black's cramped but resilient position."
+    },
+    {
+      "san": "c5",
+      "annotation": "We're launching the characteristic space-gaining advance of the Harrwitz Attack, seizing space on the queenside and beginning to cramp Black's position significantly. This pawn advance supports a potential d4-d5 breakthrough while also restricting Black's pieces, particularly making it harder for their knight on d7 to find good squares. The c5 move begins our strategy of gradual space advantage and piece restriction, typical of this variation where we trade immediate tactics for long-term positional pressure. Black will now have to deal with reduced space and fewer options for piece development, while we can continue improving our position with moves like Be2, castling, and potentially advancing our kingside pawns."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "openingId": "van-geet-opening-sicilian-two-knights",
+  "moveAnnotations": [
+    {
+      "san": "Nc3",
+      "annotation": "The Van Geet Opening is an offbeat way to avoid mainstream theory by controlling d5 and e4 before committing to a central pawn. By developing the knight first, we keep our options open and can transpose into various systems depending on Black's response—this flexibility is the opening's main appeal against well-prepared opponents."
+    },
+    {
+      "san": "c5",
+      "annotation": "Black immediately stakes a claim in the center with the Sicilian pawn break, the most combative response. This move challenges us to make a decision: will we support the center with d4, or will we play a quieter system? Black is signaling they want active, tactical play."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our second piece while maintaining pressure on e5 and d4, keeping the d4 push in reserve. This natural developing move doesn't commit us yet—we're building flexibility and preparing to meet Black's plans with good piece coordination."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops their knight to its most active square, controlling d4 and e5 while preparing to support further central operations. This is the main line continuation, and now we have a genuine choice: do we push d4 to challenge their control, or play something quieter?"
+    },
+    {
+      "san": "d4",
+      "annotation": "We strike at the center with the natural break, immediately creating concrete tactical issues for Black to solve. This move attacks their c5 pawn and opens lines for our pieces, forcing them to make a decision—they can't ignore this central challenge."
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Black captures in the center, which is the most natural and critical response. By taking on d4, they remove our central tension but allow us to recapture with the knight, which centralizes our piece and puts pressure on Black's position."
+    },
+    {
+      "san": "Nxd4",
+      "annotation": "We recapture with our knight, placing it actively on d4 where it controls crucial squares like f5, e6, b5, and c6. This gives us a well-placed piece in the center that will dominate Black's position, and we've successfully transposed into Sicilian Two Knights territory with a solid developmental advantage."
+    }
+  ]
+}

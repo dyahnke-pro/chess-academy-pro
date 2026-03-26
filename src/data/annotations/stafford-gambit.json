@@ -1,0 +1,222 @@
+{
+  "openingId": "stafford-gambit",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn — the most popular first move in chess. Little does White know, they may be walking into one of the trickiest gambits in modern online chess. The Stafford Gambit, popularized by Eric Rosen, is lurking just a few moves away.",
+      "plans": [
+        "Control the center and develop rapidly",
+        "Head toward an Open Game"
+      ],
+      "alternatives": [
+        "d4 — Queen's Pawn, avoiding Stafford territory"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "Black mirrors with e5, entering the Open Game. This symmetrical setup is the gateway to the Stafford Gambit. Black is already planning to meet Nf3 with Nf6, steering toward the Petrov's Defense structure where the Stafford surprise lives.",
+      "plans": [
+        "Play Nf6 after Nf3 to enter Stafford territory",
+        "Keep the position open for tactical tricks"
+      ],
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops the knight to its natural square, attacking the e5 pawn and preparing to castle. This is the most common second move for White. Black's response here is what separates the Stafford Gambit from the normal Petrov's Defense — instead of defending e5 passively, Black is about to sacrifice it.",
+      "plans": [
+        "Attack e5 and gain central control",
+        "Develop naturally with Bc4 or Bb5"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black plays Nf6, entering the Petrov's Defense. But Black has no intention of playing a quiet Petrov! This knight attacks e4, and when White captures on e5, Black's devastating reply Nc6 will turn the tables. The Stafford Gambit is set up and ready to spring.",
+      "plans": [
+        "After Nxe5, play Nc6 — the Stafford Gambit move",
+        "Sacrifice the e5 pawn for rapid development and tricks"
+      ],
+      "alternatives": [
+        "Nc6 — normal development, defending e5"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nxe5",
+      "annotation": "White grabs the free pawn — this looks great for White, and in normal Petrov's play, Black would respond with d6 or Nxe4. But the Stafford Gambit diverges here. White's knight is now on e5, seemingly dominant, but it's actually a target. Black's next move will put immediate pressure on it and begin an avalanche of tactical threats.",
+      "plans": [
+        "Consolidate the extra pawn",
+        "Maintain the strong knight on e5"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e5",
+          "to": "f7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nc6",
+      "annotation": "THIS is the Stafford Gambit! Instead of the normal d6 or Nxe4, Black plays Nc6, immediately attacking White's knight on e5. Eric Rosen has made this move famous — it's objectively dubious, but absolutely LOADED with traps. Black sacrifices a pawn for rapid piece development, open lines, and a web of tactical tricks that catch unprepared opponents constantly. At blitz and rapid time controls, the Stafford is devastatingly effective.",
+      "pawnStructure": "Black has sacrificed the e5 pawn for nothing material, but the knight on c6 attacks e5 while developing. If White plays Nxc6, Black gets dxc6 with open lines and the bishop pair.",
+      "plans": [
+        "After Nxc6 dxc6, get open d-file and bishop pair",
+        "Set traps involving Bc5, Ng4, Qd4 ideas",
+        "Play for rapid development and king-hunting"
+      ],
+      "alternatives": [
+        "d6 — normal Petrov's, safe but boring",
+        "Nxe4 — Petrov's main line, solid equality"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nxc6",
+      "annotation": "White captures the knight, which is the most natural response. White is now up a clean pawn with a seemingly normal position. But this is exactly what Black wanted! The d-file is about to blow open, and Black's pieces will pour out with terrifying speed. Many White players relax here, thinking they're just better — and that's when the Stafford traps start working.",
+      "plans": [
+        "Simplify and hold the extra pawn",
+        "Develop calmly"
+      ],
+      "alternatives": [
+        "Nf3 — retreating, but Black gets Nxe4 with tempo"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "d8",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "dxc6",
+      "annotation": "Black recaptures with the d-pawn, and suddenly the position is ALIVE with energy. The d-file is wide open, the queen can swing to d4 or d6, the c8 bishop is free, and Black's pieces coordinate beautifully for attacking chances. White is up a pawn, but Black has open lines, the bishop pair, and a slew of tactical ideas involving Bc5, Ng4, Qd4, and even Bg4 pins. This is where the Stafford magic happens — welcome to trap city!",
+      "pawnStructure": "Black has doubled c-pawns but a wide-open d-file and free piece play. The pawn structure favors dynamic play, which is exactly what Black wants in the Stafford.",
+      "plans": [
+        "Develop Bc5 to target f2",
+        "Play Ng4 to create threats on f2 and h2",
+        "Use the open d-file for queen and rook pressure"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f6",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d8",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "d1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    }
+  ]
+}

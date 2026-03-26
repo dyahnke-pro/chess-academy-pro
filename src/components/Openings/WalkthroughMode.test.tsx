@@ -43,6 +43,7 @@ vi.mock('../../services/speechService', () => ({
     stop: (...args: unknown[]): unknown => mockStop(...args),
     setEnabled: vi.fn(),
     setRate: vi.fn(),
+    warmupInGestureContext: vi.fn(),
   },
 }));
 

@@ -1,0 +1,49 @@
+{
+  "openingId": "kings-indian-defense-four-pawns-attack",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move gives us excellent flexibility - we can transpose into many different opening systems depending on Black's response. The d4 opening tends to lead to more positional, strategic games compared to 1.e4, making it a favorite among players who prefer building long-term advantages. Our immediate plan is to establish a strong pawn center and develop our pieces to active squares."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to fight for control of the center. This is one of the most principled responses to 1.d4, as it prevents us from simply playing 2.e4 and establishing a classical pawn center without a fight. The knight on f6 also prepares kingside castling and supports potential central breaks like ...e5 or ...c5. Black is signaling an intention to play dynamically rather than passively allow us to dominate the center."
+    },
+    {
+      "san": "c4",
+      "annotation": "We're playing the English Opening move order, supporting our d4 pawn while gaining space on the queenside and controlling the important b5 and d5 squares. This move prepares to meet Black's potential ...e5 advance with strong central pressure, and it also opens up possibilities for our queen and bishop on the long diagonal. The c4 pawn often becomes a key asset in the middlegame, supporting advances like d4-d5 or helping to restrict Black's pieces. This flexible approach keeps many opening options open while maintaining excellent central control."
+    },
+    {
+      "san": "g6",
+      "annotation": "Our opponent chooses the King's Indian setup, preparing to fianchetto the dark-squared bishop on g7 where it will become a powerful piece aimed at our center and kingside. This move signals Black's intention to play for dynamic counterplay rather than challenging our center immediately with moves like ...e6 or ...c5. The g6 move also prepares castling kingside and creates a solid pawn shelter for the black king. Black is essentially saying 'I'll let you build a big center, but I'm going to put pressure on it and create tactical opportunities later.'"
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing to advance in the center with e2-e4. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us excellent piece coordination. This move fits perfectly with our plan to establish a broad pawn center - once we play e4, we'll have pawns on c4, d4, and e4, creating maximum central space. We're also preparing to meet Black's king's Indian setup with the aggressive Four Pawns Attack, where we'll push f2-f4 to create tremendous central pressure."
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Black completes the fianchetto, placing the dark-squared bishop on its most active diagonal where it eyes our entire pawn center and creates long-term pressure against d4. This bishop becomes the cornerstone of Black's counterplay - it supports breaks like ...e5 and ...c5 while also providing crucial defense of the kingside. The bishop on g7 is often called the 'King's Indian bishop' because of how central it is to this opening system. Our opponent has now created a solid kingside structure while maintaining flexibility about how to challenge our center."
+    },
+    {
+      "san": "e4",
+      "annotation": "We establish the broad pawn center that defines this opening, controlling key squares like d5, f5, and supporting our pieces' development. This move completes our 'ideal' pawn center with pawns on c4, d4, and e4, giving us maximum space and forcing Black to react to our central dominance. The e4 pawn also opens lines for our light-squared bishop and prepares aggressive continuations like f2-f4. Black now faces the classic King's Indian dilemma: how to generate counterplay against our impressive-looking but potentially overextended center."
+    },
+    {
+      "san": "d6",
+      "annotation": "Our opponent solidifies the position by supporting the potential ...e5 advance and preparing to complete development with ...O-O and ...Nbd7. The d6 pawn also provides crucial support for pieces on e5 and c5, making it a key move in the King's Indian structure. Black is showing patience - rather than immediately challenging our center, they're building a solid foundation from which to launch counterplay later. This move also prevents our potential e4-e5 advance from being immediately devastating, as the d6 pawn controls e5 and supports Black's pieces."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black wisely gets the king to safety before the position becomes too sharp, completing the basic setup of the King's Indian Defense. Castling also connects the rooks and prepares for the typical King's Indian plan of ...Re8, ...e5, and eventual kingside or central counterplay. This move shows good practical judgment - in the King's Indian, tactical battles often erupt quickly, so king safety is paramount. Our opponent has now completed the essential elements of their setup: fianchettoed bishop, castled king, and solid pawn structure, and is ready to begin active operations."
+    },
+    {
+      "san": "Be2",
+      "annotation": "We develop our light-squared bishop to a flexible square that supports our kingside and prepares castling while keeping our options open. The bishop on e2 doesn't block our f-pawn, which is crucial since we're planning the aggressive f2-f4 advance that defines the Four Pawns Attack. This modest-looking move actually serves multiple purposes: it prepares kingside castling, supports the d1-h5 diagonal, and maintains the option to later redeploy to d3 or c4 if needed. We're showing restraint by not immediately pushing f4, instead completing our development first."
+    },
+    {
+      "san": "f4",
+      "annotation": "We launch the Four Pawns Attack with this aggressive advance, creating our fourth central pawn and dramatically increasing the pressure on Black's position. This move supports a potential e4-e5 breakthrough, controls the crucial e5 and g5 squares, and signals our intention to play for a direct kingside attack. The f4 pawn also prepares ideas like f4-f5, targeting Black's kingside pawn structure and the g6 pawn specifically. Black now faces intense pressure and must find active counterplay quickly - this is the critical moment where the King's Indian either succeeds with dynamic tactics or gets overwhelmed by White's space advantage."
+    }
+  ]
+}

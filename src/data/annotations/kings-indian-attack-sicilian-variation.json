@@ -1,0 +1,41 @@
+{
+  "openingId": "kings-indian-attack-sicilian-variation",
+  "moveAnnotations": [
+    {
+      "san": "Nf3",
+      "annotation": "We start with this flexible knight move, which is the hallmark of the King's Indian Attack—a subtle, patient setup that avoids committing our center immediately. By placing the knight on f3, we control key central squares (e5 and d4) while keeping our options open to play g3 and fianchetto our kingside bishop. This move has been favored by world champions like Fischer and Kasparov because it's incredibly practical: we'll build pressure gradually rather than entering sharp theoretical battles."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black stakes a claim in the center with this aggressive move, fighting for space and making it clear they want to contest the d4 square early. This is a typical Sicilian spirit—Black wants dynamic play rather than allowing us a slow buildup. You should recognize this as a signal that your opponent won't play passively, so we need to be precise with our next moves to maintain our positional bind."
+    },
+    {
+      "san": "g3",
+      "annotation": "Now we commit to the fianchetto setup, preparing to place our bishop on the long diagonal (a1-h8) where it will exert pressure on d5 and the center. This pawn move also secures our kingside and creates a safe haven for our king on g2 after castling. The beauty of g3 is that it's modest but purposeful—we're not forcing the issue, just improving our piece placement and preparing a solid foundation for the middlegame."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops their knight naturally, attacking our e4 square (which we haven't occupied, but it's still symbolically important) and preparing to support their central advanced d-pawn. This move also enables Black to potentially follow up with moves like Nc6 or Bg4, creating piece activity. We should note that Black is developing actively—they understand that in the King's Indian Attack, counterplay on the queenside and center is their best chance."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "We complete our fianchetto by placing the bishop on its ideal diagonal, where it targets the weak d5 pawn and controls long-term pressure toward the center and queenside. The bishop on g2 is a long-term asset in the King's Indian Attack, often becoming a powerful piece as the game develops. This move also allows us to castle kingside safely next, so we're solidifying our structure while maintaining that patient, prophylactic approach."
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle kingside to tuck our king to safety while connecting our rooks, a fundamental principle we follow early in most openings. This move also prepares to potentially push c4 or place a rook on d1 to pressure Black's advanced d-pawn. Notice how we're still not playing d3 yet (which we'll do next)—every move has been about improving our position while Black must decide how to handle their advanced d5 pawn."
+    },
+    {
+      "san": "e6",
+      "annotation": "Black solidifies their position by supporting their center with the e6 pawn, preparing to develop their light-squared bishop to e7 (a typical move in this structure). This move confirms Black's intention to play a solid, balanced position rather than sacrifice material. From our perspective, we're seeing Black choose stability over sharp tactics, which suits our patient King's Indian Attack perfectly."
+    },
+    {
+      "san": "d3",
+      "annotation": "Finally we push our d-pawn, establishing the classic King's Indian Attack pawn structure with d3 and f2, keeping our center flexible and solid. By playing d3 instead of the more committal d4, we maintain our characteristic quiet strength—our bishop on g2 now has a clear view down the long diagonal, and we can later push e4 when the moment is right. This modest advance also prepares potential ideas like c4, putting pressure on Black's d5 pawn from a different angle."
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Black develops their queenside knight to a natural square where it supports d5 and prepares to reroute toward the center or queenside. This move signals that Black is following a sound developmental plan, likely heading toward moves like Be7, O-O, and then seeking counterplay. We should be pleased here—our patient setup is working as intended, and Black has chosen solid but somewhat passive development, giving us excellent chances to gradually improve our position and execute our plan of pressure along the long diagonal."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "openingId": "sicilian-defense-smith-morra-gambit-accepted-classical-formation",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to launch the Smith-Morra Gambit if our opponent plays the Sicilian Defense. This move controls the central d5 and f5 squares while freeing our light-squared bishop and queen for future development. The e4 opening leads to sharp, tactical games where we'll often sacrifice material for rapid development and attacking chances. Our goal is to put immediate pressure on Black and avoid the slow positional struggles that can arise in many Sicilian lines."
+    },
+    {
+      "san": "c5",
+      "annotation": "Black responds with the Sicilian Defense, immediately challenging our central control and avoiding the symmetrical e5 response. This move controls the important d4 square and prepares to develop pieces with counterplay on the queenside. Our opponent is signaling their intention to create an imbalanced position where both sides will have chances for active play. The Sicilian is Black's most ambitious response to e4, leading to complex middlegame positions with rich tactical and strategic possibilities."
+    },
+    {
+      "san": "d4",
+      "annotation": "We're launching the Smith-Morra Gambit by immediately challenging Black's pawn on c5 and offering to sacrifice material for rapid development. This move opens the center and forces Black to make a crucial decision - they can accept the gambit by capturing, decline it with various moves, or transpose to other openings. Our idea is to gain a significant lead in development and attacking potential in exchange for the pawn we're about to sacrifice. The d4 advance also opens lines for our pieces and puts immediate pressure on Black's position."
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Black accepts our gambit by capturing the d4 pawn, taking the material but allowing us to gain tempo and central control. Our opponent is essentially saying they're willing to face our aggressive development in exchange for being up a pawn. This is the most principled response to our gambit offer, as declining it often leads to inferior positions for Black. Now we get to recapture and start building the powerful attacking formation that makes the Smith-Morra so dangerous."
+    },
+    {
+      "san": "c3",
+      "annotation": "We continue our gambit by offering another pawn to lure Black's d4 pawn forward and open more lines for our pieces. This move prepares to recapture on c3 with our knight, which will give us excellent central control and rapid piece development. Our strategic idea is to sacrifice material for a significant lead in development, open files, and attacking chances against Black's king. The c3 advance also supports a future d4 break if Black doesn't capture, maintaining flexibility in our pawn structure."
+    },
+    {
+      "san": "dxc3",
+      "annotation": "Black accepts the second pawn, completing the gambit and giving us exactly what we want - open lines and rapid development opportunities. Our opponent is now two pawns ahead but will struggle to coordinate their pieces and castle safely while we develop with tempo. This capture opens the c-file for potential pressure and allows our knight to jump to c3 with a powerful central position. Black's extra pawns will mean nothing if we can launch a successful attack before they consolidate their position."
+    },
+    {
+      "san": "Nxc3",
+      "annotation": "We recapture with the knight, establishing a magnificent central outpost and beginning our rapid piece development with tempo. This knight on c3 controls key central squares like d5 and e4 while supporting our future piece coordination and attacking plans. Our development advantage is already becoming apparent - we have a beautifully placed knight while Black's pieces remain largely undeveloped. The knight also prepares to support advances like d4-d5 or to reroute to more aggressive squares if needed."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops their knight to its most natural square, challenging our centralized knight and preparing to coordinate their own pieces. Our opponent is trying to catch up in development while maintaining their material advantage, which is the correct approach in gambit positions. This knight development also prepares potential moves like ...d6 and ...Nf6, aiming to complete kingside development and castle to safety. However, Black is still behind in the race to get their pieces coordinated and their king secure."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop our second knight to its ideal square, attacking Black's future e5 advance and preparing to support our central control. This move also prepares quick kingside castling while keeping pressure on Black to solve their developmental problems. The knight on f3 works beautifully with our c3 knight to control the center and prepare potential tactical shots. Our pieces are flowing into the game with natural developing moves while Black still needs several moves to achieve basic coordination."
+    },
+    {
+      "san": "d6",
+      "annotation": "Black plays a solid developing move that supports their knight on c6 and prepares to fianchetto their light-squared bishop or develop it to e6. Our opponent is prioritizing piece coordination over trying to hold onto their extra pawns, which shows good practical understanding of gambit positions. This move also prepares ...Nf6 and eventual kingside castling, though Black is still several moves away from complete safety. We need to continue developing actively to maintain our initiative before Black consolidates their extra material."
+    },
+    {
+      "san": "Bc4",
+      "annotation": "We develop our light-squared bishop to its most aggressive square, targeting the weak f7 point and preparing for potential sacrificial attacks. This bishop placement is a key component of our attacking setup, as it puts immediate pressure on Black's kingside and makes castling more difficult. The bishop also supports potential tactics involving our knights and prepares to coordinate with our other pieces for a kingside assault. From c4, the bishop controls important central squares and maintains maximum flexibility for our attacking plans."
+    },
+    {
+      "san": "a6",
+      "annotation": "Black plays a useful waiting move that prepares ...b5 to challenge our active bishop while also giving their king a potential escape square on a7. Our opponent is showing good technique by improving their position gradually rather than rushing into premature development that we could exploit. This move also prevents any potential Nb5 tactics and gives Black more options for their piece coordination. However, this tempo gives us another move to improve our attacking position before Black achieves full development."
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle kingside, bringing our king to safety while connecting our rooks and completing a crucial part of our development. This move also activates our f1 rook, which can quickly swing to the kingside attack via moves like Re1-e4-h4 or support central breaks. Our king is now secure, allowing us to focus entirely on maintaining our initiative and creating threats against Black's still-exposed monarch. The castling move demonstrates the beauty of our gambit compensation - rapid development, piece coordination, and a safe king position."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black finally develops their kingside knight, challenging our e4 control and preparing to castle kingside themselves. Our opponent is making steady progress toward equalizing the position, but we still maintain excellent compensation for our sacrificed pawns through superior piece activity and attacking potential. This knight development also prepares to support Black's central control and defensive setup, though they still need several more moves to fully coordinate. We need to maintain our initiative and look for tactical opportunities before Black completes their development and consolidates their material advantage."
+    }
+  ]
+}

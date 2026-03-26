@@ -1,0 +1,13 @@
+{
+  "openingId": "k-das-opening-schneider-gambit",
+  "moveAnnotations": [
+    {
+      "san": "h4",
+      "annotation": "The Kádas Opening is a rare and unconventional choice that immediately signals we're playing for surprise and tactics rather than theoretical precision. We advance our h-pawn to prepare a possible kingside expansion and create immediate threats along the h-file and the long diagonal, while keeping our position flexible. This move is typically played by experienced players who want to steer the game away from main lines and exploit the psychological pressure of facing something unfamiliar—it's a practical choice in rapid or blitz games, though it lacks the solidity of mainstream 1.e4 or 1.d4 openings."
+    },
+    {
+      "san": "g5",
+      "annotation": "Black accepts the invitation to unbalance the position with the Schneider Gambit, immediately meeting our h4 with aggressive counterplay on the kingside. By advancing g5, Black attacks our h-pawn and gains space, while preparing to reroute the light-squared bishop and create tactical complications around e3 and f4. This gambit-style response indicates Black is willing to accept some weakness on f5 and f6 in exchange for dynamic piece activity and the chance to exploit our irregular opening—it's a fighting, practical try that leads to wild, unbalanced play where both sides have chances."
+    }
+  ]
+}
