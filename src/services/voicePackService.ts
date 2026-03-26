@@ -14,6 +14,14 @@
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 
+/** GitHub Releases base URL for voice pack downloads. */
+const VOICE_PACK_BASE_URL = 'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1';
+
+/** Build the download URL for a voice pack by ID. */
+export function getVoicePackUrl(voiceId: string): string {
+  return `${VOICE_PACK_BASE_URL}/${voiceId}.bin`;
+}
+
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
 
 export interface VoicePackVoice {

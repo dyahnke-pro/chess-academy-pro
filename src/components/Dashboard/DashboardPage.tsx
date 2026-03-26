@@ -6,7 +6,7 @@ import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
-import { voicePackService } from '../../services/voicePackService';
+import { voicePackService, getVoicePackUrl } from '../../services/voicePackService';
 import type { VoicePackStatus } from '../../services/voicePackService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { SkillBar } from '../ui/SkillBar';
@@ -85,7 +85,7 @@ export function DashboardPage(): JSX.Element {
     unlockAudioContext();
     const voiceId = activeProfile?.preferences.kokoroVoiceId || 'af_bella';
     try {
-      await voicePackService.loadFromUrl(voiceId, `/voice-packs/${voiceId}.bin`);
+      await voicePackService.loadFromUrl(voiceId, getVoicePackUrl(voiceId));
     } catch {
       // error shown via voiceStatus listener
     }
