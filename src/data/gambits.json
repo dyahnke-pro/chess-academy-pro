@@ -1,6 +1,6 @@
 [
   {
-    "id": "kings-gambit",
+    "id": "gambit-kings-gambit",
     "eco": "C30",
     "name": "King's Gambit",
     "pgn": "e4 e5 f4",
@@ -71,7 +71,7 @@
     ]
   },
   {
-    "id": "evans-gambit",
+    "id": "gambit-evans-gambit",
     "eco": "C51",
     "name": "Evans Gambit",
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O",
@@ -574,7 +574,7 @@
     ]
   },
   {
-    "id": "budapest-gambit",
+    "id": "gambit-budapest-gambit",
     "eco": "A51",
     "name": "Budapest Gambit",
     "pgn": "d4 Nf6 c4 e5 dxe5 Ng4",
@@ -696,7 +696,7 @@
     ]
   },
   {
-    "id": "benko-gambit",
+    "id": "gambit-benko-gambit",
     "eco": "A57",
     "name": "Benko Gambit",
     "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6",
