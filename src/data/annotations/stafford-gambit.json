@@ -13,8 +13,8 @@
       ],
       "arrows": [
         {
-          "from": "e4",
-          "to": "d5",
+          "from": "e2",
+          "to": "e4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -27,7 +27,8 @@
           "square": "f5",
           "color": "rgba(255, 255, 0, 0.4)"
         }
-      ]
+      ],
+      "pawnStructure": "Symmetric e4/e5 pawn center typical of Open Games. Both sides have equal central control."
     },
     {
       "san": "e5",
@@ -37,6 +38,11 @@
         "Keep the position open for tactical tricks"
       ],
       "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
         {
           "from": "g8",
           "to": "f6",
@@ -52,16 +58,21 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its natural square, attacking the e5 pawn and preparing to castle. This is the most common second move for White. Black's response here is what separates the Stafford Gambit from the normal Petrov's Defense — instead of defending e5 passively, Black is about to sacrifice it.",
+      "annotation": "White develops the knight to its natural square, attacking the e5 pawn and preparing to castle. This is the most common second move. Black's response here separates the Stafford Gambit from the normal Petrov's Defense.",
       "plans": [
         "Attack e5 and gain central control",
         "Develop naturally with Bc4 or Bb5"
       ],
       "arrows": [
         {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
           "from": "f3",
           "to": "e5",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
       "highlights": [
@@ -73,7 +84,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black plays Nf6, entering the Petrov's Defense. But Black has no intention of playing a quiet Petrov! This knight attacks e4, and when White captures on e5, Black's devastating reply Nc6 will turn the tables. The Stafford Gambit is set up and ready to spring.",
+      "annotation": "Black plays Nf6, entering the Petrov's Defense. But Black has no intention of playing a quiet Petrov! This knight attacks e4, and when White captures on e5, Black's devastating reply Nc6 will turn the tables.",
       "plans": [
         "After Nxe5, play Nc6 — the Stafford Gambit move",
         "Sacrifice the e5 pawn for rapid development and tricks"
@@ -82,6 +93,11 @@
         "Nc6 — normal development, defending e5"
       ],
       "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
         {
           "from": "f6",
           "to": "e4",
@@ -102,21 +118,21 @@
     },
     {
       "san": "Nxe5",
-      "annotation": "White grabs the free pawn — this looks great for White, and in normal Petrov's play, Black would respond with d6 or Nxe4. But the Stafford Gambit diverges here. White's knight is now on e5, seemingly dominant, but it's actually a target. Black's next move will put immediate pressure on it and begin an avalanche of tactical threats.",
+      "annotation": "White grabs the free pawn — this looks great, and in normal Petrov's play Black would respond with d6 or Nxe4. But the Stafford Gambit diverges here. White's knight on e5 is seemingly dominant, but it's actually a target.",
       "plans": [
         "Consolidate the extra pawn",
         "Maintain the strong knight on e5"
       ],
       "arrows": [
         {
-          "from": "e5",
-          "to": "d3",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
         },
         {
           "from": "e5",
           "to": "f7",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
       "highlights": [
@@ -124,11 +140,12 @@
           "square": "e5",
           "color": "rgba(255, 255, 0, 0.4)"
         }
-      ]
+      ],
+      "pawnStructure": "White captures the e5 pawn, gaining a material advantage. The center is now asymmetric with only White having a central pawn."
     },
     {
       "san": "Nc6",
-      "annotation": "THIS is the Stafford Gambit! Instead of the normal d6 or Nxe4, Black plays Nc6, immediately attacking White's knight on e5. Eric Rosen has made this move famous — it's objectively dubious, but absolutely LOADED with traps. Black sacrifices a pawn for rapid piece development, open lines, and a web of tactical tricks that catch unprepared opponents constantly. At blitz and rapid time controls, the Stafford is devastatingly effective.",
+      "annotation": "THIS is the Stafford Gambit! Instead of the normal d6 or Nxe4, Black plays Nc6, immediately attacking White's knight on e5. Eric Rosen has made this move famous — it's objectively dubious, but absolutely LOADED with traps. Black sacrifices a pawn for rapid piece development, open lines, and a web of tactical tricks.",
       "pawnStructure": "Black has sacrificed the e5 pawn for nothing material, but the knight on c6 attacks e5 while developing. If White plays Nxc6, Black gets dxc6 with open lines and the bishop pair.",
       "plans": [
         "After Nxc6 dxc6, get open d-file and bishop pair",
@@ -141,9 +158,14 @@
       ],
       "arrows": [
         {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
           "from": "c6",
           "to": "e5",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
       "highlights": [
@@ -159,18 +181,18 @@
     },
     {
       "san": "Nxc6",
-      "annotation": "White captures the knight, which is the most natural response. White is now up a clean pawn with a seemingly normal position. But this is exactly what Black wanted! The d-file is about to blow open, and Black's pieces will pour out with terrifying speed. Many White players relax here, thinking they're just better — and that's when the Stafford traps start working.",
+      "annotation": "White captures the knight — the most natural response. White is now up a clean pawn. But this is exactly what Black wanted! The d-file is about to blow open, and Black's pieces will pour out with terrifying speed.",
       "plans": [
         "Simplify and hold the extra pawn",
-        "Develop calmly"
+        "Develop calmly with d3, Be2, O-O"
       ],
       "alternatives": [
         "Nf3 — retreating, but Black gets Nxe4 with tempo"
       ],
       "arrows": [
         {
-          "from": "c6",
-          "to": "d8",
+          "from": "e5",
+          "to": "c6",
           "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
@@ -183,8 +205,8 @@
     },
     {
       "san": "dxc6",
-      "annotation": "Black recaptures with the d-pawn, and suddenly the position is ALIVE with energy. The d-file is wide open, the queen can swing to d4 or d6, the c8 bishop is free, and Black's pieces coordinate beautifully for attacking chances. White is up a pawn, but Black has open lines, the bishop pair, and a slew of tactical ideas involving Bc5, Ng4, Qd4, and even Bg4 pins. This is where the Stafford magic happens — welcome to trap city!",
-      "pawnStructure": "Black has doubled c-pawns but a wide-open d-file and free piece play. The pawn structure favors dynamic play, which is exactly what Black wants in the Stafford.",
+      "annotation": "Black recaptures with the d-pawn, and suddenly the position is ALIVE. The d-file is wide open, the queen can swing to d4 or d6, the c8 bishop is free, and Black's pieces coordinate beautifully. White is up a pawn, but Black has open lines, the bishop pair, and tactical ideas everywhere. Welcome to trap city!",
+      "pawnStructure": "Black has doubled c-pawns but a wide-open d-file and free piece play. The pawn structure favors dynamic play, which is exactly what Black wants.",
       "plans": [
         "Develop Bc5 to target f2",
         "Play Ng4 to create threats on f2 and h2",
@@ -192,18 +214,18 @@
       ],
       "arrows": [
         {
+          "from": "d7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
           "from": "f8",
           "to": "c5",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "color": "rgba(0, 100, 255, 0.7)"
         },
         {
           "from": "f6",
           "to": "g4",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "d8",
-          "to": "d4",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -213,10 +235,1115 @@
           "color": "rgba(255, 80, 80, 0.3)"
         },
         {
+          "square": "d8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nc3",
+      "annotation": "White develops the knight to c3 — natural and common. White wants to control d5 and develop normally. But this allows Black's most famous trap: the 'Oh No My Queen' line. By not playing d3 first, White leaves f2 dangerously weak.",
+      "plans": [
+        "Control d5 and develop the bishop",
+        "Castle kingside and consolidate"
+      ],
+      "alternatives": [
+        "d3 — the most careful move, but still tricky",
+        "Be2 — develops but remains passive"
+      ],
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "White has pawns on e4 with a knight on c3 controlling d5. Black has doubled c-pawns but the open d-file compensates with dynamic chances."
+    },
+    {
+      "san": "Bc5",
+      "annotation": "Black develops the bishop to the most aggressive diagonal, aiming straight at f2. This is the start of the 'Oh No My Queen' trap. The bishop on c5 creates devastating threats along the a7-g1 diagonal, and f2 is only defended by the king.",
+      "pawnStructure": "The open center means pieces are everything. Black's bishop on c5 is a monster, bearing down on f2 which is only guarded by the king.",
+      "plans": [
+        "Follow up with Ng4, attacking f2 with two pieces",
+        "Bring the queen to h4 for the 'Oh No My Queen' setup",
+        "Maintain pressure on f2 and keep White off balance"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c5",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Be2",
+      "annotation": "White develops the bishop to e2 — passive but seemingly safe. White is preparing to castle and thinks the position is fine. But this walks into the full 'Oh No My Queen' trap. Black now has a devastating sequence starting with Ng4.",
+      "plans": [
+        "Castle kingside quickly",
+        "Consolidate the extra pawn"
+      ],
+      "alternatives": [
+        "h3 — prevents Ng4 but wastes time",
+        "d3 — more solid but still allows tricks"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "e2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Ng4",
+      "annotation": "Black brings the knight to g4, attacking f2 with TWO pieces (Bc5 and Ng4). This is the key attacking move. White is under immediate pressure — f2 is attacked twice and only defended by the king. The knight also eyes h2 and e3.",
+      "plans": [
+        "Threaten Bxf2+ with devastating discovered attacks",
+        "If White castles, attack h2 with the knight",
+        "Bring the queen to h4 for the combination"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g4",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "c5",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "White castles, trying to get the king to safety. This seems logical but is actually the WORST move, walking straight into the full Stafford trap. After castling, the king is on g1, right in the line of fire from Bc5. Black's next move Qh4 will be absolutely crushing.",
+      "plans": [
+        "Get the king to safety",
+        "Develop remaining pieces"
+      ],
+      "alternatives": [
+        "Bxg4 — best defense, giving back material",
+        "d3 — tries to hold but Qh4 is still strong"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "h2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "White has a solid e4-f2-g2-h2 pawn chain but f2 is the critical weakness, attacked by both the Bc5 and Ng4."
+    },
+    {
+      "san": "Qh4",
+      "annotation": "The queen swings to h4 with devastating effect! Black now threatens Qxf2# checkmate as well as Qxh2#. The classic 'Oh No My Queen' trap is fully loaded — if White plays h3 trying to kick the knight, Black has the brilliant Nxf2 sacrifice.",
+      "plans": [
+        "Threaten Qxf2# — immediate checkmate",
+        "If h3, play Nxf2 with Rxf2 Qxf2+ winning",
+        "Maintain maximum pressure on f2, g2, and h2"
+      ],
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "h4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "h4",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "h4",
+          "to": "h2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "h2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "h4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "h3",
+      "annotation": "White plays h3, trying to kick the knight away. This looks like it solves the problem, but this is exactly what Black wanted! After Nxf2, the position explodes in Black's favor.",
+      "pawnStructure": "White has weakened the kingside with h3, creating targets and opening lines for Black's attack.",
+      "plans": [
+        "Kick the knight and stabilize",
+        "Hope to consolidate"
+      ],
+      "alternatives": [
+        "Bxg4 — best defense, but Qxg4 keeps threats",
+        "d4 — tries to block the bishop"
+      ],
+      "arrows": [
+        {
+          "from": "h2",
+          "to": "h3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "h3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nxf2",
+      "annotation": "The knight sacrifices itself on f2! This is the signature move. The knight forks the rook on f1 and opens the diagonal. If Rxf2, Black plays Qxf2+ and the king is forced to the corner.",
+      "plans": [
+        "After Rxf2, play Qxf2+ winning the exchange minimum",
+        "The attack continues with Bxh3 ideas",
+        "Black has a winning attack in all variations"
+      ],
+      "arrows": [
+        {
+          "from": "g4",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "h4",
+          "to": "f2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Rxf2",
+      "annotation": "White captures the knight with the rook — the most natural recapture. But now Black's queen swoops in with a devastating check.",
+      "plans": [
+        "Try to hold with the extra exchange",
+        "Defend the kingside"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "After the Nxf2 sacrifice, White's kingside pawn structure is shattered. The f-file is open and the h3 pawn is isolated."
+    },
+    {
+      "san": "Qxf2+",
+      "annotation": "The queen captures on f2 with check! On Kh2, Black has Qg3+ followed by Qg2#. So the king must go to h1. The 'Oh No My Queen' combination is reaching its climax.",
+      "plans": [
+        "After Kh1, play Qxe2 winning the bishop",
+        "After Kh2, play Qg3+ and Qg2# checkmate",
+        "The attack is decisive in all lines"
+      ],
+      "arrows": [
+        {
+          "from": "h4",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "f2",
+          "to": "g1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "h1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Kh1",
+      "annotation": "The king retreats to h1, avoiding immediate checkmate. On Kh2, Black has Qg3+ and Qg2#. The king hides in the corner, but Black's attack continues.",
+      "plans": [
+        "Survive in the corner",
+        "Hope to untangle"
+      ],
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "h1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qxe2",
+      "annotation": "Black captures the bishop on e2, winning a full piece while maintaining the attack. The queen on e2 eyes g2 and the weak light squares around White's king. Black is now up significant material.",
+      "pawnStructure": "Black has won back more than the sacrificed pawn. White's king is permanently exposed on h1 with a weakened pawn shield.",
+      "plans": [
+        "Consolidate the material advantage",
+        "Attack the weak light squares",
+        "Bring rooks into play via the open d-file"
+      ],
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "e2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "e2",
+          "to": "g2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "d3",
+      "annotation": "White tries to block the bishop diagonal and open a line for the c1 bishop. But it's too little too late — Black is up a piece with a continuing attack, and Bxh3 is coming to rip open the kingside.",
+      "plans": [
+        "Open the c1 bishop diagonal",
+        "Create breathing room"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bxh3",
+      "annotation": "Black captures the h3 pawn with the bishop, ripping open the kingside. This threatens Bxg2+ followed by devastating discoveries. If White takes with gxh3, Black has Qf3+ forcing Kg1 and then the queen infiltrates decisively.",
+      "plans": [
+        "Threaten Bxg2+ with discovered attacks",
+        "After gxh3, play Qf3+ with a winning attack",
+        "Demolish White's pawn cover around the king"
+      ],
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "h3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "h3",
+          "to": "g2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "After d3 Bxh3, White's kingside is completely demolished. The g and h pawns are gone, leaving the king exposed."
+    },
+    {
+      "san": "Qf1",
+      "annotation": "White plays Qf1, trying to guard f2 and g2 while keeping the queen active. This is one of White's better defensive tries, but the position is already beyond saving. Black has a bishop on h3 hammering at g2, a queen on e2, and a bishop on c5 controlling the dark squares.",
+      "plans": [
+        "Defend g2 with the queen",
+        "Try to consolidate and trade pieces"
+      ],
+      "alternatives": [
+        "gxh3 — opens the king further, Qf3+ is crushing"
+      ],
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "f1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bxg2+",
+      "annotation": "The bishop captures on g2 with check, blowing open the last barrier around White's king! The king on h1 must deal with this check. After Kh2, Black recaptures the queen with Bxf1 and is up massive material. The Stafford Gambit has torn White's position to shreds.",
+      "plans": [
+        "Force the king to h2, then take the queen",
+        "Win decisive material with the bishop captures",
+        "The attack has completely destroyed White's position"
+      ],
+      "arrows": [
+        {
+          "from": "h3",
+          "to": "g2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "h1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Kh2",
+      "annotation": "The king steps to h2, the only square. After Kxg2, Black has Qxf1 winning the queen. So Kh2 keeps the queen on f1, but Black simply takes it anyway.",
+      "plans": [
+        "Avoid Kxg2 Qxf1",
+        "Try to survive with the queen"
+      ],
+      "arrows": [
+        {
+          "from": "h1",
+          "to": "h2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bxf1",
+      "annotation": "Black captures the queen! The bishop on g2 discovered an attack, and now Black takes the queen on f1 for free. Black is now up a queen for a bishop — the material advantage is overwhelming. The Stafford Gambit trap has delivered a devastating blow.",
+      "plans": [
+        "Consolidate with the extra queen",
+        "Bring the rooks into play",
+        "Convert the winning position"
+      ],
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "f1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nxe2",
+      "annotation": "White captures the queen with the knight, getting some material back. The position is still completely lost — Black has two bishops and will soon activate the rooks. But White fights on, hoping for some miracle in the complications.",
+      "plans": [
+        "Win back some material",
+        "Try to activate the remaining pieces"
+      ],
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "e2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "Black has the bishop pair against a knight, and the open position with no pawns on the kingside strongly favors the bishops."
+    },
+    {
+      "san": "Bxe2",
+      "annotation": "Black recaptures, and now has two bishops against a knight and bishop. More importantly, White's king is completely exposed on h2 with no pawn cover. Black will castle and bring the rooks into the attack to finish the game.",
+      "pawnStructure": "White has a shattered kingside — the h and g pawns are gone. Black's doubled c-pawns are irrelevant when the attack is this strong.",
+      "plans": [
+        "Castle and activate the rooks",
+        "Use the bishop pair in the open position",
+        "Target the exposed white king"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "e2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bg5",
+      "annotation": "White develops the bishop to g5, trying to create some activity. The bishop on g5 threatens to pin a future knight on f6 and controls some dark squares. But with no queen and an exposed king, White's position is hopeless.",
+      "plans": [
+        "Activate the bishop",
+        "Create some threats on the dark squares"
+      ],
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks. Now both rooks are ready to enter the attack via the open d-file or f-file. Black's development is complete while White is still struggling to coordinate. The material and positional advantages are decisive.",
+      "plans": [
+        "Activate the rooks on the open files",
+        "Target White's weak pawns and exposed king",
+        "Convert the winning advantage"
+      ],
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a8",
+          "to": "d8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rae1",
+      "annotation": "White brings the rook to e1, trying to centralize and create some counterplay against the e2 bishop. With the queen gone, White's only hope is to trade pieces and reach an endgame, but Black's material advantage and active pieces make this impossible.",
+      "plans": [
+        "Attack the e2 bishop",
+        "Try to trade pieces and simplify"
+      ],
+      "arrows": [
+        {
+          "from": "a1",
+          "to": "e1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e1",
+          "to": "e2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bxd3",
+      "annotation": "Black captures the d3 pawn, winning yet another pawn while keeping the bishop active. The bishop on d3 is perfectly placed — it controls the c4-f1 diagonal and supports future rook infiltrations. Black is now up a full piece plus pawns with a completely winning position.",
+      "plans": [
+        "Win more material and simplify",
+        "Prepare rook infiltration on the d-file",
+        "The game is effectively over"
+      ],
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "d3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "cxd3",
+      "annotation": "White recaptures with the c-pawn, but now the c-file is open too. Black's position is overwhelming — open files everywhere, the bishop pair dominating, and White's pieces are passively placed. The rook on e1 is the only active piece White has.",
+      "pawnStructure": "White's pawn structure is now a3/b2/d3/e4 — isolated and weak. Black will pick these off one by one while maintaining the attack.",
+      "plans": [
+        "Recapture and try to hold",
+        "Use the d-pawn as a passed pawn hope"
+      ],
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "d3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rad8",
+      "annotation": "Black brings the rook to the open d-file, targeting the weak d3 pawn. The rook on d8 is perfectly placed — it x-rays through to the white king's position and will win the d3 pawn easily. Black's complete domination of the open files is the final nail in the coffin.",
+      "plans": [
+        "Win the d3 pawn with the rook",
+        "Double rooks on the d-file",
+        "Finish the game with overwhelming material"
+      ],
+      "arrows": [
+        {
+          "from": "a8",
+          "to": "d8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d8",
+          "to": "d3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Bf4",
+      "annotation": "White repositions the bishop to f4, trying to control some central squares and prevent Black's pieces from infiltrating too easily. But with such a large material deficit, this is merely delaying the inevitable.",
+      "plans": [
+        "Control the d6 square",
+        "Try to create some fortress setup"
+      ],
+      "arrows": [
+        {
+          "from": "g5",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "White's remaining pawns on b2 and a2 are weak targets. Black's rook on the third rank and bishop pair dominate the open position."
+    },
+    {
+      "san": "Rxd3",
+      "annotation": "Black captures the d3 pawn with the rook, now winning another pawn. The rook on d3 is incredibly active — it controls the entire third rank and can swing to the kingside to deliver threats against White's king. Black is completely winning.",
+      "plans": [
+        "Use the active rook to create threats",
+        "Win more pawns and convert",
+        "The position is resignable for White"
+      ],
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "d3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Kg2",
+      "annotation": "White brings the king toward the center, trying to be more active. With so little material remaining, the king needs to participate. But Black's rook on d3 and bishop pair completely dominate the position.",
+      "plans": [
+        "Centralize the king for the endgame",
+        "Try to hold with active defense"
+      ],
+      "arrows": [
+        {
+          "from": "h2",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rd2+",
+      "annotation": "Black plays Rd2+ — the rook invades to the second rank with check, forcing the white king to move. The rook on the seventh (second) rank is a classic winning pattern, cutting the king off and threatening to gobble up pawns.",
+      "plans": [
+        "Invade the second rank with the rook",
+        "Attack the b2 and a2 pawns",
+        "Force the king to an inferior square"
+      ],
+      "arrows": [
+        {
+          "from": "d3",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "The king is forced to march forward due to the lack of pawn shelter. White's isolated pawns on b2 and a2 are easy targets."
+    },
+    {
+      "san": "Kf3",
+      "annotation": "The king steps to f3, getting out of the check. The king on f3 is exposed but there aren't many alternatives. Black will now consolidate the bishop on d4 where it controls the center and supports the rook.",
+      "plans": [
+        "Centralize and try to hold",
+        "Avoid further checks"
+      ],
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bd4",
+      "annotation": "Black centralizes the bishop on d4 — an absolute powerhouse square. The bishop controls the a7-g1 diagonal AND the h8-a1 diagonal, dominating the center. It also supports the rook on d2 and prevents White's rook from accessing key squares. Combined with the other bishop and rook, Black's pieces form a perfect attacking formation.",
+      "pawnStructure": "Black's remaining pawns are healthy while White's are isolated and falling. The bishop pair controls all the key diagonals in this open position.",
+      "plans": [
+        "Dominate the center with the centralized bishop",
+        "Support the rook invasion on the second rank",
+        "Win the remaining white pawns"
+      ],
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "a1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d4",
+          "to": "g1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bg3",
+      "annotation": "White retreats the bishop to g3, trying to hold onto some dark-square control. The bishop on g3 is passive but at least defends the h2 square and keeps an eye on the e1 rook's retreat. The position is still completely lost for White.",
+      "plans": [
+        "Maintain the dark-squared bishop",
+        "Try to create a blockade"
+      ],
+      "arrows": [
+        {
+          "from": "f4",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rxb2",
+      "annotation": "Black gobbles up the b2 pawn, collecting another pawn while maintaining the rook on the second rank. White's queenside pawns are falling like dominoes. The a2 pawn will be next, and then Black will have a massive passed a-pawn to support the winning attack.",
+      "plans": [
+        "Win the a2 pawn next",
+        "Create passed pawns on the queenside",
+        "Complete domination of the position"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "b2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "b2",
+          "to": "a2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Kf4",
+      "annotation": "White advances the king to f4, trying to be active and support the e4 pawn. The king on f4 looks aggressive but is actually vulnerable — Black's bishops and rook can create discovered checks and tactical threats. White is just trying to delay the inevitable.",
+      "plans": [
+        "Support the e4 pawn",
+        "Try to advance the e-pawn"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "Black has won all of White's queenside pawns. The connected c and a pawns for Black create passed pawn potential."
+    },
+    {
+      "san": "Rxa2",
+      "annotation": "Black captures the last queenside pawn! The a-file is now completely clear, and Black has a huge material advantage — two bishops, a rook, and connected passed pawns on the queenside. White's position is absolutely hopeless.",
+      "plans": [
+        "Push the a-pawn and create a passed pawn",
+        "Use the rook and bishops to support promotion",
+        "Force resignation"
+      ],
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "a2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "White pushes e5, trying to activate the pawn and create some counterplay. A passed pawn in the center can be dangerous, but with Black's overwhelming material advantage and active pieces, this is just a final gasp.",
+      "plans": [
+        "Push the passed e-pawn",
+        "Create threats with the advancing pawn"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "c5",
+      "annotation": "Black advances the c-pawn, creating a passed pawn duo on the queenside. The c5 and a7 pawns, supported by the bishops and rook, represent an unstoppable force. White cannot deal with threats on both flanks simultaneously.",
+      "pawnStructure": "White pushes the last central pawn in desperation. Black's connected queenside pawns and active pieces are overwhelming.",
+      "plans": [
+        "Advance the queenside pawns",
+        "Use the bishops to support pawn promotion",
+        "The position is completely winning"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c5",
+          "to": "c4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rd1",
+      "annotation": "White puts the rook on d1, trying to create some activity on the d-file and potentially attack the bishop on d4. But Black's position is too solid and too strong — the bishop on d4 is untouchable and Black's queenside pawns are marching.",
+      "plans": [
+        "Attack the d4 bishop",
+        "Try to blockade the queenside pawns"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "d1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d1",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
           "square": "d1",
           "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
+    },
+    {
+      "san": "Be3+",
+      "annotation": "Black plays Be3+ — a check that forces the king to retreat. The bishop on e3 attacks the king and also supports the c5 pawn's advance. This is a classic technique: using checks to gain tempo while improving piece placement. White's position is collapsing.",
+      "plans": [
+        "Force the king back with check",
+        "Improve the bishop position",
+        "Continue the queenside pawn advance"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "e3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Ke4",
+      "annotation": "The king goes to e4, stepping forward into the center. There are no safe squares — on Kf5, Bd3+ wins the rook; on Kg5, Be7+ is devastating. The king on e4 looks bold but is actually vulnerable to Ra4+ ideas. White is in complete zugzwang territory.",
+      "plans": [
+        "Try to use the king actively",
+        "Hope Black makes an error"
+      ],
+      "alternatives": [
+        "Kf5 — allows Bd3+ winning the rook",
+        "Kg5 — allows Be7+ with decisive threats"
+      ],
+      "arrows": [
+        {
+          "from": "f4",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Ra4+",
+      "annotation": "Black plays Ra4+ — a rook check that forces the king to make yet another concession. The rook on a4 simultaneously checks the king, controls the fourth rank, and supports the c-pawn advance. This is the final illustration of the Stafford Gambit's devastating power — from a simple one-pawn sacrifice, Black has generated a won position with beautiful piece coordination. The 'Oh No My Queen' line has delivered everything it promised.",
+      "plans": [
+        "Force the king to a worse square",
+        "Maintain the attack with checks",
+        "Convert the winning position into checkmate or promotion"
+      ],
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "a4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "White's king is exposed in the center with no pawn cover. Black's rook and bishops completely dominate."
     }
   ]
 }

@@ -1,0 +1,1324 @@
+{
+  "openingId": "smith-morra-gambit",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn, the most popular first move in chess. Against the Sicilian Defense, White has a special surprise weapon: the Smith-Morra Gambit. Instead of the mainline Open Sicilian with Nf3 and d4, White will sacrifice a pawn immediately for rapid development and attacking chances.",
+      "plans": [
+        "Prepare the Smith-Morra Gambit with d4 and c3",
+        "Sacrifice a pawn for fast development and open lines"
+      ],
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "The starting position of the e4 opening. White aims for central control which will transform into the Smith-Morra's IQP structure."
+    },
+    {
+      "san": "c5",
+      "annotation": "The Sicilian Defense — Black's most popular and aggressive response to e4. The c5 pawn challenges White's control of d4 and creates an asymmetrical position. Black fights for the center from the flank, and the resulting positions are typically sharp and combative.",
+      "pawnStructure": "Black's c5 pawn fights for d4 control without committing to a central pawn structure yet. This creates the imbalanced positions that make the Sicilian so popular at all levels.",
+      "plans": [
+        "Challenge White's center from the flank",
+        "Create an asymmetrical, fighting position",
+        "Aim for counterplay on the queenside"
+      ],
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "d4",
+      "annotation": "White strikes in the center immediately with d4! This is the hallmark of the Smith-Morra Gambit. Instead of the normal Nf3 followed by d4 (the Open Sicilian), White pushes d4 right away, offering a pawn sacrifice. The idea is simple but powerful: after cxd4 c3, White gets the c-file and rapid development in exchange for the pawn.",
+      "plans": [
+        "Sacrifice the d4 pawn to open the center",
+        "Follow up with c3 to offer the gambit pawn",
+        "Develop quickly on the open lines"
+      ],
+      "alternatives": [
+        "Nf3 — the normal Open Sicilian approach",
+        "Nc3 — the Closed Sicilian"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "c5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Black captures the d4 pawn — the natural response. Declining the gambit gives White a favorable transposition. By taking, Black wins a pawn but opens the center, which is exactly what the Smith-Morra player wants. The critical question is whether Black can hold the extra pawn or White's development advantage will prove decisive.",
+      "plans": [
+        "Win a pawn and try to hold it",
+        "Develop carefully to neutralize White's initiative"
+      ],
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "Black captures on d4, creating an open center. The pawn exchange opens lines that White will exploit with rapid development."
+    },
+    {
+      "san": "c3",
+      "annotation": "The Smith-Morra Gambit! White offers a second pawn with c3, inviting Black to capture again. This is the defining move of the opening. If Black takes on c3, White recaptures with the knight and gets a dream setup: rapid development, open c-file, active pieces, and an isolated queen pawn (IQP) structure that provides dynamic chances.",
+      "pawnStructure": "After dxc3 Nxc3, White will have an IQP on e4 with open c and d-files. This structure gives White dynamic piece play and attacking chances in exchange for a slight structural weakness.",
+      "plans": [
+        "After dxc3 Nxc3, develop rapidly with Bc4, Nf3, O-O",
+        "Use the open c-file and active pieces to attack",
+        "The IQP provides dynamic play and central control"
+      ],
+      "alternatives": [
+        "Nf3 — transposes to other Sicilian lines"
+      ],
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "dxc3",
+      "annotation": "Black accepts the gambit, capturing the second pawn. Black is now up a full pawn, but White's compensation is about to become apparent. The knight recapture on c3 gives White a developed piece, and the open c-file will become a highway for White's rooks. The battle between material and initiative begins.",
+      "plans": [
+        "Win a second pawn and try to consolidate",
+        "Develop carefully and return the pawn if necessary"
+      ],
+      "alternatives": [
+        "Nf6 — the Declined Variation, keeping the extra pawn on d4",
+        "d3 — another way to decline, giving back the pawn for solid play"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nxc3",
+      "annotation": "White recaptures with the knight, completing the gambit. The knight on c3 is beautifully placed — it controls d5, e4, and supports future piece development. White has sacrificed a pawn but now has a significant lead in development, open central files, and natural attacking chances. This is the starting position of the Smith-Morra Gambit proper.",
+      "plans": [
+        "Develop Bc4 to target f7 and control d5",
+        "Play Nf3 and O-O for rapid castling",
+        "Use the c-file and central development for attacking play"
+      ],
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "After Nxc3, White has an isolated queen pawn (IQP) on e4. This structure gives dynamic piece play and central control in exchange for the structural weakness."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the knight to c6, the most natural square. The knight controls d4, e5, and helps prepare the kingside development. This is the most common response — Black develops normally while keeping the extra pawn.",
+      "plans": [
+        "Control d4 and e5 with the knight",
+        "Develop the kingside with e6, Nf6, Be7",
+        "Castle and consolidate the extra pawn"
+      ],
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c6",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bc4",
+      "annotation": "White develops the bishop to the aggressive c4 square, targeting the vulnerable f7 pawn and controlling the d5 square. The bishop on c4 is a key piece in the Smith-Morra — it creates threats along the a2-g8 diagonal and works beautifully with the knight on c3 to control the center.",
+      "plans": [
+        "Target f7 and control d5",
+        "Develop Nf3 next and castle quickly",
+        "Create pressure on the light-square diagonal"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c4",
+          "to": "f7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "e6",
+      "annotation": "Black plays e6, reinforcing the d5 square and preparing to develop the dark-squared bishop. This is the solid approach — the e6 pawn blocks the Bc4 diagonal and creates a strong pawn chain. However, the light-squared bishop is now somewhat restricted behind the pawns.",
+      "pawnStructure": "Black's e6-d6 pawn chain is solid but slightly passive. The light-squared bishop will need to find a good square, often via d7 or b7 after b6.",
+      "plans": [
+        "Block the Bc4 diagonal with e6",
+        "Prepare d6 and Nf6 development",
+        "Castle kingside and consolidate"
+      ],
+      "alternatives": [
+        "d6 — another solid option, keeping e7 open for the bishop"
+      ],
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops the knight to f3, completing the development of both minor pieces. The knight controls d4, e5, and g5 — all important squares. White is now ready to castle and begin the middlegame attack. The development advantage is striking: White has three pieces developed to Black's one.",
+      "plans": [
+        "Castle kingside next move",
+        "Complete development with maximum efficiency",
+        "Prepare Qe2 and Rd1 for central pressure"
+      ],
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "d6",
+      "annotation": "Black plays d6, creating a solid pawn center with e6 and d6. This is the standard Sicilian pawn structure. The d6 pawn supports e5 advances and gives the dark-squared bishop room to develop. However, it also creates the d5 square as a potential outpost for White's pieces.",
+      "plans": [
+        "Create a solid pawn center",
+        "Prepare Nf6 and Be7 development",
+        "Maintain the defensive pawn chain"
+      ],
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "Black's e6-d6 pawn chain is solid but creates a backward pawn on d6. The d-file will be a key battleground."
+    },
+    {
+      "san": "O-O",
+      "annotation": "White castles kingside, getting the king to safety and connecting the rooks. In just 7 moves, White has completed development of both knights, the bishop, and castled. This is the power of the Smith-Morra — the pawn sacrifice buys incredible development speed. Now White can focus entirely on attacking.",
+      "plans": [
+        "Complete king safety and connect rooks",
+        "Prepare Qe2 and Rd1 for central pressure",
+        "Launch the middlegame attack with full development"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to f6, a natural and solid move. The knight defends d5, attacks e4, and prepares to castle. Black is catching up in development but is still behind White. The knight on f6 is well-placed but can become a target if White plays e5 at the right moment.",
+      "plans": [
+        "Develop the knight to its natural square",
+        "Prepare to castle kingside",
+        "Defend the center"
+      ],
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "Black's e6-d6-Nf6 setup is the standard Sicilian defensive formation. The pawns control d5 and create a solid but slightly passive structure."
+    },
+    {
+      "san": "Qe2",
+      "annotation": "White places the queen on e2, supporting the e4 pawn and preparing to swing to the kingside. The queen on e2 is a flexible placement — it connects the rooks, supports e4, and can later go to e4 or even h5 for attacking purposes. This is a key setup move in the Smith-Morra.",
+      "plans": [
+        "Support e4 and prepare central action",
+        "Connect the rooks and prepare Rd1",
+        "Keep options open for Qe4 or kingside attacks"
+      ],
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "e2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black develops the bishop to e7, a solid but somewhat passive square. The bishop on e7 prepares to castle and defends the kingside. In many Smith-Morra lines, Black wishes this bishop were on a more active diagonal, but e7 is the safest option.",
+      "plans": [
+        "Prepare to castle kingside",
+        "Maintain a solid defensive setup",
+        "Keep the position closed to neutralize White's initiative"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "e7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rd1",
+      "annotation": "White places the rook on the open d-file, targeting the d6 pawn. The rook on d1 is perfectly placed — it pressures d6 and controls the d-file. Combined with the queen on e2 and the pieces already in play, White has a formidable attacking setup. The development advantage is now fully realized.",
+      "pawnStructure": "White's rook on d1 pressures d6, the key weakness in Black's camp. The IQP on e4 supports pieces but can become a target in the endgame.",
+      "plans": [
+        "Pressure the d6 pawn along the d-file",
+        "Double rooks on the d-file with Rac1-Rcd1",
+        "Create threats on the d6 weakness"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "d1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d1",
+          "to": "d6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles kingside, getting the king to safety. Both kings are now castled, and the middlegame battle begins in earnest. Black has an extra pawn but White has superior piece activity, open files, and a natural attacking setup. The critical question is whether White can break through before Black consolidates.",
+      "plans": [
+        "Get the king to safety",
+        "Prepare to activate the remaining pieces",
+        "Try to consolidate the extra pawn"
+      ],
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bf4",
+      "annotation": "White develops the last minor piece to the active f4 square. The bishop on f4 targets d6, supports e5 pushes, and adds to the pressure on Black's position. White now has every piece developed and actively placed — this is the dream scenario for the Smith-Morra player.",
+      "plans": [
+        "Increase pressure on d6",
+        "Support the e5 pawn break",
+        "All pieces are now optimally developed"
+      ],
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f4",
+          "to": "d6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "White has completed the ideal Smith-Morra setup: pieces developed, rooks on open files, and the IQP on e4 providing dynamic energy."
+    },
+    {
+      "san": "Bd7",
+      "annotation": "Black develops the bishop to d7, a reasonable but passive square. The bishop connects the rooks and prepares potential counterplay with Rc8. However, the bishop on d7 is not very active compared to White's aggressively placed pieces.",
+      "plans": [
+        "Connect the rooks",
+        "Prepare Rc8 for counterplay on the c-file",
+        "Keep the position solid"
+      ],
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "d7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rac1",
+      "annotation": "White seizes the open c-file with the rook! Both rooks are now on open central files — Rc1 on the c-file and Rd1 on the d-file. This is the ideal Smith-Morra setup: total control of the open lines, active minor pieces, and a development advantage that translates into real attacking chances. The pressure on Black's position is immense.",
+      "plans": [
+        "Control the c-file with the rook",
+        "Double rooks or switch files as needed",
+        "Maintain maximum pressure on the center and queenside"
+      ],
+      "arrows": [
+        {
+          "from": "a1",
+          "to": "c1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rc8",
+      "annotation": "Black contests the c-file by placing a rook on c8. This is a good defensive move — the rook on c8 challenges White's control and prepares potential trades. If Black can exchange rooks on the c-file, it reduces White's attacking potential significantly.",
+      "plans": [
+        "Contest the c-file",
+        "Prepare to trade rooks and reduce pressure",
+        "Activate the remaining pieces"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "c8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bb3",
+      "annotation": "White retreats the bishop to b3, keeping it on the active a2-g8 diagonal while making room for the knight to jump to d5. The bishop on b3 still targets e6 and f7, and now the Nd5 move becomes a serious threat. This is a typical Smith-Morra maneuver — repositioning pieces to maximize pressure.",
+      "plans": [
+        "Prepare the powerful Nd5 jump",
+        "Maintain pressure on the a2-g8 diagonal",
+        "Keep all pieces actively coordinated"
+      ],
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "The Nd5 outpost is the crown jewel of the IQP structure. The isolated pawn on e4 supports this powerful knight post."
+    },
+    {
+      "san": "a6",
+      "annotation": "Black plays a6, preventing Nb5 and creating a potential escape square for the queen on a5. This is a useful prophylactic move, but it doesn't address the main threat of Nd5. Sometimes in the Smith-Morra, Black needs to be more proactive rather than playing waiting moves.",
+      "plans": [
+        "Prevent Nb5 jumps",
+        "Prepare b5 expansion on the queenside",
+        "Create an escape square for the queen"
+      ],
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nd5",
+      "annotation": "The knight jumps to d5! This is one of the most powerful moves in the Smith-Morra arsenal. The knight on d5 is a monster — it attacks e7, c7, f6 (after exd5 exd5), and completely dominates the center. Black must deal with this immediately or face a devastating attack. The d5 square is the crown jewel of the IQP structure.",
+      "pawnStructure": "The Nd5 jump exploits the IQP structure perfectly. The isolated e4 pawn supported the knight's journey to d5, which is the key outpost in this pawn configuration.",
+      "plans": [
+        "Dominate the center from d5",
+        "Create threats against e7, c7, and the entire kingside",
+        "Force Black into uncomfortable decisions"
+      ],
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "e7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "d5",
+          "to": "c7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "exd5",
+      "annotation": "Black captures the knight, the most principled response. Leaving the knight on d5 would be intolerable. But taking opens the e-file and gives White's bishop on b3 a clear diagonal to the king. The position now transforms — White gets open lines and piece activity as compensation for the sacrificed pawn.",
+      "plans": [
+        "Eliminate the powerful knight",
+        "Accept the structural consequences",
+        "Try to hold the resulting position"
+      ],
+      "arrows": [
+        {
+          "from": "e6",
+          "to": "d5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "exd5",
+      "annotation": "White recaptures with the e-pawn, creating a powerful passed pawn on d5. This passed pawn will be a thorn in Black's side throughout the game. The d5 pawn restricts Black's pieces and threatens to advance to d6, forking or disrupting Black's piece coordination. The e-file is now open for White's rook.",
+      "pawnStructure": "After exd5, White has a passed d-pawn that will become a major weapon. The open e-file also provides attacking chances for the rooks.",
+      "plans": [
+        "Push d6 to create threats",
+        "Use the open e-file for rook activity",
+        "The passed d-pawn restricts Black's pieces"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "d6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Na5",
+      "annotation": "Black plays Na5, trying to eliminate the dangerous bishop on b3 by trading knights for bishops. The knight on a5 targets b3, and if the bishop retreats, the knight can reroute to c4. This is a reasonable plan, but the knight is offside on a5 and takes time to execute.",
+      "plans": [
+        "Trade the knight for the Bb3",
+        "Reroute the knight via a5-c4",
+        "Eliminate White's dangerous light-squared bishop"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "a5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a5",
+          "to": "b3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bxd6",
+      "annotation": "White captures the d6 pawn with the bishop, winning another pawn! The bishop takes on d6 and creates a discovered attack threat. White is temporarily sacrificing the bishop pair but gaining a crucial pawn and opening lines. The d5 and d6 pawns together form a powerful passed pawn duo.",
+      "plans": [
+        "Win the d6 pawn and create a passed pawn duo",
+        "Open lines with the bishop capture",
+        "Increase the pressure on Black's position"
+      ],
+      "arrows": [
+        {
+          "from": "f4",
+          "to": "d6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "The Na5 knight is heading for b3 to eliminate White's bishop. This exchange will weaken White's light square control but Black's knight is offside."
+    },
+    {
+      "san": "Bxd6",
+      "annotation": "Black recaptures with the bishop, restoring material balance on the d6 square. The bishop on d6 is more active than it was on e7, but Black's position remains cramped due to the d5 pawn. The knight on a5 is still offside, and White's rooks control the open files.",
+      "plans": [
+        "Recapture and try to stabilize",
+        "Use the bishop actively on d6",
+        "Get the knight back into play"
+      ],
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "d6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Rxc8",
+      "annotation": "White exchanges rooks on c8, simplifying the position while maintaining the advantage. By trading rooks, White reduces Black's defensive resources while keeping the powerful d5 pawn and the active pieces. The exchange favors White because it removes a defender from Black's position.",
+      "plans": [
+        "Trade rooks to simplify while ahead",
+        "Reduce Black's defensive resources",
+        "Maintain the d5 pawn advantage"
+      ],
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "c8",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qxc8",
+      "annotation": "Black recaptures with the queen. The queen on c8 is not ideally placed — it's somewhat passive and blocks the a8 rook. Black needs to reorganize the pieces, but the d5 pawn keeps everything cramped.",
+      "plans": [
+        "Recapture and try to reorganize",
+        "Look for counterplay with the queen",
+        "Get the knight back from a5"
+      ],
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "c8",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qe4",
+      "annotation": "White centralizes the queen on the powerful e4 square. From e4, the queen controls the center, targets a8 along the diagonal, eyes h7 for kingside attacks, and supports the d5 pawn. The queen on e4 is a powerhouse — it radiates influence in every direction.",
+      "plans": [
+        "Dominate the center with the queen on e4",
+        "Threaten Qxa8 in some lines",
+        "Support d5-d6 push and kingside attacks"
+      ],
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e4",
+          "to": "a8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e4",
+          "to": "h7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "White has doubled b-pawns from axb3 but the open a-file and powerful d5 pawn more than compensate."
+    },
+    {
+      "san": "Nxb3",
+      "annotation": "Black finally captures the bishop, trading the offside knight for White's light-squared bishop. This removes a key attacking piece from White's arsenal. The knight-bishop trade generally favors the side giving up the knight in open positions, but here Black needed to eliminate the dangerous b3 bishop.",
+      "plans": [
+        "Eliminate the dangerous Bb3",
+        "Simplify and try to hold the position",
+        "Use the extra tempo to reorganize"
+      ],
+      "arrows": [
+        {
+          "from": "a5",
+          "to": "b3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "axb3",
+      "annotation": "White recaptures with the a-pawn. The pawn structure has changed — White now has doubled b-pawns, but the a-file is open for potential rook use. More importantly, White's queen on e4 and rook on d1 still create tremendous central pressure, and the d5 pawn remains a powerful asset.",
+      "plans": [
+        "Use the open a-file if needed",
+        "Maintain central pressure with Qe4 and Rd1",
+        "Push d6 at the right moment"
+      ],
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "g6",
+      "annotation": "Black plays g6, giving the king a luft (breathing room) on g7 and preventing back-rank tricks. This also supports Bf5, which would challenge White's dominant queen on e4. The move is solid but slightly weakens the dark squares around the king.",
+      "plans": [
+        "Create king safety with g6 luft",
+        "Prepare Bf5 to challenge the Qe4",
+        "Solidify the kingside"
+      ],
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Ng5",
+      "annotation": "White brings the knight to g5, an aggressive jump that threatens Nxf7 (forking the rook and queen) and Nxh7. The knight on g5 creates immediate tactical threats. Combined with the queen on e4, White has a dangerous attacking battery aimed at the kingside.",
+      "plans": [
+        "Threaten Nxf7 fork or Nxh7",
+        "Create kingside attacking pressure",
+        "Coordinate with the queen for tactical strikes"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g5",
+          "to": "f7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "g5",
+          "to": "h7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "The Ng5 threatens to exploit Black's weakened kingside. The g6-h6 pawn formation is vulnerable to knight infiltrations."
+    },
+    {
+      "san": "Bf5",
+      "annotation": "Black develops the bishop to f5, challenging the queen on e4 and defending against the Ng5 threats. The bishop on f5 is an active piece that blocks the f-file and contests the light squares. This is Black's best defensive try — forcing the queen to relocate.",
+      "plans": [
+        "Challenge the queen on e4",
+        "Block the f-file and defend f7",
+        "Activate the light-squared bishop"
+      ],
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f5",
+          "to": "e4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qf3",
+      "annotation": "White retreats the queen to f3, maintaining pressure along the f-file and keeping the knight on g5 supported. The queen on f3 still eyes f7 and creates potential threats. White's pieces remain well-coordinated despite the queen retreat.",
+      "plans": [
+        "Maintain pressure on f7",
+        "Keep the Ng5 supported",
+        "Prepare tactical strikes on the kingside"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "f7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "h6",
+      "annotation": "Black kicks the knight with h6. This is a committal move — it weakens the g6 pawn and the dark squares, but the knight on g5 was too threatening to leave there. Black must make this concession to avoid immediate tactical problems.",
+      "pawnStructure": "The h6 pawn weakens the g6 pawn (now lacking h7 support) and the dark squares around the king. But it was necessary to challenge the Ng5.",
+      "plans": [
+        "Kick the Ng5 away from the threatening square",
+        "Relieve the immediate tactical pressure",
+        "Accept the slight kingside weakening"
+      ],
+      "arrows": [
+        {
+          "from": "h7",
+          "to": "h6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Ne4",
+      "annotation": "White retreats the knight to e4, centralizing it on a powerful square. The knight on e4 attacks d6 and f6, and can jump to various aggressive squares. The knight retreat is actually an improvement — from e4, the knight coordinates with the queen on f3 and the d5 pawn to create a dominant central presence.",
+      "plans": [
+        "Centralize the knight on e4",
+        "Threaten Nxd6 or Nf6+",
+        "Maintain the strong d5 pawn"
+      ],
+      "arrows": [
+        {
+          "from": "g5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e4",
+          "to": "d6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e4",
+          "to": "f6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ],
+      "pawnStructure": "After the Nxe4 trade, fewer pieces favor the side with the passed pawn. White's d5 pawn becomes even more dangerous."
+    },
+    {
+      "san": "Nxe4",
+      "annotation": "Black captures the knight, eliminating a dangerous piece. The trade simplifies the position slightly, which generally favors the defender in gambit situations. By removing the knight, Black reduces the number of attacking pieces White has.",
+      "plans": [
+        "Simplify by trading knights",
+        "Reduce White's attacking potential",
+        "Head toward a more manageable endgame"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qxe4",
+      "annotation": "White recaptures with the queen, returning to the powerful e4 square. The queen on e4 is again a dominant central piece — it eyes both a8 and h7, supports the d5 pawn, and creates constant tactical threats. The simplified position actually helps White because the d5 pawn becomes even more dangerous with fewer pieces to stop it.",
+      "plans": [
+        "Recentralize the queen on the powerful e4 square",
+        "Prepare to advance d5-d6",
+        "Maintain pressure on the kingside"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "d6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Be5",
+      "annotation": "Black centralizes the bishop on e5, a powerful square that controls key diagonals and blocks the e-file. The bishop on e5 is Black's best piece — it dominates the center and creates defensive fortification. However, the d5 pawn still looms as a major threat.",
+      "plans": [
+        "Centralize the bishop on e5",
+        "Block the e-file and control dark squares",
+        "Create a defensive stronghold"
+      ],
+      "arrows": [
+        {
+          "from": "d6",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "d6",
+      "annotation": "White pushes the d-pawn to d6! This is the critical moment — the passed pawn advances deep into Black's territory, creating enormous pressure. The d6 pawn is a thorn that restricts Black's pieces and threatens to promote. Black must constantly watch this pawn while also defending against White's queen and rook.",
+      "pawnStructure": "The d6 pawn is a monster — deep in enemy territory, it cramps all of Black's pieces and threatens eventual promotion.",
+      "plans": [
+        "Push the passed pawn to d6",
+        "Create a permanent weakness in Black's position",
+        "Threaten d7 and eventual promotion"
+      ],
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d6",
+          "to": "d7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qc1",
+      "annotation": "Black plays Qc1, a desperate but resourceful move. The queen on c1 creates back-rank threats against White's king and tries to generate counterplay. This is Black's only chance — rather than passively defending the d6 pawn, Black goes for active counterplay.",
+      "plans": [
+        "Create back-rank threats",
+        "Generate counterplay against White's king",
+        "Force White to deal with defensive issues"
+      ],
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "c1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Qd3",
+      "annotation": "White retreats the queen to d3, defending the d1 rook and maintaining control. The queen on d3 supports the d6 pawn and keeps everything protected. White's position remains dominant despite Black's counterplay attempt.",
+      "plans": [
+        "Defend the rook and maintain control",
+        "Support the d6 pawn from d3",
+        "Prepare to push d7 at the right moment"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d3",
+          "to": "d6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bg4",
+      "annotation": "Black attacks the rook on d1 with the bishop. This tactical trick forces White to address the bishop threat. Black is fighting hard to generate counterplay, and the bishop on g4 creates an uncomfortable pin. The game has become very tactical.",
+      "plans": [
+        "Attack the rook on d1",
+        "Create tactical complications",
+        "Force White to make concessions"
+      ],
+      "arrows": [
+        {
+          "from": "f5",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g4",
+          "to": "d1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "Re1",
+      "annotation": "White calmly moves the rook to e1, getting out of the bishop's attack while placing the rook on the open e-file. The rook on e1 targets the Be5 and supports potential back-rank ideas. White's position remains strategically superior with the d6 pawn dominating the board.",
+      "plans": [
+        "Escape the bishop attack",
+        "Place the rook on the open e-file",
+        "Target the Be5 and maintain pressure"
+      ],
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "e1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e1",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bd4",
+      "annotation": "Black shifts the bishop to d4, blocking the d-file and keeping the bishop active. The bishop on d4 controls the center and supports the fight against the d6 pawn. Black is making the best of a difficult position, using the bishop to create a blockade on the d-pawn's path to promotion. This concludes a typical Smith-Morra middlegame — White's gambit pawn has transformed into a powerful passed pawn, and the piece activity generated by the early sacrifice has resulted in a lasting positional advantage. The Smith-Morra Gambit proves that a single pawn sacrifice can yield tremendous attacking potential when backed by rapid development and central control.",
+      "plans": [
+        "Blockade the d-pawn with the bishop",
+        "Maintain central control",
+        "Fight for survival in a difficult endgame"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ],
+      "pawnStructure": "The bishop blockade on d4 is Black's only hope against the passed d6 pawn. The endgame battle revolves around this pawn."
+    }
+  ]
+}
