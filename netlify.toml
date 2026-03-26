@@ -2,6 +2,13 @@
   command = "npx vite build"
   publish = "dist"
 
+# Proxy voice pack downloads from GitHub Releases (avoids CORS + keeps same domain)
+[[redirects]]
+  from = "/voice-packs/af_bella.bin"
+  to = "https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1/af_bella.copy.bin"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/voice-packs/*"
   to = "/voice-packs/:splat"

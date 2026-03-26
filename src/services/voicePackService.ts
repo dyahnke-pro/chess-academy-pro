@@ -24,16 +24,11 @@ export interface VoicePackVoice {
 }
 
 /**
- * Remote URLs for voice pack .bin files hosted on GitHub Releases.
- * GitHub release assets support CORS and files up to 2GB.
+ * Get the download URL for a voice pack.
+ * Netlify proxies /voice-packs/af_bella.bin to the GitHub Releases asset.
  */
-const VOICE_PACK_URLS: Record<string, string> = {
-  af_bella: 'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1/af_bella.copy.bin',
-};
-
-/** Get the download URL for a voice pack — remote (GitHub Releases) or local fallback. */
 export function getVoicePackUrl(voiceId: string): string {
-  return VOICE_PACK_URLS[voiceId] ?? `/voice-packs/${voiceId}.bin`;
+  return `/voice-packs/${voiceId}.bin`;
 }
 
 /** Available voice packs — same voices as Kokoro, but pre-rendered as audio clips. */
