@@ -29,8 +29,7 @@ export async function loadSubLineAnnotations(
   if (!data?.subLines || data.subLines.length === 0) return null;
 
   // subLineKey format: 'variation-N', 'trap-N', 'warning-N'
-  // subLines array holds variation annotations ordered by variation index
-  const match = /^variation-(\d+)$/.exec(subLineKey);
+  const match = /^(?:variation|trap|warning)-(\d+)$/.exec(subLineKey);
   if (!match) return null;
 
   const idx = parseInt(match[1], 10);
