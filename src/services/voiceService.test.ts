@@ -183,6 +183,33 @@ describe('voiceService', () => {
       expect(speechService.speak).toHaveBeenCalled();
     });
 
+    it('logs a warning when voice pack clip is missing', async () => {
+      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
+      vi.spyOn(voicePackService, 'speak').mockResolvedValue(false);
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      const profile = buildUserProfile({
+        id: 'main',
+        preferences: {
+          voiceEnabled: true,
+          elevenlabsKeyEncrypted: null,
+          elevenlabsKeyIv: null,
+          kokoroEnabled: true,
+        },
+      });
+      await db.profiles.put(profile);
+
+      await voiceService.speak('Some missing phrase');
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('[TTS] Missing clip for:'),
+      );
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Some missing phrase'),
+      );
+    });
+
+
     it('skips voice pack when not ready', async () => {
       vi.spyOn(voicePackService, 'isReady').mockReturnValue(false);
 
