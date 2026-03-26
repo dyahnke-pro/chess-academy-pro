@@ -14,12 +14,10 @@
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 
-/** GitHub Releases base URL for voice pack downloads. */
-const VOICE_PACK_BASE_URL = 'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1';
-
-/** Build the download URL for a voice pack by ID. */
+/** Build the download URL for a voice pack by ID.
+ *  Uses a local path that Vercel proxies to GitHub Releases (avoids CORS). */
 export function getVoicePackUrl(voiceId: string): string {
-  return `${VOICE_PACK_BASE_URL}/${voiceId}_mp3.bin`;
+  return `/voice-packs/${voiceId}_mp3.bin`;
 }
 
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
