@@ -143,7 +143,13 @@ class VoicePackService {
       // Download with progress tracking
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`Failed to download voice pack: ${response.status}`);
+        throw new Error(`Voice pack not available (HTTP ${response.status}). Upload ${voiceId}.bin to /voice-packs/ on the server.`);
+      }
+
+      // Guard against SPA catch-all serving HTML instead of the binary file
+      const contentType = response.headers.get('content-type') ?? '';
+      if (contentType.includes('text/html')) {
+        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file. Upload ${voiceId}.bin to the voice-packs/ directory.`);
       }
 
       const contentLength = response.headers.get('content-length');
