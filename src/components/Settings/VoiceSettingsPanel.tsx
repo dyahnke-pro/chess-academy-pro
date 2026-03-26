@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
-import { voicePackService, VOICE_PACK_VOICES } from '../../services/voicePackService';
+import { voicePackService, VOICE_PACK_VOICES, getVoicePackUrl } from '../../services/voicePackService';
 import type { VoicePackStatus } from '../../services/voicePackService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
@@ -129,7 +129,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     unlockAudioContext();
     const voiceId = kokoroVoiceId;
     try {
-      await voicePackService.loadFromUrl(voiceId, `/voice-packs/${voiceId}.bin`);
+      await voicePackService.loadFromUrl(voiceId, getVoicePackUrl(voiceId));
     } catch {
       setStatus('Failed to download voice pack');
       setTimeout(() => setStatus(null), 3000);
