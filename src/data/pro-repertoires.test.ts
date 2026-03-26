@@ -52,12 +52,12 @@ describe('Pro Repertoire PGN Legality', () => {
     }
   });
 
-  it('has all 7 players', () => {
-    expect(proRepertoire.players).toHaveLength(7);
+  it('has all 14 players', () => {
+    expect(proRepertoire.players).toHaveLength(14);
   });
 
-  it('has 58 openings total', () => {
-    expect(proRepertoire.openings).toHaveLength(58);
+  it('has 79 openings total', () => {
+    expect(proRepertoire.openings).toHaveLength(79);
   });
 
   it('every opening has a valid playerId', () => {
@@ -67,13 +67,13 @@ describe('Pro Repertoire PGN Legality', () => {
     }
   });
 
-  it('every player has at least 6 openings', () => {
+  it('every player has at least 3 openings', () => {
     const counts: Record<string, number> = {};
     for (const opening of entries) {
       counts[opening.playerId] = (counts[opening.playerId] ?? 0) + 1;
     }
     for (const player of proRepertoire.players) {
-      expect(counts[player.id]).toBeGreaterThanOrEqual(6);
+      expect(counts[player.id]).toBeGreaterThanOrEqual(3);
     }
   });
 

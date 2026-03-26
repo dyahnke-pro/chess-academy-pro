@@ -1,0 +1,252 @@
+{
+  "openingId": "scotch-gambit",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn, controlling the center and setting the stage for the Scotch Gambit. This is the starting point for one of the most dynamic openings at the club level — a system that combines the open lines of the Scotch with the attacking ideas of the Italian Game.",
+      "plans": [
+        "Control the center and open lines for pieces",
+        "Head toward the Scotch Gambit with d4"
+      ],
+      "alternatives": [
+        "d4 — Queen's Pawn, different character"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "Black responds classically, occupying the center. This symmetrical structure leads to the Open Game, where the Scotch Gambit lives. Black's e5 pawn is about to become the target of White's d4 advance.",
+      "plans": [
+        "Hold the center and develop pieces",
+        "Prepare to meet White's central challenge"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "White develops the knight to its best square, attacking e5 and preparing kingside castling. This is the most natural developing move, and it sets up the key decision on move 3: the Scotch Gambit with d4. The knight on f3 will be perfectly placed to support the central advance.",
+      "plans": [
+        "Play d4 next for the Scotch Gambit",
+        "Develop rapidly toward the kingside"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the knight to defend e5 — the most popular reply. The knight on c6 is natural and solid, but it blocks the c-pawn, which can be a long-term issue. This is the exact position White needs to launch the Scotch Gambit on the next move.",
+      "plans": [
+        "Defend the e5 pawn and develop pieces",
+        "Prepare d6 or Bc5 for further development"
+      ],
+      "alternatives": [
+        "Nf6 — the Petrov's Defense, a different approach"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "d4",
+      "annotation": "White strikes the center with d4! This opens the position and challenges Black to make a critical decision. In the regular Scotch Game, White would recapture with Nxd4 after exd4. But the Scotch GAMBIT diverges — White will play Bc4 instead, sacrificing the d4 pawn for rapid development and initiative. This is the move that separates the Scotch Gambit from the regular Scotch.",
+      "plans": [
+        "After exd4, play Bc4 instead of Nxd4",
+        "Sacrifice the d-pawn for a huge development lead",
+        "Get the bishop to c4, targeting f7"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "exd4",
+      "annotation": "Black captures the d4 pawn, the most natural response. Now comes the critical moment: will White play Nxd4 for the regular Scotch, or Bc4 for the Scotch Gambit? The gambit move Bc4 leads to much sharper, more exciting play where White's rapid development creates constant threats.",
+      "pawnStructure": "Black has an extra pawn on d4, but it's hard to hold. White's e4 pawn controls key central squares and the position is about to open up dramatically.",
+      "plans": [
+        "Hold the extra pawn if possible",
+        "Develop quickly to consolidate"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Bc4",
+      "annotation": "The Scotch Gambit! Instead of recapturing with Nxd4, White develops the bishop to its most aggressive diagonal, targeting f7. White gambits the d4 pawn for time and piece activity. The bishop on c4 is a monster — it aims at the weakest point in Black's camp and supports future tactics. White's plan is simple: develop everything with tempo, castle quickly, and attack before Black can consolidate the extra pawn.",
+      "pawnStructure": "White is down a pawn but has superior development and the bishop on c4 creating immediate pressure. The open center favors the side with better development — that's White.",
+      "plans": [
+        "Develop with tempo and pressure f7",
+        "Castle kingside and bring the rook into the game",
+        "Consider c3 to attack the d4 pawn and build a center"
+      ],
+      "alternatives": [
+        "Nxd4 — the regular Scotch Game, solid but less dynamic"
+      ],
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "f7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight and counterattacks the e4 pawn — a logical and strong reply. The knight on f6 creates a real threat to White's center. Black is trying to develop while keeping the extra pawn. However, White has a powerful response that maintains the initiative.",
+      "plans": [
+        "Attack e4 and develop pieces",
+        "Look for d5 to return the pawn and equalize"
+      ],
+      "alternatives": [
+        "Bc5 — also strong, leading to the Giuoco Piano Gambit structure"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "White pushes the e-pawn forward with tempo, kicking the knight and seizing more space! This is the aggressive continuation that defines the Scotch Gambit. The knight on f6 must move, and White gains time to build up the attack. The e5 pawn is a spearhead in Black's territory, cramping Black's development and controlling key squares like d6 and f6. White's pieces are all pointing at Black's kingside, and the initiative is very real.",
+      "pawnStructure": "White's e5 pawn is an advanced wedge that restricts Black's pieces, especially the knight. Combined with the bishop on c4, White has a powerful attacking formation despite being down a pawn.",
+      "plans": [
+        "Chase the knight and gain more tempo",
+        "Follow up with O-O and Ng5 or Re1 to increase pressure",
+        "Target f7 with combined bishop and pawn pressure"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e5",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "d6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    }
+  ]
+}

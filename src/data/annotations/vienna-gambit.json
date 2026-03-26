@@ -1,0 +1,220 @@
+{
+  "openingId": "vienna-gambit",
+  "moveAnnotations": [
+    {
+      "san": "e4",
+      "annotation": "White opens with the king's pawn, the starting move of the Vienna Game and its gambit variation. The Vienna Gambit is like a delayed King's Gambit — White will play Nc3 first before pushing f4, getting an extra developing move before the fireworks begin. It all starts here.",
+      "plans": [
+        "Follow up with Nc3 for the Vienna Game",
+        "Prepare f4 — the Vienna Gambit pawn sacrifice"
+      ],
+      "alternatives": [
+        "d4 — Queen's Pawn, completely different character"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "Black mirrors with e5, entering the Open Game. This is the response the Vienna Gambit is designed to punish. Black occupies the center naturally, but the e5 pawn is about to become a target just like in the King's Gambit — except White will be even better prepared this time.",
+      "plans": [
+        "Hold the center and develop normally",
+        "Prepare to meet White's plans"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nc3",
+      "annotation": "White develops the knight to c3 — this is the Vienna Game. The knight develops naturally, supports the e4 pawn, and controls the important d5 square. But the real point of Nc3 is what comes next: f4! Unlike the King's Gambit where White plays f4 immediately on move 2, the Vienna gets the knight developed first. This means White is one tempo ahead in development when the gambit lands.",
+      "plans": [
+        "Play f4 next — the Vienna Gambit",
+        "Control d5 and support the center"
+      ],
+      "alternatives": [
+        "Nf3 — normal development toward Italian or Scotch"
+      ],
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to f6, the most natural response. The knight attacks e4 and prepares to castle. This is the standard reply, but it walks right into the Vienna Gambit. After White plays f4, the knight on f6 will be well-placed but Black will need to deal with the opened f-file and White's aggressive intentions.",
+      "plans": [
+        "Attack e4 and develop toward kingside castling",
+        "Prepare to meet White's f4 push"
+      ],
+      "alternatives": [
+        "Nc6 — also natural, supports e5",
+        "Bc5 — develops the bishop early"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "f4",
+      "annotation": "The Vienna Gambit! White pushes f4, challenging Black's e5 pawn just like the King's Gambit — but with the knight already on c3, White is a full tempo ahead in development. This is the key advantage of the Vienna over the regular King's Gambit. The f-file is about to open, and White's king can still castle or maneuver to safety. Black must decide: accept the gambit with exf4, or try to maintain the center.",
+      "pawnStructure": "White strikes at the e5 pawn, threatening to open the f-file. If Black takes, the position mirrors the King's Gambit Accepted but White has Nc3 already developed — a significant bonus.",
+      "plans": [
+        "Open the f-file for the rook after castling",
+        "If exf4, play e5 to chase the knight with tempo",
+        "Build a massive center and attack the kingside"
+      ],
+      "alternatives": [
+        "Bc4 — the Vienna Game without the gambit, quieter",
+        "f3 — supports e4 passively"
+      ],
+      "arrows": [
+        {
+          "from": "f4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "f8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    },
+    {
+      "san": "exf4",
+      "annotation": "Black accepts the gambit, grabbing the f4 pawn. This is the most critical test — Black takes the material and dares White to prove compensation. The e-file is now open and the f-file will be a highway for White's rook. But Black has an extra pawn that could matter in an endgame, so White needs to act fast.",
+      "pawnStructure": "Black has an extra pawn on f4 but it's isolated and hard to defend. The open e-file and soon-to-be-open f-file give White excellent attacking chances.",
+      "plans": [
+        "Hold the extra pawn and develop quickly",
+        "Try to survive White's attack and reach an endgame"
+      ],
+      "alternatives": [
+        "d5 — the Falkbeer-style counter, striking back in the center",
+        "d6 — solid, declining the gambit"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "f4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    },
+    {
+      "san": "e5",
+      "annotation": "White pushes e5 with tempo, kicking the knight immediately! This is the signature follow-up in the Vienna Gambit. The knight on f6 is attacked and must retreat, giving White time to develop further. The e5 pawn is a powerful wedge in Black's position, controlling d6 and f6 while restricting Black's pieces. White's plan is clear: chase the knight, develop the bishops, and launch a kingside attack using the open f-file.",
+      "pawnStructure": "White's e5 pawn is an aggressive spearhead that cramps Black's entire position. Combined with Nc3 already developed, White has a significant lead in piece activity despite being down a pawn.",
+      "plans": [
+        "Chase the knight and gain more development tempi",
+        "Play Nf3 and d3/d4 to build a strong center",
+        "Open the f-file with Bxf4 or leave the pawn and attack via Qf3"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e5",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "d6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { createDefaultSrsFields } from './srsEngine';
 import ecoData from '../data/openings-lichess.json';
 import repertoireData from '../data/repertoire.json';
 import proRepertoireData from '../data/pro-repertoires.json';
+import gambitData from '../data/gambits.json';
 import type { OpeningRecord, FlashcardRecord } from '../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -83,7 +84,7 @@ function slugify(name: string): string {
 
 // ─── Seeding State ────────────────────────────────────────────────────────────
 
-const SEED_KEY = 'db_seeded_v9';
+const SEED_KEY = 'db_seeded_v10';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
   const record = await db.meta.get(SEED_KEY);
@@ -222,6 +223,48 @@ export async function loadProRepertoireData(): Promise<void> {
   await db.openings.bulkPut(records);
 }
 
+// ─── Gambit Loader ───────────────────────────────────────────────────────────
+
+export async function loadGambitData(): Promise<void> {
+  const defaults = createDefaultSrsFields();
+
+  const records: OpeningRecord[] = (gambitData as RepertoireEntry[]).map(
+    (entry) => {
+      const { fen, uci } = computePosition(entry.pgn);
+
+      return {
+        id: entry.id,
+        eco: entry.eco,
+        name: entry.name,
+        pgn: entry.pgn,
+        uci,
+        fen,
+        color: entry.color,
+        style: entry.style,
+        isRepertoire: false,
+        isGambit: true,
+        overview: entry.overview,
+        keyIdeas: entry.keyIdeas,
+        traps: entry.traps,
+        warnings: entry.warnings,
+        variations: entry.variations,
+        trapLines: entry.trapLines ?? null,
+        warningLines: entry.warningLines ?? null,
+        drillAccuracy: 0,
+        drillAttempts: 0,
+        lastStudied: null,
+        woodpeckerReps: 0,
+        woodpeckerSpeed: null,
+        woodpeckerLastDate: null,
+        isFavorite: false,
+        ...defaults,
+      };
+    },
+  );
+
+  await db.openings.bulkPut(records);
+}
+
 // ─── Flashcard Seeder ─────────────────────────────────────────────────────────
 
 /**
@@ -320,6 +363,7 @@ export async function seedDatabase(): Promise<void> {
   await loadEcoData();
   await loadRepertoireData();
   await loadProRepertoireData();
+  await loadGambitData();
   await seedFlashcardsForRepertoire();
   await markDatabaseSeeded();
 }

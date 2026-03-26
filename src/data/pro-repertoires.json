@@ -6,7 +6,14 @@
     { "id": "hikaru", "name": "Hikaru Nakamura", "title": "GM", "rating": 2780, "style": "Aggressive, Intuitive", "description": "Fastest speed chess player in the world. Known for creative, unorthodox opening choices.", "imageInitials": "HN" },
     { "id": "caruana", "name": "Fabiano Caruana", "title": "GM", "rating": 2805, "style": "Precise, Theoretical", "description": "World Championship challenger and one of the deepest opening preparers in modern chess.", "imageInitials": "FC" },
     { "id": "firouzja", "name": "Alireza Firouzja", "title": "GM", "rating": 2785, "style": "Dynamic, Creative", "description": "The youngest player to reach 2800 FIDE. Known for fearless, attacking chess.", "imageInitials": "AF" },
-    { "id": "dubov", "name": "Daniil Dubov", "title": "GM", "rating": 2700, "style": "Creative, Unconventional", "description": "Magnus Carlsen's former second. Famous for wild, creative opening ideas that surprise even top GMs.", "imageInitials": "DD" }
+    { "id": "dubov", "name": "Daniil Dubov", "title": "GM", "rating": 2700, "style": "Creative, Unconventional", "description": "Magnus Carlsen's former second. Famous for wild, creative opening ideas that surprise even top GMs.", "imageInitials": "DD" },
+    { "id": "gukesh", "name": "Gukesh Dommaraju", "title": "GM", "rating": 2763, "style": "Classical, Attacking", "description": "The youngest undisputed World Chess Champion in history. Known for launching brilliant attacks from quiet openings.", "imageInitials": "GD" },
+    { "id": "praggnanandhaa", "name": "Praggnanandhaa R", "title": "GM", "rating": 2740, "style": "Balanced, Calculating", "description": "Indian prodigy who reached the World Cup final at 18. Exceptional calculation and endgame technique.", "imageInitials": "PR" },
+    { "id": "niemann", "name": "Hans Niemann", "title": "GM", "rating": 2700, "style": "Dynamic, Competitive", "description": "American GM known for dynamic play and competitive fighting spirit.", "imageInitials": "HN" },
+    { "id": "ericrosen", "name": "Eric Rosen", "title": "IM", "rating": 2377, "style": "Trappy, Creative", "description": "The Stafford Gambit king. Famous for creative gambits and devastating opening traps.", "imageInitials": "ER" },
+    { "id": "annacramling", "name": "Anna Cramling", "title": "WFM", "rating": 2175, "style": "Solid, Classical", "description": "Daughter of GM Pia Cramling. Popular streamer who invented 'The Cow' opening. Plays her mum's openings with her dad's style.", "imageInitials": "AC" },
+    { "id": "chesswithakeem", "name": "Akeem Brown", "title": "CM", "rating": 2304, "style": "Tactical, Blitz Specialist", "description": "Youngest National Master in Jamaican history at 16. Teaches openings and gambits with a philosophy connecting chess to life.", "imageInitials": "AB" },
+    { "id": "samayraina", "name": "Samay Raina", "title": "", "rating": 1938, "style": "Entertaining, Improving", "description": "Indian comedian and chess streamer. Known for hilarious commentary and piece nicknames. Won SuperPogChamps 2025.", "imageInitials": "SR" }
   ],
   "openings": [
     {
@@ -1649,6 +1656,624 @@
         { "name": "Leningrad Main Line", "pgn": "d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 Nc6 d5 Ne5 Nxe5 dxe5 Qb3 Kh8 Be3 e4 f3 exf3 Bxf3 c6", "explanation": "The main Leningrad Dutch. Black builds a kingside pawn wall and aims for a slow attack. Dubov uses the unbalanced structure to create creative attacking chances." },
         { "name": "Stonewall Dutch", "pgn": "d4 f5 g3 Nf6 Bg2 e6 Nf3 d5 O-O Bd6 c4 c6 b3 Qe7 Bb2 O-O Nbd2 b6 Ne5 Bb7 Nd3 Nbd7 Nf4 Ne4", "explanation": "The Stonewall setup with d5-e6-f5 creates a solid pawn wall. Dubov plays it when he wants a more structured position with clear piece maneuvering plans." },
         { "name": "Anti-Staunton Gambit", "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 d5 Bxf6 exf6 Qh5+ g6 Qe2 Be7 O-O-O c6 Nxe4 O-O Nf3 Nd7 Nc5 Nxc5 dxc5 Bf5", "explanation": "Against the Staunton Gambit (e4), Dubov accepts the pawn and defends accurately. Black emerges with an extra pawn and solid position after the tactical complications clear." }
+      ]
+    },
+    {
+      "id": "pro-gukesh-italian",
+      "playerId": "gukesh",
+      "eco": "C54",
+      "name": "Italian Game (Gukesh)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+",
+      "color": "white",
+      "style": "Classical, Attacking",
+      "overview": "Gukesh's Italian Game is a masterclass in building slow pressure from a classical opening. The youngest World Champion uses the Giuoco Piano to create positions where his deep calculation can shine. By playing c3 and d4, White builds a strong center and opens lines for a kingside attack — the kind of position where Gukesh's tactical vision is devastating.",
+      "keyIdeas": [
+        "Build a powerful pawn center with c3 and d4 to control the game",
+        "After Bb4+ Bd2 or Nc3, White gets active piece play and central dominance",
+        "Use the half-open c-file and central pawns to generate a kingside attack",
+        "Transition from quiet development into sharp tactics — Gukesh's signature approach"
+      ],
+      "traps": [
+        "After d4 exd4 cxd4 Bb4+ Nc3, if Black takes Bxc3+ bxc3, White has a massive center and open b-file",
+        "If Black plays Nxe4 prematurely in the Giuoco Piano, d5 wins the knight after the discovered attack"
+      ],
+      "warnings": [
+        "The isolated d4 pawn can become a weakness in endgames — keep pieces active",
+        "Watch for Black's counterplay with d5 break in the center"
+      ],
+      "variations": [
+        { "name": "Main Line 6...Bb4+ 7.Bd2", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Nce7 O-O O-O Rfe1 c6", "explanation": "The main continuation. White trades the dark-squared bishops and gets a comfortable IQP position. Gukesh excels at using the d4 pawn as a battering ram to generate piece activity." },
+        { "name": "6...Bb4+ 7.Nc3 Gambit", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 bxc3 d5 Ba3 dxc4 Re1 Be6 Rxe4", "explanation": "The sharp gambit line where White sacrifices a pawn for a huge initiative. After bxc3, White has the bishop pair, open lines, and a fierce attack. This is where Gukesh finds his brilliant combinations." },
+        { "name": "Classical 5...Bb6 Retreat", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb6 e5 d5 exf6 dxc4 fxg7 Rg8 d5", "explanation": "If Black retreats the bishop to b6 instead of checking, White pushes e5 gaining space. After exf6 dxc4 fxg7, White disrupts Black's kingside and the d5 push creates a powerful passed pawn." }
+      ],
+      "trapLines": [
+        { "name": "Nxe4 Premature Grab", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Nxe4 d5 Nd6 dxc6 Nxc4 Qd5", "explanation": "If Black grabs e4 too early, d5 attacks the knight and after Nd6 dxc6, White wins the bishop pair and has a powerful initiative with Qd5 targeting multiple weaknesses." }
+      ]
+    },
+    {
+      "id": "pro-gukesh-catalan",
+      "playerId": "gukesh",
+      "eco": "E04",
+      "name": "Catalan Opening (Gukesh)",
+      "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2",
+      "color": "white",
+      "style": "Positional, Strategic",
+      "overview": "The Catalan is Gukesh's weapon of choice in long classical games. The fianchettoed bishop on g2 is a monster — it controls the long diagonal and puts constant pressure on Black's queenside. Gukesh uses Qc2 to regain the c4 pawn while building a slow, crushing positional advantage. This is how a World Champion squeezes wins from nothing.",
+      "keyIdeas": [
+        "Fianchetto the bishop to g2 — it becomes the most powerful piece on the board",
+        "Recapture the c4 pawn with Qc2 while keeping positional pressure",
+        "Use the long diagonal (a8-h1) to create constant threats against Black's queenside",
+        "Grind slowly with a small but lasting edge — classic Gukesh"
+      ],
+      "traps": [
+        "After dxc4, Black must be careful not to hold the pawn — a4 and Qc2 recover it with interest",
+        "If Black plays b5 trying to hold c4, a4 undermines the chain and opens the a-file"
+      ],
+      "warnings": [
+        "Do not rush — the Catalan is a slow squeeze, not a blitz attack",
+        "Be patient about recovering the c4 pawn; the positional pressure is more important"
+      ],
+      "variations": [
+        { "name": "Open Catalan 7.Qc2", "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nbd7 Ba5 Qb8 Rc1", "explanation": "The main Open Catalan. White recovers the pawn and develops with tempo. The Bg2 applies relentless pressure on the long diagonal, making Black's position uncomfortable." },
+        { "name": "Closed Catalan", "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 Bb7 e5 Ne8 Re1 Nc7", "explanation": "Black keeps the center closed. White plays e4 to build a powerful pawn center. Gukesh uses this structure to launch a kingside attack while the Bg2 dominates the long diagonal." },
+        { "name": "Early a6 Line", "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bg5 Nbd7 Nc3 Bd5 Qd3", "explanation": "Black plays a6 to support b5. White prevents b5 with a4 and recaptures on c4. The Bg2 combined with Nc3 creates a powerful setup that Gukesh uses to slowly improve his position." }
+      ]
+    },
+    {
+      "id": "pro-gukesh-najdorf",
+      "playerId": "gukesh",
+      "eco": "B90",
+      "name": "Sicilian Najdorf (Gukesh)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+      "color": "black",
+      "style": "Dynamic, Theoretical",
+      "overview": "Gukesh's choice of the Najdorf as Black shows his fighting spirit. The Najdorf is the most theoretically complex opening in chess, and Gukesh navigates it with the precision of a World Champion. The move a6 prepares b5 and e5, giving Black dynamic counterplay. When Gukesh sits down with the Najdorf, he's saying: bring your best preparation — I'll outplay you.",
+      "keyIdeas": [
+        "Play a6 to control b5 and prepare queenside expansion with b5",
+        "Challenge the center with e5 at the right moment",
+        "Use the half-open c-file for rook pressure",
+        "Create asymmetric positions where deep calculation decides the game"
+      ],
+      "traps": [
+        "In the English Attack, after Be3 e5 Nb3 Be6, Black has natural development and counterplay",
+        "After f3 e5, if White plays Nb3 too early, Be6 followed by d5 can equalize quickly"
+      ],
+      "warnings": [
+        "The Najdorf requires deep theoretical knowledge — study the main lines carefully",
+        "Avoid playing e5 too early when White has not committed to a setup"
+      ],
+      "variations": [
+        { "name": "English Attack 6.Be3", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5", "explanation": "The critical main line. White castles queenside and launches a kingside pawn storm. Black counters on the queenside with b5. Gukesh navigates these razor-sharp positions with remarkable accuracy." },
+        { "name": "Classical 6.Bg5", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 Bd3 b5 Rhe1 Bb7", "explanation": "The Classical Najdorf with Bg5. Black plays e6 and develops solidly. The Poisoned Pawn variation (Qb6) is available but Gukesh prefers the more positional e6 approach, building a solid foundation for counterplay." },
+        { "name": "Modern 6.f3", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Be7 Qd2 Nbd7 O-O-O b5 g4 Nb6 g5 Nfd7", "explanation": "White's flexible approach with f3, preparing Be3 and Qd2 before committing to a plan. Black develops normally and times the b5 push carefully. Gukesh treats these positions with deep positional understanding." }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-ruy-lopez",
+      "playerId": "praggnanandhaa",
+      "eco": "C65",
+      "name": "Ruy Lopez (Praggnanandhaa)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O",
+      "color": "white",
+      "style": "Classical, Deep",
+      "overview": "Praggnanandhaa's Ruy Lopez is a testament to his deep understanding of classical chess. The Ruy Lopez has been the king of openings for centuries, and Pragg plays it with the patience and precision of a veteran. The idea is simple but profound: develop, castle, and build a slow positional advantage. Pragg's endgame mastery means even a tiny edge from the opening gets converted ruthlessly.",
+      "keyIdeas": [
+        "Build a classical center with d4 and maintain the tension",
+        "Use the bishop on b3 to pressure f7 and control the a2-g8 diagonal",
+        "Play c3 and d4 to establish a strong pawn center",
+        "Transition into favorable middlegames or endgames where Pragg's technique shines"
+      ],
+      "traps": [
+        "After O-O Nxe4, the Noah's Ark trap is not a threat — Re1 pins the knight and d4 opens the position",
+        "If Black plays d6 too passively, White gets a free hand on the kingside with Ng5"
+      ],
+      "warnings": [
+        "The Ruy Lopez requires patience — do not rush for an attack",
+        "Watch for the Marshall Attack (d5) — Pragg prefers the Anti-Marshall with c3"
+      ],
+      "variations": [
+        { "name": "Closed Ruy Lopez", "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d6 h3 Nb8 d4 Nbd7 Nbd2 Bb7 Bc2 Re8", "explanation": "The main Closed Ruy Lopez. White builds a powerful center with c3 and d4. Pragg loves this setup because it leads to rich middlegames where his calculation depth gives him an edge." },
+        { "name": "Anti-Marshall 8.c3", "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3", "explanation": "If Black goes for the Marshall Attack with d5, the position becomes very sharp. Pragg is well-prepared in these lines and his defensive resources are exceptional." },
+        { "name": "Berlin Defense Sideline", "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 h3 Ke8 Nc3 Be7 Bf4 Be6 Rad1", "explanation": "Against the Berlin, White trades queens early but maintains a small edge. Pragg's endgame technique makes this a dangerous weapon — he grinds these seemingly equal positions into wins." }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-catalan",
+      "playerId": "praggnanandhaa",
+      "eco": "E04",
+      "name": "Catalan Opening (Praggnanandhaa)",
+      "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O",
+      "color": "white",
+      "style": "Positional, Fianchetto",
+      "overview": "Pragg's Catalan is about maximum positional pressure with minimum risk. The Bg2 dominates the long diagonal, and White slowly squeezes Black's position. What makes Pragg's approach special is his ability to convert tiny positional edges into full points — the Catalan gives him exactly the kind of slow-burn advantage he thrives on.",
+      "keyIdeas": [
+        "Fianchetto the bishop and apply pressure along the long diagonal",
+        "Play for the c4 pawn break to open the position favorably",
+        "Use Nbd2-Nb3-Nc5 maneuver to target Black's queenside",
+        "Convert small advantages with precise endgame technique"
+      ],
+      "traps": [
+        "After dxc4, if Black tries to hold the pawn with b5, a4 cracks the structure open",
+        "Ne5 combined with Bg2 can create devastating pins along the diagonal"
+      ],
+      "warnings": [
+        "The Catalan requires patience — do not try to force the issue too early",
+        "Watch for Black's c5 break which can equalize if timed well"
+      ],
+      "variations": [
+        { "name": "Open Catalan with dxc4", "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nbd7 Rc1 c5 dxc5 Bxc5", "explanation": "Black takes the c4 pawn. White recovers it naturally and the Bg2 comes alive. Pragg plays these positions with exceptional technique, slowly improving his pieces until the position cracks." },
+        { "name": "Closed Catalan", "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 Bb7 e5 Ne8 Nh4 g6 f4 Nc7", "explanation": "Black keeps the center closed. White builds up with e4-e5 and aims for a kingside attack. The Bg2 supports the center while White's space advantage grows." },
+        { "name": "Early Nbd7 Line", "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Nc3 c6 Qd3 dxc4 Qxc4 e5 Bg5 exd4 Nxd4 Nb6 Qb3", "explanation": "Black develops the knight to d7 and plays c6. White keeps flexible development. After the center opens, Pragg's pieces spring to life and the Bg2 becomes a dominant force." }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-najdorf",
+      "playerId": "praggnanandhaa",
+      "eco": "B90",
+      "name": "Sicilian Najdorf (Praggnanandhaa)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+      "color": "black",
+      "style": "Dynamic, Fighting",
+      "overview": "Pragg's Najdorf is pure fighting chess. He chooses the sharpest defense in chess because it gives him the asymmetric positions he needs to outplay opponents. Unlike many Najdorf players who rely on memorization, Pragg's strength is his ability to calculate deeply in the middlegame complications that arise from this opening.",
+      "keyIdeas": [
+        "Prepare queenside expansion with b5 while controlling the center",
+        "Use the semi-open c-file for counterplay with Rc8",
+        "Time the e5 break to challenge White's central dominance",
+        "Create imbalanced positions where calculation matters more than theory"
+      ],
+      "traps": [
+        "In the Be3 line, after e5 Nb3 Be6 f3 b5, Black has strong queenside counterplay",
+        "Against Bg5, the Poisoned Pawn Qb6 is available but Pragg prefers solid play with e6"
+      ],
+      "warnings": [
+        "Do not play a6 and b5 mechanically — time them based on White's setup",
+        "The Najdorf can be dangerous if underprepared — know the critical lines"
+      ],
+      "variations": [
+        { "name": "English Attack", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Nbd7 Qd2 Be7 O-O-O O-O g4 b5 g5 Nh5", "explanation": "The critical English Attack. Both sides castle on opposite wings and attack. Pragg navigates these positions with remarkable composure, finding defensive resources while building queenside pressure." },
+        { "name": "Classical 6.Bg5 e6", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 g4 b5 Bxf6 Nxf6 g5 Nd7 a3 Rb8", "explanation": "Against the Classical Bg5, Pragg plays the solid e6 setup. The position is deeply theoretical but Pragg's calculation gives him confidence in the sharp middlegame positions." },
+        { "name": "h3 Najdorf", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5 Nde2 Be7 g3 b5 Bg2 Bb7 O-O Nbd7 a4 b4 Nd5 Nxd5 exd5", "explanation": "The modern h3 Najdorf avoids the sharpest lines. White plays more positionally with g3 and Bg2. Pragg responds flexibly and aims for piece activity on both flanks." }
+      ]
+    },
+    {
+      "id": "pro-niemann-anti-marshall",
+      "playerId": "niemann",
+      "eco": "C88",
+      "name": "Ruy Lopez Anti-Marshall (Niemann)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5",
+      "color": "white",
+      "style": "Positional, Theoretical",
+      "overview": "Niemann's Anti-Marshall is a sophisticated weapon. Instead of allowing the Marshall Attack, Hans takes on d5 and enters a position where his deep preparation gives him a lasting edge. The resulting positions are structurally rich — White gets a central majority and piece activity, while Black must defend precisely. Niemann thrives in these positions where competitive intensity meets deep theory.",
+      "keyIdeas": [
+        "Take on d5 to get a favorable pawn structure with d4 coming",
+        "Use the central pawn majority to create a passed d-pawn",
+        "Develop pieces to active squares while maintaining structural pressure",
+        "Transition to favorable endgames with the d-pawn advantage"
+      ],
+      "traps": [
+        "After exd5 Nxd5, Nxe5 is a tempting but incorrect pawn grab — Nxe5 Nxe5 Rxe5 c6 wins the bishop",
+        "Be careful of Bg4 pins — h3 may be needed at the right moment"
+      ],
+      "warnings": [
+        "Avoid trading too many pieces — the central majority is more valuable with pieces on the board",
+        "Watch for Black's c5 break which can challenge the d4 pawn"
+      ],
+      "variations": [
+        { "name": "Main Line 9.exd5 Nxd5", "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3", "explanation": "The critical main line. White gets a strong center after d4 and the position is rich in plans. Niemann's competitive spirit drives him to outwork opponents in these complex positions." },
+        { "name": "Anti-Marshall with d3", "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d6 d4 Bg4 d5 Na5 Bc2 c6 dxc6 Qc7 Nbd2 Qxc6", "explanation": "A sideline where White plays d3 instead of allowing d5. The position is more strategic and less forcing, giving Niemann room to outmaneuver opponents in a slower game." },
+        { "name": "8.h3 Anti-Marshall", "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 Bb7 d3 d6 a3 Na5 Ba2 c5 Nbd2 Nc6 Nf1 Qc7", "explanation": "The h3 move order avoids the Marshall while keeping options open. White develops slowly and builds a solid position. Niemann uses this to steer into comfortable middlegames." }
+      ]
+    },
+    {
+      "id": "pro-niemann-najdorf",
+      "playerId": "niemann",
+      "eco": "B90",
+      "name": "Sicilian Najdorf (Niemann)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+      "color": "black",
+      "style": "Dynamic, Aggressive",
+      "overview": "Niemann's Najdorf is aggressive and uncompromising. He plays it to create the most complex positions possible, trusting his ability to out-calculate opponents in the chaos. Hans approaches the Najdorf with a warrior mentality — every game is a fight, and the Najdorf gives him the sharpest battlefield.",
+      "keyIdeas": [
+        "Create maximum complexity with sharp Najdorf tabiya",
+        "Use queenside pawn expansion (b5) to generate counterplay",
+        "Time the e5 central break precisely for maximum impact",
+        "Fight for every half-pawn of advantage in the middlegame"
+      ],
+      "traps": [
+        "After Be3 e5 Nb3, the immediate Nxe4 is a trap — Nxe4 d5 wins a piece",
+        "In the English Attack, premature g5 by White can be met with d5 central break"
+      ],
+      "warnings": [
+        "The Najdorf demands constant vigilance — one inaccuracy can be fatal",
+        "Against 6.Bg5, know the critical lines of the Poisoned Pawn and e6 variations"
+      ],
+      "variations": [
+        { "name": "English Attack 6.Be3", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5 g5 b4 Na4 Nh5", "explanation": "The main battleground. Both sides go all-in on opposite flanks. Niemann plays these positions with fierce competitive energy, finding tactical resources in the sharpest positions." },
+        { "name": "Bg5 Najdorf", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 Bd3 b5 Rhe1 Bb7 Qg3 b4 Nce2 d5", "explanation": "Against the classical Bg5, Niemann plays the solid e6 setup and looks for the d5 break at the right moment. The position is deeply theoretical and rewards precise calculation." },
+        { "name": "6.f3 Modern", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Nbd7 Qd2 Be7 O-O-O b5 g4 b4 Nd5 Nxd5 exd5 Bf5", "explanation": "The modern f3 approach. White builds a flexible center. Niemann responds with natural development and aims for the b5-b4 pawn push to generate queenside counterplay." }
+      ]
+    },
+    {
+      "id": "pro-niemann-grunfeld",
+      "playerId": "niemann",
+      "eco": "D85",
+      "name": "Grunfeld Defense (Niemann)",
+      "pgn": "d4 Nf6 c4 g6 Nc3 d5",
+      "color": "black",
+      "style": "Dynamic, Counterattacking",
+      "overview": "Niemann's Grunfeld is a declaration of war. By allowing White to build a massive pawn center, Black bets everything on dynamic piece play and tactical counterattacks. The Grunfeld suits Niemann's competitive personality perfectly — it creates the kind of high-tension positions where fighting spirit and calculation determine the winner.",
+      "keyIdeas": [
+        "Allow White to build a big center, then undermine it with c5 and e5",
+        "Use the fianchettoed bishop on g7 as a long-range weapon targeting d4",
+        "Generate tactical counterplay against White's overextended center",
+        "Convert piece activity into material or positional gains"
+      ],
+      "traps": [
+        "After cxd5 Nxd5 e4 Nxc3 bxc3, the position looks great for White but Black has c5 and Bg7 counterplay",
+        "In the Exchange Variation, Qa5 can cause tactical problems if White is not careful"
+      ],
+      "warnings": [
+        "The Grunfeld requires precise timing — attacking the center too early can backfire",
+        "Against the Russian System (Qb3), Black must know the theoretical lines well"
+      ],
+      "variations": [
+        { "name": "Exchange Variation", "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Qxd2+ Nxd2 Rd8 d5 e6", "explanation": "The main Exchange Grunfeld. White gets a powerful center but Black's piece activity provides full compensation. Niemann excels at finding tactical shots in these dynamic positions." },
+        { "name": "Russian System 4.Qb3", "pgn": "d4 Nf6 c4 g6 Nc3 d5 Qb3 dxc4 Qxc4 Bg7 e4 O-O Be2 Nc6 Nf3 Nd7 Be3 Nb6 Qd3 f5 exf5 Bxf5 Qd2 Na5", "explanation": "The Russian System with Qb3 puts early pressure on d5. Black develops actively and challenges the center. Niemann navigates this theory-heavy line with deep preparation." },
+        { "name": "Fianchetto Grunfeld", "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 g3 O-O Bg2 dxc4 Na4 c3 bxc3 c5 O-O Nc6 Ba3 cxd4 cxd4 Qa5", "explanation": "The Fianchetto variation is quieter but still dynamic. Both sides fianchetto their bishops and fight for the long diagonals. Niemann likes this when he wants a slightly less theoretical Grunfeld." }
+      ]
+    },
+    {
+      "id": "pro-ericrosen-italian",
+      "playerId": "ericrosen",
+      "eco": "C50",
+      "name": "Italian Game (Rosen)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5",
+      "color": "white",
+      "style": "Classical, Trappy",
+      "overview": "Eric Rosen's Italian Game is all about setting traps that look natural. While the Italian is one of the oldest openings in chess, Rosen transforms it into a minefield. He develops classically but always with an eye toward sneaky tactical tricks. His opponents often think they are playing a quiet game — until they walk into a devastating combination.",
+      "keyIdeas": [
+        "Develop classically with Bc4 targeting f7 — the weakest square in Black's camp",
+        "Set up positions where natural-looking moves lead to tactical disasters",
+        "Use c3 and d4 to open the center when Black least expects it",
+        "Look for sacrificial opportunities on f7 and e5"
+      ],
+      "traps": [
+        "The Fried Liver Attack after Ng5 is always lurking if Black plays carelessly",
+        "After Bc4 Bc5, the Evans Gambit (b4) is a surprise weapon that Eric loves"
+      ],
+      "warnings": [
+        "Do not play on autopilot — always look for tactical tricks in the Italian",
+        "If Black plays the Giuoco Pianissimo with d6, be ready for a longer game"
+      ],
+      "variations": [
+        { "name": "Giuoco Piano c3 d4", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Ne7 Re1", "explanation": "The aggressive Giuoco Piano main line. White sacrifices material for a devastating attack. Rosen loves this line because Black faces a barrage of tactical threats that are very hard to defend." },
+        { "name": "Evans Gambit", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 Ba3 d6 cxd4 Bb6 Nc3 O-O Nd5 Nxd5 exd5 Na5 Re1", "explanation": "Rosen's favorite surprise — the Evans Gambit sacrifices a pawn for rapid development and open lines. The resulting positions are tactical nightmares for unprepared opponents." },
+        { "name": "Two Knights 4.Ng5", "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6 Nf3 e4 Ne5 Bd6 d4 Qc7 Bf4 O-O", "explanation": "When Black plays Nf6 instead of Bc5, Rosen goes for the aggressive Ng5. The resulting complications are exactly the kind of chess Rosen thrives in — sharp, tactical, and full of traps." }
+      ],
+      "trapLines": [
+        { "name": "Blackburne Shilling Gambit Refutation", "pgn": "e4 e5 Nf3 Nc6 Bc4 Nd4 Nxd4 Qg5 Nf3 Qxg2 Rg1 Qh3 Bxf7+ Ke7 d3 Kd8 Bg5", "explanation": "If Black tries the tricky Nd4, White plays Nxd4 and after Qg5, Nf3 defends everything. The queen on g5 is misplaced and White develops with tempo." }
+      ]
+    },
+    {
+      "id": "pro-ericrosen-stafford",
+      "playerId": "ericrosen",
+      "eco": "C42",
+      "name": "Stafford Gambit (Rosen)",
+      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6",
+      "color": "black",
+      "style": "Gambit, Trappy",
+      "overview": "The Stafford Gambit is Eric Rosen's signature weapon. After Nxe5 Nc6 (instead of the standard d6), Black sacrifices a pawn for explosive tactical play. The traps are everywhere — most players at club level fall into one of them. Rosen has scored hundreds of brilliant wins with this gambit, proving that even theoretically dubious openings can be devastatingly effective when played with creativity.",
+      "keyIdeas": [
+        "Sacrifice the e5 pawn for rapid development and tactical chances",
+        "After Nxc6 dxc6, Black has open lines for pieces and threats against f2",
+        "Look for Bc5, Ng4, and Qh4 patterns to create mating threats",
+        "Play for tricks and complications — the Stafford is not about equality"
+      ],
+      "traps": [
+        "After Nxc6 dxc6 Nc3?? Nd4! wins immediately with Nf3 fork threats",
+        "If White plays d3, Bc5 followed by Ng4 creates irresistible pressure on f2"
+      ],
+      "warnings": [
+        "The Stafford is objectively dubious — use it for fun and in blitz, not serious games",
+        "If White knows the refutation, Black can be worse — have a backup plan"
+      ],
+      "variations": [
+        { "name": "Main Trap Line", "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+", "explanation": "The famous Stafford Gambit trap. After dxe4 and Bxf2+, Black wins the queen or delivers checkmate. This is the line that made Eric Rosen famous — the queen capture on d8 looks winning but it is actually a disaster." },
+        { "name": "Nxc6 dxc6 Best Play", "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 g3 Qh3 Bf4 Bc5 Qe2 Bf5 Bg2 Qg4 Bxe4 Bxe4 Nd2 Bg6", "explanation": "White's best response avoiding all traps. The position is better for White objectively, but Black has active pieces and practical chances. Rosen still scores well here because the positions are messy." },
+        { "name": "Nc3 Blunder", "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 Be2 h5 d3 Ng4 Bxg4 hxg4 Qxg4 Qd4 Qe2 Qf2+ Qxf2 Bxf2+ Kxf2 Bh3", "explanation": "If White plays the natural Nc3, Black gets a strong initiative. The position becomes sharp and White must navigate carefully to avoid falling into one of Rosen's many tactical tricks." }
+      ],
+      "trapLines": [
+        { "name": "Oh No My Queen Trap", "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+", "explanation": "The signature Rosen trap. White takes the queen thinking they are winning, but Bxf2+ followed by Bg4+ leads to either checkmate or winning White's queen back with interest." }
+      ]
+    },
+    {
+      "id": "pro-ericrosen-englund",
+      "playerId": "ericrosen",
+      "eco": "A40",
+      "name": "Englund Gambit (Rosen)",
+      "pgn": "d4 e5",
+      "color": "black",
+      "style": "Gambit, Surprise",
+      "overview": "The Englund Gambit is Eric Rosen's surprise weapon against 1.d4. Most d4 players have never studied this opening, which gives Black a huge practical advantage. After dxe5, Black develops rapidly and sets traps that claim countless victims. It is objectively unsound, but in the hands of a trap artist like Rosen, it is surprisingly effective.",
+      "keyIdeas": [
+        "Sacrifice the e5 pawn to take White out of their preparation",
+        "Develop quickly with Nc6, Qe7, and aim for piece activity",
+        "Target the e5 pawn and f2 square with tactical tricks",
+        "Create chaos in a position White has never studied"
+      ],
+      "traps": [
+        "After dxe5 Nc6 Nf3 Qe7, Black threatens to recover the pawn immediately",
+        "The trap f3?? Qh4+ g3 Qxg3 is a classic Englund smothered mate pattern"
+      ],
+      "warnings": [
+        "The Englund is objectively bad — White is better with correct play",
+        "Only use as a surprise weapon in blitz — switch to something sound for classical"
+      ],
+      "variations": [
+        { "name": "Main Trap Line", "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Bxd2+ Qxd2 Kd8", "explanation": "The aggressive main line. Black goes after White's b2 pawn and creates maximum chaos. Many club players crumble under the pressure of these unexpected tactical problems." },
+        { "name": "Englund Gambit Trap", "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Qd5 f6 exf6 Nxf6 Qb3 d5 Bg5 Na5 Qa4+ c6 Nc3 b5 Qb3 Nc4 e3 a5", "explanation": "An offbeat line where Black plays for complications. After f6, the position opens up and Black's pieces become very active. The knight lands on c4 creating pressure, and White must be very precise to maintain the advantage." },
+        { "name": "Quiet 3.e4 Response", "pgn": "d4 e5 dxe5 Nc6 e4 Nxe5 f4 Nc6 Nf3 d6 Bc4 Be7 O-O Nf6 Nc3 O-O Qe1 Bg4 Qh4 Nd7 f5 Nde5 Nxe5 Nxe5 Bb3", "explanation": "If White plays solidly with e4, Black develops normally and aims for a solid position. Even in the quiet lines, Rosen finds creative ways to create complications." }
+      ]
+    },
+    {
+      "id": "pro-annacramling-italian",
+      "playerId": "annacramling",
+      "eco": "C50",
+      "name": "Italian Game (Cramling)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5",
+      "color": "white",
+      "style": "Classical, Solid",
+      "overview": "Anna Cramling grew up watching her mother, GM Pia Cramling, play the Italian Game at the highest level. Anna's Italian is solid and classical — she develops naturally, builds a strong center, and looks for the right moment to strike. Her approach combines her mother's positional understanding with an instinct for creating content-worthy moments.",
+      "keyIdeas": [
+        "Develop classically with Bc4 and Nf3 — target f7 from the start",
+        "Build a strong center with c3 and d4 at the right moment",
+        "Keep the position solid and wait for the opponent to overextend",
+        "Use the bishop pair as a long-term asset in open positions"
+      ],
+      "traps": [
+        "After Bc4 Bc5, if Black plays d6 too early, d4 opens the center favorably for White",
+        "The Fried Liver (Ng5) is always in the back pocket if Black plays Nf6 carelessly"
+      ],
+      "warnings": [
+        "Do not rush — the Italian is about slow preparation, not quick attacks",
+        "Watch for the Two Knights Defense which can lead to sharp play"
+      ],
+      "variations": [
+        { "name": "Giuoco Piano c3 d4", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Qb3 Nce7 Rfe1 c6 a4 Nf4 Ne4", "explanation": "The main Giuoco Piano. White gets a slight edge with the IQP but active pieces. Anna plays this patiently, building pressure until the position breaks in her favor." },
+        { "name": "Quiet Italian d3", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O O-O c3 d6 Re1 a6 Bb3 Ba7 Nbd2 Be6 Bxe6 fxe6 Nf1 d5 Bg5 dxe4 dxe4", "explanation": "The quieter d3 approach. White builds slowly and avoids early confrontation. This is Anna's preferred line — solid, safe, and with long-term potential. Very hard for Black to create counterplay." },
+        { "name": "Evans Gambit Surprise", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 Ba3 d6 cxd4 Bb6 Nc3 O-O Nd5 Nxd5 exd5 Na5 Re1", "explanation": "Anna occasionally pulls out the Evans Gambit for content. The sacrifice creates immediate attacking chances and is great for creating exciting games." }
+      ]
+    },
+    {
+      "id": "pro-annacramling-london",
+      "playerId": "annacramling",
+      "eco": "D00",
+      "name": "London System (Cramling)",
+      "pgn": "d4 d5 Bf4 Nf6 e3 e6 Nf3 Be7 Bd3",
+      "color": "white",
+      "style": "Solid, Positional",
+      "overview": "Anna's London System is her reliable go-to opening. The London is perfect for her style — solid, structured, and hard to crack. By developing the bishop to f4 before e3, White gets a harmonious setup that works against almost anything Black plays. Anna's London is about comfortable development and waiting for the right moment to push.",
+      "keyIdeas": [
+        "Develop the bishop to f4 before playing e3 — this is the London move order",
+        "Build a solid structure with d4-e3-c3 and develop pieces to natural squares",
+        "Use Nbd2-e5 to establish a strong knight outpost",
+        "The London works against everything — no need to memorize 50 lines"
+      ],
+      "traps": [
+        "After Bf4, if Black plays c5 immediately, dxc5 can lead to a favorable pawn structure",
+        "If Black allows Bd3 and h3, White can build a slow kingside attack"
+      ],
+      "warnings": [
+        "The London can become passive if you do not look for active play",
+        "Against the King's Indian setup (g6, Bg7), be ready for Black's f5 push"
+      ],
+      "variations": [
+        { "name": "Classic London Setup", "pgn": "d4 d5 Bf4 Nf6 e3 e6 Nf3 Be7 Bd3 O-O O-O Nbd7 Nbd2 c5 c3 b6 Qe2 Bb7 h3 Rc8 Rad1 Qc7", "explanation": "The standard London development. White has a harmonious position with every piece on a good square. Anna plays this to get a comfortable middlegame where she can outplay opponents positionally." },
+        { "name": "Against King's Indian", "pgn": "d4 Nf6 Bf4 g6 e3 Bg7 Nf3 O-O Be2 d6 O-O Nbd7 h3 Re8 c4 c5 Nc3 cxd4 exd4 a6 a4 Qc7 Re1", "explanation": "When Black plays g6, the London adapts. White builds a classical center and the Bf4 keeps control of e5. Anna handles this structure well, preventing Black's typical counterplay." },
+        { "name": "London vs c5 Early", "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 c3 Qb6 Qb3 c4 Qxb6 axb6 Bc7 b5 Nbd2 e6 Be2 Bd7 O-O Be7 a3 O-O", "explanation": "If Black challenges d4 with c5 early, the London transitions into a solid structure. After the queen trade, White has a pleasant endgame with the bishop pair and better pawn structure." }
+      ]
+    },
+    {
+      "id": "pro-annacramling-sicilian",
+      "playerId": "annacramling",
+      "eco": "B20",
+      "name": "Sicilian Defense (Cramling)",
+      "pgn": "e4 c5",
+      "color": "black",
+      "style": "Dynamic, Fighting",
+      "overview": "Anna's Sicilian Defense shows her fighting side. The Sicilian creates the asymmetric positions that make for exciting content and competitive games. Anna plays it because it gives Black active counterplay from move one — c5 challenges White's center and leads to the kind of dynamic positions where anything can happen.",
+      "keyIdeas": [
+        "Challenge White's center with c5 — the most popular response to e4",
+        "Use the semi-open c-file for counterplay after d4 cxd4",
+        "Aim for an asymmetric pawn structure that creates winning chances for both sides",
+        "Play actively and look for tactical opportunities in the middlegame"
+      ],
+      "traps": [
+        "After e4 c5 Nf3 d6, if White plays Bc4, Be6 challenges the bishop and equalizes quickly",
+        "In the Alapin (c3), after d5 exd5 Qxd5, Black's queen is active and develops with tempo"
+      ],
+      "warnings": [
+        "The Sicilian can be sharp — know the main lines against popular White setups",
+        "Against the Grand Prix Attack (f4), play d5 early to challenge the center"
+      ],
+      "variations": [
+        { "name": "Sicilian Najdorf Setup", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Qd2 Nbd7 a4 Qc7 f3 Rac8", "explanation": "The Najdorf-style setup. Black develops solidly with a6, d6, and Nf6. Anna likes this because it gives a clear plan — develop, castle, and fight for the center." },
+        { "name": "Accelerated Dragon", "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Bc4 O-O Bb3 d6 f3 Bd7 Qd2 Na5 O-O-O Rc8", "explanation": "The Accelerated Dragon with g6. The bishop on g7 is a powerful piece and Black gets active play. Anna enjoys the creative middlegame positions this variation produces." },
+        { "name": "Anti-Sicilian Prep", "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bb5 Nd4 O-O Nxb5 Nxb5 d5 exd5 a6 Nc3 Nf6 d4 cxd4 Nxd4 Nxd5 Nxd5 Qxd5 c3 O-O", "explanation": "Against anti-Sicilian setups like the Grand Prix, Anna plays solidly with g6 and Bg7. The fianchettoed bishop provides excellent defense and counterattacking potential." }
+      ]
+    },
+    {
+      "id": "pro-chesswithakeem-italian",
+      "playerId": "chesswithakeem",
+      "eco": "C50",
+      "name": "Italian Game (Akeem)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5",
+      "color": "white",
+      "style": "Classical, Tactical",
+      "overview": "Akeem Brown teaches the Italian Game as the foundation of good chess. His approach is rooted in classical principles — develop, control the center, and look for tactical opportunities. Akeem connects each move to a life philosophy: every piece has a purpose, just like every person has potential. His Italian is tactical but disciplined.",
+      "keyIdeas": [
+        "Develop with purpose — Bc4 aims at f7, the weakest point in Black's camp",
+        "Control the center first, then look for tactical opportunities",
+        "Use c3 and d4 to build a classical center and open lines for attack",
+        "Every move should have a reason — just like every decision in life"
+      ],
+      "traps": [
+        "After Bc4, the Fried Liver with Ng5 is always a threat if Black plays carelessly",
+        "In the Giuoco Piano, Nxe4 tricks can backfire badly for Black"
+      ],
+      "warnings": [
+        "Do not sacrifice material without a clear follow-up",
+        "Against the Two Knights with d5, be ready for sharp tactical play"
+      ],
+      "variations": [
+        { "name": "Classical Development", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Nce7 O-O O-O Rfe1 c6", "explanation": "Akeem's bread and butter. Solid development leading to a middlegame with clear plans. He teaches this line because it illustrates fundamental chess principles — center control, piece development, and king safety." },
+        { "name": "Aggressive Ng5 Line", "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Bd3 Nd5 Nf3 Bd6 O-O O-O Re1 f6 b3 Nf4 Bb2", "explanation": "When Akeem wants to teach attacking chess, he pulls out the Ng5 Two Knights line. The resulting complications are excellent for developing tactical vision — exactly the kind of positions Akeem uses in his teaching." },
+        { "name": "Slow Italian d3", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O O-O c3 d6 Re1 a6 Bb3 Ba7 Nbd2 Be6 Bxe6 fxe6 Nf1 d5 Bg5 dxe4 dxe4", "explanation": "The slow Italian with d3. Akeem teaches this for positional understanding — White builds slowly and waits for the right moment. It demonstrates patience, a key chess and life principle." }
+      ]
+    },
+    {
+      "id": "pro-chesswithakeem-scotch",
+      "playerId": "chesswithakeem",
+      "eco": "C45",
+      "name": "Scotch Game (Akeem)",
+      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4",
+      "color": "white",
+      "style": "Open, Tactical",
+      "overview": "Akeem's Scotch Game is about seizing the initiative from the very start. By opening the center with d4 on move three, White immediately creates tactical opportunities. Akeem teaches the Scotch because it embodies his chess philosophy: be bold, take control, and create opportunities. The open positions that arise reward tactical awareness and active play.",
+      "keyIdeas": [
+        "Open the center immediately with d4 — do not wait around",
+        "After Nxd4, use the centralized knight to control key squares",
+        "Develop pieces to active squares and look for f4-f5 attacking plans",
+        "The open position rewards sharp tactical play and calculation"
+      ],
+      "traps": [
+        "After Nxd4 Qh4, the queen sortie looks scary but White plays Nb5 with tempo",
+        "If Black plays Bc5 Nxc6 bxc6, White has a structural advantage"
+      ],
+      "warnings": [
+        "Do not trade pieces unnecessarily — your advantage is dynamic",
+        "Be careful after Nxd4 Nf6 — Black wants to equalize with rapid development"
+      ],
+      "variations": [
+        { "name": "Classical 4...Bc5", "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6 f4 Bb6 f5 Nxd4 Bxd4 Bxd4 cxd4", "explanation": "The main classical line. White develops naturally and prepares f4-f5. Akeem teaches this because it demonstrates how to build an attack — every move contributes to the kingside assault." },
+        { "name": "Scotch Gambit 4.Bc4", "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 O-O Nd2 Nxd2 Qxd2", "explanation": "The Scotch Gambit with Bc4. White sacrifices a tempo for rapid development and attacking chances. Akeem likes this line because it creates the tactical fireworks that make chess exciting." },
+        { "name": "4...Nf6 Aggressive Line", "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 Bb2 Bg7 g3 O-O Bg2 Rfe8", "explanation": "After 4...Nf6, White captures on c6 and pushes e5. The doubled c-pawns give White a structural edge. Akeem uses this to teach students about long-term advantages." }
+      ]
+    },
+    {
+      "id": "pro-chesswithakeem-kings-gambit",
+      "playerId": "chesswithakeem",
+      "eco": "C30",
+      "name": "King's Gambit (Akeem)",
+      "pgn": "e4 e5 f4",
+      "color": "white",
+      "style": "Romantic, Aggressive",
+      "overview": "The King's Gambit is Akeem's weapon for teaching fearless chess. By sacrificing the f-pawn on move two, White declares: I am here to attack. Akeem loves this opening because it embodies everything he believes about chess and life — sometimes you have to take a risk to achieve something great. The resulting positions are wild, tactical, and endlessly entertaining.",
+      "keyIdeas": [
+        "Sacrifice the f-pawn to open the f-file for your rook",
+        "After exf4, develop rapidly with Nf3, Bc4, and O-O",
+        "Use the open f-file and diagonal pressure to attack the Black king",
+        "Play with courage — the King's Gambit rewards bold play"
+      ],
+      "traps": [
+        "After exf4 Qh4+ g3 fxg3, White plays hxg3 or Nf3 depending on the position",
+        "If Black declines with d5, exd5 gives White a central pawn and open lines"
+      ],
+      "warnings": [
+        "The King's Gambit weakens your own king — play precisely after castling",
+        "Against the Falkbeer Counter Gambit (d5), know the main theoretical lines"
+      ],
+      "variations": [
+        { "name": "King's Knight Gambit", "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6 d4 Nh5 O-O Qxh4 Qe1 Qxe1 Rxe1 f3 gxf3 Bxe5 dxe5 O-O", "explanation": "The aggressive King's Knight Gambit. White plays Nf3 and aims for rapid development while Black tries to hold the f4 pawn. Akeem teaches this to show that sacrificing material can lead to powerful attacks." },
+        { "name": "Bishop's Gambit", "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Nf6 Nc3 Be7 Bxf4 O-O Kg1 Bg4 Be2 Nc6 Be3 d5 e5 Ne4 Nxe4 dxe4 Nd2", "explanation": "The Bishop's Gambit develops the bishop first. After Kf1, White gives up castling rights but gains attacking chances. Akeem uses this to teach that sometimes you need to sacrifice comfort for opportunities." },
+        { "name": "Declined: 2...d5", "pgn": "e4 e5 f4 d5 exd5 e4 d3 Nf6 dxe4 Nxe4 Nf3 Bc5 Qe2 Bf5 Nc3 Qe7 Be3 Bxe3 Qxe3 Nxc3 Qxe7+ Kxe7 bxc3 Re8", "explanation": "When Black declines with d5, the game takes a different character. The position is more strategic but still dynamic. Akeem shows that even in quieter positions, the King's Gambit spirit of bold play applies." }
+      ]
+    },
+    {
+      "id": "pro-samayraina-italian",
+      "playerId": "samayraina",
+      "eco": "C50",
+      "name": "Italian Game (Samay)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5",
+      "color": "white",
+      "style": "Classical, Fun",
+      "overview": "Samay Raina plays the Italian Game because it is the opening every chess player should know first. As a comedian-turned-chess-streamer, Samay approaches the Italian with enthusiasm and humor — but do not underestimate him. His Italian is surprisingly sound, focusing on natural development and looking for tactical opportunities. As he would say: 'First develop, then attack, then celebrate.'",
+      "keyIdeas": [
+        "Develop pieces to natural squares — knights before bishops before rooks",
+        "Target f7 with Bc4 — the weakest square in Black's position",
+        "Build a center with c3 and d4 when the time is right",
+        "Keep it simple and look for tactical shots — chess should be fun"
+      ],
+      "traps": [
+        "After Bc4 Bc5, watch for opportunities to play d4 and open the center",
+        "The Scholar's Mate threat (Qh5/Bc4xf7) is always worth checking"
+      ],
+      "warnings": [
+        "Do not play too passively — the Italian requires active piece play",
+        "Against the Two Knights, be ready for sharp play after Nf6"
+      ],
+      "variations": [
+        { "name": "Giuoco Piano Solid", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Re1 Bg4 Qb3 Na5 Qa4 Nxc4 Qxc4", "explanation": "The solid main line. Samay plays this because it is straightforward — develop, castle, and play in the center. No need to memorize 20 moves of theory. Just good chess principles." },
+        { "name": "Italian with d3", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O O-O c3 d6 Re1 a6 Bb3 Ba7 Nbd2 Be6 Bxe6 fxe6 Nf1 Qe8 Ng3 Qg6 Nh4 Qf7", "explanation": "The quiet d3 Italian. Samay likes this because it avoids complicated theory and leads to a pleasant middlegame. White develops slowly and waits for Black to make a mistake." },
+        { "name": "Evans Gambit Surprise", "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4 Nd5 Qg3 g6 O-O Nb6 c4 d6 exd6 Qxd6 Qxd6 Bxd6", "explanation": "When Samay wants to spice things up, he goes for the Evans Gambit. Sacrificing a pawn for rapid development creates the kind of exciting positions that make great content and great chess." }
+      ]
+    },
+    {
+      "id": "pro-samayraina-najdorf",
+      "playerId": "samayraina",
+      "eco": "B90",
+      "name": "Sicilian Najdorf (Samay)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+      "color": "black",
+      "style": "Tactical, Ambitious",
+      "overview": "Samay plays the Najdorf because if you are going to play the Sicilian, you might as well play the best version. The Najdorf is ambitious and tactical — exactly the kind of opening that creates exciting content. Samay's approach is to learn the main ideas rather than memorize 30 moves of theory, which makes his Najdorf entertaining and sometimes unpredictable.",
+      "keyIdeas": [
+        "Play a6 to prepare b5 and keep options open for queenside expansion",
+        "Challenge the center with e5 at the right moment",
+        "Use the half-open c-file for active rook play",
+        "The Najdorf creates fighting positions — every game is different"
+      ],
+      "traps": [
+        "After Be3 e5 Nb3, do not play Nxe4 immediately — it loses to d5",
+        "If White plays f3, look for Be6 and slow queenside expansion"
+      ],
+      "warnings": [
+        "The Najdorf requires preparation — do not wing it against strong players",
+        "Against the English Attack, know when to push b5 and when to wait"
+      ],
+      "variations": [
+        { "name": "Be3 English Attack", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5 g5 b4 Ne2 Nh5", "explanation": "The English Attack is the main theoretical battleground. Both sides attack on opposite flanks. Samay plays this with enthusiasm, creating the kind of tense positions that make great streaming content." },
+        { "name": "Classical 6.Be2", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Qd2 Nbd7 a4 Rc8 a5 Qc7 f3 d5", "explanation": "The classical Be2 setup is less sharp but still rich. Samay likes it because the positions are more about understanding than memorization. Black develops naturally and looks for the d5 break." },
+        { "name": "Anti-English with Be6", "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Nbd7 Qd2 Be7 O-O-O b5 g4 b4 Nd5 Bxd5 exd5 Nb6 Kb1 Nbxd5 Bd3", "explanation": "Against the modern f3 setup, Samay develops solidly with Be6 and looks for the b5 push. The position is complex but the plans are clear — push on the queenside while keeping the center stable." }
+      ]
+    },
+    {
+      "id": "pro-samayraina-nimzo",
+      "playerId": "samayraina",
+      "eco": "E20",
+      "name": "Nimzo-Indian Defense (Samay)",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4",
+      "color": "black",
+      "style": "Solid, Flexible",
+      "overview": "Samay's Nimzo-Indian is his go-to defense against 1.d4. The Nimzo is perfect for an improving player — it is theoretically sound, positionally rich, and does not require memorizing 25 moves of theory to play well. By pinning the knight on c3, Black disrupts White's plans and creates the kind of imbalanced positions where understanding trumps memorization.",
+      "keyIdeas": [
+        "Pin the knight on c3 with Bb4 — disrupting White's center control",
+        "Play for the doubled c-pawns after Bxc3 when it suits the position",
+        "Develop naturally with d5, e6, and castle quickly",
+        "The Nimzo gives Black flexible pawn structures and active piece play"
+      ],
+      "traps": [
+        "After Nc3 Bb4, if White plays a3 too early, Bxc3+ bxc3 gives Black the doubled c-pawn target",
+        "In the Samisch (a3 Bxc3+ bxc3), Black can play c5 and attack the weakened pawn structure"
+      ],
+      "warnings": [
+        "Do not trade the dark-squared bishop without getting something in return",
+        "Against the Classical (Qc2), be ready for a strategic battle"
+      ],
+      "variations": [
+        { "name": "Rubinstein 4.e3", "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 Qe2 b6 Rd1 cxd4 exd4 Bb7 d5 Bxc3 bxc3 exd5 Bxd5 Qc7", "explanation": "The Rubinstein Variation. White plays e3 and develops classically. Samay likes this because both sides have clear plans — White pushes e4, Black plays against the IQP. Easy to understand, hard to master." },
+        { "name": "Classical 4.Qc2", "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 Bb7 e3 c5 Be2 Nbd7 O-O Rc8", "explanation": "The Classical with Qc2 avoids doubled pawns. After Bxc3+ Qxc3, the position is strategic. Samay plays this solidly, developing naturally and looking for the right moment to break with c5." },
+        { "name": "Samisch 4.a3", "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 d6 O-O e5 Ng3 Re8 d5 Na5 e4 Nd7 f4 f5", "explanation": "The Samisch forces Black to decide about the bishop immediately. After Bxc3+ bxc3, White has the bishop pair but damaged pawns. Samay embraces the resulting battle between structure and dynamics." }
       ]
     }
   ]
