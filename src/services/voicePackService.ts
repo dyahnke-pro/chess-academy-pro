@@ -19,7 +19,7 @@ const VOICE_PACK_BASE_URL = 'https://github.com/dyahnke-pro/chess-academy-pro/re
 
 /** Build the download URL for a voice pack by ID. */
 export function getVoicePackUrl(voiceId: string): string {
-  return `${VOICE_PACK_BASE_URL}/${voiceId}.bin`;
+  return `${VOICE_PACK_BASE_URL}/${voiceId}_mp3.bin`;
 }
 
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
