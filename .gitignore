@@ -16,3 +16,4 @@ public/stockfish/*.wasm
 .netlify/
 src/data/annotations-all.json
 voice_packs/
+missing_clips.txt

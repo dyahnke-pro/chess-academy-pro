@@ -57,6 +57,7 @@ class VoiceService {
     if (preferences.kokoroEnabled && voicePackService.isReady()) {
       const success = await this.speakVoicePack(text, this.speed);
       if (success) return;
+      console.warn(`[TTS] Missing clip for: "${text.slice(0, 80)}" — falling back to Web Speech`);
     }
 
     // Tier 3: Web Speech API (with user's selected system voice)
