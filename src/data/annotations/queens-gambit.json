@@ -12,6 +12,66 @@
     {
       "san": "c4",
       "annotation": "We're now playing the signature move of the Queen's Gambit, offering our c-pawn in exchange for Black's central d5 pawn. This isn't a true gambit since we'll likely regain the pawn, but rather a strategic pawn trade that gives us several advantages: we eliminate Black's strong central pawn, potentially gain time if Black captures and we recapture with a piece, and open the c-file for our rook. The move also prepares to support a future e4 advance, which would give us the ideal pawn center. Even if Black doesn't capture immediately, we've put pressure on their position and can continue developing with moves like Nc3, Nf3, and e3, building a solid positional foundation."
+    },
+    {
+      "san": "e6",
+      "annotation": "Black declines the Queen's Gambit with the solid e6, reinforcing the d5 pawn and entering the Queen's Gambit Declined — one of the most respected and time-tested defenses in chess. This move creates a rock-solid pawn chain but does have the trade-off of locking the light-squared bishop behind the e6 pawn, which becomes a long-term strategic issue Black must address. Our opponent is prioritizing solidity and structural integrity over immediate piece activity. From our perspective, we should exploit the fact that Black's light-squared bishop is restricted — the Exchange Variation with cxd5 exd5 is one excellent way to do this, highlighting the isolated or minority pawn structure."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We develop the knight to c3, adding pressure to the d5 pawn and supporting our c4 pawn's attack on Black's center. The knight on c3 is perfectly placed — it controls the critical d5 and e4 squares, and together with our c4 pawn, it creates a powerful pincer grip on the center. This move also prepares for the Exchange Variation (cxd5) at any moment, and supports a future e4 advance if the center opens. The knight on c3 also works well with a future Bg5, creating the classic Queen's Gambit setup where every piece has a clear purpose."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the kingside knight to its most natural square, defending the d5 pawn and preparing to castle kingside. The knight on f6 is a key defensive piece — it guards d5 and h7 while also controlling the e4 square, preventing us from easily establishing a broad pawn center. This is the standard developing move in the Queen's Gambit Declined, and our opponent is following classical principles of development before committing to a specific plan. We'll continue our development and look to create pressure against the d5 pawn, which is the strategic cornerstone of Black's position."
+    },
+    {
+      "san": "cxd5",
+      "annotation": "We capture on d5, entering the Exchange Variation of the Queen's Gambit Declined. This exchange clarifies the central pawn structure and creates a symmetrical center, but the resulting positions are far from drawish — White has clear plans to exploit the minority attack on the queenside with b4-b5. By exchanging, we also highlight a key strategic problem for Black: their light-squared bishop on c8 remains passive behind the e6 pawn chain. The Exchange Variation has been a favorite weapon of world champions because it leads to positions where understanding pawn structures and long-term plans is paramount."
+    },
+    {
+      "san": "exd5",
+      "annotation": "Black recaptures with the e-pawn, maintaining a solid pawn on d5 but creating the characteristic symmetrical pawn structure of the Exchange QGD. The recapture opens the e-file and liberates the diagonal for Black's dark-squared bishop, but the light-squared bishop remains hemmed in. Our opponent now has a clear central pawn on d5 that we'll target with our pieces — the minority attack (b4-b5 on the queenside) is our primary strategic weapon, aiming to create weaknesses in Black's pawn structure. Black will need to find active counterplay, often on the kingside, to compensate for our queenside pressure."
+    },
+    {
+      "san": "Bg5",
+      "annotation": "We pin the f6 knight to Black's queen, creating immediate tactical tension and adding more pressure to the d5 pawn. The bishop on g5 is a nuisance for Black — it forces a decision about how to deal with the pin, and if Black plays ...Be7, we can exchange the bishop for the knight, potentially weakening Black's kingside pawn structure with Bxf6 gxf6. This move also develops a piece to an active square while maintaining maximum pressure on Black's position. The Bg5 pin is a classical motif in the Queen's Gambit — it restricts Black's pieces and creates long-term problems that are difficult to resolve."
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black breaks the pin by developing the bishop to e7, a solid and classical response that prepares to castle kingside. The bishop on e7 is somewhat passive compared to more active squares like d6 or b4, but it serves an important defensive function by neutralizing the Bg5 pin. Our opponent is prioritizing completing development and getting the king to safety over seeking immediate active play. From our perspective, we can consider Bxf6 Bxf6 to saddle Black with doubled f-pawns and a weakened kingside, or we can maintain the tension and continue developing with e3 and Bd3, keeping our strategic options open."
+    },
+    {
+      "san": "e3",
+      "annotation": "We solidify our center with e3, supporting the d4 pawn and preparing to develop our light-squared bishop to d3. This modest pawn move is actually quite important — it creates a solid pawn duo on d4 and e3 that gives us excellent central control, and it opens the diagonal for our bishop to reach its ideal d3 square. The pawn on e3 also prevents any tactical tricks involving ...Ne4, which would have attacked our Bg5 while forking our pawns. Our position is developing harmoniously: we have the pin on g5, the knight on c3 pressuring d5, and now we're preparing to castle and launch our minority attack on the queenside."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks — this was the whole point of developing the bishop to e7 first. Our opponent now has a solid, well-coordinated position, but the long-term strategic challenge of the passive light-squared bishop and the symmetrical pawn structure remains. From our perspective, Black's castling is expected and we should continue with Bd3, completing our development and preparing to castle ourselves. The middlegame will revolve around our queenside minority attack (b4-b5) versus Black's potential kingside counterplay, a classic strategic battle in the Exchange QGD."
+    },
+    {
+      "san": "Bd3",
+      "annotation": "We develop our light-squared bishop to the ideal d3 square, where it simultaneously eyes the kingside (particularly the h7 pawn) and supports our central strategy. The bishop on d3 is a powerhouse — it can participate in kingside attacks with Qc2 creating a battery against h7, and it also controls the important e4 square. This move completes our minor piece development and prepares to castle, after which we'll have a fully coordinated position ready for the middlegame. The combination of Bd3 and the potential Qc2 move creates latent threats that Black must always be aware of, adding to their defensive burden."
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Black develops the remaining knight to d7, supporting the f6 knight and preparing to reroute pieces for active play. The knight on d7 can head to f8 to defend the kingside, or to b6 to pressure our queenside. This is a flexible developing move typical of the QGD — our opponent is completing their development methodically before committing to a specific plan. However, the knight on d7 does block the dark-squared bishop's retreat and makes Black's position somewhat cramped. From our perspective, we should castle and prepare our minority attack, which will put increasing pressure on Black's queenside pawns."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop the kingside knight to f3, defending the d4 pawn and preparing to castle. The knight on f3 controls the important e5 square and works beautifully with our bishop on g5 to maintain pressure on Black's position. This move also brings us one step closer to castling kingside and connecting our rooks. With Nf3, our development is essentially complete — all our minor pieces are on active squares, and we're ready to castle and shift into middlegame mode. Our plan will be to play Re1, Qc2, and then launch the minority attack with a4, b4, and b5 on the queenside."
+    },
+    {
+      "san": "Re8",
+      "annotation": "Black places the rook on the half-open e-file, activating it and preparing potential central counterplay with ...Nf8-Ne6 or ...c6 followed by the ...dxc4 exchange. The rook on e8 also supports a potential ...e5 pawn break (after ...Nf8-Ne6), which is Black's main way to free their position and generate counterplay. This is a standard move in the QGD — our opponent is following the principle of placing rooks on open or semi-open files. From our perspective, Black's rook move doesn't create immediate threats, so we should castle and begin executing our minority attack plan before Black can organize effective counterplay."
+    },
+    {
+      "san": "Qc2",
+      "annotation": "We place our queen on c2, creating the classic attacking battery with our bishop on d3 aimed at Black's h7 pawn. This is a dual-purpose move: it creates latent kingside threats (Bxh7+ sacrifices can become real if Black isn't careful) while also connecting our rooks and preparing to move the queen off the d-file. The Qc2 move is a hallmark of the Exchange QGD — it forces Black to constantly be aware of sacrificial possibilities on h7 while we build up our queenside play. With our queen on c2, we're now ready to castle and begin the minority attack with a3, b4, and b5, putting maximum pressure on Black's queenside pawn structure."
+    },
+    {
+      "san": "c6",
+      "annotation": "Black shores up the d5 pawn with c6, creating a solid pawn chain but also committing to a somewhat passive structure. This move prevents any tactical tricks involving Nxd5 or Bxf6 followed by Nxd5, and it prepares potential queenside expansion with ...Qa5 or ...b5. However, the c6 pawn also becomes a potential target for our minority attack — after b4-b5, the exchange bxc6 can leave Black with an isolated d5 pawn or weak c6 pawn. Our opponent is prioritizing solidity, but the long-term strategic implications favor us. We now have a clear plan: castle, play Rab1, a4, b4, and b5, creating weaknesses in Black's queenside pawn structure that we can exploit in the endgame."
     }
   ]
 }

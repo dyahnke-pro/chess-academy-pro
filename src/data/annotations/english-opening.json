@@ -3,7 +3,67 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We start with the English Opening, one of the most flexible and strategically rich first moves in chess. Rather than immediately grabbing the center with a pawn like 1.e4, we control the d5 square and prepare to build our center more gradually, keeping maximum flexibility in our setup. This move suits players who enjoy positional maneuvering and want to avoid the sharpest theoretical lines — we can transpose into many different systems depending on Black's response, whether they play 1...c5 (mirroring our structure), 1...e5, or other moves."
+      "annotation": "We start with the English Opening, one of the most flexible and strategically rich first moves in chess. Rather than immediately grabbing the center with a pawn like 1.e4, we control the d5 square and prepare to build our center more gradually, keeping maximum flexibility in our setup. This move suits players who enjoy positional maneuvering and want to avoid the sharpest theoretical lines. The c4 pawn can support many different formations — we might transpose into a Catalan, a Reti, or stay in pure English Opening territory depending on Black's response."
+    },
+    {
+      "san": "e5",
+      "annotation": "Black responds aggressively by grabbing central space with e5, which is one of the most popular and principled responses to the English Opening. By playing e5, our opponent claims the center and aims to build a strong pawn duo with d5 later, essentially reversing a Sicilian Defense structure. The pawn on e5 controls the d4 and f4 squares and opens the diagonal for Black's dark-squared bishop. From our perspective, this is a setup we're well-prepared for — we'll develop our knights to c3 and f3, fianchetto our kingside bishop, and look to undermine Black's center at the right moment."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We develop the knight to c3, putting immediate pressure on the d5 square and preventing Black from easily establishing a broad pawn center with ...d5. The knight on c3 is perfectly placed — it supports our c4 pawn, controls critical central squares, and prepares for flexible development depending on how Black responds. This move is the hallmark of the English Opening — we're developing pieces actively while maintaining a fluid pawn structure. From c3, the knight can support e4 advances or assist in queenside operations, making it a versatile piece in our setup."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the kingside knight to f6, controlling the d5 and e4 squares while preparing to castle. This is a natural developing move that reinforces Black's central presence and threatens to play ...d5 at the right moment. The knight on f6 also supports a potential ...Bc5 or ...Bb4 bishop development, keeping Black's options flexible. From our perspective, we should continue developing with Nf3, which will pressure the e5 pawn and prepare our own kingside setup. Black's position is solid and well-organized, so we need to find ways to create imbalances in our favor."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop the kingside knight to f3, putting immediate pressure on Black's e5 pawn and preparing to fianchetto our bishop with g3 and Bg2. The knight on f3 controls the d4 and e5 squares and works beautifully with our knight on c3 to contest the center. This double-knight development is a classic English Opening setup — both knights are actively placed and coordinating to undermine Black's central pawns. We're also one step closer to castling kingside, which is a priority for king safety. The pressure on e5 forces Black to decide how to defend: either ...Nc6 to add a defender, or ...d6 to solidify."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the queenside knight to c6, defending the e5 pawn and adding another piece to the battle for central control. The knight on c6 is well-placed — it controls d4 and e5 while developing naturally toward the center. This is the most principled defense of the e5 pawn, and it gives Black a solid, classical setup. Our opponent now has both knights actively deployed, and they're preparing to develop the dark-squared bishop and castle. From our perspective, we should proceed with our fianchetto plan (g3 and Bg2), which will give us a powerful long-range bishop and a safe king position."
+    },
+    {
+      "san": "g3",
+      "annotation": "We prepare to fianchetto our light-squared bishop, which is one of the most characteristic ideas in the English Opening. The bishop on g2 will control the long diagonal and put pressure on Black's center, particularly the d5 square. This move also prepares a solid king shelter for castling — the g3-f2 pawn structure combined with the bishop on g2 is very resilient. The fianchetto is strategically important because it allows us to contest the center from a distance rather than committing additional pawns, keeping our position flexible and hard to attack."
+    },
+    {
+      "san": "Bb4",
+      "annotation": "Black develops the bishop to b4, pinning our knight on c3 and creating immediate tactical tension. This is an aggressive developing move that threatens to exchange the bishop for our important c3 knight, which would weaken our control over the d5 square. The Bb4 move also prepares castling and can be followed by ...Bxc3 to double our pawns if Black chooses. From our perspective, the pin is not immediately dangerous — we should continue with our plan of Bg2, and if Black captures on c3, we can recapture with bxc3 or dxc3, each leading to interesting middlegame structures with different strategic themes."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "We complete the fianchetto, placing our bishop on the powerful g2 square where it surveys the entire long diagonal. The bishop on g2 is a strategic anchor — it controls d5, pressures Black's queenside through the diagonal, and provides excellent support for our king after castling. Even though Black has pinned our c3 knight with Bb4, our bishop on g2 compensates by being a powerful long-range piece. This bishop will prove invaluable in the middlegame, especially if the center opens up and the diagonal becomes a highway for our piece activity. The combination of Bg2 and Nc3 gives us strong light-square control throughout the position."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks. This is a natural and strong move — our opponent has completed their kingside development and is now ready to focus on the middlegame. The castled king on g8 is well-protected behind the standard pawn shelter, and the rook on f8 is activated. From our perspective, we should also castle quickly to match Black's king safety and then look for ways to challenge the center. The middlegame will likely revolve around our attempts to undermine Black's e5-d6 pawn chain while Black seeks active piece play."
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle kingside, completing our development and bringing the king into the safe corner behind our fianchettoed bishop. Our king on g1 is very secure with the g3-f2 pawn shelter and the powerful bishop on g2 guarding the long diagonal. Castling also activates our rook on f1, which can support a future f4 push or slide to d1 to put pressure on the d-file. With both sides castled, the opening phase is essentially complete, and we can now focus on middlegame plans. Our primary strategy will be to play d3 followed by a3 to ask the bishop on b4 where it wants to go, and then prepare active play on the queenside or in the center."
+    },
+    {
+      "san": "e4",
+      "annotation": "Black pushes the e-pawn forward to e4, gaining space and driving our knight away from f3. This is an aggressive advance that seizes territory in the center but also has drawbacks — the e4 pawn is now advanced beyond Black's other central pawns and could become a target. The advance also opens the e5 square, which could be used by our pieces. From our perspective, we need to retreat the knight (d2 is a good square) and then figure out how to undermine or blockade the e4 pawn. Our strategy will involve playing d3 to challenge the pawn directly, and our bishop on g2 will become even more powerful as the center opens up."
+    },
+    {
+      "san": "d3",
+      "annotation": "We challenge Black's advanced e4 pawn with d3, creating central tension and threatening to exchange or undermine it. This is the right moment to strike at Black's overextended center — the d3 advance puts pressure on e4 and opens the d-file for potential rook play. If Black captures exd3, we recapture with Qxd3 or exd3, gaining open lines and good piece play. If Black maintains the pawn with ...exd3, we can recapture and maintain a healthy pawn structure. The move also opens the diagonal for our dark-squared bishop to develop to e3 or d2, completing the mobilization of our forces."
+    },
+    {
+      "san": "d6",
+      "annotation": "Black reinforces the center with d6, supporting the e5 square and creating a solid pawn chain on d6-e4. This is a positional move that prioritizes structural stability over immediate tactics. The pawn on d6 also opens the diagonal for Black's dark-squared bishop to potentially reach more active squares via e7 or f8. From our perspective, Black's pawn structure is solid but somewhat rigid — the d6 and e4 pawns are committed and can become targets if we find the right plan to challenge them. We should continue with a3 to resolve the tension with Black's bishop on b4, and then look for opportunities to play on the queenside or prepare f3 to undermine e4."
+    },
+    {
+      "san": "a3",
+      "annotation": "We ask Black's bishop on b4 an important question: stay and be captured, retreat, or exchange on c3? This move gains space on the queenside and is a common idea in English Opening positions with ...Bb4 — we want to clarify the bishop's intentions before proceeding with our middlegame plans. If Black retreats to c5 or a5, we've gained the bishop pair potential and queenside space. If Black exchanges on c3, we get the bishop pair and can recapture with bxc3 to open the b-file for our rook. Either way, this move improves our position and removes the annoying pin on our c3 knight."
+    },
+    {
+      "san": "Bc5",
+      "annotation": "Black retreats the bishop to c5, where it's actively placed on the a7-g1 diagonal, targeting our king's position and controlling the important d4 square. This is an excellent retreat — rather than exchanging on c3 and giving us the bishop pair, our opponent keeps the bishop on an active diagonal where it exerts pressure against our kingside. The bishop on c5 also supports a potential ...d5 advance and works well with the knight on c6. From our perspective, Black's bishop is well-placed but we've achieved our goal of removing the pin on our knight. We can now proceed with our middlegame plans, building on the queenside or preparing central play with b4 or Nd5 ideas."
     }
   ]
 }

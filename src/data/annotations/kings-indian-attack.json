@@ -3,15 +3,67 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We start with the flexible knight move, the hallmark of the King's Indian Attack—a system where we'll control the center indirectly rather than occupy it immediately with pawns. By placing the knight on f3, we're preparing to support e4 later, controlling key squares like e5 and d4, while keeping our options open about how to structure our center. This move is deceptively deep because it works for White regardless of Black's response, and it's been a weapon of world champions precisely because of this flexibility."
+      "annotation": "We start with the flexible knight move, the hallmark of the King's Indian Attack — a system where we'll control the center indirectly rather than occupy it immediately with pawns. By placing the knight on f3, we're preparing to support e4 later, controlling key squares like e5 and d4, while keeping our options open about how to structure our center. This move is deceptively deep because it works for White regardless of Black's response, and it's been a weapon of world champions precisely because of this flexibility."
     },
     {
       "san": "d5",
-      "annotation": "Black stakes a claim in the center immediately, which is a natural and solid response—taking space and preventing us from easily playing e4 later. From a strategic perspective, Black is saying 'I won't let you build a comfortable setup,' which is reasonable, though it does commit the d-pawn and potentially allows us to build pressure on the light squares and the d5 square itself."
+      "annotation": "Black stakes a claim in the center immediately, which is a natural and solid response — taking space and preventing us from easily playing e4 later. From a strategic perspective, Black is saying 'I won't let you build a comfortable setup,' which is reasonable, though it does commit the d-pawn and potentially allows us to build pressure on the light squares and the d5 square itself. The d5 pawn controls c4 and e4, making it harder for us to expand in the center, which is why we'll adopt a more subtle approach."
     },
     {
       "san": "g3",
-      "annotation": "This is the signature move of the King's Indian Attack system: we fianchetto our kingside bishop, planning to control the long diagonal (a1–h8) and the critical d4 and e5 squares from g2. By playing g3, we're not trying to occupy the center immediately, but rather to control it from afar while preparing a setup with Bg2, perhaps e4 if it fits, and solid piece coordination. This quiet, space-preserving approach gives us a long-term positional squeeze rather than a tactical confrontation—perfect against d5, as we can now challenge Black's center methodically."
+      "annotation": "This is the signature move of the King's Indian Attack system: we fianchetto our kingside bishop, planning to control the long diagonal and the critical d5 square from g2. By playing g3, we're not trying to occupy the center immediately, but rather to control it from afar while preparing a setup with Bg2, O-O, and d3. This quiet, space-preserving approach gives us a long-term positional squeeze rather than a tactical confrontation — perfect against d5, as we can now challenge Black's center methodically while keeping a rock-solid structure."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to its best square, reinforcing the d5 pawn and controlling the e4 square to prevent us from easily advancing in the center. The knight on f6 is the backbone of Black's position — it defends key central squares and prepares kingside castling. This is the most natural and popular response, and it gives Black a flexible, classical development scheme. From our perspective, we continue with our KIA setup by playing Bg2 next, completing the fianchetto and aiming the bishop at d5 through the knight on f6."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "We complete the fianchetto, placing our bishop on g2 where it becomes a powerhouse controlling the long diagonal. The bishop on g2 exerts constant pressure on the d5 square and eyes the center from a safe distance. Combined with our knight on f3, we're building a flexible system that can adapt to Black's setup while maintaining positional pressure. The Bg2 is particularly strong in the KIA because it supports the future e4 advance — when we eventually push e4, this bishop will come alive as the center opens. This is a patient, strategic approach that rewards careful maneuvering and long-term planning."
+    },
+    {
+      "san": "c6",
+      "annotation": "Black reinforces the d5 pawn with c6, creating a solid Slav-like pawn structure. This is a practical choice — the c6 pawn ensures that d5 is firmly anchored and prevents any tactical tricks from our bishop on g2 against the d5 pawn. However, the c6 pawn also has drawbacks: it blocks the natural development square for the queenside knight, which now must go to d7 instead of c6, and it takes away the c6 square from the b8 knight. From our perspective, Black's setup is solid but somewhat rigid, and we should castle and prepare d3 followed by the key e4 central break that defines the KIA."
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle kingside, completing our kingside development and bringing the king to safety behind the fianchettoed bishop structure. Our king on g1 is extremely secure with the g3 pawn and bishop on g2 providing excellent cover. Castling also activates the rook on f1, which will support our critical e4 advance later. With O-O, we've completed the first phase of the KIA setup — our kingside is fully developed and rock-solid. The next phase involves playing d3 and then e4, challenging Black's center and opening lines for our pieces. The timing of e4 is crucial — we want our pieces optimally placed before we strike."
+    },
+    {
+      "san": "Bg4",
+      "annotation": "Black develops the light-squared bishop to g4, pinning our knight on f3 to the queen and creating immediate tactical pressure. This is an active developing move that puts the bishop on its most aggressive square before the pawn structure becomes fixed. The bishop on g4 controls the f3 knight and could potentially exchange it, removing one of our key pieces. From our perspective, we're not worried about this pin — we can break it with h3, or simply develop naturally with d3 and Nbd2. The bishop on g4 is active, but it's also somewhat exposed and might become a target if we play h3 at the right moment."
+    },
+    {
+      "san": "d3",
+      "annotation": "We play d3, establishing our pawn on the third rank and preparing the critical e4 advance that is the heart of the King's Indian Attack. The d3 pawn supports e4, controls the c4 and e4 squares, and opens the diagonal for our dark-squared bishop if it needs to develop to e3 or f4. This move is the key structural decision in the KIA — by placing the pawn on d3 rather than d4, we commit to a reversed King's Indian setup where our central play will revolve around the e4 break. The d3 pawn also creates a stable base for our position, ensuring that our center remains solid regardless of Black's actions."
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Black develops the queenside knight to d7, the only available square since c6 is occupied by the pawn. The knight on d7 supports the f6 knight, prepares potential rerouting to b6 or f8, and keeps Black's position flexible. While d7 is not as active as c6 would be, it's a practical solution that allows Black to maintain the solid pawn structure. The knight may later move to e5 if the center opens, creating a strong outpost. From our perspective, Black's development is solid but passive, and we should continue preparing our e4 break with Nbd2, which also supports the advance and develops our last minor piece."
+    },
+    {
+      "san": "Nbd2",
+      "annotation": "We develop the knight to d2, supporting the upcoming e4 advance and keeping our position flexible. The knight on d2 is a key piece in the KIA — it supports e4 directly and can reroute to c4, b3, or f1 depending on how the position evolves. From d2, the knight also avoids blocking our c-pawn, preserving the option of c3 or c4 later. With Nbd2, all our pieces are developed and our position is primed for the critical e4 push. The timing is almost right — once we play e4, the center will open and our fianchettoed bishop will spring to life on the long diagonal."
+    },
+    {
+      "san": "e5",
+      "annotation": "Black occupies the center with e5, grabbing space and restricting our e4 advance. This is a logical and strong move that establishes a powerful pawn duo on d5 and e5, controlling the center and limiting our piece mobility. The e5 pawn takes away key squares from our knight on f3 and creates a wall in the center. However, by committing to e5, Black has also created some light-square weaknesses, particularly on d5 and f5, and the d6 pawn could become backward if the center opens. From our perspective, we should still push e4 to challenge Black's center — the resulting tension will create chances for us to exploit the light-square weaknesses."
+    },
+    {
+      "san": "e4",
+      "annotation": "We execute the key central break of the KIA, challenging Black's pawn center head-on! This is the moment we've been building toward — e4 creates direct tension with Black's d5 pawn and threatens to open lines for our fianchettoed bishop on g2. The push also activates our position by opening central lines and creating tactical possibilities. If Black takes dxe4, we recapture with dxe4, gaining a strong pawn center and opened lines. If Black pushes d4, we get the e4 outpost for our pieces and play on the kingside. The e4 break is the strategic heart of the KIA, and timing it correctly is what separates good KIA players from great ones."
+    },
+    {
+      "san": "dxe4",
+      "annotation": "Black captures on e4, releasing the central tension and opening the position. This is the most natural response — our opponent eliminates the threat and opens the d-file. The capture creates an open center that favors the side with better-developed pieces. From our perspective, this exchange is exactly what we wanted — our bishop on g2 now has an unobstructed diagonal, and the d-file and e-file are both open for our rooks. We'll recapture with dxe4, establishing a strong central pawn on e4 that controls d5 and f5 while giving our pieces maximum activity."
+    },
+    {
+      "san": "dxe4",
+      "annotation": "We recapture with the d-pawn, establishing a powerful pawn on e4 that controls the critical d5 and f5 squares. Our position has transformed beautifully — the bishop on g2 now rakes the long diagonal through the open center, and our pieces have excellent scope. The e4 pawn creates a spatial advantage and restricts Black's knight on f6. Our knight on d2 can now hop to c4 or e4 via f3 (after the original f3 knight moves), creating tactical threats. The position has opened up exactly as we planned, and our KIA setup is paying dividends with active pieces and strong central control."
+    },
+    {
+      "san": "Bc5",
+      "annotation": "Black develops the bishop to c5, placing it on an active diagonal that targets our f2 pawn and controls the d4 square. This is an excellent square for the bishop — it's actively placed, supports central control, and creates some tactical tension around our king position. The bishop on c5 combined with the knight potentially coming to e5 gives Black some counterplay. From our perspective, we've achieved our strategic goal with the e4 break, and now we need to continue improving our pieces. Our position is promising with the powerful bishop on g2, the strong e4 pawn, and active piece prospects. We should look for ways to exploit our central control and develop initiative on either flank."
     }
   ]
 }

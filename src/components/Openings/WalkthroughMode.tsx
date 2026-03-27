@@ -364,13 +364,16 @@ export function WalkthroughMode({
       const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
       const spokenText = ann?.annotation;
       const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
-      // Add extra buffer so TTS end event has priority
-      autoPlayRef.current = setTimeout(advanceToNext, delay + 1500);
+      // Voice pack audio duration is unpredictable — use a very generous fallback
+      // so the onEnd callback has priority. Only fires if TTS truly never completes.
+      const voicePackActive = kokoroEnabled && voicePackService.isReady();
+      const fallbackDelay = voicePackActive ? delay * 3 + 5000 : delay + 1500;
+      autoPlayRef.current = setTimeout(advanceToNext, fallbackDelay);
 
       setBoardKey((k) => k + 1);
       return nextIndex;
     });
-  }, [expectedMoves.length, annotations, autoPlaySpeed]);
+  }, [expectedMoves.length, annotations, autoPlaySpeed, kokoroEnabled]);
 
   // Auto-play logic: kick off the chain when play starts
   useEffect(() => {

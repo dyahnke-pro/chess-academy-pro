@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to develop our pieces with purpose. This move gives us excellent flexibility - we can transpose into many different systems depending on how our opponent responds. The d4 pawn controls key central squares and opens lines for both our queen and dark-squared bishop, setting the foundation for a solid positional game. Unlike 1.e4 openings that often lead to sharp tactical battles, 1.d4 typically produces more strategic, maneuvering games where understanding pawn structures and piece coordination becomes crucial."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to develop our pieces with purpose. This move gives us excellent flexibility — we can transpose into many different systems depending on how our opponent responds. The d4 pawn controls key central squares and opens lines for both our queen and dark-squared bishop, setting the foundation for a solid positional game. Unlike 1.e4 openings that often lead to sharp tactical battles, 1.d4 typically produces more strategic, maneuvering games where understanding pawn structures and piece coordination becomes crucial."
     },
     {
       "san": "Nf6",
@@ -11,7 +11,75 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We're launching into the Trompowsky Attack, an aggressive and somewhat unconventional system that immediately puts pressure on Black's kingside development. This bishop move pins the f6 knight to Black's queen, creating immediate tactical tension and forcing our opponent to make an early decision about how to handle this pin. The Trompowsky is perfect for players who want to avoid the main theoretical lines of other 1.d4 openings while still maintaining good practical chances - it often leads to unbalanced positions where both sides have winning chances. Our opponent now faces several challenging options: they can break the pin with ...h6, accept doubled pawns with ...Bxf6, or try to ignore the pin temporarily, but each choice comes with significant strategic consequences that we can exploit."
+      "annotation": "We're launching into the Trompowsky Attack, an aggressive and somewhat unconventional system that immediately puts pressure on Black's kingside development. This bishop move pins the f6 knight to Black's queen, creating immediate tactical tension and forcing our opponent to make an early decision about how to handle this pin. The Trompowsky is perfect for players who want to avoid the main theoretical lines of other 1.d4 openings while still maintaining excellent practical chances. Our opponent now faces several challenging options: they can break the pin with ...Ne4, challenge us with ...d5, or try ...e6 followed by ...Be7, but each choice comes with significant strategic consequences."
+    },
+    {
+      "san": "Ne4",
+      "annotation": "Black immediately challenges our bishop by attacking it with the knight, which is one of the most aggressive and principled responses to the Trompowsky. The knight on e4 attacks our bishop directly and threatens to win the bishop pair if we don't react. This counterpunch is typical of modern chess — rather than passively accepting the pin, our opponent takes the initiative and forces us to make a decision. From our perspective, this is exactly what we anticipated, and we'll retreat the bishop to f4 where it remains active and well-placed while the knight on e4 is somewhat exposed and will likely need to retreat."
+    },
+    {
+      "san": "Bf4",
+      "annotation": "We retreat the bishop to f4, maintaining its activity on the b8-h2 diagonal while avoiding the exchange. This is the most popular and positionally sound retreat — the bishop on f4 controls the important e5 square, eyes the b8-h2 diagonal for future tactical opportunities, and stays out of harm's way. The retreat also prepares us to build a solid center with e3 and potentially challenge the advanced knight with moves like Nd2 or f3. The bishop on f4 is reminiscent of the London System placement, but in the Trompowsky context, it arrives here through a more dynamic move order. Black's knight on e4 looks impressive but it will need to find a permanent home soon."
+    },
+    {
+      "san": "d5",
+      "annotation": "Black grabs central space with d5, supporting the knight on e4 and establishing a strong presence in the center. This is a logical follow-up — by playing d5, our opponent secures the knight's position and prevents us from easily pushing e4 to kick it away. The pawn on d5 also opens the diagonal for Black's light-squared bishop and creates a solid central foothold. From our perspective, this is a reasonable setup for Black, but it does commit the d-pawn early and allows us to develop our pieces around this structure. We'll continue with e3 to solidify our center and prepare Bd3, building toward a harmonious position."
+    },
+    {
+      "san": "e3",
+      "annotation": "We advance the e-pawn to e3, supporting our d4 pawn and opening the diagonal for our light-squared bishop to develop to d3. This solid move creates a stable central structure and prepares our key developing plan of Bd3, which will target the knight on e4 and eye the kingside. The pawn on e3 also controls the f4 square, ensuring our bishop remains safely posted. While e3 may look modest, it's the correct positional approach — we're building a sound structure that will support active piece play in the middlegame. Our plan is Bd3, Nf3, and O-O, developing efficiently while putting pressure on Black's advanced knight."
+    },
+    {
+      "san": "c5",
+      "annotation": "Black strikes at our pawn center with c5, creating tension and challenging our d4 point. This is an active and ambitious move — our opponent is not content to sit passively and instead fights for counterplay immediately. The c5 advance also prepares to develop the queenside knight to c6 and opens the c-file for potential rook play. From our perspective, we welcome this tension because our pieces are well-placed to handle it. We'll continue with Bd3, targeting the knight on e4 and maintaining a flexible central structure. If Black captures on d4, we recapture with exd4, keeping a solid center."
+    },
+    {
+      "san": "Bd3",
+      "annotation": "We develop the light-squared bishop to d3, directly challenging Black's advanced knight on e4 and creating a powerful piece aimed at the kingside. The bishop on d3 is ideally placed — it attacks the knight, supports a future e4 push, and has latent threats against h7 if it pairs up with the queen on c2 later. This move forces Black to make a decision about the knight: retreat it, exchange it, or find another way to justify its position. The Bd3 development also connects our pieces nicely and prepares to castle kingside. Our position is developing harmoniously, with each piece finding its ideal square."
+    },
+    {
+      "san": "Nd6",
+      "annotation": "Black retreats the knight to d6, a slightly unusual but logical square where it avoids the exchange and supports key central squares. The knight on d6 blocks the d-pawn but supports the e4 and b5 squares, and it keeps an eye on the f5 square where it might reroute later. Our opponent is accepting a somewhat passive setup in exchange for maintaining piece coordination. From our perspective, this retreat is a concession — the knight on d6 is less actively placed than on e4, and Black has lost some time with the knight maneuver Nf6-Ne4-Nd6. We should continue developing rapidly with Nf3, castle, and prepare to exploit our lead in development."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We develop the kingside knight to f3, completing our kingside development and preparing to castle. The knight on f3 controls the e5 square — a critical outpost that works beautifully with our bishop on f4 — and supports our d4 pawn. With Nf3, we've achieved a very harmonious setup: the bishop on d3 targets the kingside, the bishop on f4 controls dark squares, and the knight on f3 coordinates with both. We're ahead in development compared to Black, who still has the bishop on c8, the knight on b8, and hasn't castled. Our next step is to castle and then look for ways to exploit our developmental advantage."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black develops the queenside knight to c6, attacking our d4 pawn and adding support to the e5 and d4 squares. This is a natural developing move that brings another piece into the game and increases pressure on our center. The knight on c6 works well with the c5 pawn to put collective pressure on the d4 point. From our perspective, our d4 pawn is well-defended by the knight on f3 and pawn on e3, so we're not concerned about the added pressure. We should castle quickly to bring the king to safety and prepare our rooks for the middlegame battle, where our better-developed pieces will give us an edge."
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle kingside, bringing our king to safety behind the protective pawn structure and activating the rook on f1. Castling is a priority here because it completes our kingside development and allows us to connect the rooks, preparing them for active duty on the central files. Our position after castling is excellent — we have harmoniously developed pieces, a solid center, and clear plans for the middlegame. Black still hasn't castled and has some coordination issues, so we should look for ways to exploit this before our opponent can catch up in development. The rook on f1 can slide to e1 to support an eventual e4 push."
+    },
+    {
+      "san": "Nf5",
+      "annotation": "Black repositions the knight to f5, targeting our dark-squared bishop on f4 and establishing the knight on a strong outpost. The knight on f5 is aggressively placed — it attacks our bishop and eyes the d4, e3, and g3 squares, creating tactical threats. Our opponent has found an active square for the knight that was previously misplaced on d6, showing good flexibility. From our perspective, we need to decide how to handle the attack on our bishop: we can maintain it, exchange it, or retreat. Playing c3 supports our center and prepares Qc2, which maintains our attacking potential while keeping the position under control."
+    },
+    {
+      "san": "c3",
+      "annotation": "We bolster our center with c3, creating a solid d4-e3-c3 pawn structure that's very resilient against Black's pressure. This move supports the d4 pawn, prepares the queen to swing to c2, and frees the d-file for potential rook play. The c3 pawn also controls the b4 and d4 squares, limiting Black's piece activity on the queenside. Our pawn structure is now a fortress in the center, allowing us to focus on piece play. We can now prepare Qc2 with ideas of attacking h7 with the Bd3-Qc2 battery, or play Nbd2 to bring the last piece into play and prepare e4 if the position calls for it."
+    },
+    {
+      "san": "e6",
+      "annotation": "Black solidifies the center with e6, supporting the d5 pawn and the knight on f5 while opening the diagonal for the dark-squared bishop. This is a solid, positional move that reinforces Black's central structure. The e6 pawn ensures that the d5 point is firmly controlled and prevents us from playing e4 easily. Our opponent is also preparing to develop the dark-squared bishop to e7 and castle. From our perspective, Black's setup is sound but somewhat passive, and we should continue improving our position with Nbd2, preparing Re1 and the eventual e4 central break that will open the position for our well-placed pieces."
+    },
+    {
+      "san": "Nbd2",
+      "annotation": "We develop the last minor piece to d2, where it supports the e4 advance and can reroute to more active squares as needed. The knight on d2 keeps the c-file clear, supports the knight on f3, and prepares the thematic e4 push that would open lines in the center. This move completes our development — all our pieces are on active squares and ready for middlegame play. From d2, the knight can jump to b3 to pressure c5, swing to e4 via f1, or support e4 directly. Our position is harmonious and well-coordinated, and the stage is set for a controlled middlegame where our better piece coordination should tell."
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black develops the dark-squared bishop to e7, a solid square that prepares castling and covers important dark squares. The bishop on e7 is somewhat passive compared to more active placements, but it serves an important function in covering the kingside and allowing Black to castle. Our opponent is prioritizing completing development and getting the king to safety, which is sound strategy when behind in development. From our perspective, Black's setup is fully developed now but remains slightly passive. We should look for the right moment to play e4, opening the center where our more actively placed pieces will have the advantage."
+    },
+    {
+      "san": "Qc2",
+      "annotation": "We place our queen on c2, creating the dangerous battery with our bishop on d3 aimed at Black's h7 pawn. This move is dual-purpose: it creates latent kingside threats, particularly the potential Bxh7+ sacrifice motif, while also preparing to support the e4 advance from c2. The queen on c2 is perfectly placed in our Trompowsky setup — it connects with the bishop on d3 and controls the b1-h7 diagonal, forcing Black to be constantly vigilant about sacrificial possibilities. Our position is now fully mature, with clear attacking potential on the kingside combined with a solid center."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black finally castles kingside, bringing the king to safety but also placing it in the line of fire of our Bd3-Qc2 battery aimed at h7. This was a necessary move — Black couldn't afford to leave the king in the center much longer — but it does mean our kingside attacking ideas now have a concrete target. Our opponent has completed their development and has a solid position, but we have clear plans for the middlegame: the e4 central break, potential Bxh7+ sacrificial ideas, and piece maneuvering to increase pressure. The stage is set for an exciting middlegame where our space advantage and better-coordinated pieces give us promising attacking chances."
     }
   ]
 }
