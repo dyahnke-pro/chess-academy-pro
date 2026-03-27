@@ -64,25 +64,15 @@ interface ProviderConfig {
 
 async function getProviderConfig(): Promise<ProviderConfig | null> {
   try {
-    // Check build-time env vars first — works even without a profile
     const anthropicEnvKey = (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_KEY || __ANTHROPIC_KEY__) as string || undefined;
     const deepseekEnvKey = (import.meta.env.VITE_DEEPSEEK_API_KEY || import.meta.env.DEEPSEEK_KEY || __DEEPSEEK_KEY__) as string || undefined;
-
-    console.log('[CoachAPI] env key check:', {
-      hasAnthropicKey: !!anthropicEnvKey,
-      hasDeepseekKey: !!deepseekEnvKey,
-      keyPrefix: anthropicEnvKey ? anthropicEnvKey.substring(0, 10) + '...' : 'none',
-    });
 
     const profile = await db.profiles.get('main');
     const provider: AiProvider = profile?.preferences.aiProvider ?? (anthropicEnvKey ? 'anthropic' : 'deepseek');
 
     if (provider === 'anthropic') {
       if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey };
-
-      // Fall back to encrypted IndexedDB key
       if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
-        // Last resort: if DeepSeek env key exists, fall back to that
         if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey };
         return null;
       }
@@ -93,11 +83,8 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
       );
       return { provider, apiKey };
     } else {
-      // DeepSeek
       if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey };
-
       if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
-        // Last resort: if Anthropic env key exists, fall back to that
         if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey };
         return null;
       }
@@ -108,6 +95,24 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
       );
       return { provider, apiKey };
     }
+  } catch {
+    return null;
+  }
+}
+
+/** Get a fallback config using the OTHER provider. Returns null if no alternate key available. */
+async function getFallbackConfig(failedProvider: AiProvider): Promise<ProviderConfig | null> {
+  try {
+    const anthropicEnvKey = (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_KEY || __ANTHROPIC_KEY__) as string || undefined;
+    const deepseekEnvKey = (import.meta.env.VITE_DEEPSEEK_API_KEY || import.meta.env.DEEPSEEK_KEY || __DEEPSEEK_KEY__) as string || undefined;
+
+    if (failedProvider === 'anthropic' && deepseekEnvKey) {
+      return { provider: 'deepseek', apiKey: deepseekEnvKey };
+    }
+    if (failedProvider === 'deepseek' && anthropicEnvKey) {
+      return { provider: 'anthropic', apiKey: anthropicEnvKey };
+    }
+    return null;
   } catch {
     return null;
   }
@@ -244,6 +249,30 @@ async function callAnthropic(
 
 // ── Public API ──
 
+async function callChatWithConfig(
+  config: ProviderConfig,
+  messages: { role: 'user' | 'assistant'; content: string }[],
+  systemPrompt: string,
+  onStream?: (chunk: string) => void,
+): Promise<string> {
+  const model = getModel('chat_response', config.provider);
+  if (config.provider === 'anthropic') {
+    if (onStream) {
+      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 1024, onStream);
+    }
+    return await callAnthropic(config.apiKey, model, systemPrompt, messages, 1024, 'chat_response');
+  } else {
+    const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+      { role: 'system', content: systemPrompt },
+      ...messages,
+    ];
+    if (onStream) {
+      return await callDeepSeekStream(config.apiKey, model, allMessages, 1024, onStream);
+    }
+    return await callDeepSeek(config.apiKey, model, allMessages, 1024, 'chat_response');
+  }
+}
+
 export async function getCoachChatResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPromptAddition: string,
@@ -252,29 +281,51 @@ export async function getCoachChatResponse(
   const config = await getProviderConfig();
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
 
-  const model = getModel('chat_response', config.provider);
   const systemPrompt = SYSTEM_PROMPT + '\n\n' + systemPromptAddition;
 
   try {
-    if (config.provider === 'anthropic') {
-      if (onStream) {
-        return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 1024, onStream);
-      }
-      return await callAnthropic(config.apiKey, model, systemPrompt, messages, 1024, 'chat_response');
-    } else {
-      const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-        { role: 'system', content: systemPrompt },
-        ...messages,
-      ];
-      if (onStream) {
-        return await callDeepSeekStream(config.apiKey, model, allMessages, 1024, onStream);
-      }
-      return await callDeepSeek(config.apiKey, model, allMessages, 1024, 'chat_response');
-    }
+    return await callChatWithConfig(config, messages, systemPrompt, onStream);
   } catch (error) {
-    console.error('Coach chat API error:', error);
+    console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
+    const fallback = await getFallbackConfig(config.provider);
+    if (fallback) {
+      try {
+        return await callChatWithConfig(fallback, messages, systemPrompt, onStream);
+      } catch (fallbackError) {
+        console.error('[CoachAPI] Fallback also failed:', fallbackError);
+        const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
+        return `⚠️ Coach error: ${errMsg}`;
+      }
+    }
     const errMsg = error instanceof Error ? error.message : String(error);
     return `⚠️ Coach error: ${errMsg}`;
+  }
+}
+
+async function callCommentaryWithConfig(
+  config: ProviderConfig,
+  task: CoachTask,
+  userMessage: string,
+  onStream?: (chunk: string) => void,
+): Promise<string> {
+  const model = getModel(task, config.provider);
+  if (config.provider === 'anthropic') {
+    const messages: { role: 'user' | 'assistant'; content: string }[] = [
+      { role: 'user', content: userMessage },
+    ];
+    if (onStream) {
+      return await callAnthropicStream(config.apiKey, model, SYSTEM_PROMPT, messages, 512, onStream);
+    }
+    return await callAnthropic(config.apiKey, model, SYSTEM_PROMPT, messages, 1024, task);
+  } else {
+    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: userMessage },
+    ];
+    if (onStream) {
+      return await callDeepSeekStream(config.apiKey, model, messages, 512, onStream);
+    }
+    return await callDeepSeek(config.apiKey, model, messages, 1024, task);
   }
 }
 
@@ -286,31 +337,21 @@ export async function getCoachCommentary(
   const config = await getProviderConfig();
   if (!config) return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
 
-  const model = getModel(task, config.provider);
   const userMessage = buildChessContextMessage(context);
 
   try {
-    if (config.provider === 'anthropic') {
-      const messages: { role: 'user' | 'assistant'; content: string }[] = [
-        { role: 'user', content: userMessage },
-      ];
-      if (onStream) {
-        return await callAnthropicStream(config.apiKey, model, SYSTEM_PROMPT, messages, 512, onStream);
-      }
-      return await callAnthropic(config.apiKey, model, SYSTEM_PROMPT, messages, 1024, task);
-    } else {
-      const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userMessage },
-      ];
-      if (onStream) {
-        return await callDeepSeekStream(config.apiKey, model, messages, 512, onStream);
-      }
-      return await callDeepSeek(config.apiKey, model, messages, 1024, task);
-    }
+    return await callCommentaryWithConfig(config, task, userMessage, onStream);
   } catch (error) {
-    console.error('Coach API error:', error);
-    const errMsg = error instanceof Error ? error.message : String(error);
-    return `⚠️ Coach error: ${errMsg}`;
+    console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
+    const fallback = await getFallbackConfig(config.provider);
+    if (fallback) {
+      try {
+        return await callCommentaryWithConfig(fallback, task, userMessage, onStream);
+      } catch (fallbackError) {
+        console.error('[CoachAPI] Fallback also failed:', fallbackError);
+        return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
+      }
+    }
+    return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
   }
 }
