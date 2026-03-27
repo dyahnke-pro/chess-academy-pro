@@ -35,7 +35,7 @@ vi.mock('../../services/voicePackService', () => ({
 
 vi.mock('../../services/stockfishEngine', () => ({
   stockfishEngine: {
-    analyzePosition: vi.fn().mockResolvedValue({ evaluation: 0, isMate: false, mateIn: null }),
+    analyzePosition: vi.fn().mockResolvedValue({ evaluation: 0, isMate: false, mateIn: null, topLines: [] }),
     init: vi.fn(),
     destroy: vi.fn(),
     onStatusChange: vi.fn(),

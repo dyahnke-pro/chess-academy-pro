@@ -2,13 +2,17 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChessBoard } from '../Board/ChessBoard';
+import { EngineLines } from '../Board/EngineLines';
+import { LichessLines } from '../Board/LichessLines';
+import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { BoardControls } from '../Board/BoardControls';
 import { ExplanationCard } from './ExplanationCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import type { OpeningRecord, OpeningVariation } from '../../types';
+import { fetchCloudEval } from '../../services/lichessExplorerService';
+import type { OpeningRecord, OpeningVariation, AnalysisLine, LichessCloudEval } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
@@ -69,10 +73,22 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
   const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
   const { playCelebration, playEncouragement } = usePieceSound();
 
+  // Analysis toggle overrides
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
+  const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
+  const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
+
   // Stockfish eval state
   const [latestEval, setLatestEval] = useState<number | null>(null);
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+  const [latestTopLines, setLatestTopLines] = useState<AnalysisLine[]>([]);
+
+  // Lichess cloud eval state
+  const [lichessOverride, setLichessOverride] = useState<boolean | null>(null);
+  const showLichessEffective = lichessOverride ?? false;
+  const [cloudEval, setCloudEval] = useState<LichessCloudEval | null>(null);
 
   const isPlayerTurn = useCallback(
     (idx: number): boolean => {
@@ -184,6 +200,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
+          setLatestTopLines(analysis.topLines);
         }
       } catch {
         // Stockfish not ready yet
@@ -191,6 +208,20 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
     })();
     return () => { cancelled = true; };
   }, [currentFen]);
+
+  // Lichess cloud eval on position change
+  useEffect(() => {
+    if (!showLichessEffective) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result = await fetchCloudEval(currentFen, 3);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) setCloudEval(result);
+      } catch { /* Cloud eval not available */ }
+    })();
+    return () => { cancelled = true; };
+  }, [currentFen, showLichessEffective]);
 
   // Auto-takeback: revert wrong move after brief delay
   useEffect(() => {
@@ -308,6 +339,15 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
             </p>
           </div>
         </div>
+        <div className="flex items-center gap-2">
+        <AnalysisToggles
+          showEvalBar={showEvalBarEffective}
+          onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+          showEngineLines={showEngineLinesEffective}
+          onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+          showLichessLines={showLichessEffective}
+          onToggleLichessLines={() => setLichessOverride((prev) => !(prev ?? false))}
+        />
         {/* Line navigation */}
         <div className="flex items-center gap-1">
           <button
@@ -326,6 +366,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
           >
             <ChevronRightIcon size={16} className="text-theme-text" />
           </button>
+        </div>
         </div>
       </div>
 
@@ -358,7 +399,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
               showFlipButton={true}
               showUndoButton={false}
               showResetButton={false}
-              showEvalBar={true}
+              showEvalBar={showEvalBarEffective}
               evaluation={latestEval}
               isMate={latestIsMate}
               mateIn={latestMateIn}
@@ -403,6 +444,12 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
             </AnimatePresence>
           </div>
         </div>
+        {showEngineLinesEffective && latestTopLines.length > 0 && (
+          <EngineLines lines={latestTopLines} fen={currentFen} className="mt-1" />
+        )}
+        {showLichessEffective && cloudEval && (
+          <LichessLines cloudEval={cloudEval} fen={currentFen} className="mt-1" />
+        )}
       </div>
 
       {/* Move navigation */}
