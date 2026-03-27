@@ -64,18 +64,20 @@ interface ProviderConfig {
 
 async function getProviderConfig(): Promise<ProviderConfig | null> {
   try {
-    const profile = await db.profiles.get('main');
-    if (!profile) return null;
+    // Check build-time env vars first — works even without a profile
+    const anthropicEnvKey = (import.meta.env.VITE_ANTHROPIC_API_KEY ?? import.meta.env.ANTHROPIC_KEY ?? '') as string || undefined;
+    const deepseekEnvKey = (import.meta.env.VITE_DEEPSEEK_API_KEY ?? import.meta.env.DEEPSEEK_KEY ?? '') as string || undefined;
 
-    const provider: AiProvider = profile.preferences.aiProvider;
+    const profile = await db.profiles.get('main');
+    const provider: AiProvider = profile?.preferences.aiProvider ?? (anthropicEnvKey ? 'anthropic' : 'deepseek');
 
     if (provider === 'anthropic') {
-      // Check build-time env var first
-      const envKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined;
-      if (envKey) return { provider, apiKey: envKey };
+      if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey };
 
       // Fall back to encrypted IndexedDB key
-      if (!profile.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
+      if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
+        // Last resort: if DeepSeek env key exists, fall back to that
+        if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey };
         return null;
       }
       const { decryptApiKey } = await import('./cryptoService');
@@ -86,10 +88,11 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
       return { provider, apiKey };
     } else {
       // DeepSeek
-      const envKey = import.meta.env.VITE_DEEPSEEK_API_KEY as string | undefined;
-      if (envKey) return { provider, apiKey: envKey };
+      if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey };
 
-      if (!profile.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
+      if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
+        // Last resort: if Anthropic env key exists, fall back to that
+        if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey };
         return null;
       }
       const { decryptApiKey } = await import('./cryptoService');
