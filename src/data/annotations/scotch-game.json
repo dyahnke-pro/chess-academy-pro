@@ -9,8 +9,8 @@
         "Follow up with Nf3 and d4 for central dominance"
       ],
       "alternatives": [
-        "d4 — Queen's Pawn openings, more positional",
-        "c4 — the English Opening"
+        "d4 \u2014 Queen's Pawn openings, more positional",
+        "c4 \u2014 the English Opening"
       ],
       "arrows": [
         {
@@ -43,7 +43,7 @@
         "Maintain the central balance"
       ],
       "alternatives": [
-        "c5 — the Sicilian, the most popular asymmetric choice"
+        "c5 \u2014 the Sicilian, the most popular asymmetric choice"
       ],
       "arrows": [
         {
@@ -57,7 +57,16 @@
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
@@ -67,8 +76,8 @@
         "Castle kingside quickly"
       ],
       "alternatives": [
-        "Bc4 — the Bishop's Opening",
-        "Nc3 — the Vienna Game"
+        "Bc4 \u2014 the Bishop's Opening",
+        "Nc3 \u2014 the Vienna Game"
       ],
       "arrows": [
         {
@@ -96,7 +105,7 @@
         "Defend e5 and prepare kingside development"
       ],
       "alternatives": [
-        "Nf6 — the Petrov, counterattacking e4"
+        "Nf6 \u2014 the Petrov, counterattacking e4"
       ],
       "arrows": [
         {
@@ -126,8 +135,8 @@
         "Aim for rapid development with initiative"
       ],
       "alternatives": [
-        "Bb5 — the Ruy Lopez, slower but with long-term pressure",
-        "Bc4 — the Italian Game"
+        "Bb5 \u2014 the Ruy Lopez, slower but with long-term pressure",
+        "Bc4 \u2014 the Italian Game"
       ],
       "arrows": [
         {
@@ -145,13 +154,13 @@
     },
     {
       "san": "exd4",
-      "annotation": "Black has to capture — allowing d5 would be terrible, pushing the knight away and giving White a dominating center. After exd4, the center opens up and both sides need to develop quickly to exploit the open lines.",
+      "annotation": "Black has to capture \u2014 allowing d5 would be terrible, pushing the knight away and giving White a dominating center. After exd4, the center opens up and both sides need to develop quickly to exploit the open lines.",
       "pawnStructure": "The e5 pawn is gone, opening the e-file. The position transforms from a closed center to an open one where piece activity is king.",
       "plans": [
         "Develop rapidly to exploit the open position"
       ],
       "alternatives": [
-        "d6 — too passive, lets White build an overwhelming center with d5"
+        "d6 \u2014 too passive, lets White build an overwhelming center with d5"
       ],
       "arrows": [
         {
@@ -160,7 +169,12 @@
           "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nxd4",
@@ -170,7 +184,7 @@
         "Develop quickly with Bc4, Be3, or Be2"
       ],
       "alternatives": [
-        "Qxd4 — recaptures but the queen is exposed to Nc6 tempo gain"
+        "Qxd4 \u2014 recaptures but the queen is exposed to Nc6 tempo gain"
       ],
       "arrows": [
         {
@@ -198,14 +212,14 @@
     },
     {
       "san": "Bc5",
-      "annotation": "Black develops aggressively, pinning the d4 knight against the queen and targeting the sensitive f2 square. This is the most principled response — the bishop is very active on the a7-g1 diagonal and forces White to make a concrete decision about the knight.",
+      "annotation": "Black develops aggressively, pinning the d4 knight against the queen and targeting the sensitive f2 square. This is the most principled response \u2014 the bishop is very active on the a7-g1 diagonal and forces White to make a concrete decision about the knight.",
       "plans": [
         "Put pressure on d4 and f2",
         "Prepare Qf6 to add firepower to the attack"
       ],
       "alternatives": [
-        "Nf6 — the Scotch Four Knights, solid but less ambitious",
-        "Bb4+ — the Schmidt Variation"
+        "Nf6 \u2014 the Scotch Four Knights, solid but less ambitious",
+        "Bb4+ \u2014 the Schmidt Variation"
       ],
       "arrows": [
         {
@@ -235,10 +249,16 @@
         "Exploit the weak doubled c-pawns in the endgame"
       ],
       "alternatives": [
-        "Be3 — keeps more tension but allows Black comfortable development",
-        "Nb3 — retreats but the bishop stays strong on c5"
+        "Be3 \u2014 keeps more tension but allows Black comfortable development",
+        "Nb3 \u2014 retreats but the bishop stays strong on c5"
       ],
-      "arrows": [],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
       "highlights": [
         {
           "square": "c6",
@@ -248,14 +268,14 @@
     },
     {
       "san": "Qf6",
-      "annotation": "Black brings the queen out early, but with good reason — it defends the knight on c6 square while threatening mate on f2. The queen on f6 also prepares to recapture on f3 if queens are exchanged, keeping Black's pawn structure flexible. This dual-purpose move justifies the early queen deployment.",
+      "annotation": "Black brings the queen out early, but with good reason \u2014 it defends the knight on c6 square while threatening mate on f2. The queen on f6 also prepares to recapture on f3 if queens are exchanged, keeping Black's pawn structure flexible. This dual-purpose move justifies the early queen deployment.",
       "plans": [
         "Threaten f2 and maintain piece activity",
         "Recapture on f3 with the queen after an exchange to avoid doubled pawns"
       ],
       "alternatives": [
-        "bxc6 — accepts the doubled pawns but the position is fine",
-        "dxc6 — opens the d-file but weakens the queenside structure"
+        "bxc6 \u2014 accepts the doubled pawns but the position is fine",
+        "dxc6 \u2014 opens the d-file but weakens the queenside structure"
       ],
       "arrows": [
         {
@@ -273,14 +293,14 @@
     },
     {
       "san": "Qf3",
-      "annotation": "White offers a queen trade! This is a sophisticated strategic idea — in the resulting endgame, Black's doubled c-pawns and White's bishop pair give White a lasting structural advantage. The queen on f3 also defends against the f2 threat and takes control of the d1-h5 diagonal.",
+      "annotation": "White offers a queen trade! This is a sophisticated strategic idea \u2014 in the resulting endgame, Black's doubled c-pawns and White's bishop pair give White a lasting structural advantage. The queen on f3 also defends against the f2 threat and takes control of the d1-h5 diagonal.",
       "plans": [
         "Steer into a favorable endgame with structural advantage",
         "Exploit the bishop pair in an open position"
       ],
       "alternatives": [
-        "Qe2 — protects f2 but is more passive",
-        "Be3 — blocks the f2 threat but allows Black to keep queens on"
+        "Qe2 \u2014 protects f2 but is more passive",
+        "Be3 \u2014 blocks the f2 threat but allows Black to keep queens on"
       ],
       "arrows": [
         {
@@ -303,10 +323,21 @@
         "Aim for active piece play to compensate for structural issues"
       ],
       "alternatives": [
-        "Qe5 — tries to keep queens on but the queen is unstable in the center"
+        "Qe5 \u2014 tries to keep queens on but the queen is unstable in the center"
       ],
-      "arrows": [],
-      "highlights": []
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "gxf3",
@@ -347,7 +378,7 @@
         "Use the open d-file for the rook"
       ],
       "alternatives": [
-        "bxc6 — also playable but closes the b-file and creates an isolated a-pawn"
+        "bxc6 \u2014 also playable but closes the b-file and creates an isolated a-pawn"
       ],
       "arrows": [
         {
@@ -375,7 +406,7 @@
         "Prepare O-O-O for quick rook activation"
       ],
       "alternatives": [
-        "Rg1 — immediately exploiting the open file but neglecting development"
+        "Rg1 \u2014 immediately exploiting the open file but neglecting development"
       ],
       "arrows": [
         {
@@ -389,7 +420,16 @@
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bxe3",
@@ -398,14 +438,25 @@
         "Simplify to reduce White's bishop pair advantage"
       ],
       "alternatives": [
-        "Bb6 — keeps the bishop but it's passive after a4-a5"
+        "Bb6 \u2014 keeps the bishop but it's passive after a4-a5"
       ],
-      "arrows": [],
-      "highlights": []
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "fxe3",
-      "annotation": "White recaptures, creating a doubled e-pawn but opening the f-file for the rook. Now White has rooks that can operate on both the g-file and f-file. The pawn on e3, while doubled, controls d4 and f4 — important central squares.",
+      "annotation": "White recaptures, creating a doubled e-pawn but opening the f-file for the rook. Now White has rooks that can operate on both the g-file and f-file. The pawn on e3, while doubled, controls d4 and f4 \u2014 important central squares.",
       "pawnStructure": "White now has doubled e-pawns and doubled f-pawns, but three half-open files (d, f, g) for rook activity. The structure is ugly but incredibly dynamic.",
       "plans": [
         "Activate rooks on the open files",
@@ -445,7 +496,7 @@
         "Use the knight to blockade White's central pawns"
       ],
       "alternatives": [
-        "Ne7 — less active, doesn't pressure the center as much"
+        "Ne7 \u2014 less active, doesn't pressure the center as much"
       ],
       "arrows": [
         {
@@ -468,14 +519,14 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, controlling d5 and e4 — the two most important central squares. From c3, the knight supports the e4 pawn and can later jump to d5 in favorable circumstances. This also prepares O-O-O to connect the rooks.",
+      "annotation": "White develops the knight to c3, controlling d5 and e4 \u2014 the two most important central squares. From c3, the knight supports the e4 pawn and can later jump to d5 in favorable circumstances. This also prepares O-O-O to connect the rooks.",
       "plans": [
         "Control the d5 outpost",
         "Prepare O-O-O for rook centralization",
         "Look for Nd5 when the time is right"
       ],
       "alternatives": [
-        "Nd2 — heading to c4 or f1, but c3 is more active"
+        "Nd2 \u2014 heading to c4 or f1, but c3 is more active"
       ],
       "arrows": [
         {
@@ -498,13 +549,13 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles into safety, completing development. The king is secure on g8 and the rook joins the fight on the f-file. Black's position is solid despite the doubled c-pawns — the active pieces and development provide excellent practical chances.",
+      "annotation": "Black castles into safety, completing development. The king is secure on g8 and the rook joins the fight on the f-file. Black's position is solid despite the doubled c-pawns \u2014 the active pieces and development provide excellent practical chances.",
       "plans": [
         "Activate the rooks on central files",
         "Target White's structural weaknesses with active piece play"
       ],
       "alternatives": [
-        "Bd7 — developing but castling is more urgent for king safety"
+        "Bd7 \u2014 developing but castling is more urgent for king safety"
       ],
       "arrows": [
         {
@@ -513,7 +564,12 @@
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ]
     }
   ],
   "subLines": [
@@ -2428,7 +2484,7 @@
       ]
     },
     {
-      "name": "Scotch: Göring Gambit",
+      "name": "Scotch: G\u00f6ring Gambit",
       "moveAnnotations": [
         {
           "san": "e4",
@@ -2440,7 +2496,7 @@
           ],
           "alternatives": [
             "d4 leads to Queen's Pawn openings with different central structures",
-            "Nf3 transposes to the Réti Opening with more flexible development"
+            "Nf3 transposes to the R\u00e9ti Opening with more flexible development"
           ],
           "arrows": [
             {
@@ -2619,7 +2675,7 @@
         },
         {
           "san": "c3",
-          "annotation": "White launches the Göring Gambit with this pawn sacrifice, attacking Black's advanced d4 pawn and preparing to open the c-file for the rook after recapture. This aggressive move prioritizes rapid development and attacking chances over material, as White will likely sacrifice one or two pawns for superior piece activity. The gambit creates immediate tactical complications that favor the better-prepared player.",
+          "annotation": "White launches the G\u00f6ring Gambit with this pawn sacrifice, attacking Black's advanced d4 pawn and preparing to open the c-file for the rook after recapture. This aggressive move prioritizes rapid development and attacking chances over material, as White will likely sacrifice one or two pawns for superior piece activity. The gambit creates immediate tactical complications that favor the better-prepared player.",
           "plans": [
             "Open the c-file and develop pieces with maximum activity",
             "Create attacking chances against Black's king"
@@ -2735,7 +2791,7 @@
         },
         {
           "san": "Bc4",
-          "annotation": "White develops the light-squared bishop to its most aggressive square, targeting the f7 weakness and preparing to castle. The bishop on c4 is a key piece in the Göring Gambit, creating immediate threats against Black's kingside and supporting potential sacrificial attacks. This development also completes White's kingside piece coordination perfectly.",
+          "annotation": "White develops the light-squared bishop to its most aggressive square, targeting the f7 weakness and preparing to castle. The bishop on c4 is a key piece in the G\u00f6ring Gambit, creating immediate threats against Black's kingside and supporting potential sacrificial attacks. This development also completes White's kingside piece coordination perfectly.",
           "plans": [
             "Castle kingside to complete development",
             "Create threats against f7 and the Black king"

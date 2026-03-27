@@ -3,67 +3,375 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, staking our claim to the center and beginning the London System — one of the most reliable and straightforward opening systems for White. The d4 pawn controls the important e5 and c5 squares while opening lines for both our queen and dark-squared bishop. This is the foundation of every London System setup, and the beauty is that we can reach our desired piece configuration regardless of how Black responds. Our plan is simple: develop the bishop to f4 early, build a solid pawn triangle with d4-e3-c3, and castle kingside for a harmonious, hard-to-crack position."
+      "annotation": "We're opening with the queen's pawn, staking our claim to the center and beginning the London System \u2014 one of the most reliable and straightforward opening systems for White. The d4 pawn controls the important e5 and c5 squares while opening lines for both our queen and dark-squared bishop. This is the foundation of every London System setup, and the beauty is that we can reach our desired piece configuration regardless of how Black responds. Our plan is simple: develop the bishop to f4 early, build a solid pawn triangle with d4-e3-c3, and castle kingside for a harmonious, hard-to-crack position.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically, fighting for their share of the center by controlling e4 and c4. This is the most principled reply — our opponent is saying they want a stake in the center and won't let us dominate unchallenged. The pawn on d5 also opens the diagonal for Black's light-squared bishop and supports potential expansion with ...c5 later. From our perspective, this is perfectly fine because our London System setup works beautifully against d5 structures — we'll develop our bishop to f4 on the very next move and proceed with our standard plan."
+      "annotation": "Black responds symmetrically, fighting for their share of the center by controlling e4 and c4. This is the most principled reply \u2014 our opponent is saying they want a stake in the center and won't let us dominate unchallenged. The pawn on d5 also opens the diagonal for Black's light-squared bishop and supports potential expansion with ...c5 later. From our perspective, this is perfectly fine because our London System setup works beautifully against d5 structures \u2014 we'll develop our bishop to f4 on the very next move and proceed with our standard plan.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bf4",
-      "annotation": "Here's the signature move of the London System! We develop our dark-squared bishop to f4 before playing e3, which would otherwise lock it in behind the pawn chain. This bishop is actively placed on f4, controlling the important e5 square and eyeing the b8-h2 diagonal where it can create pressure against Black's kingside. The beauty of playing Bf4 this early is that it's very difficult for Black to challenge or dislodge this bishop — it sits comfortably on f4 for most of the game. From here, we'll build our solid pawn structure with e3, c3, and Nf3, creating a fortress that's extremely hard for Black to break down."
+      "annotation": "Here's the signature move of the London System! We develop our dark-squared bishop to f4 before playing e3, which would otherwise lock it in behind the pawn chain. This bishop is actively placed on f4, controlling the important e5 square and eyeing the b8-h2 diagonal where it can create pressure against Black's kingside. The beauty of playing Bf4 this early is that it's very difficult for Black to challenge or dislodge this bishop \u2014 it sits comfortably on f4 for most of the game. From here, we'll build our solid pawn structure with e3, c3, and Nf3, creating a fortress that's extremely hard for Black to break down.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our center and preparing to castle kingside. The knight on f6 controls the e4 and d5 squares, which is important for Black's central presence. Our opponent is also keeping options open — they could play ...e6 for a solid setup, or ...c5 to challenge our pawn center directly. From our perspective, this doesn't disturb our London System plan at all. We'll continue developing methodically with e3 and Nf3, building our characteristic solid structure while the knight on f6 poses no immediate threat to our setup."
+      "annotation": "Black develops the knight to its most natural square, attacking our center and preparing to castle kingside. The knight on f6 controls the e4 and d5 squares, which is important for Black's central presence. Our opponent is also keeping options open \u2014 they could play ...e6 for a solid setup, or ...c5 to challenge our pawn center directly. From our perspective, this doesn't disturb our London System plan at all. We'll continue developing methodically with e3 and Nf3, building our characteristic solid structure while the knight on f6 poses no immediate threat to our setup.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We advance the e-pawn to e3, solidifying our pawn center and creating the first leg of our famous London System pawn triangle on d4-e3-c3. This move supports the d4 pawn, controls the f4 square so our bishop can't be chased away by ...Nh5, and opens the diagonal for our light-squared bishop to develop to d3. While e3 looks modest compared to e4, it's the principled London System choice because it maintains our rock-solid structure while keeping all our pieces coordinated. The pawn on e3 also provides a safe home for our king after we castle, contributing to the overall fortress-like quality of our position."
+      "annotation": "We advance the e-pawn to e3, solidifying our pawn center and creating the first leg of our famous London System pawn triangle on d4-e3-c3. This move supports the d4 pawn, controls the f4 square so our bishop can't be chased away by ...Nh5, and opens the diagonal for our light-squared bishop to develop to d3. While e3 looks modest compared to e4, it's the principled London System choice because it maintains our rock-solid structure while keeping all our pieces coordinated. The pawn on e3 also provides a safe home for our king after we castle, contributing to the overall fortress-like quality of our position.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid, classical setup by reinforcing the d5 pawn with e6. This creates a sturdy pawn chain but does have the trade-off of locking in Black's light-squared bishop behind the e6-d5 pawns — something we can potentially exploit later. Our opponent is preparing to develop the dark-squared bishop to d6 or e7 and castle kingside, aiming for a reliable, well-coordinated position. From our perspective, this is a comfortable setup to play against because Black's light-squared bishop is somewhat restricted, and we can focus on building our position with Nf3, c3, and Bd3 without worrying about immediate tactical complications."
+      "annotation": "Black plays a solid, classical setup by reinforcing the d5 pawn with e6. This creates a sturdy pawn chain but does have the trade-off of locking in Black's light-squared bishop behind the e6-d5 pawns \u2014 something we can potentially exploit later. Our opponent is preparing to develop the dark-squared bishop to d6 or e7 and castle kingside, aiming for a reliable, well-coordinated position. From our perspective, this is a comfortable setup to play against because Black's light-squared bishop is somewhat restricted, and we can focus on building our position with Nf3, c3, and Bd3 without worrying about immediate tactical complications.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c8",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and controlling the important e5 square. The knight on f3 complements our bishop on f4 beautifully — together they create strong control over the e5 outpost, which is a key strategic theme in the London System. This move also prepares castling kingside, which we'll want to do soon to bring our king to safety and connect our rooks. Additionally, the knight supports a future c3-Nbd2 development path, keeping our pieces flexible and well-coordinated within our solid pawn structure."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and controlling the important e5 square. The knight on f3 complements our bishop on f4 beautifully \u2014 together they create strong control over the e5 outpost, which is a key strategic theme in the London System. This move also prepares castling kingside, which we'll want to do soon to bring our king to safety and connect our rooks. Additionally, the knight supports a future c3-Nbd2 development path, keeping our pieces flexible and well-coordinated within our solid pawn structure.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at our pawn center with the most challenging break, putting immediate pressure on our d4 pawn. This is the principal way for Black to fight for counterplay against the London System — by attacking the base of our pawn chain. Our opponent is threatening ...cxd4, which would open the c-file and give Black more active piece play. However, we're well prepared for this — our next move c3 will create the complete London System pawn triangle (c3-d4-e3), which is incredibly resilient and difficult to break down. This is exactly why we set up our pieces before committing our pawns."
+      "annotation": "Black strikes at our pawn center with the most challenging break, putting immediate pressure on our d4 pawn. This is the principal way for Black to fight for counterplay against the London System \u2014 by attacking the base of our pawn chain. Our opponent is threatening ...cxd4, which would open the c-file and give Black more active piece play. However, we're well prepared for this \u2014 our next move c3 will create the complete London System pawn triangle (c3-d4-e3), which is incredibly resilient and difficult to break down. This is exactly why we set up our pieces before committing our pawns.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "c3",
-      "annotation": "We complete the iconic London System pawn triangle with c3, creating an ironclad central structure on c3-d4-e3. This is the heart of the London — three pawns supporting each other in a formation that's almost impossible for Black to undermine. The c3 pawn shores up the d4 point against Black's ...c5 pressure, and also prepares the Nbd2 development route for our queenside knight. With this pawn triangle in place, we can develop freely knowing our center is rock-solid. Our plan now is to play Nbd2, Bd3, and castle kingside, completing our development in a harmonious and secure manner."
+      "annotation": "We complete the iconic London System pawn triangle with c3, creating an ironclad central structure on c3-d4-e3. This is the heart of the London \u2014 three pawns supporting each other in a formation that's almost impossible for Black to undermine. The c3 pawn shores up the d4 point against Black's ...c5 pressure, and also prepares the Nbd2 development route for our queenside knight. With this pawn triangle in place, we can develop freely knowing our center is rock-solid. Our plan now is to play Nbd2, Bd3, and castle kingside, completing our development in a harmonious and secure manner.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queenside knight to its natural square, adding more pressure to our d4 pawn and supporting the ...c5 break. The knight on c6 also controls the important e5 and d4 squares, and could potentially reroute to b4 or e7 depending on how the position develops. Our opponent is building up forces against our center methodically. From our perspective, this is a standard developing move that we're well equipped to handle — our pawn triangle holds firm, and we'll continue with Nbd2 to add another defender to d4 while preparing to develop our light-squared bishop to the powerful d3 square."
+      "annotation": "Black develops the queenside knight to its natural square, adding more pressure to our d4 pawn and supporting the ...c5 break. The knight on c6 also controls the important e5 and d4 squares, and could potentially reroute to b4 or e7 depending on how the position develops. Our opponent is building up forces against our center methodically. From our perspective, this is a standard developing move that we're well equipped to handle \u2014 our pawn triangle holds firm, and we'll continue with Nbd2 to add another defender to d4 while preparing to develop our light-squared bishop to the powerful d3 square.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c6",
+          "to": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nbd2",
-      "annotation": "We develop the knight to d2 rather than c3, which is a key London System idea. The d2 square keeps the c-file clear for potential future use and avoids blocking our c3 pawn. From d2, the knight supports the d4 and e4 squares and can reroute to e5 via f1 or potentially jump to b3 to attack Black's c5 pawn. This development scheme also keeps our position flexible — the knight on d2 works harmoniously with our bishop on d3 (coming next) to create a powerful battery aimed at the h7 square. Our setup is nearly complete, and we're preparing to castle and launch our middlegame plans."
+      "annotation": "We develop the knight to d2 rather than c3, which is a key London System idea. The d2 square keeps the c-file clear for potential future use and avoids blocking our c3 pawn. From d2, the knight supports the d4 and e4 squares and can reroute to e5 via f1 or potentially jump to b3 to attack Black's c5 pawn. This development scheme also keeps our position flexible \u2014 the knight on d2 works harmoniously with our bishop on d3 (coming next) to create a powerful battery aimed at the h7 square. Our setup is nearly complete, and we're preparing to castle and launch our middlegame plans.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bd6",
-      "annotation": "Black develops the bishop to d6, aiming to challenge our powerful dark-squared bishop on f4 by offering a trade. This is a common and logical plan — if Black can exchange our London bishop, they remove one of our best-placed pieces and ease their defensive task. The bishop on d6 also supports a potential ...e5 advance and looks toward our kingside. We have an important decision: we can allow the trade, retreat to g3 to maintain the bishop, or exchange on d6 if it suits our plans. Typically in the London, we play Bg3 to keep our bishop, which also eyes the h4-d8 diagonal and can become surprisingly active."
+      "annotation": "Black develops the bishop to d6, aiming to challenge our powerful dark-squared bishop on f4 by offering a trade. This is a common and logical plan \u2014 if Black can exchange our London bishop, they remove one of our best-placed pieces and ease their defensive task. The bishop on d6 also supports a potential ...e5 advance and looks toward our kingside. We have an important decision: we can allow the trade, retreat to g3 to maintain the bishop, or exchange on d6 if it suits our plans. Typically in the London, we play Bg3 to keep our bishop, which also eyes the h4-d8 diagonal and can become surprisingly active.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d6",
+          "to": "f4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "Bg3",
-      "annotation": "We retreat our bishop to g3, maintaining this valuable piece on the board rather than allowing it to be traded off. The bishop on g3 is surprisingly well-placed — it controls the e5 square, eyes the h4-d8 diagonal, and keeps latent threats against Black's kingside along the b8-h2 diagonal. If Black plays ...Bxg3, we recapture with hxg3, opening the h-file for our rook, which can create dangerous attacking chances against Black's castled king. This is a classic London System trick — even if we lose the bishop pair, the open h-file compensation is excellent. Meanwhile, our position remains solid and we're ready to develop our light-squared bishop to d3."
+      "annotation": "We retreat our bishop to g3, maintaining this valuable piece on the board rather than allowing it to be traded off. The bishop on g3 is surprisingly well-placed \u2014 it controls the e5 square, eyes the h4-d8 diagonal, and keeps latent threats against Black's kingside along the b8-h2 diagonal. If Black plays ...Bxg3, we recapture with hxg3, opening the h-file for our rook, which can create dangerous attacking chances against Black's castled king. This is a classic London System trick \u2014 even if we lose the bishop pair, the open h-file compensation is excellent. Meanwhile, our position remains solid and we're ready to develop our light-squared bishop to d3.",
+      "arrows": [
+        {
+          "from": "f4",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "h2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, bringing their king to safety and connecting the rooks. This is a natural move, but it does place the king on the same side where we have potential attacking chances — especially if the h-file opens after a future ...Bxg3 hxg3 exchange. Our opponent is prioritizing king safety and completing their development, which is sound play. From our perspective, we should continue with Bd3, aiming the bishop at the h7 pawn and creating the classic London System battery on the b1-h7 diagonal. The combination of our bishop on d3 and queen on c2 (after Qc2) can create real threats against Black's kingside."
+      "annotation": "Black castles kingside, bringing their king to safety and connecting the rooks. This is a natural move, but it does place the king on the same side where we have potential attacking chances \u2014 especially if the h-file opens after a future ...Bxg3 hxg3 exchange. Our opponent is prioritizing king safety and completing their development, which is sound play. From our perspective, we should continue with Bd3, aiming the bishop at the h7 pawn and creating the classic London System battery on the b1-h7 diagonal. The combination of our bishop on d3 and queen on c2 (after Qc2) can create real threats against Black's kingside.",
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ]
     },
     {
       "san": "Bd3",
-      "annotation": "We develop our light-squared bishop to the powerful d3 square, completing our piece development and creating a dangerous battery aimed at Black's h7 pawn. The bishop on d3 is the crown jewel of our London System setup — it works in tandem with the bishop on g3 and our knight on f3 to create a web of control over the center and kingside. From d3, the bishop can support a future e4 pawn break and also participates in potential kingside attacks, especially after we play Qc2 to line up against h7. Our development is now essentially complete — we're castled, all pieces are active, and we have a clear plan to play for an advantage in the middlegame."
+      "annotation": "We develop our light-squared bishop to the powerful d3 square, completing our piece development and creating a dangerous battery aimed at Black's h7 pawn. The bishop on d3 is the crown jewel of our London System setup \u2014 it works in tandem with the bishop on g3 and our knight on f3 to create a web of control over the center and kingside. From d3, the bishop can support a future e4 pawn break and also participates in potential kingside attacks, especially after we play Qc2 to line up against h7. Our development is now essentially complete \u2014 we're castled, all pieces are active, and we have a clear plan to play for an advantage in the middlegame.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d3",
+          "to": "h7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "b6",
-      "annotation": "Black prepares to fianchetto the light-squared bishop to b7, aiming to put it on the long diagonal where it can pressure our e4 square and create counterplay. This move also prepares potential queenside expansion with ...Bb7, ...Qc7, and possibly ...a5-a4 later. Our opponent is trying to activate their somewhat restricted light-squared bishop, which has been hemmed in by the e6 pawn. From our perspective, Black's plan is logical but slow, giving us time to complete our setup with O-O and perhaps Qc2, creating the classic London System attacking formation. We now have a comfortable position with clear plans on the kingside while Black's counterplay on the queenside is still a few moves away."
+      "annotation": "Black prepares to fianchetto the light-squared bishop to b7, aiming to put it on the long diagonal where it can pressure our e4 square and create counterplay. This move also prepares potential queenside expansion with ...Bb7, ...Qc7, and possibly ...a5-a4 later. Our opponent is trying to activate their somewhat restricted light-squared bishop, which has been hemmed in by the e6 pawn. From our perspective, Black's plan is logical but slow, giving us time to complete our setup with O-O and perhaps Qc2, creating the classic London System attacking formation. We now have a comfortable position with clear plans on the kingside while Black's counterplay on the queenside is still a few moves away.",
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c8",
+          "to": "b7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ]
     }
   ]
 }

@@ -132,54 +132,54 @@ export function OpeningExplorerPage(): JSX.Element {
       </div>
 
       {/* Tab toggle */}
-      <div className="flex gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
+      <div className="flex gap-1 mb-4 p-1 bg-theme-surface rounded-xl overflow-x-auto" data-testid="tab-toggle">
         <button
           onClick={() => setTab('repertoire')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             tab === 'repertoire'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-repertoire"
         >
-          <BookOpen size={14} />
-          My Repertoire
+          <BookOpen size={14} className="shrink-0" />
+          <span className="hidden sm:inline">My </span>Repertoire
         </button>
         <button
           onClick={() => setTab('all')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             tab === 'all'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-all"
         >
-          <Library size={14} />
-          All Openings
+          <Library size={14} className="shrink-0" />
+          <span className="hidden sm:inline">All </span>Openings
         </button>
         <button
           onClick={() => setTab('gambits')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             tab === 'gambits'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-gambits"
         >
-          <Swords size={14} />
+          <Swords size={14} className="shrink-0" />
           Gambits
         </button>
         <button
           onClick={() => setTab('pro')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             tab === 'pro'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-pro"
         >
-          <Users size={14} />
-          Pro Repertoires
+          <Users size={14} className="shrink-0" />
+          Pro
         </button>
       </div>
 

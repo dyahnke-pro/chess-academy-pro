@@ -18,18 +18,18 @@
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "c2",
-          "to": "c4",
-          "color": "rgba(0, 100, 255, 0.7)"
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
         {
-          "square": "d5",
+          "square": "e5",
           "color": "rgba(255, 255, 0, 0.4)"
         },
         {
-          "square": "e5",
+          "square": "c5",
           "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
@@ -49,22 +49,16 @@
           "from": "d7",
           "to": "d5",
           "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "d5",
-          "to": "c4",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "d5",
-          "to": "e4",
-          "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
         {
-          "square": "d5",
-          "color": "rgba(0, 200, 100, 0.3)"
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -81,20 +75,20 @@
       ],
       "arrows": [
         {
-          "from": "c4",
-          "to": "d5",
+          "from": "c2",
+          "to": "c4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "e2",
-          "to": "e4",
-          "color": "rgba(0, 100, 255, 0.7)"
+          "from": "c4",
+          "to": "d5",
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
       "highlights": [
         {
           "square": "d5",
-          "color": "rgba(255, 80, 80, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -111,19 +105,19 @@
       ],
       "arrows": [
         {
-          "from": "e6",
-          "to": "d5",
+          "from": "e7",
+          "to": "e6",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
         {
-          "square": "c8",
-          "color": "rgba(255, 80, 80, 0.3)"
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
         },
         {
-          "square": "d5",
-          "color": "rgba(0, 200, 100, 0.3)"
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -139,20 +133,20 @@
       ],
       "arrows": [
         {
-          "from": "c3",
-          "to": "d5",
+          "from": "b1",
+          "to": "c3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
           "from": "c3",
-          "to": "e4",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "to": "d5",
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
       "highlights": [
         {
           "square": "d5",
-          "color": "rgba(255, 80, 80, 0.3)"
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ]
     },
@@ -168,20 +162,15 @@
       ],
       "arrows": [
         {
-          "from": "f6",
-          "to": "d5",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "f6",
-          "to": "e4",
+          "from": "g8",
+          "to": "f6",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
         {
           "square": "d5",
-          "color": "rgba(0, 200, 100, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -198,20 +187,24 @@
       ],
       "arrows": [
         {
-          "from": "g5",
-          "to": "f6",
+          "from": "c1",
+          "to": "g5",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "f6",
-          "to": "d8",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "from": "g5",
+          "to": "f6",
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
       "highlights": [
         {
           "square": "f6",
-          "color": "rgba(255, 80, 80, 0.3)"
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "square": "d8",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -228,6 +221,11 @@
       ],
       "arrows": [
         {
+          "from": "f8",
+          "to": "e7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
           "from": "e7",
           "to": "g5",
           "color": "rgba(0, 180, 80, 0.8)"
@@ -235,7 +233,7 @@
       ],
       "highlights": [
         {
-          "square": "g8",
+          "square": "e7",
           "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
@@ -253,15 +251,19 @@
       ],
       "arrows": [
         {
-          "from": "f1",
-          "to": "d3",
-          "color": "rgba(0, 100, 255, 0.7)"
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
         {
           "square": "d4",
-          "color": "rgba(0, 200, 100, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -274,15 +276,20 @@
       ],
       "arrows": [
         {
-          "from": "b8",
-          "to": "d7",
-          "color": "rgba(0, 100, 255, 0.7)"
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "h8",
+          "to": "f8",
+          "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
         {
           "square": "g8",
-          "color": "rgba(0, 200, 100, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -298,8 +305,8 @@
       ],
       "arrows": [
         {
-          "from": "f3",
-          "to": "d4",
+          "from": "g1",
+          "to": "f3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
@@ -327,14 +334,9 @@
       ],
       "arrows": [
         {
-          "from": "d7",
-          "to": "e5",
-          "color": "rgba(0, 100, 255, 0.7)"
-        },
-        {
-          "from": "c7",
-          "to": "c5",
-          "color": "rgba(0, 100, 255, 0.7)"
+          "from": "b8",
+          "to": "d7",
+          "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
@@ -357,20 +359,20 @@
       ],
       "arrows": [
         {
-          "from": "c1",
-          "to": "c4",
+          "from": "a1",
+          "to": "c1",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
           "from": "c1",
           "to": "c7",
-          "color": "rgba(0, 100, 255, 0.7)"
+          "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
       "highlights": [
         {
           "square": "c1",
-          "color": "rgba(0, 200, 100, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -388,20 +390,19 @@
       ],
       "arrows": [
         {
-          "from": "c6",
-          "to": "d5",
+          "from": "c7",
+          "to": "c6",
           "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "d5",
-          "to": "c4",
-          "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
       "highlights": [
         {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
           "square": "d5",
-          "color": "rgba(0, 200, 100, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -417,20 +418,20 @@
       ],
       "arrows": [
         {
-          "from": "d3",
-          "to": "h7",
+          "from": "f1",
+          "to": "d3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "e3",
-          "to": "e4",
-          "color": "rgba(0, 100, 255, 0.7)"
+          "from": "d3",
+          "to": "h7",
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
       "highlights": [
         {
           "square": "h7",
-          "color": "rgba(255, 80, 80, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -449,16 +450,15 @@
           "from": "d5",
           "to": "c4",
           "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "f6",
-          "to": "d5",
-          "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
       "highlights": [
         {
-          "square": "d5",
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d3",
           "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
@@ -475,25 +475,19 @@
       ],
       "arrows": [
         {
-          "from": "c4",
-          "to": "e6",
+          "from": "d5",
+          "to": "c4",
           "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "c4",
-          "to": "f7",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "e3",
-          "to": "e4",
-          "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
       "highlights": [
         {
-          "square": "f7",
-          "color": "rgba(255, 80, 80, 0.3)"
+          "square": "c4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -509,29 +503,20 @@
       ],
       "arrows": [
         {
+          "from": "f6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
           "from": "d5",
-          "to": "g5",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "c6",
-          "to": "d5",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "e6",
-          "to": "d5",
-          "color": "rgba(0, 180, 80, 0.8)"
+          "to": "c3",
+          "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
       "highlights": [
         {
           "square": "d5",
-          "color": "rgba(0, 200, 100, 0.3)"
-        },
-        {
-          "square": "g5",
-          "color": "rgba(255, 80, 80, 0.3)"
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     }

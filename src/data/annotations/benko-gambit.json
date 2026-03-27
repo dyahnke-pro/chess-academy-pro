@@ -3,83 +3,408 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, staking a claim to the center and preparing to develop pieces harmoniously. This move controls the important e5 square and opens diagonals for both the dark-squared bishop and queen. Against our Benko Gambit, this is actually the move we want to see — d4 combined with c4 and d5 creates exactly the pawn structure we need to launch our gambit. The d4 opening leads to rich, strategic middlegames, and we're going to spice things up with one of the most dynamic gambits in chess."
+      "annotation": "White opens with the queen's pawn, staking a claim to the center and preparing to develop pieces harmoniously. This move controls the important e5 square and opens diagonals for both the dark-squared bishop and queen. Against our Benko Gambit, this is actually the move we want to see — d4 combined with c4 and d5 creates exactly the pawn structure we need to launch our gambit. The d4 opening leads to rich, strategic middlegames, and we're going to spice things up with one of the most dynamic gambits in chess.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "We develop our knight to its most natural square, attacking the d4 pawn and preparing to challenge White's central control. This is a flexible move that keeps our options open — we could play various Indian defenses or, as we're planning, head into the Benko Gambit after ...c5 and ...b5. The knight on f6 also controls the e4 square, preventing White from easily establishing a broad pawn center. By developing the knight first, we're not yet revealing our Benko intentions, which keeps White guessing about our plans."
+      "annotation": "We develop our knight to its most natural square, attacking the d4 pawn and preparing to challenge White's central control. This is a flexible move that keeps our options open — we could play various Indian defenses or, as we're planning, head into the Benko Gambit after ...c5 and ...b5. The knight on f6 also controls the e4 square, preventing White from easily establishing a broad pawn center. By developing the knight first, we're not yet revealing our Benko intentions, which keeps White guessing about our plans.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "White expands in the center with c4, supporting the d4 pawn and controlling the d5 square. This move creates the classic d4-c4 pawn duo that characterizes many Queen's Gambit and Indian Defense positions. For our Benko Gambit plans, c4 is essential — we need White's pawn on c4 so that after ...c5, d5, ...b5, the cxb5 capture opens the a-file and gives us the queenside pressure we're looking for. White is developing logically, unaware that we're about to shake up the position with an aggressive pawn sacrifice."
+      "annotation": "White expands in the center with c4, supporting the d4 pawn and controlling the d5 square. This move creates the classic d4-c4 pawn duo that characterizes many Queen's Gambit and Indian Defense positions. For our Benko Gambit plans, c4 is essential — we need White's pawn on c4 so that after ...c5, d5, ...b5, the cxb5 capture opens the a-file and gives us the queenside pressure we're looking for. White is developing logically, unaware that we're about to shake up the position with an aggressive pawn sacrifice.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "We strike at the center with c5, challenging White's d4 pawn and signaling our intention to enter Benoni or Benko Gambit territory. This is the critical move that sets up our gambit — after White plays d5, we'll follow up with ...b5, offering a pawn sacrifice for long-term positional compensation. The c5 advance creates tension in the center and forces White to make a decision: maintain the tension, capture, or advance. Most importantly, this move opens the c-file for future rook play and begins our queenside counterattack plan. We're laying the groundwork for one of the most exciting and principled gambits in chess."
+      "annotation": "We strike at the center with c5, challenging White's d4 pawn and signaling our intention to enter Benoni or Benko Gambit territory. This is the critical move that sets up our gambit — after White plays d5, we'll follow up with ...b5, offering a pawn sacrifice for long-term positional compensation. The c5 advance creates tension in the center and forces White to make a decision: maintain the tension, capture, or advance. Most importantly, this move opens the c-file for future rook play and begins our queenside counterattack plan. We're laying the groundwork for one of the most exciting and principled gambits in chess.",
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b5",
+          "to": "c4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "White advances the pawn to gain space, which is exactly what we were hoping for! The d5 advance gives White more territory but also creates the ideal conditions for our Benko Gambit — the pawn on d5 is extended and potentially vulnerable, and White's queenside structure will come under tremendous pressure after our ...b5 sacrifice. White's space advantage is real, but it comes with responsibilities: the d5 pawn must be defended, and the queenside will become a battleground. From our perspective, this is the green light for our gambit plan — next comes the dramatic ...b5 pawn sacrifice."
+      "annotation": "White advances the pawn to gain space, which is exactly what we were hoping for! The d5 advance gives White more territory but also creates the ideal conditions for our Benko Gambit — the pawn on d5 is extended and potentially vulnerable, and White's queenside structure will come under tremendous pressure after our ...b5 sacrifice. White's space advantage is real, but it comes with responsibilities: the d5 pawn must be defended, and the queenside will become a battleground. From our perspective, this is the green light for our gambit plan — next comes the dramatic ...b5 pawn sacrifice.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b5",
-      "annotation": "Here comes the Benko Gambit! We're offering a pawn sacrifice to generate long-lasting positional compensation — open files, active pieces, and relentless pressure on White's queenside. This is one of the most principled gambits in chess because the compensation isn't just tactical or short-term; it's structural and permanent. After White captures, we'll follow with ...a6, opening the a-file and creating a highway for our rooks. The beauty of the Benko is that Black's compensation grows over time — the longer the game goes, the more painful White's queenside weaknesses become. We're trading a wing pawn for activity, initiative, and long-term pressure."
+      "annotation": "Here comes the Benko Gambit! We're offering a pawn sacrifice to generate long-lasting positional compensation — open files, active pieces, and relentless pressure on White's queenside. This is one of the most principled gambits in chess because the compensation isn't just tactical or short-term; it's structural and permanent. After White captures, we'll follow with ...a6, opening the a-file and creating a highway for our rooks. The beauty of the Benko is that Black's compensation grows over time — the longer the game goes, the more painful White's queenside weaknesses become. We're trading a wing pawn for activity, initiative, and long-term pressure.",
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxb5",
-      "annotation": "White accepts the gambit, which is the most principled continuation. By taking on b5, White has an extra pawn but must now defend against our mounting queenside pressure. The capture opens lines that we'll exploit with ...a6, and White's extra pawn on b5 is more of a liability than an asset — it's difficult to hold and becomes a target for our pieces. Some players prefer to decline the Benko with moves like 4.Nf3 or 4.a4, but accepting and trying to prove the extra pawn's value is the most testing approach. Now it's time for us to continue the gambit plan with ...a6."
+      "annotation": "White accepts the gambit, which is the most principled continuation. By taking on b5, White has an extra pawn but must now defend against our mounting queenside pressure. The capture opens lines that we'll exploit with ...a6, and White's extra pawn on b5 is more of a liability than an asset — it's difficult to hold and becomes a target for our pieces. Some players prefer to decline the Benko with moves like 4.Nf3 or 4.a4, but accepting and trying to prove the extra pawn's value is the most testing approach. Now it's time for us to continue the gambit plan with ...a6.",
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a6",
-      "annotation": "We continue the gambit sequence, attacking White's b5 pawn and preparing to open the a-file for our rook. This is the second pawn sacrifice — we're willing to give up two pawns to create massive queenside pressure with open a and b-files, an active bishop on the long diagonal, and piece activity that's worth far more than the material deficit. After White captures bxa6, we'll recapture with the bishop, developing a piece with tempo while maintaining all our structural advantages. The a-file will become our main avenue of attack, with our rook on a8 putting constant pressure on White's a-pawn."
+      "annotation": "We continue the gambit sequence, attacking White's b5 pawn and preparing to open the a-file for our rook. This is the second pawn sacrifice — we're willing to give up two pawns to create massive queenside pressure with open a and b-files, an active bishop on the long diagonal, and piece activity that's worth far more than the material deficit. After White captures bxa6, we'll recapture with the bishop, developing a piece with tempo while maintaining all our structural advantages. The a-file will become our main avenue of attack, with our rook on a8 putting constant pressure on White's a-pawn.",
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a6",
+          "to": "b5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "b5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "bxa6",
-      "annotation": "White captures our a-pawn, going two pawns up in material but handing us exactly the position we want. The a-file is now wide open for our rook, and White has a doubled, isolated a-pawn that's difficult to defend. Our compensation is becoming concrete: we have open files, will develop our bishop actively to a6 (recapturing the pawn), and our pieces will be much more active than White's. The two extra pawns look impressive on paper, but in practice, White's queenside structure is compromised and our piece activity generates constant threats. This is the classic Benko trade — material for positional pressure."
+      "annotation": "White captures our a-pawn, going two pawns up in material but handing us exactly the position we want. The a-file is now wide open for our rook, and White has a doubled, isolated a-pawn that's difficult to defend. Our compensation is becoming concrete: we have open files, will develop our bishop actively to a6 (recapturing the pawn), and our pieces will be much more active than White's. The two extra pawns look impressive on paper, but in practice, White's queenside structure is compromised and our piece activity generates constant threats. This is the classic Benko trade — material for positional pressure.",
+      "arrows": [
+        {
+          "from": "b5",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bxa6",
-      "annotation": "We recapture with the bishop, immediately developing a piece while regaining one of our sacrificed pawns. The bishop on a6 is perfectly placed — it targets White's f1 bishop and can potentially force an exchange that disrupts White's castling plans. We're now only one pawn down, but our positional compensation is immense: open a-file, active bishop, and the coming ...g6, ...Bg7 fianchetto will add another powerful piece to our queenside pressure campaign. The bishop on a6 is a star piece in the Benko — it creates tactical threats against f1 and keeps constant pressure on White's position."
+      "annotation": "We recapture with the bishop, immediately developing a piece while regaining one of our sacrificed pawns. The bishop on a6 is perfectly placed — it targets White's f1 bishop and can potentially force an exchange that disrupts White's castling plans. We're now only one pawn down, but our positional compensation is immense: open a-file, active bishop, and the coming ...g6, ...Bg7 fianchetto will add another powerful piece to our queenside pressure campaign. The bishop on a6 is a star piece in the Benko — it creates tactical threats against f1 and keeps constant pressure on White's position.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a6",
+          "to": "f1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, supporting the d5 pawn and developing naturally. This is a logical move, but the knight on c3 can also become a target for our pieces — after ...d6 and ...Nbd7, we'll have strong pressure along the queenside files. White is trying to complete development and stabilize, but every tempo spent on defense is a tempo not spent converting the extra pawn. From our Benko perspective, White's development is reasonable but our piece activity and open files are already creating pressure that makes it hard for White to play freely."
+      "annotation": "White develops the knight to c3, supporting the d5 pawn and developing naturally. This is a logical move, but the knight on c3 can also become a target for our pieces — after ...d6 and ...Nbd7, we'll have strong pressure along the queenside files. White is trying to complete development and stabilize, but every tempo spent on defense is a tempo not spent converting the extra pawn. From our Benko perspective, White's development is reasonable but our piece activity and open files are already creating pressure that makes it hard for White to play freely.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "We play d6, solidifying our center and preparing to complete our ideal Benko Gambit setup with ...g6 and ...Bg7. The d6 pawn supports the e5 square and creates a flexible pawn structure that complements our piece activity. This move also opens the possibility of ...Nbd7, developing the queenside knight and adding more pieces to our attack. The d6 pawn is a cornerstone of our position — it keeps our structure sound while we focus on maximizing our piece pressure on the queenside. Our setup is coming together beautifully: open files, active bishop, and now a solid center."
+      "annotation": "We play d6, solidifying our center and preparing to complete our ideal Benko Gambit setup with ...g6 and ...Bg7. The d6 pawn supports the e5 square and creates a flexible pawn structure that complements our piece activity. This move also opens the possibility of ...Nbd7, developing the queenside knight and adding more pieces to our attack. The d6 pawn is a cornerstone of our position — it keeps our structure sound while we focus on maximizing our piece pressure on the queenside. Our setup is coming together beautifully: open files, active bishop, and now a solid center.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "White advances in the center, gaining space and building an imposing pawn center on d5 and e4. This is a logical try to use the extra material to dominate the board, but the e4 advance also creates a target and weakens some squares around White's center. The pawns on d5 and e4 look impressive, but they require piece support to maintain, and White's pieces are still catching up on development. From our perspective, we're not worried about White's big center — our Benko pressure on the queenside will distract White from consolidating, and the f1 bishop exchange we're planning will further disrupt White's coordination."
+      "annotation": "White advances in the center, gaining space and building an imposing pawn center on d5 and e4. This is a logical try to use the extra material to dominate the board, but the e4 advance also creates a target and weakens some squares around White's center. The pawns on d5 and e4 look impressive, but they require piece support to maintain, and White's pieces are still catching up on development. From our perspective, we're not worried about White's big center — our Benko pressure on the queenside will distract White from consolidating, and the f1 bishop exchange we're planning will further disrupt White's coordination.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bxf1",
-      "annotation": "We execute the key exchange, trading our bishop for White's dark-squared bishop on f1! This is one of the hallmark ideas of the Benko Gambit — by eliminating the f1 bishop, we force White's king to recapture on f1, permanently removing castling rights. This exchange is worth much more than it appears: White's king will be stuck in the center or must castle by hand (Kf1-Kg2), costing valuable time. Meanwhile, our rooks will dominate the open a and b-files, and our fianchettoed bishop on g7 will control the long diagonal. This is the moment where our gambit compensation becomes overwhelming."
+      "annotation": "We execute the key exchange, trading our bishop for White's dark-squared bishop on f1! This is one of the hallmark ideas of the Benko Gambit — by eliminating the f1 bishop, we force White's king to recapture on f1, permanently removing castling rights. This exchange is worth much more than it appears: White's king will be stuck in the center or must castle by hand (Kf1-Kg2), costing valuable time. Meanwhile, our rooks will dominate the open a and b-files, and our fianchettoed bishop on g7 will control the long diagonal. This is the moment where our gambit compensation becomes overwhelming.",
+      "arrows": [
+        {
+          "from": "a6",
+          "to": "f1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "Kxf1",
-      "annotation": "White is forced to recapture with the king, losing the right to castle entirely. This is a huge concession — the king on f1 is misplaced and will need several moves to find safety on g2 via the artificial castling route (Kg2). Every move White spends on king relocation is a move not spent on countering our queenside pressure. Our compensation is now very tangible: we have open files for our rooks, our bishop will fianchetto to g7 controlling the long diagonal, and White's king is awkwardly placed. The Benko Gambit is in full effect — our positional compensation is worth much more than the single pawn deficit."
+      "annotation": "White is forced to recapture with the king, losing the right to castle entirely. This is a huge concession — the king on f1 is misplaced and will need several moves to find safety on g2 via the artificial castling route (Kg2). Every move White spends on king relocation is a move not spent on countering our queenside pressure. Our compensation is now very tangible: we have open files for our rooks, our bishop will fianchetto to g7 controlling the long diagonal, and White's king is awkwardly placed. The Benko Gambit is in full effect — our positional compensation is worth much more than the single pawn deficit.",
+      "arrows": [
+        {
+          "from": "a6",
+          "to": "f1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "We prepare the powerful kingside fianchetto, setting up the bishop on g7 where it will dominate the long diagonal and add another attacking piece to our queenside pressure. The g6 move is essential to the Benko Gambit setup — the bishop on g7 will target White's center and queenside through the a1-h8 diagonal, complementing our rook pressure on the a and b-files. This pawn move also prepares to castle kingside, bringing our king to safety while our pieces continue the assault. The combination of rooks on the open files and the bishop on g7 creates a web of pressure that's extremely difficult for White to navigate."
+      "annotation": "We prepare the powerful kingside fianchetto, setting up the bishop on g7 where it will dominate the long diagonal and add another attacking piece to our queenside pressure. The g6 move is essential to the Benko Gambit setup — the bishop on g7 will target White's center and queenside through the a1-h8 diagonal, complementing our rook pressure on the a and b-files. This pawn move also prepares to castle kingside, bringing our king to safety while our pieces continue the assault. The combination of rooks on the open files and the bishop on g7 creates a web of pressure that's extremely difficult for White to navigate.",
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "f1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to f3 and prepares to bring the king to g2 via the artificial castling route. The knight on f3 is well-placed, controlling e5 and supporting the center, and it also helps cover the g1-a7 diagonal. White is trying to organize their pieces and find a safe haven for the king, which is understandable given the exposed position on f1. From our perspective, we should complete our fianchetto with ...Bg7 and then castle, after which we'll have a fully operational Benko setup with tremendous queenside pressure and a safe king."
+      "annotation": "White develops the knight to f3 and prepares to bring the king to g2 via the artificial castling route. The knight on f3 is well-placed, controlling e5 and supporting the center, and it also helps cover the g1-a7 diagonal. White is trying to organize their pieces and find a safe haven for the king, which is understandable given the exposed position on f1. From our perspective, we should complete our fianchetto with ...Bg7 and then castle, after which we'll have a fully operational Benko setup with tremendous queenside pressure and a safe king.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "We complete the fianchetto, unleashing our bishop on the powerful a1-h8 diagonal. The bishop on g7 is a monster — it pressures White's center, eyes the a1 corner, and works in harmony with our rooks on the open files to create devastating queenside pressure. This bishop is one of the key attacking pieces in the Benko Gambit, and its long-range power makes it impossible for White to relax on the queenside. Combined with our open a and b-files and White's awkwardly placed king, we have full Benko compensation. Our next step is to castle and then deploy our rooks to a8 and b8, creating the classic Benko piston formation."
+      "annotation": "We complete the fianchetto, unleashing our bishop on the powerful a1-h8 diagonal. The bishop on g7 is a monster — it pressures White's center, eyes the a1 corner, and works in harmony with our rooks on the open files to create devastating queenside pressure. This bishop is one of the key attacking pieces in the Benko Gambit, and its long-range power makes it impossible for White to relax on the queenside. Combined with our open a and b-files and White's awkwardly placed king, we have full Benko compensation. Our next step is to castle and then deploy our rooks to a8 and b8, creating the classic Benko piston formation.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g7",
+          "to": "a1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g3",
-      "annotation": "White plays g3, preparing to bring the king to g2 and complete the artificial castling maneuver. This is a necessary move to resolve the king's safety issue — from g2, the king will be relatively secure behind the g3 and f2 pawns. However, this entire king relocation process has cost White valuable time that could have been spent developing and attacking. The g3 move also slightly weakens the dark squares around White's king, which our bishop on g7 can exploit. From our perspective, White is still scrambling for king safety while we're ready to castle and launch our full queenside assault."
+      "annotation": "White plays g3, preparing to bring the king to g2 and complete the artificial castling maneuver. This is a necessary move to resolve the king's safety issue — from g2, the king will be relatively secure behind the g3 and f2 pawns. However, this entire king relocation process has cost White valuable time that could have been spent developing and attacking. The g3 move also slightly weakens the dark squares around White's king, which our bishop on g7 can exploit. From our perspective, White is still scrambling for king safety while we're ready to castle and launch our full queenside assault.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "h4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside, bringing our king to perfect safety on g8 and activating our rook on f8. With castling complete, our entire Benko Gambit setup is fully operational: the bishop on g7 rakes the long diagonal, the a-file and b-file are open for our rooks, and our king is secure. Now we're ready to execute the final phase of our plan — placing rooks on a8 and b8 to create the classic Benko piston that will pound White's queenside relentlessly. White's extra pawn is meaningless compared to our piece activity, open files, and long-term pressure. This is the Benko Gambit at its finest — we've sacrificed a pawn for a position where every one of our pieces is more active than its White counterpart."
+      "annotation": "We castle kingside, bringing our king to perfect safety on g8 and activating our rook on f8. With castling complete, our entire Benko Gambit setup is fully operational: the bishop on g7 rakes the long diagonal, the a-file and b-file are open for our rooks, and our king is secure. Now we're ready to execute the final phase of our plan — placing rooks on a8 and b8 to create the classic Benko piston that will pound White's queenside relentlessly. White's extra pawn is meaningless compared to our piece activity, open files, and long-term pressure. This is the Benko Gambit at its finest — we've sacrificed a pawn for a position where every one of our pieces is more active than its White counterpart.",
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "h8",
+          "to": "f8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

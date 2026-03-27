@@ -11,8 +11,8 @@
         "Castle early for king safety"
       ],
       "alternatives": [
-        "d4 — leads to Queen's Pawn openings with a different strategic flavor",
-        "c4 — the English, aiming for a flank-based approach"
+        "d4 \u2014 leads to Queen's Pawn openings with a different strategic flavor",
+        "c4 \u2014 the English, aiming for a flank-based approach"
       ],
       "arrows": [
         {
@@ -51,8 +51,8 @@
         "Prepare d5 break when the time is right"
       ],
       "alternatives": [
-        "c5 — the Sicilian Defense, Black's most popular asymmetric response",
-        "e6 — the French Defense, solid but more passive"
+        "c5 \u2014 the Sicilian Defense, Black's most popular asymmetric response",
+        "e6 \u2014 the French Defense, solid but more passive"
       ],
       "arrows": [
         {
@@ -86,8 +86,8 @@
         "Support a future d4 advance"
       ],
       "alternatives": [
-        "Bc4 — the Italian Game, targeting f7 directly",
-        "f4 — the King's Gambit, sacrificing a pawn for fast development"
+        "Bc4 \u2014 the Italian Game, targeting f7 directly",
+        "f4 \u2014 the King's Gambit, sacrificing a pawn for fast development"
       ],
       "arrows": [
         {
@@ -116,8 +116,8 @@
         "Develop the kingside pieces next"
       ],
       "alternatives": [
-        "Nf6 — the Petrov Defense, counterattacking e4 instead of defending e5",
-        "d6 — the Philidor Defense, solid but somewhat passive"
+        "Nf6 \u2014 the Petrov Defense, counterattacking e4 instead of defending e5",
+        "d6 \u2014 the Philidor Defense, solid but somewhat passive"
       ],
       "arrows": [
         {
@@ -148,8 +148,8 @@
         "In many lines the bishop retreats to c2 to support a kingside attack"
       ],
       "alternatives": [
-        "Bc4 — the Italian Game, more direct but allows Black easier equality",
-        "d4 — the Scotch Game, an immediate central confrontation"
+        "Bc4 \u2014 the Italian Game, more direct but allows Black easier equality",
+        "d4 \u2014 the Scotch Game, an immediate central confrontation"
       ],
       "arrows": [
         {
@@ -172,15 +172,15 @@
     },
     {
       "san": "a6",
-      "annotation": "The Morphy Defense — Black asks the bishop an important question: where do you want to go? This gains time and space on the queenside while preparing b5 to kick the bishop further. It also prevents any future Bb5-a4-Nb5 ideas.",
+      "annotation": "The Morphy Defense \u2014 Black asks the bishop an important question: where do you want to go? This gains time and space on the queenside while preparing b5 to kick the bishop further. It also prevents any future Bb5-a4-Nb5 ideas.",
       "pawnStructure": "The a6 pawn prepares the b5 advance, which will expand on the queenside. This creates a pawn lever that defines many Ruy Lopez middlegames.",
       "plans": [
         "Follow up with b5 to gain queenside space",
         "Develop naturally while the bishop retreats"
       ],
       "alternatives": [
-        "Nf6 — the Berlin Defense, leading to famous endgame lines",
-        "d6 — the Steinitz Defense, very solid but more cramped"
+        "Nf6 \u2014 the Berlin Defense, leading to famous endgame lines",
+        "d6 \u2014 the Steinitz Defense, very solid but more cramped"
       ],
       "arrows": [
         {
@@ -205,7 +205,7 @@
         "Later Bb3 or Bc2 depending on the pawn structure"
       ],
       "alternatives": [
-        "Bxc6 — the Exchange Variation, simplifying but giving Black the bishop pair"
+        "Bxc6 \u2014 the Exchange Variation, simplifying but giving Black the bishop pair"
       ],
       "arrows": [
         {
@@ -214,17 +214,26 @@
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its best square, attacking e4 and completing kingside development preparation. This is the main line of the Ruy Lopez — Black creates a counter-threat against e4 rather than passively defending.",
+      "annotation": "Black develops the knight to its best square, attacking e4 and completing kingside development preparation. This is the main line of the Ruy Lopez \u2014 Black creates a counter-threat against e4 rather than passively defending.",
       "plans": [
         "Attack e4 to force White to address the center",
         "Prepare Be7 and O-O for quick castling"
       ],
       "alternatives": [
-        "b5 followed by Na5 — the Open Ruy Lopez, immediately challenging the bishop"
+        "b5 followed by Na5 \u2014 the Open Ruy Lopez, immediately challenging the bishop"
       ],
       "arrows": [
         {
@@ -242,13 +251,13 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles into safety while connecting the rooks. A key subtlety: White doesn't defend e4 with d3 yet, because after O-O the rook on f1 is ready to go to e1, and the e4 pawn is offered as a temporary sacrifice in some lines. This is the beginning of the famous 'Spanish torture' — slow, strategic pressure.",
+      "annotation": "White castles into safety while connecting the rooks. A key subtlety: White doesn't defend e4 with d3 yet, because after O-O the rook on f1 is ready to go to e1, and the e4 pawn is offered as a temporary sacrifice in some lines. This is the beginning of the famous 'Spanish torture' \u2014 slow, strategic pressure.",
       "plans": [
         "Play Re1 to defend e4 and add pressure to the e-file",
         "Build a center with d4 at the right moment"
       ],
       "alternatives": [
-        "d3 — safe but overly passive, blocks the queen and slows White's plan"
+        "d3 \u2014 safe but overly passive, blocks the queen and slows White's plan"
       ],
       "arrows": [
         {
@@ -257,18 +266,27 @@
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "square": "f1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Be7",
-      "annotation": "The bishop develops modestly to e7 rather than the more aggressive c5 or b4. On e7 it supports castling, prepares to contest the d6-f6 squares, and stays flexible — it can later reroute to f6 or d8 in some Breyer/Zaitsev structures.",
+      "annotation": "The bishop develops modestly to e7 rather than the more aggressive c5 or b4. On e7 it supports castling, prepares to contest the d6-f6 squares, and stays flexible \u2014 it can later reroute to f6 or d8 in some Breyer/Zaitsev structures.",
       "plans": [
         "Castle kingside immediately",
         "Keep options open for the bishop's future diagonal"
       ],
       "alternatives": [
-        "Bc5 — more aggressive but can be awkward after d4",
-        "b5 Bb3 Bb7 — the Archangel, aiming for active piece play"
+        "Bc5 \u2014 more aggressive but can be awkward after d4",
+        "b5 Bb3 Bb7 \u2014 the Archangel, aiming for active piece play"
       ],
       "arrows": [
         {
@@ -277,7 +295,12 @@
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "e7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ]
     },
     {
       "san": "Re1",
@@ -287,7 +310,7 @@
         "The e-file becomes a key battleground after d4 exd4"
       ],
       "alternatives": [
-        "d3 — too slow at this point, White should be more ambitious"
+        "d3 \u2014 too slow at this point, White should be more ambitious"
       ],
       "arrows": [
         {
@@ -317,7 +340,7 @@
         "Use the queenside space for piece activity"
       ],
       "alternatives": [
-        "d6 first — the Old Steinitz Deferred, more conservative"
+        "d6 first \u2014 the Old Steinitz Deferred, more conservative"
       ],
       "arrows": [
         {
@@ -331,18 +354,23 @@
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb3",
-      "annotation": "The bishop settles on its best diagonal, eyeing the f7 pawn. From b3, the bishop is extremely well-placed — it's safe from further pawn attacks, targets the sensitive f7 square, and supports future central play with d4. In many lines, it later reroutes to c2 to support a kingside pawn storm.",
+      "annotation": "The bishop settles on its best diagonal, eyeing the f7 pawn. From b3, the bishop is extremely well-placed \u2014 it's safe from further pawn attacks, targets the sensitive f7 square, and supports future central play with d4. In many lines, it later reroutes to c2 to support a kingside pawn storm.",
       "plans": [
         "Target f7 from the a2-g8 diagonal",
         "Support d4 central advance",
         "Potentially reroute to c2 to support e4-e5 or kingside attack"
       ],
       "alternatives": [
-        "Ba2 — too passive, the bishop is buried behind its own pawns"
+        "Ba2 \u2014 too passive, the bishop is buried behind its own pawns"
       ],
       "arrows": [
         {
@@ -365,14 +393,14 @@
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the e5 pawn and opens a diagonal for the c8 bishop. This is a key structural move — d6 creates the famous Ruy Lopez pawn chain (e5-d6) that defines Black's central strategy. The position is solid but slightly passive, which is why precise play is needed.",
+      "annotation": "Black solidifies the e5 pawn and opens a diagonal for the c8 bishop. This is a key structural move \u2014 d6 creates the famous Ruy Lopez pawn chain (e5-d6) that defines Black's central strategy. The position is solid but slightly passive, which is why precise play is needed.",
       "pawnStructure": "The e5-d6 chain is solid but commits Black to a specific structure. The d6 pawn can become a target if White achieves d4 and opens the position.",
       "plans": [
         "Complete development with O-O",
         "Prepare Bb7 or Bg4 for the light-squared bishop"
       ],
       "alternatives": [
-        "d5 — more aggressive but risky, leading to sharp Open Ruy Lopez lines"
+        "d5 \u2014 more aggressive but risky, leading to sharp Open Ruy Lopez lines"
       ],
       "arrows": [
         {
@@ -394,14 +422,14 @@
     },
     {
       "san": "c3",
-      "annotation": "A critical preparatory move! White supports the d4 advance — without c3, after d4 exd4 Nxd4, Black can play Nxd4 with a comfortable position. With c3, after d4 exd4 cxd4, White gets a powerful broad pawn center. This is the hallmark of the Ruy Lopez — patient preparation before the central strike.",
+      "annotation": "A critical preparatory move! White supports the d4 advance \u2014 without c3, after d4 exd4 Nxd4, Black can play Nxd4 with a comfortable position. With c3, after d4 exd4 cxd4, White gets a powerful broad pawn center. This is the hallmark of the Ruy Lopez \u2014 patient preparation before the central strike.",
       "pawnStructure": "c3 prepares an ideal pawn center with d4. The c3-d4-e4 pawn trio would give White significant central control.",
       "plans": [
         "Play d4 with strong central control",
         "The knight on b1 may reroute via d2 to f1-g3"
       ],
       "alternatives": [
-        "d4 immediately — playable but gives Black easier counterplay without the c3 support"
+        "d4 immediately \u2014 playable but gives Black easier counterplay without the c3 support"
       ],
       "arrows": [
         {
@@ -430,7 +458,7 @@
         "Consider Re8 to add support to the e-file"
       ],
       "alternatives": [
-        "Bg4 — immediately active but White can gain the bishop pair with h3 and d4"
+        "Bg4 \u2014 immediately active but White can gain the bishop pair with h3 and d4"
       ],
       "arrows": [
         {
@@ -439,7 +467,12 @@
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
-      "highlights": []
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ]
     },
     {
       "san": "h3",
@@ -450,8 +483,8 @@
         "In some lines, the h3 pawn supports a future g4 kingside expansion"
       ],
       "alternatives": [
-        "d4 — possible but Bg4 would be annoying",
-        "d3 — too passive, surrendering White's central ambitions"
+        "d4 \u2014 possible but Bg4 would be annoying",
+        "d3 \u2014 too passive, surrendering White's central ambitions"
       ],
       "arrows": [
         {
@@ -469,16 +502,16 @@
     },
     {
       "san": "Nb8",
-      "annotation": "The Breyer maneuver — one of the most famous retreats in chess! The knight goes backward to reroute via d7 to better squares. On c6 the knight was blocked by its own e5 pawn, but from d7 it can go to f8-g6 or support c5. This deep regrouping was a revolution in Ruy Lopez theory, showing that retreat can be the most aggressive plan.",
-      "pawnStructure": "No structural change, but the knight retreat prepares structural flexibility — c5 or d5 breaks become possible without the knight blocking c6.",
+      "annotation": "The Breyer maneuver \u2014 one of the most famous retreats in chess! The knight goes backward to reroute via d7 to better squares. On c6 the knight was blocked by its own e5 pawn, but from d7 it can go to f8-g6 or support c5. This deep regrouping was a revolution in Ruy Lopez theory, showing that retreat can be the most aggressive plan.",
+      "pawnStructure": "No structural change, but the knight retreat prepares structural flexibility \u2014 c5 or d5 breaks become possible without the knight blocking c6.",
       "plans": [
         "Reroute the knight via Nbd7 to f8 or e6",
         "Prepare the c5 or d5 pawn break",
         "Develop Bb7 to contest the long diagonal"
       ],
       "alternatives": [
-        "Na5 — trading the bishop pair but losing time",
-        "Re8 — standard but less flexible than the Breyer setup"
+        "Na5 \u2014 trading the bishop pair but losing time",
+        "Re8 \u2014 standard but less flexible than the Breyer setup"
       ],
       "arrows": [
         {

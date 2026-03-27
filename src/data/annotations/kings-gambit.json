@@ -3,13 +3,13 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White opens with the king's pawn, seizing central space and preparing for the most romantic opening in chess. Every King's Gambit starts here — controlling d5 and f5 while freeing the queen and bishop.",
+      "annotation": "White opens with the king's pawn, seizing central space and preparing for the most romantic opening in chess. Every King's Gambit starts here \u2014 controlling d5 and f5 while freeing the queen and bishop.",
       "plans": [
-        "Prepare f4 — the King's Gambit pawn sacrifice",
+        "Prepare f4 \u2014 the King's Gambit pawn sacrifice",
         "Open lines for rapid attacking development"
       ],
       "alternatives": [
-        "d4 — leads to calmer Queen's Pawn openings"
+        "d4 \u2014 leads to calmer Queen's Pawn openings"
       ],
       "arrows": [
         {
@@ -37,7 +37,7 @@
         "Develop pieces to defend and counterattack"
       ],
       "alternatives": [
-        "c5 — the Sicilian, avoiding gambit play entirely"
+        "c5 \u2014 the Sicilian, avoiding gambit play entirely"
       ],
       "arrows": [
         {
@@ -55,7 +55,7 @@
     },
     {
       "san": "f4",
-      "annotation": "The King's Gambit! White offers a pawn to rip open the f-file and aim directly at Black's king. This is one of the oldest and most aggressive openings in chess — played by Morphy, Anderssen, Spassky, and Fischer. The idea is pure: sacrifice material for rapid development, open lines, and a ferocious attack.",
+      "annotation": "The King's Gambit! White offers a pawn to rip open the f-file and aim directly at Black's king. This is one of the oldest and most aggressive openings in chess \u2014 played by Morphy, Anderssen, Spassky, and Fischer. The idea is pure: sacrifice material for rapid development, open lines, and a ferocious attack.",
       "pawnStructure": "White voluntarily weakens the kingside by moving the f-pawn. If Black accepts with exf4, the e-file opens and the f-file becomes a highway for White's rook after O-O.",
       "plans": [
         "Open the f-file for the rook after O-O",
@@ -63,8 +63,8 @@
         "Play d4 to build a massive center"
       ],
       "alternatives": [
-        "Nf3 — the quiet, mainline approach",
-        "Bc4 — developing first, keeping f4 as an option"
+        "Nf3 \u2014 the quiet, mainline approach",
+        "Bc4 \u2014 developing first, keeping f4 as an option"
       ],
       "arrows": [
         {
@@ -82,15 +82,15 @@
     },
     {
       "san": "exf4",
-      "annotation": "Black accepts the gambit, grabbing a pawn. This is the most principled response — taking the material and daring White to prove compensation. The f4 pawn can be tricky to hold, but Black's extra pawn is real and can matter in the endgame if White's attack fizzles.",
+      "annotation": "Black accepts the gambit, grabbing a pawn. This is the most principled response \u2014 taking the material and daring White to prove compensation. The f4 pawn can be tricky to hold, but Black's extra pawn is real and can matter in the endgame if White's attack fizzles.",
       "pawnStructure": "Black has an extra pawn on f4 but it's isolated and hard to defend. White's center with just e4 is still strong, and the f-file is wide open.",
       "plans": [
         "Try to hold the extra pawn or use it to disrupt White's development",
         "Develop quickly to withstand the coming attack"
       ],
       "alternatives": [
-        "Bc5 — the King's Gambit Declined, keeping the center solid",
-        "d5 — the Falkbeer Counter Gambit, striking back immediately"
+        "Bc5 \u2014 the King's Gambit Declined, keeping the center solid",
+        "d5 \u2014 the Falkbeer Counter Gambit, striking back immediately"
       ],
       "arrows": [
         {
@@ -108,14 +108,14 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its best square, preparing to castle and connecting the rook to the open f-file. The knight also prevents Qh4+, which would be extremely annoying — the check would force the king to e2 or g3 variations that favor Black. This is the King's Knight Gambit, the most trusted form.",
+      "annotation": "White develops the knight to its best square, preparing to castle and connecting the rook to the open f-file. The knight also prevents Qh4+, which would be extremely annoying \u2014 the check would force the king to e2 or g3 variations that favor Black. This is the King's Knight Gambit, the most trusted form.",
       "plans": [
         "Prevent Qh4+ check",
         "Castle quickly to activate the f1 rook",
         "Play d4 to build a dominating center"
       ],
       "alternatives": [
-        "Bc4 — the Bishop's Gambit, also strong but allows Qh4+"
+        "Bc4 \u2014 the Bishop's Gambit, also strong but allows Qh4+"
       ],
       "arrows": [
         {
@@ -133,15 +133,15 @@
     },
     {
       "san": "g5",
-      "annotation": "Black makes the boldest defense — pushing g5 to hold the f4 pawn! This is Fischer's recommendation and the classical main line. The g5 pawn protects f4 and threatens g4 to kick the knight. It's aggressive and committal — Black's kingside is weakened but the extra pawn is maintained.",
+      "annotation": "Black makes the boldest defense \u2014 pushing g5 to hold the f4 pawn! This is Fischer's recommendation and the classical main line. The g5 pawn protects f4 and threatens g4 to kick the knight. It's aggressive and committal \u2014 Black's kingside is weakened but the extra pawn is maintained.",
       "pawnStructure": "Black's kingside pawns advance aggressively with f4-g5. This creates a pawn storm but also exposes the black king if it stays in the center too long.",
       "plans": [
         "Hold the f4 pawn with g5-g4",
         "Push g4 to drive away the knight and seize space"
       ],
       "alternatives": [
-        "d5 — the Modern Defense, giving back the pawn for rapid development",
-        "Nf6 — developing while defending, a practical approach"
+        "d5 \u2014 the Modern Defense, giving back the pawn for rapid development",
+        "Nf6 \u2014 developing while defending, a practical approach"
       ],
       "arrows": [
         {
@@ -154,6 +154,16 @@
           "to": "g4",
           "color": "rgba(0, 100, 255, 0.7)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "square": "h4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -165,8 +175,8 @@
         "After hxg5, the h-file becomes a deadly weapon"
       ],
       "alternatives": [
-        "Bc4 — the quieter approach, developing first and attacking f7",
-        "d4 — building the center before attacking the pawns"
+        "Bc4 \u2014 the quieter approach, developing first and attacking f7",
+        "d4 \u2014 building the center before attacking the pawns"
       ],
       "arrows": [
         {
@@ -174,18 +184,24 @@
           "to": "g5",
           "color": "rgba(220, 50, 50, 0.7)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
       ]
     },
     {
       "san": "g4",
-      "annotation": "Black pushes forward rather than passively defending with g4, driving the knight away from its powerful f3 post. This is the critical position of the Kieseritzky Gambit. Black gains space and time but the kingside is incredibly exposed — the king won't be castling anytime soon.",
+      "annotation": "Black pushes forward rather than passively defending with g4, driving the knight away from its powerful f3 post. This is the critical position of the Kieseritzky Gambit. Black gains space and time but the kingside is incredibly exposed \u2014 the king won't be castling anytime soon.",
       "pawnStructure": "Black's g4-f4 pawns are advanced and menacing but the kingside is a wasteland of open files and diagonals. This is a double-edged structure demanding precise play from both sides.",
       "plans": [
         "Drive the knight from f3",
         "Maintain the pawn mass and look for counterplay"
       ],
       "alternatives": [
-        "Bg7 — developing while defending g5, safer but less ambitious"
+        "Bg7 \u2014 developing while defending g5, safer but less ambitious"
       ],
       "arrows": [
         {
@@ -207,15 +223,15 @@
     },
     {
       "san": "Ne5",
-      "annotation": "The knight leaps to the powerful e5 outpost rather than retreating! From e5, the knight attacks f7, d7, and g4, creating multiple threats. This is the Kieseritzky Gambit's signature move — White sacrifices another pawn (h4 is hanging) for a devastating central knight and blistering piece activity.",
+      "annotation": "The knight leaps to the powerful e5 outpost rather than retreating! From e5, the knight attacks f7, d7, and g4, creating multiple threats. This is the Kieseritzky Gambit's signature move \u2014 White sacrifices another pawn (h4 is hanging) for a devastating central knight and blistering piece activity.",
       "plans": [
-        "Attack f7 — Black's weakest point",
+        "Attack f7 \u2014 Black's weakest point",
         "Coordinate Bc4 + Ne5 for maximum pressure on f7",
         "The knight on e5 is worth more than the pawns Black holds"
       ],
       "alternatives": [
-        "Ng1 — retreating is too slow, Black consolidates easily",
-        "Ng5 — aggressive but less central than e5"
+        "Ng1 \u2014 retreating is too slow, Black consolidates easily",
+        "Ng5 \u2014 aggressive but less central than e5"
       ],
       "arrows": [
         {
@@ -242,14 +258,14 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to defend while counterattacking e4. The knight on f6 is doing critical work — it defends h5, controls d5, and attacks the e4 pawn. This is the most principled developing move, keeping Black in the game while White's attack builds.",
+      "annotation": "Black develops the knight to defend while counterattacking e4. The knight on f6 is doing critical work \u2014 it defends h5, controls d5, and attacks the e4 pawn. This is the most principled developing move, keeping Black in the game while White's attack builds.",
       "plans": [
         "Defend the kingside while developing",
         "Attack e4 to create counterplay"
       ],
       "alternatives": [
-        "d6 — kicks the knight but is slower on development",
-        "Bg7 — develops the bishop but doesn't help with e4 pressure"
+        "d6 \u2014 kicks the knight but is slower on development",
+        "Bg7 \u2014 develops the bishop but doesn't help with e4 pressure"
       ],
       "arrows": [
         {
@@ -262,18 +278,28 @@
           "to": "d5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
       "san": "Bc4",
-      "annotation": "White trains the bishop on f7 — now both the knight and bishop converge on Black's most vulnerable point. The combination of Bc4 + Ne5 creates immense tactical pressure. This is the classic setup in the King's Gambit: every piece aims at the black king's neighborhood.",
+      "annotation": "White trains the bishop on f7 \u2014 now both the knight and bishop converge on Black's most vulnerable point. The combination of Bc4 + Ne5 creates immense tactical pressure. This is the classic setup in the King's Gambit: every piece aims at the black king's neighborhood.",
       "plans": [
         "Double attack on f7 with bishop and knight",
         "Prepare O-O to bring the rook into the attack via the f-file",
         "Look for Bxf7+ or Nxf7 tactical shots"
       ],
       "alternatives": [
-        "d4 — builds the center but doesn't increase pressure on f7 as directly"
+        "d4 \u2014 builds the center but doesn't increase pressure on f7 as directly"
       ],
       "arrows": [
         {
@@ -296,14 +322,14 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes back in the center with a counter-sacrifice! By pushing d5, Black attacks both the bishop on c4 and the pawn on e4, breaking up White's center. This is the key defensive resource — rather than passively suffering, Black opens lines for the bishops and challenges White to prove the attack is worth more than material.",
+      "annotation": "Black strikes back in the center with a counter-sacrifice! By pushing d5, Black attacks both the bishop on c4 and the pawn on e4, breaking up White's center. This is the key defensive resource \u2014 rather than passively suffering, Black opens lines for the bishops and challenges White to prove the attack is worth more than material.",
       "pawnStructure": "The d5 break changes the entire pawn structure. After exd5, the center opens completely and both kings are in danger. The game becomes a race between White's kingside attack and Black's central counterplay.",
       "plans": [
         "Break open the center to activate the bishops",
         "Challenge White's attacking setup by creating counterplay"
       ],
       "alternatives": [
-        "Be7 — solid but passive, White builds up with O-O and d4 easily"
+        "Be7 \u2014 solid but passive, White builds up with O-O and d4 easily"
       ],
       "arrows": [
         {
@@ -326,14 +352,14 @@
     },
     {
       "san": "exd5",
-      "annotation": "White captures, opening the e-file and maintaining the bishop on c4. The d5 pawn is now a passed pawn which could become relevant later. More importantly, the position is now completely open — tactical fireworks are inevitable with both kings exposed.",
+      "annotation": "White captures, opening the e-file and maintaining the bishop on c4. The d5 pawn is now a passed pawn which could become relevant later. More importantly, the position is now completely open \u2014 tactical fireworks are inevitable with both kings exposed.",
       "pawnStructure": "White has a passed d5 pawn and open central lines. The open e-file and the bishop on c4 create a deadly battery.",
       "plans": [
         "Use the passed d-pawn as a long-term asset",
         "Maintain pressure on f7 with Bc4 and Ne5"
       ],
       "alternatives": [
-        "Bb3 — retreats but loses the central tension"
+        "Bb3 \u2014 retreats but loses the central tension"
       ],
       "arrows": [
         {
@@ -357,8 +383,8 @@
         "Support the f4 pawn and maintain the kingside pawn chain"
       ],
       "alternatives": [
-        "Nh5 — aggressive but leaves the kingside uncoordinated",
-        "Bg7 — develops but doesn't challenge e5"
+        "Nh5 \u2014 aggressive but leaves the kingside uncoordinated",
+        "Bg7 \u2014 develops but doesn't challenge e5"
       ],
       "arrows": [
         {
@@ -366,11 +392,17 @@
           "to": "e5",
           "color": "rgba(220, 50, 50, 0.7)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
       ]
     },
     {
       "san": "d4",
-      "annotation": "White builds a massive pawn center with d4, supporting the e5 knight and gaining space. The d4-d5 pawn duo is extremely powerful, restricting Black's pieces. White's center now looks like a steamroller — combined with the attacking pieces, the position is razor-sharp.",
+      "annotation": "White builds a massive pawn center with d4, supporting the e5 knight and gaining space. The d4-d5 pawn duo is extremely powerful, restricting Black's pieces. White's center now looks like a steamroller \u2014 combined with the attacking pieces, the position is razor-sharp.",
       "pawnStructure": "White's d4-d5 pawn center is imposing, grabbing space on both sides. The passed d5 pawn can become a monster in the endgame.",
       "plans": [
         "Support the e5 knight permanently",
@@ -378,7 +410,7 @@
         "Castle and bring the rook to the f-file"
       ],
       "alternatives": [
-        "O-O — castling is tempting but d4 solidifies the center first"
+        "O-O \u2014 castling is tempting but d4 solidifies the center first"
       ],
       "arrows": [
         {
@@ -400,14 +432,14 @@
     },
     {
       "san": "Nh5",
-      "annotation": "The knight jumps to h5 with aggressive intent — eyeing f4 to recapture the pawn with the knight, or potentially reaching g3. On h5, the knight also eyes f4 and g3, creating threats against White's king if it castles kingside. This is a creative attempt to generate counterplay.",
+      "annotation": "The knight jumps to h5 with aggressive intent \u2014 eyeing f4 to recapture the pawn with the knight, or potentially reaching g3. On h5, the knight also eyes f4 and g3, creating threats against White's king if it castles kingside. This is a creative attempt to generate counterplay.",
       "plans": [
         "Target f4 with the knight for a powerful outpost",
         "Create threats against White's kingside if it castles"
       ],
       "alternatives": [
-        "O-O — castling is reasonable but the position demands active play",
-        "Nd7 — developing but blocking the c8 bishop"
+        "O-O \u2014 castling is reasonable but the position demands active play",
+        "Nd7 \u2014 developing but blocking the c8 bishop"
       ],
       "arrows": [
         {
@@ -430,14 +462,14 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles into the storm! This is the whole point of the King's Gambit — the rook immediately comes to f1, staring down the open f-file at Black's king. Even though Black has pawns on f4 and g4 threatening the kingside, White's pieces are so active that the attack plays itself.",
+      "annotation": "White castles into the storm! This is the whole point of the King's Gambit \u2014 the rook immediately comes to f1, staring down the open f-file at Black's king. Even though Black has pawns on f4 and g4 threatening the kingside, White's pieces are so active that the attack plays itself.",
       "plans": [
         "Activate the rook on f1 along the open f-file",
         "Look for Rxf4 or Nxf7 sacrificial breakthroughs",
         "The connected rooks and centralized pieces create overwhelming pressure"
       ],
       "alternatives": [
-        "Nd2 — slow, White should castle and attack immediately"
+        "Nd2 \u2014 slow, White should castle and attack immediately"
       ],
       "arrows": [
         {
@@ -450,6 +482,16 @@
           "to": "f7",
           "color": "rgba(220, 50, 50, 0.7)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -460,7 +502,7 @@
         "Coordinate queen + knight on h5 for kingside pressure"
       ],
       "alternatives": [
-        "Bxe5 — captures the knight but dxe5 gives White a protected passed pawn and open lines"
+        "Bxe5 \u2014 captures the knight but dxe5 gives White a protected passed pawn and open lines"
       ],
       "arrows": [
         {
