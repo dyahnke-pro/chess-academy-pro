@@ -333,14 +333,14 @@ class VoicePackService {
 
   private async getCachedPack(voiceId: string): Promise<ArrayBuffer | null> {
     const record = await db.meta.get(`voicepack-${voiceId}`);
-    if (record && record.value instanceof ArrayBuffer) {
-      return record.value;
+    if (record && (record as unknown as { value: unknown }).value instanceof ArrayBuffer) {
+      return (record as unknown as { value: ArrayBuffer }).value;
     }
     return null;
   }
 
   private async cachePack(voiceId: string, buffer: ArrayBuffer): Promise<void> {
-    await db.meta.put({ key: `voicepack-${voiceId}`, value: buffer });
+    await db.meta.put({ key: `voicepack-${voiceId}`, value: buffer as unknown as string });
   }
 }
 

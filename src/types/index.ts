@@ -170,7 +170,7 @@ export interface ProPlayer {
 
 export interface MetaRecord {
   key: string;
-  value: string | ArrayBuffer;
+  value: string;
 }
 
 // ─── Games ───────────────────────────────────────────────────────────────────
