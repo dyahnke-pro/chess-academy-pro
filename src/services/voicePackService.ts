@@ -14,8 +14,8 @@
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 
-/** GitHub Releases base URL for voice pack downloads. */
-const VOICE_PACK_BASE_URL = 'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1';
+/** Surge CDN base URL for voice pack downloads. */
+const VOICE_PACK_BASE_URL = 'https://chess-voice-packs.surge.sh';
 
 /** Build the download URL for a voice pack by ID. */
 export function getVoicePackUrl(voiceId: string): string {
@@ -335,14 +335,17 @@ class VoicePackService {
 
   private async getCachedPack(voiceId: string): Promise<ArrayBuffer | null> {
     const record = await db.meta.get(`voicepack-${voiceId}`);
-    if (record && record.value instanceof ArrayBuffer) {
-      return record.value;
+    // IndexedDB stores the raw ArrayBuffer even though MetaRecord types value as string
+    const value = record?.value as unknown;
+    if (value instanceof ArrayBuffer) {
+      return value;
     }
     return null;
   }
 
   private async cachePack(voiceId: string, buffer: ArrayBuffer): Promise<void> {
-    await db.meta.put({ key: `voicepack-${voiceId}`, value: buffer });
+    // Voice packs store ArrayBuffer in meta table (IndexedDB supports binary values)
+    await db.meta.put({ key: `voicepack-${voiceId}`, value: buffer as unknown as string });
   }
 }
 
