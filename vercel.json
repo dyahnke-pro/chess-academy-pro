@@ -1,7 +1,6 @@
 {
   "rewrites": [
-    { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

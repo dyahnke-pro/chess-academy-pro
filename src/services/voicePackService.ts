@@ -15,9 +15,9 @@ import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 
 /** Build the download URL for a voice pack by ID.
- *  Uses a local path that Vercel proxies to GitHub Releases (avoids CORS). */
+ *  Vercel Edge Function proxies to GitHub Releases (avoids CORS). */
 export function getVoicePackUrl(voiceId: string): string {
-  return `/voice-packs/${voiceId}_mp3.bin`;
+  return `/api/voice-packs/${voiceId}_mp3.bin`;
 }
 
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
