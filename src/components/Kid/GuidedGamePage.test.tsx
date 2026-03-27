@@ -63,17 +63,7 @@ function makeMoveResult(san: string): MoveResult {
     san,
     from: 'a1',
     to: 'a2',
-    color: 'w',
-    piece: 'p',
-    flags: '',
     fen: 'test-fen',
-    pgn: '',
-    moveNumber: 1,
-    isCheck: false,
-    isCheckmate: false,
-    isStalemate: false,
-    isDraw: false,
-    isGameOver: false,
   };
 }
 
