@@ -194,11 +194,11 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
         story:
           'Here is the bishop\'s secret: it never changes color! A bishop that starts on a light square ' +
           'will ALWAYS stay on light squares. A bishop on a dark square stays on dark squares forever.',
-        fen: '4k3/8/8/8/8/5B2/2B5/4K3 w - - 0 1',
-        highlightSquares: ['c2', 'f3'],
+        fen: '4k3/8/8/8/5B2/8/2B5/4K3 w - - 0 1',
+        highlightSquares: ['c2', 'f4'],
         instruction:
           'The bishop on c2 is on a light square and can only reach other light squares. ' +
-          'The bishop on f3 is on a dark square and can only reach dark squares!',
+          'The bishop on f4 is on a dark square and can only reach dark squares!',
       },
     ],
     puzzles: [
@@ -519,8 +519,8 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'tactics-puzzle-2',
-        fen: 'r3k3/8/8/8/3N4/8/8/4K3 w - - 0 1',
-        solution: ['Nc6'],
+        fen: '1r6/4k3/8/8/3N4/8/8/4K3 w - - 0 1',
+        solution: ['Nc6+'],
         hint: 'Find the square where the knight attacks both the king and the rook!',
         successMessage:
           'Knight fork! The knight attacks the king and the rook. You will win the rook!',
@@ -578,12 +578,13 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
         id: 'first-game-lesson-3',
         title: 'The Checkmate!',
         story:
-          'White brings the queen to f3, then to f7 for checkmate! ' +
-          'The queen is protected by the bishop, and the king has no escape. Game over!',
-        fen: 'rnb1kbnr/pppp1ppp/8/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 3',
-        highlightSquares: ['f3', 'f7'],
+          'White brings the queen to f3, threatening to capture on f7. ' +
+          'Black develops the bishop, but it is too late — nothing can stop Qxf7 checkmate! ' +
+          'The queen is protected by the bishop on c4, and the king has no escape.',
+        fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4',
+        highlightSquares: ['f3', 'f7', 'c4'],
         instruction:
-          'The queen on f3 threatens Qxf7#. If Black does not defend f7, it is checkmate next move!',
+          'The queen on f3 and bishop on c4 both aim at f7. White can play Qxf7# — checkmate!',
       },
     ],
     puzzles: [
@@ -597,7 +598,7 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'first-game-puzzle-2',
-        fen: 'rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 2',
+        fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3',
         solution: ['Qf3'],
         hint: 'Bring the queen out to help attack f7!',
         successMessage:
@@ -605,11 +606,11 @@ export const JOURNEY_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'first-game-puzzle-3',
-        fen: 'rnb1kbnr/pppp1Qpp/8/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 3',
-        solution: ['Kd8', 'Qxf8#'],
-        hint: 'The king is in check from the queen on f7! Where can it escape? Then finish the game!',
+        fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4',
+        solution: ['Qxf7#'],
+        hint: 'The queen and bishop both aim at f7. Can you deliver checkmate?',
         successMessage:
-          'Checkmate! The queen captured on f8 and the king has nowhere to run. You completed the Scholar\'s Mate!',
+          'Checkmate! The queen captures on f7, protected by the bishop. The king has nowhere to run. You completed the Scholar\'s Mate!',
       },
     ],
   },
