@@ -1,23 +1,18 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export const config = {
-  maxDuration: 300,
+  maxDuration: 60,
 };
 
-const GITHUB_API_ASSET =
-  'https://api.github.com/repos/dyahnke-pro/chess-academy-pro/releases/assets';
-
-/** Map voice-pack filenames to GitHub release asset IDs. */
-const ASSET_MAP: Record<string, number> = {
-  'af_bella_mp3.bin': 382462063,
-};
+const GITHUB_RELEASE_URL =
+  'https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1';
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.status(204).end();
     return;
   }
@@ -29,52 +24,37 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
 
-  const assetId = ASSET_MAP[file];
-  if (!assetId) {
-    res.status(404).send('Voice pack not found or not yet uploaded.');
-    return;
-  }
-
   try {
-    // Step 1: Hit GitHub API to get a fresh CDN redirect URL
-    const apiResp = await fetch(`${GITHUB_API_ASSET}/${assetId}`, {
-      redirect: 'manual',
+    // Fetch from GitHub Releases — Node.js runtime follows redirects and
+    // has no CORS restrictions, so this works directly.
+    const ghResp = await fetch(`${GITHUB_RELEASE_URL}/${file}`, {
       headers: {
-        'Accept': 'application/octet-stream',
         'User-Agent': 'ChessAcademyPro/1.0',
+        'Accept': 'application/octet-stream',
       },
     });
 
-    const cdnUrl = apiResp.headers.get('location');
-    if (!cdnUrl) {
-      res.status(502).send('Could not resolve download URL');
-      return;
-    }
-
-    // Step 2: Stream the file from the CDN back to the client
-    const cdnResp = await fetch(cdnUrl);
-    if (!cdnResp.ok || !cdnResp.body) {
-      res.status(502).send(`CDN returned ${cdnResp.status}`);
+    if (!ghResp.ok || !ghResp.body) {
+      res.status(ghResp.status).send(`GitHub returned ${ghResp.status}`);
       return;
     }
 
     res.setHeader('Content-Type', 'application/octet-stream');
-    const contentLength = cdnResp.headers.get('content-length');
+    const contentLength = ghResp.headers.get('content-length');
     if (contentLength) {
       res.setHeader('Content-Length', contentLength);
     }
     res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+    res.status(200);
 
-    // Stream the body using the Web ReadableStream
-    const reader = cdnResp.body.getReader();
+    // Stream the body to the client
+    const reader = ghResp.body.getReader();
     try {
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
-        // Write chunk to Node.js response stream
-        const canContinue = res.write(Buffer.from(value));
-        if (!canContinue) {
-          // Wait for drain if backpressure
+        const ok = res.write(Buffer.from(value));
+        if (!ok) {
           await new Promise<void>((resolve) => res.once('drain', resolve));
         }
       }
@@ -86,6 +66,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     const msg = err instanceof Error ? err.message : 'Unknown error';
     if (!res.headersSent) {
       res.status(502).send(`Voice pack download failed: ${msg}`);
+    } else {
+      res.end();
     }
   }
 }
