@@ -183,16 +183,19 @@ class VoicePackService {
               const reader = resp.body?.getReader();
               if (!reader) throw new Error('Response body is not readable');
 
+              // Track bytes for this attempt separately to avoid double-counting on retry
+              let attemptBytes = 0;
               const parts: Uint8Array[] = [];
               for (;;) {
                 const { done, value } = await reader.read();
                 if (done) break;
                 parts.push(value);
-                receivedBytes += value.length;
+                attemptBytes += value.length;
                 if (totalBytes > 0) {
-                  this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+                  this.setProgress(Math.min(99, Math.round(((receivedBytes + attemptBytes) / totalBytes) * 100)));
                 }
               }
+              receivedBytes += attemptBytes;
 
               // Combine this chunk's parts
               const chunkSize = parts.reduce((s, p) => s + p.length, 0);
