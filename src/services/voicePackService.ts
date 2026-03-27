@@ -14,9 +14,15 @@
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 
-/** Build the download URL for a voice pack by ID (same-origin, served from /voice-packs/). */
+interface VoicePackManifest {
+  voiceId: string;
+  chunks: string[];
+  totalBytes: number;
+}
+
+/** Build the manifest URL for a voice pack by ID. */
 export function getVoicePackUrl(voiceId: string): string {
-  return `/voice-packs/${voiceId}_mp3.bin`;
+  return `/voice-packs/${voiceId}_mp3.manifest.json`;
 }
 
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
@@ -125,10 +131,10 @@ class VoicePackService {
   }
 
   /**
-   * Load a voice pack from a URL. Downloads the .bin file, parses it,
-   * and caches the raw binary in IndexedDB for offline use.
+   * Load a voice pack from a manifest URL. Downloads chunks in parallel,
+   * reassembles the .bin, parses it, and caches in IndexedDB for offline use.
    */
-  async loadFromUrl(voiceId: string, url: string): Promise<void> {
+  async loadFromUrl(voiceId: string, manifestUrl: string): Promise<void> {
     if (this.status === 'ready' && this.loadedVoiceId === voiceId) return;
 
     this.setStatus('downloading');
@@ -145,45 +151,56 @@ class VoicePackService {
         return;
       }
 
-      // Download with progress tracking
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Voice pack not available (HTTP ${response.status}). Upload ${voiceId}.bin to /voice-packs/ on the server.`);
+      // Fetch manifest to get chunk list
+      const manifestResp = await fetch(manifestUrl);
+      if (!manifestResp.ok) {
+        throw new Error(`Voice pack manifest not found (HTTP ${manifestResp.status}).`);
       }
+      const manifest: VoicePackManifest = await manifestResp.json() as VoicePackManifest;
+      const totalBytes = manifest.totalBytes;
 
-      // Guard against SPA catch-all serving HTML instead of the binary file
-      const contentType = response.headers.get('content-type') ?? '';
-      if (contentType.includes('text/html')) {
-        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file. Upload ${voiceId}.bin to the voice-packs/ directory.`);
-      }
-
-      const contentLength = response.headers.get('content-length');
-      const totalBytes = contentLength ? parseInt(contentLength, 10) : 0;
-
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error('Response body is not readable');
-      }
-
-      const chunks: Uint8Array[] = [];
+      // Download all chunks in parallel with aggregate progress
       let receivedBytes = 0;
+      const chunkBuffers: ArrayBuffer[] = new Array(manifest.chunks.length);
+      const basePath = manifestUrl.substring(0, manifestUrl.lastIndexOf('/') + 1);
 
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-        receivedBytes += value.length;
-        if (totalBytes > 0) {
-          this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+      await Promise.all(manifest.chunks.map(async (chunkName, index) => {
+        const resp = await fetch(`${basePath}${chunkName}`);
+        if (!resp.ok) {
+          throw new Error(`Chunk ${chunkName} failed (HTTP ${resp.status}).`);
         }
-      }
 
-      // Combine chunks into single ArrayBuffer
-      const combined = new Uint8Array(receivedBytes);
+        const reader = resp.body?.getReader();
+        if (!reader) throw new Error('Response body is not readable');
+
+        const parts: Uint8Array[] = [];
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          parts.push(value);
+          receivedBytes += value.length;
+          if (totalBytes > 0) {
+            this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+          }
+        }
+
+        // Combine this chunk's parts
+        const chunkSize = parts.reduce((s, p) => s + p.length, 0);
+        const chunkBuf = new Uint8Array(chunkSize);
+        let off = 0;
+        for (const part of parts) {
+          chunkBuf.set(part, off);
+          off += part.length;
+        }
+        chunkBuffers[index] = chunkBuf.buffer;
+      }));
+
+      // Reassemble all chunks into one ArrayBuffer
+      const combined = new Uint8Array(totalBytes);
       let offset = 0;
-      for (const chunk of chunks) {
-        combined.set(chunk, offset);
-        offset += chunk.length;
+      for (const buf of chunkBuffers) {
+        combined.set(new Uint8Array(buf), offset);
+        offset += buf.byteLength;
       }
 
       const buffer = combined.buffer;
