@@ -1,9 +1,15 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_']);
+  return {
   envPrefix: ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_'],
+  define: {
+    __ANTHROPIC_KEY__: JSON.stringify(env.ANTHROPIC_KEY ?? ''),
+    __DEEPSEEK_KEY__: JSON.stringify(env.DEEPSEEK_KEY ?? ''),
+  },
   plugins: [
     react(),
     VitePWA({
@@ -75,4 +81,5 @@ export default defineConfig({
       },
     },
   },
+};
 });
