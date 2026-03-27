@@ -65,8 +65,8 @@ interface ProviderConfig {
 async function getProviderConfig(): Promise<ProviderConfig | null> {
   try {
     // Check build-time env vars first — works even without a profile
-    const anthropicEnvKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined;
-    const deepseekEnvKey = import.meta.env.VITE_DEEPSEEK_API_KEY as string | undefined;
+    const anthropicEnvKey = (import.meta.env.VITE_ANTHROPIC_API_KEY ?? import.meta.env.ANTHROPIC_KEY ?? '') as string || undefined;
+    const deepseekEnvKey = (import.meta.env.VITE_DEEPSEEK_API_KEY ?? import.meta.env.DEEPSEEK_KEY ?? '') as string || undefined;
 
     const profile = await db.profiles.get('main');
     const provider: AiProvider = profile?.preferences.aiProvider ?? (anthropicEnvKey ? 'anthropic' : 'deepseek');
