@@ -14,12 +14,9 @@
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 
-/** Surge CDN base URL for voice pack downloads. */
-const VOICE_PACK_BASE_URL = 'https://chess-voice-packs.surge.sh';
-
-/** Build the download URL for a voice pack by ID. */
+/** Build the download URL for a voice pack by ID (same-origin, served from /voice-packs/). */
 export function getVoicePackUrl(voiceId: string): string {
-  return `${VOICE_PACK_BASE_URL}/${voiceId}_mp3.bin`;
+  return `/voice-packs/${voiceId}_mp3.bin`;
 }
 
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
