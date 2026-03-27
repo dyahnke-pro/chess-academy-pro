@@ -159,41 +159,63 @@ class VoicePackService {
       const manifest: VoicePackManifest = await manifestResp.json() as VoicePackManifest;
       const totalBytes = manifest.totalBytes;
 
-      // Download all chunks in parallel with aggregate progress
+      // Download all chunks with aggregate progress and retry logic
       let receivedBytes = 0;
       const chunkBuffers: ArrayBuffer[] = new Array(manifest.chunks.length);
       const basePath = manifestUrl.substring(0, manifestUrl.lastIndexOf('/') + 1);
+      const MAX_RETRIES = 3;
+      const MAX_CONCURRENT = 4;
 
-      await Promise.all(manifest.chunks.map(async (chunkName, index) => {
-        const resp = await fetch(`${basePath}${chunkName}`);
-        if (!resp.ok) {
-          throw new Error(`Chunk ${chunkName} failed (HTTP ${resp.status}).`);
-        }
+      // Download in batches to avoid overwhelming the server
+      for (let batchStart = 0; batchStart < manifest.chunks.length; batchStart += MAX_CONCURRENT) {
+        const batch = manifest.chunks.slice(batchStart, batchStart + MAX_CONCURRENT);
+        await Promise.all(batch.map(async (chunkName, batchIdx) => {
+          const index = batchStart + batchIdx;
+          let lastError: Error | null = null;
 
-        const reader = resp.body?.getReader();
-        if (!reader) throw new Error('Response body is not readable');
+          for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+            try {
+              const resp = await fetch(`${basePath}${chunkName}`);
+              if (!resp.ok) {
+                throw new Error(`Chunk ${chunkName} failed (HTTP ${resp.status}).`);
+              }
 
-        const parts: Uint8Array[] = [];
-        for (;;) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          parts.push(value);
-          receivedBytes += value.length;
-          if (totalBytes > 0) {
-            this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+              const reader = resp.body?.getReader();
+              if (!reader) throw new Error('Response body is not readable');
+
+              const parts: Uint8Array[] = [];
+              for (;;) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                parts.push(value);
+                receivedBytes += value.length;
+                if (totalBytes > 0) {
+                  this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+                }
+              }
+
+              // Combine this chunk's parts
+              const chunkSize = parts.reduce((s, p) => s + p.length, 0);
+              const chunkBuf = new Uint8Array(chunkSize);
+              let off = 0;
+              for (const part of parts) {
+                chunkBuf.set(part, off);
+                off += part.length;
+              }
+              chunkBuffers[index] = chunkBuf.buffer;
+              lastError = null;
+              break; // success
+            } catch (err) {
+              lastError = err instanceof Error ? err : new Error(String(err));
+              console.warn(`[VoicePackService] Chunk ${chunkName} attempt ${attempt + 1} failed, retrying...`);
+              // Brief delay before retry
+              await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+            }
           }
-        }
 
-        // Combine this chunk's parts
-        const chunkSize = parts.reduce((s, p) => s + p.length, 0);
-        const chunkBuf = new Uint8Array(chunkSize);
-        let off = 0;
-        for (const part of parts) {
-          chunkBuf.set(part, off);
-          off += part.length;
-        }
-        chunkBuffers[index] = chunkBuf.buffer;
-      }));
+          if (lastError) throw lastError;
+        }));
+      }
 
       // Reassemble all chunks into one ArrayBuffer
       const combined = new Uint8Array(totalBytes);
