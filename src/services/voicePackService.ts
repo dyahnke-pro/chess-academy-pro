@@ -126,8 +126,8 @@ class VoicePackService {
   }
 
   /**
-   * Load a voice pack from a URL. Downloads the .bin file, parses it,
-   * and caches the raw binary in IndexedDB for offline use.
+   * Load a voice pack from a URL. Downloads the .bin file in chunks,
+   * parses it, and caches the raw binary in IndexedDB for offline use.
    */
   async loadFromUrl(voiceId: string, url: string): Promise<void> {
     if (this.status === 'ready' && this.loadedVoiceId === voiceId) return;
@@ -146,48 +146,40 @@ class VoicePackService {
         return;
       }
 
-      // Download with progress tracking
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Voice pack not available (HTTP ${response.status}). Upload ${voiceId}.bin to /voice-packs/ on the server.`);
+      // Get file size with HEAD request
+      const headResp = await fetch(url, { method: 'HEAD' });
+      if (!headResp.ok) {
+        throw new Error(`Voice pack not available (HTTP ${headResp.status}).`);
+      }
+      const totalBytes = parseInt(headResp.headers.get('content-length') ?? '0', 10);
+      if (totalBytes === 0) {
+        throw new Error('Could not determine voice pack file size.');
       }
 
-      // Guard against SPA catch-all serving HTML instead of the binary file
-      const contentType = response.headers.get('content-type') ?? '';
-      if (contentType.includes('text/html')) {
-        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file. Upload ${voiceId}.bin to the voice-packs/ directory.`);
-      }
-
-      const contentLength = response.headers.get('content-length');
-      const totalBytes = contentLength ? parseInt(contentLength, 10) : 0;
-
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error('Response body is not readable');
-      }
-
-      const chunks: Uint8Array[] = [];
+      // Download in 5MB chunks to stay within edge function timeout
+      const CHUNK_SIZE = 5 * 1024 * 1024;
+      const combined = new Uint8Array(totalBytes);
       let receivedBytes = 0;
 
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-        receivedBytes += value.length;
-        if (totalBytes > 0) {
-          this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+      while (receivedBytes < totalBytes) {
+        const start = receivedBytes;
+        const end = Math.min(receivedBytes + CHUNK_SIZE - 1, totalBytes - 1);
+
+        const chunkResp = await fetch(url, {
+          headers: { 'Range': `bytes=${start}-${end}` },
+        });
+
+        if (!chunkResp.ok && chunkResp.status !== 206) {
+          throw new Error(`Chunk download failed (HTTP ${chunkResp.status}) at byte ${start}.`);
         }
+
+        const chunkBuffer = await chunkResp.arrayBuffer();
+        combined.set(new Uint8Array(chunkBuffer), receivedBytes);
+        receivedBytes += chunkBuffer.byteLength;
+        this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
       }
 
-      // Combine chunks into single ArrayBuffer
-      const combined = new Uint8Array(receivedBytes);
-      let offset = 0;
-      for (const chunk of chunks) {
-        combined.set(chunk, offset);
-        offset += chunk.length;
-      }
-
-      const buffer = combined.buffer;
+      const buffer = combined.buffer as ArrayBuffer;
 
       // Parse and cache
       this.parseBin(buffer);
