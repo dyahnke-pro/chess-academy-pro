@@ -5,6 +5,9 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { ChessBoard } from '../Board/ChessBoard';
+import { EngineLines } from '../Board/EngineLines';
+import { LichessLines } from '../Board/LichessLines';
+import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { BoardControls } from '../Board/BoardControls';
 import { HintButton } from '../Coach/HintButton';
 import { DifficultyToggle } from '../Coach/DifficultyToggle';
@@ -14,9 +17,10 @@ import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
 import { usePieceSound } from '../../hooks/usePieceSound';
-import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty, AnalysisLine, LichessCloudEval } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 
@@ -55,10 +59,22 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
   const moveCountRef = useRef(0);
   const { playCelebration } = usePieceSound();
 
+  // Analysis toggle overrides (user can toggle in-game)
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
+  const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
+  const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
+
   // Stockfish eval state
   const [latestEval, setLatestEval] = useState<number | null>(null);
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+  const [latestTopLines, setLatestTopLines] = useState<AnalysisLine[]>([]);
+
+  // Lichess cloud eval state
+  const [lichessOverride, setLichessOverride] = useState<boolean | null>(null);
+  const showLichessEffective = lichessOverride ?? false;
+  const [cloudEval, setCloudEval] = useState<LichessCloudEval | null>(null);
 
   // Move history for navigation
   const [moveHistory, setMoveHistory] = useState<Array<{ fen: string; from: string; to: string }>>([]);
@@ -126,6 +142,7 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
+          setLatestTopLines(analysis.topLines);
         }
       } catch {
         // Stockfish not ready yet
@@ -133,6 +150,24 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
     })();
     return () => { cancelled = true; };
   }, [game.fen]);
+
+  // ─── Lichess cloud eval on position change ────────────────────────────
+  useEffect(() => {
+    if (!showLichessEffective) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result = await fetchCloudEval(game.fen, 3);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
+          setCloudEval(result);
+        }
+      } catch {
+        // Cloud eval not available
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [game.fen, showLichessEffective]);
 
   // ─── Move navigation ──────────────────────────────────────────────────
   const displayFen = viewedMoveIndex !== null
@@ -476,6 +511,14 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
         </div>
 
         <div className="flex items-center gap-2">
+          <AnalysisToggles
+            showEvalBar={showEvalBarEffective}
+            onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+            showEngineLines={showEngineLinesEffective}
+            onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+            showLichessLines={showLichessEffective}
+            onToggleLichessLines={() => setLichessOverride((prev) => !(prev ?? false))}
+          />
           <DifficultyToggle
             value={difficulty}
             onChange={setDifficulty}
@@ -519,7 +562,7 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
               !isComputerThinking.current
             }
             onMove={handlePlayerMove}
-            showEvalBar={difficulty !== 'hard'}
+            showEvalBar={showEvalBarEffective}
             evaluation={latestEval}
             isMate={latestIsMate}
             mateIn={latestMateIn}
@@ -531,6 +574,12 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
             ghostMove={hintState.ghostMove}
           />
         </div>
+        {showEngineLinesEffective && latestTopLines.length > 0 && (
+          <EngineLines lines={latestTopLines} fen={game.fen} className="mt-1" />
+        )}
+        {showLichessEffective && cloudEval && (
+          <LichessLines cloudEval={cloudEval} fen={game.fen} className="mt-1" />
+        )}
       </div>
 
       {/* Controls bar */}

@@ -3,15 +3,20 @@ import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
 import { ChessBoard } from '../Board/ChessBoard';
+import { EngineLines } from '../Board/EngineLines';
+import { LichessLines } from '../Board/LichessLines';
+import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { BoardControls } from '../Board/BoardControls';
+import { useSettings } from '../../hooks/useSettings';
 import { AnnotationCard } from './AnnotationCard';
 import { speechService } from '../../services/speechService';
 import { voicePackService } from '../../services/voicePackService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
-import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowRight, Play, Pause } from 'lucide-react';
 
 export interface WalkthroughModeProps {
@@ -99,10 +104,23 @@ export function WalkthroughMode({
   // on iOS Safari. Kokoro only loads when the user explicitly taps
   // "Download Voice Model" in Settings > Coach > HD Voice.
 
+  // Analysis toggle overrides
+  const { settings } = useSettings();
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
+  const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
+  const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
+
   // Stockfish eval state
   const [latestEval, setLatestEval] = useState<number | null>(null);
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+  const [latestTopLines, setLatestTopLines] = useState<AnalysisLine[]>([]);
+
+  // Lichess cloud eval state
+  const [lichessOverride, setLichessOverride] = useState<boolean | null>(null);
+  const showLichessEffective = lichessOverride ?? false;
+  const [cloudEval, setCloudEval] = useState<LichessCloudEval | null>(null);
 
   // Track last move highlight
   const lastMove = useMemo((): { from: string; to: string } | null => {
@@ -158,6 +176,7 @@ export function WalkthroughMode({
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
+          setLatestTopLines(analysis.topLines ?? []);
         }
       } catch {
         // Stockfish not ready yet
@@ -165,6 +184,20 @@ export function WalkthroughMode({
     })();
     return () => { cancelled = true; };
   }, [currentFen]);
+
+  // Lichess cloud eval on position change
+  useEffect(() => {
+    if (!showLichessEffective) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result = await fetchCloudEval(currentFen, 3);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) setCloudEval(result);
+      } catch { /* Cloud eval not available */ }
+    })();
+    return () => { cancelled = true; };
+  }, [currentFen, showLichessEffective]);
 
   // Current annotation for the move that was just played
   const currentAnnotation = useMemo((): OpeningMoveAnnotation | null => {
@@ -542,6 +575,14 @@ export function WalkthroughMode({
             <p className="text-xs text-theme-text-muted">{opening.eco} &middot; {opening.style}</p>
           </div>
         </div>
+        <AnalysisToggles
+          showEvalBar={showEvalBarEffective}
+          onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+          showEngineLines={showEngineLinesEffective}
+          onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+          showLichessLines={showLichessEffective}
+          onToggleLichessLines={() => setLichessOverride((prev) => !(prev ?? false))}
+        />
       </div>
 
       {/* Progress bar */}
@@ -572,7 +613,7 @@ export function WalkthroughMode({
             showFlipButton={true}
             showUndoButton={false}
             showResetButton={false}
-            showEvalBar={true}
+            showEvalBar={showEvalBarEffective}
             evaluation={latestEval}
             isMate={latestIsMate}
             mateIn={latestMateIn}
@@ -580,6 +621,12 @@ export function WalkthroughMode({
             arrows={boardArrows}
             annotationHighlights={boardHighlights}
           />
+          {showEngineLinesEffective && latestTopLines.length > 0 && (
+            <EngineLines lines={latestTopLines} fen={currentFen} className="mt-1" />
+          )}
+          {showLichessEffective && cloudEval && (
+            <LichessLines cloudEval={cloudEval} fen={currentFen} className="mt-1" />
+          )}
         </div>
       </div>
 

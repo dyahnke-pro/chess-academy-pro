@@ -6,6 +6,8 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { ChessBoard } from '../Board/ChessBoard';
+import { EngineLines } from '../Board/EngineLines';
+import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { DifficultyToggle } from './DifficultyToggle';
 import { HintButton } from './HintButton';
 import { CoachGameReview } from './CoachGameReview';
@@ -17,6 +19,7 @@ import { MobileChatDrawer } from './MobileChatDrawer';
 import { ResignButton } from './ResignButton';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
+import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -33,7 +36,7 @@ import { reconstructMovesFromGame } from '../../services/gameReconstructionServi
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty, MoveClassification, MoveAnnotation,
-  StockfishAnalysis, GameAnalysisSummary, GameRecord,
+  StockfishAnalysis, GameAnalysisSummary, GameRecord, AnalysisLine,
   GameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -247,10 +250,18 @@ export function CoachGamePage(): JSX.Element {
   // Post-game practice bridge prompt
   const [pendingChatPrompt, setPendingChatPrompt] = useState<string | null>(null);
 
+  // Settings-driven analysis toggles (user can override in-game)
+  const { settings } = useSettings();
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
+  const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
+  const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
+
   // Evaluation tracking for eval bar
   const [latestEval, setLatestEval] = useState<number>(0);
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+  const [latestTopLines, setLatestTopLines] = useState<AnalysisLine[]>([]);
 
   // 3-tier visual hint system (Stockfish-powered, no knownMove)
   const isPlayersTurn =
@@ -583,6 +594,7 @@ export function CoachGamePage(): JSX.Element {
         setLatestEval(postCoachEval);
         setLatestIsMate(analysis.isMate);
         setLatestMateIn(analysis.mateIn);
+        setLatestTopLines(analysis.topLines);
       } catch (error) {
         if (isCancelled()) return;
         console.error('[CoachGame] Coach move failed, attempting random fallback:', error);
@@ -651,11 +663,12 @@ export function CoachGamePage(): JSX.Element {
       // If pre-analysis fails, we'll use simpler classification
     }
 
-    // Update eval bar
+    // Update eval bar + engine lines
     if (analysis) {
       setLatestEval(analysis.evaluation);
       setLatestIsMate(analysis.isMate);
       setLatestMateIn(analysis.mateIn);
+      setLatestTopLines(analysis.topLines);
     }
 
     // Check if the player played the engine's best move
@@ -919,6 +932,12 @@ export function CoachGamePage(): JSX.Element {
                 <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-neutral-800 border border-neutral-600" />
               </button>
             </div>
+            <AnalysisToggles
+              showEvalBar={showEvalBarEffective}
+              onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+              showEngineLines={showEngineLinesEffective}
+              onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+            />
             <DifficultyToggle
               value={difficulty}
               onChange={setDifficulty}
@@ -1015,7 +1034,7 @@ export function CoachGamePage(): JSX.Element {
               orientation={playerColor}
               interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition}
               onMove={handleBoardMoveRouted}
-              showEvalBar={difficulty !== 'hard'}
+              showEvalBar={showEvalBarEffective}
               evaluation={latestEval}
               isMate={latestIsMate}
               mateIn={latestMateIn}
@@ -1026,6 +1045,9 @@ export function CoachGamePage(): JSX.Element {
               ghostMove={hintState.ghostMove}
             />
           </div>
+          {showEngineLinesEffective && latestTopLines.length > 0 && (
+            <EngineLines lines={latestTopLines} fen={game.fen} className="mt-1" />
+          )}
         </div>
 
         {/* Player info bar (bottom) */}
