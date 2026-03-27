@@ -1,9 +1,6 @@
 {
   "rewrites": [
-    {
-      "source": "/voice-packs/:file",
-      "destination": "https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1/:file"
-    },
+    { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
