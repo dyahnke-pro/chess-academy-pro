@@ -7,8 +7,8 @@ export default defineConfig(({ mode }) => {
   return {
   envPrefix: ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_'],
   define: {
-    __ANTHROPIC_KEY__: JSON.stringify(env.ANTHROPIC_KEY ?? ''),
-    __DEEPSEEK_KEY__: JSON.stringify(env.DEEPSEEK_KEY ?? ''),
+    __ANTHROPIC_KEY__: JSON.stringify(env.ANTHROPIC_KEY || process.env.ANTHROPIC_KEY || ''),
+    __DEEPSEEK_KEY__: JSON.stringify(env.DEEPSEEK_KEY || process.env.DEEPSEEK_KEY || ''),
   },
   plugins: [
     react(),

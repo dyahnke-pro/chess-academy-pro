@@ -68,6 +68,12 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const anthropicEnvKey = (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_KEY || __ANTHROPIC_KEY__) as string || undefined;
     const deepseekEnvKey = (import.meta.env.VITE_DEEPSEEK_API_KEY || import.meta.env.DEEPSEEK_KEY || __DEEPSEEK_KEY__) as string || undefined;
 
+    console.log('[CoachAPI] env key check:', {
+      hasAnthropicKey: !!anthropicEnvKey,
+      hasDeepseekKey: !!deepseekEnvKey,
+      keyPrefix: anthropicEnvKey ? anthropicEnvKey.substring(0, 10) + '...' : 'none',
+    });
+
     const profile = await db.profiles.get('main');
     const provider: AiProvider = profile?.preferences.aiProvider ?? (anthropicEnvKey ? 'anthropic' : 'deepseek');
 
@@ -244,7 +250,7 @@ export async function getCoachChatResponse(
   onStream?: (chunk: string) => void,
 ): Promise<string> {
   const config = await getProviderConfig();
-  if (!config) return OFFLINE_FALLBACKS.default;
+  if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
 
   const model = getModel('chat_response', config.provider);
   const systemPrompt = SYSTEM_PROMPT + '\n\n' + systemPromptAddition;
@@ -267,7 +273,8 @@ export async function getCoachChatResponse(
     }
   } catch (error) {
     console.error('Coach chat API error:', error);
-    return OFFLINE_FALLBACKS.default;
+    const errMsg = error instanceof Error ? error.message : String(error);
+    return `⚠️ Coach error: ${errMsg}`;
   }
 }
 
@@ -303,6 +310,7 @@ export async function getCoachCommentary(
     }
   } catch (error) {
     console.error('Coach API error:', error);
-    return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
+    const errMsg = error instanceof Error ? error.message : String(error);
+    return `⚠️ Coach error: ${errMsg}`;
   }
 }
