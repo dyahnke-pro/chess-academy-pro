@@ -12,7 +12,8 @@ vi.mock('../../stores/appStore', () => ({
 }));
 
 /* Cast partial store shape for selector mocks — only tested fields matter */
-function mockStore(partial: Record<string, unknown>): unknown {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mockStore(partial: Record<string, unknown>): any {
   return partial;
 }
 
