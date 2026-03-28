@@ -65,6 +65,7 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
     const polly = new PollyClient({
       region,
       credentials: { accessKeyId, secretAccessKey },
+      requestHandler: { requestTimeout: 8000 },
     });
 
     const command = new SynthesizeSpeechCommand({
@@ -74,7 +75,15 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
       Engine: voiceConfig.engine,
     });
 
-    const result = await polly.send(command);
+    const abortController = new AbortController();
+    const timeout = setTimeout(() => abortController.abort(), 8000);
+
+    let result;
+    try {
+      result = await polly.send(command, { abortSignal: abortController.signal });
+    } finally {
+      clearTimeout(timeout);
+    }
 
     if (!result.AudioStream) {
       return new Response('No audio returned', { status: 500, headers: cors });
@@ -93,8 +102,9 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
     });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
-    console.error('[TTS] Polly error:', msg);
-    return new Response(`TTS error: ${msg}`, { status: 500, headers: cors });
+    const name = error instanceof Error ? error.name : '';
+    console.error('[TTS] Polly error:', name, msg);
+    return new Response(`TTS error [${name}]: ${msg}`, { status: 500, headers: cors });
   }
 }
 
