@@ -30,6 +30,7 @@ export function DashboardPage(): JSX.Element {
   const [voiceStatus, setVoiceStatus] = useState<VoicePackStatus>(voicePackService.getStatus());
   const [voiceProgress, setVoiceProgress] = useState(voicePackService.getDownloadProgress());
   const [voiceError, setVoiceError] = useState<string | null>(null);
+  const [voiceLogs, setVoiceLogs] = useState<string[]>([]);
 
   useEffect(() => {
     void seedDatabase();
@@ -73,18 +74,22 @@ export function DashboardPage(): JSX.Element {
   useEffect(() => {
     const unsubStatus = voicePackService.onStatusChange(setVoiceStatus);
     const unsubProgress = voicePackService.onProgress(setVoiceProgress);
+    const unsubLog = voicePackService.onLog((entry: string) => {
+      setVoiceLogs((prev) => [...prev, entry]);
+    });
 
     // Auto-load from cache if previously downloaded
     if (activeProfile?.preferences.kokoroEnabled && voicePackService.getStatus() === 'idle') {
       void voicePackService.loadCached(activeProfile.preferences.kokoroVoiceId);
     }
 
-    return () => { unsubStatus(); unsubProgress(); };
+    return () => { unsubStatus(); unsubProgress(); unsubLog(); };
   }, [activeProfile?.preferences.kokoroEnabled, activeProfile?.preferences.kokoroVoiceId]);
 
   const handleDownloadBella = useCallback(async (): Promise<void> => {
     unlockAudioContext();
     setVoiceError(null);
+    setVoiceLogs([]);
     const voiceId = activeProfile?.preferences.kokoroVoiceId || 'af_bella';
     try {
       await voicePackService.loadFromUrl(voiceId, getVoicePackUrl(voiceId));
@@ -181,6 +186,19 @@ export function DashboardPage(): JSX.Element {
               </>
             )}
           </div>
+          {/* Live debug console */}
+          {voiceLogs.length > 0 && (
+            <div
+              className="mt-3 rounded-lg p-3 font-mono text-xs overflow-y-auto max-h-48"
+              style={{ background: '#111', color: '#0f0', border: '1px solid #333' }}
+            >
+              {voiceLogs.map((line, i) => (
+                <div key={i} style={{ color: line.includes('ERROR') ? '#f44' : line.includes('OK') || line.includes('Done') || line.includes('Ready') ? '#0f0' : '#aaa' }}>
+                  {line}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
       {activeProfile.preferences.kokoroEnabled && voiceStatus === 'ready' && (

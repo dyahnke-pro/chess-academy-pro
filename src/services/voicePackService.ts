@@ -70,6 +70,7 @@ class VoicePackService {
   private downloadProgress = 0;
   private statusListeners: Set<(status: VoicePackStatus) => void> = new Set();
   private progressListeners: Set<(progress: number) => void> = new Set();
+  private logListeners: Set<(entry: string) => void> = new Set();
   private currentSource: AudioBufferSourceNode | null = null;
   private playing = false;
 
@@ -111,6 +112,20 @@ class VoicePackService {
     return () => { this.progressListeners.delete(listener); };
   }
 
+  onLog(listener: (entry: string) => void): () => void {
+    this.logListeners.add(listener);
+    return () => { this.logListeners.delete(listener); };
+  }
+
+  private log(msg: string): void {
+    const ts = new Date().toLocaleTimeString();
+    const entry = `[${ts}] ${msg}`;
+    console.log('[VoicePack]', msg);
+    for (const listener of this.logListeners) {
+      listener(entry);
+    }
+  }
+
   private setStatus(status: VoicePackStatus): void {
     this.status = status;
     for (const listener of this.statusListeners) {
@@ -137,71 +152,95 @@ class VoicePackService {
 
     try {
       // Check IndexedDB cache first
+      this.log('Checking IndexedDB cache...');
       const cached = await this.getCachedPack(voiceId);
       if (cached) {
+        this.log(`Cache hit! ${cached.byteLength} bytes. Parsing...`);
         this.parseBin(cached);
         this.loadedVoiceId = voiceId;
         this.setProgress(100);
         this.setStatus('ready');
+        this.log(`Ready — ${this.clips.size} clips loaded from cache`);
         return;
       }
+      this.log('No cache. Starting download...');
 
       // Get file size from first Range request
       const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks to stay within edge timeout
+      this.log(`Fetching ${url} (Range: bytes=0-0)...`);
       const firstChunk = await fetch(url, {
         headers: { 'Range': 'bytes=0-0' },
       });
+      this.log(`First response: HTTP ${firstChunk.status}`);
 
       if (!firstChunk.ok && firstChunk.status !== 206) {
-        throw new Error(`Voice pack not available (HTTP ${firstChunk.status}).`);
+        const body = await firstChunk.text().catch(() => '(unreadable)');
+        throw new Error(`HTTP ${firstChunk.status}: ${body}`);
       }
 
-      // Guard against SPA catch-all serving HTML instead of the binary file
+      // Guard against SPA catch-all serving HTML
       const contentType = firstChunk.headers.get('content-type') ?? '';
+      this.log(`Content-Type: ${contentType}`);
       if (contentType.includes('text/html')) {
-        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file.`);
+        throw new Error('Server returned HTML instead of binary — SPA catch-all is intercepting.');
       }
 
       // Parse total size from Content-Range: bytes 0-0/234420138
       const contentRange = firstChunk.headers.get('content-range') ?? '';
+      this.log(`Content-Range: ${contentRange}`);
       const sizeMatch = contentRange.match(/\/(\d+)$/);
       const totalBytes = sizeMatch ? parseInt(sizeMatch[1], 10) : 0;
       if (totalBytes === 0) {
-        throw new Error('Could not determine file size from Content-Range header.');
+        throw new Error(`Could not parse file size. Content-Range: "${contentRange}"`);
       }
+      this.log(`File size: ${(totalBytes / 1024 / 1024).toFixed(1)} MB`);
+
+      // Allocate buffer
+      this.log('Allocating ArrayBuffer...');
+      const combined = new Uint8Array(totalBytes);
+      this.log('Buffer allocated OK');
 
       // Download in chunks using Range requests
-      const combined = new Uint8Array(totalBytes);
       let receivedBytes = 0;
+      let chunkNum = 0;
 
       while (receivedBytes < totalBytes) {
         const start = receivedBytes;
         const end = Math.min(start + CHUNK_SIZE - 1, totalBytes - 1);
+        chunkNum++;
+        this.log(`Chunk ${chunkNum}: bytes ${start}-${end}...`);
 
         const response = await fetch(url, {
           headers: { 'Range': `bytes=${start}-${end}` },
         });
 
         if (!response.ok && response.status !== 206) {
-          throw new Error(`Chunk download failed (HTTP ${response.status}) at byte ${start}.`);
+          const body = await response.text().catch(() => '(unreadable)');
+          throw new Error(`Chunk ${chunkNum} failed: HTTP ${response.status}: ${body}`);
         }
 
         const chunkBuffer = await response.arrayBuffer();
         combined.set(new Uint8Array(chunkBuffer), start);
         receivedBytes += chunkBuffer.byteLength;
-        this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+        const pct = Math.round((receivedBytes / totalBytes) * 100);
+        this.setProgress(pct);
+        this.log(`Chunk ${chunkNum} OK (${chunkBuffer.byteLength} bytes, ${pct}%)`);
       }
 
+      this.log('Download complete. Parsing binary...');
       const buffer = combined.buffer;
 
       // Parse and cache
       this.parseBin(buffer);
+      this.log(`Parsed ${this.clips.size} clips. Caching to IndexedDB...`);
       await this.cachePack(voiceId, buffer);
+      this.log('Cached. Done!');
       this.loadedVoiceId = voiceId;
       this.setProgress(100);
       this.setStatus('ready');
     } catch (error) {
-      console.error('[VoicePackService] Failed to load voice pack:', error);
+      const msg = error instanceof Error ? error.message : String(error);
+      this.log(`ERROR: ${msg}`);
       this.setStatus('error');
       throw error;
     }
