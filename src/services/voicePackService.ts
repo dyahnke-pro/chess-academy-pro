@@ -228,9 +228,10 @@ class VoicePackService {
       this.log(`Download complete: ${(receivedBytes / 1024 / 1024).toFixed(1)} MB`);
       const buffer = combined.buffer;
       this.log('Parsing binary...');
-
-      // Parse and cache
       this.parseBin(buffer);
+      if (this.clips.size === 0) {
+        throw new Error('parseBin produced 0 clips — binary may be corrupt');
+      }
       this.log(`Parsed ${this.clips.size} clips. Caching to IndexedDB...`);
       await this.cachePack(voiceId, buffer);
       this.log('Cached. Done!');
@@ -350,28 +351,47 @@ class VoicePackService {
 
   private parseBin(buffer: ArrayBuffer): void {
     this.clips.clear();
+    this.log(`parseBin: buffer size = ${buffer.byteLength}`);
     const view = new DataView(buffer);
     let offset = 0;
 
     const count = view.getUint32(offset, true);
     offset += 4;
+    this.log(`parseBin: clip count = ${count}`);
 
     for (let i = 0; i < count; i++) {
+      if (offset + 2 > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, reading hashLen`);
+        break;
+      }
       const hashLen = view.getUint16(offset, true);
       offset += 2;
 
+      if (offset + hashLen > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, hashLen=${hashLen}`);
+        break;
+      }
       const hashBytes = new Uint8Array(buffer, offset, hashLen);
       const hash = new TextDecoder().decode(hashBytes);
       offset += hashLen;
 
+      if (offset + 4 > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, reading audioLen`);
+        break;
+      }
       const audioLen = view.getUint32(offset, true);
       offset += 4;
 
+      if (offset + audioLen > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, audioLen=${audioLen}`);
+        break;
+      }
       const audioData = buffer.slice(offset, offset + audioLen);
       offset += audioLen;
 
       this.clips.set(hash, audioData);
     }
+    this.log(`parseBin: done — ${this.clips.size} clips, final offset ${offset}`);
   }
 
   private async getCachedPack(voiceId: string): Promise<ArrayBuffer | null> {
