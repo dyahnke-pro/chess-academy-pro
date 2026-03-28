@@ -10,6 +10,7 @@ export default async function handler(req: Request): Promise<Response> {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Range',
       },
     });
   }
@@ -35,10 +36,16 @@ export default async function handler(req: Request): Promise<Response> {
       });
     }
 
-    // Fetch full file from CDN and stream it back
-    const upstream = await fetch(cdnUrl);
+    // Forward Range header if present (for chunked downloads)
+    const fetchHeaders: Record<string, string> = {};
+    const rangeHeader = req.headers.get('range');
+    if (rangeHeader) {
+      fetchHeaders['Range'] = rangeHeader;
+    }
 
-    if (!upstream.ok) {
+    const upstream = await fetch(cdnUrl, { headers: fetchHeaders });
+
+    if (!upstream.ok && upstream.status !== 206) {
       return new Response(`CDN returned ${upstream.status}`, {
         status: upstream.status,
         headers: { 'Access-Control-Allow-Origin': '*' },
@@ -46,6 +53,7 @@ export default async function handler(req: Request): Promise<Response> {
     }
 
     return new Response(upstream.body, {
+      status: upstream.status,
       headers: {
         'Content-Type': 'application/octet-stream',
         'Content-Length': upstream.headers.get('content-length') ?? '',
