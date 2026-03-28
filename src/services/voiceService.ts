@@ -1,6 +1,6 @@
 // AI voice synthesis — all coach speech goes through here
-// Fallback chain: ElevenLabs → Voice Packs (pre-rendered) → Web Speech API
-// Only this file may call the ElevenLabs API.
+// Fallback chain: ElevenLabs → Amazon Polly → Voice Packs (pre-rendered) → Web Speech API
+// Only this file may call TTS APIs.
 
 import { speechService } from './speechService';
 import { voicePackService } from './voicePackService';
@@ -9,6 +9,22 @@ import { db } from '../db/schema';
 import type { UserPreferences } from '../types';
 
 const ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
+
+/** Available Amazon Polly voices (served via /api/tts endpoint) */
+export const POLLY_VOICES = [
+  { id: 'ruth',     name: 'Ruth',     description: 'Generative female', engine: 'generative' },
+  { id: 'matthew',  name: 'Matthew',  description: 'Generative male',   engine: 'generative' },
+  { id: 'danielle', name: 'Danielle', description: 'Generative female', engine: 'generative' },
+  { id: 'gregory',  name: 'Gregory',  description: 'Generative male',   engine: 'generative' },
+  { id: 'joanna',   name: 'Joanna',   description: 'Neural female',     engine: 'neural' },
+  { id: 'stephen',  name: 'Stephen',  description: 'Neural male',       engine: 'neural' },
+  { id: 'kendra',   name: 'Kendra',   description: 'Neural female',     engine: 'neural' },
+  { id: 'kimberly', name: 'Kimberly', description: 'Neural female',     engine: 'neural' },
+  { id: 'salli',    name: 'Salli',    description: 'Neural female',     engine: 'neural' },
+  { id: 'joey',     name: 'Joey',     description: 'Neural male',       engine: 'neural' },
+  { id: 'ivy',      name: 'Ivy',      description: 'Neural child',      engine: 'neural' },
+  { id: 'kevin',    name: 'Kevin',    description: 'Neural child',      engine: 'neural' },
+] as const;
 
 // Web Speech fallback settings
 const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
@@ -45,22 +61,28 @@ class VoiceService {
     }
 
     // Tier 1: ElevenLabs (if configured)
-    const apiKey = await this.getApiKey(preferences);
+    const elevenLabsKey = await this.getElevenLabsKey(preferences);
     const voiceId = preferences.elevenlabsVoiceId as string | undefined;
 
-    if (apiKey && voiceId) {
-      const success = await this.speakElevenLabs(text, apiKey, voiceId);
+    if (elevenLabsKey && voiceId) {
+      const success = await this.speakElevenLabs(text, elevenLabsKey, voiceId);
       if (success) return;
     }
 
-    // Tier 2: Voice Pack — pre-rendered clips, no WASM, works on iOS
+    // Tier 2: Amazon Polly (server-side, no API key needed in browser)
+    if (preferences.pollyEnabled) {
+      const success = await this.speakPolly(text, preferences.pollyVoice || 'ruth');
+      if (success) return;
+    }
+
+    // Tier 3: Voice Pack — pre-rendered clips, no WASM, works on iOS
     if (preferences.kokoroEnabled && voicePackService.isReady()) {
       const success = await this.speakVoicePack(text, this.speed);
       if (success) return;
       console.warn(`[TTS] Missing clip for: "${text.slice(0, 80)}" — falling back to Web Speech`);
     }
 
-    // Tier 3: Web Speech API (with user's selected system voice)
+    // Tier 4: Web Speech API (with user's selected system voice)
     if (preferences.systemVoiceURI) {
       speechService.setVoice(preferences.systemVoiceURI);
     }
@@ -114,6 +136,33 @@ class VoiceService {
     }
   }
 
+  private async speakPolly(text: string, voice: string): Promise<boolean> {
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voice }),
+      });
+
+      if (response.status === 503) {
+        // TTS not configured on server — skip silently
+        return false;
+      }
+
+      if (!response.ok) {
+        console.warn('[VoiceService] Polly TTS error', response.status, '— falling back');
+        return false;
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      await this.playAudioBuffer(arrayBuffer);
+      return true;
+    } catch (error) {
+      console.warn('[VoiceService] Polly TTS fetch failed:', error);
+      return false;
+    }
+  }
+
   private async speakVoicePack(text: string, speed: number): Promise<boolean> {
     try {
       return await voicePackService.speak(text, speed);
@@ -152,7 +201,7 @@ class VoiceService {
     });
   }
 
-  private async getApiKey(preferences: UserPreferences): Promise<string | null> {
+  private async getElevenLabsKey(preferences: UserPreferences): Promise<string | null> {
     if (!preferences.elevenlabsKeyEncrypted || !preferences.elevenlabsKeyIv) {
       return null;
     }
@@ -164,6 +213,7 @@ class VoiceService {
       return null;
     }
   }
+
 }
 
 // Singleton
