@@ -60,7 +60,7 @@ import { ProPlayerPage } from './components/Openings/ProPlayerPage';
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
     useAppStore();
-  const [onboardingSkipped, setOnboardingSkipped] = useState(false);
+  const [onboardingSkipped, setOnboardingSkipped] = useState(true);
 
   useEffect(() => {
     async function init(): Promise<void> {
