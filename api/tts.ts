@@ -72,12 +72,13 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
       credentials: { accessKeyId, secretAccessKey },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
     const command = new SynthesizeSpeechCommand({
       Text: text,
       OutputFormat: 'mp3',
       VoiceId: voiceConfig.voiceId,
       Engine: voiceConfig.engine,
-    } as Record<string, string>);
+    } as any);
 
     const abortController = new AbortController();
     const timeout = setTimeout(() => abortController.abort(), 8000);
