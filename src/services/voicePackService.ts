@@ -163,7 +163,7 @@ class VoicePackService {
 
     try {
       // Check IndexedDB cache first
-      this.log('=== Voice Pack Downloader v5 ===');
+      this.log('=== Voice Pack Downloader v6 ===');
       this.log('Checking IndexedDB cache...');
       const cached = await this.getCachedPack(voiceId);
       if (cached) {
@@ -214,7 +214,10 @@ class VoicePackService {
           throw new Error(`Chunk ${chunkNum} HTTP ${response.status}: ${body}`);
         }
 
-        const chunkData = new Uint8Array(await response.arrayBuffer());
+        const rawChunk = new Uint8Array(await response.arrayBuffer());
+        // Last chunk may be larger than remaining space — trim to fit
+        const remaining = totalBytes - start;
+        const chunkData = rawChunk.byteLength > remaining ? rawChunk.slice(0, remaining) : rawChunk;
         combined.set(chunkData, start);
         receivedBytes += chunkData.byteLength;
         const pct = Math.round((receivedBytes / totalBytes) * 100);
