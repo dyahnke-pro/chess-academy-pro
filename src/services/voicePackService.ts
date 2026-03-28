@@ -63,8 +63,14 @@ export function hashText(text: string): string {
   return String(h);
 }
 
+interface ClipRef {
+  offset: number;
+  length: number;
+}
+
 class VoicePackService {
-  private clips: Map<string, ArrayBuffer> = new Map();
+  private clipRefs: Map<string, ClipRef> = new Map();
+  private packBuffer: ArrayBuffer | null = null;
   private status: VoicePackStatus = 'idle';
   private loadedVoiceId: string | null = null;
   private downloadProgress = 0;
@@ -82,7 +88,7 @@ class VoicePackService {
   }
 
   getClipCount(): number {
-    return this.clips.size;
+    return this.clipRefs.size;
   }
 
   getDownloadProgress(): number {
@@ -90,7 +96,7 @@ class VoicePackService {
   }
 
   isReady(): boolean {
-    return this.status === 'ready' && this.clips.size > 0;
+    return this.status === 'ready' && this.clipRefs.size > 0;
   }
 
   isPlaying(): boolean {
@@ -98,7 +104,7 @@ class VoicePackService {
   }
 
   hasClip(text: string): boolean {
-    return this.clips.has(hashText(text));
+    return this.clipRefs.has(hashText(text));
   }
 
   onStatusChange(listener: (status: VoicePackStatus) => void): () => void {
@@ -261,11 +267,14 @@ class VoicePackService {
    */
   async speak(text: string, speed: number = 1.0): Promise<boolean> {
     const hash = hashText(text);
-    const audioData = this.clips.get(hash);
+    const ref = this.clipRefs.get(hash);
 
-    if (!audioData) {
+    if (!ref || !this.packBuffer) {
       return false;
     }
+
+    // Slice only the single clip needed for playback
+    const audioData = this.packBuffer.slice(ref.offset, ref.offset + ref.length);
 
     this.stop();
 
@@ -275,7 +284,7 @@ class VoicePackService {
       await ctx.resume();
     }
 
-    const audioBuffer = await ctx.decodeAudioData(audioData.slice(0));
+    const audioBuffer = await ctx.decodeAudioData(audioData);
     const source = ctx.createBufferSource();
     source.buffer = audioBuffer;
     source.playbackRate.value = speed;
@@ -309,7 +318,8 @@ class VoicePackService {
   /** Unload the current voice pack and free memory. */
   unload(): void {
     this.stop();
-    this.clips.clear();
+    this.clipRefs.clear();
+    this.packBuffer = null;
     this.loadedVoiceId = null;
     this.setStatus('idle');
     this.setProgress(0);
@@ -331,7 +341,8 @@ class VoicePackService {
   // --- Private ---
 
   private parseBin(buffer: ArrayBuffer): void {
-    this.clips.clear();
+    this.clipRefs.clear();
+    this.packBuffer = buffer;
     const view = new DataView(buffer);
     let offset = 0;
 
@@ -349,10 +360,10 @@ class VoicePackService {
       const audioLen = view.getUint32(offset, true);
       offset += 4;
 
-      const audioData = buffer.slice(offset, offset + audioLen);
+      // Store offset+length reference instead of copying the audio data.
+      // This avoids doubling memory usage from 234MB of buffer.slice() calls.
+      this.clipRefs.set(hash, { offset, length: audioLen });
       offset += audioLen;
-
-      this.clips.set(hash, audioData);
     }
   }
 
