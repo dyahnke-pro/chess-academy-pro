@@ -75,9 +75,9 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
     const command = new SynthesizeSpeechCommand({
       Text: text,
       OutputFormat: 'mp3',
-      VoiceId: voiceConfig.voiceId as Parameters<typeof SynthesizeSpeechCommand.prototype.constructor>[0]['VoiceId'],
-      Engine: voiceConfig.engine as Parameters<typeof SynthesizeSpeechCommand.prototype.constructor>[0]['Engine'],
-    });
+      VoiceId: voiceConfig.voiceId,
+      Engine: voiceConfig.engine,
+    } as Record<string, string>);
 
     const abortController = new AbortController();
     const timeout = setTimeout(() => abortController.abort(), 8000);
