@@ -41,7 +41,11 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
   const region = process.env.AWS_REGION_POLLY || 'us-east-2';
 
   if (!accessKeyId || !secretAccessKey) {
-    return new Response('TTS not configured', { status: 503, headers: cors });
+    const missing = [
+      !accessKeyId && 'AWS_ACCESS_KEY_ID_POLLY',
+      !secretAccessKey && 'AWS_SECRET_ACCESS_KEY_POLLY',
+    ].filter(Boolean).join(', ');
+    return new Response(`TTS not configured — missing env: ${missing}`, { status: 503, headers: cors });
   }
 
   if (!text || text.length > MAX_TEXT_LENGTH) {
