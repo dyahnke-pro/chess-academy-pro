@@ -4,10 +4,11 @@ import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
 import { voicePackService, VOICE_PACK_VOICES, getVoicePackUrl } from '../../services/voicePackService';
 import type { VoicePackStatus } from '../../services/voicePackService';
+import { POLLY_VOICES } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
-import { Volume2, Download, Play, Check, AlertCircle, Loader2, Mic } from 'lucide-react';
-import { unlockAudioContext } from '../../services/audioContextManager';
+import { Volume2, Download, Play, Check, AlertCircle, Loader2, Mic, Sparkles } from 'lucide-react';
+import { unlockAudioContext, getSharedAudioContext } from '../../services/audioContextManager';
 
 /** Curated quality voice names — prioritized at top of system voice list */
 const QUALITY_VOICES = [
@@ -41,6 +42,11 @@ export function VoiceSettingsPanel(): JSX.Element {
   const [elevenlabsVoiceId, setElevenlabsVoiceId] = useState(() => activeProfile?.preferences.elevenlabsVoiceId ?? '');
   const [voiceSpeed, setVoiceSpeed] = useState(() => activeProfile?.preferences.voiceSpeed ?? 1.0);
   const [status, setStatus] = useState<string | null>(null);
+
+  // Amazon Polly TTS state
+  const [pollyEnabled, setPollyEnabled] = useState(() => activeProfile?.preferences.pollyEnabled ?? true);
+  const [pollyVoice, setPollyVoice] = useState(() => activeProfile?.preferences.pollyVoice ?? 'ruth');
+  const [pollyPreviewPlaying, setPollyPreviewPlaying] = useState(false);
 
   // Voice pack state
   const [kokoroEnabled, setKokoroEnabled] = useState(() => activeProfile?.preferences.kokoroEnabled ?? true);
@@ -123,6 +129,63 @@ export function VoiceSettingsPanel(): JSX.Element {
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     setStatus('Voice settings saved');
     setTimeout(() => setStatus(null), 2000);
+  };
+
+  const handlePollyToggle = async (enabled: boolean): Promise<void> => {
+    setPollyEnabled(enabled);
+    if (!activeProfile) return;
+    const updatedPrefs = { ...activeProfile.preferences, pollyEnabled: enabled };
+    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+  };
+
+  const handlePollyVoiceChange = async (voice: string): Promise<void> => {
+    setPollyVoice(voice);
+    if (!activeProfile) return;
+    const updatedPrefs = { ...activeProfile.preferences, pollyVoice: voice };
+    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+  };
+
+  const handlePollyPreview = async (): Promise<void> => {
+    if (pollyPreviewPlaying) return;
+    unlockAudioContext();
+    setPollyPreviewPlaying(true);
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: 'Great move! You found the key idea in this position.',
+          voice: pollyVoice,
+        }),
+      });
+      if (response.status === 503) {
+        setStatus('Cloud voice not configured on server');
+        setTimeout(() => setStatus(null), 3000);
+        setPollyPreviewPlaying(false);
+        return;
+      }
+      if (!response.ok) {
+        setStatus(`Cloud voice error: ${response.status}`);
+        setTimeout(() => setStatus(null), 3000);
+        setPollyPreviewPlaying(false);
+        return;
+      }
+      const buffer = await response.arrayBuffer();
+      const ctx = getSharedAudioContext();
+      if (ctx.state === 'suspended') await ctx.resume();
+      const audioBuffer = await ctx.decodeAudioData(buffer);
+      const source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(ctx.destination);
+      source.onended = () => setPollyPreviewPlaying(false);
+      source.start();
+    } catch {
+      setStatus('Preview failed');
+      setTimeout(() => setStatus(null), 2000);
+      setPollyPreviewPlaying(false);
+    }
   };
 
   const handleDownloadModel = useCallback(async (): Promise<void> => {
@@ -341,6 +404,72 @@ export function VoiceSettingsPanel(): JSX.Element {
                 {previewPlaying ? 'Playing…' : 'Preview Voice'}
               </button>
             )}
+          </div>
+        )}
+      </div>
+
+      {/* ── Amazon Polly (Cloud Voice) ──────────────────────────── */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-sm flex items-center gap-2">
+            <Sparkles size={16} />
+            Cloud Voice (AI)
+          </h3>
+          <label className="flex items-center gap-2 cursor-pointer" data-testid="polly-toggle">
+            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              {pollyEnabled ? 'On' : 'Off'}
+            </span>
+            <div
+              role="switch"
+              aria-checked={pollyEnabled}
+              tabIndex={0}
+              onClick={() => void handlePollyToggle(!pollyEnabled)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); void handlePollyToggle(!pollyEnabled); } }}
+              className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+              style={{ background: pollyEnabled ? 'var(--color-accent)' : 'var(--color-border)' }}
+            >
+              <span
+                className="inline-block h-4 w-4 rounded-full bg-white transition-transform"
+                style={{ transform: pollyEnabled ? 'translateX(24px)' : 'translateX(4px)' }}
+              />
+            </div>
+          </label>
+        </div>
+        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          High-quality AI voice powered by Amazon Polly. Reads any text naturally — no setup required.
+        </p>
+
+        {pollyEnabled && (
+          <div className="space-y-3">
+            <div>
+              <label className="text-xs font-medium block mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
+                Voice
+              </label>
+              <select
+                value={pollyVoice}
+                onChange={(e) => void handlePollyVoiceChange(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border text-sm appearance-none"
+                style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="polly-voice-select"
+              >
+                {POLLY_VOICES.map((voice) => (
+                  <option key={voice.id} value={voice.id}>
+                    {voice.name} — {voice.description}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              onClick={() => void handlePollyPreview()}
+              disabled={pollyPreviewPlaying}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border disabled:opacity-50"
+              style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+              data-testid="polly-preview-btn"
+            >
+              <Play size={14} />
+              {pollyPreviewPlaying ? 'Playing…' : 'Preview Voice'}
+            </button>
           </div>
         )}
       </div>

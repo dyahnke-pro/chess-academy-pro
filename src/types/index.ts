@@ -303,6 +303,9 @@ export interface UserPreferences {
   elevenlabsKeyEncrypted: string | null;
   elevenlabsKeyIv: string | null;
   elevenlabsVoiceId: string | null;
+  // Amazon Polly TTS (server-side, no API key in browser)
+  pollyEnabled: boolean;
+  pollyVoice: string;
   voiceSpeed: number;
   // Kokoro TTS (open-source, in-browser)
   kokoroEnabled: boolean;
