@@ -1,5 +1,3 @@
-import { PollyClient, SynthesizeSpeechCommand, type VoiceId, type Engine } from '@aws-sdk/client-polly';
-
 const ALLOWED_ORIGINS = [
   'capacitor://app.chessacademy.pro',
   'https://chess-academy-pro.vercel.app',
@@ -15,8 +13,12 @@ function getCorsHeaders(req?: Request): Record<string, string> {
   };
 }
 
-// Neural voices available in us-east-2 (Ohio)
-const ALLOWED_VOICES: Record<string, { voiceId: VoiceId; engine: Engine }> = {
+interface VoiceConfig {
+  voiceId: string;
+  engine: string;
+}
+
+const ALLOWED_VOICES: Record<string, VoiceConfig> = {
   ruth:     { voiceId: 'Ruth',     engine: 'generative' },
   matthew:  { voiceId: 'Matthew',  engine: 'generative' },
   joanna:   { voiceId: 'Joanna',   engine: 'neural' },
@@ -62,17 +64,19 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
   }
 
   try {
+    // Lazy import to avoid crashing at module load time
+    const { PollyClient, SynthesizeSpeechCommand } = await import('@aws-sdk/client-polly');
+
     const polly = new PollyClient({
       region,
       credentials: { accessKeyId, secretAccessKey },
-      requestHandler: { requestTimeout: 8000 },
     });
 
     const command = new SynthesizeSpeechCommand({
       Text: text,
       OutputFormat: 'mp3',
-      VoiceId: voiceConfig.voiceId,
-      Engine: voiceConfig.engine,
+      VoiceId: voiceConfig.voiceId as Parameters<typeof SynthesizeSpeechCommand.prototype.constructor>[0]['VoiceId'],
+      Engine: voiceConfig.engine as Parameters<typeof SynthesizeSpeechCommand.prototype.constructor>[0]['Engine'],
     });
 
     const abortController = new AbortController();
@@ -116,7 +120,6 @@ export default async function handler(req: Request): Promise<Response> {
       return new Response(null, { status: 204, headers: cors });
     }
 
-    // Support GET with query params (for direct <audio src="..."> on iOS)
     if (req.method === 'GET') {
       const url = new URL(req.url);
       const text = url.searchParams.get('text')?.trim() ?? '';
@@ -126,9 +129,9 @@ export default async function handler(req: Request): Promise<Response> {
       if (url.searchParams.get('diag') === '1') {
         const hasKey = Boolean(process.env.AWS_ACCESS_KEY_ID_POLLY);
         const hasSecret = Boolean(process.env.AWS_SECRET_ACCESS_KEY_POLLY);
-        const region = process.env.AWS_REGION_POLLY || '(not set, default us-east-2)';
+        const r = process.env.AWS_REGION_POLLY || '(not set, default us-east-2)';
         return new Response(
-          `ENV CHECK:\nAWS_ACCESS_KEY_ID_POLLY: ${hasKey ? 'SET' : 'MISSING'}\nAWS_SECRET_ACCESS_KEY_POLLY: ${hasSecret ? 'SET' : 'MISSING'}\nAWS_REGION_POLLY: ${region}\n`,
+          `ENV CHECK:\nAWS_ACCESS_KEY_ID_POLLY: ${hasKey ? 'SET' : 'MISSING'}\nAWS_SECRET_ACCESS_KEY_POLLY: ${hasSecret ? 'SET' : 'MISSING'}\nAWS_REGION_POLLY: ${r}\n`,
           { status: 200, headers: { ...cors, 'Content-Type': 'text/plain' } },
         );
       }
@@ -136,7 +139,6 @@ export default async function handler(req: Request): Promise<Response> {
       return synthesize(text, voice, req);
     }
 
-    // Support POST with JSON body
     if (req.method === 'POST') {
       let body: { text?: string; voice?: string };
       try {
