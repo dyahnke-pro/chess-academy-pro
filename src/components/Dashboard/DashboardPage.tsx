@@ -29,6 +29,7 @@ export function DashboardPage(): JSX.Element {
   const [betaBannerVisible, setBetaBannerVisible] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState<VoicePackStatus>(voicePackService.getStatus());
   const [voiceProgress, setVoiceProgress] = useState(voicePackService.getDownloadProgress());
+  const [voiceError, setVoiceError] = useState<string | null>(null);
 
   useEffect(() => {
     void seedDatabase();
@@ -83,11 +84,13 @@ export function DashboardPage(): JSX.Element {
 
   const handleDownloadBella = useCallback(async (): Promise<void> => {
     unlockAudioContext();
+    setVoiceError(null);
     const voiceId = activeProfile?.preferences.kokoroVoiceId || 'af_bella';
     try {
       await voicePackService.loadFromUrl(voiceId, getVoicePackUrl(voiceId));
-    } catch {
-      // error shown via voiceStatus listener
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setVoiceError(msg);
     }
   }, [activeProfile?.preferences.kokoroVoiceId]);
 
@@ -158,8 +161,13 @@ export function DashboardPage(): JSX.Element {
             {voiceStatus === 'error' && (
               <>
                 <p className="text-sm font-semibold" style={{ color: 'var(--color-error)' }}>Bella download failed</p>
+                {voiceError && (
+                  <p className="text-xs mt-0.5 mb-1 font-mono break-all" style={{ color: 'var(--color-error)' }}>
+                    {voiceError}
+                  </p>
+                )}
                 <p className="text-xs mt-0.5 mb-3" style={{ color: 'var(--color-text-muted)' }}>
-                  The voice pack file may not be uploaded yet. Check the console for details, or try again.
+                  Tap retry to try again.
                 </p>
                 <button
                   onClick={() => void handleDownloadBella()}
