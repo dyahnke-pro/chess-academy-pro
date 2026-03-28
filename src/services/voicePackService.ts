@@ -17,7 +17,7 @@ import { db } from '../db/schema';
 /** Build the download URL for a voice pack by ID.
  *  Vercel Edge Function proxies to GitHub Releases (avoids CORS). */
 export function getVoicePackUrl(voiceId: string): string {
-  return `/voice-packs/${voiceId}_mp3.bin`;
+  return `/api/voice-packs/${voiceId}_mp3.bin`;
 }
 
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
@@ -146,45 +146,50 @@ class VoicePackService {
         return;
       }
 
-      // Download with progress tracking
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Voice pack not available (HTTP ${response.status}). Upload ${voiceId}.bin to /voice-packs/ on the server.`);
+      // Get file size from first Range request
+      const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks to stay within edge timeout
+      const firstChunk = await fetch(url, {
+        headers: { 'Range': 'bytes=0-0' },
+      });
+
+      if (!firstChunk.ok && firstChunk.status !== 206) {
+        throw new Error(`Voice pack not available (HTTP ${firstChunk.status}).`);
       }
 
       // Guard against SPA catch-all serving HTML instead of the binary file
-      const contentType = response.headers.get('content-type') ?? '';
+      const contentType = firstChunk.headers.get('content-type') ?? '';
       if (contentType.includes('text/html')) {
-        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file. Upload ${voiceId}.bin to the voice-packs/ directory.`);
+        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file.`);
       }
 
-      const contentLength = response.headers.get('content-length');
-      const totalBytes = contentLength ? parseInt(contentLength, 10) : 0;
-
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error('Response body is not readable');
+      // Parse total size from Content-Range: bytes 0-0/234420138
+      const contentRange = firstChunk.headers.get('content-range') ?? '';
+      const sizeMatch = contentRange.match(/\/(\d+)$/);
+      const totalBytes = sizeMatch ? parseInt(sizeMatch[1], 10) : 0;
+      if (totalBytes === 0) {
+        throw new Error('Could not determine file size from Content-Range header.');
       }
 
-      const chunks: Uint8Array[] = [];
+      // Download in chunks using Range requests
+      const combined = new Uint8Array(totalBytes);
       let receivedBytes = 0;
 
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-        receivedBytes += value.length;
-        if (totalBytes > 0) {
-          this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
-        }
-      }
+      while (receivedBytes < totalBytes) {
+        const start = receivedBytes;
+        const end = Math.min(start + CHUNK_SIZE - 1, totalBytes - 1);
 
-      // Combine chunks into single ArrayBuffer
-      const combined = new Uint8Array(receivedBytes);
-      let offset = 0;
-      for (const chunk of chunks) {
-        combined.set(chunk, offset);
-        offset += chunk.length;
+        const response = await fetch(url, {
+          headers: { 'Range': `bytes=${start}-${end}` },
+        });
+
+        if (!response.ok && response.status !== 206) {
+          throw new Error(`Chunk download failed (HTTP ${response.status}) at byte ${start}.`);
+        }
+
+        const chunkBuffer = await response.arrayBuffer();
+        combined.set(new Uint8Array(chunkBuffer), start);
+        receivedBytes += chunkBuffer.byteLength;
+        this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
       }
 
       const buffer = combined.buffer;

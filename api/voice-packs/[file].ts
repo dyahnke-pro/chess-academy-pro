@@ -10,8 +10,9 @@ export default async function handler(req: Request): Promise<Response> {
       status: 204,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+        'Access-Control-Allow-Headers': 'Range',
+        'Access-Control-Expose-Headers': 'Content-Length, Content-Range, Accept-Ranges',
       },
     });
   }
@@ -20,58 +21,66 @@ export default async function handler(req: Request): Promise<Response> {
   const file = url.pathname.split('/').pop();
 
   if (!file || !file.endsWith('.bin')) {
-    return new Response('Invalid file', { status: 400 });
+    return new Response('Invalid file', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
   }
 
+  const corsHeaders: Record<string, string> = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Expose-Headers': 'Content-Length, Content-Range, Accept-Ranges',
+  };
+
   try {
-    // Step 1: Get the redirect URL from GitHub (don't follow automatically)
+    // Resolve GitHub redirect to get the signed CDN URL
     const ghResponse = await fetch(`${GITHUB_RELEASE_URL}/${file}`, {
       redirect: 'manual',
     });
 
-    // GitHub returns 302 with Location header pointing to Azure CDN
     const cdnUrl = ghResponse.headers.get('location');
     if (!cdnUrl) {
-      // If no redirect, maybe GitHub returned the file directly (unlikely)
-      if (ghResponse.ok && ghResponse.body) {
-        return new Response(ghResponse.body, {
-          headers: {
-            'Content-Type': 'application/octet-stream',
-            'Content-Length': ghResponse.headers.get('content-length') ?? '',
-            'Cache-Control': 'public, max-age=604800, immutable',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-      }
-      return new Response(
-        `GitHub returned ${ghResponse.status} with no redirect. Headers: ${JSON.stringify(Object.fromEntries(ghResponse.headers.entries()))}`,
-        { status: 502, headers: { 'Access-Control-Allow-Origin': '*' } }
-      );
+      return new Response(`GitHub returned ${ghResponse.status} with no redirect`, {
+        status: 502,
+        headers: corsHeaders,
+      });
     }
 
-    // Step 2: Fetch from CDN directly (the signed URL)
-    const upstream = await fetch(cdnUrl);
-
-    if (!upstream.ok) {
-      return new Response(
-        `CDN returned ${upstream.status}. URL prefix: ${cdnUrl.substring(0, 80)}...`,
-        { status: upstream.status, headers: { 'Access-Control-Allow-Origin': '*' } }
-      );
+    // Forward Range header from client if present (for chunked downloads)
+    const rangeHeader = req.headers.get('range');
+    const fetchHeaders: Record<string, string> = {};
+    if (rangeHeader) {
+      fetchHeaders['Range'] = rangeHeader;
     }
+
+    const upstream = await fetch(cdnUrl, { headers: fetchHeaders });
+
+    if (!upstream.ok && upstream.status !== 206) {
+      return new Response(`CDN returned ${upstream.status}`, {
+        status: upstream.status,
+        headers: corsHeaders,
+      });
+    }
+
+    const responseHeaders: Record<string, string> = {
+      'Content-Type': 'application/octet-stream',
+      'Cache-Control': 'public, max-age=604800, immutable',
+      'Accept-Ranges': 'bytes',
+      ...corsHeaders,
+    };
+
+    const cl = upstream.headers.get('content-length');
+    if (cl) responseHeaders['Content-Length'] = cl;
+
+    const cr = upstream.headers.get('content-range');
+    if (cr) responseHeaders['Content-Range'] = cr;
 
     return new Response(upstream.body, {
-      headers: {
-        'Content-Type': 'application/octet-stream',
-        'Content-Length': upstream.headers.get('content-length') ?? '',
-        'Cache-Control': 'public, max-age=604800, immutable',
-        'Access-Control-Allow-Origin': '*',
-      },
+      status: upstream.status,
+      headers: responseHeaders,
     });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
     return new Response(`Edge function error: ${msg}`, {
       status: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: corsHeaders,
     });
   }
 }
