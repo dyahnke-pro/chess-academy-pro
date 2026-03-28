@@ -121,6 +121,18 @@ export default async function handler(req: Request): Promise<Response> {
       const url = new URL(req.url);
       const text = url.searchParams.get('text')?.trim() ?? '';
       const voice = url.searchParams.get('voice') ?? 'ruth';
+
+      // Diagnostic mode: /api/tts?diag=1 returns env var status without calling Polly
+      if (url.searchParams.get('diag') === '1') {
+        const hasKey = Boolean(process.env.AWS_ACCESS_KEY_ID_POLLY);
+        const hasSecret = Boolean(process.env.AWS_SECRET_ACCESS_KEY_POLLY);
+        const region = process.env.AWS_REGION_POLLY || '(not set, default us-east-2)';
+        return new Response(
+          `ENV CHECK:\nAWS_ACCESS_KEY_ID_POLLY: ${hasKey ? 'SET' : 'MISSING'}\nAWS_SECRET_ACCESS_KEY_POLLY: ${hasSecret ? 'SET' : 'MISSING'}\nAWS_REGION_POLLY: ${region}\n`,
+          { status: 200, headers: { ...cors, 'Content-Type': 'text/plain' } },
+        );
+      }
+
       return synthesize(text, voice, req);
     }
 
