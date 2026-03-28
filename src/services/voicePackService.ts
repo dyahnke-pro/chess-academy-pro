@@ -210,12 +210,16 @@ class VoicePackService {
 
       const buffer = combined.buffer as ArrayBuffer;
 
-      // Parse and cache
+      // Parse clips first — this makes the voice usable immediately
       this.parseBin(buffer);
-      await this.cachePack(voiceId, buffer);
       this.loadedVoiceId = voiceId;
       this.setProgress(100);
       this.setStatus('ready');
+
+      // Cache in IndexedDB in the background — don't block on it
+      this.cachePack(voiceId, buffer).catch((err) => {
+        console.warn('[VoicePackService] Failed to cache voice pack (will re-download next time):', err);
+      });
     } catch (error) {
       console.error('[VoicePackService] Failed to load voice pack:', error);
       this.setStatus('error');
