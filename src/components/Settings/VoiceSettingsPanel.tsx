@@ -8,7 +8,7 @@ import { POLLY_VOICES } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Download, Play, Check, AlertCircle, Loader2, Mic, Sparkles } from 'lucide-react';
-import { unlockAudioContext, getSharedAudioContext } from '../../services/audioContextManager';
+import { unlockAudioContext } from '../../services/audioContextManager';
 
 /** Curated quality voice names — prioritized at top of system voice list */
 const QUALITY_VOICES = [
@@ -172,30 +172,29 @@ export function VoiceSettingsPanel(): JSX.Element {
         setPollyPreviewPlaying(false);
         return;
       }
-      const buffer = await response.arrayBuffer();
-      if (buffer.byteLength === 0) {
+      const blob = await response.blob();
+      if (blob.size === 0) {
         setStatus('Cloud voice returned empty audio');
         setTimeout(() => setStatus(null), 3000);
         setPollyPreviewPlaying(false);
         return;
       }
-      // Check if response is HTML/text error instead of audio
-      const contentType = response.headers.get('content-type') ?? '';
-      if (!contentType.includes('audio')) {
-        const text = new TextDecoder().decode(buffer.slice(0, 200));
-        setStatus(`Cloud voice error: ${text.slice(0, 100)}`);
-        setTimeout(() => setStatus(null), 5000);
+      setStatus(`Got ${blob.size} bytes, playing...`);
+      // Use <audio> element — more reliable on iOS than AudioContext
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.onended = () => {
         setPollyPreviewPlaying(false);
-        return;
-      }
-      const ctx = getSharedAudioContext();
-      if (ctx.state === 'suspended') await ctx.resume();
-      const audioBuffer = await ctx.decodeAudioData(buffer);
-      const source = ctx.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(ctx.destination);
-      source.onended = () => setPollyPreviewPlaying(false);
-      source.start();
+        setStatus(null);
+        URL.revokeObjectURL(url);
+      };
+      audio.onerror = () => {
+        setStatus(`Audio playback error`);
+        setTimeout(() => setStatus(null), 3000);
+        setPollyPreviewPlaying(false);
+        URL.revokeObjectURL(url);
+      };
+      await audio.play();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setStatus(`Preview failed: ${msg}`);

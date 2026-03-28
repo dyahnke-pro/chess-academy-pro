@@ -31,6 +31,7 @@ const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
 
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
+  private currentAudio: HTMLAudioElement | null = null;
   private playing = false;
   private speed = 1.0;
 
@@ -98,6 +99,10 @@ class VoiceService {
       }
       this.currentSource = null;
     }
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio = null;
+    }
     this.playing = false;
     voicePackService.stop();
     speechService.stop();
@@ -154,13 +159,35 @@ class VoiceService {
         return false;
       }
 
-      const arrayBuffer = await response.arrayBuffer();
-      await this.playAudioBuffer(arrayBuffer);
+      const blob = await response.blob();
+      await this.playAudioBlob(blob);
       return true;
     } catch (error) {
       console.warn('[VoiceService] Polly TTS fetch failed:', error);
       return false;
     }
+  }
+
+  private playAudioBlob(blob: Blob): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      this.currentAudio = audio;
+      this.playing = true;
+      audio.onended = () => {
+        this.playing = false;
+        this.currentAudio = null;
+        URL.revokeObjectURL(url);
+        resolve();
+      };
+      audio.onerror = () => {
+        this.playing = false;
+        this.currentAudio = null;
+        URL.revokeObjectURL(url);
+        resolve();
+      };
+      void audio.play();
+    });
   }
 
   private async speakVoicePack(text: string, speed: number): Promise<boolean> {
