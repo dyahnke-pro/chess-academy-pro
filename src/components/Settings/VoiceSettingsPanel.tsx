@@ -173,6 +173,21 @@ export function VoiceSettingsPanel(): JSX.Element {
         return;
       }
       const buffer = await response.arrayBuffer();
+      if (buffer.byteLength === 0) {
+        setStatus('Cloud voice returned empty audio');
+        setTimeout(() => setStatus(null), 3000);
+        setPollyPreviewPlaying(false);
+        return;
+      }
+      // Check if response is HTML/text error instead of audio
+      const contentType = response.headers.get('content-type') ?? '';
+      if (!contentType.includes('audio')) {
+        const text = new TextDecoder().decode(buffer.slice(0, 200));
+        setStatus(`Cloud voice error: ${text.slice(0, 100)}`);
+        setTimeout(() => setStatus(null), 5000);
+        setPollyPreviewPlaying(false);
+        return;
+      }
       const ctx = getSharedAudioContext();
       if (ctx.state === 'suspended') await ctx.resume();
       const audioBuffer = await ctx.decodeAudioData(buffer);
@@ -181,9 +196,10 @@ export function VoiceSettingsPanel(): JSX.Element {
       source.connect(ctx.destination);
       source.onended = () => setPollyPreviewPlaying(false);
       source.start();
-    } catch {
-      setStatus('Preview failed');
-      setTimeout(() => setStatus(null), 2000);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setStatus(`Preview failed: ${msg}`);
+      setTimeout(() => setStatus(null), 5000);
       setPollyPreviewPlaying(false);
     }
   };
