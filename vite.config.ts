@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         globIgnores: ['stockfish/**'],
+        navigateFallbackDenylist: [/^\/api\//, /^\/voice-packs\//],
         runtimeCaching: [
           {
             urlPattern: /\/stockfish\/.*/i,
