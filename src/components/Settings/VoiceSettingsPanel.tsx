@@ -151,6 +151,20 @@ export function VoiceSettingsPanel(): JSX.Element {
     if (pollyPreviewPlaying) return;
     unlockAudioContext();
     setPollyPreviewPlaying(true);
+
+    // iOS Safari: create and "unlock" Audio element synchronously in the
+    // gesture handler. Playing a silent data URI keeps the gesture alive
+    // so we can set the real src after the async fetch completes.
+    const audio = new Audio();
+    audio.volume = 1;
+    try {
+      // Tiny silent MP3 — unlocks playback on iOS
+      audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRwBHAAAAAAD/+1DEAAAB8AK/tAAAIgAANIAAAAQAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7UMQbAAADSAAAAAAAAANIAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=';
+      await audio.play();
+    } catch {
+      // Ignore — unlock attempt, real playback below
+    }
+
     try {
       const response = await fetch('/api/tts', {
         method: 'POST',
@@ -179,10 +193,9 @@ export function VoiceSettingsPanel(): JSX.Element {
         setPollyPreviewPlaying(false);
         return;
       }
-      setStatus(`Got ${blob.size} bytes, playing...`);
-      // Use <audio> element — more reliable on iOS than AudioContext
+      // Reuse the same unlocked audio element — set blob as src
       const url = URL.createObjectURL(blob);
-      const audio = new Audio(url);
+      audio.src = url;
       audio.onended = () => {
         setPollyPreviewPlaying(false);
         setStatus(null);

@@ -143,6 +143,19 @@ class VoiceService {
 
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
+      // iOS Safari: pre-create and unlock audio element synchronously before
+      // the async fetch, so the gesture context is preserved.
+      const audio = new Audio();
+      this.currentAudio = audio;
+      this.playing = true;
+      try {
+        // Tiny silent MP3 — unlocks playback on iOS
+        audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRwBHAAAAAAD/+1DEAAAB8AK/tAAAIgAANIAAAAQAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7UMQbAAADSAAAAAAAAANIAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=';
+        await audio.play();
+      } catch {
+        // Ignore — unlock attempt
+      }
+
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -150,44 +163,44 @@ class VoiceService {
       });
 
       if (response.status === 503) {
-        // TTS not configured on server — skip silently
+        this.playing = false;
+        this.currentAudio = null;
         return false;
       }
 
       if (!response.ok) {
         console.warn('[VoiceService] Polly TTS error', response.status, '— falling back');
+        this.playing = false;
+        this.currentAudio = null;
         return false;
       }
 
       const blob = await response.blob();
-      await this.playAudioBlob(blob);
+      const url = URL.createObjectURL(blob);
+      // Reuse the same unlocked audio element
+      audio.src = url;
+      await new Promise<void>((resolve) => {
+        audio.onended = () => {
+          this.playing = false;
+          this.currentAudio = null;
+          URL.revokeObjectURL(url);
+          resolve();
+        };
+        audio.onerror = () => {
+          this.playing = false;
+          this.currentAudio = null;
+          URL.revokeObjectURL(url);
+          resolve();
+        };
+        void audio.play();
+      });
       return true;
     } catch (error) {
       console.warn('[VoiceService] Polly TTS fetch failed:', error);
+      this.playing = false;
+      this.currentAudio = null;
       return false;
     }
-  }
-
-  private playAudioBlob(blob: Blob): Promise<void> {
-    return new Promise<void>((resolve) => {
-      const url = URL.createObjectURL(blob);
-      const audio = new Audio(url);
-      this.currentAudio = audio;
-      this.playing = true;
-      audio.onended = () => {
-        this.playing = false;
-        this.currentAudio = null;
-        URL.revokeObjectURL(url);
-        resolve();
-      };
-      audio.onerror = () => {
-        this.playing = false;
-        this.currentAudio = null;
-        URL.revokeObjectURL(url);
-        resolve();
-      };
-      void audio.play();
-    });
   }
 
   private async speakVoicePack(text: string, speed: number): Promise<boolean> {
