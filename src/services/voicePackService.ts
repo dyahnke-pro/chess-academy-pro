@@ -63,14 +63,8 @@ export function hashText(text: string): string {
   return String(h);
 }
 
-interface ClipRef {
-  offset: number;
-  length: number;
-}
-
 class VoicePackService {
-  private clipRefs: Map<string, ClipRef> = new Map();
-  private packBlob: Blob | null = null;
+  private clips: Map<string, ArrayBuffer> = new Map();
   private status: VoicePackStatus = 'idle';
   private loadedVoiceId: string | null = null;
   private downloadProgress = 0;
@@ -88,7 +82,7 @@ class VoicePackService {
   }
 
   getClipCount(): number {
-    return this.clipRefs.size;
+    return this.clips.size;
   }
 
   getDownloadProgress(): number {
@@ -96,7 +90,7 @@ class VoicePackService {
   }
 
   isReady(): boolean {
-    return this.status === 'ready' && this.clipRefs.size > 0;
+    return this.status === 'ready' && this.clips.size > 0;
   }
 
   isPlaying(): boolean {
@@ -104,7 +98,7 @@ class VoicePackService {
   }
 
   hasClip(text: string): boolean {
-    return this.clipRefs.has(hashText(text));
+    return this.clips.has(hashText(text));
   }
 
   onStatusChange(listener: (status: VoicePackStatus) => void): () => void {
@@ -132,11 +126,8 @@ class VoicePackService {
   }
 
   /**
-   * Load a voice pack from a URL. Downloads the .bin file in chunks,
-   * parses it, and caches as a Blob in IndexedDB for offline use.
-   *
-   * Uses Blob (disk-backed) instead of ArrayBuffer (RAM) so the full
-   * 234MB file doesn't have to fit in mobile Safari's ~256MB heap.
+   * Load a voice pack from a URL. Downloads the .bin file, parses it,
+   * and caches the raw binary in IndexedDB for offline use.
    */
   async loadFromUrl(voiceId: string, url: string): Promise<void> {
     if (this.status === 'ready' && this.loadedVoiceId === voiceId) return;
@@ -146,82 +137,64 @@ class VoicePackService {
 
     try {
       // Check IndexedDB cache first
-      const cached = await this.getCachedBlob(voiceId);
+      const cached = await this.getCachedPack(voiceId);
       if (cached) {
-        await this.parseBinFromBlob(cached);
-        this.packBlob = cached;
+        this.parseBin(cached);
         this.loadedVoiceId = voiceId;
         this.setProgress(100);
         this.setStatus('ready');
         return;
       }
 
-      // Download in 5MB chunks using Range requests to stay within
-      // the edge function's 25-second timeout per request.
-      const CHUNK_SIZE = 5 * 1024 * 1024;
-      const blobParts: Blob[] = [];
+      // Download with progress tracking
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Voice pack not available (HTTP ${response.status}). Upload ${voiceId}.bin to /voice-packs/ on the server.`);
+      }
+
+      // Guard against SPA catch-all serving HTML instead of the binary file
+      const contentType = response.headers.get('content-type') ?? '';
+      if (contentType.includes('text/html')) {
+        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file. Upload ${voiceId}.bin to the voice-packs/ directory.`);
+      }
+
+      const contentLength = response.headers.get('content-length');
+      const totalBytes = contentLength ? parseInt(contentLength, 10) : 0;
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('Response body is not readable');
+      }
+
+      const chunks: Uint8Array[] = [];
       let receivedBytes = 0;
-      let totalBytes = 0;
 
       for (;;) {
-        const start = receivedBytes;
-        const end = start + CHUNK_SIZE - 1;
-
-        const chunkResp = await fetch(url, {
-          headers: { 'Range': `bytes=${start}-${end}` },
-        });
-
-        if (chunkResp.status === 200) {
-          // Server doesn't support Range — got whole file
-          const blob = await chunkResp.blob();
-          await this.parseBinFromBlob(blob);
-          this.packBlob = blob;
-          this.loadedVoiceId = voiceId;
-          this.setProgress(100);
-          this.setStatus('ready');
-          this.cacheBlob(voiceId, blob).catch(() => {});
-          return;
-        }
-
-        if (chunkResp.status !== 206) {
-          throw new Error(`Chunk download failed (HTTP ${chunkResp.status}) at byte ${start}.`);
-        }
-
-        if (totalBytes === 0) {
-          const rangeHeader = chunkResp.headers.get('content-range') ?? '';
-          const match = rangeHeader.match(/\/(\d+)$/);
-          if (match) {
-            totalBytes = parseInt(match[1], 10);
-          }
-        }
-
-        const chunkBlob = await chunkResp.blob();
-        blobParts.push(chunkBlob);
-        receivedBytes += chunkBlob.size;
-
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        receivedBytes += value.length;
         if (totalBytes > 0) {
           this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
         }
-
-        if (chunkBlob.size < CHUNK_SIZE || (totalBytes > 0 && receivedBytes >= totalBytes)) {
-          break;
-        }
       }
 
-      // Combine chunks into a single Blob (disk-backed, not RAM)
-      const fullBlob = new Blob(blobParts, { type: 'application/octet-stream' });
+      // Combine chunks into single ArrayBuffer
+      const combined = new Uint8Array(receivedBytes);
+      let offset = 0;
+      for (const chunk of chunks) {
+        combined.set(chunk, offset);
+        offset += chunk.length;
+      }
 
-      // Parse the index from the blob — only reads small slices into RAM
-      await this.parseBinFromBlob(fullBlob);
-      this.packBlob = fullBlob;
+      const buffer = combined.buffer;
+
+      // Parse and cache
+      this.parseBin(buffer);
+      await this.cachePack(voiceId, buffer);
       this.loadedVoiceId = voiceId;
       this.setProgress(100);
       this.setStatus('ready');
-
-      // Cache in IndexedDB in the background
-      this.cacheBlob(voiceId, fullBlob).catch((err) => {
-        console.warn('[VoicePackService] Cache failed (will re-download next time):', err);
-      });
     } catch (error) {
       console.error('[VoicePackService] Failed to load voice pack:', error);
       this.setStatus('error');
@@ -234,14 +207,10 @@ class VoicePackService {
    * when the .bin is bundled with the app).
    */
   loadFromBuffer(voiceId: string, buffer: ArrayBuffer): void {
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
-    // parseBinFromBlob is async but we fire-and-forget for test compat
-    this.parseBinFromBlob(blob).then(() => {
-      this.packBlob = blob;
-      this.loadedVoiceId = voiceId;
-      this.setProgress(100);
-      this.setStatus('ready');
-    });
+    this.parseBin(buffer);
+    this.loadedVoiceId = voiceId;
+    this.setProgress(100);
+    this.setStatus('ready');
   }
 
   /**
@@ -251,11 +220,10 @@ class VoicePackService {
   async loadCached(voiceId: string): Promise<boolean> {
     if (this.status === 'ready' && this.loadedVoiceId === voiceId) return true;
 
-    const cached = await this.getCachedBlob(voiceId);
+    const cached = await this.getCachedPack(voiceId);
     if (!cached) return false;
 
-    await this.parseBinFromBlob(cached);
-    this.packBlob = cached;
+    this.parseBin(cached);
     this.loadedVoiceId = voiceId;
     this.setProgress(100);
     this.setStatus('ready');
@@ -268,15 +236,11 @@ class VoicePackService {
    */
   async speak(text: string, speed: number = 1.0): Promise<boolean> {
     const hash = hashText(text);
-    const ref = this.clipRefs.get(hash);
+    const audioData = this.clips.get(hash);
 
-    if (!ref || !this.packBlob) {
+    if (!audioData) {
       return false;
     }
-
-    // Slice only the single clip from the blob (disk-backed → RAM)
-    const clipSlice = this.packBlob.slice(ref.offset, ref.offset + ref.length);
-    const audioData = await clipSlice.arrayBuffer();
 
     this.stop();
 
@@ -286,7 +250,7 @@ class VoicePackService {
       await ctx.resume();
     }
 
-    const audioBuffer = await ctx.decodeAudioData(audioData);
+    const audioBuffer = await ctx.decodeAudioData(audioData.slice(0));
     const source = ctx.createBufferSource();
     source.buffer = audioBuffer;
     source.playbackRate.value = speed;
@@ -320,8 +284,7 @@ class VoicePackService {
   /** Unload the current voice pack and free memory. */
   unload(): void {
     this.stop();
-    this.clipRefs.clear();
-    this.packBlob = null;
+    this.clips.clear();
     this.loadedVoiceId = null;
     this.setStatus('idle');
     this.setProgress(0);
@@ -342,70 +305,42 @@ class VoicePackService {
 
   // --- Private ---
 
-  /**
-   * Parse the clip index from a Blob without loading the entire file into RAM.
-   * Only reads small header slices into memory to build the offset map.
-   */
-  private async parseBinFromBlob(blob: Blob): Promise<void> {
-    this.clipRefs.clear();
+  private parseBin(buffer: ArrayBuffer): void {
+    this.clips.clear();
+    const view = new DataView(buffer);
+    let offset = 0;
 
-    // Read first 4 bytes for clip count
-    const headerBuf = await blob.slice(0, 4).arrayBuffer();
-    const headerView = new DataView(headerBuf);
-    const count = headerView.getUint32(0, true);
-
-    // Read the index portion in 1MB pages to avoid loading full file
-    let offset = 4;
-    const PAGE_SIZE = 1024 * 1024;
-    let pageBuf: ArrayBuffer | null = null;
-    let pageStart = 0;
+    const count = view.getUint32(offset, true);
+    offset += 4;
 
     for (let i = 0; i < count; i++) {
-      // Ensure we have enough buffered data for the index entry header (6 bytes min)
-      if (!pageBuf || offset - pageStart + 6 > pageBuf.byteLength) {
-        pageStart = offset;
-        const pageEnd = Math.min(offset + PAGE_SIZE, blob.size);
-        pageBuf = await blob.slice(pageStart, pageEnd).arrayBuffer();
-      }
+      const hashLen = view.getUint16(offset, true);
+      offset += 2;
 
-      const localOff = offset - pageStart;
-      const view = new DataView(pageBuf);
-
-      const hashLen = view.getUint16(localOff, true);
-
-      // Make sure we have enough for hash + audioLen header
-      if (localOff + 2 + hashLen + 4 > pageBuf.byteLength) {
-        pageStart = offset;
-        const pageEnd = Math.min(offset + PAGE_SIZE, blob.size);
-        pageBuf = await blob.slice(pageStart, pageEnd).arrayBuffer();
-      }
-
-      const localOff2 = offset - pageStart;
-      const view2 = new DataView(pageBuf);
-
-      const hLen = view2.getUint16(localOff2, true);
-      const hashBytes = new Uint8Array(pageBuf, localOff2 + 2, hLen);
+      const hashBytes = new Uint8Array(buffer, offset, hashLen);
       const hash = new TextDecoder().decode(hashBytes);
+      offset += hashLen;
 
-      const audioLen = view2.getUint32(localOff2 + 2 + hLen, true);
+      const audioLen = view.getUint32(offset, true);
+      offset += 4;
 
-      const audioOffset = offset + 2 + hLen + 4;
-      this.clipRefs.set(hash, { offset: audioOffset, length: audioLen });
+      const audioData = buffer.slice(offset, offset + audioLen);
+      offset += audioLen;
 
-      offset = audioOffset + audioLen;
+      this.clips.set(hash, audioData);
     }
   }
 
-  private async getCachedBlob(voiceId: string): Promise<Blob | null> {
+  private async getCachedPack(voiceId: string): Promise<ArrayBuffer | null> {
     const record = await db.meta.get(`voicepack-${voiceId}`);
-    if (record && (record as unknown as { value: unknown }).value instanceof Blob) {
-      return (record as unknown as { value: Blob }).value;
+    if (record && (record as unknown as { value: unknown }).value instanceof ArrayBuffer) {
+      return (record as unknown as { value: ArrayBuffer }).value;
     }
     return null;
   }
 
-  private async cacheBlob(voiceId: string, blob: Blob): Promise<void> {
-    await db.meta.put({ key: `voicepack-${voiceId}`, value: blob as unknown as string });
+  private async cachePack(voiceId: string, buffer: ArrayBuffer): Promise<void> {
+    await db.meta.put({ key: `voicepack-${voiceId}`, value: buffer as unknown as string });
   }
 }
 
