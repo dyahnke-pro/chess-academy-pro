@@ -4,7 +4,7 @@ import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
 import { voicePackService, VOICE_PACK_VOICES, getVoicePackUrl } from '../../services/voicePackService';
 import type { VoicePackStatus } from '../../services/voicePackService';
-import { POLLY_VOICES } from '../../services/voiceService';
+import { POLLY_VOICES, getTtsUrl } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Download, Play, Check, AlertCircle, Loader2, Mic, Sparkles } from 'lucide-react';
@@ -151,20 +151,24 @@ export function VoiceSettingsPanel(): JSX.Element {
     if (pollyPreviewPlaying) return;
     setPollyPreviewPlaying(true);
 
-    // Direct URL — no fetch, no blob. iOS Safari plays this in the gesture.
-    const text = encodeURIComponent('Great move! You found the key idea in this position.');
-    const audio = new Audio(`/api/tts?text=${text}&voice=${pollyVoice}`);
+    const previewText = 'Great move! You found the key idea in this position.';
+    const url = getTtsUrl(previewText, pollyVoice);
+    const audio = new Audio(url);
+
     audio.onended = () => {
       setPollyPreviewPlaying(false);
     };
     audio.onerror = () => {
-      setStatus('Voice preview failed');
-      setTimeout(() => setStatus(null), 3000);
+      const err = audio.error;
+      const detail = err ? `code=${err.code} ${err.message}` : 'unknown';
+      setStatus(`Preview failed: ${detail}`);
+      setTimeout(() => setStatus(null), 5000);
       setPollyPreviewPlaying(false);
     };
-    audio.play().catch(() => {
-      setStatus('Could not play audio');
-      setTimeout(() => setStatus(null), 3000);
+    audio.play().catch((e: unknown) => {
+      const msg = e instanceof Error ? e.message : String(e);
+      setStatus(`Play error: ${msg}`);
+      setTimeout(() => setStatus(null), 5000);
       setPollyPreviewPlaying(false);
     });
   };
@@ -442,7 +446,7 @@ export function VoiceSettingsPanel(): JSX.Element {
             </div>
 
             <button
-              onClick={() => void handlePollyPreview()}
+              onClick={() => { handlePollyPreview(); }}
               disabled={pollyPreviewPlaying}
               className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border disabled:opacity-50"
               style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
@@ -450,6 +454,34 @@ export function VoiceSettingsPanel(): JSX.Element {
             >
               <Play size={14} />
               {pollyPreviewPlaying ? 'Playing…' : 'Preview Voice'}
+            </button>
+
+            <button
+              onClick={() => {
+                const url = getTtsUrl('Test', pollyVoice);
+                setStatus(`Testing ${url} ...`);
+                void fetch(url).then(async (r) => {
+                  const contentType = r.headers.get('Content-Type') ?? 'none';
+                  if (!r.ok) {
+                    const body = await r.text();
+                    setStatus(`API error ${r.status}: ${body}`);
+                  } else {
+                    const blob = await r.blob();
+                    setStatus(`OK: ${r.status}, type=${contentType}, size=${blob.size} bytes`);
+                  }
+                  setTimeout(() => setStatus(null), 8000);
+                }).catch((e: unknown) => {
+                  const msg = e instanceof Error ? e.message : String(e);
+                  setStatus(`Fetch failed: ${msg}`);
+                  setTimeout(() => setStatus(null), 8000);
+                });
+              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium border"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
+              data-testid="polly-test-btn"
+            >
+              <AlertCircle size={14} />
+              Test API Endpoint
             </button>
           </div>
         )}
