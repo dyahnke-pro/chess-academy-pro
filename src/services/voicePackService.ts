@@ -146,37 +146,66 @@ class VoicePackService {
         return;
       }
 
-      // Get file size with HEAD request
-      const headResp = await fetch(url, { method: 'HEAD' });
-      if (!headResp.ok) {
-        throw new Error(`Voice pack not available (HTTP ${headResp.status}).`);
-      }
-      const totalBytes = parseInt(headResp.headers.get('content-length') ?? '0', 10);
-      if (totalBytes === 0) {
-        throw new Error('Could not determine voice pack file size.');
-      }
-
-      // Download in 5MB chunks to stay within edge function timeout
+      // Download in 5MB chunks using Range requests to stay within
+      // the edge function's 25-second timeout per request.
       const CHUNK_SIZE = 5 * 1024 * 1024;
-      const combined = new Uint8Array(totalBytes);
+      const allChunks: Uint8Array[] = [];
       let receivedBytes = 0;
+      let totalBytes = 0;
 
-      while (receivedBytes < totalBytes) {
+      for (;;) {
         const start = receivedBytes;
-        const end = Math.min(receivedBytes + CHUNK_SIZE - 1, totalBytes - 1);
+        const end = start + CHUNK_SIZE - 1;
 
         const chunkResp = await fetch(url, {
           headers: { 'Range': `bytes=${start}-${end}` },
         });
 
-        if (!chunkResp.ok && chunkResp.status !== 206) {
+        // If the server doesn't support Range (returns 200), fall back to
+        // single-request download for backwards compatibility.
+        if (chunkResp.status === 200) {
+          const buffer = await chunkResp.arrayBuffer();
+          this.parseBin(buffer);
+          await this.cachePack(voiceId, buffer);
+          this.loadedVoiceId = voiceId;
+          this.setProgress(100);
+          this.setStatus('ready');
+          return;
+        }
+
+        if (chunkResp.status !== 206) {
           throw new Error(`Chunk download failed (HTTP ${chunkResp.status}) at byte ${start}.`);
         }
 
-        const chunkBuffer = await chunkResp.arrayBuffer();
-        combined.set(new Uint8Array(chunkBuffer), receivedBytes);
-        receivedBytes += chunkBuffer.byteLength;
-        this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+        // Parse total size from Content-Range: bytes 0-5242879/234420138
+        if (totalBytes === 0) {
+          const rangeHeader = chunkResp.headers.get('content-range') ?? '';
+          const match = rangeHeader.match(/\/(\d+)$/);
+          if (match) {
+            totalBytes = parseInt(match[1], 10);
+          }
+        }
+
+        const chunkData = new Uint8Array(await chunkResp.arrayBuffer());
+        allChunks.push(chunkData);
+        receivedBytes += chunkData.byteLength;
+
+        if (totalBytes > 0) {
+          this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+        }
+
+        // If we got less than CHUNK_SIZE, we've reached the end
+        if (chunkData.byteLength < CHUNK_SIZE || (totalBytes > 0 && receivedBytes >= totalBytes)) {
+          break;
+        }
+      }
+
+      // Combine all chunks into single ArrayBuffer
+      const combined = new Uint8Array(receivedBytes);
+      let offset = 0;
+      for (const chunk of allChunks) {
+        combined.set(chunk, offset);
+        offset += chunk.byteLength;
       }
 
       const buffer = combined.buffer as ArrayBuffer;
