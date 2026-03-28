@@ -147,73 +147,26 @@ export function VoiceSettingsPanel(): JSX.Element {
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
   };
 
-  const handlePollyPreview = async (): Promise<void> => {
+  const handlePollyPreview = (): void => {
     if (pollyPreviewPlaying) return;
-    unlockAudioContext();
     setPollyPreviewPlaying(true);
 
-    // iOS Safari: create and "unlock" Audio element synchronously in the
-    // gesture handler. Playing a silent data URI keeps the gesture alive
-    // so we can set the real src after the async fetch completes.
-    const audio = new Audio();
-    audio.volume = 1;
-    try {
-      // Tiny silent MP3 — unlocks playback on iOS
-      audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRwBHAAAAAAD/+1DEAAAB8AK/tAAAIgAANIAAAAQAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7UMQbAAADSAAAAAAAAANIAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=';
-      await audio.play();
-    } catch {
-      // Ignore — unlock attempt, real playback below
-    }
-
-    try {
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: 'Great move! You found the key idea in this position.',
-          voice: pollyVoice,
-        }),
-      });
-      if (response.status === 503) {
-        setStatus('Cloud voice not configured on server');
-        setTimeout(() => setStatus(null), 3000);
-        setPollyPreviewPlaying(false);
-        return;
-      }
-      if (!response.ok) {
-        setStatus(`Cloud voice error: ${response.status}`);
-        setTimeout(() => setStatus(null), 3000);
-        setPollyPreviewPlaying(false);
-        return;
-      }
-      const blob = await response.blob();
-      if (blob.size === 0) {
-        setStatus('Cloud voice returned empty audio');
-        setTimeout(() => setStatus(null), 3000);
-        setPollyPreviewPlaying(false);
-        return;
-      }
-      // Reuse the same unlocked audio element — set blob as src
-      const url = URL.createObjectURL(blob);
-      audio.src = url;
-      audio.onended = () => {
-        setPollyPreviewPlaying(false);
-        setStatus(null);
-        URL.revokeObjectURL(url);
-      };
-      audio.onerror = () => {
-        setStatus(`Audio playback error`);
-        setTimeout(() => setStatus(null), 3000);
-        setPollyPreviewPlaying(false);
-        URL.revokeObjectURL(url);
-      };
-      await audio.play();
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setStatus(`Preview failed: ${msg}`);
-      setTimeout(() => setStatus(null), 5000);
+    // Direct URL — no fetch, no blob. iOS Safari plays this in the gesture.
+    const text = encodeURIComponent('Great move! You found the key idea in this position.');
+    const audio = new Audio(`/api/tts?text=${text}&voice=${pollyVoice}`);
+    audio.onended = () => {
       setPollyPreviewPlaying(false);
-    }
+    };
+    audio.onerror = () => {
+      setStatus('Voice preview failed');
+      setTimeout(() => setStatus(null), 3000);
+      setPollyPreviewPlaying(false);
+    };
+    audio.play().catch(() => {
+      setStatus('Could not play audio');
+      setTimeout(() => setStatus(null), 3000);
+      setPollyPreviewPlaying(false);
+    });
   };
 
   const handleDownloadModel = useCallback(async (): Promise<void> => {

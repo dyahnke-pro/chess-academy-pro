@@ -143,60 +143,32 @@ class VoiceService {
 
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
-      // iOS Safari: pre-create and unlock audio element synchronously before
-      // the async fetch, so the gesture context is preserved.
-      const audio = new Audio();
+      // Direct URL — browser loads audio itself. No fetch, no blob.
+      // This works on iOS Safari because audio.play() is in the gesture stack.
+      const url = `/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}`;
+      const audio = new Audio(url);
       this.currentAudio = audio;
       this.playing = true;
-      try {
-        // Tiny silent MP3 — unlocks playback on iOS
-        audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRwBHAAAAAAD/+1DEAAAB8AK/tAAAIgAANIAAAAQAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7UMQbAAADSAAAAAAAAANIAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=';
-        await audio.play();
-      } catch {
-        // Ignore — unlock attempt
-      }
 
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voice }),
-      });
-
-      if (response.status === 503) {
-        this.playing = false;
-        this.currentAudio = null;
-        return false;
-      }
-
-      if (!response.ok) {
-        console.warn('[VoiceService] Polly TTS error', response.status, '— falling back');
-        this.playing = false;
-        this.currentAudio = null;
-        return false;
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      // Reuse the same unlocked audio element
-      audio.src = url;
-      await new Promise<void>((resolve) => {
+      return await new Promise<boolean>((resolve) => {
         audio.onended = () => {
           this.playing = false;
           this.currentAudio = null;
-          URL.revokeObjectURL(url);
-          resolve();
+          resolve(true);
         };
         audio.onerror = () => {
           this.playing = false;
           this.currentAudio = null;
-          URL.revokeObjectURL(url);
-          resolve();
+          resolve(false);
         };
-        void audio.play();
+        audio.play().catch(() => {
+          this.playing = false;
+          this.currentAudio = null;
+          resolve(false);
+        });
       });
-      return true;
     } catch (error) {
-      console.warn('[VoiceService] Polly TTS fetch failed:', error);
+      console.warn('[VoiceService] Polly TTS failed:', error);
       this.playing = false;
       this.currentAudio = null;
       return false;
