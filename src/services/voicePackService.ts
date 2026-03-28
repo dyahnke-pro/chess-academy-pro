@@ -165,70 +165,65 @@ class VoicePackService {
       }
       this.log('No cache. Starting download...');
 
-      // Get file size from first Range request
-      const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks to stay within edge timeout
-      this.log(`Fetching ${url} (Range: bytes=0-0)...`);
-      const firstChunk = await fetch(url, {
-        headers: { 'Range': 'bytes=0-0' },
-      });
-      this.log(`First response: HTTP ${firstChunk.status}`);
+      // Single streaming GET request — edge function proxies and streams the body
+      this.log(`Fetching ${url}...`);
+      const response = await fetch(url);
+      this.log(`Response: HTTP ${response.status}`);
 
-      if (!firstChunk.ok && firstChunk.status !== 206) {
-        const body = await firstChunk.text().catch(() => '(unreadable)');
-        throw new Error(`HTTP ${firstChunk.status}: ${body}`);
+      if (!response.ok) {
+        const body = await response.text().catch(() => '(unreadable)');
+        throw new Error(`HTTP ${response.status}: ${body}`);
       }
 
       // Guard against SPA catch-all serving HTML
-      const contentType = firstChunk.headers.get('content-type') ?? '';
+      const contentType = response.headers.get('content-type') ?? '';
       this.log(`Content-Type: ${contentType}`);
       if (contentType.includes('text/html')) {
-        throw new Error('Server returned HTML instead of binary — SPA catch-all is intercepting.');
+        throw new Error('Server returned HTML instead of binary.');
       }
 
-      // Parse total size from Content-Range: bytes 0-0/234420138
-      const contentRange = firstChunk.headers.get('content-range') ?? '';
-      this.log(`Content-Range: ${contentRange}`);
-      const sizeMatch = contentRange.match(/\/(\d+)$/);
-      const totalBytes = sizeMatch ? parseInt(sizeMatch[1], 10) : 0;
-      if (totalBytes === 0) {
-        throw new Error(`Could not parse file size. Content-Range: "${contentRange}"`);
+      const contentLength = response.headers.get('content-length');
+      const totalBytes = contentLength ? parseInt(contentLength, 10) : 0;
+      this.log(`Content-Length: ${totalBytes} (${(totalBytes / 1024 / 1024).toFixed(1)} MB)`);
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('Response body is not readable');
       }
-      this.log(`File size: ${(totalBytes / 1024 / 1024).toFixed(1)} MB`);
 
-      // Allocate buffer
-      this.log('Allocating ArrayBuffer...');
-      const combined = new Uint8Array(totalBytes);
-      this.log('Buffer allocated OK');
-
-      // Download in chunks using Range requests
+      // Stream chunks from the response body
+      const chunks: Uint8Array[] = [];
       let receivedBytes = 0;
       let chunkNum = 0;
 
-      while (receivedBytes < totalBytes) {
-        const start = receivedBytes;
-        const end = Math.min(start + CHUNK_SIZE - 1, totalBytes - 1);
+      this.log('Streaming response body...');
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        receivedBytes += value.length;
         chunkNum++;
-        this.log(`Chunk ${chunkNum}: bytes ${start}-${end}...`);
-
-        const response = await fetch(url, {
-          headers: { 'Range': `bytes=${start}-${end}` },
-        });
-
-        if (!response.ok && response.status !== 206) {
-          const body = await response.text().catch(() => '(unreadable)');
-          throw new Error(`Chunk ${chunkNum} failed: HTTP ${response.status}: ${body}`);
+        if (totalBytes > 0) {
+          const pct = Math.round((receivedBytes / totalBytes) * 100);
+          this.setProgress(pct);
+          // Log every ~5MB
+          if (chunkNum % 100 === 0) {
+            this.log(`Received ${(receivedBytes / 1024 / 1024).toFixed(1)} MB (${pct}%)`);
+          }
         }
-
-        const chunkBuffer = await response.arrayBuffer();
-        combined.set(new Uint8Array(chunkBuffer), start);
-        receivedBytes += chunkBuffer.byteLength;
-        const pct = Math.round((receivedBytes / totalBytes) * 100);
-        this.setProgress(pct);
-        this.log(`Chunk ${chunkNum} OK (${chunkBuffer.byteLength} bytes, ${pct}%)`);
       }
+      this.log(`Download complete: ${(receivedBytes / 1024 / 1024).toFixed(1)} MB in ${chunkNum} chunks`);
 
-      this.log('Download complete. Parsing binary...');
+      // Combine chunks into single ArrayBuffer
+      this.log('Combining into ArrayBuffer...');
+      const combined = new Uint8Array(receivedBytes);
+      let offset = 0;
+      for (const chunk of chunks) {
+        combined.set(chunk, offset);
+        offset += chunk.length;
+      }
       const buffer = combined.buffer;
+      this.log('Buffer ready. Parsing binary...');
 
       // Parse and cache
       this.parseBin(buffer);
