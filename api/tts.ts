@@ -1,10 +1,19 @@
 import { PollyClient, SynthesizeSpeechCommand, type VoiceId, type Engine } from '@aws-sdk/client-polly';
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+const ALLOWED_ORIGINS = [
+  'capacitor://app.chessacademy.pro',
+  'https://chess-academy-pro.vercel.app',
+];
+
+function getCorsHeaders(req?: Request): Record<string, string> {
+  const origin = req?.headers.get('Origin') ?? '';
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : '*';
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+}
 
 // Neural voices available in us-east-2 (Ohio)
 const ALLOWED_VOICES: Record<string, { voiceId: VoiceId; engine: Engine }> = {
@@ -25,26 +34,27 @@ const ALLOWED_VOICES: Record<string, { voiceId: VoiceId; engine: Engine }> = {
 
 const MAX_TEXT_LENGTH = 3000;
 
-async function synthesize(text: string, voice: string): Promise<Response> {
+async function synthesize(text: string, voice: string, req: Request): Promise<Response> {
+  const cors = getCorsHeaders(req);
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID_POLLY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_POLLY;
   const region = process.env.AWS_REGION_POLLY || 'us-east-2';
 
   if (!accessKeyId || !secretAccessKey) {
-    return new Response('TTS not configured', { status: 503, headers: CORS_HEADERS });
+    return new Response('TTS not configured', { status: 503, headers: cors });
   }
 
   if (!text || text.length > MAX_TEXT_LENGTH) {
     return new Response(`Invalid text (max ${MAX_TEXT_LENGTH} chars)`, {
       status: 400,
-      headers: CORS_HEADERS,
+      headers: cors,
     });
   }
 
   const voiceKey = (voice || 'ruth').toLowerCase();
   const voiceConfig = ALLOWED_VOICES[voiceKey];
   if (!voiceConfig) {
-    return new Response(`Unknown voice: ${voice}`, { status: 400, headers: CORS_HEADERS });
+    return new Response(`Unknown voice: ${voice}`, { status: 400, headers: cors });
   }
 
   try {
@@ -63,7 +73,7 @@ async function synthesize(text: string, voice: string): Promise<Response> {
     const result = await polly.send(command);
 
     if (!result.AudioStream) {
-      return new Response('No audio returned', { status: 500, headers: CORS_HEADERS });
+      return new Response('No audio returned', { status: 500, headers: cors });
     }
 
     const chunks: Uint8Array[] = [];
@@ -84,7 +94,7 @@ async function synthesize(text: string, voice: string): Promise<Response> {
     return new Response(audioBytes, {
       status: 200,
       headers: {
-        ...CORS_HEADERS,
+        ...cors,
         'Content-Type': 'audio/mpeg',
         'Content-Length': String(audioBytes.length),
         'Cache-Control': 'public, max-age=86400',
@@ -93,13 +103,15 @@ async function synthesize(text: string, voice: string): Promise<Response> {
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error('[TTS] Polly error:', msg);
-    return new Response(`TTS error: ${msg}`, { status: 500, headers: CORS_HEADERS });
+    return new Response(`TTS error: ${msg}`, { status: 500, headers: cors });
   }
 }
 
 export default async function handler(req: Request): Promise<Response> {
+  const cors = getCorsHeaders(req);
+
   if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: CORS_HEADERS });
+    return new Response(null, { status: 204, headers: cors });
   }
 
   // Support GET with query params (for direct <audio src="..."> on iOS)
@@ -107,7 +119,7 @@ export default async function handler(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const text = url.searchParams.get('text')?.trim() ?? '';
     const voice = url.searchParams.get('voice') ?? 'ruth';
-    return synthesize(text, voice);
+    return synthesize(text, voice, req);
   }
 
   // Support POST with JSON body
@@ -116,12 +128,12 @@ export default async function handler(req: Request): Promise<Response> {
     try {
       body = await req.json() as { text?: string; voice?: string };
     } catch {
-      return new Response('Invalid JSON', { status: 400, headers: CORS_HEADERS });
+      return new Response('Invalid JSON', { status: 400, headers: cors });
     }
     const text = body.text?.trim() ?? '';
     const voice = body.voice ?? 'ruth';
-    return synthesize(text, voice);
+    return synthesize(text, voice, req);
   }
 
-  return new Response('Method not allowed', { status: 405, headers: CORS_HEADERS });
+  return new Response('Method not allowed', { status: 405, headers: cors });
 }

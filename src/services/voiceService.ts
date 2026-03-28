@@ -10,6 +10,15 @@ import type { UserPreferences } from '../types';
 
 const ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 
+/** Absolute URL for Polly TTS — needed when running inside Capacitor WKWebView */
+const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
+const isCapacitor = typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
+
+export function getTtsUrl(text: string, voice: string): string {
+  const base = isCapacitor ? VERCEL_ORIGIN : '';
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}`;
+}
+
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
 export const POLLY_VOICES = [
   { id: 'ruth',     name: 'Ruth',     description: 'Generative female', engine: 'generative' },
@@ -145,7 +154,7 @@ class VoiceService {
     try {
       // Direct URL — browser loads audio itself. No fetch, no blob.
       // This works on iOS Safari because audio.play() is in the gesture stack.
-      const url = `/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}`;
+      const url = getTtsUrl(text, voice);
       const audio = new Audio(url);
       this.currentAudio = audio;
       this.playing = true;
