@@ -80,20 +80,7 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
       return new Response('No audio returned', { status: 500, headers: cors });
     }
 
-    const chunks: Uint8Array[] = [];
-    const reader = result.AudioStream.transformToWebStream().getReader();
-    let done = false;
-    while (!done) {
-      const { value, done: streamDone } = await reader.read();
-      if (value) chunks.push(value);
-      done = streamDone;
-    }
-    const audioBytes = new Uint8Array(chunks.reduce((acc, c) => acc + c.length, 0));
-    let offset = 0;
-    for (const chunk of chunks) {
-      audioBytes.set(chunk, offset);
-      offset += chunk.length;
-    }
+    const audioBytes = await result.AudioStream.transformToByteArray();
 
     return new Response(audioBytes, {
       status: 200,
@@ -112,32 +99,41 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
 }
 
 export default async function handler(req: Request): Promise<Response> {
-  const cors = getCorsHeaders(req);
+  try {
+    const cors = getCorsHeaders(req);
 
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: cors });
-  }
-
-  // Support GET with query params (for direct <audio src="..."> on iOS)
-  if (req.method === 'GET') {
-    const url = new URL(req.url);
-    const text = url.searchParams.get('text')?.trim() ?? '';
-    const voice = url.searchParams.get('voice') ?? 'ruth';
-    return synthesize(text, voice, req);
-  }
-
-  // Support POST with JSON body
-  if (req.method === 'POST') {
-    let body: { text?: string; voice?: string };
-    try {
-      body = await req.json() as { text?: string; voice?: string };
-    } catch {
-      return new Response('Invalid JSON', { status: 400, headers: cors });
+    if (req.method === 'OPTIONS') {
+      return new Response(null, { status: 204, headers: cors });
     }
-    const text = body.text?.trim() ?? '';
-    const voice = body.voice ?? 'ruth';
-    return synthesize(text, voice, req);
-  }
 
-  return new Response('Method not allowed', { status: 405, headers: cors });
+    // Support GET with query params (for direct <audio src="..."> on iOS)
+    if (req.method === 'GET') {
+      const url = new URL(req.url);
+      const text = url.searchParams.get('text')?.trim() ?? '';
+      const voice = url.searchParams.get('voice') ?? 'ruth';
+      return synthesize(text, voice, req);
+    }
+
+    // Support POST with JSON body
+    if (req.method === 'POST') {
+      let body: { text?: string; voice?: string };
+      try {
+        body = await req.json() as { text?: string; voice?: string };
+      } catch {
+        return new Response('Invalid JSON', { status: 400, headers: cors });
+      }
+      const text = body.text?.trim() ?? '';
+      const voice = body.voice ?? 'ruth';
+      return synthesize(text, voice, req);
+    }
+
+    return new Response('Method not allowed', { status: 405, headers: cors });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('[TTS] Handler crash:', msg);
+    return new Response(`Handler error: ${msg}`, {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
 }
