@@ -85,7 +85,11 @@ export function App(): JSX.Element {
         }
 
         const skippedMeta = await db.meta.get('onboarding_skipped');
-        setOnboardingSkipped(skippedMeta?.value === 'true');
+        if (skippedMeta?.value !== 'true') {
+          // Auto-skip onboarding — API keys can be added from Settings
+          await db.meta.put({ key: 'onboarding_skipped', value: 'true' });
+        }
+        setOnboardingSkipped(true);
 
         // Seed data in background (no-op if already seeded)
         void seedDatabase();
