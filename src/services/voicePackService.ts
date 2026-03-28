@@ -17,7 +17,7 @@ import { db } from '../db/schema';
 /** Build the download URL for a voice pack by ID.
  *  Vercel Edge Function proxies to GitHub Releases (avoids CORS). */
 export function getVoicePackUrl(voiceId: string): string {
-  return `/api/voice-packs/${voiceId}_mp3.bin`;
+  return `/voice-packs/${voiceId}_mp3.bin`;
 }
 
 export type VoicePackStatus = 'idle' | 'downloading' | 'ready' | 'error';
