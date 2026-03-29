@@ -45,6 +45,7 @@ export function DifficultySelector({ onSelect }: DifficultySelectorProps): JSX.E
             key={diff}
             onClick={() => onSelect(diff)}
             className={`flex flex-col items-center gap-3 p-6 rounded-xl border-2 ${colors.border} ${colors.bg} bg-theme-surface transition-all`}
+            aria-label={`${info.label} difficulty: ${info.description}`}
             data-testid={`difficulty-${diff}`}
           >
             <Icon size={32} className={colors.icon} />

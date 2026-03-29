@@ -1,6 +1,13 @@
 import type { LichessPuzzleActivityEntry, LichessPuzzleDashboard } from '../types';
 
 const LICHESS_API_BASE = 'https://lichess.org/api';
+const FETCH_TIMEOUT_MS = 15000;
+
+function fetchWithTimeout(url: string, init: RequestInit): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  return fetch(url, { ...init, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
 
 /**
  * Fetch the authenticated user's recent puzzle solve history from Lichess.
@@ -12,7 +19,7 @@ export async function fetchPuzzleActivity(
 ): Promise<LichessPuzzleActivityEntry[]> {
   const params = new URLSearchParams({ max: String(max) });
   const url = `${LICHESS_API_BASE}/puzzle/activity?${params.toString()}`;
-  const response = await fetch(url, {
+  const response = await fetchWithTimeout(url, {
     headers: {
       Accept: 'application/x-ndjson',
       Authorization: `Bearer ${token}`,
@@ -20,11 +27,20 @@ export async function fetchPuzzleActivity(
   });
   if (!response.ok) {
     if (response.status === 401) throw new Error('Invalid Lichess token — check your token in Settings');
+    if (response.status === 429) throw new Error('Rate limited by Lichess — try again in a minute');
     throw new Error(`Puzzle activity API error: ${response.status}`);
   }
   const text = await response.text();
   const lines = text.split('\n').filter((l) => l.trim());
-  return lines.map((line) => JSON.parse(line) as LichessPuzzleActivityEntry);
+  const results: LichessPuzzleActivityEntry[] = [];
+  for (const line of lines) {
+    try {
+      results.push(JSON.parse(line) as LichessPuzzleActivityEntry);
+    } catch {
+      // Skip malformed NDJSON lines
+    }
+  }
+  return results;
 }
 
 /**
@@ -37,7 +53,7 @@ export async function fetchPuzzleDashboard(
   days: number = 30,
 ): Promise<LichessPuzzleDashboard> {
   const url = `${LICHESS_API_BASE}/puzzle/dashboard/${days}`;
-  const response = await fetch(url, {
+  const response = await fetchWithTimeout(url, {
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
@@ -45,6 +61,7 @@ export async function fetchPuzzleDashboard(
   });
   if (!response.ok) {
     if (response.status === 401) throw new Error('Invalid Lichess token — check your token in Settings');
+    if (response.status === 429) throw new Error('Rate limited by Lichess — try again in a minute');
     throw new Error(`Puzzle dashboard API error: ${response.status}`);
   }
   return response.json() as Promise<LichessPuzzleDashboard>;
