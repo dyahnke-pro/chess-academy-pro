@@ -42,7 +42,7 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
   const cors = getCorsHeaders(req);
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID_POLLY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_POLLY;
-  const region = process.env.AWS_REGION_POLLY || 'us-east-2';
+  const region = process.env.AWS_REGION_POLLY || 'us-east-1';
 
   if (!accessKeyId || !secretAccessKey) {
     const missing = [
@@ -132,7 +132,7 @@ export default async function handler(req: Request): Promise<Response> {
       if (url.searchParams.get('diag') === '1') {
         const hasKey = Boolean(process.env.AWS_ACCESS_KEY_ID_POLLY);
         const hasSecret = Boolean(process.env.AWS_SECRET_ACCESS_KEY_POLLY);
-        const r = process.env.AWS_REGION_POLLY || '(not set, default us-east-2)';
+        const r = process.env.AWS_REGION_POLLY || '(not set, default us-east-1)';
         return new Response(
           `ENV CHECK:\nAWS_ACCESS_KEY_ID_POLLY: ${hasKey ? 'SET' : 'MISSING'}\nAWS_SECRET_ACCESS_KEY_POLLY: ${hasSecret ? 'SET' : 'MISSING'}\nAWS_REGION_POLLY: ${r}\n`,
           { status: 200, headers: { ...cors, 'Content-Type': 'text/plain' } },
