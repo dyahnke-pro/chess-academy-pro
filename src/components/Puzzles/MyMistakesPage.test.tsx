@@ -225,4 +225,44 @@ describe('MyMistakesPage', () => {
     expect(screen.getByTestId('source-filter')).toBeInTheDocument();
     expect(screen.getByTestId('status-filter')).toBeInTheDocument();
   });
+
+  it('shows narration preview text in puzzle cards', async () => {
+    setMockData([
+      buildMistakePuzzle({
+        id: 'p1',
+        narration: {
+          intro: 'You played Ng5, but d4 was significantly better.',
+          moveNarrations: [],
+          outro: 'Always develop pieces first.',
+        },
+      }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('narration-preview')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('narration-preview')).toHaveTextContent(
+      'You played Ng5, but d4 was significantly better.',
+    );
+  });
+
+  it('does not show narration preview when narration is empty', async () => {
+    setMockData([
+      buildMistakePuzzle({
+        id: 'p1',
+        narration: { intro: '', moveNarrations: [], outro: '' },
+      }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('puzzle-card')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('narration-preview')).not.toBeInTheDocument();
+  });
 });

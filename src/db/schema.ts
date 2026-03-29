@@ -258,6 +258,27 @@ class ChessAcademyDB extends Dexie {
         }
       });
     });
+
+    this.version(14).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+    }).upgrade(async (tx) => {
+      // Add narration + playerMoveSan to existing mistake puzzles
+      await tx.table('mistakePuzzles').toCollection().modify((puzzle: Record<string, unknown>) => {
+        if (!('playerMoveSan' in puzzle)) {
+          puzzle.playerMoveSan = '';
+        }
+        if (!('narration' in puzzle)) {
+          puzzle.narration = { intro: '', moveNarrations: [], outro: '' };
+        }
+      });
+    });
   }
 }
 

@@ -27,10 +27,17 @@ export type MistakePuzzleStatus = 'unsolved' | 'solved' | 'mastered';
 export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom';
 export type MistakeGamePhase = 'opening' | 'middlegame' | 'endgame';
 
+export interface MistakeNarration {
+  intro: string;
+  moveNarrations: string[];
+  outro: string;
+}
+
 export interface MistakePuzzle {
   id: string;
   fen: string;
   playerMove: string;
+  playerMoveSan: string;
   bestMove: string;
   bestMoveSan: string;
   moves: string;
@@ -42,6 +49,7 @@ export interface MistakePuzzle {
   sourceMode: MistakePuzzleSourceMode;
   playerColor: 'white' | 'black';
   promptText: string;
+  narration: MistakeNarration;
   createdAt: string;
   // SRS fields
   srsInterval: number;
