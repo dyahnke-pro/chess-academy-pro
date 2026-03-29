@@ -51,6 +51,11 @@ export interface MistakePuzzle {
   promptText: string;
   narration: MistakeNarration;
   createdAt: string;
+  // Game context fields
+  opponentName: string | null;
+  gameDate: string | null;
+  openingName: string | null;
+  evalBefore: number | null;
   // SRS fields
   srsInterval: number;
   srsEaseFactor: number;

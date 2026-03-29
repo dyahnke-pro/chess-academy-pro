@@ -11,6 +11,10 @@ function buildParams(overrides?: Partial<NarrationParams>): NarrationParams {
     cpLoss: 150,
     fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4',
     moves: 'd2d4 d7d5 c4b5 c6a5 b5d3',
+    opponentName: null,
+    gameDate: null,
+    openingName: null,
+    evalBefore: null,
     ...overrides,
   };
 }
@@ -95,5 +99,52 @@ describe('generateMistakeNarration', () => {
   it('miss intro references opponent mistake', () => {
     const result = generateMistakeNarration(buildParams({ classification: 'miss' }));
     expect(result.intro).toMatch(/opponent|punish|capitalize|off the hook/i);
+  });
+
+  it('includes opponent name in intro when provided', () => {
+    const result = generateMistakeNarration(buildParams({ opponentName: 'Magnus' }));
+    expect(result.intro).toContain('vs Magnus');
+  });
+
+  it('includes time ago in intro when gameDate provided', () => {
+    const today = new Date().toISOString().split('T')[0];
+    const result = generateMistakeNarration(buildParams({ opponentName: 'Bot', gameDate: today }));
+    expect(result.intro).toContain('today');
+  });
+
+  it('includes opening name in intro when provided', () => {
+    const result = generateMistakeNarration(buildParams({
+      opponentName: 'Bot',
+      openingName: 'Sicilian Defense',
+    }));
+    expect(result.intro).toContain('Sicilian Defense');
+  });
+
+  it('includes advantage context when evalBefore provided', () => {
+    const result = generateMistakeNarration(buildParams({
+      opponentName: 'Bot',
+      evalBefore: 2.0,
+    }));
+    expect(result.intro).toMatch(/strong advantage/i);
+  });
+
+  it('indicates equal position when evalBefore is near zero', () => {
+    const result = generateMistakeNarration(buildParams({
+      opponentName: 'Bot',
+      evalBefore: 0.1,
+    }));
+    expect(result.intro).toMatch(/roughly equal/i);
+  });
+
+  it('omits context sentence when no context fields are provided', () => {
+    const result = generateMistakeNarration(buildParams({
+      opponentName: null,
+      gameDate: null,
+      openingName: null,
+      evalBefore: null,
+    }));
+    // Should NOT contain "vs" or "playing the" — just the mistake explanation
+    expect(result.intro).not.toContain('vs ');
+    expect(result.intro).not.toContain('playing the');
   });
 });

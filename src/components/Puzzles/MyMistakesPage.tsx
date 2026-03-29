@@ -321,7 +321,13 @@ export function MyMistakesPage(): JSX.Element {
               <div className="text-sm font-medium text-theme-text">
                 Move {puzzle.moveNumber} — {puzzle.bestMoveSan}
               </div>
-              <div className="flex items-center gap-2 text-xs text-theme-text-muted">
+              <div className="flex items-center gap-2 text-xs text-theme-text-muted flex-wrap">
+                {puzzle.opponentName && (
+                  <>
+                    <span>vs {puzzle.opponentName}</span>
+                    <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
+                  </>
+                )}
                 <span>{SOURCE_LABELS[puzzle.sourceMode]}</span>
                 <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
                 <span>{puzzle.cpLoss}cp</span>

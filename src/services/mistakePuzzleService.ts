@@ -14,12 +14,39 @@ import type {
   MoveAnnotation,
 } from '../types';
 
+// ─── Game context helpers ──────────────────────────────────────────────────
+
+interface GameContext {
+  opponentName: string | null;
+  gameDate: string | null;
+  openingName: string | null;
+}
+
+async function resolveGameContext(
+  game: GameRecord,
+  playerColor: 'white' | 'black',
+): Promise<GameContext> {
+  const opponentName = playerColor === 'white' ? game.black : game.white;
+
+  let openingName: string | null = null;
+  if (game.openingId) {
+    const opening = await db.openings.get(game.openingId);
+    if (opening) openingName = opening.name;
+  }
+
+  return {
+    opponentName: opponentName || null,
+    gameDate: game.date || null,
+    openingName,
+  };
+}
+
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const CP_LOSS_THRESHOLD = 50;
 const MASTERY_REPETITIONS = 3;
-const MIN_PV_MOVES = 5;
-const MAX_PV_MOVES = 9;
+const MIN_PV_MOVES = 3;
+const MAX_PV_MOVES = 5;
 const PV_EXTENSION_DEPTH = 14;
 const BATCH_GAME_LIMIT = 100;
 
@@ -217,6 +244,7 @@ async function analyzeGameWithStockfish(
   const srsDefaults = createDefaultSrsFields();
   const now = new Date().toISOString();
   const puzzles: MistakePuzzle[] = [];
+  const gameContext = await resolveGameContext(game, playerColor);
 
   // Replay to get SAN moves
   const chess = new Chess();
@@ -313,6 +341,11 @@ async function analyzeGameWithStockfish(
       playerMove = san;
     }
 
+    // Eval before mistake from the player's perspective (positive = player is better)
+    const evalBeforeFromPlayer = playerColor === 'white'
+      ? evalBefore / 100
+      : -evalBefore / 100;
+
     const movesUci = pvMoves.join(' ');
     const narration = generateMistakeNarration({
       classification,
@@ -322,6 +355,10 @@ async function analyzeGameWithStockfish(
       cpLoss: Math.round(cpLoss),
       fen,
       moves: movesUci,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: evalBeforeFromPlayer,
     });
 
     // Store annotation for the game record
@@ -353,6 +390,10 @@ async function analyzeGameWithStockfish(
       promptText: PROMPT_TEXT[classification],
       narration,
       createdAt: now,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: Math.round(evalBeforeFromPlayer * 100) / 100,
       srsInterval: srsDefaults.interval,
       srsEaseFactor: srsDefaults.easeFactor,
       srsRepetitions: srsDefaults.repetitions,
@@ -392,6 +433,7 @@ async function generateFromAnnotations(
   const now = new Date().toISOString();
   const puzzles: MistakePuzzle[] = [];
   const annotations = game.annotations ?? [];
+  const gameContext = await resolveGameContext(game, playerColor);
 
   for (const annotation of annotations) {
     if (annotation.color !== playerColor) continue;
@@ -484,6 +526,23 @@ async function generateFromAnnotations(
       playerMove = annotation.san;
     }
 
+    // Compute eval before from annotation context (player perspective)
+    let evalBeforeFromPlayer: number | null = null;
+    if (annotation.evaluation !== null) {
+      // Find the annotation for the move right before to get pre-mistake eval
+      let prevEval: number | null = null;
+      for (const ann of annotations) {
+        const annIdx = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
+        if (annIdx === fenIndex - 1) {
+          prevEval = ann.evaluation;
+          break;
+        }
+      }
+      if (prevEval !== null) {
+        evalBeforeFromPlayer = playerColor === 'white' ? prevEval : -prevEval;
+      }
+    }
+
     const narration = generateMistakeNarration({
       classification,
       gamePhase,
@@ -492,6 +551,10 @@ async function generateFromAnnotations(
       cpLoss,
       fen,
       moves: movesUci,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: evalBeforeFromPlayer,
     });
 
     puzzles.push({
@@ -512,6 +575,10 @@ async function generateFromAnnotations(
       promptText: PROMPT_TEXT[classification],
       narration,
       createdAt: now,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: evalBeforeFromPlayer !== null ? Math.round(evalBeforeFromPlayer * 100) / 100 : null,
       srsInterval: srsDefaults.interval,
       srsEaseFactor: srsDefaults.easeFactor,
       srsRepetitions: srsDefaults.repetitions,
