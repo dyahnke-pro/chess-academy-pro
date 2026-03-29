@@ -95,14 +95,6 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
-        // Load cached voice pack if user has it enabled (no network, no WASM)
-        if (profile.preferences.kokoroEnabled) {
-          void import('./services/voicePackService').then(({ voicePackService }) => {
-            if (!voicePackService.isReady()) {
-              void voicePackService.loadCached(profile.preferences.kokoroVoiceId);
-            }
-          });
-        }
       } catch (error) {
         console.error('App initialization failed:', error);
       } finally {

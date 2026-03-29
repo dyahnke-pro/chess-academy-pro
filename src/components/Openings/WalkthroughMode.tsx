@@ -10,7 +10,6 @@ import { BoardControls } from '../Board/BoardControls';
 import { useSettings } from '../../hooks/useSettings';
 import { AnnotationCard } from './AnnotationCard';
 import { speechService } from '../../services/speechService';
-import { voicePackService } from '../../services/voicePackService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
@@ -68,8 +67,6 @@ export function WalkthroughMode({
   // would break iOS Safari's user-gesture context for Web Speech API).
   const activeProfile = useAppStore((s) => s.activeProfile);
   const voiceEnabled = activeProfile?.preferences.voiceEnabled ?? true;
-  const kokoroEnabled = activeProfile?.preferences.kokoroEnabled ?? false;
-  const kokoroVoiceId = activeProfile?.preferences.kokoroVoiceId ?? 'af_bella';
 
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
@@ -446,60 +443,20 @@ export function WalkthroughMode({
     if (!ann) return;
     if (!voiceEnabled) return;
 
-    let cancelled = false;
+    speechService.speak(ann.annotation, {
+      rate: TTS_RATE[autoPlaySpeed],
+      onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
+      onEnd: () => ttsFinishedRef.current?.(),
+    });
 
-    // iOS Safari requires Web Speech to be called synchronously within the
-    // user-gesture task — any preceding await breaks that context and the
-    // utterance is silently dropped. We read voice prefs from Zustand
-    // (synchronous) so the common Web Speech path never awaits.
-    const voicePackReady = kokoroEnabled && voicePackService.isReady();
-
-    if (voicePackReady) {
-      // Voice pack loaded — try pre-rendered clip first, fall back to Web Speech
-      void (async () => {
-        try {
-          const played = await voicePackService.speak(ann.annotation, TTS_RATE[autoPlaySpeed]);
-          if (!cancelled) {
-            if (played) {
-              setVisibleArrowCount(ann.arrows?.length ?? 0);
-              setVisibleHighlightCount(ann.highlights?.length ?? 0);
-              ttsFinishedRef.current?.();
-            } else {
-              // Clip not in pack — fall back to Web Speech
-              speechService.speak(ann.annotation, {
-                rate: TTS_RATE[autoPlaySpeed],
-                onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-                onEnd: () => ttsFinishedRef.current?.(),
-              });
-            }
-          }
-        } catch {
-          if (!cancelled) {
-            speechService.speak(ann.annotation, {
-              rate: TTS_RATE[autoPlaySpeed],
-              onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-              onEnd: () => ttsFinishedRef.current?.(),
-            });
-          }
-        }
-      })();
-    } else {
-      // Web Speech — called synchronously so iOS gesture context is preserved
-      speechService.speak(ann.annotation, {
-        rate: TTS_RATE[autoPlaySpeed],
-        onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-        onEnd: () => ttsFinishedRef.current?.(),
-      });
-    }
-
-    return () => { cancelled = true; };
-  }, [voiceEnabled, kokoroEnabled, kokoroVoiceId, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
+    return () => { speechService.stop(); };
+  }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
   // Clean up speech on unmount
   useEffect(() => {
     return () => {
       speechService.stop();
-      voicePackService.stop();
+
     };
   }, []);
 
@@ -507,7 +464,6 @@ export function WalkthroughMode({
   const goToMove = useCallback((idx: number) => {
     setIsAutoPlaying(false);
     speechService.stop();
-    voicePackService.stop();
     setCurrentMoveIndex(idx);
     setBoardKey((k) => k + 1);
   }, []);
@@ -517,7 +473,6 @@ export function WalkthroughMode({
     unlockAudioContext();
     speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
     speechService.stop();
-    voicePackService.stop();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.max(0, prev - 1));
     setBoardKey((k) => k + 1);

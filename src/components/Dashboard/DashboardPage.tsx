@@ -6,12 +6,9 @@ import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
-import { voicePackService, getVoicePackUrl } from '../../services/voicePackService';
-import type { VoicePackStatus } from '../../services/voicePackService';
-import { unlockAudioContext } from '../../services/audioContextManager';
 import { SkillBar } from '../ui/SkillBar';
 import { MiniBoard } from '../Board/MiniBoard';
-import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X, Download, Volume2, CheckCircle } from 'lucide-react';
+import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X } from 'lucide-react';
 import { DailyPuzzleCard } from './DailyPuzzleCard';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
@@ -27,10 +24,6 @@ export function DashboardPage(): JSX.Element {
   const [recentSessions, setRecentSessions] = useState<SessionRecord[]>([]);
   const [favorites, setFavorites] = useState<OpeningRecord[]>([]);
   const [betaBannerVisible, setBetaBannerVisible] = useState(false);
-  const [voiceStatus, setVoiceStatus] = useState<VoicePackStatus>(voicePackService.getStatus());
-  const [voiceProgress, setVoiceProgress] = useState(voicePackService.getDownloadProgress());
-  const [voiceError, setVoiceError] = useState<string | null>(null);
-  const [voiceLogs, setVoiceLogs] = useState<string[]>([]);
 
   useEffect(() => {
     void seedDatabase();
@@ -70,35 +63,6 @@ export function DashboardPage(): JSX.Element {
     }
   }, [activeProfile, setActiveProfile, setPendingAchievement]);
 
-  // Subscribe to voice pack status. Try loading from IndexedDB cache on mount.
-  useEffect(() => {
-    const unsubStatus = voicePackService.onStatusChange(setVoiceStatus);
-    const unsubProgress = voicePackService.onProgress(setVoiceProgress);
-    const unsubLog = voicePackService.onLog((entry: string) => {
-      setVoiceLogs((prev) => [...prev, entry]);
-    });
-
-    // Auto-load from cache if previously downloaded
-    if (activeProfile?.preferences.kokoroEnabled && voicePackService.getStatus() === 'idle') {
-      void voicePackService.loadCached(activeProfile.preferences.kokoroVoiceId);
-    }
-
-    return () => { unsubStatus(); unsubProgress(); unsubLog(); };
-  }, [activeProfile?.preferences.kokoroEnabled, activeProfile?.preferences.kokoroVoiceId]);
-
-  const handleDownloadBella = useCallback(async (): Promise<void> => {
-    unlockAudioContext();
-    setVoiceError(null);
-    setVoiceLogs([]);
-    const voiceId = activeProfile?.preferences.kokoroVoiceId || 'af_bella';
-    try {
-      await voicePackService.loadFromUrl(voiceId, getVoicePackUrl(voiceId));
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setVoiceError(msg);
-    }
-  }, [activeProfile?.preferences.kokoroVoiceId]);
-
   const handleStartSession = useCallback(async (): Promise<void> => {
     if (!activeProfile) return;
     const session = await createSession(activeProfile);
@@ -118,100 +82,6 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
-      {/* Bella voice card — shows until model is ready */}
-      {activeProfile.preferences.kokoroEnabled && voiceStatus !== 'ready' && (
-        <div
-          className="rounded-xl p-4 border flex items-start gap-3"
-          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-          data-testid="bella-voice-card"
-        >
-          <div
-            className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-          >
-            <Volume2 size={18} />
-          </div>
-          <div className="flex-1 min-w-0">
-            {voiceStatus === 'idle' && (
-              <>
-                <p className="text-sm font-semibold">Activate Bella — Your AI Voice Coach</p>
-                <p className="text-xs mt-0.5 mb-3" style={{ color: 'var(--color-text-muted)' }}>
-                  Download the voice pack once. Bella will narrate openings and coach feedback — no internet required after download.
-                </p>
-                <button
-                  onClick={() => void handleDownloadBella()}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium"
-                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                  data-testid="bella-download-btn"
-                >
-                  <Download size={15} />
-                  Download Bella Voice
-                </button>
-              </>
-            )}
-            {voiceStatus === 'downloading' && (
-              <>
-                <p className="text-sm font-semibold">Downloading Bella voice… {voiceProgress}%</p>
-                <div className="w-full h-2 rounded-full overflow-hidden mt-2" style={{ background: 'var(--color-border)' }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-300"
-                    style={{ width: `${voiceProgress}%`, background: 'var(--color-accent)' }}
-                  />
-                </div>
-                <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                  Keep this screen open — download runs in the foreground.
-                </p>
-              </>
-            )}
-            {voiceStatus === 'error' && (
-              <>
-                <p className="text-sm font-semibold" style={{ color: 'var(--color-error)' }}>Bella download failed</p>
-                {voiceError && (
-                  <p className="text-xs mt-0.5 mb-1 font-mono break-all" style={{ color: 'var(--color-error)' }}>
-                    {voiceError}
-                  </p>
-                )}
-                <p className="text-xs mt-0.5 mb-3" style={{ color: 'var(--color-text-muted)' }}>
-                  Tap retry to try again.
-                </p>
-                <button
-                  onClick={() => void handleDownloadBella()}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border"
-                  style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
-                  data-testid="bella-retry-btn"
-                >
-                  <Download size={15} />
-                  Retry Download
-                </button>
-              </>
-            )}
-          </div>
-          {/* Live debug console */}
-          {voiceLogs.length > 0 && (
-            <div
-              className="mt-3 rounded-lg p-3 font-mono text-xs overflow-y-auto max-h-48"
-              style={{ background: '#111', color: '#0f0', border: '1px solid #333' }}
-            >
-              {voiceLogs.map((line, i) => (
-                <div key={i} style={{ color: line.includes('ERROR') ? '#f44' : line.includes('OK') || line.includes('Done') || line.includes('Ready') ? '#0f0' : '#aaa' }}>
-                  {line}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-      {activeProfile.preferences.kokoroEnabled && voiceStatus === 'ready' && (
-        <div
-          className="rounded-xl px-4 py-2.5 border flex items-center gap-2 text-sm"
-          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-          data-testid="bella-ready-card"
-        >
-          <CheckCircle size={15} style={{ color: 'var(--color-success)' }} />
-          <span style={{ color: 'var(--color-text-muted)' }}>Bella voice is active</span>
-        </div>
-      )}
-
       {betaBannerVisible && (
         <div
           className="rounded-xl p-3 text-sm flex items-center justify-between"
