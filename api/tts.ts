@@ -1,3 +1,5 @@
+export const config = { runtime: 'edge' };
+
 const ALLOWED_ORIGINS = [
   'capacitor://app.chessacademy.pro',
   'https://chess-academy-pro.vercel.app',
