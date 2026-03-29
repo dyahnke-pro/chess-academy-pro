@@ -68,12 +68,13 @@ describe('AnnotationCard', () => {
     expect(screen.getByText('Prepare d4 advance')).toBeInTheDocument();
   });
 
-  it('renders alternatives section when present', () => {
+  it('renders alternatives section with toggle when present', () => {
     render(
       <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
     );
     expect(screen.getByTestId('annotation-alternatives')).toBeInTheDocument();
-    expect(screen.getByText('1.d4 leads to closed positions')).toBeInTheDocument();
+    // Alternatives are collapsed by default — toggle button is present
+    expect(screen.getByTestId('annotation-toggle')).toBeInTheDocument();
   });
 
   it('does not render optional sections when absent', () => {
@@ -87,28 +88,45 @@ describe('AnnotationCard', () => {
     expect(screen.queryByTestId('annotation-toggle')).not.toBeInTheDocument();
   });
 
-  it('toggle button collapses and expands extra sections', async () => {
+  it('toggle button expands and collapses alternatives', async () => {
     const user = userEvent.setup();
     render(
       <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
     );
-    // Extra sections visible by default
+
+    // Alternatives collapsed by default — content not visible
+    expect(screen.queryByText('1.d4 leads to closed positions')).not.toBeInTheDocument();
+
+    // Click to expand
+    await user.click(screen.getByTestId('annotation-toggle'));
+
+    // Alternatives now visible
+    await waitFor(() => {
+      expect(screen.getByText('1.d4 leads to closed positions')).toBeInTheDocument();
+    });
+
+    // Click to collapse
+    await user.click(screen.getByTestId('annotation-toggle'));
+
+    // Alternatives hidden again
+    await waitFor(() => {
+      expect(screen.queryByText('1.d4 leads to closed positions')).not.toBeInTheDocument();
+    });
+  });
+
+  it('pawn structure and plans always visible without toggle', () => {
+    render(
+      <AnnotationCard
+        annotation={{ san: 'e4', annotation: 'Test', pawnStructure: 'Open', plans: ['Plan A'] }}
+        moveNumber={1}
+        isWhite={true}
+        visible={true}
+      />,
+    );
+    // Pawn structure and plans are always visible (no toggle needed)
     expect(screen.getByTestId('annotation-pawn-structure')).toBeInTheDocument();
-
-    // Click collapse
-    await user.click(screen.getByTestId('annotation-toggle'));
-
-    // Sections hidden (wait for animation exit)
-    await waitFor(() => {
-      expect(screen.queryByTestId('annotation-pawn-structure')).not.toBeInTheDocument();
-    });
-
-    // Click expand
-    await user.click(screen.getByTestId('annotation-toggle'));
-
-    // Sections visible again
-    await waitFor(() => {
-      expect(screen.getByTestId('annotation-pawn-structure')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('annotation-plans')).toBeInTheDocument();
+    // No toggle when there are no alternatives
+    expect(screen.queryByTestId('annotation-toggle')).not.toBeInTheDocument();
   });
 });

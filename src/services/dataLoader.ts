@@ -5,7 +5,9 @@ import ecoData from '../data/openings-lichess.json';
 import repertoireData from '../data/repertoire.json';
 import proRepertoireData from '../data/pro-repertoires.json';
 import gambitData from '../data/gambits.json';
-import type { OpeningRecord, FlashcardRecord } from '../types';
+import modelGamesData from '../data/model-games.json';
+import middlegamePlansData from '../data/middlegame-plans.json';
+import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan } from '../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -84,7 +86,7 @@ function slugify(name: string): string {
 
 // ─── Seeding State ────────────────────────────────────────────────────────────
 
-const SEED_KEY = 'db_seeded_v10';
+const SEED_KEY = 'db_seeded_v11';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
   const record = await db.meta.get(SEED_KEY);
@@ -265,6 +267,24 @@ export async function loadGambitData(): Promise<void> {
   await db.openings.bulkPut(records);
 }
 
+// ─── Model Games Loader ──────────────────────────────────────────────────────
+
+export async function loadModelGamesData(): Promise<void> {
+  const records = (modelGamesData as ModelGame[]).map((entry) => ({
+    ...entry,
+  }));
+  await db.modelGames.bulkPut(records);
+}
+
+// ─── Middlegame Plans Loader ─────────────────────────────────────────────────
+
+export async function loadMiddlegamePlansData(): Promise<void> {
+  const records = (middlegamePlansData as MiddlegamePlan[]).map((entry) => ({
+    ...entry,
+  }));
+  await db.middlegamePlans.bulkPut(records);
+}
+
 // ─── Flashcard Seeder ─────────────────────────────────────────────────────────
 
 /**
@@ -364,6 +384,8 @@ export async function seedDatabase(): Promise<void> {
   await loadRepertoireData();
   await loadProRepertoireData();
   await loadGambitData();
+  await loadModelGamesData();
+  await loadMiddlegamePlansData();
   await seedFlashcardsForRepertoire();
   await markDatabaseSeeded();
 }

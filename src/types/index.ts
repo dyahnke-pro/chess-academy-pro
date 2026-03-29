@@ -106,10 +106,92 @@ export interface OpeningAnnotations {
 
 // ─── Opening ─────────────────────────────────────────────────────────────────
 
+export type SidelineFrequency = 'common' | 'uncommon' | 'rare';
+export type SidelineDanger = 'safe' | 'tricky' | 'critical';
+
 export interface OpeningVariation {
   name: string;
   pgn: string;
   explanation: string;
+  frequency?: SidelineFrequency;
+  danger?: SidelineDanger;
+  deviationMove?: number;
+}
+
+// ─── Model Games ────────────────────────────────────────────────────────────
+
+export interface ModelGameCriticalMoment {
+  moveNumber: number;
+  color: 'white' | 'black';
+  fen: string;
+  annotation: string;
+  concept: string;
+  arrows?: AnnotationArrow[];
+  highlights?: AnnotationHighlight[];
+}
+
+export interface ModelGame {
+  id: string;
+  openingId: string;
+  white: string;
+  black: string;
+  whiteElo: number | null;
+  blackElo: number | null;
+  result: GameResult;
+  year: number;
+  event: string;
+  pgn: string;
+  overview: string;
+  criticalMoments: ModelGameCriticalMoment[];
+  middlegameTheme: string;
+  lessonSummary: string;
+}
+
+// ─── Middlegame Plans ───────────────────────────────────────────────────────
+
+export interface PawnBreak {
+  move: string;
+  explanation: string;
+  fen: string;
+  arrows?: AnnotationArrow[];
+}
+
+export interface PieceManeuver {
+  piece: string;
+  route: string;
+  explanation: string;
+  arrows?: AnnotationArrow[];
+}
+
+export interface MiddlegamePlan {
+  id: string;
+  openingId: string;
+  criticalPositionFen: string;
+  title: string;
+  overview: string;
+  pawnBreaks: PawnBreak[];
+  pieceManeuvers: PieceManeuver[];
+  strategicThemes: string[];
+  endgameTransitions: string[];
+  arrows?: AnnotationArrow[];
+  highlights?: AnnotationHighlight[];
+}
+
+// ─── Content Generation (LLM Pipeline) ─────────────────────────────────────
+
+export type GeneratedContentType =
+  | 'model_game_annotation'
+  | 'middlegame_plan'
+  | 'sideline_explanation'
+  | 'deep_annotation';
+
+export interface GeneratedContent {
+  id: string;
+  openingId: string;
+  type: GeneratedContentType;
+  content: string;
+  groundingData: string;
+  generatedAt: string;
 }
 
 export interface DrillAttempt {
@@ -536,7 +618,10 @@ export type CoachTask =
   | 'weakness_report'
   | 'interactive_review'
   | 'whatif_commentary'
-  | 'game_narrative_summary';
+  | 'game_narrative_summary'
+  | 'model_game_annotation'
+  | 'middlegame_plan_generation'
+  | 'sideline_explanation';
 
 export interface CoachContext {
   fen: string;

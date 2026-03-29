@@ -14,6 +14,9 @@ import type {
   MiniGameProgress,
   ProPlayer,
   MistakePuzzle,
+  ModelGame,
+  MiddlegamePlan,
+  GeneratedContent,
 } from '../types';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -349,6 +352,79 @@ export function buildMistakePuzzle(overrides?: Partial<MistakePuzzle>): MistakeP
     status: 'unsolved',
     attempts: 0,
     successes: 0,
+    ...overrides,
+  };
+}
+
+// ─── ModelGame ─────────────────────────────────────────────────────────────
+
+export function buildModelGame(overrides?: Partial<ModelGame>): ModelGame {
+  return {
+    id: nextId('model-game'),
+    openingId: 'italian-game',
+    white: 'Morphy',
+    black: 'Duke of Brunswick',
+    whiteElo: null,
+    blackElo: null,
+    result: '1-0',
+    year: 1858,
+    event: 'Paris Opera',
+    pgn: 'e4 e5 Nf3 d6 d4 Bg4 dxe5 Bxf3 Qxf3 dxe5 Bc4 Nf6 Qb3 Qe7 Nc3 c6 Bg5 b5 Nxb5 cxb5 Bxb5+ Nbd7 O-O-O Rd8 Rxd7 Rxd7 Rd1 Qe6 Bxd7+ Nxd7 Qb8+ Nxb8 Rd8#',
+    overview: 'The Opera Game demonstrates the power of rapid development and open lines.',
+    criticalMoments: [
+      {
+        moveNumber: 10,
+        color: 'white',
+        fen: 'rn1qkb1r/ppp2ppp/5n2/1B2p3/4P3/1QN5/PPP2PPP/R1B1K2R b KQkq - 1 10',
+        annotation: 'White has a commanding lead in development. The queen and bishop battery targets f7.',
+        concept: 'Development advantage',
+      },
+    ],
+    middlegameTheme: 'Rapid development and tactical finish',
+    lessonSummary: 'Develop your pieces quickly and punish opponents who waste time.',
+    ...overrides,
+  };
+}
+
+// ─── MiddlegamePlan ────────────────────────────────────────────────────────
+
+export function buildMiddlegamePlan(overrides?: Partial<MiddlegamePlan>): MiddlegamePlan {
+  return {
+    id: nextId('plan'),
+    openingId: 'italian-game',
+    criticalPositionFen: 'r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 8',
+    title: 'Central Expansion with d4',
+    overview: 'White aims to establish a strong pawn center with c3 and d4, then use the open lines to attack the kingside.',
+    pawnBreaks: [
+      {
+        move: 'd3-d4',
+        explanation: 'The key central break. After proper preparation with c3, d4 opens the center when White has superior development.',
+        fen: 'r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 8',
+      },
+    ],
+    pieceManeuvers: [
+      {
+        piece: 'Knight',
+        route: 'Nb1-d2-f1-g3',
+        explanation: 'The knight reroutes to g3 to support the f5 advance and control key kingside squares.',
+      },
+    ],
+    strategicThemes: ['Control the d4 square', 'Kingside attack with f4-f5'],
+    endgameTransitions: ['Trade into a favorable bishop endgame with the bishop pair'],
+    ...overrides,
+  };
+}
+
+// ─── GeneratedContent ──────────────────────────────────────────────────────
+
+export function buildGeneratedContent(overrides?: Partial<GeneratedContent>): GeneratedContent {
+  return {
+    id: nextId('content'),
+    openingId: 'italian-game',
+    type: 'middlegame_plan',
+    content: 'The Italian Game middlegame revolves around central control...',
+    groundingData: '{"topMoves": "d4: 5000 games"}',
+    generatedAt: new Date().toISOString(),
     ...overrides,
   };
 }

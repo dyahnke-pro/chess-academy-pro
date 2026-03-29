@@ -8,6 +8,10 @@ import { TrainMode } from './TrainMode';
 import { WalkthroughMode } from './WalkthroughMode';
 import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
+import { ModelGamesSection } from './ModelGamesSection';
+import { ModelGameViewer } from './ModelGameViewer';
+import { MiddlegamePlansSection } from './MiddlegamePlansSection';
+import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import {
   getOpeningById,
   getMasteryPercent,
@@ -16,7 +20,7 @@ import {
   getTotalLines,
   toggleFavorite,
 } from '../../services/openingService';
-import type { OpeningRecord } from '../../types';
+import type { OpeningRecord, ModelGame, MiddlegamePlan } from '../../types';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -56,7 +60,9 @@ type ViewMode =
   | 'trap-walkthrough'
   | 'warning-walkthrough'
   | 'train-traps'
-  | 'train-warnings';
+  | 'train-warnings'
+  | 'model-game'
+  | 'middlegame-plan';
 
 function computeFenFromPgn(pgn: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -84,6 +90,8 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
+  const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -112,8 +120,20 @@ export function OpeningDetailPage(): JSX.Element {
     setActiveVariationIndex(-1);
     setActiveTrapLineIndex(-1);
     setActiveWarningLineIndex(-1);
+    setActiveModelGame(null);
+    setActiveMiddlegamePlan(null);
     void loadOpening();
   }, [loadOpening]);
+
+  const handleSelectModelGame = useCallback((game: ModelGame): void => {
+    setActiveModelGame(game);
+    setViewMode('model-game');
+  }, []);
+
+  const handleSelectMiddlegamePlan = useCallback((plan: MiddlegamePlan): void => {
+    setActiveMiddlegamePlan(plan);
+    setViewMode('middlegame-plan');
+  }, []);
 
   const handleStartVariationWalkthrough = useCallback((index: number): void => {
     setActiveVariationIndex(index);
@@ -377,6 +397,28 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Model game viewer
+  if (viewMode === 'model-game' && activeModelGame) {
+    return (
+      <ModelGameViewer
+        game={activeModelGame}
+        boardOrientation={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Middlegame plan study
+  if (viewMode === 'middlegame-plan' && activeMiddlegamePlan) {
+    return (
+      <MiddlegamePlanStudy
+        plan={activeMiddlegamePlan}
+        boardOrientation={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
   // Detail view
   const mastery = getMasteryPercent(opening);
   const totalLines = getTotalLines(opening);
@@ -511,6 +553,18 @@ export function OpeningDetailPage(): JSX.Element {
           </ul>
         </div>
       )}
+
+      {/* Middlegame Plans */}
+      <MiddlegamePlansSection
+        openingId={opening.id}
+        onSelectPlan={handleSelectMiddlegamePlan}
+      />
+
+      {/* Model Games */}
+      <ModelGamesSection
+        openingId={opening.id}
+        onSelectGame={handleSelectModelGame}
+      />
 
       {/* Traps */}
       {opening.traps && opening.traps.length > 0 && (
@@ -699,10 +753,27 @@ export function OpeningDetailPage(): JSX.Element {
                     orientation={opening.color}
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-medium text-theme-text">{variation.name}</span>
                       {isPerfected && <Trophy size={12} className="text-yellow-500" />}
                       {isDiscovered && !isPerfected && <CheckCircle size={12} className="text-green-500" />}
+                      {variation.frequency && (
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                          variation.frequency === 'common' ? 'bg-blue-500/15 text-blue-400' :
+                          variation.frequency === 'uncommon' ? 'bg-amber-500/15 text-amber-400' :
+                          'bg-gray-500/15 text-gray-400'
+                        }`}>
+                          {variation.frequency}
+                        </span>
+                      )}
+                      {variation.danger && variation.danger !== 'safe' && (
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                          variation.danger === 'critical' ? 'bg-red-500/15 text-red-400' :
+                          'bg-amber-500/15 text-amber-400'
+                        }`}>
+                          {variation.danger}
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                   </div>
