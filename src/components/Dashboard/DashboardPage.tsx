@@ -8,7 +8,7 @@ import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
 import { SkillBar } from '../ui/SkillBar';
 import { MiniBoard } from '../Board/MiniBoard';
-import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X } from 'lucide-react';
+import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X, Upload } from 'lucide-react';
 import { DailyPuzzleCard } from './DailyPuzzleCard';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
@@ -158,10 +158,11 @@ export function DashboardPage(): JSX.Element {
       <DailyPuzzleCard />
 
       {/* Quick actions */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-4 gap-3">
         <QuickAction label="Openings" icon={<BookOpen size={18} />} onClick={() => void navigate('/openings')} />
         <QuickAction label="Play" icon={<Brain size={18} />} onClick={() => void navigate('/play')} />
         <QuickAction label="Coach" icon={<Target size={18} />} onClick={() => void navigate('/coach')} />
+        <QuickAction label="Import" icon={<Upload size={18} />} onClick={() => void navigate('/games')} />
       </div>
 
       {/* Favorite openings */}
