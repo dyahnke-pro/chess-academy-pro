@@ -152,34 +152,19 @@ class VoiceService {
 
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
-      // Direct URL — browser loads audio itself. No fetch, no blob.
-      // This works on iOS Safari because audio.play() is in the gesture stack.
       const url = getTtsUrl(text, voice);
-      const audio = new Audio(url);
-      this.currentAudio = audio;
-      this.playing = true;
-
-      return await new Promise<boolean>((resolve) => {
-        audio.onended = () => {
-          this.playing = false;
-          this.currentAudio = null;
-          resolve(true);
-        };
-        audio.onerror = () => {
-          this.playing = false;
-          this.currentAudio = null;
-          resolve(false);
-        };
-        audio.play().catch(() => {
-          this.playing = false;
-          this.currentAudio = null;
-          resolve(false);
-        });
-      });
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.warn('[VoiceService] Polly API error:', response.status);
+        return false;
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      await this.playAudioBuffer(arrayBuffer);
+      return true;
     } catch (error) {
       console.warn('[VoiceService] Polly TTS failed:', error);
       this.playing = false;
-      this.currentAudio = null;
+      this.currentSource = null;
       return false;
     }
   }
