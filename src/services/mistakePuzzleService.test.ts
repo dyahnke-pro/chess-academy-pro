@@ -91,12 +91,19 @@ describe('mistakePuzzleService', () => {
       expect(blunder!.playerColor).toBe('white');
       expect(blunder!.status).toBe('unsolved');
       expect(blunder!.promptText).toBe('Oops — this was a serious mistake. Find the best move.');
+      expect(blunder!.playerMoveSan).toBe('Ng5');
+      expect(blunder!.narration).toBeDefined();
+      expect(blunder!.narration.intro).toBeTruthy();
+      expect(blunder!.narration.outro).toBeTruthy();
+      expect(Array.isArray(blunder!.narration.moveNarrations)).toBe(true);
 
       // Second puzzle: d3 mistake (move 4)
       const mistake = puzzles.find((p) => p.classification === 'mistake');
       expect(mistake).toBeDefined();
       expect(mistake!.moveNumber).toBe(4);
       expect(mistake!.bestMove).toBe('e4d5');
+      expect(mistake!.playerMoveSan).toBe('d3');
+      expect(mistake!.narration.intro).toBeTruthy();
     });
 
     it('is idempotent — no duplicates on second call', async () => {

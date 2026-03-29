@@ -336,6 +336,11 @@ export function MyMistakesPage(): JSX.Element {
                   {puzzle.status}
                 </span>
               </div>
+              {puzzle.narration.intro && (
+                <p className="text-xs text-theme-text-muted mt-1 line-clamp-1" data-testid="narration-preview">
+                  {puzzle.narration.intro}
+                </p>
+              )}
             </button>
 
             {/* Delete */}
