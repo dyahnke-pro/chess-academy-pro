@@ -338,7 +338,7 @@ export function buildMistakePuzzle(overrides?: Partial<MistakePuzzle>): MistakeP
     },
     createdAt: new Date().toISOString(),
     srsInterval: 0,
-    srsEaseFactor: 2.5,
+    srsEaseFactor: 0,
     srsRepetitions: 0,
     srsDueDate: today(),
     srsLastReview: null,

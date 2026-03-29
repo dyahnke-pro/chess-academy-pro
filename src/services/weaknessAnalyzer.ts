@@ -10,6 +10,7 @@ import type {
   SessionRecord,
   OpeningRecord,
   FlashcardRecord,
+  MistakePuzzle,
 } from '../types';
 import type { ThemeSkill } from './puzzleService';
 
@@ -318,6 +319,83 @@ function analyzeEndgame(themeSkills: ThemeSkill[]): {
   return { weaknesses, strengths };
 }
 
+// ─── Mistake Puzzle Analysis ─────────────────────────────────────────────
+
+function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
+  weaknesses: WeaknessItem[];
+  strengths: string[];
+} {
+  const weaknesses: WeaknessItem[] = [];
+  const strengths: string[] = [];
+
+  if (mistakePuzzles.length < 3) return { weaknesses, strengths };
+
+  // Phase breakdown: which game phase has the most mistakes?
+  const byPhase: Record<string, number> = { opening: 0, middlegame: 0, endgame: 0 };
+  for (const p of mistakePuzzles) {
+    byPhase[p.gamePhase]++;
+  }
+
+  const total = mistakePuzzles.length;
+  const phaseLabels: Record<string, string> = {
+    opening: 'the opening',
+    middlegame: 'the middlegame',
+    endgame: 'the endgame',
+  };
+
+  for (const [phase, count] of Object.entries(byPhase)) {
+    const ratio = count / total;
+    if (count >= 3 && ratio > 0.5) {
+      weaknesses.push({
+        category: phase === 'endgame' ? 'endgame' : phase === 'opening' ? 'openings' : 'calculation',
+        label: `Most mistakes in ${phaseLabels[phase]}`,
+        metric: `${count} of ${total} mistakes (${Math.round(ratio * 100)}%)`,
+        severity: Math.round(ratio * 70),
+        detail: `Over half your mistakes from real games happen in ${phaseLabels[phase]}. Focus your practice on ${phaseLabels[phase]} patterns and positions.`,
+      });
+    }
+  }
+
+  // Blunder ratio: how many mistakes are blunders?
+  const blunders = mistakePuzzles.filter((p) => p.classification === 'blunder').length;
+  if (blunders >= 3) {
+    const blunderRatio = blunders / total;
+    if (blunderRatio > 0.4) {
+      weaknesses.push({
+        category: 'calculation',
+        label: 'Frequent blunders in games',
+        metric: `${blunders} blunders out of ${total} mistakes (${Math.round(blunderRatio * 100)}%)`,
+        severity: Math.min(85, Math.round(blunderRatio * 120)),
+        detail: `${Math.round(blunderRatio * 100)}% of your game mistakes are blunders (300+ centipawn loss). Before each move, do a quick blunder check — ask if anything is hanging or if your opponent has a tactic.`,
+      });
+    }
+  }
+
+  // Unsolved ratio: are they actually working on their mistakes?
+  const unsolved = mistakePuzzles.filter((p) => p.status === 'unsolved').length;
+  if (unsolved >= 5) {
+    const unsolvedRatio = unsolved / total;
+    if (unsolvedRatio > 0.6) {
+      weaknesses.push({
+        category: 'tactics',
+        label: 'Unresolved game mistakes',
+        metric: `${unsolved} of ${total} mistake puzzles still unsolved`,
+        severity: Math.round(unsolvedRatio * 50),
+        detail: `You have ${unsolved} mistake puzzles from your own games that haven't been solved yet. Reviewing your mistakes is one of the most effective ways to improve. Head to My Mistakes to work through them.`,
+      });
+    }
+  }
+
+  // Strength: high mastery rate
+  const mastered = mistakePuzzles.filter((p) => p.status === 'mastered').length;
+  if (mastered >= 5 && mastered / total > 0.4) {
+    strengths.push(`Mastered ${mastered} of ${total} mistake puzzles from your games`);
+  }
+
+  weaknesses.sort((a, b) => b.severity - a.severity);
+  return { weaknesses, strengths };
+}
+
 // ─── Overall Assessment Generator ───────────────────────────────────────────
 
 function generateOverallAssessment(
@@ -426,12 +504,13 @@ export async function computeWeaknessProfile(
   profile: UserProfile,
 ): Promise<WeaknessProfile> {
   // Gather all data in parallel
-  const [themeSkills, repertoire, recentGames, recentSessions, flashcards] = await Promise.all([
+  const [themeSkills, repertoire, recentGames, recentSessions, flashcards, mistakePuzzles] = await Promise.all([
     getThemeSkills(),
     getRepertoireOpenings(),
     db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
     db.sessions.orderBy('date').reverse().limit(RECENT_SESSIONS_LIMIT).toArray(),
     db.flashcards.toArray(),
+    db.mistakePuzzles.toArray(),
   ]);
 
   // Run each analyzer
@@ -441,6 +520,7 @@ export async function computeWeaknessProfile(
   const sessions = analyzeSessionConsistency(recentSessions);
   const flashcardAnalysis = analyzeFlashcards(flashcards);
   const endgame = analyzeEndgame(themeSkills);
+  const mistakes = analyzeMistakePuzzles(mistakePuzzles);
 
   // Merge all items and strengths
   const allItems: WeaknessItem[] = [
@@ -450,6 +530,7 @@ export async function computeWeaknessProfile(
     ...sessions.weaknesses,
     ...flashcardAnalysis.weaknesses,
     ...endgame.weaknesses,
+    ...mistakes.weaknesses,
   ].sort((a, b) => b.severity - a.severity);
 
   const allStrengths: string[] = [
@@ -459,6 +540,7 @@ export async function computeWeaknessProfile(
     ...sessions.strengths,
     ...flashcardAnalysis.strengths,
     ...endgame.strengths,
+    ...mistakes.strengths,
   ];
 
   // Cap at top 10 weaknesses
@@ -517,6 +599,7 @@ export const _testing = {
   analyzeSessionConsistency,
   analyzeFlashcards,
   analyzeEndgame,
+  analyzeMistakePuzzles,
   generateOverallAssessment,
   computeSkillRadar,
 };
