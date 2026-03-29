@@ -1,6 +1,7 @@
 import { LineChart, Line, ResponsiveContainer, YAxis, XAxis, Tooltip } from 'recharts';
 import { Trophy, Target, Flame, Clock, TrendingUp, TrendingDown } from 'lucide-react';
 import type { AdaptiveSessionSummary as SummaryData } from '../../services/adaptivePuzzleService';
+import { formatThemeName } from '../../services/lichessPuzzleService';
 
 interface AdaptiveSessionSummaryProps {
   summary: SummaryData;
@@ -37,13 +38,13 @@ export function AdaptiveSessionSummary({
       {/* Main Stats */}
       <div className="grid grid-cols-4 gap-4 w-full">
         <div className="text-center">
-          <div className="text-2xl font-bold text-green-500" data-testid="summary-solved">
+          <div className="text-2xl font-bold" style={{ color: 'var(--color-success)' }} data-testid="summary-solved">
             {summary.puzzlesSolved}
           </div>
           <div className="text-xs text-theme-text-muted">Solved</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-red-500" data-testid="summary-failed">
+          <div className="text-2xl font-bold" style={{ color: 'var(--color-error)' }} data-testid="summary-failed">
             {summary.puzzlesFailed}
           </div>
           <div className="text-xs text-theme-text-muted">Failed</div>
@@ -59,7 +60,7 @@ export function AdaptiveSessionSummary({
         </div>
         <div className="text-center">
           <div className="flex items-center justify-center gap-1">
-            <Flame size={16} className="text-orange-500" />
+            <Flame size={16} style={{ color: 'var(--color-warning)' }} />
             <span className="text-2xl font-bold text-theme-text" data-testid="summary-streak">
               {summary.bestStreak}
             </span>
@@ -74,9 +75,9 @@ export function AdaptiveSessionSummary({
           <h3 className="text-sm font-semibold text-theme-text">Session Rating</h3>
           <div className="flex items-center gap-1">
             {ratingDelta >= 0
-              ? <TrendingUp size={16} className="text-green-500" />
-              : <TrendingDown size={16} className="text-red-500" />}
-            <span className={`text-lg font-bold ${ratingDelta >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+              ? <TrendingUp size={16} style={{ color: 'var(--color-success)' }} />
+              : <TrendingDown size={16} style={{ color: 'var(--color-error)' }} />}
+            <span className="text-lg font-bold" style={{ color: ratingDelta >= 0 ? 'var(--color-success)' : 'var(--color-error)' }}>
               {ratingDelta >= 0 ? '+' : ''}{ratingDelta}
             </span>
           </div>
@@ -123,8 +124,8 @@ export function AdaptiveSessionSummary({
           <div className="space-y-2">
             {summary.weakestThemes.map((t) => (
               <div key={t.theme} className="flex items-center justify-between">
-                <span className="text-sm text-theme-text capitalize">{t.theme.replace(/([A-Z])/g, ' $1').trim()}</span>
-                <span className={`text-sm font-medium ${t.accuracy < 0.5 ? 'text-red-500' : 'text-amber-500'}`}>
+                <span className="text-sm text-theme-text">{formatThemeName(t.theme)}</span>
+                <span className="text-sm font-medium" style={{ color: t.accuracy < 0.5 ? 'var(--color-error)' : 'var(--color-warning)' }}>
                   {Math.round(t.accuracy * 100)}% ({t.total} puzzles)
                 </span>
               </div>

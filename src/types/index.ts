@@ -27,10 +27,17 @@ export type MistakePuzzleStatus = 'unsolved' | 'solved' | 'mastered';
 export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom';
 export type MistakeGamePhase = 'opening' | 'middlegame' | 'endgame';
 
+export interface MistakeNarration {
+  intro: string;
+  moveNarrations: string[];
+  outro: string;
+}
+
 export interface MistakePuzzle {
   id: string;
   fen: string;
   playerMove: string;
+  playerMoveSan: string;
   bestMove: string;
   bestMoveSan: string;
   moves: string;
@@ -42,6 +49,7 @@ export interface MistakePuzzle {
   sourceMode: MistakePuzzleSourceMode;
   playerColor: 'white' | 'black';
   promptText: string;
+  narration: MistakeNarration;
   createdAt: string;
   // SRS fields
   srsInterval: number;
@@ -303,6 +311,9 @@ export interface UserPreferences {
   elevenlabsKeyEncrypted: string | null;
   elevenlabsKeyIv: string | null;
   elevenlabsVoiceId: string | null;
+  // Amazon Polly TTS (server-side, no API key in browser)
+  pollyEnabled: boolean;
+  pollyVoice: string;
   voiceSpeed: number;
   // Kokoro TTS (open-source, in-browser)
   kokoroEnabled: boolean;
@@ -834,6 +845,54 @@ export interface MiniGameLevelProgress {
 
 export interface MiniGameProgress {
   levels: Partial<Record<number, MiniGameLevelProgress>>;
+}
+
+// ─── Guided Game Tutorial ───────────────────────────────────────────────────
+
+export interface GuidedMove {
+  /** Move number (1-based, shared by white/black pairs) */
+  moveNumber: number;
+  /** Standard algebraic notation, e.g. "e4", "Bc4", "Qxf7#" */
+  san: string;
+  /** FEN position AFTER this move */
+  fen: string;
+  /** 'w' for White's move, 'b' for Black's move */
+  color: 'w' | 'b';
+  /** If true, the app auto-animates this move. If false, the kid plays it. */
+  autoPlay: boolean;
+  /** Coach narration displayed and spoken at this move */
+  narration?: string;
+  /** Squares to highlight on the board */
+  highlightSquares?: string[];
+  /** Teaching concept label, e.g. "center control", "development" */
+  teachingConcept?: string;
+  /** If true, awards a milestone star */
+  isMilestone?: boolean;
+  /** Feedback text when the kid plays the wrong move */
+  wrongMoveResponse?: string;
+}
+
+export type GuidedGameDifficulty = 1 | 2 | 3;
+
+export interface GuidedGame {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: GuidedGameDifficulty;
+  estimatedMinutes: number;
+  storyIntro: string;
+  storyOutro: string;
+  /** Starting FEN (usually the standard starting position) */
+  startFen: string;
+  /** The player's color in this game */
+  playerColor: 'w' | 'b';
+  moves: GuidedMove[];
+}
+
+export interface GuidedGameProgress {
+  completed: boolean;
+  stars: number;
+  bestTime: number | null;
 }
 
 // ─── Lichess Opening Explorer ────────────────────────────────────────────────

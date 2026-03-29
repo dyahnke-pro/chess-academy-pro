@@ -4,7 +4,8 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
-import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { voiceService } from '../../services/voiceService';
+import { CheckCircle, XCircle, AlertTriangle, Volume2 } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
@@ -44,11 +45,13 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
   const [fen, setFen] = useState(puzzle.fen);
   const [moveCount, setMoveCount] = useState(0);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
+  const [subtitle, setSubtitle] = useState<string>('');
   // boardKey increments to force ChessBoard remount only on resets
   const [boardKey, setBoardKey] = useState(0);
   const hasMadeMistakeRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
+  const playerMoveCountRef = useRef(0);
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
   const { settings } = useSettings();
 
@@ -85,21 +88,31 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
     movesRef.current = parseUciMoves(puzzle.moves);
+    playerMoveCountRef.current = 0;
     setMoveIndex(0);
     setMoveCount(0);
     setFen(puzzle.fen);
     setLastMoveHighlight(null);
+    setSubtitle('');
     setBoardKey((k) => k + 1);
     hasMadeMistakeRef.current = false;
     setState('loading');
     resetHints();
+    voiceService.stop();
 
-    // Brief loading state then ready to play
+    // Brief loading state then ready to play — speak intro narration
     const timer = setTimeout(() => {
       setState('playing');
+      if (puzzle.narration.intro) {
+        setSubtitle(puzzle.narration.intro);
+        void voiceService.speak(puzzle.narration.intro);
+      }
     }, 400);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      voiceService.stop();
+    };
   }, [puzzle, resetHints]);
 
   const handleMove = useCallback((move: MoveResult): void => {
@@ -116,6 +129,17 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       resetHints();
       setLastMoveHighlight({ from: move.from, to: move.to });
       setMoveCount((c) => c + 1);
+
+      // Speak per-move narration
+      const currentPlayerMove = playerMoveCountRef.current;
+      playerMoveCountRef.current += 1;
+      const moveNarrations = puzzle.narration.moveNarrations;
+      if (moveNarrations[currentPlayerMove]) {
+        voiceService.stop();
+        setSubtitle(moveNarrations[currentPlayerMove]);
+        void voiceService.speak(moveNarrations[currentPlayerMove]);
+      }
+
       const nextIndex = moveIndex + 1;
 
       // Check if puzzle is fully solved
@@ -123,6 +147,13 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
+        // Speak outro after a brief delay so celebration sound plays first
+        if (puzzle.narration.outro) {
+          setTimeout(() => {
+            setSubtitle(puzzle.narration.outro);
+            void voiceService.speak(puzzle.narration.outro);
+          }, 800);
+        }
         onComplete(solvedCleanly);
         return;
       }
@@ -155,6 +186,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       chessRef.current.undo();
       const prevFen = chessRef.current.fen();
       setState('incorrect');
+      voiceService.stop();
       playEncouragement();
 
       setFen(prevFen);
@@ -165,7 +197,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         setState('playing');
       }, 1000);
     }
-  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
+  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     try {
@@ -269,6 +301,17 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       {state === 'loading' && (
         <div className="text-sm text-theme-text-muted" data-testid="puzzle-loading">
           Setting up position...
+        </div>
+      )}
+
+      {/* Coach narration subtitle */}
+      {subtitle && (
+        <div
+          className="flex items-start gap-2 p-3 rounded-lg bg-theme-surface border border-theme-border"
+          data-testid="narration-subtitle"
+        >
+          <Volume2 size={14} className="shrink-0 mt-0.5 text-theme-accent" />
+          <p className="text-xs text-theme-text-muted leading-relaxed">{subtitle}</p>
         </div>
       )}
 

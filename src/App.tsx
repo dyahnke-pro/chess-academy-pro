@@ -49,6 +49,8 @@ import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
 import { QueenGamesHub } from './components/Kid/QueenGamesHub';
 import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
+import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
+import { GuidedGamePage } from './components/Kid/GuidedGamePage';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
@@ -58,7 +60,7 @@ import { ProPlayerPage } from './components/Openings/ProPlayerPage';
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
     useAppStore();
-  const [onboardingSkipped, setOnboardingSkipped] = useState(false);
+  const [onboardingSkipped, setOnboardingSkipped] = useState(true);
 
   useEffect(() => {
     async function init(): Promise<void> {
@@ -83,20 +85,16 @@ export function App(): JSX.Element {
         }
 
         const skippedMeta = await db.meta.get('onboarding_skipped');
-        setOnboardingSkipped(skippedMeta?.value === 'true');
+        if (skippedMeta?.value !== 'true') {
+          // Auto-skip onboarding — API keys can be added from Settings
+          await db.meta.put({ key: 'onboarding_skipped', value: 'true' });
+        }
+        setOnboardingSkipped(true);
 
         // Seed data in background (no-op if already seeded)
         void seedDatabase();
         void seedPuzzles();
 
-        // Load cached voice pack if user has it enabled (no network, no WASM)
-        if (profile.preferences.kokoroEnabled) {
-          void import('./services/voicePackService').then(({ voicePackService }) => {
-            if (!voicePackService.isReady()) {
-              void voicePackService.loadCached(profile.preferences.kokoroVoiceId);
-            }
-          });
-        }
       } catch (error) {
         console.error('App initialization failed:', error);
       } finally {
@@ -171,6 +169,8 @@ export function App(): JSX.Element {
           <Route path="/kid/knight-games" element={<ErrorBoundary><KnightGamesPage /></ErrorBoundary>} />
           <Route path="/kid/knight-games/leap-frog" element={<ErrorBoundary><LeapFrogGame /></ErrorBoundary>} />
           <Route path="/kid/knight-games/knight-sweep" element={<ErrorBoundary><KnightSweepGame /></ErrorBoundary>} />
+          <Route path="/kid/play-games" element={<ErrorBoundary><GuidedGameHubPage /></ErrorBoundary>} />
+          <Route path="/kid/play-games/:gameId" element={<ErrorBoundary><GuidedGamePage /></ErrorBoundary>} />
           <Route path="/kid/puzzles" element={<ErrorBoundary><KidPuzzlePage /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>

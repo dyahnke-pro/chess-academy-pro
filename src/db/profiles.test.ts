@@ -139,6 +139,8 @@ describe('Profiles CRUD', () => {
         moveMethod: 'both',
         moveConfirmation: false,
         autoPromoteQueen: true,
+        pollyEnabled: false,
+        pollyVoice: 'ruth',
         masterAllOff: false,
       },
     };

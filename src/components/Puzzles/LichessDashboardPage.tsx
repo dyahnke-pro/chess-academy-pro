@@ -21,8 +21,8 @@ export function LichessDashboardPage(): JSX.Element {
   const [activity, setActivity] = useState<LichessPuzzleActivityEntry[]>([]);
   const [days, setDays] = useState(30);
 
-  const tokenEncrypted = activeProfile?.preferences?.lichessTokenEncrypted;
-  const tokenIv = activeProfile?.preferences?.lichessTokenIv;
+  const tokenEncrypted = activeProfile?.preferences.lichessTokenEncrypted;
+  const tokenIv = activeProfile?.preferences.lichessTokenIv;
   const hasToken = Boolean(tokenEncrypted && tokenIv);
 
   const loadData = useCallback(async (): Promise<void> => {
@@ -138,6 +138,7 @@ export function LichessDashboardPage(): JSX.Element {
           value={days}
           onChange={(e) => setDays(Number(e.target.value))}
           className="px-2 py-1 rounded-lg border text-xs text-theme-text bg-theme-surface border-theme-border"
+          aria-label="Time range"
           data-testid="days-select"
         >
           {[7, 14, 30, 60, 90].map((d) => (
@@ -153,11 +154,11 @@ export function LichessDashboardPage(): JSX.Element {
       )}
 
       {error && (
-        <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20" data-testid="dashboard-error">
-          <p className="text-sm text-red-500">{error}</p>
+        <div className="p-4 rounded-lg" style={{ background: 'var(--color-error, #ef4444)10', border: '1px solid var(--color-error, #ef4444)20' }} data-testid="dashboard-error">
+          <p className="text-sm" style={{ color: 'var(--color-error)' }}>{error}</p>
           <button
             onClick={() => void loadData()}
-            className="mt-2 text-xs text-red-400 underline"
+            className="mt-2 text-xs underline" style={{ color: 'var(--color-error)' }}
           >
             Retry
           </button>
@@ -193,7 +194,8 @@ export function LichessDashboardPage(): JSX.Element {
                 {weakThemes.map((theme) => (
                   <span
                     key={theme}
-                    className="px-2 py-0.5 rounded-full text-xs bg-red-500/10 text-red-500 border border-red-500/20"
+                    className="px-2 py-0.5 rounded-full text-xs"
+                    style={{ background: 'color-mix(in srgb, var(--color-error) 10%, transparent)', color: 'var(--color-error)', border: '1px solid color-mix(in srgb, var(--color-error) 20%, transparent)' }}
                   >
                     {formatThemeName(theme)}
                   </span>
@@ -210,6 +212,11 @@ export function LichessDashboardPage(): JSX.Element {
           )}
 
           {/* Theme breakdown */}
+          {sortedThemes.length === 0 && (
+            <div className="text-center py-8 text-theme-text-muted" data-testid="no-themes">
+              <p className="text-sm">No theme data yet. Solve more puzzles on Lichess to see your breakdown.</p>
+            </div>
+          )}
           {sortedThemes.length > 0 && (
             <div className="space-y-2" data-testid="theme-breakdown">
               <div className="flex items-center gap-2">
@@ -233,13 +240,13 @@ export function LichessDashboardPage(): JSX.Element {
                             {formatThemeName(theme)}
                           </span>
                           {isWeak && (
-                            <span className="text-xs text-red-500 shrink-0">weak</span>
+                            <span className="text-xs shrink-0" style={{ color: 'var(--color-error)' }}>weak</span>
                           )}
                         </div>
                         <div className="mt-1 h-1.5 rounded-full bg-theme-border overflow-hidden">
                           <div
-                            className={`h-full rounded-full transition-all ${pct >= 70 ? 'bg-green-500' : pct >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                            style={{ width: `${pct}%` }}
+                            className="h-full rounded-full transition-all"
+                            style={{ width: `${pct}%`, background: pct >= 70 ? 'var(--color-success)' : pct >= 50 ? 'var(--color-warning)' : 'var(--color-error)' }}
                           />
                         </div>
                       </div>

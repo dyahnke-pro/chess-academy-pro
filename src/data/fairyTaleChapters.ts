@@ -259,11 +259,11 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
           'My lightning can only strike along my color. ' +
           'That is why a kingdom needs two wizards — one of light, one of shadow — ' +
           'to protect every diagonal in the realm."',
-        fen: '4k3/8/8/8/8/5B2/2B5/4K3 w - - 0 1',
-        highlightSquares: ['c2', 'f3'],
+        fen: '4k3/8/8/8/5B2/8/2B5/4K3 w - - 0 1',
+        highlightSquares: ['c2', 'f4'],
         instruction:
           'The bishop on c2 is on a light square and can only reach other light squares. ' +
-          'The bishop on f3 is on a dark square and can only reach dark squares!',
+          'The bishop on f4 is on a dark square and can only reach dark squares!',
       },
     ],
     puzzles: [
@@ -670,8 +670,8 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'tactics-puzzle-2',
-        fen: 'r3k3/8/8/8/3N4/8/8/4K3 w - - 0 1',
-        solution: ['Nc6'],
+        fen: '1r6/4k3/8/8/3N4/8/8/4K3 w - - 0 1',
+        solution: ['Nc6+'],
         hint: 'Find the square where the knight attacks both the king and the rook!',
         successMessage:
           'The Shadow Stallion strikes again! A devastating fork — the king and rook attacked at once. The rook will fall!',
@@ -754,12 +754,13 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
           'The Sorceress Queen joins the battle — and the end is near. ' +
           'She takes her position on f3, aiming at the same weak f7 square. ' +
           'Two powerful pieces targeting one defenseless point. ' +
-          'If the queen reaches f7, protected by the bishop, it is checkmate. ' +
+          'Black tries to develop the bishop, but it is too late — ' +
+          'the queen captures on f7, protected by the wizard on c4. Checkmate! ' +
           'The enemy king has no escape. The kingdom falls!',
-        fen: 'rnb1kbnr/pppp1ppp/8/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 3',
-        highlightSquares: ['f3', 'f7'],
+        fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4',
+        highlightSquares: ['f3', 'f7', 'c4'],
         instruction:
-          'The queen on f3 threatens Qxf7#. If Black does not defend f7, it is checkmate next move!',
+          'The queen on f3 and bishop on c4 both aim at f7. White can play Qxf7# — checkmate!',
       },
     ],
     puzzles: [
@@ -773,7 +774,7 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'first-game-puzzle-2',
-        fen: 'rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 2',
+        fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3',
         solution: ['Qf3'],
         hint: 'Summon the Sorceress Queen to join the attack on f7!',
         successMessage:
@@ -781,9 +782,9 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'first-game-puzzle-3',
-        fen: 'rnb1kbnr/pppp1Qpp/8/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 3',
-        solution: ['Kd8', 'Qxf8#'],
-        hint: 'The king is in check from the queen on f7! Where can it escape? Then finish the battle!',
+        fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4',
+        solution: ['Qxf7#'],
+        hint: 'The queen and bishop both aim at f7. Deliver the final blow!',
         successMessage:
           'CHECKMATE! The Sorceress Queen delivers the final blow! ' +
           'The enemy kingdom falls, and the little pawn\'s quest is complete. ' +

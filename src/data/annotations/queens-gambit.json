@@ -12,6 +12,132 @@
     {
       "san": "c4",
       "annotation": "We're now playing the signature move of the Queen's Gambit, offering our c-pawn in exchange for Black's central d5 pawn. This isn't a true gambit since we'll likely regain the pawn, but rather a strategic pawn trade that gives us several advantages: we eliminate Black's strong central pawn, potentially gain time if Black captures and we recapture with a piece, and open the c-file for our rook. The move also prepares to support a future e4 advance, which would give us the ideal pawn center. Even if Black doesn't capture immediately, we've put pressure on their position and can continue developing with moves like Nc3, Nf3, and e3, building a solid positional foundation."
+    },
+    {
+      "san": "e6",
+      "annotation": "Black declines the gambit and shores up the d5 pawn with e6, choosing the solid Queen's Gambit Declined. This is the most classical and reliable defense, but it comes with a cost: the light-squared bishop on c8 is now blocked behind its own pawns. Exploiting that passive bishop will be one of our key strategic themes throughout the game.",
+      "arrows": [
+        { "from": "e6", "to": "d5", "color": "rgba(0, 100, 255, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c8", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "Nc3",
+      "annotation": "We develop the knight to its most natural square, adding a second attacker to d5 and preparing to support a future e4 push. The knight on c3 is the backbone of our queenside development, putting pressure on the center and eyeing the e4 and b5 squares. It also clears the way for our queen to potentially come to b3 or c2 later.",
+      "arrows": [
+        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "e4", "color": "rgba(0, 100, 255, 0.8)" }
+      ]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to f6, defending d5 and contesting the e4 square. This is the most natural developing move, contributing to kingside development and preparing to castle. The knight on f6 is a reliable defender of the center, though it can become a target for our Bg5 pin.",
+      "arrows": [
+        { "from": "f6", "to": "d5", "color": "rgba(0, 100, 255, 0.8)" },
+        { "from": "f6", "to": "e4", "color": "rgba(0, 100, 255, 0.8)" }
+      ]
+    },
+    {
+      "san": "cxd5",
+      "annotation": "We exchange on d5, entering the Exchange Variation of the Queen's Gambit Declined. This clarifies the central tension and creates a symmetrical pawn structure, but White retains a small edge because of superior piece activity and the minority attack on the queenside. The resulting position features a clear strategic plan: advance our b and a pawns to undermine Black's c6 pawn.",
+      "arrows": [
+        { "from": "a2", "to": "a4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b2", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
+    },
+    {
+      "san": "exd5",
+      "annotation": "Black recaptures with the e-pawn, maintaining a solid pawn structure but leaving the light-squared bishop still hemmed in on c8. The d5 pawn is now an isolani-in-waiting: if Black plays c6 to support it, the pawn structure becomes somewhat rigid. This recapture is necessary but reinforces the strategic weakness we aimed to exploit.",
+      "highlights": [
+        { "square": "c8", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "Bg5",
+      "annotation": "We pin the f6 knight to the queen, one of the most thematic moves in the Queen's Gambit. This bishop creates persistent pressure on Black's kingside and makes it harder for them to break free with moves like Ne4 or develop comfortably. The pin also supports our long-term plan of exchanging this knight to weaken Black's control of d5.",
+      "arrows": [
+        { "from": "g5", "to": "f6", "color": "rgba(220, 50, 50, 0.8)" }
+      ]
+    },
+    {
+      "san": "Be7",
+      "annotation": "Black develops the bishop to e7, a modest but solid square that breaks the pin on the knight. This is the classical approach: Be7 prepares castling and keeps the position stable, though the bishop is somewhat passive here compared to a more aggressive development like Bb4 or Bd6.",
+      "arrows": [
+        { "from": "e7", "to": "g5", "color": "rgba(0, 100, 255, 0.8)" }
+      ]
+    },
+    {
+      "san": "e3",
+      "annotation": "We solidify our center with e3, supporting the d4 pawn and preparing to develop the light-squared bishop to d3. This quiet but important move ensures our pawn chain is rock-solid before we complete development. The bishop will go to d3 where it targets h7 and supports a potential kingside attack.",
+      "arrows": [
+        { "from": "e3", "to": "d4", "color": "rgba(0, 100, 255, 0.8)" },
+        { "from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" }
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles kingside, getting the king to safety and connecting the rooks. This is the natural moment to castle since the bishop is developed and the knight is on f6. Black's position is solid but somewhat passive, and they'll need to find a way to activate their pieces, particularly the light-squared bishop.",
+      "highlights": [
+        { "square": "g8", "color": "rgba(0, 180, 80, 0.4)" }
+      ]
+    },
+    {
+      "san": "Bd3",
+      "annotation": "We develop the bishop to its ideal diagonal, aiming directly at the h7 pawn near Black's king. From d3, the bishop supports both kingside attacking ideas and central play. Combined with our queen potentially coming to c2, we can create a dangerous battery on the b1-h7 diagonal. This is a key attacking motif in the Queen's Gambit.",
+      "arrows": [
+        { "from": "d3", "to": "h7", "color": "rgba(220, 50, 50, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "h7", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Black reroutes the knight to d7, a flexible square that supports multiple plans: the knight can go to f8 for kingside defense, to b6 to pressure c4, or to f6 if the other knight moves. This development also avoids blocking the c-pawn, keeping c6 available to reinforce d5. It's a typical Queen's Gambit Declined maneuver.",
+      "arrows": [
+        { "from": "d7", "to": "f8", "color": "rgba(0, 100, 255, 0.8)" },
+        { "from": "d7", "to": "b6", "color": "rgba(0, 100, 255, 0.8)" }
+      ]
+    },
+    {
+      "san": "Nf3",
+      "annotation": "We complete our kingside development with Nf3, preparing to castle and adding another defender to d4 and e5. The knight on f3 is perfectly placed: it controls key central squares, supports a potential kingside attack, and keeps our position harmoniously developed. We're now ready to castle and enter the middlegame with a comfortable position.",
+      "arrows": [
+        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "d4", "color": "rgba(0, 100, 255, 0.8)" }
+      ]
+    },
+    {
+      "san": "Re8",
+      "annotation": "Black places the rook on the half-open e-file, which is a natural and useful move. The rook eyes the e3 pawn and keeps options open for central activity. It also supports a potential e5 break in the future, though that would require significant preparation in this pawn structure.",
+      "arrows": [
+        { "from": "e8", "to": "e3", "color": "rgba(0, 100, 255, 0.8)" }
+      ]
+    },
+    {
+      "san": "Qc2",
+      "annotation": "We bring the queen to c2, creating the powerful Bd3+Qc2 battery along the b1-h7 diagonal aimed straight at Black's kingside. This is one of the most important attacking setups in the Queen's Gambit: the queen and bishop combine to put pressure on h7, and after we castle, we can consider kingside attacks with h3, followed by a potential piece sacrifice on h7 in the right circumstances. The queen on c2 also supports the c-file and keeps our position flexible.",
+      "arrows": [
+        { "from": "c2", "to": "h7", "color": "rgba(220, 50, 50, 0.8)" },
+        { "from": "d3", "to": "h7", "color": "rgba(220, 50, 50, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "h7", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "c6",
+      "annotation": "Black reinforces the d5 pawn with c6, creating a solid pawn chain but making the position somewhat rigid. While this stabilizes the center, it also means the queenside pawns become a target for our minority attack (b4-b5). The c6 pawn can be undermined by b4-b5, forcing cxb5 and creating a weak backward pawn or isolated pawn on d5. This is our key strategic plan going forward.",
+      "arrows": [
+        { "from": "b2", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b4", "to": "b5", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c6", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     }
   ]
 }
