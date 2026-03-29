@@ -9,7 +9,7 @@ import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { BoardControls } from '../Board/BoardControls';
 import { useSettings } from '../../hooks/useSettings';
 import { AnnotationCard } from './AnnotationCard';
-import { speechService } from '../../services/speechService';
+import { voiceService } from '../../services/voiceService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
@@ -435,7 +435,7 @@ export function WalkthroughMode({
   // Track when TTS finishes speaking — used to advance auto-play immediately
   const ttsFinishedRef = useRef<(() => void) | null>(null);
 
-  // TTS narration when move changes — tries Kokoro first, falls back to Web Speech
+  // TTS narration when move changes — tries Polly first, falls back to Web Speech
   useEffect(() => {
     if (currentMoveIndex === 0) return;
     if (!annotations) return;
@@ -443,27 +443,31 @@ export function WalkthroughMode({
     if (!ann) return;
     if (!voiceEnabled) return;
 
-    speechService.speak(ann.annotation, {
-      rate: TTS_RATE[autoPlaySpeed],
-      onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-      onEnd: () => ttsFinishedRef.current?.(),
+    let cancelled = false;
+
+    void voiceService.speak(ann.annotation).then(() => {
+      if (!cancelled) {
+        ttsFinishedRef.current?.();
+      }
     });
 
-    return () => { speechService.stop(); };
+    return () => {
+      cancelled = true;
+      voiceService.stop();
+    };
   }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
   // Clean up speech on unmount
   useEffect(() => {
     return () => {
-      speechService.stop();
-
+      voiceService.stop();
     };
   }, []);
 
   // Navigation handlers
   const goToMove = useCallback((idx: number) => {
     setIsAutoPlaying(false);
-    speechService.stop();
+    voiceService.stop();
     setCurrentMoveIndex(idx);
     setBoardKey((k) => k + 1);
   }, []);
@@ -471,15 +475,13 @@ export function WalkthroughMode({
   const handleFirst = useCallback(() => goToMove(0), [goToMove]);
   const handlePrev = useCallback(() => {
     unlockAudioContext();
-    speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
-    speechService.stop();
+    voiceService.stop();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.max(0, prev - 1));
     setBoardKey((k) => k + 1);
   }, []);
   const handleNext = useCallback(() => {
     unlockAudioContext();
-    speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.min(expectedMoves.length, prev + 1));
     setBoardKey((k) => k + 1);
@@ -488,7 +490,6 @@ export function WalkthroughMode({
 
   const toggleAutoPlay = useCallback(() => {
     unlockAudioContext();
-    speechService.warmupInGestureContext(); // unlock iOS Web Speech
     setIsAutoPlaying((prev) => {
       if (!prev && currentMoveIndex >= expectedMoves.length) {
         // Reset to beginning if at end
