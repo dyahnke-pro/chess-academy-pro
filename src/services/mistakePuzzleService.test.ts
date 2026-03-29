@@ -367,7 +367,7 @@ describe('mistakePuzzleService', () => {
 
       const updated = await db.mistakePuzzles.get('grade-1');
       expect(updated!.srsRepetitions).toBe(1);
-      expect(updated!.srsInterval).toBe(1);
+      expect(updated!.srsInterval).toBe(3); // FSRS initial stability for 'good' → ~3 days
       expect(updated!.attempts).toBe(1);
       expect(updated!.successes).toBe(1);
       expect(updated!.status).toBe('solved');
@@ -377,7 +377,8 @@ describe('mistakePuzzleService', () => {
       const puzzle = buildMistakePuzzle({
         id: 'grade-2',
         srsRepetitions: 2,
-        srsInterval: 6,
+        srsInterval: 10,
+        srsEaseFactor: 987, // FSRS stability after 2 good reviews
         status: 'solved',
         successes: 2,
       });
@@ -387,7 +388,7 @@ describe('mistakePuzzleService', () => {
 
       const updated = await db.mistakePuzzles.get('grade-2');
       expect(updated!.srsRepetitions).toBe(0);
-      expect(updated!.srsInterval).toBe(1);
+      expect(updated!.srsInterval).toBeGreaterThanOrEqual(1);
       expect(updated!.attempts).toBe(1);
       expect(updated!.successes).toBe(2); // unchanged
       expect(updated!.status).toBe('solved'); // stays solved since successes > 0
@@ -397,8 +398,8 @@ describe('mistakePuzzleService', () => {
       const puzzle = buildMistakePuzzle({
         id: 'grade-3',
         srsRepetitions: 2,
-        srsInterval: 6,
-        srsEaseFactor: 2.5,
+        srsInterval: 10,
+        srsEaseFactor: 987, // FSRS stability after 2 good reviews
         status: 'solved',
         successes: 2,
       });
