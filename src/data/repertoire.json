@@ -1340,7 +1340,7 @@
     "id": "london-system",
     "eco": "D00",
     "name": "London System",
-    "pgn": "d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6",
+    "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Be2 O-O O-O Nbd7 h3 b6 c3 Bb7",
     "color": "white",
     "style": "Solid, Universal",
     "overview": "The London System is the ultimate low-maintenance opening — you develop Bf4, e3, Nf3, Bd3, Nbd2, c3 in almost any order regardless of what Black does. It's incredibly reliable and gives you a solid, playable position against virtually anything. The dark-squared bishop on f4 is the star piece, and from there you can launch kingside attacks or play a positional game depending on what Black gives you.",
