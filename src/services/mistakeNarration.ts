@@ -11,6 +11,10 @@ export interface NarrationParams {
   cpLoss: number;
   fen: string;
   moves: string; // space-separated UCI continuation
+  opponentName?: string | null;
+  gameDate?: string | null;
+  openingName?: string | null;
+  evalBefore?: number | null; // from player's perspective in pawns (positive = player ahead)
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -24,6 +28,63 @@ function cpToText(cp: number): string {
   if (cp >= 300) return `about ${pawns} pawns — a serious swing`;
   if (cp >= 150) return `around ${pawns} pawns`;
   return `roughly ${pawns} pawns`;
+}
+
+function timeAgoText(dateStr: string): string {
+  const gameDate = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - gameDate.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'today';
+  if (diffDays === 1) return 'yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 14) return 'last week';
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 60) return 'last month';
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return 'over a year ago';
+}
+
+function advantageText(evalBefore: number): string {
+  if (evalBefore > 1.5) return 'You had a strong advantage';
+  if (evalBefore > 0.5) return 'You were slightly better';
+  if (evalBefore > -0.5) return 'The position was roughly equal';
+  if (evalBefore > -1.5) return 'You were slightly worse';
+  return 'You were already in trouble';
+}
+
+function buildContextSentence(params: NarrationParams): string {
+  const parts: string[] = [];
+
+  // "In your game vs opponent (X days ago)"
+  if (params.opponentName && params.gameDate) {
+    parts.push(`In your game vs ${params.opponentName} ${timeAgoText(params.gameDate)}`);
+  } else if (params.opponentName) {
+    parts.push(`In your game vs ${params.opponentName}`);
+  } else if (params.gameDate) {
+    parts.push(`In your game from ${timeAgoText(params.gameDate)}`);
+  }
+
+  // "playing the Sicilian Defense"
+  if (params.openingName) {
+    parts.push(`playing the ${params.openingName}`);
+  }
+
+  if (parts.length === 0) return '';
+
+  let sentence = parts[0];
+  if (parts.length > 1) {
+    sentence += ', ' + parts[1];
+  }
+
+  // "you were slightly better."
+  if (params.evalBefore !== null && params.evalBefore !== undefined) {
+    sentence += ': ' + advantageText(params.evalBefore).toLowerCase() + '.';
+  } else {
+    sentence += '.';
+  }
+
+  return sentence;
 }
 
 function uciToSan(fen: string, uci: string): string {
@@ -141,14 +202,19 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
 
   const cpText = cpToText(cpLoss);
 
+  // Build context sentence (opponent, time ago, opening, advantage)
+  const contextSentence = buildContextSentence(params);
+
   // Build intro
   const introTemplate = pick(INTRO_TEMPLATES[classification]);
   const phaseContext = pick(PHASE_CONTEXT[gamePhase]);
-  const intro = introTemplate
+  const mistakeExplanation = introTemplate
     .replace(/\{playerMove\}/g, playerMoveSan)
     .replace(/\{bestMove\}/g, bestMoveSan)
-    .replace(/\{cpText\}/g, cpText)
-    + ' ' + phaseContext;
+    .replace(/\{cpText\}/g, cpText);
+  const intro = contextSentence
+    ? contextSentence + ' ' + mistakeExplanation + ' ' + phaseContext
+    : mistakeExplanation + ' ' + phaseContext;
 
   // Build per-move narrations
   const moveNarrations = buildMoveNarrations(fen, moves);

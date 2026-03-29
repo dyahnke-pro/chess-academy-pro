@@ -5,7 +5,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
-import { CheckCircle, XCircle, AlertTriangle, Volume2 } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
@@ -29,6 +29,19 @@ const PHASE_LABELS: Record<string, string> = {
   middlegame: 'Middlegame',
   endgame: 'Endgame',
 };
+
+function formatTimeAgo(dateStr: string): string {
+  const gameDate = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - gameDate.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'today';
+  if (diffDays === 1) return 'yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)}mo ago`;
+  return `${Math.floor(diffDays / 365)}y ago`;
+}
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
   if (!uci || uci.trim().length === 0) return [];
@@ -212,7 +225,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
   return (
     <div className="space-y-3" data-testid="mistake-puzzle-board">
       {/* Header with classification badge and phase */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <span
           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold ${badge.color}`}
           data-testid="classification-badge"
@@ -223,19 +236,45 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         <span className="text-xs px-2 py-0.5 rounded bg-theme-surface text-theme-text-muted border border-theme-border">
           {PHASE_LABELS[puzzle.gamePhase]}
         </span>
-        <span className="text-xs text-theme-text-muted">
-          From your game
-        </span>
-      </div>
-
-      <p className="text-sm text-theme-text-secondary" data-testid="prompt-text">
-        {puzzle.promptText}
-        {isMultiMove && (
-          <span className="text-theme-text-muted ml-1">
-            ({Math.ceil(totalMoves / 2)} move{Math.ceil(totalMoves / 2) > 1 ? 's' : ''} to find)
+        {puzzle.openingName && (
+          <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-theme-surface text-theme-text-muted border border-theme-border" data-testid="opening-name">
+            <BookOpen size={10} />
+            {puzzle.openingName}
           </span>
         )}
-      </p>
+      </div>
+
+      {/* Game context: opponent + time ago */}
+      <div className="flex items-center gap-3 text-xs text-theme-text-muted" data-testid="game-context">
+        {puzzle.opponentName && (
+          <span className="inline-flex items-center gap-1">
+            <User size={11} />
+            vs {puzzle.opponentName}
+          </span>
+        )}
+        {puzzle.gameDate && (
+          <span className="inline-flex items-center gap-1">
+            <Clock size={11} />
+            {formatTimeAgo(puzzle.gameDate)}
+          </span>
+        )}
+        {!puzzle.opponentName && !puzzle.gameDate && (
+          <span>From your game</span>
+        )}
+      </div>
+
+      {/* Show the wrong move before asking for the correct one */}
+      <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
+        <p>
+          You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}.
+          {' '}Find the best move.
+          {isMultiMove && (
+            <span className="text-theme-text-muted ml-1">
+              ({Math.ceil(totalMoves / 2)} move{Math.ceil(totalMoves / 2) > 1 ? 's' : ''} to find)
+            </span>
+          )}
+        </p>
+      </div>
 
       {/* Board */}
       <div className="w-full md:max-w-[420px] mx-auto">

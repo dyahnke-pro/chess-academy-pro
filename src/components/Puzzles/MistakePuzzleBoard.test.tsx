@@ -49,22 +49,47 @@ describe('MistakePuzzleBoard', () => {
     expect(screen.getByTestId('classification-badge')).toHaveTextContent('? Mistake');
   });
 
-  it('displays prompt text', () => {
+  it('displays the wrong move and prompt to find the best move', () => {
     const puzzle = buildMistakePuzzle({
-      promptText: 'This move cost you. What should you have played?',
+      playerMoveSan: 'Ng5',
+      classification: 'mistake',
     });
     render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
-    expect(screen.getByTestId('prompt-text')).toHaveTextContent(
-      'This move cost you. What should you have played?',
-    );
+    const prompt = screen.getByTestId('prompt-text');
+    expect(prompt).toHaveTextContent('You played Ng5');
+    expect(prompt).toHaveTextContent('Find the best move');
   });
 
-  it('displays "From your game" label', () => {
-    const puzzle = buildMistakePuzzle();
+  it('displays opponent name and time ago', () => {
+    const puzzle = buildMistakePuzzle({
+      opponentName: 'Magnus',
+      gameDate: new Date().toISOString().split('T')[0],
+    });
     render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
-    expect(screen.getByText('From your game')).toBeInTheDocument();
+    const context = screen.getByTestId('game-context');
+    expect(context).toHaveTextContent('vs Magnus');
+    expect(context).toHaveTextContent('today');
+  });
+
+  it('displays opening name when available', () => {
+    const puzzle = buildMistakePuzzle({
+      openingName: 'Sicilian Defense',
+    });
+    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+
+    expect(screen.getByTestId('opening-name')).toHaveTextContent('Sicilian Defense');
+  });
+
+  it('falls back to "From your game" when no opponent/date', () => {
+    const puzzle = buildMistakePuzzle({
+      opponentName: null,
+      gameDate: null,
+    });
+    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+
+    expect(screen.getByTestId('game-context')).toHaveTextContent('From your game');
   });
 
   it('shows move number and cp loss info', () => {
