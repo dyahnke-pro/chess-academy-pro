@@ -828,7 +828,7 @@
               "color": "rgba(0, 120, 255, 0.8)"
             },
             {
-              "from": "h1",
+              "from": "g1",
               "to": "f1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
@@ -1346,8 +1346,8 @@
           ],
           "arrows": [
             {
-              "from": "g1",
-              "to": "g8",
+              "from": "f1",
+              "to": "f3",
               "color": "rgba(0, 120, 255, 0.8)"
             },
             {
@@ -1590,8 +1590,8 @@
               "color": "rgba(255, 50, 50, 0.8)"
             },
             {
-              "from": "g1",
-              "to": "h1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
@@ -2187,8 +2187,8 @@
               "color": "rgba(0, 180, 80, 0.8)"
             },
             {
-              "from": "e3",
-              "to": "c5",
+              "from": "c1",
+              "to": "e3",
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ]
@@ -2271,7 +2271,7 @@
         },
         {
           "san": "Bxe3",
-          "annotation": "Black accepts the bishop trade, eliminating White's light-squared bishop while maintaining piece activity. This exchange is reasonable for Black as it removes White's potentially strong bishop and keeps the position dynamic. The recapture will also centralize White's queen, but Black maintains good piece coordination.",
+          "annotation": "Black accepts the bishop trade, eliminating White's dark-squared bishop while maintaining piece activity. This exchange is reasonable for Black as it removes White's potentially strong bishop and keeps the position dynamic. The recapture will also centralize White's queen, but Black maintains good piece coordination.",
           "plans": [
             "Maintain active piece play after the recapture",
             "Look for tactics involving the centralized pieces"
@@ -2505,8 +2505,8 @@
               "color": "rgba(255, 50, 50, 0.8)"
             },
             {
-              "from": "g1",
-              "to": "h1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
