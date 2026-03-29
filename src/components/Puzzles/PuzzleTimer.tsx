@@ -35,22 +35,23 @@ export function PuzzleTimer({ duration, running, onTimeout }: PuzzleTimerProps):
     return () => clearInterval(interval);
   }, [running, remaining]);
 
-  const fraction = remaining / duration;
+  const fraction = duration > 0 ? remaining / duration : 0;
   const isUrgent = remaining <= 10;
 
   return (
-    <div className="flex items-center gap-2" data-testid="puzzle-timer">
-      <Clock size={16} className={isUrgent ? 'text-red-500' : 'text-theme-text-muted'} />
+    <div className="flex items-center gap-2" data-testid="puzzle-timer" role="timer" aria-label={`${remaining} seconds remaining`}>
+      <Clock size={16} className={isUrgent ? '' : 'text-theme-text-muted'} style={isUrgent ? { color: 'var(--color-error)' } : undefined} />
       <span
-        className={`text-sm font-mono font-semibold ${isUrgent ? 'text-red-500' : 'text-theme-text'}`}
+        className="text-sm font-mono font-semibold"
+        style={{ color: isUrgent ? 'var(--color-error)' : 'var(--color-text)' }}
         data-testid="timer-display"
       >
         {remaining}s
       </span>
       <div className="flex-1 h-1.5 rounded-full bg-theme-border overflow-hidden">
         <div
-          className={`h-full rounded-full transition-all duration-1000 ${isUrgent ? 'bg-red-500' : 'bg-theme-accent'}`}
-          style={{ width: `${fraction * 100}%` }}
+          className="h-full rounded-full transition-all duration-1000"
+          style={{ width: `${fraction * 100}%`, background: isUrgent ? 'var(--color-error)' : 'var(--color-accent)' }}
           data-testid="timer-bar"
         />
       </div>
