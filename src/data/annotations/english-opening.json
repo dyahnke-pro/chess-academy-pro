@@ -3,130 +3,568 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We start with the English Opening, one of the most flexible and strategically rich first moves in chess. Rather than immediately grabbing the center with a pawn like 1.e4, we control the d5 square and prepare to build our center more gradually, keeping maximum flexibility in our setup. This move suits players who enjoy positional maneuvering and want to avoid the sharpest theoretical lines — we can transpose into many different systems depending on Black's response, whether they play 1...c5 (mirroring our structure), 1...e5, or other moves."
+      "annotation": "The English Opening — one of the most flexible first moves in chess. Instead of grabbing the center immediately with 1.e4 or 1.d4, we stake a claim on the d5 square from the flank and keep our options wide open. The beauty of 1.c4 is that we can steer the game into many different structures depending on Black's response, giving us a positional, maneuvering game where understanding matters more than memorization.",
+      "pawnStructure": "Single flank pawn on c4. White delays central pawn commitments to maintain maximum flexibility.",
+      "plans": [
+        "Control d5 and prepare a kingside fianchetto with g3 + Bg2",
+        "Develop knights to c3 and f3, then decide on central structure later"
+      ],
+      "arrows": [
+        { "from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c4", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black plays the Reversed Sicilian setup with e5, boldly claiming central space and establishing a strong pawn in the center. This is one of the most popular and aggressive responses to the English. By playing e5, Black takes direct control of d4 and f4, and opens lines for the dark-squared bishop and queen. We'll aim to undermine this center gradually rather than challenge it head-on.",
+      "annotation": "Black responds aggressively by grabbing central space with 1...e5. This is one of the most principled replies — Black occupies the center immediately and opens lines for the dark-squared bishop and queen. From White's perspective, this is excellent: we now have a Reversed Sicilian structure where we essentially play a Sicilian Defense with an extra tempo. That extra tempo makes a huge strategic difference.",
+      "pawnStructure": "Black has a central e5 pawn vs White's flank c4 pawn. The asymmetry creates an imbalanced, rich middlegame.",
+      "plans": [
+        "Challenge White's setup by maintaining the e5 stronghold",
+        "Develop pieces rapidly with Nf6, Nc6, and aim for active play"
+      ],
+      "alternatives": [
+        "1...c5 — the Symmetrical English, leading to quieter positional play",
+        "1...Nf6 — the Anglo-Indian, very flexible and transpositional"
+      ],
       "arrows": [
-        { "from": "e5", "to": "d4", "color": "rgba(0, 100, 255, 0.8)" },
-        { "from": "e5", "to": "f4", "color": "rgba(0, 100, 255, 0.8)" }
+        { "from": "e7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "e5", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop the knight to c3, adding pressure to the key d5 and e4 squares. The knight is perfectly placed here: it supports our c4 pawn's influence on d5 and prepares for a flexible central strategy. From c3, the knight also keeps open the possibility of playing e3 or e4 depending on how the position develops.",
+      "annotation": "We develop the queen's knight to its most natural square, reinforcing our grip on d5 and preparing to expand. The knight on c3 is a multi-purpose piece: it supports a future d4 push, pressures d5 and e4, and works beautifully with a kingside fianchetto. Notice we develop knights before bishops — a classical principle that lets us see where the bishops belong based on the pawn structure that emerges.",
+      "pawnStructure": "Still c4 vs e5. White keeps central flexibility, not committing to d3 or d4 yet.",
+      "plans": [
+        "Follow up with Nf3 and g3 to fianchetto the bishop",
+        "Keep the option of d3 (solid) or d4 (ambitious) depending on Black's setup"
+      ],
       "arrows": [
-        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c3", "to": "e4", "color": "rgba(0, 100, 255, 0.8)" }
+        { "from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c3", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops naturally, placing the knight on f6 where it defends d5, controls e4, and prepares kingside castling. This is a solid and flexible development move. The knight on f6 will be a key piece in Black's fight for central control, and it also supports potential pawn advances like d5.",
-      "arrows": [
-        { "from": "f6", "to": "e4", "color": "rgba(0, 100, 255, 0.8)" },
-        { "from": "f6", "to": "d5", "color": "rgba(0, 100, 255, 0.8)" }
-      ]
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We develop the second knight, putting immediate pressure on Black's e5 pawn and controlling the d4 square. This is more active than g3 at this moment because it forces Black to think about defending e5. The knight on f3 also prepares for a kingside fianchetto with g3 and Bg2 next, giving us a powerful setup.",
-      "arrows": [
-        { "from": "f3", "to": "e5", "color": "rgba(220, 50, 50, 0.8)" },
-        { "from": "f3", "to": "d4", "color": "rgba(0, 100, 255, 0.8)" }
-      ]
-    },
-    {
-      "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the knight, the most natural move. The knight on c6 adds support to the center and develops a piece at the same time. However, this does block the c-pawn, which means Black will need to find another way to challenge our queenside pressure if they want to play d5.",
-      "arrows": [
-        { "from": "c6", "to": "e5", "color": "rgba(0, 100, 255, 0.8)" }
-      ]
-    },
-    {
-      "san": "g3",
-      "annotation": "We prepare to fianchetto the bishop to g2, which is the signature setup in the English Opening. The bishop on g2 will control the long a8-h1 diagonal, putting constant pressure on d5 and Black's queenside. This patient approach builds our position piece by piece, aiming for a long-term positional advantage rather than an early confrontation.",
-      "arrows": [
-        { "from": "f1", "to": "g2", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "g2", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
-      ]
-    },
-    {
-      "san": "Bb4",
-      "annotation": "Black develops the bishop actively, pinning the knight on c3 and putting pressure on our queenside. This is an aggressive choice that mirrors ideas from the Nimzo-Indian Defense. The pin is annoying because if Black captures on c3, we'll have doubled pawns, though those pawns can actually be useful for controlling the center.",
-      "arrows": [
-        { "from": "b4", "to": "c3", "color": "rgba(220, 50, 50, 0.8)" }
-      ]
-    },
-    {
-      "san": "Bg2",
-      "annotation": "We complete the fianchetto, placing our bishop on the powerful g2 diagonal. Rather than worrying about the pin on c3, we continue with our development plan. The bishop on g2 is a monster: it rakes down the long diagonal toward a8, pressures d5, and will be a key piece for the rest of the game. This bishop often becomes our best piece in English Opening positions.",
-      "arrows": [
-        { "from": "g2", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "g2", "to": "a8", "color": "rgba(0, 100, 255, 0.8)" }
+      "annotation": "Black mirrors the logical development plan, placing the knight on its ideal square. The f6-knight controls d5 and e4 — two critical central squares — and prepares kingside castling. Black is saying: 'I'll develop sensibly and fight for the center with pieces before committing my pawns further.' This is sound, classical chess.",
+      "pawnStructure": "Unchanged. Both sides developing pieces before further pawn commitments.",
+      "plans": [
+        "Complete kingside development with Bc5 or Bb4 and castle quickly",
+        "Fight for control of d4 and e4 with piece pressure"
       ],
-      "highlights": [
-        { "square": "g2", "color": "rgba(0, 180, 80, 0.4)" }
-      ]
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black castles kingside, getting the king to safety and preparing to bring the rook into the game. This is a natural and important move. With the bishop on b4 and knights developed, Black has a solid position, though the question of what to do with the Bb4 remains a strategic decision for later.",
-      "highlights": [
-        { "square": "g8", "color": "rgba(0, 180, 80, 0.4)" }
-      ]
-    },
-    {
-      "san": "O-O",
-      "annotation": "We castle as well, tucking our king away safely behind the fianchettoed bishop. The position is now entering the middlegame phase where both sides will compete for central control. Our plan involves building pressure on d5 and looking for the right moment to challenge Black's center with d3 followed by a potential e4 advance.",
       "arrows": [
-        { "from": "d2", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" }
-      ],
-      "highlights": [
-        { "square": "g1", "color": "rgba(0, 180, 80, 0.4)" }
-      ]
-    },
-    {
-      "san": "e4",
-      "annotation": "Black advances the e-pawn to e4, gaining space and chasing our f3 knight. This is a committal but aggressive move that fixes the central structure. While Black gains space in the center, the e4 pawn can also become a target since it's advanced beyond its support. We'll aim to undermine it with d3.",
-      "arrows": [
-        { "from": "e4", "to": "f3", "color": "rgba(220, 50, 50, 0.8)" }
+        { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f6", "to": "d5", "color": "rgba(255, 50, 50, 0.8)" },
+        { "from": "f6", "to": "e4", "color": "rgba(255, 50, 50, 0.8)" }
       ],
       "highlights": [
         { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
-      "san": "d3",
-      "annotation": "We immediately challenge Black's advanced e4 pawn with d3, striking at the base of their central wedge. This is the key move in this variation: by undermining e4, we can open the position for our fianchettoed bishop on g2 and create central activity. After the likely exchange on d3, the position opens up favorably for our pieces, especially the g2 bishop.",
+      "san": "Nf3",
+      "annotation": "We develop our second knight, attacking Black's e5 pawn and completing our knight development before committing to a pawn structure. The knight on f3 is the perfect complement to Nc3: together they control d4, d5, and e5. We're also preparing g3 next, because the Bg2 fianchetto is the signature setup in the English — the bishop will become a long-range sniper on the a8-h1 diagonal.",
+      "pawnStructure": "Still c4 vs e5. White maintains maximum flexibility before choosing between d3 and d4.",
+      "plans": [
+        "Play g3 and Bg2 for the kingside fianchetto",
+        "Castle kingside and then choose the right moment for d3 or d4"
+      ],
+      "alternatives": [
+        "3.g3 — fianchettoing immediately is also fine, but Nf3 first puts pressure on e5"
+      ],
       "arrows": [
-        { "from": "d3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "g2", "to": "b7", "color": "rgba(0, 180, 80, 0.8)" }
+        { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Black defends e5 with the most natural developing move. The knight on c6 does triple duty: it protects the e5 pawn, controls d4, and prepares to support a future ...d5 advance. We now have a Four Knights English structure, which is one of the main theoretical battlegrounds of the English Opening. Both sides have developed logically and the real strategic decisions are about to begin.",
+      "pawnStructure": "c4 vs e5 remains. The pawn tension is latent — neither side is forced to resolve it yet.",
+      "plans": [
+        "Support the e5 pawn and develop the dark-squared bishop actively",
+        "Consider ...Bb4 pinning the knight or ...Bc5 for active piece play"
+      ],
+      "arrows": [
+        { "from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "g3",
+      "annotation": "This is the defining move of our setup — we prepare the kingside fianchetto. The bishop on g2 will be an absolute monster, raking down the long diagonal toward a8. In the English Opening, this fianchettoed bishop is often our most important piece: it pressures the center from a distance, supports a future d4 break, and creates X-ray pressure against Black's queenside. The g3 move also prepares castling and gives our king a cozy shelter.",
+      "pawnStructure": "c4 + g3 for White. The g3 pawn signals a long-term positional approach with the fianchetto.",
+      "plans": [
+        "Complete the fianchetto with Bg2 and castle kingside",
+        "Use the g2 bishop to dominate the long diagonal and pressure d5"
+      ],
+      "arrows": [
+        { "from": "g2", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g2", "to": "a8", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g2", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "Bb4",
+      "annotation": "Black pins our c3-knight against the king, creating immediate tactical tension. This is a Nimzo-style idea: by pinning the knight, Black threatens to double our pawns with ...Bxc3 and disrupts our control of d5. It's an aggressive, committal choice — the bishop leaves the kingside, which means Black will need to find another way to protect the king. The pin is annoying but White has good resources to handle it.",
+      "pawnStructure": "Unchanged. The pin on Nc3 creates strategic tension around whether Black will capture and double White's pawns.",
+      "plans": [
+        "Create pressure on the c3-knight with the pin",
+        "Threaten ...Bxc3 to double White's pawns if the timing is right"
+      ],
+      "alternatives": [
+        "7...Bc5 — keeps the bishop aimed at the kingside, more conservative",
+        "7...d5 — immediately striking at the center, leading to sharper play"
+      ],
+      "arrows": [
+        { "from": "f8", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "b4", "to": "c3", "color": "rgba(255, 50, 50, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "c3", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
+    },
+    {
+      "san": "Bg2",
+      "annotation": "We calmly complete the fianchetto, ignoring Black's pin for now. The bishop on g2 is a powerhouse — it controls the long diagonal from a8 to h1, pressures d5 and the entire center, and will prove its worth throughout the game. We don't need to panic about the pin: once we castle, the pin is less effective, and we'll have a3 available to challenge the bishop whenever we choose.",
+      "pawnStructure": "c4 + g3 fianchetto structure established. The g2 bishop becomes the backbone of White's position.",
+      "plans": [
+        "Castle immediately to break the pin's power",
+        "Play a3 later to challenge the Bb4 and potentially gain the bishop pair"
+      ],
+      "arrows": [
+        { "from": "f1", "to": "g2", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "g2", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" },
+        { "from": "g2", "to": "a8", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "Black castles kingside, getting the king to safety and connecting the rooks. This is the right moment — the bishop on b4 has done its job of creating tension, and now Black completes development. With the king safe, Black can focus on the middlegame battle: fighting for the center with ...d6 or ...d5, and potentially repositioning the b4-bishop.",
+      "pawnStructure": "No change. Black's king is now safe and the rooks are connected.",
+      "plans": [
+        "Consolidate the kingside and prepare central play with ...d6 or ...d5",
+        "Look for the right moment to decide the bishop's fate on b4"
+      ],
+      "arrows": [
+        { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "O-O",
+      "annotation": "We castle immediately, following Black's lead. Now the pin on our c3-knight is effectively broken — the king is no longer on e1 in the pin line. Our king is snug behind the g3-g2 fianchetto shelter, which is one of the safest king positions in chess. With both sides castled, the opening phase transitions into a strategic middlegame where our fianchettoed bishop and central control will be key advantages.",
+      "pawnStructure": "Both kings are castled kingside. The position is stable and strategic, not tactical.",
+      "plans": [
+        "Play d3 to support the center and complete development with Be3 or Bg5",
+        "Prepare a3 to challenge the Bb4 and clarify the position"
+      ],
+      "arrows": [
+        { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d2", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    },
+    {
+      "san": "e4",
+      "annotation": "Black makes an ambitious central advance, pushing the pawn to e4 to gain space and restrict White's knight on f3. This is a double-edged decision: the e4 pawn grabs territory but also leaves behind a hole on d4 that White can exploit. The pawn also becomes harder to defend as it advances. White should welcome this — the d5 square and the long diagonal become even more potent for our fianchettoed bishop.",
+      "pawnStructure": "Black's e4 pawn is advanced and potentially overextended. White gains the d4 and d5 outposts.",
+      "plans": [
+        "Exploit the d4 and d5 squares left weak by ...e4",
+        "Maneuver the f3-knight away and later target the e4 pawn"
+      ],
+      "arrows": [
+        { "from": "e5", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "f3", "to": "e1", "color": "rgba(255, 50, 50, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" },
+        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+      ]
+    },
+    {
+      "san": "d3",
+      "annotation": "We immediately challenge Black's advanced e4 pawn. The d3 push is a critical strategic move: by striking at e4, we force Black to make a decision. If Black takes on d3, we recapture and get an open d-file plus beautiful central control. If Black maintains the tension, we can take on e4 and open up the position for our fianchettoed bishop. This is the thematic break in the English — patient preparation followed by a precise challenge.",
+      "pawnStructure": "c4 + d3 vs Black's e4. The d3 pawn directly challenges the overextended e4 pawn. After exchanges, White typically gets an ideal center.",
+      "plans": [
+        "Exchange on e4 or provoke Black to take on d3, opening the position for our pieces",
+        "After the pawn tension resolves, use the open lines and d5 outpost"
+      ],
+      "arrows": [
+        { "from": "d2", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d3", "to": "e4", "color": "rgba(255, 50, 50, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
       "san": "d6",
-      "annotation": "Black supports the e4 pawn with d6, creating a solid pawn chain but committing to a specific structure. While this holds the center, it also means Black's position becomes somewhat rigid. The dark-squared bishop now has fewer active diagonals, and we can maneuver around this fixed structure.",
+      "annotation": "Black supports the e4 pawn chain by playing ...d6, creating a solid e4-d6 structure. This is the safe, solid choice — Black maintains central space while keeping everything defended. However, it does commit to a somewhat passive setup: the light-squared bishop is now restricted behind the pawn chain, and Black's position, while solid, lacks dynamic potential. White can maneuver freely and probe for weaknesses.",
+      "pawnStructure": "Black has an e4-d6 pawn chain. Solid but space-consuming. White's c4 pawn controls d5, and the d3 pawn challenges the chain base.",
+      "plans": [
+        "Maintain the solid pawn chain and use the space advantage",
+        "Develop the remaining pieces and look for counterplay on the kingside"
+      ],
       "arrows": [
-        { "from": "d6", "to": "e5", "color": "rgba(0, 100, 255, 0.8)" }
+        { "from": "d7", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "d6", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+      ],
+      "highlights": [
+        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" },
+        { "square": "d6", "color": "rgba(255, 255, 0, 0.4)" }
       ]
     },
     {
       "san": "a3",
-      "annotation": "We play a3, asking Black's bishop on b4 the critical question: retreat or exchange? This move gains time and prevents any future Nd4 ideas combined with the bishop pressure. If Black retreats the bishop, we've gained a useful tempo. If they exchange on c3, we get the bishop pair and open the b-file for our rook, which is excellent in this position.",
+      "annotation": "We ask the bishop a critical question: stay or go? The a3 move forces Black's dark-squared bishop on b4 to make a definitive decision. If it retreats to c5 or a5, we've gained time and can proceed with our plan. If it takes on c3, we get the bishop pair in an open position — usually a significant advantage. This is a well-timed move because our position is already well-developed and we can afford to spend a tempo clarifying the situation.",
+      "pawnStructure": "The a3 pawn gains space on the queenside and is a useful prophylactic move, preventing future ...Bb4 ideas.",
+      "plans": [
+        "Force the bishop to commit and potentially win the bishop pair",
+        "Follow up with b4, expanding on the queenside and gaining more space"
+      ],
+      "alternatives": [
+        "8.Nd5 — occupying the outpost immediately, but the bishop issue remains",
+        "8.Bg5 — developing with a pin, though Black can break it with ...h6"
+      ],
       "arrows": [
-        { "from": "a3", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" }
+        { "from": "a2", "to": "a3", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "a3", "to": "b4", "color": "rgba(255, 50, 50, 0.8)" }
+      ],
+      "highlights": [
+        { "square": "b4", "color": "rgba(255, 80, 80, 0.3)" }
       ]
     },
     {
       "san": "Bc5",
-      "annotation": "Black retreats the bishop to c5, a more active square than e7 or a5. From c5, the bishop targets the f2 pawn and the a7-g1 diagonal, maintaining some aggressive potential. However, the bishop can be hit by b4 later, and we've accomplished our goal of gaining a tempo. Our position is flexible and promising with plans involving dxe4, Nd5, or b4 depending on how Black continues.",
+      "annotation": "Black retreats the bishop to the active c5 square rather than exchanging on c3. This is a reasonable decision — the bishop on c5 aims at the vulnerable f2 square and stays in the game actively. However, Black has lost some time: the bishop moved from f8 to b4 and now to c5 — three tempi for a bishop development that could have been done in one. White has emerged from the opening with a comfortable position: solid fianchetto, flexible center, and the initiative.",
+      "pawnStructure": "Final main line structure: White has c4+d3+g3, Black has d6+e4. A rich strategic position with chances for both sides.",
+      "plans": [
+        "Keep the bishop actively placed on c5 targeting f2",
+        "Regroup and look for counterplay, potentially with ...f5 to support the e4 pawn"
+      ],
       "arrows": [
-        { "from": "c5", "to": "f2", "color": "rgba(220, 50, 50, 0.8)" }
+        { "from": "b4", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "c5", "to": "f2", "color": "rgba(255, 50, 50, 0.8)" }
       ],
       "highlights": [
+        { "square": "f2", "color": "rgba(255, 80, 80, 0.3)" },
         { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" }
+      ]
+    }
+  ],
+  "subLines": [
+    {
+      "name": "Reversed Sicilian",
+      "moveAnnotations": [
+        {
+          "san": "c4",
+          "annotation": "The same English Opening move, but in this variation Black will choose a different path that leads to the Reversed Sicilian — one of the most thematic and important structures in the English. We control d5 and keep all our options open.",
+          "pawnStructure": "Single c4 pawn. White's plan will become clear as a reversed Sicilian structure emerges.",
+          "plans": [
+            "Prepare a kingside fianchetto and flexible development",
+            "Aim for a reversed Sicilian where White has an extra tempo"
+          ],
+          "arrows": [
+            { "from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black occupies the center. This leads to a position where White essentially plays a Sicilian Defense with colors reversed and an extra move. In a normal Sicilian, Black plays ...c5 against 1.e4 — here White has played c4 against 1...e5, achieving the mirror image but with the advantage of moving first.",
+          "pawnStructure": "c4 vs e5 — the classic English asymmetry, mirror of the Sicilian's e4 vs c5.",
+          "arrows": [
+            { "from": "e7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Developing the knight to its natural square. In the Reversed Sicilian, the Nc3 supports our central play and keeps d5 under observation. We're building a flexible formation that mirrors many Sicilian Dragon or Najdorf structures from White's side.",
+          "pawnStructure": "Unchanged. Knights come out before pawns commit to a structure.",
+          "plans": [
+            "Develop both knights and fianchetto the kingside bishop",
+            "Maintain the reversed Sicilian character with a tempo advantage"
+          ],
+          "arrows": [
+            { "from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c3", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black continues with natural development. The knight on f6 controls d5 and e4, the two most important central squares. Both sides are developing harmoniously, and the critical moment will come when the pawn structure crystallizes.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We complete our knight development and put pressure on e5. The knight on f3 works with Nc3 to control the center. Now comes the key branching point: instead of the main line where Black plays ...Nc6, Black will play ...d5 here, leading into the sharp Reversed Sicilian proper.",
+          "pawnStructure": "Still c4 vs e5. The next few moves will define the character of the game.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5 and develops naturally. This transposes from the main line setup, but in this variation Black will soon play the ambitious ...d5 central break, which changes the character of the game entirely compared to the main line's quieter approach.",
+          "plans": [
+            "Support e5 and prepare ...d5 to strike at the center",
+            "Develop rapidly and fight for central control"
+          ],
+          "arrows": [
+            { "from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c6", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "We prepare the fianchetto as in the main line. The g2-bishop will be the cornerstone of our position, controlling the long diagonal. But here, Black has a concrete central break in mind that will test whether our fianchetto approach can handle a direct confrontation.",
+          "pawnStructure": "c4 + g3 for White. The fianchetto is the key setup, but Black is about to challenge it with ...d5.",
+          "plans": [
+            "Complete the fianchetto and use the bishop's diagonal power",
+            "Be ready to handle Black's ...d5 central break"
+          ],
+          "arrows": [
+            { "from": "g2", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "g2", "to": "a8", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "g2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "This is the defining move of the Reversed Sicilian variation. Black strikes at the center with ...d5, directly challenging our c4 pawn and opening the position. This is tactically justified because if we take cxd5, Black recaptures with the knight and gets active piece play. The position transforms from a quiet maneuvering game into a dynamic, open battle. White must handle this precisely.",
+          "pawnStructure": "The d5 advance creates central tension. After cxd5 Nxd5, Black gets active pieces but White retains the bishop pair potential and central outposts.",
+          "plans": [
+            "Strike at the center to open lines for Black's pieces",
+            "After cxd5 Nxd5, Black gets a well-placed knight and active play"
+          ],
+          "alternatives": [
+            "7...Be7 — quieter, maintaining the tension without committing",
+            "7...Bb4 — as in the main line, pinning the knight"
+          ],
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d5", "to": "c4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "We capture toward the center, which is almost always correct. Taking on d5 opens the c-file for our rook and clears the way for our fianchettoed bishop to dominate the long diagonal. The recapture will give Black an active knight on d5, but we have a concrete plan: complete development, castle, and then look to undermine that knight with d3 followed by moves like Be3 or Nd5 ourselves.",
+          "pawnStructure": "White has no center pawns yet (just g3). The position is open and piece activity matters most.",
+          "plans": [
+            "Open the c-file for rook activity after development",
+            "Complete the fianchetto and contest the center with d3"
+          ],
+          "arrows": [
+            { "from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black recaptures with the knight, placing it on the powerful d5 outpost. This knight is centralized and active, hitting c3 and controlling key squares. However, knights on outposts can be challenged — White has Bg2 aiming at it, and a future d3 + Be3 might encourage it to move. The position is dynamic and rich in possibilities for both sides.",
+          "pawnStructure": "Open center with no pawns on d- or c-files. Piece activity is everything now.",
+          "plans": [
+            "Centralize the knight on d5, the strongest outpost available",
+            "Coordinate pieces and look for active play in the center and kingside"
+          ],
+          "arrows": [
+            { "from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d5", "to": "c3", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "We complete the fianchetto, and now the bishop immediately exerts pressure on the d5 knight. This is the beauty of the fianchetto in the Reversed Sicilian: the bishop was waiting for exactly this moment. It X-rays through d5 all the way to a8, and the knight on d5 is under subtle but persistent pressure. The g2 bishop is arguably the best piece on the board.",
+          "pawnStructure": "Open center. The g2 bishop dominates the long diagonal with the d5 knight in its crosshairs.",
+          "plans": [
+            "Use the g2 bishop to pressure d5 and the long diagonal",
+            "Castle and then play d3, preparing Be3 to challenge the knight"
+          ],
+          "arrows": [
+            { "from": "f1", "to": "g2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "g2", "to": "d5", "color": "rgba(255, 50, 50, 0.8)" },
+            { "from": "g2", "to": "a8", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nb6",
+          "annotation": "Black wisely retreats the knight to b6, stepping off the dangerous d5 square where it was under fire from the g2 bishop and potentially from Nc3. The knight on b6 keeps an eye on c4 and d5, and Black plans to complete development with ...Be7 and ...O-O. While the retreat looks passive, it's actually prudent — staying on d5 would invite White to build pressure with d3 + Be3.",
+          "pawnStructure": "Open center. Black consolidates and prepares to finish development before engaging in the middlegame fight.",
+          "plans": [
+            "Retreat to safety and maintain control of c4 and d5",
+            "Complete development with ...Be7, ...O-O, and ...Be6"
+          ],
+          "alternatives": [
+            "11...Nxc3 — exchanging, but this helps White develop after bxc3 or dxc3"
+          ],
+          "arrows": [
+            { "from": "d5", "to": "b6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "b6", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "c4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle, getting our king to safety and connecting the rooks. With the center open, king safety is paramount. Our position is very comfortable: the g2 bishop is a monster, the knights are well-placed, and we have a clear plan of d3 followed by Be3. The Reversed Sicilian character means we're essentially playing a Sicilian with an extra move, which gives us a lasting positional edge.",
+          "pawnStructure": "Open position with both sides needing to complete development. White's fianchetto structure gives king safety.",
+          "plans": [
+            "Play d3 to support the center and prepare Be3",
+            "Open the position gradually and exploit the bishop pair"
+          ],
+          "arrows": [
+            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d2", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop modestly to e7. This is the safe choice — the bishop defends the kingside, prepares castling, and doesn't commit to an aggressive diagonal yet. Compared to ...Bc5 or ...Bb4, this is less ambitious but more solid. Black is prioritizing completing development and getting castled before looking for active play.",
+          "pawnStructure": "Unchanged. Black is finishing development before creating any new pawn weaknesses.",
+          "plans": [
+            "Complete development solidly and castle kingside",
+            "Reposition pieces after castling, potentially with ...Bf6 or ...Bg5 later"
+          ],
+          "alternatives": [
+            "13...Bc5 — more aggressive, aiming at f2",
+            "13...Bb4 — pinning the knight, but less effective with the king already castled"
+          ],
+          "arrows": [
+            { "from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e7", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "We establish our central pawn, supporting a future e4 advance and giving our dark-squared bishop access to e3. The d3 pawn is a key part of our setup: it controls e4 and c4, and combined with our fianchetto, gives us a very harmonious position. This is typical Reversed Sicilian strategy — build slowly, maintain control, and strike when the time is right.",
+          "pawnStructure": "White has d3 + c-file open. The pawn on d3 is flexible — White can later play e4 for a central majority or keep things closed.",
+          "plans": [
+            "Play Be3 to develop the last minor piece and challenge the b6 knight",
+            "Prepare a future e4 advance to seize central space"
+          ],
+          "arrows": [
+            { "from": "d2", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c1", "to": "e3", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, completing the fundamental development phase. Both sides now have their kings safe and rooks connected. The middlegame battle will center on White's superior long-diagonal bishop and space advantage versus Black's solid but slightly passive setup. White has a pleasant position with clear plans, while Black needs to find active counterplay.",
+          "pawnStructure": "Both sides castled kingside. White's d3 + g3 structure is solid and flexible.",
+          "plans": [
+            "Get the king safe and prepare to fight for central influence",
+            "Look for ...f5 or ...Nd5 to activate pieces in the middlegame"
+          ],
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Be3",
+          "annotation": "We develop our last minor piece to the ideal square. The bishop on e3 does several things at once: it eyes the b6 knight (threatening Bc5 ideas in some lines), supports a future d4 push, and controls the dark squares in the center. Our development is now complete and every piece is well-placed. This is a textbook example of how to play the Reversed Sicilian — patient development with every piece on a good square.",
+          "pawnStructure": "White's setup is complete: c-file open, d3 solid, g2 bishop dominant, e3 bishop active.",
+          "plans": [
+            "Consider Rc1 to seize the open c-file",
+            "Prepare d4 or Nd5 to increase central control"
+          ],
+          "arrows": [
+            { "from": "c1", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e3", "to": "b6", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "b6", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black develops the last minor piece, placing it on e6 where it defends d5 and connects with the knight on b6. The bishop on e6 is solid but somewhat passive — it's doing defensive work rather than creating threats. White has achieved a comfortable advantage from the opening: better piece placement, more space, and clearer plans. The Reversed Sicilian has delivered exactly what we hoped for.",
+          "pawnStructure": "Final position of the Reversed Sicilian subline. White has a slight but lasting positional edge thanks to the fianchetto and superior piece coordination.",
+          "plans": [
+            "Solidify the position and defend d5 with the bishop",
+            "Look for ...d5 or ...f5 breaks to equalize"
+          ],
+          "arrows": [
+            { "from": "c8", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "e6", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        }
       ]
     }
   ]
