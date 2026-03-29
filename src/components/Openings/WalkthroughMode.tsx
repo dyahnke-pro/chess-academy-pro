@@ -95,6 +95,7 @@ export function WalkthroughMode({
   // Ref for TTS boundary callback — updated per annotation
   const boundaryHandlerRef = useRef<((charIndex: number) => void) | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+  const isAutoPlayingRef = useRef(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('normal');
 
   // Do NOT auto-load Kokoro here — the 87 MB WASM model causes OOM crashes
@@ -350,6 +351,11 @@ export function WalkthroughMode({
     : Math.floor((currentMoveIndex - 1) / 2) + 1;
   const displayIsWhite = currentMoveIndex === 0 || (currentMoveIndex - 1) % 2 === 0;
 
+  // Keep ref in sync with state so closures can read current value
+  useEffect(() => {
+    isAutoPlayingRef.current = isAutoPlaying;
+  }, [isAutoPlaying]);
+
   // Auto-play timeout ref (dynamic per-move delay)
   const autoPlayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -370,6 +376,9 @@ export function WalkthroughMode({
       const nextIndex = prev + 1;
 
       const advanceToNext = (): void => {
+        // Don't advance if auto-play was paused
+        if (!isAutoPlayingRef.current) return;
+
         // Clear both triggers to prevent double-advance
         if (autoPlayRef.current) {
           clearTimeout(autoPlayRef.current);
@@ -499,12 +508,24 @@ export function WalkthroughMode({
   const toggleAutoPlay = useCallback(() => {
     unlockAudioContext();
     setIsAutoPlaying((prev) => {
-      if (!prev && currentMoveIndex >= expectedMoves.length) {
-        // Reset to beginning if at end
+      if (prev) {
+        // Pausing — stop voice immediately and clear pending callbacks
+        voiceService.stop();
+        ttsFinishedRef.current = null;
+        if (autoPlayRef.current) {
+          clearTimeout(autoPlayRef.current);
+          autoPlayRef.current = null;
+        }
+        isAutoPlayingRef.current = false;
+        return false;
+      }
+      // Starting — reset if at end
+      if (currentMoveIndex >= expectedMoves.length) {
         setCurrentMoveIndex(0);
         setBoardKey((k) => k + 1);
       }
-      return !prev;
+      isAutoPlayingRef.current = true;
+      return true;
     });
   }, [currentMoveIndex, expectedMoves.length]);
 

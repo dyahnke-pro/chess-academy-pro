@@ -36,6 +36,7 @@ const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
 
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
+  private abortController: AbortController | null = null;
   private playing = false;
   private speed = 1.0;
 
@@ -78,6 +79,11 @@ class VoiceService {
   }
 
   stop(): void {
+    // Abort any in-flight Polly fetch
+    if (this.abortController) {
+      this.abortController.abort();
+      this.abortController = null;
+    }
     if (this.currentSource) {
       try {
         this.currentSource.stop();
@@ -96,16 +102,21 @@ class VoiceService {
 
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
+      this.abortController = new AbortController();
       const url = getTtsUrl(text, voice);
-      const response = await fetch(url);
+      const response = await fetch(url, { signal: this.abortController.signal });
       if (!response.ok) {
         console.warn('[VoiceService] Polly API error:', response.status);
         return false;
       }
       const arrayBuffer = await response.arrayBuffer();
+      this.abortController = null;
       await this.playAudioBuffer(arrayBuffer);
       return true;
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return false;
+      }
       console.warn('[VoiceService] Polly TTS failed:', error);
       this.playing = false;
       this.currentSource = null;
