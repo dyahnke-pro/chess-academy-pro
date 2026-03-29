@@ -2228,7 +2228,7 @@
     "id": "benko-gambit",
     "eco": "A57",
     "name": "Benko Gambit",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O",
     "color": "black",
     "style": "Positional, Gambit",
     "overview": "The Benko Gambit is one of the most spectacular positional gambits in chess. After 3...b5, Black sacrifices a pawn to rip open the a- and b-files and get long-lasting queenside pressure. The beauty of this opening is that Black's compensation doesn't fade — those open files and the fianchettoed bishop on g7 create permanent pressure that can last well into the endgame.",
