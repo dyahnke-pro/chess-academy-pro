@@ -33,6 +33,7 @@ export function SrsGradeButtons({
             onClick={() => onGrade(grade)}
             disabled={disabled}
             className={`flex-1 px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors disabled:opacity-40 ${color}`}
+            aria-label={`Rate as ${grade}: ${label}`}
             data-testid={`grade-${grade}`}
           >
             {label}

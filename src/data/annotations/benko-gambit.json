@@ -224,40 +224,40 @@
       "highlights": [{"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
-      "san": "Rxc4",
-      "annotation": "White recaptures with the rook, placing it on the open c-file. The rook is active on c4 but must also worry about defending the second rank. White's position is solid but passive — the hallmark of the Benko from the defender's perspective.",
-      "plans": ["Use the c4 rook actively if possible", "Try to exchange rooks to reduce the pressure"],
-      "arrows": [{"from": "e2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "san": "Rc2",
+      "annotation": "White slides the rook to the c-file, contesting it while keeping the second rank defended. The rook on c2 is solid but passive — the hallmark of the Benko from the defender's perspective. White must carefully coordinate pieces to avoid being overwhelmed on the queenside.",
+      "plans": ["Contest the c-file with the rook", "Try to coordinate pieces for a defensive setup"],
+      "arrows": [{"from": "e2", "to": "c2", "color": "rgba(0, 180, 80, 0.8)"}],
+      "highlights": [{"square": "c2", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
       "san": "Nd7",
-      "annotation": "Black reroutes the knight, heading for e5 or c5 where it can attack the c4 rook and contest key central squares. The knight maneuver is typical of the Benko — pieces keep finding strong squares while White struggles to find active counterplay.",
+      "annotation": "Black reroutes the knight, heading for e5 where it can dominate the center and contest key squares. The knight maneuver is typical of the Benko — pieces keep finding strong squares while White struggles to find active counterplay.",
       "pawnStructure": "The position is still asymmetric. Black has open files and active pieces compensating for the pawn deficit. Endgames tend to favor Black.",
-      "plans": ["Play ...Ne5 to attack the c4 rook and dominate the center", "Alternatively ...Nc5 to pressure a4 and e4"],
+      "plans": ["Play ...Ne5 to dominate the center", "Alternatively ...Nc5 to pressure a4 and e4"],
       "arrows": [{"from": "f6", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "d7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)"}],
       "highlights": [{"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
-      "san": "Qc2",
-      "annotation": "White centralizes the queen, connecting it to the c4 rook and defending the e4 pawn. The queen on c2 is well-placed but White remains passive. This is a common defensive setup in the Benko — White tries to hold everything together while looking for chances to break free.",
-      "plans": ["Coordinate queen and rook on the c-file", "Prepare Bd2 and Rac1 to double rooks"],
-      "arrows": [{"from": "d1", "to": "c2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "c2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "san": "Qd3",
+      "annotation": "White centralizes the queen, defending the e4 pawn and keeping an eye on the queenside. The queen on d3 is well-placed but White remains passive. This is a common defensive setup in the Benko — White tries to hold everything together while looking for chances to break free.",
+      "plans": ["Defend e4 and maintain central control", "Prepare Bd2 to develop the last minor piece"],
+      "arrows": [{"from": "d1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}],
+      "highlights": [{"square": "d3", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
-      "san": "Ne5",
-      "annotation": "The knight lands on the powerful e5 outpost, attacking the c4 rook and controlling critical central squares. This is a dream square for the Benko knight — it radiates influence in all directions and cannot be easily challenged. The knight on e5 supports tactics along the c-file and b-file.",
-      "plans": ["Force the rook to move from c4", "Use the knight to support infiltration on the queenside", "Prepare ...Qa3 or ...Qb4 to increase pressure"],
-      "arrows": [{"from": "d7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e5", "to": "c4", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "e5", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}],
+      "san": "Nde5",
+      "annotation": "The knight lands on the powerful e5 outpost, controlling critical central squares. This is a dream square for the Benko knight — it radiates influence in all directions and cannot be easily challenged. The knight on e5 supports tactics along the c-file and b-file.",
+      "plans": ["Use the knight to support infiltration on the queenside", "Prepare ...Qa3 or ...Qb4 to increase pressure", "Threaten ...Nd3 to fork key squares"],
+      "arrows": [{"from": "d7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e5", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "e5", "to": "c6", "color": "rgba(0, 100, 255, 0.7)"}],
       "highlights": [{"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
-      "san": "Rc1",
-      "annotation": "White retreats the rook to c1 to avoid the knight's attack while maintaining presence on the c-file. This is a concession — the rook was more active on c4 but had no choice. White's pieces are now passively defending.",
-      "plans": ["Hold the c-file and try to maintain defensive coordination", "Look for a chance to break free with f4 or Nb5"],
-      "arrows": [{"from": "c4", "to": "c1", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "c1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "san": "Qe2",
+      "annotation": "White retreats the queen to e2 to defend the second rank and keep pieces coordinated. This is a concession — the queen was more active on d3 but the knight on e5 controls too many squares. White's pieces are now passively defending.",
+      "plans": ["Defend the second rank and maintain coordination", "Look for a chance to break free with f4 or Nb5"],
+      "arrows": [{"from": "d3", "to": "e2", "color": "rgba(0, 180, 80, 0.8)"}],
+      "highlights": [{"square": "e2", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
       "san": "Qa3",
@@ -274,10 +274,10 @@
       "highlights": [{"square": "d2", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
-      "san": "Rb2",
-      "annotation": "Black invades the second rank with devastating effect. The rook on b2 is incredibly powerful, threatening to win material and creating mating threats in conjunction with the other pieces. This is the Benko at its best — relentless pressure building into a decisive invasion.",
-      "plans": ["Double rooks on the second rank if possible", "Target the d2 bishop and a2 pawn", "Create tactical threats in combination with the queen and knight"],
-      "arrows": [{"from": "b8", "to": "b2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b2", "to": "a2", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "b2", "to": "d2", "color": "rgba(220, 50, 50, 0.7)"}],
+      "san": "Rxb2",
+      "annotation": "Black invades the second rank with devastating effect, capturing the b2 pawn. The rook on b2 is incredibly powerful, threatening to win more material and creating threats in conjunction with the other pieces. This is the Benko at its best — relentless pressure building into a decisive invasion.",
+      "plans": ["Double rooks on the second rank if possible", "Target the a2 pawn next", "Create tactical threats in combination with the queen and knight"],
+      "arrows": [{"from": "b8", "to": "b2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b2", "to": "a2", "color": "rgba(220, 50, 50, 0.7)"}],
       "highlights": [{"square": "b2", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}]
     },
     {
@@ -288,10 +288,10 @@
       "highlights": [{"square": "e1", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
-      "san": "Ra2",
-      "annotation": "Black doubles on the second rank with devastating force. The two rooks on the second rank create enormous tactical threats, particularly against the king. The a2 pawn falls and White's position is crumbling. This is a textbook Benko endgame — the pressure converts to material gain.",
+      "san": "Rxa2",
+      "annotation": "Black doubles on the second rank with devastating force, capturing the a2 pawn. The two rooks on the second rank create enormous tactical threats, particularly against the king. White's position is crumbling. This is a textbook Benko endgame — the pressure converts to material gain.",
       "pawnStructure": "Black has successfully recovered the gambit pawn and now has two rooks dominating White's second rank. The positional advantage is decisive.",
-      "plans": ["Win the a2 pawn and create passed pawns", "Coordinate all pieces for the final assault", "Convert the material and positional advantage"],
+      "plans": ["Create passed pawns on the queenside", "Coordinate all pieces for the final assault", "Convert the material and positional advantage"],
       "arrows": [{"from": "a8", "to": "a2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a2", "to": "a1", "color": "rgba(220, 50, 50, 0.7)"}],
       "highlights": [{"square": "a2", "color": "rgba(255, 255, 0, 0.4)"}]
     },
@@ -304,11 +304,11 @@
       "highlights": [{"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "d6", "color": "rgba(255, 80, 80, 0.3)"}]
     },
     {
-      "san": "Rxb2",
-      "annotation": "Black calmly captures the b2 pawn, now up material with a completely winning position. The rook remains active on the second rank and White's counterplay with Nb5 is too slow. Black has achieved the ultimate Benko dream — converting the long-term pressure into a decisive material advantage.",
-      "plans": ["Simplify into a winning endgame", "Use the extra pawns and active pieces to force resignation"],
-      "arrows": [{"from": "a2", "to": "b2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "san": "Rxc2",
+      "annotation": "Black captures the rook on c2, winning the exchange and achieving a completely winning position. White's counterplay with Nb5 is too slow. Black has achieved the ultimate Benko dream — converting the long-term pressure into a decisive material advantage.",
+      "plans": ["Simplify into a winning endgame", "Use the extra material and active pieces to force resignation"],
+      "arrows": [{"from": "a2", "to": "c2", "color": "rgba(220, 50, 50, 0.7)"}],
+      "highlights": [{"square": "c2", "color": "rgba(255, 255, 0, 0.4)"}]
     },
     {
       "san": "Nxd6",
@@ -319,10 +319,10 @@
     },
     {
       "san": "Nd3",
-      "annotation": "Black's knight invades to d3, a devastating square that forks the e1 bishop and c1 rook. This tactical blow is the culmination of the Benko pressure — Black's piece activity generates concrete threats that win material. The knight on d3 is immune to capture due to the double attack.",
-      "plans": ["Win the exchange or more material", "Convert the overwhelming advantage into checkmate"],
-      "arrows": [{"from": "e5", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d3", "to": "e1", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "d3", "to": "c1", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "d3", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e1", "color": "rgba(255, 80, 80, 0.3)"}, {"square": "c1", "color": "rgba(255, 80, 80, 0.3)"}]
+      "annotation": "Black's knight invades to d3, a devastating square that forks the e1 bishop and e2 queen. This tactical blow is the culmination of the Benko pressure — Black's piece activity generates concrete threats that win material. The knight on d3 is immune to capture due to the double attack.",
+      "plans": ["Win the queen or bishop", "Convert the overwhelming advantage into checkmate"],
+      "arrows": [{"from": "e5", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d3", "to": "e1", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "d3", "to": "e2", "color": "rgba(220, 50, 50, 0.7)"}],
+      "highlights": [{"square": "d3", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e1", "color": "rgba(255, 80, 80, 0.3)"}, {"square": "e2", "color": "rgba(255, 80, 80, 0.3)"}]
     }
   ]
 }

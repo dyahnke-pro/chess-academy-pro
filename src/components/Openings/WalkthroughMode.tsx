@@ -3,15 +3,19 @@ import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
 import { ChessBoard } from '../Board/ChessBoard';
+import { EngineLines } from '../Board/EngineLines';
+import { LichessLines } from '../Board/LichessLines';
+import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { BoardControls } from '../Board/BoardControls';
+import { useSettings } from '../../hooks/useSettings';
 import { AnnotationCard } from './AnnotationCard';
-import { speechService } from '../../services/speechService';
-import { voicePackService } from '../../services/voicePackService';
+import { voiceService } from '../../services/voiceService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
-import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowRight, Play, Pause } from 'lucide-react';
 
 export interface WalkthroughModeProps {
@@ -63,8 +67,6 @@ export function WalkthroughMode({
   // would break iOS Safari's user-gesture context for Web Speech API).
   const activeProfile = useAppStore((s) => s.activeProfile);
   const voiceEnabled = activeProfile?.preferences.voiceEnabled ?? true;
-  const kokoroEnabled = activeProfile?.preferences.kokoroEnabled ?? false;
-  const kokoroVoiceId = activeProfile?.preferences.kokoroVoiceId ?? 'af_bella';
 
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
@@ -93,16 +95,30 @@ export function WalkthroughMode({
   // Ref for TTS boundary callback — updated per annotation
   const boundaryHandlerRef = useRef<((charIndex: number) => void) | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+  const isAutoPlayingRef = useRef(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('normal');
 
   // Do NOT auto-load Kokoro here — the 87 MB WASM model causes OOM crashes
   // on iOS Safari. Kokoro only loads when the user explicitly taps
   // "Download Voice Model" in Settings > Coach > HD Voice.
 
+  // Analysis toggle overrides
+  const { settings } = useSettings();
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
+  const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
+  const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
+
   // Stockfish eval state
   const [latestEval, setLatestEval] = useState<number | null>(null);
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+  const [latestTopLines, setLatestTopLines] = useState<AnalysisLine[]>([]);
+
+  // Lichess cloud eval state
+  const [lichessOverride, setLichessOverride] = useState<boolean | null>(null);
+  const showLichessEffective = lichessOverride ?? false;
+  const [cloudEval, setCloudEval] = useState<LichessCloudEval | null>(null);
 
   // Track last move highlight
   const lastMove = useMemo((): { from: string; to: string } | null => {
@@ -158,6 +174,7 @@ export function WalkthroughMode({
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
+          setLatestTopLines(analysis.topLines ?? []);
         }
       } catch {
         // Stockfish not ready yet
@@ -165,6 +182,20 @@ export function WalkthroughMode({
     })();
     return () => { cancelled = true; };
   }, [currentFen]);
+
+  // Lichess cloud eval on position change
+  useEffect(() => {
+    if (!showLichessEffective) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result = await fetchCloudEval(currentFen, 3);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) setCloudEval(result);
+      } catch { /* Cloud eval not available */ }
+    })();
+    return () => { cancelled = true; };
+  }, [currentFen, showLichessEffective]);
 
   // Current annotation for the move that was just played
   const currentAnnotation = useMemo((): OpeningMoveAnnotation | null => {
@@ -320,6 +351,11 @@ export function WalkthroughMode({
     : Math.floor((currentMoveIndex - 1) / 2) + 1;
   const displayIsWhite = currentMoveIndex === 0 || (currentMoveIndex - 1) % 2 === 0;
 
+  // Keep ref in sync with state so closures can read current value
+  useEffect(() => {
+    isAutoPlayingRef.current = isAutoPlaying;
+  }, [isAutoPlaying]);
+
   // Auto-play timeout ref (dynamic per-move delay)
   const autoPlayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -340,6 +376,9 @@ export function WalkthroughMode({
       const nextIndex = prev + 1;
 
       const advanceToNext = (): void => {
+        // Don't advance if auto-play was paused
+        if (!isAutoPlayingRef.current) return;
+
         // Clear both triggers to prevent double-advance
         if (autoPlayRef.current) {
           clearTimeout(autoPlayRef.current);
@@ -363,14 +402,22 @@ export function WalkthroughMode({
       // Fallback timer in case TTS doesn't fire onEnd (voice disabled, no annotation, etc.)
       const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
       const spokenText = ann?.annotation;
-      const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
-      // Add extra buffer so TTS end event has priority
-      autoPlayRef.current = setTimeout(advanceToNext, delay + 1500);
+
+      if (voiceEnabled && spokenText) {
+        // When voice is active, Polly fetch + playback can take much longer than
+        // the estimated reading time. Use a generous safety-net timeout and let
+        // ttsFinishedRef handle the normal advance when narration actually ends.
+        autoPlayRef.current = setTimeout(advanceToNext, 30_000);
+      } else {
+        // Voice off or no annotation — use reading-time estimate
+        const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
+        autoPlayRef.current = setTimeout(advanceToNext, delay + 1500);
+      }
 
       setBoardKey((k) => k + 1);
       return nextIndex;
     });
-  }, [expectedMoves.length, annotations, autoPlaySpeed]);
+  }, [expectedMoves.length, annotations, autoPlaySpeed, voiceEnabled]);
 
   // Auto-play logic: kick off the chain when play starts
   useEffect(() => {
@@ -405,7 +452,7 @@ export function WalkthroughMode({
   // Track when TTS finishes speaking — used to advance auto-play immediately
   const ttsFinishedRef = useRef<(() => void) | null>(null);
 
-  // TTS narration when move changes — tries Kokoro first, falls back to Web Speech
+  // TTS narration when move changes — tries Polly first, falls back to Web Speech
   useEffect(() => {
     if (currentMoveIndex === 0) return;
     if (!annotations) return;
@@ -415,66 +462,29 @@ export function WalkthroughMode({
 
     let cancelled = false;
 
-    // iOS Safari requires Web Speech to be called synchronously within the
-    // user-gesture task — any preceding await breaks that context and the
-    // utterance is silently dropped. We read voice prefs from Zustand
-    // (synchronous) so the common Web Speech path never awaits.
-    const voicePackReady = kokoroEnabled && voicePackService.isReady();
+    void voiceService.speak(ann.annotation).then(() => {
+      if (!cancelled) {
+        ttsFinishedRef.current?.();
+      }
+    });
 
-    if (voicePackReady) {
-      // Voice pack loaded — try pre-rendered clip first, fall back to Web Speech
-      void (async () => {
-        try {
-          const played = await voicePackService.speak(ann.annotation, TTS_RATE[autoPlaySpeed]);
-          if (!cancelled) {
-            if (played) {
-              setVisibleArrowCount(ann.arrows?.length ?? 0);
-              setVisibleHighlightCount(ann.highlights?.length ?? 0);
-              ttsFinishedRef.current?.();
-            } else {
-              // Clip not in pack — fall back to Web Speech
-              speechService.speak(ann.annotation, {
-                rate: TTS_RATE[autoPlaySpeed],
-                onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-                onEnd: () => ttsFinishedRef.current?.(),
-              });
-            }
-          }
-        } catch {
-          if (!cancelled) {
-            speechService.speak(ann.annotation, {
-              rate: TTS_RATE[autoPlaySpeed],
-              onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-              onEnd: () => ttsFinishedRef.current?.(),
-            });
-          }
-        }
-      })();
-    } else {
-      // Web Speech — called synchronously so iOS gesture context is preserved
-      speechService.speak(ann.annotation, {
-        rate: TTS_RATE[autoPlaySpeed],
-        onBoundary: (charIndex) => boundaryHandlerRef.current?.(charIndex),
-        onEnd: () => ttsFinishedRef.current?.(),
-      });
-    }
-
-    return () => { cancelled = true; };
-  }, [voiceEnabled, kokoroEnabled, kokoroVoiceId, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
+    return () => {
+      cancelled = true;
+      voiceService.stop();
+    };
+  }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
 
   // Clean up speech on unmount
   useEffect(() => {
     return () => {
-      speechService.stop();
-      voicePackService.stop();
+      voiceService.stop();
     };
   }, []);
 
   // Navigation handlers
   const goToMove = useCallback((idx: number) => {
     setIsAutoPlaying(false);
-    speechService.stop();
-    voicePackService.stop();
+    voiceService.stop();
     setCurrentMoveIndex(idx);
     setBoardKey((k) => k + 1);
   }, []);
@@ -482,16 +492,13 @@ export function WalkthroughMode({
   const handleFirst = useCallback(() => goToMove(0), [goToMove]);
   const handlePrev = useCallback(() => {
     unlockAudioContext();
-    speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
-    speechService.stop();
-    voicePackService.stop();
+    voiceService.stop();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.max(0, prev - 1));
     setBoardKey((k) => k + 1);
   }, []);
   const handleNext = useCallback(() => {
     unlockAudioContext();
-    speechService.warmupInGestureContext(); // unlock iOS Web Speech before async effect fires
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.min(expectedMoves.length, prev + 1));
     setBoardKey((k) => k + 1);
@@ -500,14 +507,25 @@ export function WalkthroughMode({
 
   const toggleAutoPlay = useCallback(() => {
     unlockAudioContext();
-    speechService.warmupInGestureContext(); // unlock iOS Web Speech
     setIsAutoPlaying((prev) => {
-      if (!prev && currentMoveIndex >= expectedMoves.length) {
-        // Reset to beginning if at end
+      if (prev) {
+        // Pausing — stop voice immediately and clear pending callbacks
+        voiceService.stop();
+        ttsFinishedRef.current = null;
+        if (autoPlayRef.current) {
+          clearTimeout(autoPlayRef.current);
+          autoPlayRef.current = null;
+        }
+        isAutoPlayingRef.current = false;
+        return false;
+      }
+      // Starting — reset if at end
+      if (currentMoveIndex >= expectedMoves.length) {
         setCurrentMoveIndex(0);
         setBoardKey((k) => k + 1);
       }
-      return !prev;
+      isAutoPlayingRef.current = true;
+      return true;
     });
   }, [currentMoveIndex, expectedMoves.length]);
 
@@ -542,6 +560,14 @@ export function WalkthroughMode({
             <p className="text-xs text-theme-text-muted">{opening.eco} &middot; {opening.style}</p>
           </div>
         </div>
+        <AnalysisToggles
+          showEvalBar={showEvalBarEffective}
+          onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+          showEngineLines={showEngineLinesEffective}
+          onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+          showLichessLines={showLichessEffective}
+          onToggleLichessLines={() => setLichessOverride((prev) => !(prev ?? false))}
+        />
       </div>
 
       {/* Progress bar */}
@@ -572,7 +598,7 @@ export function WalkthroughMode({
             showFlipButton={true}
             showUndoButton={false}
             showResetButton={false}
-            showEvalBar={true}
+            showEvalBar={showEvalBarEffective}
             evaluation={latestEval}
             isMate={latestIsMate}
             mateIn={latestMateIn}
@@ -580,6 +606,12 @@ export function WalkthroughMode({
             arrows={boardArrows}
             annotationHighlights={boardHighlights}
           />
+          {showEngineLinesEffective && latestTopLines.length > 0 && (
+            <EngineLines lines={latestTopLines} fen={currentFen} className="mt-1" />
+          )}
+          {showLichessEffective && cloudEval && (
+            <LichessLines cloudEval={cloudEval} fen={currentFen} className="mt-1" />
+          )}
         </div>
       </div>
 

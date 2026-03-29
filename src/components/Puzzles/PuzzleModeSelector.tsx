@@ -22,6 +22,7 @@ export function PuzzleModeSelector({ onSelectMode }: PuzzleModeSelectorProps): J
           key={config.mode}
           onClick={() => onSelectMode(config.mode)}
           className="flex flex-col items-start gap-2 p-4 rounded-lg bg-theme-surface hover:bg-theme-border border border-theme-border transition-colors text-left group"
+          aria-label={`${config.label}: ${config.description}`}
           data-testid={`mode-${config.mode}`}
         >
           <div className="flex items-center gap-3 w-full">

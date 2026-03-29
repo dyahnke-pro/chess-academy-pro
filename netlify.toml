@@ -1,0 +1,15 @@
+[build]
+  command = "npx vite build"
+  publish = "dist"
+
+# Proxy voice pack downloads from GitHub Releases (avoids CORS + keeps same domain)
+[[redirects]]
+  from = "/voice-packs/*"
+  to = "https://github.com/dyahnke-pro/chess-academy-pro/releases/download/voice-packs-v1/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

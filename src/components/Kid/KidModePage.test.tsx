@@ -94,6 +94,8 @@ function createProfile(): UserProfile {
       moveMethod: 'both',
       moveConfirmation: false,
       autoPromoteQueen: true,
+      pollyEnabled: false,
+      pollyVoice: 'ruth',
       masterAllOff: false,
     },
   };

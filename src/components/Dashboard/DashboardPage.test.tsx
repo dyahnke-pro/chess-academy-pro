@@ -212,6 +212,7 @@ describe('DashboardPage', () => {
       expect(screen.getByTestId('quick-action-openings')).toBeInTheDocument();
       expect(screen.getByTestId('quick-action-play')).toBeInTheDocument();
       expect(screen.getByTestId('quick-action-coach')).toBeInTheDocument();
+      expect(screen.getByTestId('quick-action-import')).toBeInTheDocument();
     });
   });
 
@@ -231,6 +232,9 @@ describe('DashboardPage', () => {
 
     fireEvent.click(screen.getByTestId('quick-action-coach'));
     expect(mockNavigate).toHaveBeenCalledWith('/coach');
+
+    fireEvent.click(screen.getByTestId('quick-action-import'));
+    expect(mockNavigate).toHaveBeenCalledWith('/games');
   });
 
   it('shows puzzle stats when data is available', async () => {

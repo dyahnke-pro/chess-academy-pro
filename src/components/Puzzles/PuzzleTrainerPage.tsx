@@ -297,15 +297,15 @@ export function PuzzleTrainerPage(): JSX.Element {
           {session.mode !== 'daily_challenge' && (
             <div className="flex gap-6 text-sm">
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-500">{session.solved}</div>
+                <div className="text-2xl font-bold" style={{ color: 'var(--color-success)' }}>{session.solved}</div>
                 <div className="text-theme-text-muted">Solved</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-red-500">{session.failed}</div>
+                <div className="text-2xl font-bold" style={{ color: 'var(--color-error)' }}>{session.failed}</div>
                 <div className="text-theme-text-muted">Failed</div>
               </div>
               <div className="text-center">
-                <div className={`text-2xl font-bold ${session.ratingChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                <div className="text-2xl font-bold" style={{ color: session.ratingChange >= 0 ? 'var(--color-success)' : 'var(--color-error)' }}>
                   {session.ratingChange >= 0 ? '+' : ''}{session.ratingChange}
                 </div>
                 <div className="text-theme-text-muted">Rating</div>

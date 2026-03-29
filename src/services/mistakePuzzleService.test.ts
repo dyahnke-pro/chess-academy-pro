@@ -91,12 +91,19 @@ describe('mistakePuzzleService', () => {
       expect(blunder!.playerColor).toBe('white');
       expect(blunder!.status).toBe('unsolved');
       expect(blunder!.promptText).toBe('Oops — this was a serious mistake. Find the best move.');
+      expect(blunder!.playerMoveSan).toBe('Ng5');
+      expect(blunder!.narration).toBeDefined();
+      expect(blunder!.narration.intro).toBeTruthy();
+      expect(blunder!.narration.outro).toBeTruthy();
+      expect(Array.isArray(blunder!.narration.moveNarrations)).toBe(true);
 
       // Second puzzle: d3 mistake (move 4)
       const mistake = puzzles.find((p) => p.classification === 'mistake');
       expect(mistake).toBeDefined();
       expect(mistake!.moveNumber).toBe(4);
       expect(mistake!.bestMove).toBe('e4d5');
+      expect(mistake!.playerMoveSan).toBe('d3');
+      expect(mistake!.narration.intro).toBeTruthy();
     });
 
     it('is idempotent — no duplicates on second call', async () => {
@@ -360,7 +367,7 @@ describe('mistakePuzzleService', () => {
 
       const updated = await db.mistakePuzzles.get('grade-1');
       expect(updated!.srsRepetitions).toBe(1);
-      expect(updated!.srsInterval).toBe(1);
+      expect(updated!.srsInterval).toBe(3); // FSRS initial stability for 'good' → ~3 days
       expect(updated!.attempts).toBe(1);
       expect(updated!.successes).toBe(1);
       expect(updated!.status).toBe('solved');
@@ -370,7 +377,8 @@ describe('mistakePuzzleService', () => {
       const puzzle = buildMistakePuzzle({
         id: 'grade-2',
         srsRepetitions: 2,
-        srsInterval: 6,
+        srsInterval: 10,
+        srsEaseFactor: 987, // FSRS stability after 2 good reviews
         status: 'solved',
         successes: 2,
       });
@@ -380,7 +388,7 @@ describe('mistakePuzzleService', () => {
 
       const updated = await db.mistakePuzzles.get('grade-2');
       expect(updated!.srsRepetitions).toBe(0);
-      expect(updated!.srsInterval).toBe(1);
+      expect(updated!.srsInterval).toBeGreaterThanOrEqual(1);
       expect(updated!.attempts).toBe(1);
       expect(updated!.successes).toBe(2); // unchanged
       expect(updated!.status).toBe('solved'); // stays solved since successes > 0
@@ -390,8 +398,8 @@ describe('mistakePuzzleService', () => {
       const puzzle = buildMistakePuzzle({
         id: 'grade-3',
         srsRepetitions: 2,
-        srsInterval: 6,
-        srsEaseFactor: 2.5,
+        srsInterval: 10,
+        srsEaseFactor: 987, // FSRS stability after 2 good reviews
         status: 'solved',
         successes: 2,
       });

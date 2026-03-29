@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX, ArrowLeft, Map, Swords, Shield, Footprints, Gamepad2, Puzzle } from 'lucide-react';
+import { Volume2, VolumeX, ArrowLeft, Map, Swords, Shield, Footprints, Gamepad2, Puzzle, Play } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { getGameProgress, getGameCompletedChapterCount } from '../../services/journeyService';
@@ -202,6 +202,27 @@ export function KidModePage(): JSX.Element {
               </div>
             </div>
             <span className="text-2xl">🧩</span>
+          </button>
+
+          {/* Play a Game (Guided Game Tutorial) */}
+          <button
+            onClick={() => void navigate('/kid/play-games')}
+            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+            style={{
+              background: 'var(--color-surface)',
+              borderColor: 'var(--color-accent)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+            }}
+            data-testid="play-games-card"
+          >
+            <Play size={28} style={{ color: 'var(--color-accent)' }} />
+            <div className="flex-1">
+              <div className="font-bold text-lg">Play a Game</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                Walk through famous chess games move by move!
+              </div>
+            </div>
+            <span className="text-2xl">♟️</span>
           </button>
 
           {/* Games section */}

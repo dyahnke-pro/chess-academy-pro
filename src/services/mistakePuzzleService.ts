@@ -2,6 +2,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
+import { generateMistakeNarration } from './mistakeNarration';
 import type {
   MistakePuzzle,
   MistakeClassification,
@@ -13,11 +14,40 @@ import type {
   MoveAnnotation,
 } from '../types';
 
+// ─── Game context helpers ──────────────────────────────────────────────────
+
+interface GameContext {
+  opponentName: string | null;
+  gameDate: string | null;
+  openingName: string | null;
+}
+
+async function resolveGameContext(
+  game: GameRecord,
+  playerColor: 'white' | 'black',
+): Promise<GameContext> {
+  const opponentName = playerColor === 'white' ? game.black : game.white;
+
+  let openingName: string | null = null;
+  if (game.openingId) {
+    const opening = await db.openings.get(game.openingId);
+    if (opening) openingName = opening.name;
+  }
+
+  return {
+    opponentName: opponentName || null,
+    gameDate: game.date || null,
+    openingName,
+  };
+}
+
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const CP_LOSS_THRESHOLD = 50;
 const MASTERY_REPETITIONS = 3;
 const MIN_PV_MOVES = 3;
+const MAX_PV_MOVES = 5;
+const PV_EXTENSION_DEPTH = 14;
 const BATCH_GAME_LIMIT = 100;
 
 function generateId(): string {
@@ -79,6 +109,53 @@ function classifyGamePhase(fen: string, moveNumber: number): MistakeGamePhase {
   if (moveNumber <= 15 && minorMajorCount >= 12) return 'opening';
 
   return 'middlegame';
+}
+
+/**
+ * Extend a PV line by iteratively playing moves and analyzing responses.
+ * Targets MIN_PV_MOVES..MAX_PV_MOVES UCI moves (3–5 player moves).
+ */
+async function extendPvLine(fen: string, pvMoves: string[]): Promise<string[]> {
+  if (pvMoves.length >= MIN_PV_MOVES) return pvMoves.slice(0, MAX_PV_MOVES);
+
+  const extended = [...pvMoves];
+  const chess = new Chess(fen);
+
+  // Play existing moves
+  for (const uci of extended) {
+    try {
+      chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+    } catch {
+      return extended;
+    }
+  }
+
+  // Keep extending until we reach MIN_PV_MOVES or MAX_PV_MOVES
+  while (extended.length < MAX_PV_MOVES) {
+    if (chess.isGameOver()) break;
+    try {
+      const analysis = await stockfishEngine.analyzePosition(chess.fen(), PV_EXTENSION_DEPTH);
+      const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
+      if (!topLine || topLine.moves.length === 0) break;
+
+      // Add moves from the continuation
+      for (const move of topLine.moves) {
+        if (extended.length >= MAX_PV_MOVES) break;
+        extended.push(move);
+        try {
+          chess.move({ from: move.slice(0, 2), to: move.slice(2, 4), promotion: move.length > 4 ? move[4] : undefined });
+        } catch {
+          return extended;
+        }
+      }
+
+      if (extended.length >= MIN_PV_MOVES) break;
+    } catch {
+      break;
+    }
+  }
+
+  return extended;
 }
 
 function replayPgnToFens(pgn: string): string[] {
@@ -167,6 +244,7 @@ async function analyzeGameWithStockfish(
   const srsDefaults = createDefaultSrsFields();
   const now = new Date().toISOString();
   const puzzles: MistakePuzzle[] = [];
+  const gameContext = await resolveGameContext(game, playerColor);
 
   // Replay to get SAN moves
   const chess = new Chess();
@@ -227,21 +305,34 @@ async function analyzeGameWithStockfish(
     const classification = classifyCpLoss(cpLoss);
     const fen = fens[fenBeforeIdx];
 
-    // Get best move via Stockfish at higher depth
+    // Get best move + PV line via Stockfish at higher depth
     let bestMove: string | null = null;
+    let pvMoves: string[] = [];
     try {
       const bestAnalysis = await stockfishEngine.analyzePosition(fen, 18);
       bestMove = bestAnalysis.bestMove;
+      const topLine = bestAnalysis.topLines[0] as { moves: string[] } | undefined;
+      if (topLine) pvMoves = topLine.moves;
     } catch {
       continue;
     }
     if (!bestMove) continue;
 
+    // Extend PV to 3–5 player moves
+    if (pvMoves.length < MIN_PV_MOVES) {
+      pvMoves = pvMoves.length > 0 ? pvMoves : [bestMove];
+      pvMoves = await extendPvLine(fen, pvMoves);
+    } else if (pvMoves.length > MAX_PV_MOVES) {
+      pvMoves = pvMoves.slice(0, MAX_PV_MOVES);
+    }
+
     const bestMoveSan = uciToSan(fen, bestMove);
     const san = moves[moveIdx];
+    const gamePhase = classifyGamePhase(fen, moveNumber);
 
-    // Player's actual move in UCI
+    // Player's actual move in UCI + SAN
     let playerMove = '';
+    const playerMoveSan = san;
     try {
       const c = new Chess(fen);
       const m = c.move(san);
@@ -249,6 +340,26 @@ async function analyzeGameWithStockfish(
     } catch {
       playerMove = san;
     }
+
+    // Eval before mistake from the player's perspective (positive = player is better)
+    const evalBeforeFromPlayer = playerColor === 'white'
+      ? evalBefore / 100
+      : -evalBefore / 100;
+
+    const movesUci = pvMoves.join(' ');
+    const narration = generateMistakeNarration({
+      classification,
+      gamePhase,
+      playerMoveSan,
+      bestMoveSan,
+      cpLoss: Math.round(cpLoss),
+      fen,
+      moves: movesUci,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: evalBeforeFromPlayer,
+    });
 
     // Store annotation for the game record
     annotations.push({
@@ -265,18 +376,24 @@ async function analyzeGameWithStockfish(
       id: generateId(),
       fen,
       playerMove,
+      playerMoveSan,
       bestMove,
       bestMoveSan,
-      moves: bestMove,
+      moves: movesUci,
       cpLoss: Math.round(cpLoss),
       classification,
-      gamePhase: classifyGamePhase(fen, moveNumber),
+      gamePhase,
       moveNumber,
       sourceGameId: gameId,
       sourceMode,
       playerColor,
       promptText: PROMPT_TEXT[classification],
+      narration,
       createdAt: now,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: Math.round(evalBeforeFromPlayer * 100) / 100,
       srsInterval: srsDefaults.interval,
       srsEaseFactor: srsDefaults.easeFactor,
       srsRepetitions: srsDefaults.repetitions,
@@ -316,6 +433,7 @@ async function generateFromAnnotations(
   const now = new Date().toISOString();
   const puzzles: MistakePuzzle[] = [];
   const annotations = game.annotations ?? [];
+  const gameContext = await resolveGameContext(game, playerColor);
 
   for (const annotation of annotations) {
     if (annotation.color !== playerColor) continue;
@@ -377,29 +495,19 @@ async function generateFromAnnotations(
       if (!bestMove) bestMove = analysis.bestMove;
       // Get the PV line (multi-move continuation) from top line
       const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
-      if (topLine && topLine.moves.length >= MIN_PV_MOVES) {
-        pvMoves = topLine.moves;
-      }
+      if (topLine) pvMoves = topLine.moves;
     } catch {
       if (!bestMove) continue; // Skip if no bestMove at all
     }
 
     if (!bestMove) continue;
 
-    // If PV line is too short, build a minimum 3-move sequence from bestMove
+    // Extend PV to 3–5 player moves
     if (pvMoves.length < MIN_PV_MOVES) {
-      pvMoves = [bestMove];
-      // Try to extend by playing the best move and analyzing the response
-      try {
-        const tempChess = new Chess(fen);
-        tempChess.move({ from: bestMove.slice(0, 2), to: bestMove.slice(2, 4), promotion: bestMove.length > 4 ? bestMove[4] : undefined });
-        const followUp = await stockfishEngine.analyzePosition(tempChess.fen(), 14);
-        if (followUp.topLines[0]) {
-          pvMoves.push(...followUp.topLines[0].moves.slice(0, 4));
-        }
-      } catch {
-        // Keep what we have
-      }
+      pvMoves = pvMoves.length > 0 ? pvMoves : [bestMove];
+      pvMoves = await extendPvLine(fen, pvMoves);
+    } else if (pvMoves.length > MAX_PV_MOVES) {
+      pvMoves = pvMoves.slice(0, MAX_PV_MOVES);
     }
 
     const movesUci = pvMoves.join(' ');
@@ -407,8 +515,9 @@ async function generateFromAnnotations(
     const classification: MistakeClassification = annotation.classification === 'miss' ? 'miss' : classifyCpLoss(cpLoss);
     const gamePhase = classifyGamePhase(fen, annotation.moveNumber);
 
-    // Determine player's move in UCI format from annotation SAN
+    // Determine player's move in UCI + SAN format from annotation
     let playerMove = '';
+    const playerMoveSan = annotation.san;
     try {
       const chess = new Chess(fen);
       const move = chess.move(annotation.san);
@@ -417,10 +526,42 @@ async function generateFromAnnotations(
       playerMove = annotation.san;
     }
 
+    // Compute eval before from annotation context (player perspective)
+    let evalBeforeFromPlayer: number | null = null;
+    if (annotation.evaluation !== null) {
+      // Find the annotation for the move right before to get pre-mistake eval
+      let prevEval: number | null = null;
+      for (const ann of annotations) {
+        const annIdx = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
+        if (annIdx === fenIndex - 1) {
+          prevEval = ann.evaluation;
+          break;
+        }
+      }
+      if (prevEval !== null) {
+        evalBeforeFromPlayer = playerColor === 'white' ? prevEval : -prevEval;
+      }
+    }
+
+    const narration = generateMistakeNarration({
+      classification,
+      gamePhase,
+      playerMoveSan,
+      bestMoveSan,
+      cpLoss,
+      fen,
+      moves: movesUci,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: evalBeforeFromPlayer,
+    });
+
     puzzles.push({
       id: generateId(),
       fen,
       playerMove,
+      playerMoveSan,
       bestMove,
       bestMoveSan,
       moves: movesUci,
@@ -432,7 +573,12 @@ async function generateFromAnnotations(
       sourceMode,
       playerColor,
       promptText: PROMPT_TEXT[classification],
+      narration,
       createdAt: now,
+      opponentName: gameContext.opponentName,
+      gameDate: gameContext.gameDate,
+      openingName: gameContext.openingName,
+      evalBefore: evalBeforeFromPlayer !== null ? Math.round(evalBeforeFromPlayer * 100) / 100 : null,
       srsInterval: srsDefaults.interval,
       srsEaseFactor: srsDefaults.easeFactor,
       srsRepetitions: srsDefaults.repetitions,

@@ -70,6 +70,7 @@ class VoicePackService {
   private downloadProgress = 0;
   private statusListeners: Set<(status: VoicePackStatus) => void> = new Set();
   private progressListeners: Set<(progress: number) => void> = new Set();
+  private logListeners: Set<(entry: string) => void> = new Set();
   private currentSource: AudioBufferSourceNode | null = null;
   private playing = false;
 
@@ -111,6 +112,31 @@ class VoicePackService {
     return () => { this.progressListeners.delete(listener); };
   }
 
+  onLog(listener: (entry: string) => void): () => void {
+    this.logListeners.add(listener);
+    return () => { this.logListeners.delete(listener); };
+  }
+
+  private log(msg: string): void {
+    const ts = new Date().toLocaleTimeString();
+    const entry = `[${ts}] ${msg}`;
+    console.log('[VoicePack]', msg);
+    for (const listener of this.logListeners) {
+      listener(entry);
+    }
+    // Direct DOM write — bypasses React state entirely
+    try {
+      const el = document.getElementById('vp-debug');
+      if (el) {
+        const line = document.createElement('div');
+        line.textContent = entry;
+        line.style.color = msg.includes('ERROR') ? '#f44' : '#0f0';
+        el.appendChild(line);
+        el.scrollTop = el.scrollHeight;
+      }
+    } catch { /* SSR safety */ }
+  }
+
   private setStatus(status: VoicePackStatus): void {
     this.status = status;
     for (const listener of this.statusListeners) {
@@ -137,66 +163,84 @@ class VoicePackService {
 
     try {
       // Check IndexedDB cache first
+      this.log('=== Voice Pack Downloader v6 ===');
+      this.log('Checking IndexedDB cache...');
       const cached = await this.getCachedPack(voiceId);
       if (cached) {
+        this.log(`Cache hit! ${cached.byteLength} bytes. Parsing...`);
         this.parseBin(cached);
         this.loadedVoiceId = voiceId;
         this.setProgress(100);
         this.setStatus('ready');
+        this.log(`Ready — ${this.clips.size} clips loaded from cache`);
         return;
       }
+      this.log('No cache. Starting chunked download...');
 
-      // Download with progress tracking
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Voice pack not available (HTTP ${response.status}). Upload ${voiceId}.bin to /voice-packs/ on the server.`);
+      // Known file size from GitHub Release metadata — avoids needing Content-Range
+      const KNOWN_SIZES: Record<string, number> = {
+        af_bella: 234420138,
+      };
+      const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB per request — fits in edge timeout
+      const totalBytes = KNOWN_SIZES[voiceId] ?? 0;
+
+      if (totalBytes === 0) {
+        throw new Error(`Unknown voice pack size for "${voiceId}". Add it to KNOWN_SIZES.`);
       }
+      this.log(`File size: ${(totalBytes / 1024 / 1024).toFixed(1)} MB (${Math.ceil(totalBytes / CHUNK_SIZE)} chunks)`);
 
-      // Guard against SPA catch-all serving HTML instead of the binary file
-      const contentType = response.headers.get('content-type') ?? '';
-      if (contentType.includes('text/html')) {
-        throw new Error(`Voice pack file not found at ${url}. The server returned HTML instead of the .bin file. Upload ${voiceId}.bin to the voice-packs/ directory.`);
-      }
+      // Allocate buffer upfront
+      this.log('Allocating buffer...');
+      const combined = new Uint8Array(totalBytes);
+      this.log('Buffer OK');
 
-      const contentLength = response.headers.get('content-length');
-      const totalBytes = contentLength ? parseInt(contentLength, 10) : 0;
-
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error('Response body is not readable');
-      }
-
-      const chunks: Uint8Array[] = [];
+      // Download in 5MB chunks using Range requests
       let receivedBytes = 0;
+      let chunkNum = 0;
 
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-        receivedBytes += value.length;
-        if (totalBytes > 0) {
-          this.setProgress(Math.round((receivedBytes / totalBytes) * 100));
+      while (receivedBytes < totalBytes) {
+        const start = receivedBytes;
+        const end = Math.min(start + CHUNK_SIZE - 1, totalBytes - 1);
+        chunkNum++;
+
+        this.log(`Chunk ${chunkNum}: ${start}-${end}...`);
+        const response = await fetch(url, {
+          headers: { 'Range': `bytes=${start}-${end}` },
+        });
+        this.log(`Chunk ${chunkNum}: HTTP ${response.status}`);
+
+        if (!response.ok && response.status !== 206) {
+          const body = await response.text().catch(() => '');
+          throw new Error(`Chunk ${chunkNum} HTTP ${response.status}: ${body}`);
         }
+
+        const rawChunk = new Uint8Array(await response.arrayBuffer());
+        // Last chunk may be larger than remaining space — trim to fit
+        const remaining = totalBytes - start;
+        const chunkData = rawChunk.byteLength > remaining ? rawChunk.slice(0, remaining) : rawChunk;
+        combined.set(chunkData, start);
+        receivedBytes += chunkData.byteLength;
+        const pct = Math.round((receivedBytes / totalBytes) * 100);
+        this.setProgress(pct);
+        this.log(`Chunk ${chunkNum} OK: ${chunkData.byteLength} bytes (${pct}%)`);
       }
 
-      // Combine chunks into single ArrayBuffer
-      const combined = new Uint8Array(receivedBytes);
-      let offset = 0;
-      for (const chunk of chunks) {
-        combined.set(chunk, offset);
-        offset += chunk.length;
-      }
-
+      this.log(`Download complete: ${(receivedBytes / 1024 / 1024).toFixed(1)} MB`);
       const buffer = combined.buffer;
-
-      // Parse and cache
+      this.log('Parsing binary...');
       this.parseBin(buffer);
+      if (this.clips.size === 0) {
+        throw new Error('parseBin produced 0 clips — binary may be corrupt');
+      }
+      this.log(`Parsed ${this.clips.size} clips. Caching to IndexedDB...`);
       await this.cachePack(voiceId, buffer);
+      this.log('Cached. Done!');
       this.loadedVoiceId = voiceId;
       this.setProgress(100);
       this.setStatus('ready');
     } catch (error) {
-      console.error('[VoicePackService] Failed to load voice pack:', error);
+      const msg = error instanceof Error ? error.message : String(error);
+      this.log(`ERROR: ${msg}`);
       this.setStatus('error');
       throw error;
     }
@@ -307,28 +351,47 @@ class VoicePackService {
 
   private parseBin(buffer: ArrayBuffer): void {
     this.clips.clear();
+    this.log(`parseBin: buffer size = ${buffer.byteLength}`);
     const view = new DataView(buffer);
     let offset = 0;
 
     const count = view.getUint32(offset, true);
     offset += 4;
+    this.log(`parseBin: clip count = ${count}`);
 
     for (let i = 0; i < count; i++) {
+      if (offset + 2 > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, reading hashLen`);
+        break;
+      }
       const hashLen = view.getUint16(offset, true);
       offset += 2;
 
+      if (offset + hashLen > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, hashLen=${hashLen}`);
+        break;
+      }
       const hashBytes = new Uint8Array(buffer, offset, hashLen);
       const hash = new TextDecoder().decode(hashBytes);
       offset += hashLen;
 
+      if (offset + 4 > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, reading audioLen`);
+        break;
+      }
       const audioLen = view.getUint32(offset, true);
       offset += 4;
 
+      if (offset + audioLen > buffer.byteLength) {
+        this.log(`parseBin: out of bounds at clip ${i}, offset ${offset}, audioLen=${audioLen}`);
+        break;
+      }
       const audioData = buffer.slice(offset, offset + audioLen);
       offset += audioLen;
 
       this.clips.set(hash, audioData);
     }
+    this.log(`parseBin: done — ${this.clips.size} clips, final offset ${offset}`);
   }
 
   private async getCachedPack(voiceId: string): Promise<ArrayBuffer | null> {

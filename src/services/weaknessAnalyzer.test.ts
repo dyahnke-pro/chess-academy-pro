@@ -9,6 +9,7 @@ import type {
   FlashcardRecord,
   MoveAnnotation,
   WeaknessProfile,
+  MistakePuzzle,
 } from '../types';
 import type { ThemeSkill } from './puzzleService';
 
@@ -19,6 +20,7 @@ const {
   analyzeSessionConsistency,
   analyzeFlashcards,
   analyzeEndgame,
+  analyzeMistakePuzzles,
   generateOverallAssessment,
   computeSkillRadar,
 } = _testing;
@@ -597,6 +599,97 @@ describe('weaknessAnalyzer', () => {
   });
 
   // ─── filterWeaknessesByCategory ───────────────────────────────────────
+
+  // ─── analyzeMistakePuzzles ──────────────────────────────────────────
+
+  describe('analyzeMistakePuzzles', () => {
+    function createMistakePuzzle(id: string, overrides: Partial<MistakePuzzle> = {}): MistakePuzzle {
+      const today = new Date().toISOString().split('T')[0];
+      return {
+        id,
+        fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+        playerMove: 'e7e5',
+        playerMoveSan: 'e5',
+        bestMove: 'd7d5',
+        bestMoveSan: 'd5',
+        moves: 'd7d5 e4d5',
+        cpLoss: 150,
+        classification: 'mistake',
+        gamePhase: 'middlegame',
+        moveNumber: 5,
+        sourceGameId: 'g1',
+        sourceMode: 'lichess',
+        playerColor: 'white',
+        promptText: 'Find the best move.',
+        narration: { intro: '', moveNarrations: [], outro: '' },
+        createdAt: new Date().toISOString(),
+        srsInterval: 0,
+        srsEaseFactor: 0,
+        srsRepetitions: 0,
+        srsDueDate: today,
+        srsLastReview: null,
+        status: 'unsolved',
+        attempts: 0,
+        successes: 0,
+        ...overrides,
+      };
+    }
+
+    it('returns empty for too few puzzles', () => {
+      const puzzles = [createMistakePuzzle('p1'), createMistakePuzzle('p2')];
+      const result = analyzeMistakePuzzles(puzzles);
+      expect(result.weaknesses).toHaveLength(0);
+      expect(result.strengths).toHaveLength(0);
+    });
+
+    it('detects when most mistakes are in one game phase', () => {
+      const puzzles = [
+        createMistakePuzzle('p1', { gamePhase: 'opening' }),
+        createMistakePuzzle('p2', { gamePhase: 'opening' }),
+        createMistakePuzzle('p3', { gamePhase: 'opening' }),
+        createMistakePuzzle('p4', { gamePhase: 'middlegame' }),
+      ];
+
+      const result = analyzeMistakePuzzles(puzzles);
+      const phaseWeakness = result.weaknesses.find((w) => w.label.includes('opening'));
+      expect(phaseWeakness).toBeDefined();
+      expect(phaseWeakness?.metric).toContain('3 of 4');
+    });
+
+    it('detects high blunder ratio', () => {
+      const puzzles = [
+        createMistakePuzzle('p1', { classification: 'blunder' }),
+        createMistakePuzzle('p2', { classification: 'blunder' }),
+        createMistakePuzzle('p3', { classification: 'blunder' }),
+        createMistakePuzzle('p4', { classification: 'mistake' }),
+      ];
+
+      const result = analyzeMistakePuzzles(puzzles);
+      const blunderWeakness = result.weaknesses.find((w) => w.label.includes('blunder'));
+      expect(blunderWeakness).toBeDefined();
+      expect(blunderWeakness?.category).toBe('calculation');
+    });
+
+    it('detects unresolved mistake puzzles', () => {
+      const puzzles = Array.from({ length: 8 }, (_, i) =>
+        createMistakePuzzle(`p${i}`, { status: 'unsolved' }),
+      );
+
+      const result = analyzeMistakePuzzles(puzzles);
+      const unresolvedWeakness = result.weaknesses.find((w) => w.label.includes('Unresolved'));
+      expect(unresolvedWeakness).toBeDefined();
+      expect(unresolvedWeakness?.category).toBe('tactics');
+    });
+
+    it('identifies high mastery rate as strength', () => {
+      const puzzles = Array.from({ length: 10 }, (_, i) =>
+        createMistakePuzzle(`p${i}`, { status: i < 5 ? 'mastered' : 'solved' }),
+      );
+
+      const result = analyzeMistakePuzzles(puzzles);
+      expect(result.strengths.some((s) => s.includes('Mastered'))).toBe(true);
+    });
+  });
 
   describe('filterWeaknessesByCategory', () => {
     it('filters by category', () => {

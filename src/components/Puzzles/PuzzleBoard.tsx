@@ -33,6 +33,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   const [fen, setFen] = useState(puzzle.fen);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
   const [boardKey, setBoardKey] = useState(0);
+  const hasMadeMistakeRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
@@ -81,6 +82,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     setFen(puzzle.fen);
     setLastMoveHighlight(null);
     setBoardKey((k) => k + 1);
+    hasMadeMistakeRef.current = false;
     setState('loading');
     resetHints();
 
@@ -106,11 +108,12 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     return () => clearTimeout(timer);
   }, [puzzle, playMoveSound, resetHints]);
 
-  // Voice feedback when puzzle state changes
+  // Voice feedback when puzzle state changes (respects user voice setting)
   useEffect(() => {
+    if (!settings.voiceEnabled) return;
     if (state === 'correct') void voiceService.speak('Excellent! Puzzle solved!');
     else if (state === 'incorrect') void voiceService.speak('Not quite, try again.');
-  }, [state]);
+  }, [state, settings.voiceEnabled]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
@@ -129,9 +132,10 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
       // Check if puzzle is fully solved
       if (nextIndex >= movesRef.current.length) {
+        const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
-        onComplete(true);
+        onComplete(solvedCleanly);
         return;
       }
 
@@ -157,6 +161,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
       }
     } else {
       // Wrong move — undo and let them try again from the same position
+      hasMadeMistakeRef.current = true;
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setBoardKey((k) => k + 1);
@@ -219,13 +224,13 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
       {/* Status message */}
       {state === 'correct' && (
-        <div className="flex items-center gap-2 text-green-500" data-testid="puzzle-correct">
+        <div className="flex items-center gap-2" style={{ color: 'var(--color-success)' }} data-testid="puzzle-correct">
           <CheckCircle size={18} />
           <span className="text-sm font-medium">Correct!</span>
         </div>
       )}
       {state === 'incorrect' && (
-        <div className="flex items-center gap-2 text-red-500" data-testid="puzzle-incorrect">
+        <div className="flex items-center gap-2" style={{ color: 'var(--color-error)' }} data-testid="puzzle-incorrect">
           <XCircle size={18} />
           <span className="text-sm font-medium">Incorrect — try again</span>
         </div>

@@ -22,11 +22,11 @@ export function AdaptiveSessionPanel({ session }: AdaptiveSessionPanelProps): JS
       <div>
         <div className="flex items-center justify-between mb-1">
           <h3 className="text-sm font-semibold text-theme-text">Session Rating</h3>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1" style={{ color: ratingDelta >= 0 ? 'var(--color-success)' : 'var(--color-error)' }}>
             {ratingDelta >= 0
-              ? <TrendingUp size={14} className="text-green-500" />
-              : <TrendingDown size={14} className="text-red-500" />}
-            <span className={`text-sm font-bold ${ratingDelta >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+              ? <TrendingUp size={14} />
+              : <TrendingDown size={14} />}
+            <span className="text-sm font-bold">
               {ratingDelta >= 0 ? '+' : ''}{ratingDelta}
             </span>
           </div>
@@ -57,13 +57,13 @@ export function AdaptiveSessionPanel({ session }: AdaptiveSessionPanelProps): JS
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3">
         <div className="text-center">
-          <div className="text-lg font-bold text-green-500" data-testid="solved-count">
+          <div className="text-lg font-bold" style={{ color: 'var(--color-success)' }} data-testid="solved-count">
             {session.puzzlesSolved}
           </div>
           <div className="text-xs text-theme-text-muted">Solved</div>
         </div>
         <div className="text-center">
-          <div className="text-lg font-bold text-red-500" data-testid="failed-count">
+          <div className="text-lg font-bold" style={{ color: 'var(--color-error)' }} data-testid="failed-count">
             {session.puzzlesFailed}
           </div>
           <div className="text-xs text-theme-text-muted">Failed</div>
@@ -79,7 +79,7 @@ export function AdaptiveSessionPanel({ session }: AdaptiveSessionPanelProps): JS
         </div>
         <div className="text-center">
           <div className="flex items-center justify-center gap-1">
-            <Flame size={14} className={session.streak >= 3 ? 'text-orange-500' : 'text-theme-text-muted'} />
+            <Flame size={14} style={session.streak >= 3 ? { color: 'var(--color-warning)' } : undefined} className={session.streak < 3 ? 'text-theme-text-muted' : ''} />
             <span className="text-lg font-bold text-theme-text" data-testid="streak">
               {session.streak}
             </span>
