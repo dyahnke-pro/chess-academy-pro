@@ -393,14 +393,22 @@ export function WalkthroughMode({
       // Fallback timer in case TTS doesn't fire onEnd (voice disabled, no annotation, etc.)
       const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
       const spokenText = ann?.annotation;
-      const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
-      // Add extra buffer so TTS end event has priority
-      autoPlayRef.current = setTimeout(advanceToNext, delay + 1500);
+
+      if (voiceEnabled && spokenText) {
+        // When voice is active, Polly fetch + playback can take much longer than
+        // the estimated reading time. Use a generous safety-net timeout and let
+        // ttsFinishedRef handle the normal advance when narration actually ends.
+        autoPlayRef.current = setTimeout(advanceToNext, 30_000);
+      } else {
+        // Voice off or no annotation — use reading-time estimate
+        const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
+        autoPlayRef.current = setTimeout(advanceToNext, delay + 1500);
+      }
 
       setBoardKey((k) => k + 1);
       return nextIndex;
     });
-  }, [expectedMoves.length, annotations, autoPlaySpeed]);
+  }, [expectedMoves.length, annotations, autoPlaySpeed, voiceEnabled]);
 
   // Auto-play logic: kick off the chain when play starts
   useEffect(() => {
