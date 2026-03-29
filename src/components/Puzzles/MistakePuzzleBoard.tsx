@@ -48,6 +48,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
   const [subtitle, setSubtitle] = useState<string>('');
   // boardKey increments to force ChessBoard remount only on resets
   const [boardKey, setBoardKey] = useState(0);
+  const hasMadeMistakeRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const playerMoveCountRef = useRef(0);
@@ -94,6 +95,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     setLastMoveHighlight(null);
     setSubtitle('');
     setBoardKey((k) => k + 1);
+    hasMadeMistakeRef.current = false;
     setState('loading');
     resetHints();
     voiceService.stop();
@@ -142,6 +144,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
 
       // Check if puzzle is fully solved
       if (nextIndex >= allMoves.length) {
+        const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
         // Speak outro after a brief delay so celebration sound plays first
@@ -151,7 +154,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
             void voiceService.speak(puzzle.narration.outro);
           }, 800);
         }
-        onComplete(true);
+        onComplete(solvedCleanly);
         return;
       }
 
@@ -179,6 +182,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       }
     } else {
       // Wrong move — undo and let them try again from the same position
+      hasMadeMistakeRef.current = true;
       chessRef.current.undo();
       const prevFen = chessRef.current.fen();
       setState('incorrect');

@@ -33,6 +33,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   const [fen, setFen] = useState(puzzle.fen);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
   const [boardKey, setBoardKey] = useState(0);
+  const hasMadeMistakeRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
@@ -81,6 +82,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     setFen(puzzle.fen);
     setLastMoveHighlight(null);
     setBoardKey((k) => k + 1);
+    hasMadeMistakeRef.current = false;
     setState('loading');
     resetHints();
 
@@ -130,9 +132,10 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
       // Check if puzzle is fully solved
       if (nextIndex >= movesRef.current.length) {
+        const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
-        onComplete(true);
+        onComplete(solvedCleanly);
         return;
       }
 
@@ -158,6 +161,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
       }
     } else {
       // Wrong move — undo and let them try again from the same position
+      hasMadeMistakeRef.current = true;
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setBoardKey((k) => k + 1);
