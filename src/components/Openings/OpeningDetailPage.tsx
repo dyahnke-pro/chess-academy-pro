@@ -8,6 +8,16 @@ import { TrainMode } from './TrainMode';
 import { WalkthroughMode } from './WalkthroughMode';
 import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
+import { ModelGamesSection } from './ModelGamesSection';
+import { ModelGameViewer } from './ModelGameViewer';
+import { MiddlegamePlansSection } from './MiddlegamePlansSection';
+import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
+import { CheckpointQuiz } from './CheckpointQuiz';
+import { CommonMistakesSection } from './CommonMistakesSection';
+import { SidelineExplainer } from './SidelineExplainer';
+import commonMistakesData from '../../data/common-mistakes.json';
+import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
+import type { CommonMistake, CheckpointQuizItem } from '../../types';
 import {
   getOpeningById,
   getMasteryPercent,
@@ -16,7 +26,7 @@ import {
   getTotalLines,
   toggleFavorite,
 } from '../../services/openingService';
-import type { OpeningRecord } from '../../types';
+import type { OpeningRecord, ModelGame, MiddlegamePlan } from '../../types';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -35,6 +45,7 @@ import {
   Crosshair,
   Heart,
   PlayCircle,
+  Lock,
 } from 'lucide-react';
 
 type ViewMode =
@@ -56,7 +67,9 @@ type ViewMode =
   | 'trap-walkthrough'
   | 'warning-walkthrough'
   | 'train-traps'
-  | 'train-warnings';
+  | 'train-warnings'
+  | 'model-game'
+  | 'middlegame-plan';
 
 function computeFenFromPgn(pgn: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -84,6 +97,10 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
+  const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -112,8 +129,20 @@ export function OpeningDetailPage(): JSX.Element {
     setActiveVariationIndex(-1);
     setActiveTrapLineIndex(-1);
     setActiveWarningLineIndex(-1);
+    setActiveModelGame(null);
+    setActiveMiddlegamePlan(null);
     void loadOpening();
   }, [loadOpening]);
+
+  const handleSelectModelGame = useCallback((game: ModelGame): void => {
+    setActiveModelGame(game);
+    setViewMode('model-game');
+  }, []);
+
+  const handleSelectMiddlegamePlan = useCallback((plan: MiddlegamePlan): void => {
+    setActiveMiddlegamePlan(plan);
+    setViewMode('middlegame-plan');
+  }, []);
 
   const handleStartVariationWalkthrough = useCallback((index: number): void => {
     setActiveVariationIndex(index);
@@ -377,11 +406,40 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Model game viewer
+  if (viewMode === 'model-game' && activeModelGame) {
+    return (
+      <ModelGameViewer
+        game={activeModelGame}
+        boardOrientation={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Middlegame plan study
+  if (viewMode === 'middlegame-plan' && activeMiddlegamePlan) {
+    return (
+      <MiddlegamePlanStudy
+        plan={activeMiddlegamePlan}
+        boardOrientation={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
   // Detail view
   const mastery = getMasteryPercent(opening);
   const totalLines = getTotalLines(opening);
   const discovered = getLinesDiscovered(opening);
   const perfected = getLinesPerfected(opening);
+
+  // Data lookups for new features
+  const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
+  const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
+  const currentQuiz = quizzes[quizIndex] ?? null;
+  const hasCompletedMainLine = opening.drillAttempts > 0;
+  const isAdvancedUnlocked = hasCompletedMainLine || mastery > 0;
 
   const NarrationButton = ({ sectionId, text }: { sectionId: string; text: string }): JSX.Element => {
     const isNarrating = narratingSection === sectionId;
@@ -510,6 +568,61 @@ export function OpeningDetailPage(): JSX.Element {
             ))}
           </ul>
         </div>
+      )}
+
+      {/* Checkpoint Quiz — after Key Ideas */}
+      {currentQuiz && !quizCompleted && (
+        <CheckpointQuiz
+          quiz={currentQuiz}
+          boardOrientation={opening.color}
+          onComplete={(correct) => {
+            if (quizIndex < quizzes.length - 1) {
+              setQuizIndex((prev) => prev + 1);
+            } else {
+              setQuizCompleted(true);
+            }
+          }}
+        />
+      )}
+
+      {/* Middlegame Plans — gated behind first drill */}
+      {isAdvancedUnlocked ? (
+        <MiddlegamePlansSection
+          openingId={opening.id}
+          onSelectPlan={handleSelectMiddlegamePlan}
+        />
+      ) : (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="plans-locked">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-theme-text-muted" />
+            <h3 className="text-sm font-semibold text-theme-text">Middlegame Plans</h3>
+          </div>
+          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock middlegame plans.</p>
+        </div>
+      )}
+
+      {/* Model Games — gated behind first drill */}
+      {isAdvancedUnlocked ? (
+        <ModelGamesSection
+          openingId={opening.id}
+          onSelectGame={handleSelectModelGame}
+        />
+      ) : (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="games-locked">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-theme-text-muted" />
+            <h3 className="text-sm font-semibold text-theme-text">Model Games</h3>
+          </div>
+          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock model games.</p>
+        </div>
+      )}
+
+      {/* Common Mistakes */}
+      {mistakes.length > 0 && (
+        <CommonMistakesSection
+          mistakes={mistakes}
+          boardOrientation={opening.color}
+        />
       )}
 
       {/* Traps */}
@@ -699,10 +812,27 @@ export function OpeningDetailPage(): JSX.Element {
                     orientation={opening.color}
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-medium text-theme-text">{variation.name}</span>
                       {isPerfected && <Trophy size={12} className="text-yellow-500" />}
                       {isDiscovered && !isPerfected && <CheckCircle size={12} className="text-green-500" />}
+                      {variation.frequency && (
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                          variation.frequency === 'common' ? 'bg-blue-500/15 text-blue-400' :
+                          variation.frequency === 'uncommon' ? 'bg-amber-500/15 text-amber-400' :
+                          'bg-gray-500/15 text-gray-400'
+                        }`}>
+                          {variation.frequency}
+                        </span>
+                      )}
+                      {variation.danger && variation.danger !== 'safe' && (
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                          variation.danger === 'critical' ? 'bg-red-500/15 text-red-400' :
+                          'bg-amber-500/15 text-amber-400'
+                        }`}>
+                          {variation.danger}
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                   </div>
@@ -743,6 +873,11 @@ export function OpeningDetailPage(): JSX.Element {
                     >
                       <Swords size={20} />
                     </button>
+                    <SidelineExplainer
+                      opening={opening}
+                      variation={variation}
+                      fen={variationFens[i]}
+                    />
                   </div>
                 </div>
               );

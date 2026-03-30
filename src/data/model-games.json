@@ -1,0 +1,371 @@
+[
+  {
+    "id": "mg-morphy-opera",
+    "openingId": "italian-game",
+    "white": "Paul Morphy",
+    "black": "Duke of Brunswick & Count Isouard",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1858,
+    "event": "Paris Opera House",
+    "pgn": "e4 e5 Nf3 d6 d4 Bg4 dxe5 Bxf3 Qxf3 dxe5 Bc4 Nf6 Qb3 Qe7 Nc3 c6 Bg5 b5 Nxb5 cxb5 Bxb5+ Nbd7 O-O-O Rd8 Rxd7 Rxd7 Rd1 Qe6 Bxd7+ Nxd7 Qb8+ Nxb8 Rd8#",
+    "overview": "The most famous attacking game ever played. Morphy demonstrates the power of rapid development and open lines against an undeveloped opponent.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "rn2kb1r/ppp1qppp/2p2n2/1B2p1B1/4P3/8/PPP2PPP/R3K2R w KQkq - 1 10",
+        "annotation": "Morphy sacrifices a knight with Nxb5 to rip open the queenside. Black's king is stuck in the center with no development — this is the moment the attack becomes decisive.",
+        "concept": "Piece Sacrifice for Development"
+      },
+      {
+        "moveNumber": 13,
+        "color": "white",
+        "fen": "rn2kb1r/ppp1qppp/4n3/4p1B1/4P3/8/PPP2PPP/2KR3R w kq - 0 13",
+        "annotation": "Rxd7 begins a series of exchanges that strip away Black's defenders. Every white piece is active while Black's pieces remain on their starting squares.",
+        "concept": "Removing the Guard"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "rn2kb1r/p4ppp/4q3/4p1B1/4P3/8/PPP2PPP/1QKR4 w kq - 0 15",
+        "annotation": "The stunning Qb8+! forces Nxb8 and then Rd8# delivers checkmate. A queen sacrifice that exemplifies Morphy's tactical brilliance.",
+        "concept": "Queen Sacrifice & Back Rank Mate"
+      }
+    ],
+    "middlegameTheme": "Rapid Development & Attack",
+    "lessonSummary": "Development wins games. Morphy's every move brought a new piece into the attack while his opponents wasted time. When you have a development lead, open the position and attack before the opponent can catch up."
+  },
+  {
+    "id": "mg-fischer-spassky-g6",
+    "openingId": "sicilian-najdorf",
+    "white": "Bobby Fischer",
+    "black": "Boris Spassky",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1972,
+    "event": "World Championship Game 6, Reykjavik",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 b5 O-O Be7 f4 O-O f5 e5 Nde2 Bb7 Ng3 Nbd7 Kh1 Nc5 Bg5 Rc8 Qd3 Nxb3 axb3 Qc7 Rae1 Rfe8 Qd1 h6 Bh4 Rcd8 b4 d5 f6 gxf6 Bxf6 Bxf6 Nf5 Be7 Rxf6 Kg7 Qg4+ Kh8 Rf3",
+    "overview": "Fischer's greatest game. A masterclass in the Najdorf Sicilian where White builds a crushing kingside attack with f4-f5 and a spectacular exchange sacrifice.",
+    "criticalMoments": [
+      {
+        "moveNumber": 11,
+        "color": "white",
+        "fen": "r1bq1rk1/1p2bppp/p2ppn2/4P3/5P2/1BN5/PPP3PP/R1BQ1RK1 b - - 0 11",
+        "annotation": "Fischer plays f5, fixing Black's pawn structure and preparing a kingside assault. This pawn clamp takes away the e6 square and prepares Bg5-Bh4 with threats along the h4-d8 diagonal.",
+        "concept": "Pawn Clamp & Kingside Space"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "3rr2k/1bq1bp2/p4p1p/1p1pp3/1P2n1P1/2N2Q2/1PP3PP/R3RR1K w - - 0 21",
+        "annotation": "Fischer breaks through with f6! The pawn tears open lines toward the Black king. After gxf6 Bxf6 Bxf6 Nf5, White's pieces swarm the kingside with devastating effect.",
+        "concept": "Pawn Breakthrough"
+      },
+      {
+        "moveNumber": 24,
+        "color": "white",
+        "fen": "3rr2k/1bq1bR2/p4n1p/1p1ppN2/1P4P1/8/1PP3PP/4R2K w - - 0 24",
+        "annotation": "The exchange sacrifice Rxf6! is the key blow. White gets a ferocious attack with the knight on f5 and the open g-file. Black's king has no escape.",
+        "concept": "Exchange Sacrifice for Attack"
+      }
+    ],
+    "middlegameTheme": "Kingside Pawn Storm & Exchange Sacrifice",
+    "lessonSummary": "In the Najdorf, White's f4-f5 advance can create a devastating kingside attack. Fischer showed that sometimes an exchange sacrifice (Rxf6) is worth more than material — the resulting attack with knight on f5 and open lines is overwhelming."
+  },
+  {
+    "id": "mg-kasparov-topalov",
+    "openingId": "sicilian-dragon",
+    "white": "Garry Kasparov",
+    "black": "Veselin Topalov",
+    "whiteElo": 2812,
+    "blackElo": 2700,
+    "result": "1-0",
+    "year": 1999,
+    "event": "Wijk aan Zee",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 h4 Rc8 Bb3 Ne5 O-O-O Nc4 Bxc4 Rxc4 g4 h5 Kb1 a5 Ndxe6 fxe6 Nd5 Nxd5 exd5 Qc7 Rhg1 Re8 g5 e5 Rde1 Be6 dxe6 d5 Rxe5 Rxe5 Bf4 Rf5 Bxc7 Rxd2",
+    "overview": "Widely considered the greatest chess game ever played. Kasparov unleashes a dazzling combination with multiple piece sacrifices in the Yugoslav Attack against the Dragon.",
+    "criticalMoments": [
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "2r1brk1/pp1bpp1p/3p1np1/4N3/2r1P2P/1BN1BP2/PPPQ2P1/1K1R3R w - - 0 15",
+        "annotation": "Kasparov plays the stunning Ndxe6! sacrificing a knight to blow open Black's kingside. This begins one of the most spectacular combinations in chess history.",
+        "concept": "Knight Sacrifice to Open Lines"
+      },
+      {
+        "moveNumber": 24,
+        "color": "white",
+        "fen": "4r1k1/ppq3p1/3pP1P1/3np1r1/7P/5B2/PPP5/1K2R1R1 w - - 0 24",
+        "annotation": "White has sacrificed massive material but the passed e6 pawn and active rooks create an unstoppable attack. Black's pieces are discoordinated despite the material advantage.",
+        "concept": "Passed Pawn as Attacking Weapon"
+      }
+    ],
+    "middlegameTheme": "Yugoslav Attack Sacrificial Assault",
+    "lessonSummary": "In the Yugoslav Attack against the Dragon, White castles queenside and storms the kingside. Kasparov showed that piece sacrifices to open lines can be worth far more than material when the opponent's king is exposed. Initiative and coordination beat material."
+  },
+  {
+    "id": "mg-botvinnik-capablanca",
+    "openingId": "english-opening",
+    "white": "Mikhail Botvinnik",
+    "black": "Jose Raul Capablanca",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1938,
+    "event": "AVRO Tournament",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 Bd3 O-O Ne2 b6 O-O Ba6 Bxa6 Nxa6 Bb2 Qd7 a4 Rfe8 Qd3 c4 Qc2 Nb8 Rae1 Nc6 Ng3 Na5 f3 Nb3 e4 Qxa4 e5 Nd7 Qf2 g6 f4 f5 exf6 Nxf6 f5 Rxe1 Rxe1 Re8 Re6 Rxe6 fxe6 Kg7 Qf4 Qe8 Qe5 Qe7 Ba3 Qxa3 Nh5+ gxh5 Qg5+ Kf8 Qxf6+ Kg8 e7 Qc1+ Kf2 Qc2+ Kg3 Qd3+ Kh4 Qe4+ Kxh5 Qe2+ Kh4 Qe4+ g4 Qe1+ Kh5",
+    "overview": "One of the greatest positional masterpieces ever played. Botvinnik builds a crushing kingside attack against the legendary Capablanca using a minority pawn structure and the e5 advance.",
+    "criticalMoments": [
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "r3r1k1/p2q1ppp/1pn5/3p4/P1pP4/2P2NQ1/1BQ3PP/4R1K1 w - - 0 19",
+        "annotation": "Botvinnik repositions the knight to g3 where it supports e4 and eyes f5/h5. This regrouping is a key idea — the knight was passive on e2 but becomes a monster on g3.",
+        "concept": "Knight Redeployment"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "r3r1k1/p2q1ppp/1p6/n2pp3/P1p2P2/2P2NQ1/1BQ3PP/4R1K1 w - - 0 21",
+        "annotation": "The e5 advance locks in a space advantage and creates a powerful outpost. Combined with f4 and the bishop on b2, White gets a crushing kingside attack.",
+        "concept": "Central Advance & Space"
+      },
+      {
+        "moveNumber": 30,
+        "color": "white",
+        "fen": "6k1/p5p1/1p2Pn2/4qN1p/4Q3/8/6KP/8 w - - 0 30",
+        "annotation": "Nh5+! is the final combination. The knight sacrifice deflects the king and the e-pawn promotes. Capablanca is helpless against the mating threats despite being up material.",
+        "concept": "Knight Sacrifice & Passed Pawn Promotion"
+      }
+    ],
+    "middlegameTheme": "Positional Squeeze & Kingside Attack",
+    "lessonSummary": "Botvinnik demonstrated how to convert a small positional advantage into a winning attack. The e4-e5 advance created space and open lines, while patient piece maneuvering (Ng3, f4, Bb2) built irresistible pressure. Even Capablanca could not defend."
+  },
+  {
+    "id": "mg-capablanca-tartakower",
+    "openingId": "caro-kann",
+    "white": "Jose Raul Capablanca",
+    "black": "Saviely Tartakower",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1924,
+    "event": "New York",
+    "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Bc4 Bd6 Qe2+ Be7 Nf3 O-O O-O Re8 Qc2 Bg4 Be3 Nd7 Nd2 Nb6 Bb3 Qd5 c4 Qe6 Rfe1 Nd7 f4 Qxe3 Rxe3 Bf8 Re7 Nf8 Rxb7 Bd6 Nf3 Rab8 Rxb8 Rxb8 b3 Rb4 Ne5 Bxe5 dxe5 Rxc4 Rd1 Rc2 Rd8 Rxa2 e6",
+    "overview": "A masterclass in exploiting the doubled f-pawns in the Caro-Kann Exchange variation. Capablanca's endgame technique converts a tiny structural advantage into a winning passed pawn.",
+    "criticalMoments": [
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r3r1k1/pp2bppp/2p2n2/3q2B1/2BP4/1Q6/PPP2PPP/R3R1K1 w - - 0 16",
+        "annotation": "White's pieces are beautifully coordinated targeting the weak f7 and e-file. The doubled f-pawns give Black a permanent structural weakness that White exploits throughout the endgame.",
+        "concept": "Exploiting Structural Weakness"
+      },
+      {
+        "moveNumber": 22,
+        "color": "white",
+        "fen": "r1b2rk1/pp2nppp/2p5/8/2pP1P2/1P2R3/P1Q3PP/R5K1 w - - 0 22",
+        "annotation": "Capablanca penetrates with Re7, seizing the seventh rank. This classic rook invasion ties down all of Black's pieces to defense and prepares the decisive breakthrough.",
+        "concept": "Rook on the Seventh Rank"
+      }
+    ],
+    "middlegameTheme": "Endgame Technique & Structural Exploitation",
+    "lessonSummary": "Capablanca showed that small structural advantages — like doubled pawns — can be decisive with proper technique. The key is patience: improve your pieces, penetrate with rooks, and convert the advantage in the endgame."
+  },
+  {
+    "id": "mg-fischer-petrosian",
+    "openingId": "french-defence",
+    "white": "Bobby Fischer",
+    "black": "Tigran Petrosian",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1971,
+    "event": "Candidates Match, Buenos Aires",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 g3 f5 Nc3 Bf6 Nge2 Nc6 d5 exd5 Nxd5 Bxb2 Bg2 O-O O-O Bh8 Nef4 Ne5 Qh5 Ng6 Rad1 c6 Ne3 Qf6 Nxf5 Bxf5 Qxf5 Qd6 Rd3 Kh8 Rf3 Bg7 Re1 Rae8 Nd4 Re5 Qf4 Qxf4 Rxf4",
+    "overview": "Fischer dismantles Petrosian's French Defense with a stunning positional exchange sacrifice. A brilliant demonstration of how to exploit the weakened dark squares after ...gxf6.",
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "rnbqkb1r/ppp2p1p/4pnp1/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
+        "annotation": "After Bxf6 gxf6, Black has doubled f-pawns and weakened dark squares around the king. This structural damage is permanent and forms the basis of White's entire strategy.",
+        "concept": "Dark Square Weakness"
+      },
+      {
+        "moveNumber": 11,
+        "color": "white",
+        "fen": "r1bq1rk1/ppp2p1p/2n1p3/3pN3/5P2/2N3P1/PPb2PBP/R2QK2R w KQ - 0 11",
+        "annotation": "Fischer plays d5! opening the position when Black's king is vulnerable on the weakened dark squares. The pawn sacrifice gains tremendous activity for White's pieces.",
+        "concept": "Central Pawn Sacrifice for Initiative"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r4r1k/pp3p1p/2p1qnb1/3nNQ2/8/4N1P1/P1P2PBP/3RR1K1 w - - 0 17",
+        "annotation": "White's knights dominate the center while Black's kingside is riddled with weaknesses. The pressure on f5 and f7 combined with the dark-square control gives White a winning position.",
+        "concept": "Centralized Knights & Piece Coordination"
+      }
+    ],
+    "middlegameTheme": "Dark Square Domination",
+    "lessonSummary": "Against the French Defense, exchanging on f6 to create doubled pawns and dark-square weaknesses is a powerful strategy. Fischer demonstrated that piece activity and dark-square control can be more important than material. Always look for structural concessions you can exploit long-term."
+  },
+  {
+    "id": "mg-capablanca-marshall",
+    "openingId": "ruy-lopez",
+    "white": "Jose Raul Capablanca",
+    "black": "Frank Marshall",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1918,
+    "event": "New York",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 Nf6 Re1 Bd6 h3 Ng4 Qf3 Qh4 d4 Nxf2 Re2 Bg4 hxg4 Bh2+ Kf1 Bg3 Rxf2 Qh1+ Ke2 Bxf2 Bd2 Bh4 Qh3 Rae8+ Kd3 Qf1+ Kc2 Bf2 Qf3 Qg1 Bd5 c5 dxc5 Bxc5 b4 Bd6 a4 a5 axb5 axb4 Ra6",
+    "overview": "The legendary game where Marshall unveiled his prepared gambit against Capablanca. Despite facing a surprise pawn sacrifice and fierce attacking play, Capablanca defended with supernatural precision.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "black",
+        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 b - - 0 9",
+        "annotation": "Marshall unleashes d5! — a prepared gambit sacrificing a pawn for rapid piece activity and attack. This was one of the first great opening preparations in chess history.",
+        "concept": "Prepared Gambit & Initiative"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r4rk1/2p2ppp/p2b4/1p6/3P2nq/1BP2Q1P/PP3PP1/RNB1R1K1 w - - 0 17",
+        "annotation": "Capablanca finds the only defense with Qf3! The queen simultaneously defends f2, controls the diagonal, and prepares counterplay. Every other move loses.",
+        "concept": "Precise Defense Under Pressure"
+      }
+    ],
+    "middlegameTheme": "Defense & Counter-Attack",
+    "lessonSummary": "Even the greatest attacks can be refuted with precise defense. Capablanca showed that staying calm under pressure and finding accurate defensive moves can turn the tables. In the Ruy Lopez, understanding both attack and defense is crucial."
+  },
+  {
+    "id": "mg-kasparov-karpov-wch85",
+    "openingId": "qgd",
+    "white": "Garry Kasparov",
+    "black": "Anatoly Karpov",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1985,
+    "event": "World Championship Game 16, Moscow",
+    "pgn": "d4 d5 c4 e6 Nc3 Be7 Nf3 Nf6 Bg5 h6 Bxf6 Bxf6 e3 O-O Rc1 c6 Bd3 Nd7 O-O dxc4 Bxc4 e5 h3 exd4 exd4 Nb6 Bb3 Bf5 Re1 Qd7 Ne5 Bxe5 dxe5 Qf5 Qf3 Qxf3 gxf3 Nd5 Nxd5 cxd5 Rc5 Rfd8 Rec1 Kf8 Kf1 Ke7 Ke2 Kd7 Kd3 Rc8 Rxc8 Rxc8 Rxc8 Kxc8 f4 Kd7 Ke3 Ke6 Kd4 f6 f3 fxe5+ fxe5 a5 a3 Bd3 b3 Bb1 a4 Ba2 Ke4",
+    "overview": "The game that won Kasparov his first World Championship title. A model QGD Exchange Variation where White's superior pawn structure and piece activity triumph in the endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r1bq1rk1/pp1n1pp1/2p2b1p/3pp3/2PP4/1BN1P2P/PP3PP1/R1RQ1K1 w - - 0 16",
+        "annotation": "White opens the center with exd4/exd5 at the right moment, creating an isolated d-pawn for Black. The ensuing middlegame and endgame revolve around this structural weakness.",
+        "concept": "Exploiting the Isolated Queen's Pawn"
+      },
+      {
+        "moveNumber": 30,
+        "color": "white",
+        "fen": "2r3k1/pp3pp1/2n4p/3Rp3/8/1P3P1P/P4PK1/2R5 w - - 0 30",
+        "annotation": "White dominates the c-file and e5 is a powerful passed pawn. The king march to the center combined with the rook activity gives White a winning endgame.",
+        "concept": "Active King & Passed Pawn in Endgame"
+      }
+    ],
+    "middlegameTheme": "QGD Endgame Technique",
+    "lessonSummary": "In the QGD Exchange Variation, the minority attack and isolated d-pawn are key themes. Kasparov showed that patient endgame play — centralizing the king, activating rooks, and pushing passed pawns — can convert small structural advantages."
+  },
+  {
+    "id": "mg-bronstein-ljubojevic",
+    "openingId": "kings-indian-defence",
+    "white": "Ljubomir Ljubojevic",
+    "black": "David Bronstein",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 1973,
+    "event": "Petropolis Interzonal",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 d5 Nh5 Qd2 Qh4+ g3 Nxg3 Qf2 Nxf1 Qxh4 Nxe3 Ke2 Nxc4 Rc1 Nb6 Kd3 f5 Nge2 fxe4+ fxe4 Nd7 Nc1 Nf6 Ke2 Bd7 N1a2 Rf7 Rcf1 Raf8 Rxf6 Rxf6 Rf1 Rxf1 Kxf1 Rf6+ Kg2 Nc4 b3 Ne3+ Kh3 Rf2",
+    "overview": "A wild King's Indian where Bronstein sacrifices his queen for two minor pieces and a crushing initiative. A perfect example of KID counterattacking play on the kingside.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "black",
+        "fen": "rnb2rk1/ppp2pbp/3p2p1/3Pp2n/2P1P2q/2N1BP2/PP1Q2PP/R3KBNR b KQ - 0 8",
+        "annotation": "Nxg3! begins a forcing sequence where Black gives up the queen but destroys White's pawn structure and wins massive material. The knight wreaks havoc in White's position.",
+        "concept": "Queen Sacrifice for Piece Activity"
+      },
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "rnb2rk1/ppp2pbp/1n1p2p1/3Pp3/2n1P3/2N2P2/PP2K2P/R1R3NR b - - 0 12",
+        "annotation": "Black has two knights and a bishop for the queen plus a shattered white king. The pieces coordinate perfectly — White can never consolidate.",
+        "concept": "Piece Coordination vs Queen"
+      }
+    ],
+    "middlegameTheme": "Kingside Counter-Attack",
+    "lessonSummary": "In the King's Indian, Black's kingside counterplay can be explosive. Bronstein showed that piece activity and pawn structure can outweigh material. When White weakens their kingside, Black's pieces can infiltrate with devastating effect."
+  },
+  {
+    "id": "mg-kramnik-leko",
+    "openingId": "london-system",
+    "white": "Vladimir Kramnik",
+    "black": "Peter Leko",
+    "whiteElo": 2802,
+    "blackElo": 2740,
+    "result": "1-0",
+    "year": 2001,
+    "event": "Dortmund",
+    "pgn": "d4 Nf6 Nf3 e6 Bf4 d5 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 Qe7 Ne5 Nd7 Nxd7 Bxd7 Bxd6 Qxd6 Qf3 f5 g4 Rae8 gxf5 exf5 Qh5 g6 Qh6 Ne7 O-O-O c4 Bc2 b5 Rdg1 Kh8 Nf3 Ng8 Qh4 Nf6 Ne5 Be6 Rg3 Nd7 Rhg1 Nxe5 dxe5 Qe7 Rg5 Rg8 Qf6",
+    "overview": "Kramnik demonstrates the modern London System at the highest level. White builds a solid position then transitions to a kingside attack using the g-file and weak dark squares.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1bq1rk1/pp1n1ppp/2npb3/2p1N3/3P4/2P1P1B1/PP1N1PPP/R2QKB1R w KQ - 0 9",
+        "annotation": "Ne5 is the ideal London System outpost. The knight centralizes powerfully, supporting ideas of f3+e4 or a kingside attack. Black must deal with this immediately.",
+        "concept": "Central Knight Outpost"
+      },
+      {
+        "moveNumber": 14,
+        "color": "white",
+        "fen": "r3qrk1/pp1b2pp/5p2/2pp1P2/2p3P1/2P1P3/PPBN1P1P/R2Q1RK1 w - - 0 14",
+        "annotation": "g4! opens the g-file for the rooks. Combined with Qh5-Qh6, White creates dangerous threats against Black's weakened kingside. The London's quiet opening belies fierce middlegame play.",
+        "concept": "G-File Attack"
+      }
+    ],
+    "middlegameTheme": "Solid Setup to Kingside Attack",
+    "lessonSummary": "The London System is not just solid — it can be aggressive. Kramnik showed that after establishing the bishop-on-f4 setup, White can transition to a kingside attack with g4 and rook lifts. The key is patience in the opening and aggression in the middlegame."
+  },
+  {
+    "id": "mg-kasparov-karpov-wch85-g24",
+    "openingId": "sicilian-najdorf",
+    "white": "Garry Kasparov",
+    "black": "Anatoly Karpov",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1985,
+    "event": "World Championship Game 24, Moscow",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 O-O Be7 f4 O-O Kh1 Qc7 a4 Nc6 Be3 Re8 Bf3 Rb8 Qd2 Bd7 Nb3 b6 g4 Bc8 g5 Nd7 Qf2 Bf8 Bg2 Bb7 Rad1 g6 Bc1 Nb4 Rd2 Bg7 Nd4 e5 Nf5 gxf5 gxf6 Bxf6 Nd5 Bxd5 exd5 Re7 Be3 Qd8 fxe5 Bxe5 Bh6 Nc2 Rf6 Nd4 Bg5 Qb8 Rxd6",
+    "overview": "The decisive game that made Kasparov the youngest World Champion. A brilliant Sicilian Najdorf where White sacrifices a knight on f5 to blow open the kingside.",
+    "criticalMoments": [
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "1rb2rk1/1bqnbppp/p1pp4/4p3/P3PP2/1NN1B2P/1PP1Q1P1/R4R1K w - - 0 19",
+        "annotation": "Kasparov begins the pawn storm with g4 followed by g5, preparing to open lines on the kingside. The key idea is that Black's pieces are on the queenside and cannot help defend.",
+        "concept": "Kingside Pawn Storm"
+      },
+      {
+        "moveNumber": 24,
+        "color": "white",
+        "fen": "1rb2rk1/2qn1p1p/p2p2b1/3Np1P1/Pn2PP2/4B3/1PP2QBP/3R1R1K w - - 0 24",
+        "annotation": "Nf5! is the decisive sacrifice. After gxf5 gxf6, White's pieces pour through the opened lines. The bishop pair and open g-file create an irresistible attack.",
+        "concept": "Knight Sacrifice to Open the Kingside"
+      }
+    ],
+    "middlegameTheme": "Kingside Pawn Storm & Piece Sacrifice",
+    "lessonSummary": "In the Sicilian Najdorf, White often attacks on the kingside while Black plays on the queenside. Kasparov demonstrated that a well-timed g4-g5 push combined with a knight sacrifice on f5 can tear open the kingside before Black's counterplay arrives."
+  }
+]

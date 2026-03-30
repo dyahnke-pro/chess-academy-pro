@@ -1,0 +1,42 @@
+{
+  "italian-game": [
+    {"fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 8", "correctMove": "d4", "hint": "It's time to challenge Black's center. What pawn break opens the position?", "concept": "Central d4 Break"},
+    {"fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 3", "correctMove": "Bc4", "hint": "Develop a piece toward the center and target a weakness.", "concept": "Piece Development"}
+  ],
+  "sicilian-najdorf": [
+    {"fen": "r1b1kb1r/1pqnpppp/p2p1n2/8/3NP1P1/2N1BP2/PPP4P/R2QKB1R w KQkq - 0 8", "correctMove": "Qd2", "hint": "Connect the queen to the dark-squared bishop for opposite-side castling.", "concept": "English Attack Setup"},
+    {"fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6", "correctMove": "Be2", "hint": "Develop the bishop to a stable square before deciding on the plan.", "concept": "Flexible Development"}
+  ],
+  "french-defence": [
+    {"fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4", "correctMove": "Bd3", "hint": "Which square puts the bishop on an active diagonal while keeping f4 available?", "concept": "Bishop Development in French"},
+    {"fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 6", "correctMove": "O-O", "hint": "Get the king to safety before starting your counterplay.", "concept": "King Safety First"}
+  ],
+  "caro-kann": [
+    {"fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2", "correctMove": "dxe4", "hint": "Capture the pawn to simplify the center — this is the main idea of the Caro-Kann.", "concept": "Main Line Exchange"},
+    {"fen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3", "correctMove": "e6", "hint": "Support the d5 pawn and prepare to develop the dark-squared bishop.", "concept": "Advance Variation Defense"}
+  ],
+  "ruy-lopez": [
+    {"fen": "r1bqkb1r/1ppp1ppp/p1n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4", "correctMove": "Ba4", "hint": "Maintain the pin while keeping options open. Don't exchange yet.", "concept": "Maintaining Tension"},
+    {"fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8", "correctMove": "c3", "hint": "Prepare the central pawn break that defines the Closed Ruy Lopez.", "concept": "Preparing d4"}
+  ],
+  "qgd": [
+    {"fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4", "correctMove": "Bg5", "hint": "Pin the knight and develop with purpose. This is the Classical QGD.", "concept": "Classical Development"},
+    {"fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 8", "correctMove": "e4", "hint": "Challenge the d5 pawn directly to activate your pieces.", "concept": "Central e4 Break"}
+  ],
+  "kings-indian-defence": [
+    {"fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7", "correctMove": "f5", "hint": "Launch the classic KID kingside counter-attack by challenging e4.", "concept": "f5 Pawn Storm"},
+    {"fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4", "correctMove": "d6", "hint": "Support e5 and complete development before pushing pawns.", "concept": "Solid Development"}
+  ],
+  "london-system": [
+    {"fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3", "correctMove": "c5", "hint": "Challenge White's center immediately — the best reaction to the London.", "concept": "Anti-London Counter"},
+    {"fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 4", "correctMove": "Bd3", "hint": "Offer to trade the light-squared bishops. This is a key London idea.", "concept": "Bishop Trade"}
+  ],
+  "english-opening": [
+    {"fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3", "correctMove": "g3", "hint": "Fianchetto the bishop to control the long diagonal.", "concept": "King's Fianchetto"},
+    {"fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N3P1/PP1PPP1P/R1BQKBNR w KQkq - 0 3", "correctMove": "Bg2", "hint": "Complete the fianchetto — the bishop belongs on g2.", "concept": "Completing the Fianchetto"}
+  ],
+  "sicilian-dragon": [
+    {"fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R w KQkq - 0 7", "correctMove": "O-O-O", "hint": "Castle queenside to prepare the h4-h5 pawn storm on the kingside.", "concept": "Opposite Side Castling"},
+    {"fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP2P/2N1B3/PPPQBPP1/R3K2R w KQ - 0 8", "correctMove": "h5", "hint": "Continue the pawn storm — break open the h-file!", "concept": "h-File Attack"}
+  ]
+}

@@ -26,6 +26,9 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   weakness_report:         'deepseek-reasoner',
   weekly_report:           'deepseek-reasoner',
   deep_analysis:           'deepseek-reasoner',
+  model_game_annotation:   'deepseek-reasoner',
+  middlegame_plan_generation: 'deepseek-reasoner',
+  sideline_explanation:    'deepseek-chat',
 };
 
 const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
@@ -48,6 +51,9 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   weakness_report:         'claude-opus-4-6',
   weekly_report:           'claude-opus-4-6',
   deep_analysis:           'claude-opus-4-6',
+  model_game_annotation:   'claude-sonnet-4-6',
+  middlegame_plan_generation: 'claude-sonnet-4-6',
+  sideline_explanation:    'claude-haiku-4-5-20251001',
 };
 
 // Offline fallback templates
