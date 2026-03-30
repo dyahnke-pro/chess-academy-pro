@@ -132,54 +132,54 @@ export function OpeningExplorerPage(): JSX.Element {
       </div>
 
       {/* Tab toggle */}
-      <div className="flex gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
+      <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         <button
           onClick={() => setTab('repertoire')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
             tab === 'repertoire'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-repertoire"
         >
-          <BookOpen size={14} />
-          My Repertoire
+          <BookOpen size={16} />
+          <span className="leading-tight text-center">Repertoire</span>
         </button>
         <button
           onClick={() => setTab('all')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
             tab === 'all'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-all"
         >
-          <Library size={14} />
-          All Openings
+          <Library size={16} />
+          <span className="leading-tight text-center">All</span>
         </button>
         <button
           onClick={() => setTab('gambits')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
             tab === 'gambits'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-gambits"
         >
-          <Swords size={14} />
-          Gambits
+          <Swords size={16} />
+          <span className="leading-tight text-center">Gambits</span>
         </button>
         <button
           onClick={() => setTab('pro')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
             tab === 'pro'
               ? 'bg-theme-accent text-white'
               : 'text-theme-text-muted hover:text-theme-text'
           }`}
           data-testid="tab-pro"
         >
-          <Users size={14} />
-          Pro Repertoires
+          <Users size={16} />
+          <span className="leading-tight text-center">Pro</span>
         </button>
       </div>
 
