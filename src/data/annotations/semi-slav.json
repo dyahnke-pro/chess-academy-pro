@@ -3398,6 +3398,2224 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Botvinnik Material Grab",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen pawn, aiming for a classical center. The d4 pawn controls e5 and c5, setting the stage for the Queen's Gambit complex.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black matches the center symmetrically, signaling a willingness to enter QGD or Slav structures. The d5 pawn challenges White's central ambitions directly.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. White pressures d5 and prepares to gain a space advantage if Black allows it.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav move, supporting d5 with a pawn rather than a piece. This keeps the light-squared bishop free to develop outside the pawn chain.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to its most natural square. Nf3 supports d4, controls e5, and prepares kingside castling.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops and attacks the e4 square, preventing White from easily pushing e4. This is the standard Semi-Slav setup move.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White adds another piece to the center, reinforcing e4 and putting more pressure on d5. The Semi-Slav structures demand this knight on c3.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "The Semi-Slav move order! Black shores up d5 with e6, creating a solid but slightly passive pawn structure. The downside is the light-squared bishop is now locked in.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the f6 knight against the queen, the aggressive Bg5 line. This creates tension and threatens to disrupt Black's coordination.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black grabs the pawn! This is the Botvinnik Variation, one of the sharpest lines in all of chess. Black accepts structural weaknesses in exchange for material and counterplay.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White pushes forward aggressively, seizing the center and threatening e5 to attack the f6 knight. This is the critical moment that defines the Botvinnik.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black defends the extra pawn on c4 with b5, creating a queenside pawn chain. This is the thematic Botvinnik idea: hold the material at all costs.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b5",
+              "to": "c4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "White strikes! The e5 advance attacks the f6 knight and opens lines toward Black's king. The position becomes razor-sharp with both sides committed.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "Black asks the bishop a question. This forces White to make a critical decision about the dark-squared bishop before the position clarifies.",
+          "arrows": [
+            {
+              "from": "h7",
+              "to": "h6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "h6",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bh4",
+          "annotation": "White retreats to h4, maintaining the pin on the f6 knight. The bishop stays active on the h4-d8 diagonal, keeping pressure on Black's position.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "h4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "h4",
+              "to": "f6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g5",
+          "annotation": "Black chases the bishop further with g5! This looks reckless but is deeply prepared theory. Black weakens the kingside but gains time and space.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "h4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nxg5",
+          "annotation": "White sacrifices the knight on g5, ripping open lines toward the Black king. This is the famous Botvinnik sacrifice that leads to incredibly complex play.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "h7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "hxg5",
+          "annotation": "Black recaptures, opening the h-file. The position is now critical with both sides having committed pieces and pawns to the battle.",
+          "arrows": [
+            {
+              "from": "h6",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bxg5",
+          "annotation": "White recaptures with the bishop, now aiming at the exposed Black kingside. The pin on f6 is reinstated and the position is incredibly sharp.",
+          "arrows": [
+            {
+              "from": "h4",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, reinforcing the f6 knight and preparing to castle queenside. This is the safest haven for the king in this wild position.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White fianchettoes to g2, aiming the bishop at the long diagonal. This prepares a powerful bishop on g2 targeting the Black queenside.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black develops the light-squared bishop to b7, controlling the long diagonal. This is the payoff for the pawn structure choices, the bishop is very active here.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "g2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White completes the fianchetto. The g2 bishop is extremely powerful, aiming through the center toward the Black queenside along the long diagonal.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "a8",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qb6",
+          "annotation": "Black places the queen actively, eyeing b2 and supporting the b5-c4 pawn chain. The queen also prepares queenside castling.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b6",
+              "to": "b2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "exf6",
+          "annotation": "White captures on f6, breaking open lines and creating passed pawns. The f6 pawn becomes a thorn deep in Black's territory.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "Black castles queenside, tucking the king to safety. In this wild Botvinnik position, the queenside is relatively safe despite the open lines.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "c8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside. Both sides have castled on opposite wings, setting the stage for mutual pawn storms and attacks.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "The trap springs! Black pushes c5, gaining massive queenside space and threatening to advance further. White must now deal with Black's connected passed pawns on the queenside while the f6 pawn provides counterplay. This position is a material grab that rewards precise calculation.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Anti-Meran c5 Break",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White starts with the queen pawn, controlling the center and preparing the Queen's Gambit setup.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds symmetrically, establishing a stake in the center and signaling a classical approach.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit, pressuring d5 and seeking to gain a space advantage.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav Defense move, supporting d5 solidly with a pawn.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops naturally, supporting d4 and controlling e5.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, pressuring e4 and maintaining flexibility.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White reinforces the center, preparing for e4 and adding pressure to d5.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "The Semi-Slav. Black supports d5 with e6, creating a solid but slightly passive center.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White opts for the quiet e3 Anti-Meran rather than the aggressive Bg5. This solid approach aims to develop the bishop to d3 and play for a controlled center.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, preparing to reroute and supporting the center.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White places the bishop on its best diagonal, eyeing h7 and preparing to castle.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, the typical Semi-Slav approach. This gains a tempo as White must recapture the bishop.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recaptures, placing the bishop on a strong diagonal.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black gains queenside space and attacks the bishop. This is the start of the Meran counter-attacking plan.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "The bishop retreats, maintaining its strong diagonal.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black prepares the c5 break by securing the b5 pawn.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White seizes the center with e4, staking a claim to space and creating central tension.",
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "The trap! Black strikes with c5, challenging White's center at the perfect moment. If White plays d5, Black's queenside majority becomes mobile and dangerous. The e5 square is weakened in White's camp and Black's pieces spring to life.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "c5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "White advances, but this plays into Black's hands by freeing the long diagonal.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black locks the center, creating a strong pawn wedge on e5. The position now favors Black's piece activity.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, seeking safety.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black's light-squared bishop becomes a monster on the long diagonal. The bishop eyes the d5 pawn and aims all the way to g2. Black's position is dynamic and full of counterplay thanks to the c5 break.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "g2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Botvinnik Without Preparation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "Standard queen pawn opening, controlling the center.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds symmetrically.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav Defense support move.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Natural development.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops and attacks e4.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White reinforces the center.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "The Semi-Slav.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "The aggressive Bg5, entering the Botvinnik/Moscow complex.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black enters the Botvinnik.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White seizes the center aggressively.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black defends the extra pawn.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "The critical advance, attacking f6.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "Asking the bishop.",
+          "arrows": [
+            {
+              "from": "h7",
+              "to": "h6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bh4",
+          "annotation": "Maintaining the pin.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "h4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g5",
+          "annotation": "The aggressive g5 push.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nxg5",
+          "annotation": "The knight sacrifice.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "hxg5",
+          "annotation": "Recapturing.",
+          "arrows": [
+            {
+              "from": "h6",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bxg5",
+          "annotation": "White recaptures with bishop.",
+          "arrows": [
+            {
+              "from": "h4",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Developing.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "Preparing the fianchetto.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Developing the bishop.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "Completing the fianchetto.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qb6",
+          "annotation": "Queen to b6.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "exf6",
+          "annotation": "Capturing on f6.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "Black castles queenside.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "c8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b4",
+          "annotation": "Black pushes b4, but without proper preparation this advance is premature. The knight on c3 is displaced but White gets powerful counterplay.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Na4",
+          "annotation": "The knight hops to a4, eyeing c5 and pressuring the queenside. White's pieces coordinate well.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a4",
+              "to": "c5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qb5",
+          "annotation": "Black tries to keep pressure, but the queen is running out of good squares.",
+          "arrows": [
+            {
+              "from": "b6",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "a3",
+          "annotation": "White undermines the b4 pawn, opening lines against the Black king.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a3",
+              "to": "b4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc5",
+          "annotation": "Black activates the knight, but it's too late.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "axb4",
+          "annotation": "White opens the a-file against the Black king.",
+          "arrows": [
+            {
+              "from": "a3",
+              "to": "b4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nxa4",
+          "annotation": "Black captures the knight.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Rxa4",
+          "annotation": "White recaptures with the rook, which now dominates the a-file. Black's king is critically exposed.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "a4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "a4",
+              "to": "a8",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qxb4",
+          "annotation": "WARNING: Black grabs the b4 pawn but this is a mistake. White's rook on a4 and bishop on g2 create devastating threats along the open files. Without proper preparation, the Botvinnik material grab backfires as White's piece activity overwhelms Black's extra pawns. The a-file pressure and the passed f6 pawn give White a winning attack.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a4",
+              "to": "a8",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "a8",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Passive Play After e3",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "Standard queen pawn opening.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds in the center.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav setup.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Natural development.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Reinforcing the center.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "The Semi-Slav.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays the quiet e3, a solid but unambitious choice. This blocks the dark-squared bishop and gives Black easy equality.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops normally.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White places the bishop on d3.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop modestly.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White connects rooks and eyes h7.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c2",
+              "to": "h7",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "Black prepares Bb7, a natural and good plan.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White finally pushes e4, but it comes too late in this position.",
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black opens the center favorably.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "White recaptures with the knight.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black exchanges knights.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe4",
+          "annotation": "White recaptures, the bishop is centralized.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black develops the bishop to b7, challenging White's centralized bishop.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White places the rook on d1.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qc7",
+          "annotation": "Black positions the queen actively.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "c7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White retreats the bishop.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "WARNING: This is the problem with passive e3 setups. Black achieves the freeing c5 break with perfect timing, equalizing completely. The position opens up and Black's pieces are well-placed. White's earlier e3 meant the dark-squared bishop was locked in, and now it has no active prospects. The lesson: in the Semi-Slav, White must play ambitiously or Black will equalize effortlessly.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "g2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "dxc5",
+          "annotation": "White captures but Black recaptures with a well-coordinated position.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc5",
+          "annotation": "Black recaptures with the knight, reaching a fully equal position. The knight is beautifully placed on c5 and Black has no weaknesses.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Be2",
+          "annotation": "White must retreat again, having achieved nothing from the opening.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Rfd8",
+          "annotation": "Black seizes the open d-file with the rook. The position is fully equal to slightly better for Black, illustrating why passive play after e3 gives White no advantage.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "d8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d8",
+              "to": "d1",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

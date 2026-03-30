@@ -497,19 +497,19 @@
           ]
         },
         {
-          "san": "Nf3",
-          "annotation": "White develops the kingside knight before e3, keeping the position flexible. In this move order, Nf3 comes before e3 to support d4 and prepare castling. The knight controls e5 and is perfectly placed on f3 for both attack and defense.",
-          "pawnStructure": "Unchanged. White's development is harmonious with both knights active and the bishop pinning.",
+          "san": "e3",
+          "annotation": "White plays e3 immediately after Bg5, securing d4 and opening the f1-a6 diagonal for the light-squared bishop. The bishop on g5 is already developed outside the pawn chain, so e3 doesn't trap anything — it's purely constructive. The pawn chain e3-d4 is rock solid.",
+          "pawnStructure": "White's e3-d4 chain is very stable. The light bishop will develop to d3 on its ideal diagonal.",
           "plans": [
-            "Play e3 to solidify and open the diagonal for the light bishop",
-            "Castle and launch the minority attack"
+            "Develop Bd3 targeting h7",
+            "Follow with Qc2 to create the dangerous battery"
           ],
           "arrows": [
-            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"},
-            {"from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}
+            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}
           ],
           "highlights": [
-            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
           ]
         },
         {
@@ -528,19 +528,19 @@
           ]
         },
         {
-          "san": "e3",
-          "annotation": "Now White plays e3, securing d4 and opening the f1-a6 diagonal for the light-squared bishop. Since Bg5 and Nf3 are already played, e3 doesn't trap anything — it's purely constructive. The pawn chain e3-d4 is rock solid.",
-          "pawnStructure": "White's e3-d4 chain is very stable. The light bishop will develop to d3 on its ideal diagonal.",
+          "san": "Bd3",
+          "annotation": "The bishop takes its commanding post on d3, aiming straight at h7. This is the signature piece placement in the Exchange QGD. The Bd3+Qc2 battery will create latent threats against the Black king that restrict Black's options.",
+          "pawnStructure": "Unchanged. The bishop on d3 adds a kingside dimension to White's plan.",
           "plans": [
-            "Develop Bd3 targeting h7",
-            "Follow with Qc2 to create the dangerous battery"
+            "Play Qc2 to complete the battery",
+            "Develop Nf3 and castle for the minority attack"
           ],
           "arrows": [
-            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"},
-            {"from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}
+            {"from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
           ],
           "highlights": [
-            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"}
           ]
         },
         {
@@ -548,8 +548,8 @@
           "annotation": "Black develops the last minor piece. The knight on d7 is flexible — it can go to f8 for defense, b6 for queenside activity, or support a future ...c5 break. It also keeps the c-file clear for ...c6.",
           "pawnStructure": "Unchanged. Black's development is nearly complete.",
           "plans": [
-            "Play ...c6 to lock down d5",
-            "Put the rook on e8 for e-file pressure"
+            "Play ...Re8 to use the open e-file",
+            "Play ...c6 to lock down d5"
           ],
           "arrows": [
             {"from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"},
@@ -560,19 +560,20 @@
           ]
         },
         {
-          "san": "Bd3",
-          "annotation": "The bishop takes its commanding post on d3, aiming straight at h7. This is the signature piece placement in the Exchange QGD. The Bd3+Qc2 battery will create latent threats against the Black king that restrict Black's options.",
-          "pawnStructure": "Unchanged. The bishop on d3 adds a kingside dimension to White's plan.",
+          "san": "Qc2",
+          "annotation": "White completes the Bd3+Qc2 battery. The queen supports the bishop's aim at h7, clears d1 for rook connectivity, and prepares the minority attack. This is the ideal setup — kingside pressure combined with queenside pawn advances.",
+          "pawnStructure": "Unchanged. White's setup is progressing with the battery in place.",
           "plans": [
-            "Play Qc2 to complete the battery",
-            "Consider O-O and then Rab1 for the minority attack"
+            "Develop Nf3 and castle kingside",
+            "Keep the kingside threats simmering to restrict Black's pieces"
           ],
           "arrows": [
-            {"from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"},
-            {"from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
+            {"from": "d1", "to": "c2", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c2", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
           ],
           "highlights": [
-            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"}
+            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"},
+            {"square": "b4", "color": "rgba(255, 255, 0, 0.4)"}
           ]
         },
         {
@@ -592,20 +593,19 @@
           ]
         },
         {
-          "san": "Qc2",
-          "annotation": "White completes the Bd3+Qc2 battery. The queen supports the bishop's aim at h7, clears d1 for rook connectivity, and prepares the minority attack. This is the ideal setup — kingside pressure combined with queenside pawn advances.",
-          "pawnStructure": "Unchanged. White's setup is now complete with the battery in place.",
+          "san": "Nf3",
+          "annotation": "White develops the kingside knight to f3, supporting d4 and preparing to castle. The knight controls e5 and is perfectly placed for both attack and defense. With Bd3 and Qc2 already in place, White is nearly ready to castle and launch the minority attack.",
+          "pawnStructure": "Unchanged. White's development is harmonious with both knights active and the bishop pinning.",
           "plans": [
-            "Castle and begin the minority attack with Rab1, a3, b4",
-            "Keep the kingside threats simmering to restrict Black's pieces"
+            "Castle kingside next",
+            "Launch the minority attack with Rab1, a3, b4"
           ],
           "arrows": [
-            {"from": "d1", "to": "c2", "color": "rgba(0, 180, 80, 0.8)"},
-            {"from": "c2", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}
           ],
           "highlights": [
-            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"},
-            {"square": "b4", "color": "rgba(255, 255, 0, 0.4)"}
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
           ]
         },
         {

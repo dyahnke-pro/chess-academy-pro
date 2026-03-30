@@ -2743,6 +2743,366 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Legal's Mate Reversal",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "Bc4"
+        },
+        {
+          "san": "Bg4"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "h3"
+        },
+        {
+          "san": "Bh5"
+        },
+        {
+          "san": "Nxe5"
+        },
+        {
+          "san": "Bxd1"
+        },
+        {
+          "san": "Bxf7+"
+        },
+        {
+          "san": "Ke7"
+        },
+        {
+          "san": "Nd5+"
+        },
+        {
+          "san": "Nxd5"
+        },
+        {
+          "san": "Kxd1"
+        },
+        {
+          "san": "Kf6",
+          "annotation": "The famous Legal's Mate trap backfires here when Black calmly captures the queen and survives the attack. After Bxf7+ Ke7 and Nd5+, Black plays Nxd5 and the king escapes to f6. Black emerges with an extra queen for two minor pieces — a decisive material advantage.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d1",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "d4 Capture Refutation",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Nbd7"
+        },
+        {
+          "san": "Bc4"
+        },
+        {
+          "san": "Be7"
+        },
+        {
+          "san": "Ng5"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Bxf7+"
+        },
+        {
+          "san": "Rxf7"
+        },
+        {
+          "san": "Ne6"
+        },
+        {
+          "san": "Qe8"
+        },
+        {
+          "san": "Nxc7"
+        },
+        {
+          "san": "Qd8"
+        },
+        {
+          "san": "Nxa8"
+        },
+        {
+          "san": "b6",
+          "annotation": "White's Bxf7+ sacrifice looks flashy but Black refutes it cleanly. After Ne6 Qe8 and Nxc7 Qd8, the knight on a8 is trapped in the corner. Black will win it back with ...b6 and ...Bb7, emerging with better development and the initiative.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "a8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b6",
+              "to": "a8",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Early exd4 Mistake",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "exd4"
+        },
+        {
+          "san": "Nxd4"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Be7"
+        },
+        {
+          "san": "Bf4"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Qd2"
+        },
+        {
+          "san": "Re8"
+        },
+        {
+          "san": "O-O-O"
+        },
+        {
+          "san": "Bf8"
+        },
+        {
+          "san": "f3"
+        },
+        {
+          "san": "a6"
+        },
+        {
+          "san": "g4"
+        },
+        {
+          "san": "b5",
+          "annotation": "Black should avoid capturing exd4 too early in the Philidor. This exchange relieves all central tension and gives White a free hand to develop aggressively. White gets easy kingside expansion with f3 and g4, while Black's position remains cramped with no active plan.",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "h2",
+              "to": "h4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cramped Position Danger",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Nbd7"
+        },
+        {
+          "san": "Bc4"
+        },
+        {
+          "san": "Be7"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Re1"
+        },
+        {
+          "san": "c6"
+        },
+        {
+          "san": "a4"
+        },
+        {
+          "san": "h6"
+        },
+        {
+          "san": "b3"
+        },
+        {
+          "san": "Re8"
+        },
+        {
+          "san": "Bb2"
+        },
+        {
+          "san": "Bf8",
+          "annotation": "Black's main danger in the Philidor is getting a passive, cramped position with no counterplay. Playing ...c6 instead of ...c5 surrenders the center entirely. Without the ...d5 or ...c5 break, Black's pieces lack active squares and White can build pressure at leisure.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

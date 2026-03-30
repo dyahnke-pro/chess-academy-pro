@@ -2998,6 +2998,390 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Nxf7 Refutation",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nxe5"
+        },
+        {
+          "san": "Nc6"
+        },
+        {
+          "san": "Nxc6"
+        },
+        {
+          "san": "dxc6"
+        },
+        {
+          "san": "d3"
+        },
+        {
+          "san": "Bc5"
+        },
+        {
+          "san": "Be2"
+        },
+        {
+          "san": "Ng4"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Qh4"
+        },
+        {
+          "san": "h3"
+        },
+        {
+          "san": "Nxf2"
+        },
+        {
+          "san": "Rxf2"
+        },
+        {
+          "san": "Bxf2+"
+        },
+        {
+          "san": "Kh1"
+        },
+        {
+          "san": "Qxe4",
+          "annotation": "White's casual play allows a devastating knight sacrifice on f2. After Nxf2 Rxf2 Bxf2+ Kh1, Black wins the e4 pawn with Qxe4 and has a winning attack. The open f-file and exposed white king make this position extremely dangerous for White.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "h1",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f2",
+              "to": "f1",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Wrong Move Order Punishment",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nxe5"
+        },
+        {
+          "san": "Nxe4"
+        },
+        {
+          "san": "Qe2"
+        },
+        {
+          "san": "Qe7"
+        },
+        {
+          "san": "Qxe4"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "dxe5"
+        },
+        {
+          "san": "dxe5"
+        },
+        {
+          "san": "Nc6"
+        },
+        {
+          "san": "Bf4"
+        },
+        {
+          "san": "Qb4+"
+        },
+        {
+          "san": "Qxb4"
+        },
+        {
+          "san": "Nxb4"
+        },
+        {
+          "san": "Na3"
+        },
+        {
+          "san": "Bf5",
+          "annotation": "If Black recaptures with Nxe4 instead of the correct d6, White can exploit the move order. However, after the queens come off Black's active knight on b4 targets c2 and a2. Black's bishop on f5 controls key squares, giving Black dynamic compensation in the endgame.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f5",
+              "to": "c2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "b4",
+              "to": "a2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cochrane Gambit Danger",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nxe5"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "Nxf7"
+        },
+        {
+          "san": "Kxf7"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "c5"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "cxd4"
+        },
+        {
+          "san": "Qxd4"
+        },
+        {
+          "san": "Nc6"
+        },
+        {
+          "san": "Qd1"
+        },
+        {
+          "san": "Be7"
+        },
+        {
+          "san": "Bc4+"
+        },
+        {
+          "san": "Be6"
+        },
+        {
+          "san": "Bxe6+"
+        },
+        {
+          "san": "Kxe6",
+          "annotation": "The Cochrane Gambit (Nxf7) is a dangerous surprise weapon. White sacrifices a knight to strip Black's castling rights and expose the king. Even though Black is a piece up, the displaced king on e6 is vulnerable to central attacks. Black must play precisely to consolidate.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "d6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "e6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "d4 Center Bind",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nxe5"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Nxe4"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "Bd3"
+        },
+        {
+          "san": "Bd6"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "c6"
+        },
+        {
+          "san": "Qc2"
+        },
+        {
+          "san": "Na6"
+        },
+        {
+          "san": "a3"
+        },
+        {
+          "san": "f5"
+        },
+        {
+          "san": "cxd5"
+        },
+        {
+          "san": "cxd5"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Nxc3"
+        },
+        {
+          "san": "bxc3"
+        },
+        {
+          "san": "Nc7",
+          "annotation": "White's d4+c4 pawn duo creates a powerful central bind. If Black plays passively, White will open the center and exploit superior piece activity. The c4 break undermines Black's d5 pawn, and after cxd5 cxd5 the isolated d-pawn becomes a long-term weakness.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

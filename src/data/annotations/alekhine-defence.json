@@ -2852,6 +2852,395 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Four Pawns Attack Counter",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nd5"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "Nb6"
+        },
+        {
+          "san": "f4"
+        },
+        {
+          "san": "dxe5"
+        },
+        {
+          "san": "fxe5"
+        },
+        {
+          "san": "Nc6"
+        },
+        {
+          "san": "Be3"
+        },
+        {
+          "san": "Bf5"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "e6"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Bb4"
+        },
+        {
+          "san": "Rc1"
+        },
+        {
+          "san": "Bxc3+"
+        },
+        {
+          "san": "bxc3"
+        },
+        {
+          "san": "Nb4",
+          "annotation": "Black exploits the weakened queenside structure after bxc3 by planting a knight on b4. The doubled c-pawns are a permanent weakness, and the knight eyes both c2 and d3, creating dual threats that are hard to handle.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b4",
+              "to": "d3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f5",
+              "to": "c2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bg4 Pin Pressure",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nd5"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Bg4"
+        },
+        {
+          "san": "Be2"
+        },
+        {
+          "san": "e6"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Be7"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "Nb6"
+        },
+        {
+          "san": "exd6"
+        },
+        {
+          "san": "cxd6"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "exd5"
+        },
+        {
+          "san": "cxd5"
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black's early Bg4 pins the f3 knight, generating lasting pressure along the d-file after the center opens. With a solid pawn structure and well-placed minor pieces, Black has comfortable play against White's isolated d5 pawn.",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "e8",
+              "to": "e2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Four Pawns Steamroll",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nd5"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "Nb6"
+        },
+        {
+          "san": "f4"
+        },
+        {
+          "san": "dxe5"
+        },
+        {
+          "san": "fxe5"
+        },
+        {
+          "san": "g6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Bg7"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Be2"
+        },
+        {
+          "san": "Bg4"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Nc6"
+        },
+        {
+          "san": "Be3"
+        },
+        {
+          "san": "f6",
+          "annotation": "White's four-pawn center looks imposing but Black must time the ...f6 break carefully. If Black plays ...f6 too early without sufficient piece pressure, White can maintain the center and launch a kingside attack. The key danger is that exf6 opens the e-file toward Black's king.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Exchange Passive Play",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "Nd5"
+        },
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d6"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "Nb6"
+        },
+        {
+          "san": "exd6"
+        },
+        {
+          "san": "cxd6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "g6"
+        },
+        {
+          "san": "Be3"
+        },
+        {
+          "san": "Bg7"
+        },
+        {
+          "san": "Rc1"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "b3"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "N8d7"
+        },
+        {
+          "san": "Be2"
+        },
+        {
+          "san": "f5",
+          "annotation": "In the Exchange Variation, Black must avoid passivity. If Black fails to challenge the center with ...e5 and ...f5 early, White's space advantage becomes permanent. The d6 pawn can become a chronic weakness if Black doesn't generate active counterplay on the kingside.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "c1",
+              "to": "c7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f5",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

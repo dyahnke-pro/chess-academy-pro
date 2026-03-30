@@ -454,6 +454,33 @@
             {"square": "b7", "color": "rgba(255, 255, 0, 0.4)"},
             {"square": "g2", "color": "rgba(255, 255, 0, 0.4)"}
           ]
+        },
+        {
+          "san": "e5",
+          "annotation": "White advances e5, seizing space and pushing back the f6 knight. This is the logical follow-up to the e4 break — White locks in a space advantage and restricts Black's most active minor piece. The Catalan bishop on g2 now has a clear diagonal with d5 under pressure, and Black must find a retreat for the knight.",
+          "pawnStructure": "The e5 pawn cramps Black's kingside and creates a wedge in the center. White's space advantage is now substantial.",
+          "plans": ["Restrict Black's knight and gain kingside space", "Prepare Nf3-g5 or Nd2-f3-g5 attacks"],
+          "arrows": [
+            {"from": "e4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e5", "to": "f6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "f6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Ne8",
+          "annotation": "Black retreats the knight to e8, the only good square. The knight will reroute to c7 or d6 to remain useful. This is a typical consequence of White's space advantage in the Closed Catalan — Black's pieces get pushed back and must regroup. The position is strategically pleasant for White with more space, the powerful Catalan bishop, and a flexible pawn center.",
+          "plans": ["Reroute the knight to c7 or d6", "Seek counterplay with ...f6 to challenge the e5 pawn"],
+          "arrows": [
+            {"from": "f6", "to": "e8", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e8", "to": "c7", "color": "rgba(0, 100, 255, 0.7)"},
+            {"from": "e8", "to": "d6", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
         }
       ]
     },
@@ -762,8 +789,20 @@
           "highlights": [{"square": "g2", "color": "rgba(255, 255, 0, 0.4)"}]
         },
         {
+          "san": "d5",
+          "annotation": "Black plants the pawn on d5, establishing central presence. In this Nbd7 variation, Black will eventually capture on c4 and develop the queenside with ...Bd7-c6 and ...Nbd7-b6, a sophisticated regrouping plan.",
+          "arrows": [{"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}],
+          "highlights": [{"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The Catalan bishop takes its post on g2, immediately pressuring d5 along the long diagonal. This is the heart of the Catalan — the bishop will exert relentless positional pressure on the queenside light squares.",
+          "arrows": [{"from": "f1", "to": "g2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "g2", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}],
+          "highlights": [{"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}]
+        },
+        {
           "san": "Be7",
-          "annotation": "Black develops the bishop before committing to ...d5. This flexible approach allows Black to see how White develops before making central pawn decisions.",
+          "annotation": "Black develops the bishop to e7, a solid choice preparing kingside castling. The bishop is passive but guards important squares and keeps the position flexible.",
           "arrows": [{"from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}],
           "highlights": [{"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}]
         },
@@ -849,21 +888,9 @@
         },
         {
           "san": "Nb6",
-          "annotation": "Black attacks the queen with ...Nb6, gaining a tempo. The knight on b6 is well-placed, controlling c4 and a4. Black's position is solid and the minor pieces are actively deployed.",
+          "annotation": "Black attacks the queen with ...Nb6, gaining a tempo. The knight on b6 is well-placed, controlling c4 and a4. Black's position is solid and the minor pieces are actively deployed. The battle for the long diagonal between the Catalan bishop and Black's Bc6 defines the middlegame strategy.",
           "arrows": [{"from": "d7", "to": "b6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b6", "to": "c4", "color": "rgba(255, 50, 50, 0.8)"}],
           "highlights": [{"square": "b6", "color": "rgba(255, 255, 0, 0.4)"}]
-        },
-        {
-          "san": "Qd3",
-          "annotation": "White retreats the queen to d3, maintaining central influence. The queen supports e4 and keeps options open. The position is roughly equal but White has slightly more harmonious piece coordination and the Catalan bishop remains a long-term asset.",
-          "arrows": [{"from": "c4", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"}],
-          "highlights": [{"square": "d3", "color": "rgba(255, 255, 0, 0.4)"}]
-        },
-        {
-          "san": "Nbd5",
-          "annotation": "Black centralizes the knight on the powerful d5 outpost. The knight blocks the Catalan bishop's diagonal and controls key central squares. This is an excellent post for the knight where it cannot easily be challenged.",
-          "arrows": [{"from": "b6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}],
-          "highlights": [{"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}]
         }
       ]
     },

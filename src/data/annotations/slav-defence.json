@@ -3108,6 +3108,419 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Qb3 Trap Defense",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "c6"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "dxc4"
+        },
+        {
+          "san": "a4"
+        },
+        {
+          "san": "Bf5"
+        },
+        {
+          "san": "Qb3"
+        },
+        {
+          "san": "Na6"
+        },
+        {
+          "san": "e4"
+        },
+        {
+          "san": "Bg6"
+        },
+        {
+          "san": "Bxc4"
+        },
+        {
+          "san": "Nb4"
+        },
+        {
+          "san": "Be2"
+        },
+        {
+          "san": "e6"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Be7"
+        },
+        {
+          "san": "Rd1"
+        },
+        {
+          "san": "O-O",
+          "annotation": "White's Qb3 tries to exploit the undefended b7 pawn after ...Bf5, but Black has a clean defense with ...Na6. The knight heads to b4, putting pressure on c2 and d3. After e4 Bg6, Black's bishop retreats safely and the knight on b4 becomes a powerful outpost, giving Black a comfortable game.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b4",
+              "to": "d3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "g6",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Exchange Slav Qb6 Trick",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "c6"
+        },
+        {
+          "san": "cxd5"
+        },
+        {
+          "san": "cxd5"
+        },
+        {
+          "san": "Bf4"
+        },
+        {
+          "san": "Nc6"
+        },
+        {
+          "san": "e3"
+        },
+        {
+          "san": "Qb6"
+        },
+        {
+          "san": "Qb3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Bf5"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "e6"
+        },
+        {
+          "san": "Be2"
+        },
+        {
+          "san": "Bb4"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "O-O",
+          "annotation": "In the Exchange Slav, Black's ...Qb6 is a sneaky move that targets b2 and creates an awkward pin. After Qb3 Nf6 Nc3, Black develops naturally with ...Bf5 and ...Bb4, pinning the knight and maintaining pressure on the queenside. White must play carefully to avoid losing the b2 pawn.",
+          "arrows": [
+            {
+              "from": "b6",
+              "to": "b2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "f5",
+              "to": "d3",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Premature ...Bf5 Before ...c6",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "c6"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Bf5"
+        },
+        {
+          "san": "cxd5"
+        },
+        {
+          "san": "cxd5"
+        },
+        {
+          "san": "Qb3"
+        },
+        {
+          "san": "Qb6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "Qxb3"
+        },
+        {
+          "san": "axb3"
+        },
+        {
+          "san": "Nc6"
+        },
+        {
+          "san": "Bf4"
+        },
+        {
+          "san": "e6"
+        },
+        {
+          "san": "e3"
+        },
+        {
+          "san": "Bb4"
+        },
+        {
+          "san": "Ne5"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Be2"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "a6",
+          "annotation": "Developing ...Bf5 before consolidating with ...Nf6 and ...e6 is a common Slav mistake. White's Qb3 immediately targets b7, and after the queen exchange, White gets an open a-file and better endgame structure. Black's bishop on f5 is outside the pawn chain but the position lacks dynamism.",
+          "arrows": [
+            {
+              "from": "b3",
+              "to": "b7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "a1",
+              "to": "a6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ignoring White's e4 Push",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "c4"
+        },
+        {
+          "san": "c6"
+        },
+        {
+          "san": "Nf3"
+        },
+        {
+          "san": "Nf6"
+        },
+        {
+          "san": "Nc3"
+        },
+        {
+          "san": "dxc4"
+        },
+        {
+          "san": "a4"
+        },
+        {
+          "san": "Bf5"
+        },
+        {
+          "san": "e3"
+        },
+        {
+          "san": "e6"
+        },
+        {
+          "san": "Bxc4"
+        },
+        {
+          "san": "Bb4"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "O-O"
+        },
+        {
+          "san": "Qe2"
+        },
+        {
+          "san": "Bg6"
+        },
+        {
+          "san": "e4"
+        },
+        {
+          "san": "e5"
+        },
+        {
+          "san": "d5"
+        },
+        {
+          "san": "Nbd7"
+        },
+        {
+          "san": "Nh4"
+        },
+        {
+          "san": "Nc5"
+        },
+        {
+          "san": "Nxg6"
+        },
+        {
+          "san": "hxg6"
+        },
+        {
+          "san": "f3"
+        },
+        {
+          "san": "a5",
+          "annotation": "After ...Bf5, Black must watch out for White's e4 push. If Black allows e4 without adequate counterplay, White gains a massive center and can drive the bishop back with e4-e5. The d5 advance locks Black's pieces behind the pawn chain, creating a long-term space disadvantage that is hard to overcome.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "d6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "h4",
+              "to": "g6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
