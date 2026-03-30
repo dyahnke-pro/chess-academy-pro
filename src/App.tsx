@@ -132,6 +132,7 @@ export function App(): JSX.Element {
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
           <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
           <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
+          <Route path="/weaknesses" element={<ErrorBoundary><CoachWeaknessReport /></ErrorBoundary>} />
           <Route path="/coach/report" element={<ErrorBoundary><CoachWeaknessReport /></ErrorBoundary>} />
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           <Route path="/games" element={<ErrorBoundary><GameDatabasePage /></ErrorBoundary>} />
