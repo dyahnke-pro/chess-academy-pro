@@ -950,6 +950,3102 @@
           ]
         }
       ]
+    },
+    {
+      "name": "KIA vs Sicilian Structure",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "White opens with the flexible Nf3, ready to steer into the King's Indian Attack regardless of Black's response. Against a Sicilian setup with ...c5, the KIA avoids all the heavy theory of the Open Sicilian and gives White a comfortable system to play.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays ...c5, the Sicilian move. By avoiding 2.d4, White sidesteps all Open Sicilian theory. Black's c5 pawn controls d4 but does nothing for kingside development. White will happily fianchetto and build the standard KIA formation while Black figures out how to develop.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "Preparing the fianchetto as usual. Against the Sicilian structure, the Bg2 will pressure the center and the queenside dark squares, especially if Black fianchettoes on the kingside. The g3-Bg2 setup is the heart of the KIA and it works perfectly here.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "a8",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, a natural Sicilian move controlling d4 and e5. The knight is well-placed here, supporting the c5 pawn and preparing flexible development. White is happy to see this because the knight doesn't pressure e4 yet.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The bishop arrives on its power diagonal. Against the Sicilian structure, the Bg2 will pressure the long diagonal and work beautifully with a future e4 push. If Black fianchettoes with ...g6 and ...Bg7, the two bishops will face off on the long diagonal, but White's is typically better supported.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black prepares to fianchetto on the kingside, mirroring White's setup. The ...g6 and ...Bg7 formation gives Black a solid kingside structure, but it means both bishops will fight for the long diagonal. White's central pawn advantage with d3+e4 will often give the Bg2 the edge in this battle.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g7",
+              "to": "a1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside, completing the first phase of development. The king is safe behind the g3 pawn shield, and the rook is activated on f1. Against the Sicilian structure, White can now focus on building the center with d3, e4, and Nbd2.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black completes the fianchetto. The Bg7 is a strong piece, controlling the long diagonal and supporting ...d6. However, the bishop is somewhat passive behind the c5 pawn — it doesn't have the same attacking potential as White's Bg2, which will benefit from the e4 push opening the center.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g7",
+              "to": "a1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3, the foundational move for the e4 push. Against the Sicilian structure, d3 keeps things flexible — White isn't committing to d4 where the pawn would be challenged by ...cxd4. Instead, White builds a compact center that's hard to attack.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays ...d6, a typical Sicilian structure move that reinforces e5 and opens the c8-bishop's diagonal. The d6 pawn gives Black a solid center but creates the classic Sicilian weakness on d5 — a square White's pieces will dream of occupying later.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4, grabbing central space and opening the position for the Bg2. This is the standard KIA central advance — after e4, White has a strong pawn duo on d3+e4 and the bishop on g2 becomes much more active. The d5 square is now a potential outpost for White's pieces.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, the most natural square. The Nf6 fights for control of e4 and d5, putting pressure on White's center. This is solid development — Black is ready to castle and has a flexible position with counterplay options on both flanks.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "The second knight comes to d2, adding another defender to e4 and preparing to reroute. Against the Sicilian, the Nd2 can go to c4 to pressure d6 and e5, or to f1-e3 to control d5. This is the standard KIA piece arrangement, and it works just as well against the Sicilian as against any other setup.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, completing development. Both sides have fianchettoed and castled — the position is balanced but White has a slight space advantage with the d3+e4 center. The middlegame plans are clear: White will play on the kingside with f4 or Nh4-f5, while Black seeks queenside expansion with ...a6, ...Rb8, and ...b5.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "White plays a4, a prophylactic move that prevents Black's natural ...b5 expansion on the queenside. By clamping down on b5, White ensures Black can't easily generate counterplay, buying time to prepare the kingside attack. The a4 pawn also creates the possibility of a4-a5 to fix weaknesses on the queenside.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a4",
+              "to": "b5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Rb8",
+          "annotation": "Black places the rook on b8, preparing ...b5 despite White's a4. The rook supports the b-pawn advance and is well-placed on the semi-open b-file that will result from ...b5. This is standard Sicilian counterplay — Black needs queenside activity to balance White's kingside ambitions.",
+          "arrows": [
+            {
+              "from": "a8",
+              "to": "b8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KIA vs Caro-Kann Structure",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "White opens with 1.e4, which can transpose into the KIA after Black plays ...c6. The beauty of the KIA is that White can reach the same setup from multiple move orders. Against the Caro-Kann structure, the KIA offers a positional squeeze that avoids sharp tactical lines.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black plays ...c6, the Caro-Kann move. This prepares ...d5 with solid pawn support. The Caro-Kann is known for being rock-solid, but the KIA setup gives White a reliable way to get a comfortable middlegame without needing to memorize reams of theory.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "Instead of the mainline 2.d4, White plays the modest d3 signaling KIA intentions. This immediately tells Black that the position won't follow standard Caro-Kann theory. White plans a slow, methodical buildup with Nd2, Ngf3, g3, and Bg2.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, the fundamental Caro-Kann idea. The d5 pawn challenges White's e4 directly, and with c6 already played, it's extremely well-supported. White must decide how to handle the central tension — in the KIA, White typically maintains it and develops first.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2, supporting e4 and preparing to develop the other knight to f3. The Nd2 is typical of the KIA — it looks passive but serves the critical role of bolstering the center. From d2, the knight can later go to f1-e3 or c4 depending on how the position develops.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays the ambitious ...e5, seizing space in the center and creating a strong pawn duo on d5+e5. This is a popular approach that gives Black a big center, but it also means the d5 pawn is no longer supported by ...e6. White's Bg2 will target d5 once it arrives on the long diagonal.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Ngf3",
+          "annotation": "The knight develops to f3, controlling e5 and d4. With both knights developed, White is ready to proceed with g3 and Bg2. The Ngf3 also adds pressure to the e5 pawn, which can become overextended if Black isn't careful about defending it.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black develops the bishop to d6, protecting e5 and eyeing the kingside. The bishop is actively placed here, supporting the center and potentially joining a kingside attack. However, it does block the d-file, which could be an issue if the center opens.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d6",
+              "to": "h2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White prepares the fianchetto. Against the Caro-Kann structure with ...e5, the Bg2 will be especially effective because it targets the d5 pawn from a safe distance. White's plan is classic KIA: complete the fianchetto, castle, and use the Bg2's pressure to undermine Black's center.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, fighting for e4. This is natural and solid, but in the KIA vs Caro-Kann, the Nf6 can become a target if White manages to push e4-e5 at the right moment. Black must be ready to retreat or exchange if White achieves the central break.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The fianchetto is complete and the Bg2 immediately pressures d5 along the long diagonal. Against the Caro-Kann structure with the big center, this bishop is White's most important piece. It quietly waits for the center to open, at which point it can become devastating.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside. With both sides castled short, the middlegame battle will revolve around the center. Black has the bigger center but White has the better bishop. White will look for ways to undermine Black's center with c4 or a well-timed dxe4 followed by piece play.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king safe and the rook activated. The standard KIA formation is nearly complete. White's next moves will be Re1 to support the e-file and then look for central breaks or piece rerouting to exploit the position.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black places the rook on the e-file, supporting the e5 pawn and preparing for potential central play. The Re8 is a natural move that ensures Black's center remains well-defended. If the center opens, this rook will be perfectly placed.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Re1",
+          "annotation": "White mirrors with Re1, contesting the e-file and adding pressure to the center. The rook on e1 supports a potential central break and keeps the e-file under control. White's position is harmonious: every piece serves the central strategy.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, reinforcing e5 and preparing potential rerouting. The knight on d7 is flexible — it can go to b6, f8, or c5 depending on what White does. This completes Black's development with a solid but somewhat passive position.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KIA: Botvinnik Setup",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "The flexible Nf3 start. In the Botvinnik Setup variation, Black will aim for a big center with ...d5, ...c5, and ...e5 — the so-called Botvinnik formation. White's KIA setup is an excellent response because the Bg2 will constantly pressure this ambitious center.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, starting the central buildup. In the Botvinnik Setup, Black wants pawns on c5, d5, and e5 — a massive center. While this looks imposing, it can become a target if White's pieces coordinate to undermine it.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "Preparing the fianchetto. Against the Botvinnik center, the Bg2 will be White's sniper — targeting d5 and the entire long diagonal. The bigger Black's center gets, the more tempting a target it becomes for the fianchettoed bishop.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays ...c5, the second piece of the Botvinnik triangle. Together with ...d5, this gives Black strong queenside control and prepares ...Nc6 and ...e5. The center looks powerful, but White's strategy is to let Black overextend and then probe the weaknesses.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The bishop takes its post on the long diagonal. With Black planning a massive center, this bishop is positioned perfectly to undermine it. Once the center becomes rigid with ...d4 or ...e5, the Bg2 gains long-term pressure against the pawn chain's base.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, supporting both d4 and e5 pushes. The Nc6 is a key piece in the Botvinnik Setup — it holds the center together and supports the ambitious pawn advances. White needs to be ready for ...e5 coming next.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles before committing to the central plan. Against the Botvinnik formation, patience is key — let Black build the big center, then find ways to chip away at it. The king is safe and the rook is ready to support central play via Re1.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black completes the Botvinnik triangle: pawns on c5, d5, and e5. This is an impressive-looking center that controls most of the board. However, the center is also rigid and can become a target. White will probe with c3, c4, or b4 to create weaknesses in the chain.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3, staying true to the KIA philosophy. Rather than challenging Black's center head-on, White builds behind the lines. The d3 pawn supports e4 and keeps the position flexible. White will look for c3 and d4 breaks, or e4 and f4 pushes depending on how Black continues.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, completing minor piece development. The Nf6 adds another defender to d5 and e4. Black's position looks commanding with the big center and good piece placement, but White's compact setup is very resilient and hard to crack.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White plays Nbd2, preparing the e4 central break. Even against the Botvinnik center, the e4 push is White's main idea. If Black has already played ...e5, then e4 will create tension and potentially open lines for the Bg2. The Nd2 also keeps the c4 square available for future piece play.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, a solid but unambitious square. The Be7 prepares castling and keeps the position flexible. In the Botvinnik Setup, Black often wants to play ...Be7, ...O-O, and then decide whether to advance with ...d4 or maintain the big center.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White strikes with e4, challenging Black's center directly. This is the moment of truth — White forces Black to make a decision about the center. If ...dxe4 dxe4, the position opens favorably for the Bg2. If ...d4, the center locks and White can maneuver on the flanks.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "Black advances ...d4, locking the center. This is the most common response — Black maintains the big center but now it's frozen. The Bg2 still has long-term pressure on the diagonal, and White can play around the locked center with f4, c3, or b4 to create pawn breaks.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nc4",
+          "annotation": "White reroutes the knight to c4, an excellent outpost. The Nc4 eyes d6, e5, and b6 — multiple key squares. With the center locked, piece maneuvering becomes critical, and this knight is beautifully placed. White has a flexible position with many possible plans: f4, a4, or b4.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "d6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, getting the king to safety. The position is strategically complex with the locked center. Black's large pawn chain looks impressive, but White's pieces are more flexibly placed. The Nc4 is a beast, and White has multiple pawn break options to open the position favorably.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "White plays a4, gaining queenside space and preventing ...b5 which would kick the powerful Nc4. This prophylactic move is common in KIA positions with Nc4 — the knight needs to stay on its outpost. White can follow up with a5 to fix weaknesses or simply maintain the positional grip.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a4",
+              "to": "b5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black retreats the knight to d7, preparing to challenge the strong Nc4 or reroute to b6. The Nd7 also supports the e5 pawn and keeps options open. The position is tense — both sides are maneuvering for advantage in a strategically rich middlegame.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KIA: Fischer Attack",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Starting with 1.e4, which leads to the KIA via the move order Fischer famously employed. Fischer used the KIA against the French Defense repeatedly, turning a quiet system into a lethal attacking weapon. This move order commits to e4 first, then retreats into the KIA setup.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays ...e6, the French Defense. This is the setup where Fischer's KIA treatment was most devastating. The ...e6 pawn locks in the light-squared bishop and creates the structural weakness that the KIA exploits so well.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3 instead of the mainline d4, signaling the King's Indian Attack. This is the Fischer specialty — rather than entering the sharp theoretical battles of the French Defense mainlines, White opts for a systematic setup that consistently produces attacking chances on the kingside.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, the standard French center. The d5 pawn challenges e4 directly and gives Black a solid foothold. However, in the KIA, White maintains the e4 pawn rather than exchanging, which keeps the tension and the Bg2's potential alive.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2 before Nf3, keeping the f-pawn flexible for a possible f4 push later. This is a subtle difference from the standard KIA move order. The Nd2 supports e4 and the knight can reroute to f1 for the kingside attack after e5 is achieved.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, the most natural move fighting for e4. In Fischer's games, this knight often had to retreat after e5, demonstrating the power of the KIA's central advance. Black needs to develop quickly before White's kingside attack gets rolling.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Ngf3",
+          "annotation": "The second knight develops to f3, completing the double-knight setup that defines the KIA. With both knights supporting e4 and the d3 pawn as the foundation, White is ready for g3, Bg2, and castling. The Fischer Attack builds slowly but the attack comes fast once the setup is complete.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays ...c5, gaining queenside space and preparing ...Nc6. This is the standard counterplay in the French structure — while White builds on the kingside, Black expands on the queenside. The race between the two flanks is the central strategic theme of this line.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White prepares the fianchetto. The g3 pawn creates the safe king shelter and prepares Bg2 for the long diagonal. In Fischer's hands, this quiet move was the calm before the storm — the Bg2 would later become a monster once e5 opened the diagonal.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "a8",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, supporting ...c5 and controlling d4 and e5. The Nc6 is an important defensive piece that tries to slow White's e5 advance. However, once White achieves e5, the knight on c6 often becomes poorly placed with limited squares.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The bishop reaches its ideal diagonal. In the Fischer Attack, this bishop is the star — it pressures d5 and, after e5, dominates the long diagonal. Fischer knew that this bishop combined with the e5 space advantage was enough to generate a crushing kingside attack.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, a safe but modest square. In the French structure, the dark-squared bishop rarely finds an aggressive post early on. The Be7 prepares castling and is ready to defend the kingside, but it doesn't create any threats.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, completing the kingside setup. The king is safe behind g3 and the rook is activated. White is now ready to push for e5 — the key breakthrough move. Everything in the KIA has been building toward this moment.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside as well. Both kings are now on the same wing, which typically favors the side with the more active attacking pieces. In the Fischer Attack, this is White — the e5 push combined with Nf1-g3/h4 creates dangerous threats against Black's king.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1, the classic preparatory move before e5. The rook directly supports the e-pawn's advance and will be perfectly placed once the e-file opens. In Fischer's games, Re1 followed by e5 was a devastating one-two punch that often led to a crushing kingside attack.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black launches queenside counterplay with ...b5. This is the standard French recipe — attack on the queenside while White attacks on the kingside. The race is on: whoever strikes first usually wins. Black aims for ...b4, ...c4, and eventually ...Ba6 or ...Bb7 to put pressure on White's queenside.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "White pushes e5! This is the Fischer Attack in full force. The e5 pawn gains space, kicks the Nf6 off its ideal square, and opens the Bg2's diagonal. Fischer demonstrated time and again that this advance gives White a ferocious kingside attack. The knight must retreat and White follows up with Nf1-g3/h5 and Bf4.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "The knight retreats to d7, forced by the e5 pawn. From d7, the knight is passive and blocks the c8-bishop's development. This is the uncomfortable reality of the French structure after e5 — Black's pieces get cramped and the knight must find a way to re-enter the game, usually via b6 or f8.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e4 Break Unleashed",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "The standard KIA opening move. In this trap line, White sets up the classic formation and then springs a devastating e4 break that catches Black off guard when the timing is perfect.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black takes central space. Everything looks normal for now, but Black's setup choices over the next few moves will create a vulnerability that White can exploit with a well-timed e4 break.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "Preparing the fianchetto. White methodically builds the KIA setup, waiting for the right moment to unleash the central break. Patience is rewarded in this system.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops naturally. The knight on f6 controls e4, but once the central tension resolves, this knight can become a target or find itself misplaced.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The bishop arrives on the long diagonal, ready to exploit any opening of the center. Against the upcoming ...Bg4 and ...e5 setup, this bishop will become a monster once e4 breaks through.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black reinforces d5 with ...c6. This is solid, but it means Black's queenside knight can't come to c6. The Slav-like formation gives Black solidity at the cost of flexibility.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king safe before the fireworks. The rook on f1 will later support Re1, adding pressure to the e-file after the central break.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black pins the Nf3, a natural and aggressive-looking move. However, this bishop on g4 is actually committing to a square that can be challenged with h3. Black's development looks active but the bishop may become a target.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "g4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3, continuing the buildup. The stage is being set for the e4 break. With the bishop committed to g4, Black will have to make difficult decisions once the center opens.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, supporting ...e5. With pieces on f6, d7, and g4, Black looks well-developed. But the position has a hidden vulnerability — the bishop on g4 is far from home and the center is about to crack open.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "The second knight to d2, fully preparing the e4 break. Both knights, the d3 pawn, and the Bg2 are all aimed at making e4 work. White is coiled like a spring, ready to strike.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays ...e5, creating the big center. This looks strong, but it's actually the trigger for White's trap. With ...e5 played, the d5 pawn is no longer supported by ...e6, and the center becomes vulnerable to e4.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "Now e4 strikes! This is the key break. White challenges the d5 pawn when it's only defended by the c6 pawn and the Nf6 (which is also defending e5). Black is forced to capture since retreating with ...d4 would leave the e5 pawn weak.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black captures on e4, the most natural response. But this opens the floodgates — the d-file opens, the Bg2 comes alive on the long diagonal, and White gets a strong initiative with piece play in the center.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "White recaptures, opening the d-file. The Bg2 now rakes the long diagonal with tremendous power. White has a clear advantage: better piece coordination, open lines, and the bishop pair is working beautifully. This is the payoff of the patient KIA buildup.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "a8",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black develops the bishop to c5, trying to create counterplay against f2. The bishop is active here but Black's position is already strategically challenging — the open d-file and White's Bg2 are powerful assets.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qe1",
+          "annotation": "White plays Qe1, a clever multi-purpose move. The queen connects the rooks, prepares Qe2 or Qa5, and avoids the Bc5's pressure on the a7-g1 diagonal. It also eyes the a5 square where it can create queenside pressure.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "a5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, getting the king safe. But on the kingside, the king faces White's powerful Bg2 and the potential for a kingside pawn storm. Black needs to generate counterplay fast or White's positional advantage will grow.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "h3",
+          "annotation": "White challenges the bishop on g4, forcing a critical decision. Black must either retreat to h5 (where the bishop can be further harassed by Nh4) or exchange on f3, giving up the bishop pair. Either way, White gains a tempo and improves the position.",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "h3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "h3",
+              "to": "g4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bh5",
+          "annotation": "Black retreats to h5, maintaining the pin but the bishop is now on the rim and out of play. White can continue with Nh4 to challenge this bishop further, or simply develop with an initiative. The trap has worked — White has a superior position with active pieces and open lines.",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "h5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nh4",
+          "annotation": "White attacks the bishop with Nh4, threatening to win the bishop pair or force it to a completely passive square. The knight on h4 also eyes f5, a powerful attacking square. White's initiative is growing with every move — this is the KIA at its best.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "h4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "h4",
+              "to": "f5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black plays ...Re8, hoping to create counterplay on the e-file. But White's position is already dominant — the Bg2 controls the long diagonal, the knight threatens f5, and Black's bishop on h5 is completely out of the game. White has a winning advantage from the trap.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "French Structure Squeeze",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Opening with e4, heading for a KIA via the French move order. This trap line demonstrates how the e5 advance in the French KIA can create a suffocating positional squeeze that leaves Black struggling for counterplay.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays ...e6, entering the French structure. This pawn will become the foundation of Black's solid but cramped position. The light-squared bishop is already beginning to feel restricted behind the e6 pawn.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White signals the KIA with d3. Against the French, this avoids all the mainline theory and heads for a system where White has a clear and simple plan. The squeeze begins quietly.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, the standard French central pawn. Together with ...e6, this creates a solid pawn chain. However, White's plan is to push e5 and use the space advantage to squeeze Black into submission.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2, the standard KIA developing move. The knight supports e4 and prepares to reroute after e5 is achieved. Against the French, Nd2 is particularly effective because the knight can go to f1-g3-f5 for a devastating kingside attack.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops to f6, the most natural move. But this knight is living on borrowed time — once White plays e5, the knight will be kicked and forced to retreat to a passive square. This is a key theme in the French KIA squeeze.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Ngf3",
+          "annotation": "The second knight develops to f3. White's setup is methodical: both knights developed, d3 pawn in place, ready for g3 and Bg2. The squeeze is being set up move by move.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, controlling d4 and e5. This looks natural and solid, but the knight on c6 will struggle to find good squares once the center closes with e5. Black is walking into the squeeze without realizing it.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "Preparing the fianchetto. The Bg2 will dominate the long diagonal once e5 locks the center. Against the French structure, this bishop contrast — active Bg2 vs passive Bc8 — is the strategic foundation of the squeeze.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, safe but unambitious. In the French structure, the dark-squared bishop rarely finds an aggressive post. The Be7 will become even more passive after e5, as it will have limited scope behind the pawn chain.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The fianchetto is complete. The Bg2 stares down the long diagonal at d5 and beyond. Once e5 locks the center, this bishop will be significantly stronger than either of Black's bishops. The squeeze is almost ready.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, getting the king safe. But the king is now on the same side where White will be building the attack. After e5, White's pieces will swarm the kingside while Black's cramped position makes it hard to defend.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The entire KIA formation is in place. Everything is set for the e5 advance: both knights support it, the Bg2 benefits from it, and the rook on f1 can support f4 afterward. The spring is loaded.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "Black plays ...b6, trying to fianchetto the problem light-squared bishop. This is a reasonable attempt to solve the French bishop issue, but it costs time and weakens the queenside dark squares. White will strike in the center before Black completes this plan.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1, the final preparatory move. The rook supports e5 from behind and will be perfectly placed once the center locks. White is now fully ready to play e5 — the squeeze is about to be applied.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black completes the fianchetto, but it may be too late. The bishop on b7 looks toward e4, but after e5, the center locks and the bishop has limited scope. Black has spent two moves on this bishop while White's attack is ready to launch.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "The squeeze arrives! e5 locks the center and gains massive space. The Nf6 is kicked immediately, the Bg2 gains long-term power, and Black's position becomes severely cramped. White will follow up with Nf1-g3/h4 and f4 to build an overwhelming kingside attack. This is the French KIA trap at its finest.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "The knight retreats to d7, forced by e5. Black's position is now deeply cramped — the knight on d7 blocks the Bb7, the Be7 has no scope, and the Nc6 is locked in. White has a huge space advantage and can build the attack at leisure.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf1",
+          "annotation": "White reroutes the knight via Nf1, heading for g3 or e3. This is the classic French KIA maneuver — the knight goes to the kingside to join the attack. From g3, it eyes f5 and h5, two devastating outposts. The squeeze is in full effect and Black has no counterplay.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "g3",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "f6",
+          "annotation": "Black desperately plays ...f6, trying to challenge the e5 pawn and get some breathing room. But this weakens the kingside severely — the e6 pawn is now vulnerable, and the king's shelter is compromised. White can exploit this with exf6 or keep the tension to maintain the squeeze.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Premature e4 Rush",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "The standard KIA start. In this warning line, White will make a common mistake — pushing e4 at the right time but mishandling the follow-up with h3 too early, allowing Black to equalize. Timing is everything in the KIA.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black takes central space as usual. The position looks identical to many other KIA lines, but the subtle difference in White's move order will matter later.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "Preparing the fianchetto as usual. Nothing wrong yet — White is following the standard KIA recipe.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops naturally to f6. The game is following a familiar path — but watch how the move order nuance creates a problem for White.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The fianchetto is complete. The Bg2 is on its dream diagonal. So far everything is textbook KIA play.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black reinforces d5 with ...c6, the Slav-like setup. This is solid and gives Black a stable center that's hard to undermine.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. Normal so far. The position is identical to the main line and the trap line — the critical difference is about to emerge in White's handling of the Bg4 pin.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black pins the Nf3. This is where White's response matters critically. In the successful trap line, White plays d3 first and delays h3. Here, White will make the mistake of playing h3 too early.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "g4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3, which is correct. The buildup continues. But the next move after Black's response is where the error happens — watch the move order carefully.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, preparing ...e5. This is the standard setup. Now White faces a choice: play Nbd2 and continue the buildup, or rush with h3 to challenge the bishop.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White develops the knight to d2. This is still correct — the e4 push is being prepared. The critical moment is approaching.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays ...e5, creating the big center. This is the same position as the successful trap line. Now the key question: should White play e4 immediately, or h3 first?",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4, which is correct. The central break is timely. But after Black captures, White makes the mistake in the follow-up.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black captures. The center opens and the Bg2 comes alive. So far identical to the trap line. The difference is about to appear.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "White recaptures. The position is open and active. Now, instead of Qe1 (the correct move from the trap line), White plays h3 prematurely.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black develops the bishop aggressively to c5, targeting f2. This is the same as the trap line so far.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "h3",
+          "annotation": "This is the mistake! White plays h3 prematurely instead of Qe1. The problem is that h3 weakens the kingside and gives Black an important tempo. After ...Bh5, Black's pieces are better coordinated than in the trap line because White hasn't rerouted the queen yet. The initiative shifts to Black.",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "h3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bh5",
+          "annotation": "Black retreats to h5, and now the position is different from the trap line. Without Qe1 having been played, White's queen is still on d1 where it's less flexible. Black maintains the annoying pin and has better piece coordination here.",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "h5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "h5",
+              "to": "f3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qe1",
+          "annotation": "White now plays Qe1, but it's a tempo behind the trap line. Black has already achieved a comfortable position with the bishop pair, active pieces, and a solid center. The premature h3 allowed Black to equalize comfortably.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles with a fully equal position. The lesson is clear: in the KIA, move order matters. Playing Qe1 before h3 gives White a meaningful initiative, but reversing the order lets Black off the hook. Always Qe1 first, then h3.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nh4",
+          "annotation": "White tries Nh4 to harass the bishop, but without the queen on e1 having arrived first, this maneuver lacks punch. Black is already comfortably developed and can meet Nh4 with ...Bg6, maintaining a balanced position. The warning is clear: don't rush h3 before Qe1 in the KIA.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "h4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black plays ...Re8, contesting the e-file with a fully equal game. White's premature h3 has cost the initiative — the trap didn't work because the move order was wrong. Remember: Qe1 first, then h3, then Nh4. That's the correct sequence in the KIA.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Queenside Collapse",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Starting with 1.e4, heading for the KIA against the French. This warning line shows what happens when White pushes e5 without adequate queenside preparation — Black's counterplay arrives too fast and White's queenside collapses.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays ...e6, the French Defense. White will set up the KIA, but the key lesson is about timing the e5 push correctly relative to queenside defense.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White signals the KIA with d3. The setup proceeds normally, but White will make a strategic error by neglecting the queenside entirely while focusing on the kingside attack.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, the standard French center. So far everything is following the normal script.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2, the standard developing move. Everything is on track for the KIA formation.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays ...c5, immediately establishing queenside counterplay. This is the move White needs to respect — if White ignores the queenside and pushes e5 too quickly, Black's ...b5-b4 advance will crash through.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Ngf3",
+          "annotation": "White develops the knight to f3. The setup is methodical, but White is not paying attention to Black's queenside intentions. A prophylactic move like a4 should be on the radar.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, adding pressure to d4 and e5. Black's queenside is developing quickly while White continues to focus only on the kingside setup.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White continues with the fianchetto plan, completely ignoring the queenside. While the setup is standard, the lack of any queenside prophylaxis (like a4) will prove costly.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the final minor piece. Black's setup is efficient and every piece is well-placed. Both sides are nearing the critical moment where the battle lines will be drawn.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The fianchetto is complete. White's kingside looks great, but the queenside is completely unattended. No a4 has been played, no pawn or piece guards the queenside expansion squares.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop, preparing to castle. Black's position is harmonious and all the pieces are working together. The queenside counterplay with ...b5 is ready to launch.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The KIA formation is complete, but White has missed the window for a4. Now when e5 comes, Black's queenside counterattack will be faster than White's kingside attack.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. Both sides have castled kingside. The race is about to begin, but Black is better prepared for queenside play than White is for the kingside attack.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1, preparing e5. This is a reasonable move, but the problem is that White has done nothing to slow Black's queenside expansion. A prophylactic a4 was needed before committing to the kingside attack.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black launches ...b5! Without a4 to prevent this, Black gets free queenside expansion. The b5 pawn threatens ...b4, gaining space and opening lines on the queenside. This is the beginning of the collapse White should have prevented.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "White pushes e5, hoping the kingside attack compensates for the queenside neglect. But it's too late — Black's queenside counterplay is already rolling. The e5 push is strong in principle, but without queenside prophylaxis, White can't survive the coming storm.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "The knight retreats, as expected. But Black's position is much better than in the successful lines because the queenside is already advanced. Black has ...b4, ...a5, ...Ba6 all ready to go while White's attack is just starting.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf1",
+          "annotation": "White reroutes the knight, heading for the kingside attack. But the problem is clear: while White is spending moves rerouting pieces, Black's queenside pawns are already advanced and ready to break through. The attack will arrive too slowly.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "g3",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "a5",
+          "annotation": "Black plays ...a5, continuing the queenside advance. The a5-b4 pawn chain is coming and White has no way to stop it. This is the queenside collapse in action — Black's pawns roll forward unopposed. The lesson: always play a4 before e5 when Black has ...c5 and ...b5 ready. A single prophylactic move could have prevented this entire problem.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a5",
+              "to": "a4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

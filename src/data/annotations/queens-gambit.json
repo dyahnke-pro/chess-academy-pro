@@ -661,6 +661,2200 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Classical Mainline",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, claiming central space and preparing c4. In the Classical Mainline, this is the starting point for one of the deepest strategic battles in chess.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "c5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black stakes an equal claim in the center. The d5 pawn controls c4 and e4, preventing White from building an ideal two-pawn center without a fight.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit — White offers the c-pawn to pull Black's d5 pawn off the center. If Black takes, White gains a strong e4 push. If Black declines, White keeps pressure on d5.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black declines and bolsters d5 with the e-pawn. Solid and classical, but the light-squared bishop is now locked behind the pawn chain. Finding a way to activate that bishop is Black's long-term challenge.",
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c8", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to its best square, adding a second attacker to d5. The knight on c3 also prepares e4, and together with c4 creates serious pressure on Black's center.",
+          "arrows": [
+            {"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c3", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to defend d5 and control e4. This is the cornerstone of Black's defense — without Nf6, the pressure on d5 would be overwhelming.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the f6 knight against the queen, which is the hallmark of the Classical QGD. The pin adds indirect pressure on d5 because the knight is one of d5's key defenders. This must come before e3 to avoid trapping the bishop.",
+          "plans": [
+            "Maintain the pin to keep d5 under siege",
+            "Prepare e3 and Bd3 once the bishop is out"
+          ],
+          "arrows": [
+            {"from": "c1", "to": "g5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "g5", "to": "f6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black breaks the pin with the bishop on e7, the most solid and reliable response. Be7 defends the knight, prepares castling, and keeps the position stable. It's modest but proven at the highest levels.",
+          "arrows": [
+            {"from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "Now that Bg5 is out, White plays e3 to support d4 and open the diagonal for the light-squared bishop. Move order is everything here — e3 before Bg5 would have been a strategic error.",
+          "arrows": [
+            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles to safety. With the bishop on e7 and knight on f6, this is the natural moment to get the king tucked away before White builds more pressure.",
+          "arrows": [
+            {"from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the last minor piece to its natural square. The knight on f3 controls e5, supports d4, and prepares castling. White's setup is nearly complete.",
+          "plans": [
+            "Castle and then play Bd3 + Qc2 for the classic battery",
+            "Or play Rc1 to prepare for the c-file battle after ...dxc4"
+          ],
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the last minor piece to d7, keeping maximum flexibility. The knight supports the f6 knight, prepares ...c5 or ...dxc4 breaks, and can reroute to b6, f8, or e5 depending on how the position unfolds.",
+          "arrows": [
+            {"from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Rc1",
+          "annotation": "White places the rook on c1, anticipating the opening of the c-file after Black plays ...dxc4. This is prophylactic thinking at its finest — the rook is already in position for the upcoming pawn exchange. The c-file will become White's highway into Black's position.",
+          "plans": [
+            "After ...dxc4 Bxc4, the rook already controls the open c-file",
+            "Support a potential minority attack with b4-b5"
+          ],
+          "arrows": [
+            {"from": "a1", "to": "c1", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c1", "to": "c7", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c1", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black plays ...c6 to solidify d5 and prepare the freeing ...dxc4 maneuver at the right moment. The c6 pawn makes d5 unassailable and gives Black a solid queenside structure, but it also means the queen's knight can no longer go to c6.",
+          "arrows": [
+            {"from": "c7", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White places the bishop on its commanding diagonal, aiming at h7. The Bd3 is a key attacking piece in the Classical QGD — combined with Qc2, it creates the famous battery that restricts Black's kingside.",
+          "arrows": [
+            {"from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black releases the central tension by capturing on c4. This is a key strategic decision — by giving up the d5 stronghold, Black gains time and opens lines for piece play. The idea is that the bishop must spend a tempo recapturing, and Black can seize the initiative with ...Nd5.",
+          "plans": [
+            "Follow up with ...Nd5 to exploit the pin on g5",
+            "The open d-file and c-file give both sides active play"
+          ],
+          "arrows": [
+            {"from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recaptures with the bishop, which is now beautifully placed on c4 aiming at f7 and supporting e6 ideas. The bishop is more active here than on d3 in many ways — it targets the sensitive f7 square and watches the a2-g8 diagonal.",
+          "arrows": [
+            {"from": "d3", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "f7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Black plays the thematic ...Nd5, the whole point of the Classical Mainline. The knight centralizes powerfully on d5, attacks the Bg5, and takes advantage of the fact that after Bxe7 Qxe7, Black has an ideal piece arrangement. This is one of the most important theoretical moves in the QGD.",
+          "plans": [
+            "After Bxe7 Qxe7, Black has a strong centralized knight and active pieces",
+            "The knight on d5 controls key squares and can never be driven away easily"
+          ],
+          "arrows": [
+            {"from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d5", "to": "g5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "White exchanges the bishop for the knight's defender. After Qxe7, Black has a strong centralized knight but White has the bishop pair and pressure along the c-file. This trade is essentially forced — retreating the bishop would leave it passive.",
+          "arrows": [
+            {"from": "g5", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Black recaptures with the queen, reaching the critical position of the Classical Mainline. Black has a powerful knight on d5, the queen is well-placed on e7 overseeing the board, and the position is rich with strategic possibilities for both sides. This is one of the deepest positions in all of chess theory.",
+          "plans": [
+            "Consolidate with ...Nf6 or ...N7f6, develop the remaining pieces",
+            "The knight on d5 gives Black excellent central control"
+          ],
+          "arrows": [
+            {"from": "d8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d5", "to": "c3", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tartakower Variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. The Tartakower is one of Black's most reliable systems against the QGD, and it starts from the same first moves as the Classical.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center symmetrically, preparing to decline the gambit and enter a strategic battle.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. White pressures d5 from the flank, asking Black to commit to a defensive structure.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black declines, bolstering d5. The light-squared bishop is locked in, but the position is rock solid.",
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c8", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops with pressure on d5. The knight and c4 pawn combine to create mounting tension on Black's central bastion.",
+          "arrows": [
+            {"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c3", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to defend d5 and control e4, the standard defensive setup.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the knight, the signature move of the Classical QGD. This creates indirect pressure on d5 through the pinned knight.",
+          "arrows": [
+            {"from": "c1", "to": "g5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "g5", "to": "f6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black unpins the knight and prepares castling. Be7 is the gateway move — after castling, Black will choose between the Classical ...Nbd7 or the Tartakower ...h6 ...b6 setup.",
+          "arrows": [
+            {"from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White solidifies the center and opens the light bishop's diagonal. The bishop on g5 is already out, so e3 doesn't trap anything.",
+          "arrows": [
+            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles to safety, preparing to unveil the Tartakower plan with ...h6 and ...b6. Getting the king safe first is essential before committing to the queenside fianchetto.",
+          "arrows": [
+            {"from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "h7", "to": "h6", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "g8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White continues development. The knight on f3 is perfectly placed — controlling e5 and d4 while preparing to castle.",
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "This is the key Tartakower move! Black kicks the bishop, forcing it to decide where to go. After Bh4, Black will play ...b6, fianchettoing the light-squared bishop to b7 where it solves the classic QGD problem of the hemmed-in bishop.",
+          "plans": [
+            "Follow up with ...b6 and ...Bb7 to activate the problem bishop",
+            "The ...h6 gains space on the kingside and takes away g5 from White's pieces"
+          ],
+          "arrows": [
+            {"from": "h7", "to": "h6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "g5", "to": "h4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "g5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Bh4",
+          "annotation": "White retreats the bishop to h4, maintaining the pin on the knight. The bishop is still active here, but Black's plan is about to make it uncomfortable with ...b6 and ...Nxd5.",
+          "arrows": [
+            {"from": "g5", "to": "h4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "h4", "to": "f6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "h4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "The signature Tartakower move — Black prepares to fianchetto the light-squared bishop to b7. This solves the QGD's eternal problem of the hemmed-in c8 bishop by routing it to the long diagonal where it becomes a powerhouse.",
+          "plans": [
+            "Play ...Bb7 to activate the bishop on the long diagonal",
+            "After ...Nxd5, the bishop on b7 will be perfectly placed"
+          ],
+          "arrows": [
+            {"from": "b7", "to": "b6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White exchanges on d5, forcing Black to reveal their hand. After ...Nxd5, Black gets the powerful centralized knight and the bishop can develop to b7 unchallenged. White gets clarity in the center and the open c-file.",
+          "arrows": [
+            {"from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black recaptures with the knight, centralizing it on d5 where it is a monster. The knight attacks the Bh4 and controls key squares. This is better than ...exd5 because the knight is actively placed rather than creating a fixed pawn structure.",
+          "plans": [
+            "After Bxe7 Qxe7, develop ...Bb7 with a great position",
+            "The centralized knight gives Black dynamic counterplay"
+          ],
+          "arrows": [
+            {"from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d5", "to": "h4", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "White exchanges the bishop — holding onto it makes no sense with the knight attacking it. After Qxe7, the position simplifies slightly but remains rich.",
+          "arrows": [
+            {"from": "h4", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Black recaptures, and now the queen on e7 oversees the board while the knight sits powerfully on d5. Black will complete development with ...Bb7 and have an excellent Tartakower position with no bad pieces.",
+          "arrows": [
+            {"from": "d8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "White captures the powerful knight, eliminating Black's most active piece. This simplifies the position but gives Black the choice of recapture. After ...exd5, Black gets a symmetrical pawn structure with the bishop pair.",
+          "arrows": [
+            {"from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black recaptures with the pawn, opening the e-file and freeing the c8 bishop completely. Now ...Bb7 or ...Be6 will complete development with a harmonious position. The Tartakower has achieved its goal — Black has no bad bishop.",
+          "arrows": [
+            {"from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c8", "to": "e6", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "c8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Rc1",
+          "annotation": "White seizes the open c-file with the rook, the natural follow-up in this structure. The rook eyes c7 and will support potential infiltration. White's plan revolves around exploiting the open c-file and the slight vulnerability of Black's queenside.",
+          "plans": [
+            "Double rooks on the c-file for maximum pressure",
+            "Target the c7 and c6 squares for infiltration"
+          ],
+          "arrows": [
+            {"from": "a1", "to": "c1", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c1", "to": "c7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black develops the bishop actively to e6, where it defends d5 and controls the a2-g8 diagonal. This is the payoff of the Tartakower system — the bishop that was locked behind e6 is now free and well-placed. Black has a solid, harmonious position.",
+          "plans": [
+            "Complete development with ...Rfc8 or ...Rac8",
+            "The bishop on e6 provides excellent central control"
+          ],
+          "arrows": [
+            {"from": "c8", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e6", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Queen's Gambit Accepted",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. In the QGA, Black will actually take the offered c4 pawn, leading to open, dynamic positions.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center, but unlike the QGD, Black is planning to capture on c4 rather than hold d5.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. This time Black will accept the pawn, giving up the center in exchange for a tempo and open piece play.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black accepts the gambit! By taking on c4, Black gives up the central d5 pawn but gains material temporarily and open lines for development. The key is that Black cannot hold the pawn — White will recover it while building a strong center with e3-e4.",
+          "plans": [
+            "Try to hold the pawn with ...b5 or develop quickly",
+            "Use the extra tempo to get pieces out fast"
+          ],
+          "arrows": [
+            {"from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "e4", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops naturally rather than rushing to recapture the pawn. The knight on f3 controls e5 and d4, and White knows the c4 pawn cannot be held. There's no rush — good development comes first.",
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, controlling e4 and preventing White from playing an immediate e4 to build a big center. Solid, natural development that keeps the position balanced.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f6", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White opens the diagonal for the bishop to recapture on c4. The e3 pawn also supports d4 and creates a solid foundation. White will get the pawn back with Bxc4 on the next move.",
+          "plans": [
+            "Recapture on c4 with the bishop next move",
+            "Build a strong center and develop rapidly"
+          ],
+          "arrows": [
+            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f1", "to": "c4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black solidifies the position with e6, controlling d5 and opening the dark-squared bishop's diagonal. This is the most solid approach — Black aims for a classical setup with ...c5 to challenge White's center.",
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recovers the pawn with the bishop landing on an excellent square. The bishop on c4 is beautifully placed — it targets f7, controls the a2-g8 diagonal, and is more active than it would be in many QGD lines.",
+          "arrows": [
+            {"from": "f1", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "f7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes at the center with ...c5, the most important break in the QGA. This challenges White's d4 pawn and opens lines for Black's pieces. The position becomes dynamic and open, which is exactly what QGA players want.",
+          "plans": [
+            "Open the position and use piece activity to compensate for White's central space",
+            "Challenge d4 to prevent White from building an overwhelming center"
+          ],
+          "arrows": [
+            {"from": "c7", "to": "c5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king to safety before the center opens. With the position about to become tactical after the c5-d4 tension resolves, king safety is paramount.",
+          "arrows": [
+            {"from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g1", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays the useful waiting move ...a6, preventing Nb5 and preparing ...b5 to expand on the queenside. This is a common QGA motif — the a6 pawn secures the queenside and gives Black space to develop the bishop to b7.",
+          "arrows": [
+            {"from": "a7", "to": "a6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White places the queen on e2, connecting the rooks and preparing a potential e4 central advance. The queen also supports the Bc4 and keeps an eye on the a6-f1 diagonal. This is a flexible developing move.",
+          "plans": [
+            "Prepare e4 to seize the center",
+            "Support the bishop on c4 and maintain central pressure"
+          ],
+          "arrows": [
+            {"from": "d1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black expands on the queenside, pushing the bishop back and gaining space. The b5 pawn also prepares ...Bb7 for the fianchetto, activating Black's light-squared bishop.",
+          "arrows": [
+            {"from": "b7", "to": "b5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White retreats the bishop to b3 where it remains on the same powerful diagonal. From b3, the bishop still targets f7 and stays active in the position. The bishop is safe here and well-placed for the long term.",
+          "arrows": [
+            {"from": "c4", "to": "b3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b3", "to": "f7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black fianchettoes the bishop to b7, completing development with an active piece. The bishop on b7 is a great piece — it controls the long diagonal, pressures e4, and supports the center. Black has achieved a solid QGA setup.",
+          "arrows": [
+            {"from": "c8", "to": "b7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b7", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White places the rook on the d-file, centralizing it behind the d4 pawn. The rook supports d4 and will be perfectly placed if the center opens after a future ...cxd4 exchange. White is fully developed and ready to fight for central control.",
+          "arrows": [
+            {"from": "f1", "to": "d1", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d1", "to": "d7", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the last minor piece to d7, supporting the center and keeping options open. The knight can go to b6, e5, or support a future ...c4 advance. Black has a comfortable, flexible QGA position with active pieces and no weaknesses.",
+          "plans": [
+            "Reroute the knight to b6 to pressure d5 or a4",
+            "Consider ...c4 to fix the queenside structure"
+          ],
+          "arrows": [
+            {"from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d7", "to": "b6", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Slav Defence Response",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. The Slav is one of the most popular defenses Black can choose, and it avoids locking in the light-squared bishop.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center. The key question is how Black will support this pawn — with ...e6 (QGD) or ...c6 (Slav).",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. White pressures d5. In the Slav, Black responds with ...c6 to keep the light-squared bishop's diagonal open — a subtle but important difference from ...e6.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav Defence! Black supports d5 with the c-pawn instead of e6, which is the critical difference. By keeping e6 open, the light-squared bishop can develop to f5 or g4 without being locked in. This is the main advantage of the Slav over the QGD.",
+          "plans": [
+            "Keep the light-squared bishop free to develop to f5 or g4",
+            "Maintain a solid pawn center with ...c6 and ...d5"
+          ],
+          "arrows": [
+            {"from": "c7", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c8", "to": "f5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops naturally. In the Slav, Nf3 before Nc3 is common to avoid certain lines where Black takes on c4 and holds the pawn with ...b5.",
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, defending d5 and controlling e4. Standard and natural — both sides are following well-trodden theoretical paths.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White adds more pressure on d5. Now the knight and c4 pawn both target Black's central stronghold. White is building up for a potential cxd5 at the right moment.",
+          "arrows": [
+            {"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c3", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, entering a sharp and well-studied variation of the Slav. The idea is to hold the pawn with ...b5 or develop quickly while White recovers the material. This is a principled approach that leads to dynamic play.",
+          "plans": [
+            "Try to hold the pawn with ...b5 or develop actively",
+            "Use the tempo White spends recovering the pawn to get ahead in development"
+          ],
+          "arrows": [
+            {"from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "White prevents ...b5, which would have allowed Black to hold the c4 pawn. The a4 pawn takes away the b5 square and ensures White will recover the pawn. This is the most principled response.",
+          "arrows": [
+            {"from": "a2", "to": "a4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "a4", "to": "b5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "b5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Bf5",
+          "annotation": "This is the payoff of the Slav! Black develops the light-squared bishop to f5 before playing ...e6. This bishop would have been locked in behind e6 in the QGD, but in the Slav it gets out early and is actively placed. The bishop on f5 controls e4 and sits on a strong diagonal.",
+          "plans": [
+            "The bishop is free and active — the Slav's main advantage over the QGD",
+            "Continue with ...e6 to solidify the center with the bishop already out"
+          ],
+          "arrows": [
+            {"from": "c8", "to": "f5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f5", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "f5", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White opens the diagonal for the bishop to recapture on c4. The pawn on e3 also supports d4, creating a solid structure. White will recover the pawn with Bxc4 on the next move.",
+          "arrows": [
+            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f1", "to": "c4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Now Black plays ...e6, knowing the bishop is already safely developed to f5. This creates a solid d5-support structure and opens the dark-squared bishop's diagonal. Black has achieved the ideal Slav setup.",
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recovers the pawn with the bishop beautifully placed on c4. It targets f7 and controls the diagonal. White has a comfortable position with good development and central control.",
+          "arrows": [
+            {"from": "f1", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "f7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Black pins the Nc3 with the bishop, adding tactical tension to the position. This pin is annoying for White because it pressures e4 control and threatens to double White's pawns after ...Bxc3+.",
+          "plans": [
+            "Maintain the pin to restrict White's options",
+            "Threaten ...Bxc3+ to double White's pawns"
+          ],
+          "arrows": [
+            {"from": "f8", "to": "b4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b4", "to": "c3", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c3", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king safe and connecting the rooks. White is not concerned about the pin — the position is flexible enough to handle it. The king on g1 is well-protected.",
+          "arrows": [
+            {"from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g1", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black also castles, reaching a rich middlegame position. Both sides are fully developed and the battle revolves around the central pawn structure and the Bb4 pin. This is a well-studied position with chances for both sides.",
+          "arrows": [
+            {"from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White places the queen on e2, connecting the rooks and preparing e4. The queen supports the central advance and defends the Bc4 indirectly. This is a flexible move that keeps White's options open.",
+          "plans": [
+            "Prepare e4 to seize the center",
+            "Use the queen to support both kingside and central play"
+          ],
+          "arrows": [
+            {"from": "d1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the last minor piece. The knight on d7 supports the center, can reroute to b6 or e5, and completes Black's development. The Slav has delivered a solid, active position for Black.",
+          "arrows": [
+            {"from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d7", "to": "b6", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Semi-Slav Response",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, beginning what will become one of the sharpest and most complex systems in the Queen's Gambit family.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center. The Semi-Slav combines elements of both the QGD and the Slav, using both ...c6 and ...e6.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit, pressuring d5 from the flank. Black's response will determine whether this becomes a Slav, QGD, or the hybrid Semi-Slav.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black starts with the Slav setup, supporting d5 with the c-pawn. But unlike the pure Slav, Black will soon add ...e6 to create a double-support system for d5.",
+          "arrows": [
+            {"from": "c7", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight naturally. Both sides are navigating a well-known theoretical highway with the Semi-Slav.",
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight, defending d5 and controlling e4. The position is heading toward the Semi-Slav structure with ...e6 coming next.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White puts more pressure on d5. The knight and c4 pawn create a formidable attacking duo against Black's center.",
+          "arrows": [
+            {"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c3", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "This is what makes it a Semi-Slav — Black plays both ...c6 AND ...e6 to create maximum support for d5. The downside is the same as the QGD: the light-squared bishop gets locked in. But the rock-solid center compensates for this.",
+          "plans": [
+            "The d5 pawn is supported twice by pawns — nearly unbreakable",
+            "Look for ...dxc4 and ...b5 to create queenside counterplay"
+          ],
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c8", "color": "rgba(255, 80, 80, 0.3)"},
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White supports d4 and opens the light-squared bishop's diagonal. In the Semi-Slav, White often plays a slower setup because Black's center is so solid that rushing doesn't help.",
+          "arrows": [
+            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, supporting the center and preparing ...dxc4. The knight can reroute to b6, e5, or support the ...c5 break. This flexible placement is typical of the Semi-Slav.",
+          "arrows": [
+            {"from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d7", "to": "b6", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White places the bishop on d3, aiming at the kingside. The bishop on d3 is well-placed in the Semi-Slav — it targets h7 and supports a future e4 advance.",
+          "arrows": [
+            {"from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, entering the Meran Variation. The idea is to expand with ...b5 and ...c5, creating queenside counterplay while White has the center. This is one of the sharpest systems in the Semi-Slav.",
+          "plans": [
+            "Follow up with ...b5 to hold the pawn and gain queenside space",
+            "Use the tempo to develop actively on the queenside"
+          ],
+          "arrows": [
+            {"from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recovers the pawn immediately. The bishop is well-placed on c4 but may need to retreat after ...b5. White's plan is to push e4 and seize the center.",
+          "arrows": [
+            {"from": "d3", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "f7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black expands aggressively on the queenside! This is the heart of the Meran — Black gains space with ...b5 and plans ...Bb7 to activate the bishop. The queenside pawn storm gives Black dynamic counterplay against White's central plans.",
+          "arrows": [
+            {"from": "b7", "to": "b5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White retreats the bishop to d3, maintaining the aim at h7. From d3, the bishop supports the crucial e4 advance that White needs to fight for the center. The battle lines are drawn: White gets the center, Black gets the queenside.",
+          "plans": [
+            "Push e4 to seize central space",
+            "Use the Bd3-Qc2 battery if h7 becomes weak"
+          ],
+          "arrows": [
+            {"from": "c4", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"},
+            {"from": "e3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black activates the light-squared bishop on the long diagonal. The bishop on b7 is powerful — it pressures e4, controls the center, and supports a future ...c5 break.",
+          "arrows": [
+            {"from": "c8", "to": "b7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king safe before pushing e4. The position is about to explode — White will play e4 and both sides will have sharp tactical chances.",
+          "arrows": [
+            {"from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g1", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black secures the b5 pawn and prepares ...c5. The a6 pawn is a prophylactic gem — it prevents Nb5 and keeps the queenside structure solid. Black is ready for the central battle.",
+          "arrows": [
+            {"from": "a7", "to": "a6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c6", "to": "c5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "a6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White strikes in the center with the thematic e4 advance! This is the critical moment in the Meran — White seizes space and opens lines for the pieces. The position becomes highly tactical with both sides having active play on different wings.",
+          "plans": [
+            "Push e5 to drive back the f6 knight and gain kingside space",
+            "Open the center for the bishops and rooks"
+          ],
+          "arrows": [
+            {"from": "e3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black counters in the center with ...c5, challenging d4 and opening the position. This is the Semi-Slav's counterplay in action — Black gives up the c6 support for d5 in exchange for active piece play and central tension. The position is razor-sharp.",
+          "plans": [
+            "Open the c-file and diagonal for the Bb7",
+            "Use the active pieces to create tactical chances"
+          ],
+          "arrows": [
+            {"from": "c6", "to": "c5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "QGA e4 Thrust",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. In this aggressive QGA line, White will follow up the gambit acceptance with a bold e4 thrust to seize the center.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center, preparing to accept the gambit on the next move.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. Black will accept, but White has an aggressive follow-up planned with e4.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black accepts the gambit, taking the c4 pawn. Now White will strike with e4 to build a massive central pawn duo.",
+          "arrows": [
+            {"from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays the aggressive e4 thrust instead of the calm e3! This builds a massive center and gains space rapidly. The idea is to use the two central pawns as a battering ram while developing quickly behind them.",
+          "plans": [
+            "Use the d4+e4 center to dominate the board",
+            "Develop quickly with Nf3 and Bxc4 to recover the pawn with a lead in development"
+          ],
+          "arrows": [
+            {"from": "e2", "to": "e4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black counters in the center immediately! By challenging d4, Black prevents White from getting a steamroller center. This leads to sharp, open play where both sides need to calculate carefully.",
+          "arrows": [
+            {"from": "e7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight, adding pressure to the e5 and d4 tension. The knight attacks e5 and supports d4, maintaining White's central presence while developing naturally.",
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f3", "to": "e5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "exd4",
+          "annotation": "Black captures on d4, winning a central pawn. Now White must decide how to recapture — but the key idea is that White has a strong center and development advantage even down a pawn temporarily.",
+          "arrows": [
+            {"from": "e5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recovers one pawn and the bishop lands on a powerful square aiming at f7. White has excellent compensation: the bishop pair, open lines, and a lead in development. The d4 pawn is hard for Black to hold.",
+          "plans": [
+            "Target f7 and develop rapidly to exploit the lead in development",
+            "Recover the d4 pawn with pieces bearing down on the center"
+          ],
+          "arrows": [
+            {"from": "f1", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c4", "to": "f7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to defend d4 and develop naturally. The knight on c6 supports the extra pawn and adds to Black's piece play.",
+          "arrows": [
+            {"from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king safe and the rook into play. With the open center, king safety is critical. White has excellent piece activity and will look to recover the d4 pawn.",
+          "arrows": [
+            {"from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g1", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black develops the bishop to e6, blocking the Bc4's aim at f7 and developing a piece. This is solid but leads to a tactical position after the bishop exchange.",
+          "arrows": [
+            {"from": "c8", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e6", "to": "c4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxe6",
+          "annotation": "White captures the bishop, opening the f-file and damaging Black's pawn structure. The doubled e-pawns after ...fxe6 create long-term weaknesses that White can target.",
+          "plans": [
+            "After ...fxe6, target the doubled pawns and weak squares",
+            "Use the open f-file for rook activity"
+          ],
+          "arrows": [
+            {"from": "c4", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e6", "color": "rgba(255, 80, 80, 0.3)"},
+            {"square": "f7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "fxe6",
+          "annotation": "Black recaptures, accepting the doubled pawns. The e6 pawn is weak but Black has the two central pawns and piece development. The position is very sharp.",
+          "arrows": [
+            {"from": "f7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Qb3",
+          "annotation": "White attacks the e6 pawn and the b7 pawn simultaneously! The queen creates a double attack that forces Black to be very precise. This is the trap — Black must defend accurately or lose material.",
+          "plans": [
+            "Attack b7 and e6 simultaneously",
+            "Force Black into a defensive position"
+          ],
+          "arrows": [
+            {"from": "d1", "to": "b3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b3", "to": "b7", "color": "rgba(255, 50, 50, 0.8)"},
+            {"from": "b3", "to": "e6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "b7", "color": "rgba(255, 80, 80, 0.3)"},
+            {"square": "e6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Qd7",
+          "annotation": "Black defends the e6 pawn with the queen while also protecting b7 indirectly. This holds the position together but the queen is passive on d7.",
+          "arrows": [
+            {"from": "d8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qxb7",
+          "annotation": "White grabs the b7 pawn! The queen invades and wins material. Now Black's queenside is weakened and the a8 rook is under fire. White has recovered the gambit pawn plus interest.",
+          "arrows": [
+            {"from": "b3", "to": "b7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "a8", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "a8", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Rb8",
+          "annotation": "Black attacks the queen to drive it back, but White has already won a pawn and has the better position. The queen can retreat to safety while maintaining the material advantage.",
+          "arrows": [
+            {"from": "a8", "to": "b8", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b8", "to": "b7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "b7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Qa6",
+          "annotation": "White retreats the queen to a6, keeping it active on the queenside while maintaining the extra pawn. White has a clear advantage with the extra material, better structure, and active pieces. The QGA e4 trap has worked perfectly.",
+          "arrows": [
+            {"from": "b7", "to": "a6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "a6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight, trying to generate some activity. But White's extra pawn and better structure give a lasting advantage. The key lesson: in the QGA e4 line, White's aggressive central play combined with Bxe6 and Qb3 creates serious problems for Black.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Minority Attack Breakthrough",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, beginning the setup for one of the most instructive positional plans in chess — the minority attack.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center symmetrically, heading into QGD territory.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. White will exchange on d5 to enter the Exchange Variation and set up the minority attack.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black declines with the standard e6, entering the QGD. White will now choose the Exchange Variation to set up the minority attack plan.",
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c8", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops with pressure on d5, the standard approach.",
+          "arrows": [
+            {"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c3", "to": "d5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to defend d5 and control e4.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White enters the Exchange Variation, the starting point for the minority attack. By symmetrizing the center, White creates a position where the queenside pawn majority becomes the key strategic weapon.",
+          "plans": [
+            "Set up the minority attack with b4-b5",
+            "Create a weakness on c6 or an isolated d5 pawn"
+          ],
+          "arrows": [
+            {"from": "c4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b2", "to": "b4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black recaptures, creating the symmetrical d4 vs d5 structure. The e-file is open and Black's light-squared bishop is free, but d5 needs constant protection.",
+          "arrows": [
+            {"from": "e6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the knight before playing e3. The bishop on g5 creates pressure and must come out before e3 blocks it in.",
+          "arrows": [
+            {"from": "c1", "to": "g5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "g5", "to": "f6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black breaks the pin and prepares to castle. Standard and solid.",
+          "arrows": [
+            {"from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White solidifies the center and opens the light bishop's diagonal. With Bg5 already out, e3 is purely constructive.",
+          "arrows": [
+            {"from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles to safety. The king is secure and development continues.",
+          "arrows": [
+            {"from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White places the bishop on d3 aiming at h7, the classic setup. Combined with Qc2, this creates the dangerous battery.",
+          "arrows": [
+            {"from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, keeping things flexible. The knight can go to f8, b6, or support ...c5.",
+          "arrows": [
+            {"from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the last minor piece, preparing to castle and begin the minority attack.",
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black places the rook on the open e-file, a natural and active move.",
+          "arrows": [
+            {"from": "f8", "to": "e8", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qc2",
+          "annotation": "The Bd3+Qc2 battery is in place! White now has kingside threats simmering while preparing the minority attack on the queenside. This dual-wing strategy is the hallmark of the Exchange QGD.",
+          "arrows": [
+            {"from": "d1", "to": "c2", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c2", "to": "h7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "h7", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black plays ...c6 to support d5, the standard defensive setup. But this c6 pawn becomes the minority attack's primary target.",
+          "arrows": [
+            {"from": "c7", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, completing development. Now the minority attack begins in earnest — Rab1, a3, and b4 are coming.",
+          "plans": [
+            "Play Rab1 immediately to prepare b4",
+            "Execute b4-b5 to attack the c6 pawn"
+          ],
+          "arrows": [
+            {"from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "a1", "to": "b1", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "g1", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf8",
+          "annotation": "Black reroutes the knight to f8, heading for e6 or g6. This is the standard defensive regrouping but it's slow.",
+          "arrows": [
+            {"from": "d7", "to": "f8", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "f8", "to": "e6", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Rab1",
+          "annotation": "White begins the minority attack! The rook goes to b1 to support the b-pawn's advance. This is textbook positional chess — the plan is simple and devastating: push b4-b5 to attack c6.",
+          "plans": [
+            "Push a3 and then b4 to begin the pawn storm",
+            "After b5, exchange on c6 to create a weak pawn"
+          ],
+          "arrows": [
+            {"from": "a1", "to": "b1", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b2", "to": "b4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b1", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "a5",
+          "annotation": "Black tries to prevent b4 by advancing the a-pawn. But this creates a hook for White's attack and weakens the b5 square.",
+          "arrows": [
+            {"from": "a7", "to": "a5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "b5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "a3",
+          "annotation": "White prepares b4 with a3. The a3 pawn supports b4 and prevents any ...a4 tricks from Black. The minority attack is rolling forward.",
+          "arrows": [
+            {"from": "a2", "to": "a3", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b2", "to": "b4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Ng6",
+          "annotation": "Black places the knight on g6 for kingside defense. The knight eyes f4 and h4, but it's far from the queenside where the real battle is happening.",
+          "arrows": [
+            {"from": "f8", "to": "g6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "b4",
+          "annotation": "The minority attack strikes! White pushes b4, and after b5 the c6 pawn will be undermined. If Black takes ...axb4 axb4, the b-file opens for White's rook. If Black allows b5, then bxc6 creates a weak isolated pawn. This is the trap — the minority of pawns (a+b) attacks the majority (a+b+c) to create lasting weaknesses.",
+          "plans": [
+            "Push b5 next to attack c6 directly",
+            "After bxc6, the resulting weak pawn gives White a permanent target"
+          ],
+          "arrows": [
+            {"from": "b2", "to": "b4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b4", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"},
+            {"from": "b5", "to": "c6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c6", "color": "rgba(255, 80, 80, 0.3)"},
+            {"square": "b4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "axb4",
+          "annotation": "Black captures, opening the a-file. But this also opens the b-file for White's rook on b1, which is exactly what White wanted. The minority attack has achieved its goal — creating open lines and pawn weaknesses.",
+          "arrows": [
+            {"from": "a5", "to": "b4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "b4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "axb4",
+          "annotation": "White recaptures, and now the b-file is wide open with White's rook already on b1. The b-pawn will advance to b5 on the next move, creating devastating pressure on c6. This is the textbook minority attack breakthrough — White's rook, queen, and pawns coordinate to create permanent structural weaknesses in Black's camp.",
+          "plans": [
+            "Push b5 to force the bxc6 exchange and create a weak pawn",
+            "Infiltrate along the open files with rooks and queen"
+          ],
+          "arrows": [
+            {"from": "a3", "to": "b4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b4", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"},
+            {"from": "b1", "to": "b7", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c6", "color": "rgba(255, 80, 80, 0.3)"},
+            {"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black tries to get active with the bishop, but the minority attack damage is done. White will push b5 and the c6 pawn becomes a permanent weakness. The minority attack is one of the most important positional concepts to master — a small group of pawns can create decisive weaknesses in a larger group.",
+          "arrows": [
+            {"from": "e7", "to": "d6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Premature e4 Push",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn, entering the QGD. In this warning line, we'll see what happens when White gets too aggressive with e4 too early.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center. The game is heading toward a standard QGD.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit, putting pressure on d5.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black declines, entering the QGD with a solid pawn chain.",
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c8", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops, adding pressure to d5. So far everything is standard Classical QGD.",
+          "arrows": [
+            {"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to defend d5, completely standard.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the knight, the classical approach. Everything seems normal so far.",
+          "arrows": [
+            {"from": "c1", "to": "g5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "g5", "to": "f6", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black breaks the pin naturally and prepares to castle.",
+          "arrows": [
+            {"from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "f6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "This is the premature push! White plays e4 before completing development — no Nf3, no castling. It looks aggressive but it's actually a strategic error because Black can capture and exploit White's lack of coordination. The center opens before White is ready to handle the consequences.",
+          "plans": [
+            "WARNING: This push looks tempting but backfires because White's pieces aren't ready for open play",
+            "The proper plan was e3 first, then Bd3, Nf3, O-O, and only THEN consider e4"
+          ],
+          "arrows": [
+            {"from": "e2", "to": "e4", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black gladly captures! Now White's center is demolished and the Nc3 is under pressure. Black wins a pawn and White's position is already worse because the pieces aren't coordinated to recover it quickly.",
+          "arrows": [
+            {"from": "d5", "to": "e4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "c3", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "White recaptures with the knight, but now Black has a tactical shot that exploits the premature opening of the position.",
+          "arrows": [
+            {"from": "c3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black takes the knight, winning a piece for the moment. After Bxe7 Qxe7, Black has active play and White's king is stuck in the center. This is why premature e4 is dangerous — the position opens up before White is ready.",
+          "arrows": [
+            {"from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e7", "to": "g5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "White recaptures the bishop, but now the queen comes to e7 with tempo and Black has an excellent position with the central knight and open lines.",
+          "arrows": [
+            {"from": "g5", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Black recaptures with the queen, which is now centralized and powerful. White has lost the bishop pair and the center is wide open with no development advantage. The premature e4 has left White in a difficult position.",
+          "arrows": [
+            {"from": "d8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Qd2",
+          "annotation": "White tries to develop and connect pieces, but the position is already uncomfortable. The king can't castle kingside easily because the f1 bishop hasn't developed, and the open center is dangerous.",
+          "arrows": [
+            {"from": "d1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d2", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops with tempo, pressuring d4 and adding to the central advantage. White's d4 pawn is now a liability rather than a strength.",
+          "arrows": [
+            {"from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "c6", "to": "d4", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "White castles queenside in desperation, trying to get the king safe. But castling queenside with the center open is risky, and Black has clear targets.",
+          "arrows": [
+            {"from": "e1", "to": "c1", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c1", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black opens the center further, attacking d4 and activating all pieces. The e5 pawn opens the diagonal for the bishop and creates threats against White's king. White's premature e4 has backfired completely — the lesson is clear: never push e4 until your pieces are fully developed and your king is safe.",
+          "plans": [
+            "Open lines against the queenside-castled king",
+            "Use the active pieces and central control to create an attack"
+          ],
+          "arrows": [
+            {"from": "e6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "e5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 80, 80, 0.3)"},
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "White pushes d5 to try to close the center, but it's too late. Black has too much piece activity and White's king on c1 is exposed. This is the final position showing why premature e4 in the QGD leads to trouble.",
+          "arrows": [
+            {"from": "d4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c1", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Nd4",
+          "annotation": "Black's knight lands on the dominant d4 outpost, from where it controls everything. The knight on d4 is untouchable and creates threats against White's exposed king. The premature e4 push has led to a position where Black dominates — always develop before pushing pawns in the center!",
+          "arrows": [
+            {"from": "c6", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "d4", "to": "c2", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d4", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "c2", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Slav Bf5 Headache",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. This warning line shows a common trap in the Slav where White mishandles the position and gets a miserable game.",
+          "arrows": [
+            {"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center, preparing the Slav setup.",
+          "arrows": [
+            {"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. Black will play the Slav with ...c6.",
+          "arrows": [
+            {"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav Defence, keeping the light-squared bishop free. Black's plan is to capture on c4 and play ...b5 to hold the pawn.",
+          "arrows": [
+            {"from": "c7", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c8", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops naturally. So far the game is standard Slav theory.",
+          "arrows": [
+            {"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight, defending d5 and controlling e4. Standard Slav development.",
+          "arrows": [
+            {"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight, adding pressure to d5. Now Black captures on c4 to start the counterplay.",
+          "arrows": [
+            {"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "d5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, the standard Slav approach. Now Black will try to hold the extra pawn with ...b5.",
+          "plans": [
+            "Hold the pawn with ...b5 and develop actively",
+            "Create queenside space while keeping the bishop free"
+          ],
+          "arrows": [
+            {"from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "WARNING: This is a mistake! White should play a4 to prevent ...b5. Playing e3 allows Black to hold the pawn with ...b5, and now White's light-squared bishop is locked behind the pawn chain. The correct move was a4.",
+          "plans": [
+            "WARNING: e3 blocks the bishop and lets Black hold the c4 pawn",
+            "White should have played a4 to prevent ...b5"
+          ],
+          "arrows": [
+            {"from": "e2", "to": "e3", "color": "rgba(255, 50, 50, 0.8)"},
+            {"from": "a2", "to": "a4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "f1", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black holds the pawn! The b5 pawn protects c4 and gives Black a queenside space advantage. White is now struggling because the light-squared bishop cannot recapture on c4 due to the e3 pawn blocking its path. This is the headache.",
+          "arrows": [
+            {"from": "b7", "to": "b5", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "b5", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "White tries to undermine b5, but it's too late. Black has resources to maintain the pawn chain.",
+          "arrows": [
+            {"from": "a2", "to": "a4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "a4", "to": "b5", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "b5", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "b4",
+          "annotation": "Black pushes the pawn forward, driving the knight away and maintaining the extra pawn. The b4 pawn is a thorn in White's position, forcing the knight to move and keeping the c4 pawn protected.",
+          "arrows": [
+            {"from": "b5", "to": "b4", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b4", "to": "c3", "color": "rgba(255, 50, 50, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c3", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Na2",
+          "annotation": "The knight retreats to the horrible a2 square — this is the direct consequence of the premature e3. White's knight is offside, the bishop is still locked in, and Black has an extra pawn. White's position is already unpleasant.",
+          "arrows": [
+            {"from": "c3", "to": "a2", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black solidifies with e6, creating a strong pawn chain and preparing to develop the dark-squared bishop. Black has a comfortable extra pawn and better structure.",
+          "arrows": [
+            {"from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e6", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White finally recovers the pawn, but at great cost — the knight is stranded on a2 and White has lost multiple tempos. Black's position is clearly better with superior development and queenside space.",
+          "arrows": [
+            {"from": "f1", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops calmly, preparing to castle. Black has completed development naturally while White's knight is still stranded on a2. The lesson: in the Slav, always play a4 before e3 to prevent ...b5.",
+          "arrows": [
+            {"from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the damage is done. The knight on a2 is completely out of play and will need multiple moves to rejoin the fight.",
+          "arrows": [
+            {"from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles with a clearly superior position. White has the knight stuck on a2, wasted tempos, and no compensation. This is the Slav Bf5 headache — play a4 before e3, or face a miserable position where you're playing catch-up the whole game.",
+          "plans": [
+            "Black has a great position with easy development",
+            "White must spend multiple moves getting the a2 knight back into the game"
+          ],
+          "arrows": [
+            {"from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "g8", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White tries to regroup, but the position is fundamentally worse. The knight on a2 is a lasting reminder that move order matters in the Slav — always play a4 to stop ...b5 before committing to e3.",
+          "arrows": [
+            {"from": "d1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)"}
+          ],
+          "highlights": [
+            {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black activates the light-squared bishop on the long diagonal — the whole point of the Slav. The bishop on b7 is a monster, pressuring e4 and the center. Meanwhile White's a2 knight is still pathetic. This is the warning: respect the Slav's move order or pay a heavy positional price.",
+          "arrows": [
+            {"from": "c8", "to": "b7", "color": "rgba(0, 180, 80, 0.8)"},
+            {"from": "b7", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}
+          ],
+          "highlights": [
+            {"square": "b7", "color": "rgba(255, 255, 0, 0.4)"},
+            {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}
+          ]
+        }
+      ]
     }
   ]
 }

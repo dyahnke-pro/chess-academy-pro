@@ -579,6 +579,1781 @@
           ]
         }
       ]
+    },
+    {
+      "name": "London vs Queen's Pawn",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We open with 1.d4, launching the London System. This controls the center and opens the c1-h6 diagonal for our dark-squared bishop. Against the Queen's Pawn setup, Black will mirror with ...d5 and try to challenge us in a symmetrical center.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c1", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black mirrors our pawn, establishing symmetrical central tension. This is the most solid response, and the one we face most often as London players. Black stakes an equal claim in the center and plans classical development.",
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "The London signature move. We get the dark-squared bishop out before playing e3, which would lock it behind the pawn chain. From f4 it controls e5 and sits on a stable diagonal. Always play Bf4 before e3 in the London.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f4", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the king's knight naturally, controlling e4 and preparing to castle. This is a flexible move that keeps all options open. It does not disturb our London setup at all.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We solidify the center with the d4-e3 pawn duo. The e3 pawn supports d4 and opens the f1-a6 diagonal for our light-squared bishop. This completes the London pawn foundation and sets up the famous triangle with c3 to come.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "e3", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black reinforces d5 and opens the dark-squared bishop's diagonal. The downside is that the c8-bishop is now hemmed in behind the e6 pawn, which is a classic London advantage. Activating that bishop will be Black's main strategic challenge.",
+          "arrows": [
+            { "from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c8", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We develop the knight to its ideal square, reinforcing e5 and d4 control while preparing to castle. The knight on f3 is a cornerstone of the London setup, supporting both defense and future central breaks.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes at our center with the most principled break, attacking d4 and aiming to dissolve our pawn chain. This is the main challenge Black poses in the London, and how we respond defines the middlegame character.",
+          "arrows": [
+            { "from": "c7", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "We complete the London pawn triangle with c3, making d4 absolutely unbreakable. The c3-d4-e3 structure is the hallmark of the London System. Now we can focus purely on developing our remaining pieces and castling.",
+          "plans": [
+            "Complete development with Bd3, Nbd2, and O-O",
+            "After full development, prepare the e3-e4 central break"
+          ],
+          "arrows": [
+            { "from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the queen's knight naturally, adding another piece to pressure d4. The knight also supports the ...e5 central break. Our pawn triangle holds firm regardless.",
+          "arrows": [
+            { "from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "We develop the queen's knight to d2, keeping the c-file clear and supporting a future e4 push. From d2 the knight can reroute to e5 or support e4 directly. This is the classic London development scheme.",
+          "arrows": [
+            { "from": "b1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black develops the bishop to d6, directly challenging our Bf4. This is a critical moment: we can exchange bishops or retreat to g3. The Bd6 also supports the ...e5 break which Black is building toward.",
+          "arrows": [
+            { "from": "f8", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d6", "to": "f4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bg3",
+          "annotation": "We retreat the bishop to g3 rather than allowing the exchange. On g3 the bishop remains active, controlling e5 and sitting safely. It also supports a potential h4-h5 pawn push later if we want kingside play.",
+          "arrows": [
+            { "from": "f4", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "g3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, securing the king and connecting the rooks. With the king safe, Black is ready to execute the ...e5 central break that has been building for several moves.",
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "We place the light-squared bishop on its ideal diagonal, aiming at h7 and supporting the future e4 break. The Bd3-Bg3 battery is a potent attacking duo in the London, creating latent threats against the black king.",
+          "arrows": [
+            { "from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black moves the queen to e7, supporting the ...e5 break and connecting the rooks. The queen on e7 also eyes the kingside and can swing to the queenside if needed. This is a flexible multipurpose move.",
+          "arrows": [
+            { "from": "d8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle kingside, completing our development. The London setup is fully deployed: Bf4-g3, Bd3, Nf3, Nbd2, castled. Now we are ready to fight for the center with e4 or play on the queenside.",
+          "plans": [
+            "Prepare e3-e4 to seize more central space",
+            "Consider Re1 and Qe2 to support e4"
+          ],
+          "arrows": [
+            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black finally plays the thematic central break, challenging our d4 pawn directly. This transforms the position and creates central tension. If we take on e5, Black recaptures with good piece activity. This is the critical moment of the Queen's Pawn variation.",
+          "arrows": [
+            { "from": "e6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jobava London",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We start with 1.d4, but in the Jobava London we will deviate from the standard London by developing the knight to c3 instead of d2. This aggressive variation is named after Georgian GM Baadur Jobava and offers sharper play with early piece activity.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight naturally, controlling e4. This is the most common response, keeping options flexible. Against the Jobava London, Black needs to be careful about early tactical tricks that the Nc3 setup creates.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Our London bishop goes to f4 as usual. The twist comes on the next move when we play Nc3 instead of the typical e3. This bishop still performs its usual role of controlling e5 and sitting on a strong diagonal.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "b1", "to": "c3", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center symmetrically. Against the Jobava, this is the most solid approach. Black establishes a firm foothold on d5 and prepares classical development.",
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Here is the Jobava twist! Instead of the normal e3, we develop the knight to c3, putting immediate pressure on d5 and e4. This is much more aggressive than the standard London Nbd2. The knight on c3 is actively placed but does block the c-pawn, so we sacrifice the c3 triangle for faster piece development and tactical opportunities.",
+          "plans": [
+            "Use Nc3 to pressure d5 and support e4",
+            "Combine Bf4 + Nc3 for rapid piece development",
+            "Look for tactical opportunities with the active knight placement"
+          ],
+          "arrows": [
+            { "from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c3", "to": "d5", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black reinforces d5 and opens the dark-squared bishop's diagonal. This solid approach keeps the center stable. The c8-bishop is locked in, but Black has a firm position.",
+          "arrows": [
+            { "from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c8", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We play e3 to support d4 and open the bishop's diagonal. Even in the Jobava, e3 is needed to stabilize the center. The difference from the standard London is that our knight is actively placed on c3 rather than passively on d2.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f1", "to": "e2", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black challenges our center with the typical ...c5 break. This is the correct response, trying to dissolve our d4 pawn and open lines. Without c3 to reinforce d4, we need to handle this tension differently than in the standard London.",
+          "arrows": [
+            { "from": "c7", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We develop the knight to f3, reinforcing d4 and controlling e5. With both knights developed and the bishop on f4, we have excellent piece activity. The Jobava setup gives us faster development at the cost of the c3 pawn triangle.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, adding more pressure on d4. With two pieces and the c5 pawn targeting d4, Black is building up significant central pressure. We need to be ready with concrete plans.",
+          "arrows": [
+            { "from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Be2",
+          "annotation": "We develop the bishop to e2, a practical choice that supports castling and keeps the position flexible. In the Jobava, Be2 is preferred over Bd3 because our knight on c3 already provides active pressure, so we prioritize rapid castling.",
+          "arrows": [
+            { "from": "f1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black challenges our bishop directly, just as in the main line. The Bd6 offers a trade and supports ...e5. In the Jobava, this is a logical move since Black wants to simplify and reduce our piece activity.",
+          "arrows": [
+            { "from": "f8", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d6", "to": "f4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bg3",
+          "annotation": "We retreat the bishop to g3, keeping it active and avoiding the trade. The Bg3 controls e5 and maintains long-term attacking potential. If Black trades on g3, we recapture with hxg3, opening the h-file for our rook.",
+          "arrows": [
+            { "from": "f4", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "g3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, getting the king to safety. This is natural and necessary before committing to any central breaks. The rook is now ready to support central play.",
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle kingside as well, completing development. The Jobava London setup is ready: Nc3 provides active pressure, Bg3 controls the dark squares, and our pieces coordinate well. We can now choose between queenside expansion with a3-b4 or central play with Re1 and Ne5.",
+          "plans": [
+            "Consider Ne5 to plant a powerful outpost in the center",
+            "Play a3 and b4 for queenside expansion"
+          ],
+          "arrows": [
+            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "Black fianchettoes the light-squared bishop, solving the problem of the hemmed-in c8-bishop. The bishop on b7 will pressure e4 and the long diagonal. This takes time but gives Black good long-term prospects.",
+          "arrows": [
+            { "from": "b7", "to": "b6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "b7", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Ne5",
+          "annotation": "We plant the knight on the powerful e5 outpost, the ideal square in any London position. With the knight on e5 supported by our pawn on d4, we have a dominating central presence. The knight radiates influence in all directions and cannot be easily challenged.",
+          "plans": [
+            "Maintain the knight on e5 as a central anchor",
+            "Consider f3 and e4 to build a broad center"
+          ],
+          "arrows": [
+            { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e5", "to": "f7", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "f7", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black completes the fianchetto, activating the bishop on the long diagonal. The Bb7 now pressures e4 and supports central play. However, our knight on e5 is a powerful presence that Black will need to address eventually.",
+          "arrows": [
+            { "from": "c8", "to": "b7", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "b7", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "London vs Grunfeld Setup",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We begin with 1.d4, entering the London System. Against the Grunfeld setup, Black will fianchetto and then challenge our center with ...d5, combining ideas from the Grunfeld Defense with the London structure. We must be ready for dynamic counterplay.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight first, keeping options open. Black may go for a King's Indian setup with ...g6 and ...d6, or a Grunfeld-style approach with ...g6 and ...d5. We proceed with our standard London moves regardless.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Our signature bishop move, out before e3. Against the Grunfeld setup, the bishop on f4 is well placed to control e5 and monitor the long diagonal that Black's fianchettoed bishop will occupy.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f4", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black prepares the fianchetto. This could transpose into a King's Indian, but if Black follows up with ...d5 instead of ...d6, we get the Grunfeld-style structure. The g6 pawn weakens the dark squares slightly but prepares a powerful bishop on g7.",
+          "arrows": [
+            { "from": "g7", "to": "g6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f8", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "h6", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We solidify with e3, forming the London pawn duo. This remains our reliable approach against any Black setup. The e3 pawn supports d4 and opens lines for the light-squared bishop.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "e3", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black completes the fianchetto. The Bg7 is a powerful piece aiming at d4 and the entire long diagonal. In the Grunfeld-style setup, this bishop becomes especially dangerous if our center gets opened up, so we must keep d4 well defended.",
+          "arrows": [
+            { "from": "f8", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "g7", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We develop the knight to f3, defending d4 and controlling e5. This is essential before Black can ramp up pressure on our center. The knight on f3 is our main d4 defender alongside the e3 pawn.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "This is the Grunfeld-style move. Instead of ...d6, Black plays ...d5 directly, fighting for the center immediately. This creates a symmetrical d4-d5 pawn tension while the bishop on g7 pressures our d4 pawn from the flank. A more dynamic approach than the King's Indian ...d6.",
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "g7", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Be2",
+          "annotation": "We opt for Be2 in this line, prioritizing rapid castling over the more ambitious Bd3. Against the Grunfeld setup with the powerful Bg7, getting castled quickly is important so our king is safe before the center opens.",
+          "arrows": [
+            { "from": "f1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, completing development of the kingside. The king is safe behind the fianchettoed bishop. Black is now ready to challenge our center with ...c5 or expand on the queenside.",
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle as well, ensuring our king is safe. Both sides are now fully castled and the battle will center on the d4-d5 pawn tension and whether Black can effectively use the Bg7 to undermine our center.",
+          "arrows": [
+            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes at our center with ...c5, the most principled break. Combined with the Bg7 and the d5 pawn, Black is creating maximum pressure on our d4 point. We must be prepared with c3 to reinforce.",
+          "arrows": [
+            { "from": "c7", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "We complete the London triangle with c3, making d4 rock-solid. Even with the Bg7 and ...c5 pressing on our center, the c3-d4-e3 structure holds firm. This is the beauty of the London: our center is virtually unbreakable.",
+          "arrows": [
+            { "from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black adds another piece targeting d4 and prepares to increase central pressure. The knight on c6 works alongside the Bg7 and the ...c5 pawn to challenge our center from multiple angles.",
+          "arrows": [
+            { "from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "We develop the knight to d2, supporting a future e4 push and keeping our structure flexible. The knight can reroute to e5 or support the central break. This is methodical London development.",
+          "arrows": [
+            { "from": "b1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black activates the light-squared bishop to f5, a strong move that avoids the typical London problem of a locked-in c8-bishop. With the bishop outside the pawn chain, Black has solved a key strategic issue and the bishop targets the b1-h7 diagonal.",
+          "arrows": [
+            { "from": "c8", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f5", "to": "b1", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nh4",
+          "annotation": "We attack the Bf5, forcing Black to make a decision about the bishop. Nh4 gains a tempo and can lead to the knight landing on f5 (a superb outpost) if Black retreats. This is a sharp idea that gives us active play.",
+          "plans": [
+            "If ...Be6, play Nf5 for a powerful outpost",
+            "If ...Be4, exchange and open up the position"
+          ],
+          "arrows": [
+            { "from": "f3", "to": "h4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "h4", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black retreats the bishop to e6, a solid square that supports d5 and keeps the bishop active. However, this allows us to play Nf5, achieving an incredible outpost. The Grunfeld setup has given Black active pieces but our Nf5 will be a powerful asset.",
+          "arrows": [
+            { "from": "f5", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e6", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "f5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "London vs Dutch",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We open with 1.d4, and in this line Black will respond with the Dutch Defense ...f5. The London System is actually one of the best setups against the Dutch because our Bf4 directly exploits the weakened e5 square that Black creates with ...f5.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays the Dutch Defense, immediately grabbing space on the kingside and controlling e4. The drawback is significant: the e5 square is permanently weakened and the king position is slightly compromised. Our London bishop on f4 will exploit this weakness perfectly.",
+          "arrows": [
+            { "from": "f7", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "e8", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Perfect timing for our London bishop. Against the Dutch, Bf4 is especially strong because it directly controls the weakened e5 square that Black just created with ...f5. The bishop radiates power on this diagonal and will be very hard for Black to challenge.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f4", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, the most natural move. The knight controls e4 and d5 while preparing to castle. However, it does not address the e5 weakness, which remains a long-term issue for Black.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We play e3 to support d4 and open the diagonal for Bd3. Against the Dutch, our light-squared bishop on d3 will be particularly effective because it targets the h7 pawn and works with our dark-squared bishop to create attacking chances.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black solidifies with e6, supporting d5 and completing a Stonewall-like pawn formation. The e6-f5 pawns control many central squares but leave the dark squares seriously weak, especially e5 and d6. This is where our London bishop shines.",
+          "arrows": [
+            { "from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "d6", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We develop the knight to f3, reinforcing e5 and d4 control. The knight is well placed to potentially jump to e5 later, occupying the gaping hole in Black's position. Solid, purposeful development.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, completing the Stonewall pawn structure (d5-e6-f5). This gives Black a firm grip on e4 but permanently weakens the e5 square and locks in the c8-bishop. The Stonewall is a double-edged formation that our London handles very well.",
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c8", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "We develop the bishop to d3, aiming at the kingside. Against the Dutch Stonewall, Bd3 is the ideal square because it creates a battery with Bg3 (after the trade on d6) and targets h7. The bishop also supports a future e4 break if conditions are right.",
+          "arrows": [
+            { "from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black develops the bishop to d6, challenging our Bf4. This is the natural developing square, but it allows us to make a favorable exchange that highlights the dark-square weakness in Black's position.",
+          "arrows": [
+            { "from": "f8", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d6", "to": "f4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bxd6",
+          "annotation": "We capture on d6, trading our dark-squared bishop. In the Dutch this trade is favorable for us because Black's dark squares become severely weak without a dark-squared bishop to defend them. The e5 and g5 squares become permanent holes in Black's position.",
+          "plans": [
+            "Exploit dark-square weakness on e5 and g5",
+            "Plant a knight on e5 as a dominant outpost"
+          ],
+          "arrows": [
+            { "from": "f4", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "g5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Qxd6",
+          "annotation": "Black recaptures with the queen, keeping the pawn structure intact. The queen on d6 is centralized but can become a target for tempo-gaining moves. Without the dark-squared bishop, Black's king will feel exposed on the dark squares.",
+          "arrows": [
+            { "from": "d8", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d6", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle kingside, getting our king to safety and connecting the rooks. With our solid pawn structure and Black's dark-square weakness, we have a comfortable position. The plan now is to exploit e5 and build up pressure.",
+          "arrows": [
+            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles as well. Both kings are safe, but the strategic landscape clearly favors White. Our plan is to occupy e5 with the knight and potentially open the c-file with c4. Black's Stonewall structure is solid but passive.",
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "We strike at the center with c4, challenging Black's d5 pawn. This is the key break against the Stonewall: by undermining d5, we can open lines and exploit our superior piece activity. If Black takes, we recapture with Nc3 and have excellent central control.",
+          "plans": [
+            "Open the c-file for the rook",
+            "After cxd5 exd5, target the isolated d5 pawn"
+          ],
+          "arrows": [
+            { "from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c4", "to": "d5", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black reinforces d5 with ...c6, maintaining the Stonewall structure. This keeps the center closed but is very passive. The c8-bishop remains locked in and Black's position is cramped. Our space advantage and dark-square control give us a lasting edge.",
+          "arrows": [
+            { "from": "c7", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c8", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "We develop the knight to c3, putting pressure on d5 and e4. In the Dutch, Nc3 is strong because it targets the weak points in Black's Stonewall. The knight can also reroute to e2-f4 or support a central break. White has a comfortable advantage with better pieces and clearer plans.",
+          "plans": [
+            "Occupy e5 with Nf3-e5",
+            "Play Qc2 and double rooks on the c-file"
+          ],
+          "arrows": [
+            { "from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c3", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Ne4",
+          "annotation": "Black plants the knight on e4, the one strong square in the Stonewall. The Ne4 is a powerful piece that controls many squares and sits firmly in our territory. However, this is Black's only active idea, and we can challenge it with Nc3xe4 or work around it with our superior piece coordination.",
+          "arrows": [
+            { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Nh5 Misplacement",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We start with 1.d4, entering the London System. This trap line demonstrates what happens when Black tries to attack our Bf4 prematurely with ...Nh5, misplacing their knight on the rim of the board.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5 symmetrically, a standard response. So far this looks like a normal London game, but Black is about to make a strategic error in trying to win our bishop.",
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Our London bishop comes out to f4. Many opponents will be tempted to chase this bishop, but as we will see, that approach backfires badly. The bishop on f4 is actually bait for Black to waste time.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight naturally to f6. This is good development, but Black is about to make the critical error of moving this knight again to h5 to attack the bishop, violating opening principles.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We solidify the center as usual. The London pawn triangle takes shape while we develop naturally. Everything looks normal on the surface, but we are setting up for Black's mistake.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays a normal developing move, reinforcing d5. Still standard play. The position is about to diverge when Black decides to chase our bishop with ...Bd6 followed by ...Nh5.",
+          "arrows": [
+            { "from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e6", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We continue developing naturally with Nf3. Our position is solid and harmonious. We are not worried about Black chasing the bishop because we have a ready-made plan for it.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black develops the bishop to d6, challenging our Bf4. This is actually fine by itself, but many players follow up with ...Nh5 to force the bishop trade, which is the mistake we want to exploit.",
+          "arrows": [
+            { "from": "f8", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d6", "to": "f4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bg3",
+          "annotation": "We calmly retreat to g3, inviting Black to chase us further. The bishop is perfectly safe on g3 and still controls e5. If Black follows through with ...Nh5 to trade, they will waste a huge amount of time with the knight.",
+          "arrows": [
+            { "from": "f4", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g3", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nh5",
+          "annotation": "Here is the mistake! Black moves the knight to the rim of the board to force the bishop trade. While Black does win the bishop pair, the knight on h5 is misplaced and has wasted two tempi. After the exchange, Black's knight will be stranded and White gets a lead in development and the open h-file.",
+          "arrows": [
+            { "from": "f6", "to": "h5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "h5", "to": "g3", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "h5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "Instead of retreating the bishop again, we calmly develop to d3 and let Black take on g3. Our bishop on d3 aims at h7 and we will recapture on g3 with the h-pawn, opening the h-file for a devastating attack. This is the key idea of the trap.",
+          "plans": [
+            "After hxg3, the open h-file gives White attacking chances",
+            "The Bd3 aims at h7 creating a powerful battery"
+          ],
+          "arrows": [
+            { "from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nxg3",
+          "annotation": "Black captures the bishop, thinking they have achieved their goal of winning the bishop pair. But this is exactly what we wanted. The knight on g3 will be captured by our h-pawn, opening the h-file directly toward Black's king.",
+          "arrows": [
+            { "from": "h5", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g3", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "hxg3",
+          "annotation": "We recapture with the h-pawn, blasting open the h-file. This is the payoff: our rook on h1 now has a clear path to h8, and combined with the Bd3 aiming at h7, we have serious attacking chances. Black spent three knight moves to win a bishop, but we got development and an open file for free.",
+          "arrows": [
+            { "from": "h2", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "h1", "to": "h8", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "h1", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black develops the other knight, trying to catch up in development. But White is already far ahead with open lines and active pieces. Black has no bishop pair advantage to show for the time investment because the dark-squared bishop on d6 is passive.",
+          "arrows": [
+            { "from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d7", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "We complete the London triangle with c3, ensuring our center is rock solid before launching the attack. With the h-file open and pieces well developed, we are ready to shift into attacking mode.",
+          "arrows": [
+            { "from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black tries to consolidate with Qe7, connecting the rooks and preparing to castle. But castling kingside walks into our open h-file, and castling queenside leaves the king exposed on the other wing. Black is in an uncomfortable position.",
+          "arrows": [
+            { "from": "d8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e7", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "We develop the knight to d2, supporting e4 and keeping all options open. Our position is excellent: solid center, open h-file, active bishops, and a big development lead. The London has punished Black's premature bishop hunt beautifully.",
+          "arrows": [
+            { "from": "b1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black tries to free their position with ...e5, but this comes too late. The center opens and our pieces are much better coordinated. We can choose to maintain the tension or capture, but either way our open h-file and active pieces give us a significant advantage.",
+          "arrows": [
+            { "from": "e6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "We capture on e5, opening the center while maintaining our attack on the h-file. After the recapture, Black's pieces will be somewhat uncoordinated while our rook on h1, bishop on d3, and knights are all working together beautifully.",
+          "arrows": [
+            { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black recaptures with the knight, centralizing it on e5. The knight is well placed here but Black's position still suffers from the open h-file and the time wasted chasing our bishop earlier.",
+          "arrows": [
+            { "from": "d7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "We exchange knights on e5, simplifying the position while keeping our structural advantages. After the recapture, we will have a clear plan of exploiting the h-file and targeting Black's king.",
+          "arrows": [
+            { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bxe5",
+          "annotation": "Black recaptures with the bishop. The position is now more open and our advantages are clear: the h-file, the Bd3 aiming at h7, and superior development. Black will struggle to find safety for the king.",
+          "arrows": [
+            { "from": "d6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Qh5",
+          "annotation": "We bring the queen to h5, targeting h7 and creating immediate threats. The queen joins the attack along the h-file and works with the Bd3 to put immense pressure on Black's kingside. This is the culmination of the trap: Black's premature ...Nh5 has led to a position where White has a powerful attack with minimal effort.",
+          "arrows": [
+            { "from": "d1", "to": "h5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "h5", "to": "h7", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "h5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black is forced to weaken the kingside with ...g6 to block the queen's attack on h7. But this creates new weaknesses on f6 and h6, and the king is now very exposed. The lesson is clear: chasing the London bishop with ...Nh5 costs too much time and creates lasting problems.",
+          "arrows": [
+            { "from": "g7", "to": "g6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f6", "color": "rgba(255, 80, 80, 0.3)" },
+            { "square": "h6", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Qh4",
+          "annotation": "We retreat the queen to h4, maintaining pressure on the dark squares and keeping the attack alive. From h4 the queen eyes e7 and the weakened dark squares around Black's king. White has a lasting advantage from the opening. The moral: never chase the London bishop with ...Nh5 unless you have a very specific reason.",
+          "arrows": [
+            { "from": "h5", "to": "h4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "h4", "to": "e7", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "h4", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "e7", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "c5 Qb6 Handling",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We start with 1.d4, entering the London System. In this trap line, Black will try an aggressive approach with ...c5 and ...Qb6, pressuring our b2 pawn and d4. Knowing how to handle this is essential for every London player.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black opens with ...d5, a standard response. The game will soon take a sharp turn when Black plays an early ...c5 and ...Qb6 to try to exploit the fact that our bishop has left the queenside.",
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Our London bishop develops as usual. However, by moving the bishop away from the queenside, we apparently leave b2 vulnerable. Black may try to exploit this, but we have a well-prepared response.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "b2", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight naturally. The ...Qb6 idea is coming soon, but Black first gets a piece out to maintain flexibility.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We play e3, supporting d4 and continuing our London setup. The b2 pawn appears to be a target since our dark-squared bishop no longer defends it, but we have a specific plan to deal with ...Qb6.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays an early ...c5, attacking d4 and preparing to bring the queen to b6. This is the aggressive approach that many opponents try against the London, hoping to exploit the seemingly undefended b2 pawn.",
+          "arrows": [
+            { "from": "c7", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "We shore up d4 with c3, completing the London triangle. This also protects b2 indirectly by keeping the pawn structure solid. If Black plays ...Qb6, we have a clever response prepared.",
+          "arrows": [
+            { "from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Qb6",
+          "annotation": "Here it comes! Black attacks b2 with the queen, thinking we have to defend passively. Many London players panic here, but we have a powerful response that turns the tables. The queen on b6 looks active but will soon become a liability.",
+          "arrows": [
+            { "from": "d8", "to": "b6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "b6", "to": "b2", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "b2", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Qb3",
+          "annotation": "The key move! We meet Black's queen with our own, offering a queen trade. If Black trades queens, we get a favorable endgame. If Black retreats, we have gained time and the queen on b3 is actively placed, supporting d5 pressure and b2 defense simultaneously. This is the standard antidote to the ...Qb6 plan.",
+          "plans": [
+            "If ...Qxb3 axb3, we get an open a-file and active play",
+            "If the queen retreats, we have the initiative"
+          ],
+          "arrows": [
+            { "from": "d1", "to": "b3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "b3", "to": "b6", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "b3", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "Black pushes ...c4, trying to drive our queen away and gain queenside space. This is the most ambitious response, but it actually weakens Black's d4 pressure and gives us a free hand in the center. The c4 pawn is overextended and can become a target.",
+          "arrows": [
+            { "from": "c5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Qc2",
+          "annotation": "We retreat the queen to c2, a safe and flexible square. The queen eyes the kingside (h7) and stays connected to the center. Black's c4 pawn is now overextended and the ...Qb6 has accomplished nothing. We can continue developing normally with a comfortable position.",
+          "arrows": [
+            { "from": "b3", "to": "c2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c2", "to": "h7", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "c2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black develops the bishop to f5, challenging our queen's diagonal. This is an active move but the bishop may become a target if we push e4 or play Nh3-f4. Black is trying to get some compensation for the lost time.",
+          "arrows": [
+            { "from": "c8", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f5", "to": "c2", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Qc1",
+          "annotation": "We sidestep the bishop's attack by moving to c1, keeping the queen connected to the dark-squared bishop on f4. From c1 the queen can swing to various squares and supports our development. The position is slightly better for White due to our solid center.",
+          "arrows": [
+            { "from": "c2", "to": "c1", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black solidifies with ...e6, reinforcing d5 and creating a solid pawn structure. The ...Qb6 plan has not achieved anything concrete, and Black has spent several moves with the queen while White developed naturally.",
+          "arrows": [
+            { "from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We develop the knight to f3 as planned, continuing our methodical London development. With a solid center and natural piece placement, we are ahead in development because Black wasted time with the queen maneuver.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, a solid but passive square. Black has fallen behind in development due to the queen adventures and the overextended c4 pawn is a long-term weakness.",
+          "arrows": [
+            { "from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d7", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "We develop the knight to d2, supporting e4 and keeping our structure flexible. With both knights developed and the bishop on f4, our London setup is humming. The c4 pawn remains a target for future play.",
+          "arrows": [
+            { "from": "b1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "d2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop modestly to e7, preparing to castle. The bishop is passive on e7 compared to d6, but Black has no better option after the queen detour. The position is comfortable for White.",
+          "arrows": [
+            { "from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e7", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Be2",
+          "annotation": "We develop the bishop to e2, preparing to castle. Our development is smooth and harmonious while Black has wasted time with the queen. After castling, we will have a clear advantage in piece coordination.",
+          "arrows": [
+            { "from": "f1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black finally castles, getting the king to safety. But White has completed development more efficiently and has a comfortable edge. The lesson: ...Qb6 against the London does not work well when we know the Qb3 response.",
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle, completing our development. White stands better with a solid center, better piece coordination, and the potential to target Black's overextended c4 pawn. The ...Qb6 trap line has been completely neutralized.",
+          "plans": [
+            "Target the c4 pawn with a3 and b3",
+            "Play e4 to open the center with superior development"
+          ],
+          "arrows": [
+            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Rac8",
+          "annotation": "Black places the rook on c8, defending the c4 pawn and trying to create queenside activity. But our position is clearly better: we have more space, better coordination, and a clearer plan. The moral is that ...Qb6 is not a real threat in the London when you know the Qb3 antidote.",
+          "arrows": [
+            { "from": "a8", "to": "c8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c8", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Early Bf5 Counter",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We start with 1.d4. In this warning line, Black will play an early ...Bf5, mirroring our London bishop idea. This is one of the trickiest responses to the London because Black fights for the same diagonal and can create an uncomfortable position if we are not careful.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, and on the next move will develop the light-squared bishop to f5 before playing ...e6. This is the same principle we use in the London: get the bishop out before locking it in with a pawn move.",
+          "arrows": [
+            { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Our signature London move. But Black is about to mirror this idea with their own bishop development. When both sides have their bishops actively placed, the position becomes more symmetrical and our usual London advantage is reduced.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black mirrors our idea exactly, developing the light-squared bishop before playing ...e6. This is a strong and annoying response because Black avoids the typical London problem of the locked-in c8-bishop. The Bf5 contests the b1-h7 diagonal and gives Black easy development. This is a line you must know how to handle.",
+          "arrows": [
+            { "from": "c8", "to": "f5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f5", "to": "b1", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We play e3 as usual, but this move is slightly less effective when Black's bishop is already on f5. The bishop is not locked in behind the pawn chain, so our usual strategic advantage does not apply. We need to find other ways to create an edge.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e3", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays ...e6, but unlike the main London line, the bishop is already out on f5. Black has achieved the ideal setup: solid pawns on d5-e6 with the light-squared bishop actively placed outside the chain. This is exactly what Black wants.",
+          "arrows": [
+            { "from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We develop the knight normally. Our position is fine but we do not have the typical London edge. The key question is how to deal with Black's active Bf5, which contests our natural Bd3 square.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops naturally, completing the kingside development. Black has a harmonious position with the bishop already active on f5 and no structural weaknesses. This is a warning line because White's usual London advantages are neutralized.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "We switch plans and play c4 instead of c3, striking at Black's center immediately. This is the recommended approach against the early ...Bf5: since our usual positional London plan is less effective, we go for more dynamic play. The c4 push challenges d5 and opens the position.",
+          "plans": [
+            "Challenge d5 to open the center",
+            "If ...dxc4, recapture and get active piece play"
+          ],
+          "arrows": [
+            { "from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "c4", "to": "d5", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bxb1",
+          "annotation": "Black captures our knight on b1, a surprising but logical move. By eliminating our knight before it develops, Black trades their good bishop for a knight and disrupts our queenside development. This leads to an unusual position.",
+          "arrows": [
+            { "from": "f5", "to": "b1", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "b1", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Rxb1",
+          "annotation": "We recapture with the rook, which now sits on b1 with a semi-open b-file. While losing the knight is unusual, the rook on b1 can be useful on the b-file. The position is unbalanced, which is exactly what happens when Black plays the early ...Bf5 line.",
+          "arrows": [
+            { "from": "a1", "to": "b1", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "b1", "to": "b7", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "b1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bb4+",
+          "annotation": "Black plays a disruptive check with Bb4+, forcing our king to move since we cannot block easily. This is the challenging part of the ...Bf5 line: Black gets active piece play and disrupts our king position. This is why this is a warning line that London players must study.",
+          "arrows": [
+            { "from": "f8", "to": "b4", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "b4", "to": "e1", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e1", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Ke2",
+          "annotation": "We must move the king to e2, losing castling rights. This is uncomfortable but playable. The king on e2 is not in immediate danger and can eventually go to f1-g1 via a few moves. We keep our bishops and pawns active to compensate for the awkward king.",
+          "arrows": [
+            { "from": "e1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, winning a pawn temporarily and opening the center. With our king on e2 and a pawn down, the position is tricky for White. However, we have the bishop pair and can generate counterplay. This is a warning: be prepared for this line.",
+          "arrows": [
+            { "from": "d5", "to": "c4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "c4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "a3",
+          "annotation": "We push a3, kicking the Bb4 and gaining time. The bishop must retreat and we start to recover. The pawn on a3 also supports b4 later if we want to chase the bishop further or expand on the queenside.",
+          "arrows": [
+            { "from": "a2", "to": "a3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "a3", "to": "b4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "b4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black retreats the bishop to e7, a safe square. The position has calmed down somewhat, but White is still behind in development with the king on e2. The game is roughly equal but White needs to play carefully.",
+          "arrows": [
+            { "from": "b4", "to": "e7", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e7", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "We develop the knight to d2, targeting the c4 pawn and preparing to recover it. The knight on d2 also supports the king's eventual march to safety. White has compensation for the pawn due to the bishop pair and open lines.",
+          "arrows": [
+            { "from": "f3", "to": "d2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "c4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, completing development. Black has a solid position with an extra pawn, but White's bishops and potential for recovery keep the game balanced. The lesson: the early ...Bf5 line neutralizes the London's typical advantages, so consider c4 early to change the character of the position.",
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "King's Indian Counterattack",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "We begin with 1.d4, entering the London System. This warning line shows what happens when Black plays the King's Indian and successfully executes the ...e5 break followed by an aggressive ...Nh5 maneuver. Understanding this helps us prepare for Black's best counterplay.",
+          "arrows": [
+            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, signaling either a King's Indian or Nimzo-Indian setup. We proceed with our London moves regardless, but we need to be aware of the aggressive counterattacking ideas that follow.",
+          "arrows": [
+            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Our London bishop comes out as usual. Against the King's Indian, this bishop will need to navigate carefully because Black's ...e5 break directly challenges it. Knowing when to retreat and where is crucial.",
+          "arrows": [
+            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black commits to the King's Indian fianchetto. The g6 pawn prepares ...Bg7, aiming at our d4 pawn. We must be prepared for the typical King's Indian counterattacking ideas that will follow.",
+          "arrows": [
+            { "from": "g7", "to": "g6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f8", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "h6", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "We develop the knight to f3, defending d4 and controlling e5. Against the King's Indian this knight is essential for holding the center. We need it in place before Black's ...e5 comes.",
+          "arrows": [
+            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black completes the fianchetto. The Bg7 is a powerful piece aimed directly at our d4 pawn. In combination with a future ...e5, this bishop can become a monster. We need to keep our center solid.",
+          "arrows": [
+            { "from": "f8", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "g7", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "We play e3 to support d4 and open the bishop's diagonal. Standard London play. The d4-e3 structure is resilient but we need to add c3 soon to make it really solid against the ...e5 break.",
+          "arrows": [
+            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays ...d6, supporting the ...e5 break. This is the standard King's Indian approach: a solid but slightly cramped position that will explode with activity once ...e5 is achieved. We must be ready for dynamic play.",
+          "arrows": [
+            { "from": "d7", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d6", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Be2",
+          "annotation": "We choose Be2, a practical developing move that prepares castling. Against the King's Indian, getting castled quickly is important because Black's counterattack can come fast. The bishop is less ambitious on e2 but safer.",
+          "arrows": [
+            { "from": "f1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, getting the king safe and the rook ready to support the center. Now Black is fully prepared to launch the ...e5 break, which is the key moment in this warning line.",
+          "arrows": [
+            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle as well, matching king safety. Both sides are now ready for the middlegame battle. The critical question is whether we can maintain our center against Black's upcoming ...e5 push and piece counterplay.",
+          "arrows": [
+            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, the multipurpose square. The knight supports ...e5 and can reroute to c5 or e5 after the break. This is optimal preparation for the central advance.",
+          "arrows": [
+            { "from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "d7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "h3",
+          "annotation": "We play h3, the prophylactic move to prevent ...Ng4 harassing our bishop. This also prepares the Bh2 retreat square for when Black plays ...e5. A crucial preparatory move in the London vs King's Indian.",
+          "arrows": [
+            { "from": "h2", "to": "h3", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f4", "to": "h2", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "g4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Qe8",
+          "annotation": "Black plays the unusual but strong ...Qe8, a modern King's Indian idea. The queen moves off the d-file to avoid any discoveries and prepares to reroute to the kingside via e7 or h5. This is a flexible and dangerous move that signals aggressive intent.",
+          "arrows": [
+            { "from": "d8", "to": "e8", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e8", "to": "h5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "e8", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "We complete the London triangle with c3, preparing for Black's ...e5 break. The center must be absolutely secure before the storm hits. This is our standard defensive setup against the King's Indian counterattack.",
+          "arrows": [
+            { "from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black unleashes the thematic ...e5 break. This is the moment the entire King's Indian setup has been building toward. The center becomes dynamic and Black gets active piece play. Our London triangle holds, but we need to retreat the bishop and find a plan.",
+          "arrows": [
+            { "from": "e7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "e5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        },
+        {
+          "san": "Bh2",
+          "annotation": "We retreat the bishop to h2 as planned. On h2 the bishop is safe and still controls e5 from a distance. This is the standard London maneuver, but Black now has a dynamic position with the e5 pawn and active pieces.",
+          "arrows": [
+            { "from": "f4", "to": "h2", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "h2", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "h2", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "Nh5",
+          "annotation": "Black plays ...Nh5, the aggressive King's Indian maneuver. The knight clears f6 for the f-pawn and prepares ...f5 for a kingside pawn storm. This is the warning: Black has serious attacking chances on the kingside. The knight targets f4 and g3, and the ...f5-f4 advance can be very dangerous. London players must know this is coming and prepare counterplay in the center or queenside.",
+          "arrows": [
+            { "from": "f6", "to": "h5", "color": "rgba(0, 180, 80, 0.8)" },
+            { "from": "f7", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" },
+            { "from": "h5", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+          ],
+          "highlights": [
+            { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "f4", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "We capture on e5, opening the center to counteract Black's kingside attack. By resolving the central tension, we aim to use our central control and pieces to generate counterplay. If we let Black build up with ...f5 and ...f4 unchallenged, the attack could be overwhelming.",
+          "plans": [
+            "Open the center to counter Black's kingside attack",
+            "Use the d-file and central squares for counterplay"
+          ],
+          "arrows": [
+            { "from": "d4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black recaptures, maintaining a strong central pawn on e5. The position is now open and dynamic. Black has kingside attacking chances with the knight on h5 and potential ...f5, while White must seek counterplay in the center and queenside. This is a double-edged position that London players must understand is possible against the King's Indian setup.",
+          "arrows": [
+            { "from": "d6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+          ],
+          "highlights": [
+            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
+            { "square": "f5", "color": "rgba(255, 80, 80, 0.3)" }
+          ]
+        }
+      ]
     }
   ]
 }
