@@ -220,6 +220,6 @@ export async function completeClearerLevel(
 export async function isPawnChapterCompleted(): Promise<boolean> {
   const meta = await db.meta.get('journey_progress');
   if (!meta) return false;
-  const progress = JSON.parse(meta.value as string) as { chapters?: { pawn?: { completed?: boolean } } };
+  const progress = JSON.parse(meta.value) as { chapters?: { pawn?: { completed?: boolean } } };
   return progress.chapters?.pawn?.completed === true;
 }

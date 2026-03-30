@@ -64,7 +64,7 @@ describe('isDatabaseSeeded', () => {
   });
 
   it('returns true after seeding', async () => {
-    await db.meta.put({ key: 'db_seeded_v10', value: 'true' });
+    await db.meta.put({ key: 'db_seeded_v11', value: 'true' });
     const seeded = await isDatabaseSeeded();
     expect(seeded).toBe(true);
   });
