@@ -2805,7 +2805,13 @@
           "alternatives": [
             "Ke2 is more active but potentially more dangerous"
           ],
-          "arrows": [],
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "d1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
           "highlights": [
             {
               "square": "d1",
@@ -2823,7 +2829,13 @@
           "alternatives": [
             "Kd8 centralizes but may be more dangerous"
           ],
-          "arrows": [],
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
           "highlights": [
             {
               "square": "f8",
@@ -2924,7 +2936,13 @@
           "alternatives": [
             "Nd4 immediately is more aggressive but allows knight trades"
           ],
-          "arrows": [],
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
           "highlights": [
             {
               "square": "d6",

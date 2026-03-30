@@ -3554,7 +3554,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White opens with the queen's pawn, heading for the Queen's Gambit."
+          "annotation": "White opens with the queen's pawn, heading for the Queen's Gambit.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "d5",
@@ -3564,7 +3571,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black stakes a claim in the center, preparing for the QGD."
+          "annotation": "Black stakes a claim in the center, preparing for the QGD.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "c4",
@@ -3574,7 +3588,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "The Queen's Gambit. White challenges Black's central pawn."
+          "annotation": "The Queen's Gambit. White challenges Black's central pawn.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e6",
@@ -3584,7 +3605,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black declines the gambit, solidifying the d5 pawn with e6."
+          "annotation": "Black declines the gambit, solidifying the d5 pawn with e6.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -3594,7 +3622,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White develops the knight to its best square, increasing pressure on d5."
+          "annotation": "White develops the knight to its best square, increasing pressure on d5.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nf6",
@@ -3604,7 +3639,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black develops the king's knight, defending d5 and preparing to castle."
+          "annotation": "Black develops the king's knight, defending d5 and preparing to castle.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bg5",
@@ -3614,7 +3656,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White pins the knight to the queen. This is the main line of the QGD."
+          "annotation": "White pins the knight to the queen. This is the main line of the QGD.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nbd7",
@@ -3624,7 +3673,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black develops the second knight, keeping the position flexible and setting the Elephant Trap."
+          "annotation": "Black develops the second knight, keeping the position flexible and setting the Elephant Trap.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "cxd5",
@@ -3638,7 +3694,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White exchanges in the center. This is where the trap begins if White gets greedy."
+          "annotation": "White exchanges in the center. This is where the trap begins if White gets greedy.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "exd5",
@@ -3652,7 +3715,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black recaptures, opening the e-file and the diagonal for the bishop."
+          "annotation": "Black recaptures, opening the e-file and the diagonal for the bishop.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nxd5",
@@ -3666,7 +3736,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White takes the d5 pawn, thinking they've won material. This is the critical mistake that falls into the trap."
+          "annotation": "White takes the d5 pawn, thinking they've won material. This is the critical mistake that falls into the trap.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nxd5",
@@ -3680,7 +3757,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black recaptures the knight. White now sees the queen hanging on d8 and grabs it."
+          "annotation": "Black recaptures the knight. White now sees the queen hanging on d8 and grabs it.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bxd8",
@@ -3694,7 +3778,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White captures the queen, feeling confident. But a devastating surprise is coming."
+          "annotation": "White captures the queen, feeling confident. But a devastating surprise is coming.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "d8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bb4+",
@@ -3704,7 +3795,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "The key move! Bishop check from b4 forces White to interpose the queen."
+          "annotation": "The key move! Bishop check from b4 forces White to interpose the queen.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "b4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Qd2",
@@ -3714,7 +3812,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White's only legal move to block the check. The queen is now doomed."
+          "annotation": "White's only legal move to block the check. The queen is now doomed.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bxd2+",
@@ -3728,7 +3833,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black takes the queen with check. White must recapture with the king."
+          "annotation": "Black takes the queen with check. White must recapture with the king.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Kxd2",
@@ -3742,7 +3854,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White recaptures, but the king is now exposed in the center."
+          "annotation": "White recaptures, but the king is now exposed in the center.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Kxd8",
@@ -3784,7 +3903,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White opens with 1.d4, heading into the Queen's Gambit."
+          "annotation": "White opens with 1.d4, heading into the Queen's Gambit.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "d5",
@@ -3794,7 +3920,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black responds symmetrically, establishing central presence."
+          "annotation": "Black responds symmetrically, establishing central presence.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "c4",
@@ -3804,7 +3937,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "The Queen's Gambit, challenging Black's d5 pawn."
+          "annotation": "The Queen's Gambit, challenging Black's d5 pawn.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e6",
@@ -3814,7 +3954,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black declines, reinforcing d5. The QGD Orthodox is on the board."
+          "annotation": "Black declines, reinforcing d5. The QGD Orthodox is on the board.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -3824,7 +3971,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White develops toward the center, adding pressure on d5."
+          "annotation": "White develops toward the center, adding pressure on d5.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nf6",
@@ -3834,7 +3988,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black develops the king's knight naturally."
+          "annotation": "Black develops the king's knight naturally.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bg5",
@@ -3844,7 +4005,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White pins the knight, a hallmark of the Orthodox QGD."
+          "annotation": "White pins the knight, a hallmark of the Orthodox QGD.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Be7",
@@ -3854,7 +4022,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black unpins the knight and prepares to castle kingside."
+          "annotation": "Black unpins the knight and prepares to castle kingside.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e3",
@@ -3864,7 +4039,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White supports the d4 pawn and opens the diagonal for the bishop."
+          "annotation": "White supports the d4 pawn and opens the diagonal for the bishop.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -3874,7 +4056,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black castles to safety. Solid and principled."
+          "annotation": "Black castles to safety. Solid and principled.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nf3",
@@ -3884,7 +4073,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White develops the second knight, preparing to castle."
+          "annotation": "White develops the second knight, preparing to castle.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nbd7",
@@ -3894,7 +4090,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black develops the queenside knight, a typical QGD setup."
+          "annotation": "Black develops the queenside knight, a typical QGD setup.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Rc1",
@@ -3904,7 +4107,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White places the rook on the half-open c-file, anticipating ...dxc4."
+          "annotation": "White places the rook on the half-open c-file, anticipating ...dxc4.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "c1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "c6",
@@ -3914,7 +4124,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black reinforces d5 and prepares for the Lasker maneuver."
+          "annotation": "Black reinforces d5 and prepares for the Lasker maneuver.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bd3",
@@ -3924,7 +4141,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White develops the bishop to a strong diagonal, eyeing the kingside."
+          "annotation": "White develops the bishop to a strong diagonal, eyeing the kingside.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "dxc4",
@@ -3938,7 +4162,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black captures on c4 at the right moment, luring the bishop away."
+          "annotation": "Black captures on c4 at the right moment, luring the bishop away.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bxc4",
@@ -3952,7 +4183,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White recaptures, but the bishop is now less actively placed."
+          "annotation": "White recaptures, but the bishop is now less actively placed.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nd5",
@@ -3962,7 +4200,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "The Lasker maneuver! The knight jumps to d5, challenging the Bg5."
+          "annotation": "The Lasker maneuver! The knight jumps to d5, challenging the Bg5.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bxe7",
@@ -3976,7 +4221,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White trades the bishop, as retreating would lose tempo."
+          "annotation": "White trades the bishop, as retreating would lose tempo.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Qxe7",
@@ -3990,7 +4242,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black recaptures, centralizing the queen."
+          "annotation": "Black recaptures, centralizing the queen.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -4000,7 +4259,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White castles, completing development."
+          "annotation": "White castles, completing development.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nxc3",
@@ -4014,7 +4280,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black captures the knight, disrupting White's pawn structure."
+          "annotation": "Black captures the knight, disrupting White's pawn structure.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Rxc3",
@@ -4028,7 +4301,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White recaptures with the rook, keeping it active on the third rank."
+          "annotation": "White recaptures with the rook, keeping it active on the third rank.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e5",
@@ -4038,7 +4318,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "The key break! Black strikes in the center, activating all the pieces."
+          "annotation": "The key break! Black strikes in the center, activating all the pieces.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "dxe5",
@@ -4052,7 +4339,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White captures, but this opens lines for Black's pieces."
+          "annotation": "White captures, but this opens lines for Black's pieces.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nxe5",
@@ -4066,7 +4360,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black recaptures with the knight, centralizing it powerfully."
+          "annotation": "Black recaptures with the knight, centralizing it powerfully.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nxe5",
@@ -4080,7 +4381,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White is forced to exchange, but Black's queen takes over."
+          "annotation": "White is forced to exchange, but Black's queen takes over.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Qxe5",
@@ -4127,7 +4435,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White opens with d4, aiming for the Queen's Gambit."
+          "annotation": "White opens with d4, aiming for the Queen's Gambit.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "d5",
@@ -4137,7 +4452,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black responds classically in the center."
+          "annotation": "Black responds classically in the center.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "c4",
@@ -4147,7 +4469,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "The Queen's Gambit. White pressures d5 immediately."
+          "annotation": "The Queen's Gambit. White pressures d5 immediately.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e6",
@@ -4157,7 +4486,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black declines, entering the QGD."
+          "annotation": "Black declines, entering the QGD.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -4167,7 +4503,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White develops, increasing the pressure on d5."
+          "annotation": "White develops, increasing the pressure on d5.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nf6",
@@ -4177,7 +4520,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black develops the knight to defend d5."
+          "annotation": "Black develops the knight to defend d5.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bg5",
@@ -4187,7 +4537,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White pins the knight, a standard QGD continuation."
+          "annotation": "White pins the knight, a standard QGD continuation.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Be7",
@@ -4197,7 +4554,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black breaks the pin and prepares castling."
+          "annotation": "Black breaks the pin and prepares castling.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e3",
@@ -4207,7 +4571,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White solidifies the center and opens the bishop diagonal."
+          "annotation": "White solidifies the center and opens the bishop diagonal.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -4217,7 +4588,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black castles to safety."
+          "annotation": "Black castles to safety.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nf3",
@@ -4227,7 +4605,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White completes knight development."
+          "annotation": "White completes knight development.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nbd7",
@@ -4237,7 +4622,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black develops the second knight. So far a normal QGD."
+          "annotation": "Black develops the second knight. So far a normal QGD.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bd3",
@@ -4247,7 +4639,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White places the bishop aggressively, eyeing h7."
+          "annotation": "White places the bishop aggressively, eyeing h7.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "b6",
@@ -4257,7 +4656,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "This is the passive approach. Black fianchettoes instead of playing the active ...c5 or ...dxc4."
+          "annotation": "This is the passive approach. Black fianchettoes instead of playing the active ...c5 or ...dxc4.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -4267,7 +4673,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White castles, with a comfortable position and easy plans."
+          "annotation": "White castles, with a comfortable position and easy plans.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bb7",
@@ -4277,7 +4690,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black completes the fianchetto, but the bishop is somewhat passive behind the pawn chain."
+          "annotation": "Black completes the fianchetto, but the bishop is somewhat passive behind the pawn chain.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "cxd5",
@@ -4291,7 +4711,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White exchanges, fixing the pawn structure in a way that favors White."
+          "annotation": "White exchanges, fixing the pawn structure in a way that favors White.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "exd5",
@@ -4305,7 +4732,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black recaptures, but now has an isolated d-pawn that needs constant protection."
+          "annotation": "Black recaptures, but now has an isolated d-pawn that needs constant protection.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Ne5",
@@ -4315,7 +4749,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White plants the knight on e5, a dominating outpost in the center."
+          "annotation": "White plants the knight on e5, a dominating outpost in the center.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nxe5",
@@ -4329,7 +4770,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black feels compelled to exchange, but this helps White's pawn structure."
+          "annotation": "Black feels compelled to exchange, but this helps White's pawn structure.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "dxe5",
@@ -4343,7 +4791,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White recaptures, gaining central space and opening the d-file."
+          "annotation": "White recaptures, gaining central space and opening the d-file.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Ne8",
@@ -4353,7 +4808,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black retreats the knight. This is a sign of the passive position — pieces are going backward."
+          "annotation": "Black retreats the knight. This is a sign of the passive position — pieces are going backward.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bf4",
@@ -4363,7 +4825,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White repositions the bishop to an excellent diagonal, supporting e5 and eyeing the kingside."
+          "annotation": "White repositions the bishop to an excellent diagonal, supporting e5 and eyeing the kingside.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "c5",
@@ -4373,7 +4842,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black tries to counter belatedly, but it's too late to equalize."
+          "annotation": "Black tries to counter belatedly, but it's too late to equalize.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Qg4",
@@ -4383,7 +4859,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White launches a kingside attack. The queen on g4 creates immediate threats."
+          "annotation": "White launches a kingside attack. The queen on g4 creates immediate threats.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "g4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "g6",
@@ -4425,7 +4908,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White opens with 1.d4."
+          "annotation": "White opens with 1.d4.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "d5",
@@ -4435,7 +4925,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black responds symmetrically."
+          "annotation": "Black responds symmetrically.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "c4",
@@ -4445,7 +4942,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "The Queen's Gambit."
+          "annotation": "The Queen's Gambit.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e6",
@@ -4455,7 +4959,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black declines with e6."
+          "annotation": "Black declines with e6.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -4465,7 +4976,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White develops, pressuring d5."
+          "annotation": "White develops, pressuring d5.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nf6",
@@ -4475,7 +4993,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black develops the knight."
+          "annotation": "Black develops the knight.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bg5",
@@ -4485,7 +5010,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White pins the f6 knight."
+          "annotation": "White pins the f6 knight.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "dxc4",
@@ -4499,7 +5031,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black takes the gambit pawn prematurely, without first completing development. This is risky."
+          "annotation": "Black takes the gambit pawn prematurely, without first completing development. This is risky.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "e3",
@@ -4509,7 +5048,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White doesn't rush to recapture. The c4 pawn isn't going anywhere."
+          "annotation": "White doesn't rush to recapture. The c4 pawn isn't going anywhere.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "b5",
@@ -4519,7 +5065,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black tries to hold onto the extra pawn with ...b5. This weakens the queenside severely."
+          "annotation": "Black tries to hold onto the extra pawn with ...b5. This weakens the queenside severely.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "a4",
@@ -4529,7 +5082,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White immediately challenges the overextended b5 pawn. This is the key undermining move."
+          "annotation": "White immediately challenges the overextended b5 pawn. This is the key undermining move.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "c6",
@@ -4539,7 +5099,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black tries to support b5, but the structure is fragile."
+          "annotation": "Black tries to support b5, but the structure is fragile.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "axb5",
@@ -4553,7 +5120,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White captures, tearing open the queenside."
+          "annotation": "White captures, tearing open the queenside.",
+          "arrows": [
+            {
+              "from": "a4",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "cxb5",
@@ -4567,7 +5141,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "Black recaptures, but the b-pawn is now a target."
+          "annotation": "Black recaptures, but the b-pawn is now a target.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nxb5",
@@ -4581,7 +5162,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White wins a pawn and attacks the queen's position simultaneously."
+          "annotation": "White wins a pawn and attacks the queen's position simultaneously.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Qa5+",
@@ -4591,7 +5179,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black checks, trying to win back material with tactical tricks."
+          "annotation": "Black checks, trying to win back material with tactical tricks.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "a5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -4601,7 +5196,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White retreats the knight, blocking the check and keeping the extra pawn."
+          "annotation": "White retreats the knight, blocking the check and keeping the extra pawn.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bb4",
@@ -4611,7 +5213,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black pins the knight, creating pressure but still down material."
+          "annotation": "Black pins the knight, creating pressure but still down material.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "b4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Bxc4",
@@ -4625,7 +5234,14 @@
               "color": "rgba(255, 80, 80, 0.3)"
             }
           ],
-          "annotation": "White recovers the gambit pawn, now up in development and structure."
+          "annotation": "White recovers the gambit pawn, now up in development and structure.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -4635,7 +5251,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "Black castles, trying to catch up in development."
+          "annotation": "Black castles, trying to catch up in development.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Nf3",
@@ -4645,7 +5268,14 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "annotation": "White develops the last minor piece, preparing to castle."
+          "annotation": "White develops the last minor piece, preparing to castle.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
         },
         {
           "san": "Ba6",

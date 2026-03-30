@@ -241,7 +241,13 @@
       "alternatives": [
         "d3 — keeps pieces on the board, more complex"
       ],
-      "arrows": [],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
       "highlights": [
         {
           "square": "d4",

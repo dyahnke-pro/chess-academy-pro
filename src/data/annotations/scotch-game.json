@@ -252,7 +252,13 @@
         "Be3 — keeps more tension but allows Black comfortable development",
         "Nb3 — retreats but the bishop stays strong on c5"
       ],
-      "arrows": [],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
       "highlights": [
         {
           "square": "c6",
@@ -319,7 +325,13 @@
       "alternatives": [
         "Qe5 — tries to keep queens on but the queen is unstable in the center"
       ],
-      "arrows": [],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
       "highlights": [
         {
           "square": "f3",
@@ -428,7 +440,13 @@
       "alternatives": [
         "Bb6 — keeps the bishop but it's passive after a4-a5"
       ],
-      "arrows": [],
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
       "highlights": [
         {
           "square": "e3",
