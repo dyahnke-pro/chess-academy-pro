@@ -5,6 +5,7 @@ import type {
   WeaknessProfile,
   WeaknessItem,
   WeaknessCategory,
+  WeaknessTrainingAction,
   UserProfile,
   GameRecord,
   SessionRecord,
@@ -46,6 +47,11 @@ function analyzeTactics(themeSkills: ThemeSkill[]): {
         metric: `${Math.round(skill.accuracy * 100)}% accuracy (${skill.attempts} attempts)`,
         severity,
         detail: `Your ${skill.theme} puzzle accuracy is ${Math.round(skill.accuracy * 100)}%. Focus on recognizing ${skill.theme} patterns in simpler positions first.`,
+        trainingAction: {
+          route: '/puzzles',
+          buttonLabel: `Train ${skill.theme}`,
+          state: { forcedWeakThemes: [skill.theme] },
+        },
       });
     } else if (skill.accuracy >= STRONG_THEME_ACCURACY_THRESHOLD) {
       strengths.push(`Strong at ${skill.theme} (${Math.round(skill.accuracy * 100)}% accuracy)`);
@@ -78,6 +84,10 @@ function analyzeOpenings(repertoire: OpeningRecord[]): {
         metric: `${Math.round(opening.drillAccuracy * 100)}% drill accuracy (${opening.drillAttempts} drills)`,
         severity,
         detail: `Your drill accuracy in the ${opening.name} (${opening.eco}) is below 50%. Review the main line and key variations.`,
+        trainingAction: {
+          route: `/openings/${opening.id}`,
+          buttonLabel: `Drill ${opening.name}`,
+        },
       });
     } else if (opening.drillAccuracy >= STRONG_THEME_ACCURACY_THRESHOLD) {
       strengths.push(`Solid in ${opening.name} (${Math.round(opening.drillAccuracy * 100)}% drill accuracy)`);
@@ -93,6 +103,9 @@ function analyzeOpenings(repertoire: OpeningRecord[]): {
       metric: `${neverDrilled.length} of ${repertoire.length} repertoire openings untouched`,
       severity: 40,
       detail: `You have ${neverDrilled.length} openings in your repertoire that you've never drilled: ${neverDrilled.slice(0, 3).map((o) => o.name).join(', ')}${neverDrilled.length > 3 ? '...' : ''}.`,
+      trainingAction: neverDrilled.length > 0
+        ? { route: `/openings/${neverDrilled[0].id}`, buttonLabel: `Start ${neverDrilled[0].name}` }
+        : undefined,
     });
   }
 
@@ -155,6 +168,10 @@ function analyzeGames(games: GameRecord[]): {
       metric: `${totalBlunders} blunders, ${totalMistakes} mistakes in ${gamesWithAnnotations} games`,
       severity: Math.min(90, Math.round(errorRate * 500)),
       detail: `You're averaging ${(errorRate * 100).toFixed(1)}% error rate per move. That's ${((totalBlunders + totalMistakes) / gamesWithAnnotations).toFixed(1)} serious errors per game. Practice calculation exercises with increasing complexity.`,
+      trainingAction: {
+        route: '/puzzles/mistakes',
+        buttonLabel: 'Review My Mistakes',
+      },
     });
   } else if (errorRate < 0.03 && gamesWithAnnotations >= MIN_GAMES_FOR_TIME_ANALYSIS) {
     strengths.push(`Clean calculation (only ${totalBlunders + totalMistakes} errors in ${gamesWithAnnotations} games)`);
@@ -169,6 +186,11 @@ function analyzeGames(games: GameRecord[]): {
       metric: `${lateBlunderGames} of ${gamesWithAnnotations} games had multiple errors in the last 10 moves`,
       severity: Math.min(85, Math.round(collapseRate * 200)),
       detail: `In ${Math.round(collapseRate * 100)}% of your recent games, you made multiple blunders or mistakes in the final moves. This often indicates time pressure or fatigue. Try playing with increment or practicing endgame speed drills.`,
+      trainingAction: {
+        route: '/puzzles',
+        buttonLabel: 'Endgame Speed Drills',
+        state: { forcedWeakThemes: ['endgame'] },
+      },
     });
   }
 
@@ -180,6 +202,10 @@ function analyzeGames(games: GameRecord[]): {
       metric: `${(totalBlunders / gamesWithAnnotations).toFixed(1)} blunders per game`,
       severity: Math.min(95, Math.round((totalBlunders / gamesWithAnnotations) * 40)),
       detail: `Averaging ${(totalBlunders / gamesWithAnnotations).toFixed(1)} blunders per game. Before each move, do a "blunder check" — ask yourself: does my move leave anything hanging or allow a tactic?`,
+      trainingAction: {
+        route: '/puzzles/mistakes',
+        buttonLabel: 'Fix My Blunders',
+      },
     });
   }
 
@@ -217,6 +243,10 @@ function analyzeSessionConsistency(sessions: SessionRecord[]): {
         metric: `${Math.round(avgAccuracy)}% avg accuracy over ${completedSessions.length} sessions`,
         severity: Math.round((1 - avgAccuracy / 100) * 80),
         detail: `Your average puzzle accuracy in training sessions is ${Math.round(avgAccuracy)}%. Consider dropping puzzle difficulty temporarily to build pattern recognition at a comfortable level.`,
+        trainingAction: {
+          route: '/puzzles',
+          buttonLabel: 'Easy Puzzle Session',
+        },
       });
     } else if (avgAccuracy >= 75) {
       strengths.push(`Strong session performance (${Math.round(avgAccuracy)}% avg puzzle accuracy)`);
@@ -244,6 +274,10 @@ function analyzeSessionConsistency(sessions: SessionRecord[]): {
         metric: `Avg ${avgGap.toFixed(1)} days between sessions (max gap: ${maxGap} days)`,
         severity: Math.min(60, Math.round(avgGap * 10)),
         detail: `You're training every ${avgGap.toFixed(1)} days on average. Consistent daily practice, even just 15 minutes, is more effective than sporadic longer sessions.`,
+        trainingAction: {
+          route: '/coach/plan',
+          buttonLabel: 'Create Training Plan',
+        },
       });
     } else if (avgGap <= 1.5 && sessions.length >= 7) {
       strengths.push(`Excellent training consistency (${avgGap.toFixed(1)} days between sessions)`);
@@ -277,6 +311,10 @@ function analyzeFlashcards(flashcards: FlashcardRecord[]): {
       metric: `${overdue.length} of ${flashcards.length} flashcards overdue`,
       severity: Math.min(50, Math.round(overdueRatio * 100)),
       detail: `You have ${overdue.length} overdue flashcards. These are opening concepts you've learned but are starting to forget. Spending 5 minutes daily on flashcards maintains long-term retention.`,
+      trainingAction: {
+        route: '/play',
+        buttonLabel: 'Review Flashcards',
+      },
     });
   }
 
@@ -310,6 +348,11 @@ function analyzeEndgame(themeSkills: ThemeSkill[]): {
         metric: `${Math.round(endgameSkill.accuracy * 100)}% endgame puzzle accuracy`,
         severity: Math.round((1 - endgameSkill.accuracy) * 90),
         detail: `Your endgame puzzle accuracy is ${Math.round(endgameSkill.accuracy * 100)}%. Endgames are where games are decided. Focus on king and pawn endgames, then rook endgames — they're the most common.`,
+        trainingAction: {
+          route: '/puzzles',
+          buttonLabel: 'Train Endgames',
+          state: { forcedWeakThemes: ['endgame'] },
+        },
       });
     } else if (endgameSkill.accuracy >= STRONG_THEME_ACCURACY_THRESHOLD) {
       strengths.push(`Solid endgame technique (${Math.round(endgameSkill.accuracy * 100)}% accuracy)`);
@@ -346,12 +389,18 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
   for (const [phase, count] of Object.entries(byPhase)) {
     const ratio = count / total;
     if (count >= 3 && ratio > 0.5) {
+      const phaseAction: WeaknessTrainingAction = phase === 'opening'
+        ? { route: '/openings', buttonLabel: 'Drill Openings' }
+        : phase === 'endgame'
+          ? { route: '/puzzles', buttonLabel: 'Train Endgames', state: { forcedWeakThemes: ['endgame'] } }
+          : { route: '/puzzles/mistakes', buttonLabel: 'Review Mistakes' };
       weaknesses.push({
         category: phase === 'endgame' ? 'endgame' : phase === 'opening' ? 'openings' : 'calculation',
         label: `Most mistakes in ${phaseLabels[phase]}`,
         metric: `${count} of ${total} mistakes (${Math.round(ratio * 100)}%)`,
         severity: Math.round(ratio * 70),
         detail: `Over half your mistakes from real games happen in ${phaseLabels[phase]}. Focus your practice on ${phaseLabels[phase]} patterns and positions.`,
+        trainingAction: phaseAction,
       });
     }
   }
@@ -367,6 +416,10 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
         metric: `${blunders} blunders out of ${total} mistakes (${Math.round(blunderRatio * 100)}%)`,
         severity: Math.min(85, Math.round(blunderRatio * 120)),
         detail: `${Math.round(blunderRatio * 100)}% of your game mistakes are blunders (300+ centipawn loss). Before each move, do a quick blunder check — ask if anything is hanging or if your opponent has a tactic.`,
+        trainingAction: {
+          route: '/puzzles/mistakes',
+          buttonLabel: 'Fix My Blunders',
+        },
       });
     }
   }
@@ -382,6 +435,10 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
         metric: `${unsolved} of ${total} mistake puzzles still unsolved`,
         severity: Math.round(unsolvedRatio * 50),
         detail: `You have ${unsolved} mistake puzzles from your own games that haven't been solved yet. Reviewing your mistakes is one of the most effective ways to improve. Head to My Mistakes to work through them.`,
+        trainingAction: {
+          route: '/puzzles/mistakes',
+          buttonLabel: 'Solve My Mistakes',
+        },
       });
     }
   }

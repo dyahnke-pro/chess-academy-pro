@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, RefreshCw, ChevronDown, ChevronUp, Zap, Target } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { getStoredWeaknessProfile, computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { SkillBar } from '../ui/SkillBar';
@@ -22,22 +22,6 @@ function getSeverityLabel(severity: number): { text: string; color: string } {
   return { text: 'Minor', color: 'var(--color-success)' };
 }
 
-function getTrainRoute(category: WeaknessCategory): string {
-  switch (category) {
-    case 'tactics':
-    case 'calculation':
-      return '/puzzles';
-    case 'openings':
-      return '/openings';
-    case 'endgame':
-      return '/puzzles';
-    case 'time_management':
-      return '/coach/plan';
-    case 'positional':
-      return '/puzzles';
-  }
-}
-
 function formatTimestamp(isoString: string): string {
   const date = new Date(isoString);
   return date.toLocaleDateString(undefined, {
@@ -54,6 +38,7 @@ export function CoachWeaknessReport(): JSX.Element {
   const [profile, setProfile] = useState<WeaknessProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [showStrengths, setShowStrengths] = useState(false);
 
   useEffect(() => {
     void getStoredWeaknessProfile().then((stored) => {
@@ -113,6 +98,9 @@ export function CoachWeaknessReport(): JSX.Element {
   }
 
   const skillRadar = activeProfile?.skillRadar;
+  const topTrainingActions = profile.items
+    .filter((item) => item.trainingAction)
+    .slice(0, 3);
 
   return (
     <motion.div
@@ -144,22 +132,44 @@ export function CoachWeaknessReport(): JSX.Element {
         </button>
       </div>
 
-      {/* Strengths */}
-      {profile.strengths.length > 0 && (
+      {/* Training Plan — top priority actions */}
+      {topTrainingActions.length > 0 && (
         <div
           className="rounded-xl p-4 border"
-          style={{ borderColor: 'var(--color-success)', background: 'color-mix(in srgb, var(--color-success) 8%, var(--color-surface))' }}
-          data-testid="strengths-card"
+          style={{ borderColor: 'var(--color-accent)', background: 'color-mix(in srgb, var(--color-accent) 6%, var(--color-surface))' }}
+          data-testid="training-plan"
         >
-          <h3 className="text-sm font-semibold mb-2" style={{ color: 'var(--color-success)' }}>Strengths</h3>
-          <ul className="space-y-1">
-            {profile.strengths.slice(0, 5).map((strength, i) => (
-              <li key={i} className="text-sm flex items-start gap-2" style={{ color: 'var(--color-text)' }}>
-                <span style={{ color: 'var(--color-success)' }}>{'\u2713'}</span>
-                {strength}
-              </li>
+          <div className="flex items-center gap-2 mb-3">
+            <Zap size={16} style={{ color: 'var(--color-accent)' }} />
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>Your Training Plan</h3>
+          </div>
+          <div className="flex flex-col gap-2">
+            {topTrainingActions.map((item, i) => (
+              <button
+                key={`train-${item.category}-${i}`}
+                onClick={() => void navigate(item.trainingAction!.route, item.trainingAction!.state ? { state: item.trainingAction!.state } : undefined)}
+                className="flex items-center gap-3 p-3 rounded-lg text-left transition-colors hover:opacity-90"
+                style={{ background: 'var(--color-surface)' }}
+                data-testid="training-action"
+              >
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+                  style={{ background: 'color-mix(in srgb, var(--color-accent) 15%, transparent)', color: 'var(--color-accent)' }}
+                >
+                  {i + 1}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-medium block truncate" style={{ color: 'var(--color-text)' }}>
+                    {item.trainingAction!.buttonLabel}
+                  </span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    {item.metric}
+                  </span>
+                </div>
+                <Target size={14} style={{ color: 'var(--color-accent)' }} className="shrink-0" />
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
       )}
 
@@ -168,7 +178,15 @@ export function CoachWeaknessReport(): JSX.Element {
         <div className="flex flex-col gap-3" data-testid="weaknesses-list">
           <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Areas to Improve</h3>
           {profile.items.map((item, i) => (
-            <WeaknessItemCard key={`${item.category}-${i}`} item={item} onPractice={() => void navigate(getTrainRoute(item.category))} />
+            <WeaknessItemCard
+              key={`${item.category}-${i}`}
+              item={item}
+              onPractice={
+                item.trainingAction
+                  ? () => void navigate(item.trainingAction!.route, item.trainingAction!.state ? { state: item.trainingAction!.state } : undefined)
+                  : undefined
+              }
+            />
           ))}
         </div>
       )}
@@ -204,6 +222,49 @@ export function CoachWeaknessReport(): JSX.Element {
           </p>
         </div>
       )}
+
+      {/* Strengths — collapsed at the bottom */}
+      {profile.strengths.length > 0 && (
+        <div
+          className="rounded-xl border overflow-hidden"
+          style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+          data-testid="strengths-card"
+        >
+          <button
+            onClick={() => setShowStrengths(!showStrengths)}
+            className="w-full flex items-center justify-between p-4 text-left"
+          >
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-success)' }}>
+              Strengths ({profile.strengths.length})
+            </h3>
+            {showStrengths ? (
+              <ChevronUp size={16} style={{ color: 'var(--color-text-muted)' }} />
+            ) : (
+              <ChevronDown size={16} style={{ color: 'var(--color-text-muted)' }} />
+            )}
+          </button>
+          <AnimatePresence>
+            {showStrengths && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <ul className="px-4 pb-4 space-y-1">
+                  {profile.strengths.map((strength, i) => (
+                    <li key={i} className="text-sm flex items-start gap-2" style={{ color: 'var(--color-text)' }}>
+                      <span style={{ color: 'var(--color-success)' }}>{'\u2713'}</span>
+                      {strength}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -212,7 +273,7 @@ export function CoachWeaknessReport(): JSX.Element {
 
 interface WeaknessItemCardProps {
   item: WeaknessItem;
-  onPractice: () => void;
+  onPractice?: () => void;
 }
 
 function WeaknessItemCard({ item, onPractice }: WeaknessItemCardProps): JSX.Element {
@@ -267,14 +328,16 @@ function WeaknessItemCard({ item, onPractice }: WeaknessItemCardProps): JSX.Elem
               <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
                 {item.detail}
               </p>
-              <button
-                onClick={onPractice}
-                className="self-start px-3 py-1.5 rounded-lg text-xs font-semibold"
-                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                data-testid="practice-btn"
-              >
-                Practice
-              </button>
+              {onPractice && (
+                <button
+                  onClick={onPractice}
+                  className="self-start px-3 py-1.5 rounded-lg text-xs font-semibold"
+                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                  data-testid="practice-btn"
+                >
+                  {item.trainingAction?.buttonLabel ?? 'Practice'}
+                </button>
+              )}
             </div>
           </motion.div>
         )}
