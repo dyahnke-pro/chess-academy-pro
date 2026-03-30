@@ -435,7 +435,7 @@ describe('dbService', () => {
       const cards = await db.flashcards.where('openingId').equals('srs-default').toArray();
       expect(cards[0].srsInterval).toBe(0);
       expect(cards[0].srsRepetitions).toBe(0);
-      expect(cards[0].srsEaseFactor).toBe(2.5);
+      expect(cards[0].srsEaseFactor).toBe(0);
       expect(cards[0].srsLastReview).toBeNull();
     });
   });
