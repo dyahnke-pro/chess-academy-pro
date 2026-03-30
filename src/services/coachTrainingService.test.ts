@@ -42,7 +42,6 @@ import {
 const mockGetStoredWeaknessProfile = vi.mocked(getStoredWeaknessProfile);
 const mockGetFlashcardStats = vi.mocked(getFlashcardStats);
 const mockGetWeakestOpenings = vi.mocked(getWeakestOpenings);
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const mockGamesWhere = vi.mocked(db.games.where);
 
 function mockGamesQuery(games: GameRecord[]): void {

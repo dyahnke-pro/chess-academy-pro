@@ -94,10 +94,10 @@ describe('KnightSweepGame', () => {
     const board = screen.getByTestId('chessboard');
     const pos = JSON.parse(board.getAttribute('data-position') ?? '{}') as Record<string, { pieceType: string }>;
     // Level 1: knight on d4, enemies at f3, e6, b3
-    expect(pos['d4']?.pieceType).toBe('wN');
-    expect(pos['f3']?.pieceType).toBe('bP');
-    expect(pos['e6']?.pieceType).toBe('bP');
-    expect(pos['b3']?.pieceType).toBe('bP');
+    expect(pos['d4'].pieceType).toBe('wN');
+    expect(pos['f3'].pieceType).toBe('bP');
+    expect(pos['e6'].pieceType).toBe('bP');
+    expect(pos['b3'].pieceType).toBe('bP');
   });
 
   it('shows move counter and remaining count', () => {
@@ -122,7 +122,7 @@ describe('KnightSweepGame', () => {
     // f3 should now be the knight, enemy removed
     const board = screen.getByTestId('chessboard');
     const pos = JSON.parse(board.getAttribute('data-position') ?? '{}') as Record<string, { pieceType: string }>;
-    expect(pos['f3']?.pieceType).toBe('wN');
+    expect(pos['f3'].pieceType).toBe('wN');
     expect(pos['d4']).toBeUndefined();
   });
 

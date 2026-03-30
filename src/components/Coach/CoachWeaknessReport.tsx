@@ -100,7 +100,7 @@ export function CoachWeaknessReport(): JSX.Element {
 
   const skillRadar = activeProfile?.skillRadar;
   const topTrainingActions = profile.items
-    .filter((item) => item.trainingAction)
+    .filter((item): item is typeof item & { trainingAction: NonNullable<typeof item.trainingAction> } => item.trainingAction !== undefined)
     .slice(0, 3);
 
   return (
@@ -148,7 +148,7 @@ export function CoachWeaknessReport(): JSX.Element {
             {topTrainingActions.map((item, i) => (
               <button
                 key={`train-${item.category}-${i}`}
-                onClick={() => void navigate(item.trainingAction!.route, item.trainingAction!.state ? { state: item.trainingAction!.state } : undefined)}
+                onClick={() => void navigate(item.trainingAction.route, item.trainingAction.state ? { state: item.trainingAction.state } : undefined)}
                 className="flex items-center gap-3 p-3 rounded-lg text-left transition-colors hover:opacity-90"
                 style={{ background: 'var(--color-surface)' }}
                 data-testid="training-action"
@@ -161,7 +161,7 @@ export function CoachWeaknessReport(): JSX.Element {
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-medium block truncate" style={{ color: 'var(--color-text)' }}>
-                    {item.trainingAction!.buttonLabel}
+                    {item.trainingAction.buttonLabel}
                   </span>
                   <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
                     {item.metric}
@@ -182,11 +182,11 @@ export function CoachWeaknessReport(): JSX.Element {
             <WeaknessItemCard
               key={`${item.category}-${i}`}
               item={item}
-              onPractice={
-                item.trainingAction
-                  ? () => void navigate(item.trainingAction!.route, item.trainingAction!.state ? { state: item.trainingAction!.state } : undefined)
-                  : undefined
-              }
+              onPractice={(() => {
+                const action = item.trainingAction;
+                if (!action) return undefined;
+                return () => void navigate(action.route, action.state ? { state: action.state } : undefined);
+              })()}
             />
           ))}
         </div>

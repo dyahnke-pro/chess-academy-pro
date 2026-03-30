@@ -11,12 +11,6 @@ vi.mock('../../stores/appStore', () => ({
   useAppStore: vi.fn(),
 }));
 
-/* Cast partial store shape for selector mocks — only tested fields matter */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mockStore(partial: Record<string, unknown>): any {
-  return partial;
-}
-
 vi.mock('../../services/lichessPuzzleService', () => ({
   fetchPuzzleDashboard: vi.fn(),
   fetchPuzzleActivity: vi.fn(),
@@ -30,6 +24,12 @@ vi.mock('../../services/cryptoService', () => ({
 
 import { useAppStore } from '../../stores/appStore';
 const mockUseAppStore = vi.mocked(useAppStore);
+
+type StoreState = Parameters<typeof useAppStore>[0] extends ((state: infer S) => unknown) ? S : never;
+
+function mockStore(partial: Record<string, unknown>): StoreState {
+  return partial as unknown as StoreState;
+}
 const mockFetchDashboard = vi.mocked(puzzleService.fetchPuzzleDashboard);
 const mockFetchActivity = vi.mocked(puzzleService.fetchPuzzleActivity);
 const mockGetWeakest = vi.mocked(puzzleService.getWeakestThemesFromDashboard);

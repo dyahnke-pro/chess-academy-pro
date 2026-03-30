@@ -120,7 +120,7 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
 }
 
 /** Get a fallback config using the OTHER provider. Returns null if no alternate key available. */
-async function getFallbackConfig(failedProvider: AiProvider): Promise<ProviderConfig | null> {
+function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
   try {
     const anthropicEnvKey = getAnthropicKey();
     const deepseekEnvKey = getDeepseekKey();
@@ -306,7 +306,7 @@ export async function getCoachChatResponse(
     return await callChatWithConfig(config, messages, systemPrompt, onStream);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
-    const fallback = await getFallbackConfig(config.provider);
+    const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
         return await callChatWithConfig(fallback, messages, systemPrompt, onStream);
@@ -362,7 +362,7 @@ export async function getCoachCommentary(
     return await callCommentaryWithConfig(config, task, userMessage, onStream);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
-    const fallback = await getFallbackConfig(config.provider);
+    const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
         return await callCommentaryWithConfig(fallback, task, userMessage, onStream);

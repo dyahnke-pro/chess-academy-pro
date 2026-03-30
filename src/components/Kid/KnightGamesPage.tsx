@@ -12,7 +12,7 @@ export function KnightGamesPage(): JSX.Element {
 
   useEffect(() => {
     void getGameProgress('pawns-journey').then((progress) => {
-      setBishopCompleted(progress?.chapters?.bishop?.completed === true);
+      setBishopCompleted(progress?.chapters.bishop?.completed === true);
       setLoading(false);
     });
   }, []);

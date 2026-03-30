@@ -8,8 +8,8 @@ const mockStop = vi.fn();
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
-    speak: (...args: unknown[]) => mockSpeak(...args),
-    stop: () => mockStop(),
+    speak: (...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>,
+    stop: (): void => { mockStop(); },
   },
 }));
 

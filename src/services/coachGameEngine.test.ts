@@ -12,7 +12,6 @@ import { getAdaptiveMove, getTargetStrength } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/unbound-method -- vitest mock pattern
 const analyzePositionMock = vi.mocked(stockfishEngine).analyzePosition;
 
 const mockAnalysis: StockfishAnalysis = {

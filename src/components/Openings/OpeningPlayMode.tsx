@@ -239,7 +239,7 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
       setPlayPhase('opening');
     }, 2500);
     return () => clearTimeout(timer);
-  }, [playPhase, opening.name, say]);
+  }, [playPhase, opening.name, displayName, say]);
 
   // ─── Check for game over ─────────────────────────────────────────────────
   useEffect(() => {

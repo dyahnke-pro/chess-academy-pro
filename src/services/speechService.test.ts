@@ -34,9 +34,7 @@ describe('speechService', () => {
       speechService.speak('Hello world');
       vi.runAllTimers();
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.cancel).toHaveBeenCalled();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
     });
 
@@ -47,7 +45,6 @@ describe('speechService', () => {
 
       speechService.speak('Hello');
       vi.runAllTimers();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.speak).not.toHaveBeenCalled();
     });
 
@@ -59,7 +56,6 @@ describe('speechService', () => {
 
       speechService.speak('Hello again');
       vi.runAllTimers();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
     });
   });
@@ -70,7 +66,6 @@ describe('speechService', () => {
       vi.clearAllMocks();
 
       speechService.stop();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.cancel).toHaveBeenCalled();
     });
   });
@@ -81,7 +76,6 @@ describe('speechService', () => {
       vi.clearAllMocks();
 
       speechService.setEnabled(false);
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(window.speechSynthesis.cancel).toHaveBeenCalled();
     });
 

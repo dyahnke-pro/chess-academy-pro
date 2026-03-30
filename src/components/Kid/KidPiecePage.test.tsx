@@ -125,7 +125,6 @@ describe('KidPiecePage', () => {
     render(<KidPiecePage />);
     // Voice service speak is called after a 500ms delay
     await vi.waitFor(() => {
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(voiceService.speak).toHaveBeenCalled();
     });
   });
@@ -136,7 +135,6 @@ describe('KidPiecePage', () => {
     vi.clearAllMocks();
 
     fireEvent.click(screen.getByTestId('kid-speak-btn'));
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(voiceService.speak).toHaveBeenCalled();
   });
 

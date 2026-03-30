@@ -90,7 +90,7 @@ export function AnnotationCard({
                 </p>
               </div>
               <ul className="space-y-1.5">
-                {annotation.plans!.map((plan, i) => (
+                {(annotation.plans ?? []).map((plan, i) => (
                   <li key={i} className="text-sm text-theme-text flex items-start gap-2 bg-green-500/5 rounded-lg px-2.5 py-1.5">
                     <span className="text-green-400 mt-0.5 shrink-0 font-bold">{i + 1}.</span>
                     <span>{plan}</span>
@@ -129,7 +129,7 @@ export function AnnotationCard({
                     className="overflow-hidden"
                   >
                     <ul className="space-y-1.5 mt-2">
-                      {annotation.alternatives!.map((alt, i) => (
+                      {(annotation.alternatives ?? []).map((alt, i) => (
                         <li key={i} className="text-sm text-theme-text-muted flex items-start gap-2 bg-blue-500/5 rounded-lg px-2.5 py-1.5">
                           <span className="text-blue-400 mt-0.5 shrink-0">?</span>
                           <span>{alt}</span>

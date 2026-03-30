@@ -119,7 +119,6 @@ export function GamesPage(): JSX.Element {
 
   // Challenge: on complete (no-op — tracked for future session stats)
   const handleChallengeComplete = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (_perfect: boolean): void => { /* future: session stats */ },
     [],
   );

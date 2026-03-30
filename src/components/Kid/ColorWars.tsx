@@ -108,10 +108,9 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
 
     // If a bishop is selected and this is a legal move, execute it
     if (selectedSquare && legalMoves.includes(square)) {
-      const isCapture = pieces[square] !== undefined && pieces[square] !== 'B';
-      const newPieces = { ...pieces };
-      delete newPieces[selectedSquare];
-      newPieces[square] = 'B';
+      const isCapture = Object.hasOwn(pieces, square) && pieces[square] !== 'B';
+      const { [selectedSquare]: _removed, ...remaining } = pieces;
+      const newPieces: Record<string, string> = { ...remaining, [square]: 'B' };
 
       setPieces(newPieces);
       setSelectedSquare(null);
@@ -172,7 +171,6 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
 
   // Build highlight styles for overlay squares
   const getSquareClass = useCallback((sq: string): string => {
-    if (!levelConfig) return '';
     const classes: string[] = ['w-full', 'h-full'];
 
     if (selectedSquare === sq) {
@@ -202,7 +200,7 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => { voiceService.stop(); setTimerRunning(false); phase === 'playing' ? setPhase('menu') : onBack(); }}
+            onClick={() => { voiceService.stop(); setTimerRunning(false); if (phase === 'playing') { setPhase('menu'); } else { onBack(); } }}
             className="p-2 rounded-lg hover:opacity-80"
             style={{ background: 'var(--color-surface)' }}
             data-testid="cw-back-btn"

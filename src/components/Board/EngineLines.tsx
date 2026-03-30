@@ -21,7 +21,6 @@ function uciToSan(uciMoves: string[], fen: string, maxMoves: number = 6): string
       const to = uciMoves[i].slice(2, 4);
       const promotion = uciMoves[i].length > 4 ? uciMoves[i][4] : undefined;
       const move = chess.move({ from, to, promotion });
-      if (!move) break;
       // Prefix with move number for white moves
       if (move.color === 'w') {
         result.push(`${chess.moveNumber() - 1}.${move.san}`);

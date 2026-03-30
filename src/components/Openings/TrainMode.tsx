@@ -96,7 +96,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
     void (async () => {
       // Train mode uses trap/warning lines — try sub-line annotations first
       const subKey = sectionLabel.toLowerCase().includes('trap')
@@ -104,9 +104,9 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
         : `warning-${currentLineIndex}`;
       const data = await loadSubLineAnnotations(opening.id, subKey)
         ?? await loadAnnotations(opening.id);
-      if (!cancelled) setAnnotations(data);
+      if (!guard.cancelled) setAnnotations(data);
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [opening.id, sectionLabel, currentLineIndex]);
 
   const mistakeExplanation = useMemo((): string => {
