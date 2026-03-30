@@ -3,51 +3,207 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and hypermodern choices available. This move controls the important d5 and b5 squares while preparing to fianchetto our king's bishop on g2, creating a powerful diagonal battery aimed at Black's kingside. The English allows us to transpose into many different pawn structures depending on how our opponent responds, giving us excellent practical chances to steer the game into positions we're comfortable with. Unlike 1.e4 or 1.d4, this opening doesn't immediately occupy the center but instead influences it from the flank, embodying hypermodern principles."
+      "annotation": "We're opening with the English Opening, one of the most flexible and hypermodern choices available. This move controls the important d5 and b5 squares while preparing to fianchetto our king's bishop on g2, creating a powerful diagonal battery aimed at Black's kingside. The English allows us to transpose into many different pawn structures depending on how our opponent responds, giving us excellent practical chances to steer the game into positions we're comfortable with. Unlike 1.e4 or 1.d4, this opening doesn't immediately occupy the center but instead influences it from the flank, embodying hypermodern principles.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black immediately stakes out central territory with this classical response, occupying the center and preparing to develop pieces actively. This move creates the Reversed Sicilian structure where Black essentially gets an extra tempo in a Sicilian Defense setup, since we've played c4 instead of the more forcing e4. Our opponent is signaling aggressive intentions, looking to develop quickly with moves like Nf6, Bc5, and potentially f5 later to create kingside attacking chances. We need to be prepared for sharp tactical play while using our slight space advantage on the queenside to create long-term positional pressure."
+      "annotation": "Black immediately stakes out central territory with this classical response, occupying the center and preparing to develop pieces actively. This move creates the Reversed Sicilian structure where Black essentially gets an extra tempo in a Sicilian Defense setup, since we've played c4 instead of the more forcing e4. Our opponent is signaling aggressive intentions, looking to develop quickly with moves like Nf6, Bc5, and potentially f5 later to create kingside attacking chances. We need to be prepared for sharp tactical play while using our slight space advantage on the queenside to create long-term positional pressure.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting a future d4 advance and maintaining maximum flexibility in our setup. This move is part of the Four Knights system in the English, where both sides develop their knights harmoniously before committing to more concrete pawn structures. The knight on c3 also prepares potential piece sacrifices on d5 or e4 in tactical sequences, while keeping the option open to support a central pawn storm with d4 and e4. From c3, our knight can also reroute to more active squares like e4 or d5 depending on how the position develops."
+      "annotation": "We develop our knight to its most natural square, supporting a future d4 advance and maintaining maximum flexibility in our setup. This move is part of the Four Knights system in the English, where both sides develop their knights harmoniously before committing to more concrete pawn structures. The knight on c3 also prepares potential piece sacrifices on d5 or e4 in tactical sequences, while keeping the option open to support a central pawn storm with d4 and e4. From c3, our knight can also reroute to more active squares like e4 or d5 depending on how the position develops.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops with tempo, attacking our undefended e4 square and preventing us from playing e4 immediately. This natural developing move also prepares to castle kingside and supports potential central advances like d6-d5 or maintains pressure on our central ambitions. Our opponent is following sound opening principles by developing pieces toward the center while creating concrete threats that we must address. The knight on f6 is perfectly placed to support Black's central pawn on e5 and can potentially hop to more active squares like d4 or g4 in tactical sequences."
+      "annotation": "Black develops with tempo, attacking our undefended e4 square and preventing us from playing e4 immediately. This natural developing move also prepares to castle kingside and supports potential central advances like d6-d5 or maintains pressure on our central ambitions. Our opponent is following sound opening principles by developing pieces toward the center while creating concrete threats that we must address. The knight on f6 is perfectly placed to support Black's central pawn on e5 and can potentially hop to more active squares like d4 or g4 in tactical sequences.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our knight development, directly challenging Black's central pawn on e5 and preparing to support our own central operations. This move also allows us to castle kingside quickly while maintaining pressure on Black's position, forcing them to make concrete decisions about their pawn structure. The knight on f3 is ideally placed to support a future d4 advance, and in many lines, it can swing to more aggressive squares like e4 or h4 depending on the tactical requirements. We're building a solid foundation while keeping maximum flexibility in our position, staying true to the English Opening's hypermodern philosophy."
+      "annotation": "We complete our knight development, directly challenging Black's central pawn on e5 and preparing to support our own central operations. This move also allows us to castle kingside quickly while maintaining pressure on Black's position, forcing them to make concrete decisions about their pawn structure. The knight on f3 is ideally placed to support a future d4 advance, and in many lines, it can swing to more aggressive squares like e4 or h4 depending on the tactical requirements. We're building a solid foundation while keeping maximum flexibility in our position, staying true to the English Opening's hypermodern philosophy.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black mirrors our knight development, creating the symmetrical Four Knights structure that gives this variation its name. This move develops with a purpose, supporting the e5 pawn and preparing potential central breaks like d5 or f5 to challenge our position. The knight on c6 also keeps an eye on important central squares like d4 and e5, while maintaining the option to relocate to more active posts later in the game. Our opponent is developing harmoniously while keeping their options open, but this symmetrical approach sometimes leads to slightly passive positions for Black if we can successfully execute our strategic plans."
+      "annotation": "Black mirrors our knight development, creating the symmetrical Four Knights structure that gives this variation its name. This move develops with a purpose, supporting the e5 pawn and preparing potential central breaks like d5 or f5 to challenge our position. The knight on c6 also keeps an eye on important central squares like d4 and e5, while maintaining the option to relocate to more active posts later in the game. Our opponent is developing harmoniously while keeping their options open, but this symmetrical approach sometimes leads to slightly passive positions for Black if we can successfully execute our strategic plans.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g3",
-      "annotation": "We begin our kingside fianchetto, preparing to place our dark-squared bishop on the long diagonal where it will exert tremendous pressure on Black's position. This move is the hallmark of the Fianchetto Line, creating a solid pawn structure that supports our king's safety while generating long-term attacking potential along the a1-h8 diagonal. The fianchetto setup also prepares to challenge any Black pieces that venture into our half of the board, particularly if Black tries to establish a knight on d4. By controlling key central squares from the flank, we're embodying pure hypermodern strategy, allowing Black to occupy the center before undermining it."
+      "annotation": "We begin our kingside fianchetto, preparing to place our dark-squared bishop on the long diagonal where it will exert tremendous pressure on Black's position. This move is the hallmark of the Fianchetto Line, creating a solid pawn structure that supports our king's safety while generating long-term attacking potential along the a1-h8 diagonal. The fianchetto setup also prepares to challenge any Black pieces that venture into our half of the board, particularly if Black tries to establish a knight on d4. By controlling key central squares from the flank, we're embodying pure hypermodern strategy, allowing Black to occupy the center before undermining it.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes in the center with this thematic break, immediately challenging our c4 pawn and fighting for space in the critical central squares. This aggressive move opens up the position and creates immediate tactical tension, as Black is willing to trade material to gain rapid piece development and central influence. Our opponent is correctly identifying that with our bishop still on f1, this is an opportune moment to create central complications before we can complete our development. The d5 advance also opens lines for Black's light-squared bishop and prepares to bring more pieces into active play quickly."
+      "annotation": "Black strikes in the center with this thematic break, immediately challenging our c4 pawn and fighting for space in the critical central squares. This aggressive move opens up the position and creates immediate tactical tension, as Black is willing to trade material to gain rapid piece development and central influence. Our opponent is correctly identifying that with our bishop still on f1, this is an opportune moment to create central complications before we can complete our development. The d5 advance also opens lines for Black's light-squared bishop and prepares to bring more pieces into active play quickly.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxd5",
-      "annotation": "We accept the challenge and capture the pawn, opening the c-file for potential future pressure while forcing Black to make a concrete decision about recapturing. This exchange simplifies the position slightly but maintains the dynamic balance, as both sides will have active piece play in the resulting structure. By taking on d5, we're also preparing to complete our kingside development with Bg2, where our bishop will have maximum influence along the long diagonal. The capture creates an interesting pawn structure where both sides will have chances for active play, but we maintain a slight edge due to our better piece coordination."
+      "annotation": "We accept the challenge and capture the pawn, opening the c-file for potential future pressure while forcing Black to make a concrete decision about recapturing. This exchange simplifies the position slightly but maintains the dynamic balance, as both sides will have active piece play in the resulting structure. By taking on d5, we're also preparing to complete our kingside development with Bg2, where our bishop will have maximum influence along the long diagonal. The capture creates an interesting pawn structure where both sides will have chances for active play, but we maintain a slight edge due to our better piece coordination.",
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxd5",
-      "annotation": "Black recaptures with the knight, centralizing this piece on an excellent square while maintaining material balance. The knight on d5 becomes a powerful outpost, controlling key squares like b4, c7, e7, f4, f6, and b6, while also supporting potential tactics against our king. This recapture is more principled than Qxd5, as it develops a piece rather than bringing the queen out prematurely where it might become a target. However, the centralized knight may also become a target for our pieces, and we should look for ways to challenge or exchange it when the timing is right."
+      "annotation": "Black recaptures with the knight, centralizing this piece on an excellent square while maintaining material balance. The knight on d5 becomes a powerful outpost, controlling key squares like b4, c7, e7, f4, f6, and b6, while also supporting potential tactics against our king. This recapture is more principled than Qxd5, as it develops a piece rather than bringing the queen out prematurely where it might become a target. However, the centralized knight may also become a target for our pieces, and we should look for ways to challenge or exchange it when the timing is right.",
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bg2",
-      "annotation": "We complete our fianchetto setup, placing our dark-squared bishop on its most active diagonal where it surveys the entire board from a1 to h8. This bishop now exerts pressure on Black's position, particularly the knight on d5 and any potential weaknesses along the long diagonal. The bishop on g2 also supports our king's safety, creating a solid defensive structure while maintaining attacking potential. With our bishop developed, we're ready to castle kingside and begin more active operations, having achieved a harmonious piece setup that exemplifies the English Opening's positional sophistication."
+      "annotation": "We complete our fianchetto setup, placing our dark-squared bishop on its most active diagonal where it surveys the entire board from a1 to h8. This bishop now exerts pressure on Black's position, particularly the knight on d5 and any potential weaknesses along the long diagonal. The bishop on g2 also supports our king's safety, creating a solid defensive structure while maintaining attacking potential. With our bishop developed, we're ready to castle kingside and begin more active operations, having achieved a harmonious piece setup that exemplifies the English Opening's positional sophistication.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bc5",
-      "annotation": "Black develops their light-squared bishop to an active square, targeting our f2 pawn and putting immediate pressure on our kingside. This aggressive bishop placement is characteristic of the ...Bc5 system, where Black aims for quick development and sharp tactical play rather than slow positional maneuvering. The bishop on c5 also supports potential central advances and keeps our king under observation, making castling a priority for us. However, this bishop may become somewhat misplaced if we can consolidate our position and challenge it with moves like d3 and e4, so we should look to complete our development while keeping tactical vigilance for any immediate threats."
+      "annotation": "Black develops their light-squared bishop to an active square, targeting our f2 pawn and putting immediate pressure on our kingside. This aggressive bishop placement is characteristic of the ...Bc5 system, where Black aims for quick development and sharp tactical play rather than slow positional maneuvering. The bishop on c5 also supports potential central advances and keeps our king under observation, making castling a priority for us. However, this bishop may become somewhat misplaced if we can consolidate our position and challenge it with moves like d3 and e4, so we should look to complete our development while keeping tactical vigilance for any immediate threats.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

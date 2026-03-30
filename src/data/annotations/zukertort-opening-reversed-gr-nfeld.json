@@ -3,39 +3,122 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We start with the Zukertort Opening, a flexible and hypermodern approach where we control the center from afar rather than occupying it immediately. Nf3 prepares to support our center, challenges Black's ideal pawn breaks, and keeps our options open—we can later support either e4 or d4 depending on how Black responds."
+      "annotation": "We start with the Zukertort Opening, a flexible and hypermodern approach where we control the center from afar rather than occupying it immediately. Nf3 prepares to support our center, challenges Black's ideal pawn breaks, and keeps our options open—we can later support either e4 or d4 depending on how Black responds.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately stakes a claim in the center with the d-pawn, a solid classical response that controls e4 and c4. This move defines the position as a reversed Grünfeld structure where Black has the central pawn instead of White, but White maintains flexibility with our Nf3 and g3 setup."
+      "annotation": "Black immediately stakes a claim in the center with the d-pawn, a solid classical response that controls e4 and c4. This move defines the position as a reversed Grünfeld structure where Black has the central pawn instead of White, but White maintains flexibility with our Nf3 and g3 setup.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g3",
-      "annotation": "We prepare the fianchetto of our light-squared bishop, a hallmark of hypermodern strategy—we'll control the long diagonal and pressure Black's center from d5 without occupying it ourselves. This setup also prepares castling kingside and keeps our position solid and flexible."
+      "annotation": "We prepare the fianchetto of our light-squared bishop, a hallmark of hypermodern strategy—we'll control the long diagonal and pressure Black's center from d5 without occupying it ourselves. This setup also prepares castling kingside and keeps our position solid and flexible.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black attacks our future d4 pawn in advance, trying to prevent us from establishing a strong pawn center and forcing decisions before we've fully developed. This is typical counterplay in reversed structures, but we'll meet it with d4 anyway, accepting the tension."
+      "annotation": "Black attacks our future d4 pawn in advance, trying to prevent us from establishing a strong pawn center and forcing decisions before we've fully developed. This is typical counterplay in reversed structures, but we'll meet it with d4 anyway, accepting the tension.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg2",
-      "annotation": "Our bishop takes its ideal diagonal, aiming straight at the center along the long diagonal (a1-h8). From g2, it pressures d5 and supports our d4 advance by controlling important central squares like c6 and d5 after we push the pawn."
+      "annotation": "Our bishop takes its ideal diagonal, aiming straight at the center along the long diagonal (a1-h8). From g2, it pressures d5 and supports our d4 advance by controlling important central squares like c6 and d5 after we push the pawn.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black reinforces the d5 pawn and prepares to develop the light-squared bishop smoothly via f6 or d6. The e6 pawn also supports a potential d5-e5 advance later, giving Black a flexible pawn structure while defending against our center pressure."
+      "annotation": "Black reinforces the d5 pawn and prepares to develop the light-squared bishop smoothly via f6 or d6. The e6 pawn also supports a potential d5-e5 advance later, giving Black a flexible pawn structure while defending against our center pressure.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside to complete our kingside safety before committing to d4—a natural move that removes our king from the center and activates our h1 rook toward the center files. Now we're ready to push d4 with confidence, knowing our king is secure."
-    },
-    {
-      "san": "cxd4",
-      "annotation": "Black captures our d-pawn, deciding that counterplay in the center is more important than maintaining the d5 outpost. This opens up the c-file and gives us the central tension we wanted—we'll recapture and enjoy good piece placement with our bishop on g2."
-    },
-    {
-      "san": "Nxd4",
-      "annotation": "We recapture with the knight, centralizing it actively on d4 where it controls key squares like e6, c6, and f5. This gives us a strong classical setup: our knight is centralized, our bishop on g2 is aiming at the center, we control the d4 square, and we have a clear plan to develop with c4, Be3, and Nc3."
+      "annotation": "We castle kingside to complete our kingside safety before committing to d4—a natural move that removes our king from the center and activates our h1 rook toward the center files. Now we're ready to push d4 with confidence, knowing our king is secure.",
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

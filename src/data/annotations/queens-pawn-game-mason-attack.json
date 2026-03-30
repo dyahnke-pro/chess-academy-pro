@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move leads to rich positional play where we'll typically build a strong pawn center and develop our pieces with long-term strategic goals in mind. The d4 opening often leads to slower, more maneuvering games compared to 1.e4, giving us time to build up pressure gradually. Our main plan will be to control the center, develop our pieces harmoniously, and look for ways to create imbalances that favor our position."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move leads to rich positional play where we'll typically build a strong pawn center and develop our pieces with long-term strategic goals in mind. The d4 opening often leads to slower, more maneuvering games compared to 1.e4, giving us time to build up pressure gradually. Our main plan will be to control the center, develop our pieces harmoniously, and look for ways to create imbalances that favor our position.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black responds by mirroring our central pawn move, immediately challenging our control of the center and establishing their own foothold on the important central squares. This symmetric response is the most natural and principled way to meet 1.d4, as it prevents us from simply occupying the center with a second pawn move like e4. Black's d5 pawn now controls the crucial c4 and e4 squares, ensuring that the center will be contested rather than allowing us to dominate it unopposed. From here, the game will likely develop into typical queen's pawn structures where both sides fight for central influence."
+      "annotation": "Black responds by mirroring our central pawn move, immediately challenging our control of the center and establishing their own foothold on the important central squares. This symmetric response is the most natural and principled way to meet 1.d4, as it prevents us from simply occupying the center with a second pawn move like e4. Black's d5 pawn now controls the crucial c4 and e4 squares, ensuring that the center will be contested rather than allowing us to dominate it unopposed. From here, the game will likely develop into typical queen's pawn structures where both sides fight for central influence.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f4",
-      "annotation": "We're playing the Mason Attack, an aggressive and somewhat unconventional approach that immediately signals our intention to launch a kingside offensive. This pawn advance supports a future e4 push, potentially creating a strong pawn center, while also preparing to develop our pieces with attacking intentions toward Black's kingside. The move is quite committal since it weakens our king position and creates potential targets, but it can catch unprepared opponents off guard and lead to sharp, tactical positions. While not as sound as traditional developing moves like Nf3 or c4, the Mason Attack can be effective at the club level where opponents might not be familiar with the best defensive setups against this early aggression."
+      "annotation": "We're playing the Mason Attack, an aggressive and somewhat unconventional approach that immediately signals our intention to launch a kingside offensive. This pawn advance supports a future e4 push, potentially creating a strong pawn center, while also preparing to develop our pieces with attacking intentions toward Black's kingside. The move is quite committal since it weakens our king position and creates potential targets, but it can catch unprepared opponents off guard and lead to sharp, tactical positions. While not as sound as traditional developing moves like Nf3 or c4, the Mason Attack can be effective at the club level where opponents might not be familiar with the best defensive setups against this early aggression.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

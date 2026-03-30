@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim in the center and controlling the important e5 and c5 squares. This move frees our dark-squared bishop and queen while preparing to support our central pawn with c2-c4. The d4 opening typically leads to more positional, strategic games compared to 1.e4, and we're setting up for systems like the Queen's Gambit or various Indian defenses. Our plan is to build a strong pawn center and develop our pieces harmoniously while restricting Black's counterplay."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim in the center and controlling the important e5 and c5 squares. This move frees our dark-squared bishop and queen while preparing to support our central pawn with c2-c4. The d4 opening typically leads to more positional, strategic games compared to 1.e4, and we're setting up for systems like the Queen's Gambit or various Indian defenses. Our plan is to build a strong pawn center and develop our pieces harmoniously while restricting Black's counterplay.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our central control by placing a pawn on d5, creating tension in the center and preventing us from easily advancing to d5 ourselves. This solid, classical response fights for central space and gives Black's pieces good squares to develop to. Our opponent is setting up the foundation for several possible defense systems, including the Queen's Gambit Declined, Slav Defense, or various other setups. Black's pawn on d5 also opens lines for the light-squared bishop and queen, while maintaining flexibility in the position."
+      "annotation": "Black immediately challenges our central control by placing a pawn on d5, creating tension in the center and preventing us from easily advancing to d5 ourselves. This solid, classical response fights for central space and gives Black's pieces good squares to develop to. Our opponent is setting up the foundation for several possible defense systems, including the Queen's Gambit Declined, Slav Defense, or various other setups. Black's pawn on d5 also opens lines for the light-squared bishop and queen, while maintaining flexibility in the position.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're launching the Queen's Gambit by attacking Black's central d5 pawn, offering to trade our c-pawn for their central pawn. This move increases our central influence and puts immediate pressure on Black's position, forcing them to make an important decision about how to maintain their central presence. The Queen's Gambit isn't a true gambit since we'll usually regain the pawn easily, but it gives us excellent piece development and central control if accepted. We're also preparing to develop our knight to c3 and continue with our standard Queen's Gambit development pattern."
+      "annotation": "We're launching the Queen's Gambit by attacking Black's central d5 pawn, offering to trade our c-pawn for their central pawn. This move increases our central influence and puts immediate pressure on Black's position, forcing them to make an important decision about how to maintain their central presence. The Queen's Gambit isn't a true gambit since we'll usually regain the pawn easily, but it gives us excellent piece development and central control if accepted. We're also preparing to develop our knight to c3 and continue with our standard Queen's Gambit development pattern.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black chooses the Slav Defense setup by supporting the d5 pawn with the c-pawn, maintaining their central stronghold while keeping the light-squared bishop's diagonal open. This solid defensive system avoids the potential problems of blocking the light-squared bishop (as happens in the Queen's Gambit Declined with ...e6). Our opponent is preparing to potentially expand with ...b5 or develop the bishop to f5 or g4, maintaining flexible piece development. The Slav Defense is considered one of Black's most reliable defenses against the Queen's Gambit, though it can lead to somewhat passive positions if not handled actively."
+      "annotation": "Black chooses the Slav Defense setup by supporting the d5 pawn with the c-pawn, maintaining their central stronghold while keeping the light-squared bishop's diagonal open. This solid defensive system avoids the potential problems of blocking the light-squared bishop (as happens in the Queen's Gambit Declined with ...e6). Our opponent is preparing to potentially expand with ...b5 or develop the bishop to f5 or g4, maintaining flexible piece development. The Slav Defense is considered one of Black's most reliable defenses against the Queen's Gambit, though it can lead to somewhat passive positions if not handled actively.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and increasing the central pressure. This move supports our potential advance d4-d5 and prepares for various pawn breaks in the center while maintaining flexibility in our pawn structure. The knight on c3 also eyes important central squares like e4 and d5, and we're keeping our options open for different setups depending on Black's response. We're following classical development principles by bringing out pieces toward the center and maintaining the initiative with our slight spatial advantage."
+      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and increasing the central pressure. This move supports our potential advance d4-d5 and prepares for various pawn breaks in the center while maintaining flexibility in our pawn structure. The knight on c3 also eyes important central squares like e4 and d5, and we're keeping our options open for different setups depending on Black's response. We're following classical development principles by bringing out pieces toward the center and maintaining the initiative with our slight spatial advantage.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black strikes back dramatically with the Winawer Countergambit, sacrificing central space to create immediate tactical complications and challenge our comfortable development. This aggressive move attacks our d4 pawn and opens lines for Black's pieces, particularly the light-squared bishop and queen, creating sharp tactical play. Our opponent is rejecting passive play and instead seeking dynamic counterplay, even at the cost of potentially weakening their king position and falling behind in development. We now face the critical decision of how to handle this pawn sacrifice - we can capture with dxe5, defend with various moves, or even ignore it temporarily while continuing our development."
+      "annotation": "Black strikes back dramatically with the Winawer Countergambit, sacrificing central space to create immediate tactical complications and challenge our comfortable development. This aggressive move attacks our d4 pawn and opens lines for Black's pieces, particularly the light-squared bishop and queen, creating sharp tactical play. Our opponent is rejecting passive play and instead seeking dynamic counterplay, even at the cost of potentially weakening their king position and falling behind in development. We now face the critical decision of how to handle this pawn sacrifice - we can capture with dxe5, defend with various moves, or even ignore it temporarily while continuing our development.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

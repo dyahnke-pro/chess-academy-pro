@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We start with the Zukertort Opening, a flexible and sophisticated approach favored by Karpov and other positional masters. By developing our knight before committing our central pawns, we keep tremendous flexibility—we can support e4 later, control d4 and e5, and prepare to build our position gradually. This move controls e5 and d4 immediately, which are the critical central squares."
+      "annotation": "We start with the Zukertort Opening, a flexible and sophisticated approach favored by Karpov and other positional masters. By developing our knight before committing our central pawns, we keep tremendous flexibility—we can support e4 later, control d4 and e5, and prepare to build our position gradually. This move controls e5 and d4 immediately, which are the critical central squares.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our move, which is sensible and solid. Your opponent develops a piece, controls the center symmetrically, and keeps options open—they might support ...e5, play ...d5, or even prepare ...c5. This is a respectful response that doesn't yield to any early pressure."
+      "annotation": "Black mirrors our move, which is sensible and solid. Your opponent develops a piece, controls the center symmetrically, and keeps options open—they might support ...e5, play ...d5, or even prepare ...c5. This is a respectful response that doesn't yield to any early pressure.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "Now we reveal our plan: the Quiet System. Rather than rushing e4, we support it with a pawn and prepare to develop our light-squared bishop on e2 or d3. This move opens the e-file for future pressure, keeps our position solid and hard to break, and sets up a modest but reliable space advantage. We're not looking for a tactical melee—instead, we want to outmaneuver Black through superior piece placement and pawn structure."
+      "annotation": "Now we reveal our plan: the Quiet System. Rather than rushing e4, we support it with a pawn and prepare to develop our light-squared bishop on e2 or d3. This move opens the e-file for future pressure, keeps our position solid and hard to break, and sets up a modest but reliable space advantage. We're not looking for a tactical melee—instead, we want to outmaneuver Black through superior piece placement and pawn structure.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

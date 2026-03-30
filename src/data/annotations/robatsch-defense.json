@@ -3,35 +3,139 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the center and controlling the important e5 and c5 squares. This flexible first move allows us to transpose into many different systems depending on how Black responds, from the Queen's Gambit to various Indian defenses. The d4 opening typically leads to more positional, strategic games compared to 1.e4, though we maintain excellent winning chances. Our plan is to build a strong pawn center and develop our pieces harmoniously while keeping maximum flexibility in our setup."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the center and controlling the important e5 and c5 squares. This flexible first move allows us to transpose into many different systems depending on how Black responds, from the Queen's Gambit to various Indian defenses. The d4 opening typically leads to more positional, strategic games compared to 1.e4, though we maintain excellent winning chances. Our plan is to build a strong pawn center and develop our pieces harmoniously while keeping maximum flexibility in our setup.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black chooses the Robatsch Defense (also known as the Modern Defense), a hypermodern opening that deliberately avoids occupying the center with pawns immediately. Instead, our opponent plans to fianchetto the king's bishop on g7 and attack our pawn center from a distance, much like in the King's Indian Defense. This setup is quite flexible but can be somewhat passive, allowing us to build an impressive pawn center if we're not careful about Black's counterplay. The move d6 supports a future e5 advance while keeping options open for piece development."
+      "annotation": "Black chooses the Robatsch Defense (also known as the Modern Defense), a hypermodern opening that deliberately avoids occupying the center with pawns immediately. Instead, our opponent plans to fianchetto the king's bishop on g7 and attack our pawn center from a distance, much like in the King's Indian Defense. This setup is quite flexible but can be somewhat passive, allowing us to build an impressive pawn center if we're not careful about Black's counterplay. The move d6 supports a future e5 advance while keeping options open for piece development.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while preparing to castle kingside. This move fits perfectly with almost any setup we might choose, whether we go for a King's Indian Attack formation, a classical development with Nc3, or even a fianchetto system ourselves. Against the Robatsch Defense, Nf3 is particularly useful because it prevents Black from playing an early e5, which would give them more central influence. We're keeping our options open while making solid, principled development moves."
+      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while preparing to castle kingside. This move fits perfectly with almost any setup we might choose, whether we go for a King's Indian Attack formation, a classical development with Nc3, or even a fianchetto system ourselves. Against the Robatsch Defense, Nf3 is particularly useful because it prevents Black from playing an early e5, which would give them more central influence. We're keeping our options open while making solid, principled development moves.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Our opponent continues with the characteristic fianchetto setup that defines the Robatsch Defense, preparing to place the dark-squared bishop on the long diagonal where it will eye our d4 pawn and control key central squares. This move also prepares kingside castling and gives the king a flight square on g7 if needed. Black is essentially inviting us to build a large pawn center, confident that the fianchettoed bishop will provide sufficient counterplay against our central pawns. We should be thinking about how to make our central advantage count while being mindful of Black's potential tactics along the long diagonal."
+      "annotation": "Our opponent continues with the characteristic fianchetto setup that defines the Robatsch Defense, preparing to place the dark-squared bishop on the long diagonal where it will eye our d4 pawn and control key central squares. This move also prepares kingside castling and gives the king a flight square on g7 if needed. Black is essentially inviting us to build a large pawn center, confident that the fianchettoed bishop will provide sufficient counterplay against our central pawns. We should be thinking about how to make our central advantage count while being mindful of Black's potential tactics along the long diagonal.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We expand in the center with a strong pawn move that controls the important d5 and b5 squares, further restricting Black's options and preparing to build an even more impressive pawn center. This move is the start of a classical 'big center' approach against the Modern Defense, where we occupy space with pawns and challenge Black to prove their hypermodern concept works. The c4 pawn also supports a future d5 advance and opens lines for our queen and light-squared bishop. Black will need to find active counterplay soon, or risk being simply outplayed by our superior central control."
+      "annotation": "We expand in the center with a strong pawn move that controls the important d5 and b5 squares, further restricting Black's options and preparing to build an even more impressive pawn center. This move is the start of a classical 'big center' approach against the Modern Defense, where we occupy space with pawns and challenge Black to prove their hypermodern concept works. The c4 pawn also supports a future d5 advance and opens lines for our queen and light-squared bishop. Black will need to find active counterplay soon, or risk being simply outplayed by our superior central control.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto development, placing the dark-squared bishop on its optimal square where it controls the long diagonal and puts immediate pressure on our d4 pawn. This bishop will be a key piece in Black's strategy, potentially supporting central breaks like e5 or c5, and it also adds an important defender to the kingside. The bishop on g7 is both a defensive and offensive piece - it protects Black's king while simultaneously creating tactical possibilities against our position. We need to be aware that this bishop can become very dangerous if we're not careful about our pawn structure and piece coordination."
+      "annotation": "Black completes the fianchetto development, placing the dark-squared bishop on its optimal square where it controls the long diagonal and puts immediate pressure on our d4 pawn. This bishop will be a key piece in Black's strategy, potentially supporting central breaks like e5 or c5, and it also adds an important defender to the kingside. The bishop on g7 is both a defensive and offensive piece - it protects Black's king while simultaneously creating tactical possibilities against our position. We need to be aware that this bishop can become very dangerous if we're not careful about our pawn structure and piece coordination.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We establish the dream pawn center that the Modern Defense is designed to challenge, creating a massive space advantage and controlling key central squares like d5, e5, f5, and d5. This bold advance gives us excellent piece development prospects and puts immediate pressure on Black to find counterplay before we consolidate our advantage. The pawn on e4 works in perfect harmony with our d4 and c4 pawns, creating a triangle of central control that's difficult for Black to challenge directly. However, we must be careful not to overextend - Black's pieces are well-placed to attack this pawn center, and we'll need to support it with our pieces while looking for ways to advance further or create threats."
+      "annotation": "We establish the dream pawn center that the Modern Defense is designed to challenge, creating a massive space advantage and controlling key central squares like d5, e5, f5, and d5. This bold advance gives us excellent piece development prospects and puts immediate pressure on Black to find counterplay before we consolidate our advantage. The pawn on e4 works in perfect harmony with our d4 and c4 pawns, creating a triangle of central control that's difficult for Black to challenge directly. However, we must be careful not to overextend - Black's pieces are well-placed to attack this pawn center, and we'll need to support it with our pieces while looking for ways to advance further or create threats.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg4",
-      "annotation": "Black strikes back immediately with this pin against our knight on f3, applying pressure to our center and creating the first concrete threat in the position. This move develops a piece while simultaneously attacking, and it's a typical resource in the Modern Defense - using active piece play to compensate for the lack of central pawns. The bishop pin is particularly annoying because it makes it harder for us to support our e4 pawn with moves like Nbd2 or because moving the knight would allow Black to damage our kingside pawn structure. We'll need to decide whether to break the pin immediately with moves like Be2 or h3, or whether to continue developing and accept the temporary inconvenience while consolidating our central advantage."
+      "annotation": "Black strikes back immediately with this pin against our knight on f3, applying pressure to our center and creating the first concrete threat in the position. This move develops a piece while simultaneously attacking, and it's a typical resource in the Modern Defense - using active piece play to compensate for the lack of central pawns. The bishop pin is particularly annoying because it makes it harder for us to support our e4 pawn with moves like Nbd2 or because moving the knight would allow Black to damage our kingside pawn structure. We'll need to decide whether to break the pin immediately with moves like Be2 or h3, or whether to continue developing and accept the temporary inconvenience while consolidating our central advantage.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

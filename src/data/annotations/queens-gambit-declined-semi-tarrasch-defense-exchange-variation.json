@@ -3,47 +3,190 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This is one of the most principled first moves in chess, leading to rich positional games where we'll often build a strong pawn center and develop our pieces harmoniously. The d4 opening typically leads to slower, more strategic battles compared to 1.e4, giving us time to build up pressure and create long-term advantages. Our plan revolves around controlling the center and gradually improving our piece coordination."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This is one of the most principled first moves in chess, leading to rich positional games where we'll often build a strong pawn center and develop our pieces harmoniously. The d4 opening typically leads to slower, more strategic battles compared to 1.e4, giving us time to build up pressure and create long-term advantages. Our plan revolves around controlling the center and gradually improving our piece coordination.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn and develops a piece toward the center, showing they're not afraid of tactical complications. This knight move is one of the most natural responses to 1.d4, as it attacks our pawn while developing toward active squares like e4 and d5. Our opponent is signaling they want to fight for central control rather than allowing us to dominate the center unopposed. This move also prepares potential ...e6 and ...d5, leading into various Queen's Pawn Game setups."
+      "annotation": "Black immediately challenges our central pawn and develops a piece toward the center, showing they're not afraid of tactical complications. This knight move is one of the most natural responses to 1.d4, as it attacks our pawn while developing toward active squares like e4 and d5. Our opponent is signaling they want to fight for central control rather than allowing us to dominate the center unopposed. This move also prepares potential ...e6 and ...d5, leading into various Queen's Pawn Game setups.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order that often transposes into a Queen's Gambit, immediately putting pressure on Black's potential ...d5 advance. This pawn move controls the important d5 and b5 squares while preparing to challenge any central pawn Black might place on d5. The c4 advance is also flexible - it supports various opening systems and gives us excellent piece coordination possibilities. By playing c4, we're essentially offering a gambit if Black plays ...d5, as we'll be able to capture and potentially win the center."
+      "annotation": "We're playing the English Opening move order that often transposes into a Queen's Gambit, immediately putting pressure on Black's potential ...d5 advance. This pawn move controls the important d5 and b5 squares while preparing to challenge any central pawn Black might place on d5. The c4 advance is also flexible - it supports various opening systems and gives us excellent piece coordination possibilities. By playing c4, we're essentially offering a gambit if Black plays ...d5, as we'll be able to capture and potentially win the center.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses a solid, classical approach by supporting the future ...d5 advance and developing their dark-squared bishop's potential along the long diagonal. This move creates a small pawn chain and prepares to establish a central presence with ...d5, leading us toward Queen's Gambit Declined territory. Black is showing they prefer solid, positional play over sharp tactical battles, accepting slightly less space in exchange for a sound pawn structure. The e6 move also keeps options open for various defensive setups including the Orthodox Defense, Tartakower Defense, or Semi-Tarrasch systems."
+      "annotation": "Our opponent chooses a solid, classical approach by supporting the future ...d5 advance and developing their dark-squared bishop's potential along the long diagonal. This move creates a small pawn chain and prepares to establish a central presence with ...d5, leading us toward Queen's Gambit Declined territory. Black is showing they prefer solid, positional play over sharp tactical battles, accepting slightly less space in exchange for a sound pawn structure. The e6 move also keeps options open for various defensive setups including the Orthodox Defense, Tartakower Defense, or Semi-Tarrasch systems.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central pawn structure with pieces rather than just pawns. This knight placement is incredibly flexible - it can later jump to e5, g5, or even h4 depending on how the position develops, while also eyeing potential tactics on Black's kingside. Our development follows classical principles by improving our worst-placed piece first, and we're keeping all our options open regarding our next moves. The knight on f3 also prepares potential e2-e4 advances and supports various pawn breaks in the center."
+      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central pawn structure with pieces rather than just pawns. This knight placement is incredibly flexible - it can later jump to e5, g5, or even h4 depending on how the position develops, while also eyeing potential tactics on Black's kingside. Our development follows classical principles by improving our worst-placed piece first, and we're keeping all our options open regarding our next moves. The knight on f3 also prepares potential e2-e4 advances and supports various pawn breaks in the center.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes back in the center immediately, challenging our c4 pawn and establishing their own central foothold. This is the defining move of the Queen's Gambit Declined - our opponent is declining to capture on c4 and instead chooses to maintain central tension with their own pawn. By playing ...d5, Black creates a solid pawn structure but also commits to a slightly cramped position where they'll need to find active piece play. This move leads us into the main lines of the Queen's Gambit Declined, where the central tension will define much of the middlegame strategy."
+      "annotation": "Black strikes back in the center immediately, challenging our c4 pawn and establishing their own central foothold. This is the defining move of the Queen's Gambit Declined - our opponent is declining to capture on c4 and instead chooses to maintain central tension with their own pawn. By playing ...d5, Black creates a solid pawn structure but also commits to a slightly cramped position where they'll need to find active piece play. This move leads us into the main lines of the Queen's Gambit Declined, where the central tension will define much of the middlegame strategy.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We bring our second knight into play, adding more pressure to Black's d5 pawn and preparing various central advances. This knight development is almost automatic in Queen's Gambit positions - it supports our center, prepares e2-e4 breaks, and gives us excellent piece coordination. The knight on c3 can later relocate to more active squares like e4, b5, or even a4 depending on how the position develops. We're now ready to increase the central tension and force Black to make some concrete decisions about their pawn structure."
+      "annotation": "We bring our second knight into play, adding more pressure to Black's d5 pawn and preparing various central advances. This knight development is almost automatic in Queen's Gambit positions - it supports our center, prepares e2-e4 breaks, and gives us excellent piece coordination. The knight on c3 can later relocate to more active squares like e4, b5, or even a4 depending on how the position develops. We're now ready to increase the central tension and force Black to make some concrete decisions about their pawn structure.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Our opponent chooses the Semi-Tarrasch Defense, immediately counterattacking in the center and creating sharp tactical possibilities. This is a more ambitious try than the solid Orthodox lines - Black is willing to accept an isolated queen's pawn in exchange for active piece play and central counterplay. The ...c5 move challenges our d4 pawn and threatens to trade it off, potentially giving Black's pieces more breathing room in the center. This leads to dynamic positions where both sides have chances, but Black needs to be careful not to fall behind in development while pursuing central counterplay."
+      "annotation": "Our opponent chooses the Semi-Tarrasch Defense, immediately counterattacking in the center and creating sharp tactical possibilities. This is a more ambitious try than the solid Orthodox lines - Black is willing to accept an isolated queen's pawn in exchange for active piece play and central counterplay. The ...c5 move challenges our d4 pawn and threatens to trade it off, potentially giving Black's pieces more breathing room in the center. This leads to dynamic positions where both sides have chances, but Black needs to be careful not to fall behind in development while pursuing central counterplay.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxd5",
-      "annotation": "We capture the central pawn, opening up the position and preparing to establish a strong central presence with our pawns and pieces. This exchange is almost forced - if we don't take now, Black can capture our c4 pawn and achieve a comfortable position with no structural weaknesses. By taking on d5, we're steering the game toward typical Semi-Tarrasch positions where Black will have an isolated queen's pawn but active piece play. This capture also opens the c-file for our rook and clears the way for our e2-e4 advance, which will give us a powerful pawn center."
+      "annotation": "We capture the central pawn, opening up the position and preparing to establish a strong central presence with our pawns and pieces. This exchange is almost forced - if we don't take now, Black can capture our c4 pawn and achieve a comfortable position with no structural weaknesses. By taking on d5, we're steering the game toward typical Semi-Tarrasch positions where Black will have an isolated queen's pawn but active piece play. This capture also opens the c-file for our rook and clears the way for our e2-e4 advance, which will give us a powerful pawn center.",
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxd5",
-      "annotation": "Black recaptures with the knight, developing a piece while maintaining material balance and keeping their options open for various piece configurations. This recapture is natural and strong - the knight will be well-placed on d5 and can later jump to active squares like f4, b4, or f6 depending on our setup. Our opponent is showing they understand the Semi-Tarrasch concept: accepting structural weaknesses in exchange for active piece play and tactical opportunities. The knight on d5 also puts immediate pressure on our pieces and forces us to consider how we want to continue our development."
+      "annotation": "Black recaptures with the knight, developing a piece while maintaining material balance and keeping their options open for various piece configurations. This recapture is natural and strong - the knight will be well-placed on d5 and can later jump to active squares like f4, b4, or f6 depending on our setup. Our opponent is showing they understand the Semi-Tarrasch concept: accepting structural weaknesses in exchange for active piece play and tactical opportunities. The knight on d5 also puts immediate pressure on our pieces and forces us to consider how we want to continue our development.",
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We strike at Black's centralized knight immediately, establishing the characteristic central pawn duo that defines the Exchange Variation of the Semi-Tarrasch Defense. This advance forces Black's knight to retreat and gives us a powerful space advantage in the center, controlling key squares like d5 and f5. Our pawn center will provide long-term strategic advantages, but we must be careful about Black's active piece play and potential tactics around our temporarily undefended pieces. This move commits us to sharp, tactical play where both sides will have dynamic chances, making accurate calculation essential for both players."
+      "annotation": "We strike at Black's centralized knight immediately, establishing the characteristic central pawn duo that defines the Exchange Variation of the Semi-Tarrasch Defense. This advance forces Black's knight to retreat and gives us a powerful space advantage in the center, controlling key squares like d5 and f5. Our pawn center will provide long-term strategic advantages, but we must be careful about Black's active piece play and potential tactics around our temporarily undefended pieces. This move commits us to sharp, tactical play where both sides will have dynamic chances, making accurate calculation essential for both players.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

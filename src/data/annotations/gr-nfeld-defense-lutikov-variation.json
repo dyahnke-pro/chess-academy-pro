@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, staking our claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move is the foundation of many classical systems where we'll aim to build a strong pawn center and gradually increase our space advantage. The d4 move also opens lines for our dark-squared bishop and queen, giving us multiple development options. Against most defenses, we'll follow up with moves like Nf3, c4, or e3 to support our central control."
+      "annotation": "We're opening with the queen's pawn, staking our claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move is the foundation of many classical systems where we'll aim to build a strong pawn center and gradually increase our space advantage. The d4 move also opens lines for our dark-squared bishop and queen, giving us multiple development options. Against most defenses, we'll follow up with moves like Nf3, c4, or e3 to support our central control.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to contest the center from the very first move. This hypermodern approach refuses to occupy the center with pawns right away, instead preferring to attack it from the flanks with pieces. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups. We need to be ready for Black's flexible approach, as they might follow up with moves like e6, g6, or even d5 depending on how we continue."
+      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to contest the center from the very first move. This hypermodern approach refuses to occupy the center with pawns right away, instead preferring to attack it from the flanks with pieces. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups. We need to be ready for Black's flexible approach, as they might follow up with moves like e6, g6, or even d5 depending on how we continue.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, supporting our d4 pawn while simultaneously grabbing space on the queenside and preparing to challenge any central pawn breaks Black might attempt. This move controls the crucial d5 and b5 squares, preventing Black from easily establishing pieces or pawns in those key outposts. The c4 pawn also supports a potential future e4 advance, giving us the option to build a classical pawn center. By playing c4, we're steering the game toward positions where we'll have lasting space advantages and active piece play."
+      "annotation": "We're playing the English Opening move order, supporting our d4 pawn while simultaneously grabbing space on the queenside and preparing to challenge any central pawn breaks Black might attempt. This move controls the crucial d5 and b5 squares, preventing Black from easily establishing pieces or pawns in those key outposts. The c4 pawn also supports a potential future e4 advance, giving us the option to build a classical pawn center. By playing c4, we're steering the game toward positions where we'll have lasting space advantages and active piece play.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Our opponent is signaling their intention to fianchetto the dark-squared bishop on g7, adopting the King's Indian or Grünfeld Defense setup. This hypermodern approach allows Black to exert pressure on our center from long range, particularly targeting our d4 pawn once the bishop reaches g7. The g6 move also prepares kingside castling and keeps the position flexible, as Black hasn't yet committed to a specific pawn structure in the center. We should expect Black to follow up with Bg7 and potentially d5 or e6, depending on which defense they're aiming for."
+      "annotation": "Our opponent is signaling their intention to fianchetto the dark-squared bishop on g7, adopting the King's Indian or Grünfeld Defense setup. This hypermodern approach allows Black to exert pressure on our center from long range, particularly targeting our d4 pawn once the bishop reaches g7. The g6 move also prepares kingside castling and keeps the position flexible, as Black hasn't yet committed to a specific pawn structure in the center. We should expect Black to follow up with Bg7 and potentially d5 or e6, depending on which defense they're aiming for.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to meet Black's central challenges head-on. This knight controls key central squares like e4 and b5, and importantly, it prepares to recapture on d4 if Black ever plays dxc4 followed by attacking our center. The Nc3 also keeps our options open for various pawn formations - we might still play e4 for a classical center or maintain the tension with moves like Nf3 and Be2. This flexible development move puts pressure on Black to declare their intentions more clearly."
+      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to meet Black's central challenges head-on. This knight controls key central squares like e4 and b5, and importantly, it prepares to recapture on d4 if Black ever plays dxc4 followed by attacking our center. The Nc3 also keeps our options open for various pawn formations - we might still play e4 for a classical center or maintain the tension with moves like Nf3 and Be2. This flexible development move puts pressure on Black to declare their intentions more clearly.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the heart of our pawn chain with the characteristic Grünfeld Defense break, immediately challenging our space advantage and seeking to liquidate the center. This bold move transforms the position from a King's Indian structure into the sharp, tactical world of the Grünfeld, where Black will aim to pressure our extended pawns after we recapture. Our opponent is following classical Grünfeld theory, where Black allows us to build a big center only to attack it relentlessly with pieces. We now face a critical decision about how to handle this central tension - we can capture immediately with cxd5 or maintain the tension with moves like e3 or f3."
+      "annotation": "Black strikes at the heart of our pawn chain with the characteristic Grünfeld Defense break, immediately challenging our space advantage and seeking to liquidate the center. This bold move transforms the position from a King's Indian structure into the sharp, tactical world of the Grünfeld, where Black will aim to pressure our extended pawns after we recapture. Our opponent is following classical Grünfeld theory, where Black allows us to build a big center only to attack it relentlessly with pieces. We now face a critical decision about how to handle this central tension - we can capture immediately with cxd5 or maintain the tension with moves like e3 or f3.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f3",
-      "annotation": "We're choosing the aggressive Lutikov Variation, immediately preparing to advance our e-pawn to e4 and build a massive pawn center that Black will have to respect. This move, while somewhat weakening our kingside, serves the crucial purpose of supporting the e4 advance without allowing Black's knight to jump to the annoying e4 square. The f3 move is part of a concrete plan - we're saying we're willing to accept some king safety risks in exchange for maximum central control and space advantage. Black will likely continue with their development (Bg7, 0-0) while preparing counterplay against our ambitious pawn center, making this a sharp and principled fight between classical space advantage and hypermodern piece pressure."
+      "annotation": "We're choosing the aggressive Lutikov Variation, immediately preparing to advance our e-pawn to e4 and build a massive pawn center that Black will have to respect. This move, while somewhat weakening our kingside, serves the crucial purpose of supporting the e4 advance without allowing Black's knight to jump to the annoying e4 square. The f3 move is part of a concrete plan - we're saying we're willing to accept some king safety risks in exchange for maximum central control and space advantage. Black will likely continue with their development (Bg7, 0-0) while preparing counterplay against our ambitious pawn center, making this a sharp and principled fight between classical space advantage and hypermodern piece pressure.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

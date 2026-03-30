@@ -3,63 +3,258 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to develop our pieces with maximum control over the center. This move allows our dark-squared bishop to potentially develop to f4 or g5 later, and sets up the foundation for many different pawn structures depending on how Black responds. The d4 opening is slightly less forcing than 1.e4, often leading to more positional, strategic battles where understanding pawn structures becomes crucial."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to develop our pieces with maximum control over the center. This move allows our dark-squared bishop to potentially develop to f4 or g5 later, and sets up the foundation for many different pawn structures depending on how Black responds. The d4 opening is slightly less forcing than 1.e4, often leading to more positional, strategic battles where understanding pawn structures becomes crucial.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately attacking our d4 pawn and preparing to contest the center. This flexible move keeps Black's options open - they could transpose into a King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or several other setups depending on our next moves. The knight on f6 also controls the important e4 and g4 squares, limiting some of our aggressive possibilities in the center."
+      "annotation": "Black develops the knight to its most natural square, immediately attacking our d4 pawn and preparing to contest the center. This flexible move keeps Black's options open - they could transpose into a King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or several other setups depending on our next moves. The knight on f6 also controls the important e4 and g4 squares, limiting some of our aggressive possibilities in the center.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, immediately challenging Black's potential control of the d5 square and beginning to build a strong pawn center. This move supports a future d4-d5 advance and prepares to develop our knight to c3 with maximum effect. The c4 pawn also eyes the important b5 square, which will become relevant as this game unfolds into the Benko Gambit territory where Black will sacrifice material for long-term positional compensation."
+      "annotation": "We're playing the English Opening move order, immediately challenging Black's potential control of the d5 square and beginning to build a strong pawn center. This move supports a future d4-d5 advance and prepares to develop our knight to c3 with maximum effect. The c4 pawn also eyes the important b5 square, which will become relevant as this game unfolds into the Benko Gambit territory where Black will sacrifice material for long-term positional compensation.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes back at our pawn center with this Benoni-style advance, immediately challenging our d4 pawn and creating counterplay on the queenside. This move signals Black's intention to fight for the initiative rather than allowing us to build an unchallenged pawn center. By playing c5, Black is inviting us to advance with d5, which will lead to the characteristic Benoni pawn structure where both sides have clear strategic plans - we'll aim for a kingside attack while Black seeks counterplay on the queenside."
+      "annotation": "Black strikes back at our pawn center with this Benoni-style advance, immediately challenging our d4 pawn and creating counterplay on the queenside. This move signals Black's intention to fight for the initiative rather than allowing us to build an unchallenged pawn center. By playing c5, Black is inviting us to advance with d5, which will lead to the characteristic Benoni pawn structure where both sides have clear strategic plans - we'll aim for a kingside attack while Black seeks counterplay on the queenside.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "We accept Black's challenge and advance our pawn, creating the signature Benoni pawn structure where we gain space in the center and on the kingside. This advance gives us a strong space advantage and potential attacking chances on the kingside, while Black will seek compensation through piece activity and queenside counterplay. The d5 pawn becomes a strong outpost that restricts Black's pieces, particularly limiting the scope of Black's light-squared bishop. Now Black must decide how to generate counterplay, and the most ambitious try is the Benko Gambit with b5."
+      "annotation": "We accept Black's challenge and advance our pawn, creating the signature Benoni pawn structure where we gain space in the center and on the kingside. This advance gives us a strong space advantage and potential attacking chances on the kingside, while Black will seek compensation through piece activity and queenside counterplay. The d5 pawn becomes a strong outpost that restricts Black's pieces, particularly limiting the scope of Black's light-squared bishop. Now Black must decide how to generate counterplay, and the most ambitious try is the Benko Gambit with b5.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b5",
-      "annotation": "Black launches the famous Benko Gambit, sacrificing a pawn to generate long-term positional compensation along the a-file and on the queenside light squares! This bold move is the hallmark of the Benko - Black offers material in exchange for piece activity, pressure down the a-file with the rook, and control of key light squares like c3, d4, and b2. The gambit embodies a modern approach to chess where positional factors can compensate for material, and Black will aim to create lasting pressure that's worth more than the sacrificed pawn. We should accept the gambit, as declining it often gives Black an excellent position without any material investment."
+      "annotation": "Black launches the famous Benko Gambit, sacrificing a pawn to generate long-term positional compensation along the a-file and on the queenside light squares! This bold move is the hallmark of the Benko - Black offers material in exchange for piece activity, pressure down the a-file with the rook, and control of key light squares like c3, d4, and b2. The gambit embodies a modern approach to chess where positional factors can compensate for material, and Black will aim to create lasting pressure that's worth more than the sacrificed pawn. We should accept the gambit, as declining it often gives Black an excellent position without any material investment.",
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxb5",
-      "annotation": "We accept the gambit by capturing the pawn, which is the principled approach - taking the material and then trying to consolidate our advantage. By capturing on b5, we're accepting Black's positional challenge and saying we believe our extra pawn plus careful play will be worth more than Black's compensation. This capture opens the a-file for Black's rook, which is exactly what Black wanted, but we're banking on our material advantage being decisive if we can weather the initial storm and complete our development safely."
+      "annotation": "We accept the gambit by capturing the pawn, which is the principled approach - taking the material and then trying to consolidate our advantage. By capturing on b5, we're accepting Black's positional challenge and saying we believe our extra pawn plus careful play will be worth more than Black's compensation. This capture opens the a-file for Black's rook, which is exactly what Black wanted, but we're banking on our material advantage being decisive if we can weather the initial storm and complete our development safely.",
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "a6",
-      "annotation": "Black immediately intensifies the pressure with this key follow-up, attacking our advanced b5 pawn and forcing us to make a crucial decision about how to handle it. This move is essential to the Benko Gambit's logic - Black needs to keep attacking our pawn structure and prevent us from simply consolidating with a6 being answered by b6. The a6 advance also prepares to potentially recapture on b5 with the a-pawn, which would give Black the semi-open a-file that's so crucial to the gambit's compensation. We'll typically retreat the pawn to a4 or b6, but each choice has its own strategic implications."
+      "annotation": "Black immediately intensifies the pressure with this key follow-up, attacking our advanced b5 pawn and forcing us to make a crucial decision about how to handle it. This move is essential to the Benko Gambit's logic - Black needs to keep attacking our pawn structure and prevent us from simply consolidating with a6 being answered by b6. The a6 advance also prepares to potentially recapture on b5 with the a-pawn, which would give Black the semi-open a-file that's so crucial to the gambit's compensation. We'll typically retreat the pawn to a4 or b6, but each choice has its own strategic implications.",
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting our central pawn structure and preparing to meet Black's threats with solid development. The knight on c3 supports our d5 pawn, contests the important e4 square, and keeps our options open for how to handle Black's queenside pressure. This natural developing move also prepares potential advances like e4, which would give us a strong pawn center and space advantage. However, we need to be mindful that this knight might become a target for Black's pieces, particularly if Black can establish pressure along the queenside files."
+      "annotation": "We develop our knight to its most active square, supporting our central pawn structure and preparing to meet Black's threats with solid development. The knight on c3 supports our d5 pawn, contests the important e4 square, and keeps our options open for how to handle Black's queenside pressure. This natural developing move also prepares potential advances like e4, which would give us a strong pawn center and space advantage. However, we need to be mindful that this knight might become a target for Black's pieces, particularly if Black can establish pressure along the queenside files.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "axb5",
-      "annotation": "Black recaptures the pawn, opening the crucial a-file that provides the backbone of the Benko Gambit's compensation. Now Black's rook will swing to a8 and create immediate pressure along this file, targeting our a2 pawn and potentially infiltrating our position. The opened a-file, combined with Black's active piece play and pressure on the queenside light squares, gives Black the dynamic compensation they sought when sacrificing the b-pawn. We need to be very careful about our king safety and piece coordination, as Black's pressure can become overwhelming if we're not precise in our defensive setup."
+      "annotation": "Black recaptures the pawn, opening the crucial a-file that provides the backbone of the Benko Gambit's compensation. Now Black's rook will swing to a8 and create immediate pressure along this file, targeting our a2 pawn and potentially infiltrating our position. The opened a-file, combined with Black's active piece play and pressure on the queenside light squares, gives Black the dynamic compensation they sought when sacrificing the b-pawn. We need to be very careful about our king safety and piece coordination, as Black's pressure can become overwhelming if we're not precise in our defensive setup.",
+      "arrows": [
+        {
+          "from": "a6",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We establish a strong pawn center by advancing to e4, gaining significant space and preparing to launch a kingside attack that's our main source of counterplay against Black's queenside pressure. This central advance gives us excellent control over key squares like d5 and f5, while also opening lines for our pieces to develop actively. The pawn on e4 supports a potential f4-f5 advance later, which could create attacking chances against Black's king. However, we must be mindful that this advance also opens the e-file, and Black might be able to create counterplay there if we're not careful with our king safety."
+      "annotation": "We establish a strong pawn center by advancing to e4, gaining significant space and preparing to launch a kingside attack that's our main source of counterplay against Black's queenside pressure. This central advance gives us excellent control over key squares like d5 and f5, while also opening lines for our pieces to develop actively. The pawn on e4 supports a potential f4-f5 advance later, which could create attacking chances against Black's king. However, we must be mindful that this advance also opens the e-file, and Black might be able to create counterplay there if we're not careful with our king safety.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b4",
-      "annotation": "Black continues the thematic Benko plan by advancing the b-pawn, attacking our knight and forcing us to make another decision about our piece placement. This advance gains space on the queenside and potentially prepares to establish a strong outpost on c3 or create further pawn weaknesses in our position. The b4 pawn also restricts our knight's mobility and forces us to consider whether to retreat it or find another square. Black's plan is working perfectly - they're generating active piece play and putting constant pressure on our position, making it difficult for us to simply consolidate our extra material."
+      "annotation": "Black continues the thematic Benko plan by advancing the b-pawn, attacking our knight and forcing us to make another decision about our piece placement. This advance gains space on the queenside and potentially prepares to establish a strong outpost on c3 or create further pawn weaknesses in our position. The b4 pawn also restricts our knight's mobility and forces us to consider whether to retreat it or find another square. Black's plan is working perfectly - they're generating active piece play and putting constant pressure on our position, making it difficult for us to simply consolidate our extra material.",
+      "arrows": [
+        {
+          "from": "b5",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nb5",
-      "annotation": "We retreat our knight to b5, where it finds an active outpost attacking Black's d6 pawn and maintaining pressure in Black's position. This knight placement is quite strong because it can't easily be driven away by Black's pawns, and it eyes several important squares including c7 and d6. The knight on b5 also supports potential advances on the queenside and maintains some control over the c7 square, which could become important if Black tries to reroute pieces. However, we need to be aware that this knight is somewhat out of play for defending our kingside, so we must coordinate our other pieces carefully to maintain balance between offense and defense."
+      "annotation": "We retreat our knight to b5, where it finds an active outpost attacking Black's d6 pawn and maintaining pressure in Black's position. This knight placement is quite strong because it can't easily be driven away by Black's pawns, and it eyes several important squares including c7 and d6. The knight on b5 also supports potential advances on the queenside and maintains some control over the c7 square, which could become important if Black tries to reroute pieces. However, we need to be aware that this knight is somewhat out of play for defending our kingside, so we must coordinate our other pieces carefully to maintain balance between offense and defense.",
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies their pawn structure with this natural advance, defending against our knight's pressure while also preparing to complete their development with moves like Bd7 or Nbd7. This move creates a solid foundation for Black's position and ensures that our knight on b5 doesn't create immediate tactical problems. The d6 pawn also supports a potential e6 advance later, which could challenge our strong pawn center and create more piece activity for Black. Black is following the typical Benko template - solid central structure combined with active piece play and queenside pressure to compensate for the sacrificed pawn."
+      "annotation": "Black solidifies their pawn structure with this natural advance, defending against our knight's pressure while also preparing to complete their development with moves like Bd7 or Nbd7. This move creates a solid foundation for Black's position and ensures that our knight on b5 doesn't create immediate tactical problems. The d6 pawn also supports a potential e6 advance later, which could challenge our strong pawn center and create more piece activity for Black. Black is following the typical Benko template - solid central structure combined with active piece play and queenside pressure to compensate for the sacrificed pawn.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bc4",
-      "annotation": "We develop our bishop to an aggressive square, pointing directly at Black's f7 pawn and preparing to castle kingside while maintaining pressure on Black's position. The bishop on c4 is well-placed in this structure, as it controls the important d5 square, supports our central pawn advance, and creates potential tactical threats against Black's kingside. This development also prepares us to castle short and get our king to safety, which is crucial given Black's active piece play and potential counterattacks. The Nescafe Frappe Attack name comes from this aggressive bishop placement combined with our space advantage, creating a sharp position where both sides have clear attacking chances."
+      "annotation": "We develop our bishop to an aggressive square, pointing directly at Black's f7 pawn and preparing to castle kingside while maintaining pressure on Black's position. The bishop on c4 is well-placed in this structure, as it controls the important d5 square, supports our central pawn advance, and creates potential tactical threats against Black's kingside. This development also prepares us to castle short and get our king to safety, which is crucial given Black's active piece play and potential counterattacks. The Nescafe Frappe Attack name comes from this aggressive bishop placement combined with our space advantage, creating a sharp position where both sides have clear attacking chances.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

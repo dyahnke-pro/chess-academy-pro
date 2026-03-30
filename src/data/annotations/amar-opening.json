@@ -3,7 +3,20 @@
   "moveAnnotations": [
     {
       "san": "Nh3",
-      "annotation": "We're playing the Amar Opening, an unconventional first move that immediately puts your knight on the rim—a position chess principles typically discourage. However, this move has a specific purpose: we're heading toward f4, where the knight will support a potential pawn push to e4 while controlling key central squares like g5 and e5. The idea is to build an unusual but solid pawn center while keeping our pieces flexible. This opening is rare at top levels because it's slow and allows Black excellent counterplay, but it can work well against unprepared opponents who don't know how to exploit the awkward knight placement."
+      "annotation": "We're playing the Amar Opening, an unconventional first move that immediately puts your knight on the rim—a position chess principles typically discourage. However, this move has a specific purpose: we're heading toward f4, where the knight will support a potential pawn push to e4 while controlling key central squares like g5 and e5. The idea is to build an unusual but solid pawn center while keeping our pieces flexible. This opening is rare at top levels because it's slow and allows Black excellent counterplay, but it can work well against unprepared opponents who don't know how to exploit the awkward knight placement.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "h3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

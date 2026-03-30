@@ -3,19 +3,71 @@
   "moveAnnotations": [
     {
       "san": "b4",
-      "annotation": "We're starting with the Polish Opening, also called the Sokolsky Opening—an unusual flank move that's rarely seen at the highest levels but contains real strategic ideas. By advancing the b-pawn, we immediately control the important c5 and a5 squares, preparing to fianchetto our light-squared bishop on b2. This move exemplifies the hypermodern approach: instead of occupying the center immediately, we prepare to control it from the flanks and provoke Black's center. It's a psychologically interesting choice that avoids well-trodden theory and can catch unprepared opponents off-guard."
+      "annotation": "We're starting with the Polish Opening, also called the Sokolsky Opening—an unusual flank move that's rarely seen at the highest levels but contains real strategic ideas. By advancing the b-pawn, we immediately control the important c5 and a5 squares, preparing to fianchetto our light-squared bishop on b2. This move exemplifies the hypermodern approach: instead of occupying the center immediately, we prepare to control it from the flanks and provoke Black's center. It's a psychologically interesting choice that avoids well-trodden theory and can catch unprepared opponents off-guard.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black responds energetically by claiming the center with the e-pawn—this is the most natural try, giving Black a space advantage in the middle. By playing e5, Black prevents us from easily establishing control over d4 and seizes the initiative for piece placement. This is the Czech Defense specifically, and it shows Black's intent to play actively rather than defensively respond to our flank expansion. Black is essentially saying they'll meet our hypermodern setup with classical central pressure."
+      "annotation": "Black responds energetically by claiming the center with the e-pawn—this is the most natural try, giving Black a space advantage in the middle. By playing e5, Black prevents us from easily establishing control over d4 and seizes the initiative for piece placement. This is the Czech Defense specifically, and it shows Black's intent to play actively rather than defensively respond to our flank expansion. Black is essentially saying they'll meet our hypermodern setup with classical central pressure.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb2",
-      "annotation": "Now we complete our fianchetto setup by placing the bishop on b2, where it controls the long diagonal pointing toward g7 and exerts pressure along the a1-h8 diagonal. This bishop becomes a key piece in our strategy, especially if we later push a4 to open lines or support play on the queenside. By developing this piece immediately after our opening move, we're building a coherent strategic plan: controlling light squares and preparing for moves like a4 and potentially f4 to challenge Black's center. Notice that this setup prevents Black from playing ...c5 easily without allowing us pressure on the long diagonal."
+      "annotation": "Now we complete our fianchetto setup by placing the bishop on b2, where it controls the long diagonal pointing toward g7 and exerts pressure along the a1-h8 diagonal. This bishop becomes a key piece in our strategy, especially if we later push a4 to open lines or support play on the queenside. By developing this piece immediately after our opening move, we're building a coherent strategic plan: controlling light squares and preparing for moves like a4 and potentially f4 to challenge Black's center. Notice that this setup prevents Black from playing ...c5 easily without allowing us pressure on the long diagonal.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "b2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the center and prepares to support the e5 pawn, while also eyeing kingside expansion with moves like ...f6 or ...g6. The d6 pawn move is flexible and solid, allowing Black to potentially reroute the d-pawn's influence or prepare ...c6 for a stronger pawn structure. By avoiding ...d5 immediately, Black keeps options open while maintaining the space advantage—this is patient, positional play. Black is essentially saying they'll build around their e5 strongpoint rather than rush to establish a rigid pawn structure."
+      "annotation": "Black solidifies the center and prepares to support the e5 pawn, while also eyeing kingside expansion with moves like ...f6 or ...g6. The d6 pawn move is flexible and solid, allowing Black to potentially reroute the d-pawn's influence or prepare ...c6 for a stronger pawn structure. By avoiding ...d5 immediately, Black keeps options open while maintaining the space advantage—this is patient, positional play. Black is essentially saying they'll build around their e5 strongpoint rather than rush to establish a rigid pawn structure.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

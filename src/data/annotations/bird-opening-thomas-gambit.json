@@ -3,39 +3,156 @@
   "moveAnnotations": [
     {
       "san": "f4",
-      "annotation": "We're playing the Bird Opening, an offbeat but solid first move that immediately stakes a claim to e5 and opens the long diagonal for our bishop. Unlike 1.e4 or 1.d4, this move is less forcing and gives Black more flexibility, but it avoids main-line theory and often surprises unprepared opponents. The f4 pawn supports a future e4 advance while preparing to fianchetto our light-squared bishop."
+      "annotation": "We're playing the Bird Opening, an offbeat but solid first move that immediately stakes a claim to e5 and opens the long diagonal for our bishop. Unlike 1.e4 or 1.d4, this move is less forcing and gives Black more flexibility, but it avoids main-line theory and often surprises unprepared opponents. The f4 pawn supports a future e4 advance while preparing to fianchetto our light-squared bishop.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our center by striking at e4 before we occupy it—this is the principled response to Bird's Opening. By playing d5, Black claims space in the center and prevents us from easily achieving e4, forcing us to respond carefully to maintain our setup."
+      "annotation": "Black immediately challenges our center by striking at e4 before we occupy it—this is the principled response to Bird's Opening. By playing d5, Black claims space in the center and prevents us from easily achieving e4, forcing us to respond carefully to maintain our setup.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b3",
-      "annotation": "We introduce the Thomas Gambit, a rare and creative idea where we're willing to sacrifice the b3 pawn to accelerate our fianchetto setup and control the long diagonal. This move prepares Bb2, where our bishop will exert long-range pressure along the a1-h8 diagonal, and it's less direct than recapturing on d5 but gives us dynamic compensation through piece activity."
+      "annotation": "We introduce the Thomas Gambit, a rare and creative idea where we're willing to sacrifice the b3 pawn to accelerate our fianchetto setup and control the long diagonal. This move prepares Bb2, where our bishop will exert long-range pressure along the a1-h8 diagonal, and it's less direct than recapturing on d5 but gives us dynamic compensation through piece activity.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops naturally, controlling e4 and d5 while improving piece coordination. This move also prepares to support the d4 pawn or challenge our pieces, keeping the position flexible and preventing us from getting too comfortable with our setup."
+      "annotation": "Black develops naturally, controlling e4 and d5 while improving piece coordination. This move also prepares to support the d4 pawn or challenge our pieces, keeping the position flexible and preventing us from getting too comfortable with our setup.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb2",
-      "annotation": "We complete the fianchetto and activate our light-squared bishop on the long diagonal—this is the thematic follow-up to b3. The bishop now eyes d4 and f6, putting pressure on Black's pieces and the fragile pawn structure. We've sacrificed a pawn for dynamic piece play and control of key squares."
+      "annotation": "We complete the fianchetto and activate our light-squared bishop on the long diagonal—this is the thematic follow-up to b3. The bishop now eyes d4 and f6, putting pressure on Black's pieces and the fragile pawn structure. We've sacrificed a pawn for dynamic piece play and control of key squares.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "b2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "Black advances the central pawn, which we allowed with our unorthodox setup—this is a critical decision point where Black tests whether our compensation is real. By pushing to d4, Black stakes space and opens lines, but also commits the pawn where it may become a target for our pieces and tactics."
+      "annotation": "Black advances the central pawn, which we allowed with our unorthodox setup—this is a critical decision point where Black tests whether our compensation is real. By pushing to d4, Black stakes space and opens lines, but also commits the pawn where it may become a target for our pieces and tactics.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight naturally, attacking nothing but improving our piece coordination and preparing to support our center. From f3, the knight controls e5 and d4, prevents Black from easily pushing ...e5, and keeps options open for later repositioning to e1 or d2 if needed."
+      "annotation": "We develop our knight naturally, attacking nothing but improving our piece coordination and preparing to support our center. From f3, the knight controls e5 and d4, prevents Black from easily pushing ...e5, and keeps options open for later repositioning to e1 or d2 if needed.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at the center from the side, a typical Sicilian-style idea—by playing c5, Black supports the d4 pawn and fights for central space. This move also hints at a potential advance to c4, which would challenge our bishop and disrupt our fianchetto control."
+      "annotation": "Black strikes at the center from the side, a typical Sicilian-style idea—by playing c5, Black supports the d4 pawn and fights for central space. This move also hints at a potential advance to c4, which would challenge our bishop and disrupt our fianchetto control.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We reinforce the center and prepare to challenge Black's d4 pawn with moves like exd4 if needed, while keeping flexibility to play f5 later to support e4. The move also opens escape squares for our king and prepares to develop our dark-squared bishop (likely to e2 or d3), rounding out our development while maintaining tension in the position."
+      "annotation": "We reinforce the center and prepare to challenge Black's d4 pawn with moves like exd4 if needed, while keeping flexibility to play f5 later to support e4. The move also opens escape squares for our king and prepares to develop our dark-squared bishop (likely to e2 or d3), rounding out our development while maintaining tension in the position.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

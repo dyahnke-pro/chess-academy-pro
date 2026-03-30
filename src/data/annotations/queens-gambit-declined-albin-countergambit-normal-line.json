@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move characterizes positional openings where we aim for solid pawn structure and gradual piece development. The d4 opening typically leads to rich middlegame positions with strategic maneuvering rather than immediate tactical fireworks. Our plan revolves around controlling the center and preparing moves like Nf3, c4, and potentially Bf4 or Bg5 depending on how Black responds."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move characterizes positional openings where we aim for solid pawn structure and gradual piece development. The d4 opening typically leads to rich middlegame positions with strategic maneuvering rather than immediate tactical fireworks. Our plan revolves around controlling the center and preparing moves like Nf3, c4, and potentially Bf4 or Bg5 depending on how Black responds.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black mirrors our central pawn move, immediately contesting the e4 and c4 squares while establishing a symmetrical pawn structure. This solid response shows Black wants to maintain central equality and avoid giving us a free hand in the center. The d5 pawn also opens lines for Black's dark-squared bishop and queen, similar to our setup. Black is essentially saying 'I'll match you move for move in the center' rather than allowing us to dominate with a broad pawn center."
+      "annotation": "Black mirrors our central pawn move, immediately contesting the e4 and c4 squares while establishing a symmetrical pawn structure. This solid response shows Black wants to maintain central equality and avoid giving us a free hand in the center. The d5 pawn also opens lines for Black's dark-squared bishop and queen, similar to our setup. Black is essentially saying 'I'll match you move for move in the center' rather than allowing us to dominate with a broad pawn center.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're launching the famous Queen's Gambit, offering our c-pawn to deflect Black's central d5 pawn and gain space advantage. This move attacks the d5 pawn directly, forcing Black to make a crucial decision about the pawn structure. If Black captures with dxc4, we can recapture and gain central control with our d-pawn, while if Black maintains the tension, we're preparing to build pressure. The Queen's Gambit is one of the most principled ways to challenge Black's central pawn, as we're willing to invest material to gain positional superiority."
+      "annotation": "We're launching the famous Queen's Gambit, offering our c-pawn to deflect Black's central d5 pawn and gain space advantage. This move attacks the d5 pawn directly, forcing Black to make a crucial decision about the pawn structure. If Black captures with dxc4, we can recapture and gain central control with our d-pawn, while if Black maintains the tension, we're preparing to build pressure. The Queen's Gambit is one of the most principled ways to challenge Black's central pawn, as we're willing to invest material to gain positional superiority.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black launches the sharp and aggressive Albin Countergambit, immediately striking at our d4 pawn and turning the tables on our Queen's Gambit offer! This move shows Black refuses to be passive and instead creates immediate central tension by attacking our pawn. The e5 advance opens lines for Black's light-squared bishop toward our kingside and prepares to potentially push d4 if we capture. Black is essentially saying 'forget your Queen's Gambit - let's fight for the initiative right now' and this leads to sharp, tactical play where both sides must be precise."
+      "annotation": "Black launches the sharp and aggressive Albin Countergambit, immediately striking at our d4 pawn and turning the tables on our Queen's Gambit offer! This move shows Black refuses to be passive and instead creates immediate central tension by attacking our pawn. The e5 advance opens lines for Black's light-squared bishop toward our kingside and prepares to potentially push d4 if we capture. Black is essentially saying 'forget your Queen's Gambit - let's fight for the initiative right now' and this leads to sharp, tactical play where both sides must be precise.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe5",
-      "annotation": "We're accepting Black's challenge by capturing the e5 pawn, which gives us material equality but allows Black to advance the dangerous d4 pawn. This capture opens the d-file for our queen and removes Black's central pawn, but we must be prepared for Black's aggressive pawn advance. The alternative would be to retreat our d4 pawn, but that would give Black excellent central control. By taking on e5, we're committing to a sharp tactical battle where precise calculation will be crucial, as Black's d4 pawn will become a powerful wedge in our position."
+      "annotation": "We're accepting Black's challenge by capturing the e5 pawn, which gives us material equality but allows Black to advance the dangerous d4 pawn. This capture opens the d-file for our queen and removes Black's central pawn, but we must be prepared for Black's aggressive pawn advance. The alternative would be to retreat our d4 pawn, but that would give Black excellent central control. By taking on e5, we're committing to a sharp tactical battle where precise calculation will be crucial, as Black's d4 pawn will become a powerful wedge in our position.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "Black immediately advances the d-pawn, creating a powerful passed pawn in the center that cramps our position and restricts our piece development. This aggressive pawn push is the point of the Albin Countergambit - Black sacrifices the e5 pawn to create this menacing advanced pawn. The d4 pawn attacks our c3 square, making it difficult for us to develop our knight naturally, and also eyes the dangerous c3 and e3 squares. Black's idea is to use this space advantage and development difficulties to launch a quick attack against our somewhat uncoordinated pieces."
+      "annotation": "Black immediately advances the d-pawn, creating a powerful passed pawn in the center that cramps our position and restricts our piece development. This aggressive pawn push is the point of the Albin Countergambit - Black sacrifices the e5 pawn to create this menacing advanced pawn. The d4 pawn attacks our c3 square, making it difficult for us to develop our knight naturally, and also eyes the dangerous c3 and e3 squares. Black's idea is to use this space advantage and development difficulties to launch a quick attack against our somewhat uncoordinated pieces.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 square and prepares to support our position against Black's aggressive pawn center. This move also prevents Black from advancing further with moves like e4, while keeping our options open for piece coordination. The knight on f3 can potentially jump to e5 or d2 depending on how the position develops, and it's a key piece in defending against Black's coming attack. While Black's d4 pawn looks menacing, we're calmly developing and preparing to coordinate our pieces - the key to handling the Albin Countergambit is solid development rather than panicking about the advanced pawn."
+      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 square and prepares to support our position against Black's aggressive pawn center. This move also prevents Black from advancing further with moves like e4, while keeping our options open for piece coordination. The knight on f3 can potentially jump to e5 or d2 depending on how the position develops, and it's a key piece in defending against Black's coming attack. While Black's d4 pawn looks menacing, we're calmly developing and preparing to coordinate our pieces - the key to handling the Albin Countergambit is solid development rather than panicking about the advanced pawn.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

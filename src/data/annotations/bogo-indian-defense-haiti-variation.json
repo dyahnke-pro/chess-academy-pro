@@ -3,35 +3,139 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, staking an immediate claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move launches us into the rich world of 1.d4 openings, where we typically aim for a solid positional foundation before launching our attack. Unlike 1.e4 openings that often lead to sharp tactical battles early on, 1.d4 usually produces more strategic, maneuvering games where understanding pawn structures and piece coordination becomes crucial. Our plan revolves around building a strong pawn center, developing our pieces harmoniously, and gradually improving our position before striking."
+      "annotation": "We're opening with the queen's pawn, staking an immediate claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move launches us into the rich world of 1.d4 openings, where we typically aim for a solid positional foundation before launching our attack. Unlike 1.e4 openings that often lead to sharp tactical battles early on, 1.d4 usually produces more strategic, maneuvering games where understanding pawn structures and piece coordination becomes crucial. Our plan revolves around building a strong pawn center, developing our pieces harmoniously, and gradually improving our position before striking.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this hypermodern approach, attacking the d4 pawn and preparing to undermine our center from afar rather than occupying it directly. This knight move is incredibly flexible, keeping Black's options open for various defensive setups including the King's Indian, Queen's Indian, or Nimzo-Indian defenses depending on how we continue. Our opponent is following the principle of developing with tempo by putting immediate pressure on our center, forcing us to make decisions about how to support our d4 pawn. The knight on f6 also prepares kingside castling and keeps an eye on the important e4 square."
+      "annotation": "Black immediately challenges our central pawn with this hypermodern approach, attacking the d4 pawn and preparing to undermine our center from afar rather than occupying it directly. This knight move is incredibly flexible, keeping Black's options open for various defensive setups including the King's Indian, Queen's Indian, or Nimzo-Indian defenses depending on how we continue. Our opponent is following the principle of developing with tempo by putting immediate pressure on our center, forcing us to make decisions about how to support our d4 pawn. The knight on f6 also prepares kingside castling and keeps an eye on the important e4 square.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order within our 1.d4 system, supporting our d4 pawn while simultaneously grabbing space on the queenside and controlling the crucial d5 and b5 squares. This pawn advance is the hallmark of the Queen's Gambit complex, where we're willing to offer the c4 pawn (though it's rarely taken immediately) to maintain our central dominance and gain a tempo advantage in development. The c4 pawn also opens up our queen's path along the a2-g8 diagonal and prepares natural development of our queen's knight to c3. By combining d4 and c4, we've created what's called the 'Maróczy bind' formation potential, giving us excellent control over the central dark squares."
+      "annotation": "We're playing the English Opening move order within our 1.d4 system, supporting our d4 pawn while simultaneously grabbing space on the queenside and controlling the crucial d5 and b5 squares. This pawn advance is the hallmark of the Queen's Gambit complex, where we're willing to offer the c4 pawn (though it's rarely taken immediately) to maintain our central dominance and gain a tempo advantage in development. The c4 pawn also opens up our queen's path along the a2-g8 diagonal and prepares natural development of our queen's knight to c3. By combining d4 and c4, we've created what's called the 'Maróczy bind' formation potential, giving us excellent control over the central dark squares.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses a solid, classical approach by supporting the d5 advance and preparing to complete development with moves like Be7 and castling kingside. This pawn move signals Black's intention to play one of the Indian defenses rather than accepting our Queen's Gambit or playing the more aggressive King's Indian setup with g6. The e6 pawn creates a solid pawn chain and opens up the diagonal for Black's light-squared bishop, though it does somewhat restrict the dark-squared bishop's natural development to f5 or g4. This move keeps the position flexible while maintaining a sound, classical structure that's been trusted by world champions for over a century."
+      "annotation": "Our opponent chooses a solid, classical approach by supporting the d5 advance and preparing to complete development with moves like Be7 and castling kingside. This pawn move signals Black's intention to play one of the Indian defenses rather than accepting our Queen's Gambit or playing the more aggressive King's Indian setup with g6. The e6 pawn creates a solid pawn chain and opens up the diagonal for Black's light-squared bishop, though it does somewhat restrict the dark-squared bishop's natural development to f5 or g4. This move keeps the position flexible while maintaining a sound, classical structure that's been trusted by world champions for over a century.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn, controls the important e5 and h4 squares, and prepares kingside castling. This move fits perfectly with our strategic plan of completing development before committing to any particular pawn structure or attacking scheme. The knight on f3 also prevents any immediate ...Ng4 ideas from Black and maintains maximum flexibility in our setup - we can still play systems with g3 and Bg2, or more classical development with Be2. By developing this knight before committing our light-squared bishop, we're keeping our opponent guessing about our exact intentions while maintaining all our positional advantages."
+      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn, controls the important e5 and h4 squares, and prepares kingside castling. This move fits perfectly with our strategic plan of completing development before committing to any particular pawn structure or attacking scheme. The knight on f3 also prevents any immediate ...Ng4 ideas from Black and maintains maximum flexibility in our setup - we can still play systems with g3 and Bg2, or more classical development with Be2. By developing this knight before committing our light-squared bishop, we're keeping our opponent guessing about our exact intentions while maintaining all our positional advantages.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb4+",
-      "annotation": "Black springs the Bogo-Indian Defense, immediately putting our king in check and forcing us to make a critical decision about how to block this check. This bishop move is the defining characteristic of the Bogo-Indian, where Black aims to trade off our potentially strong light-squared bishop or force us into a slightly awkward piece configuration. The check creates immediate tactical tension and prevents us from castling kingside until we resolve this situation, giving Black some initiative despite being a move behind in development. Our opponent is following the hypermodern principle of using pieces rather than pawns to control the center, and this bishop move specifically targets our king's safety while maintaining pressure on our position."
+      "annotation": "Black springs the Bogo-Indian Defense, immediately putting our king in check and forcing us to make a critical decision about how to block this check. This bishop move is the defining characteristic of the Bogo-Indian, where Black aims to trade off our potentially strong light-squared bishop or force us into a slightly awkward piece configuration. The check creates immediate tactical tension and prevents us from castling kingside until we resolve this situation, giving Black some initiative despite being a move behind in development. Our opponent is following the hypermodern principle of using pieces rather than pawns to control the center, and this bishop move specifically targets our king's safety while maintaining pressure on our position.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bd2",
-      "annotation": "We're choosing the most principled response to the check, developing our dark-squared bishop while maintaining our pawn structure and keeping maximum flexibility in our position. This move allows Black to trade bishops if desired, which would give us the two-bishop advantage but also eliminate one of our key defensive pieces and potentially weaken our kingside dark squares. By playing Bd2, we're showing that we're not afraid of the bishop trade and we're preparing to recapture with the bishop if Black takes, maintaining our development advantage and central control. This natural developing move also prepares queenside castling as an alternative to kingside castling, giving us additional strategic options as the game progresses."
+      "annotation": "We're choosing the most principled response to the check, developing our dark-squared bishop while maintaining our pawn structure and keeping maximum flexibility in our position. This move allows Black to trade bishops if desired, which would give us the two-bishop advantage but also eliminate one of our key defensive pieces and potentially weaken our kingside dark squares. By playing Bd2, we're showing that we're not afraid of the bishop trade and we're preparing to recapture with the bishop if Black takes, maintaining our development advantage and central control. This natural developing move also prepares queenside castling as an alternative to kingside castling, giving us additional strategic options as the game progresses.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black continues developing with tempo by bringing the knight to its most active square, where it eyes our d4 pawn and prepares to support central advances like ...d5 or ...f5 depending on how the position evolves. This is the Haiti Variation of the Bogo-Indian, a somewhat uncommon but perfectly sound continuation that aims for rapid piece development and central pressure rather than the more common ...a5 or ...c5 pawn advances. The knight on c6 creates additional threats against our center and prepares Black to castle kingside while maintaining maximum piece activity. Our opponent is prioritizing piece development and central control over immediate pawn breaks, which leads to rich middlegame positions where both sides have chances for active play."
+      "annotation": "Black continues developing with tempo by bringing the knight to its most active square, where it eyes our d4 pawn and prepares to support central advances like ...d5 or ...f5 depending on how the position evolves. This is the Haiti Variation of the Bogo-Indian, a somewhat uncommon but perfectly sound continuation that aims for rapid piece development and central pressure rather than the more common ...a5 or ...c5 pawn advances. The knight on c6 creates additional threats against our center and prepares Black to castle kingside while maintaining maximum piece activity. Our opponent is prioritizing piece development and central control over immediate pawn breaks, which leads to rich middlegame positions where both sides have chances for active play.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

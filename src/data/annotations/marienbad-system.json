@@ -3,35 +3,139 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, staking our claim to the center and preparing to develop our pieces harmoniously. This move immediately controls the important e5 and c5 squares, preventing Black from establishing a pawn there easily. The d4 opening leads to rich positional play where we'll typically aim for a strong pawn center, active piece development, and often kingside attacking chances. Unlike 1.e4 which leads to more tactical, open games, 1.d4 usually produces strategic middlegames where understanding pawn structures and piece coordination becomes crucial."
+      "annotation": "We're opening with the queen's pawn, staking our claim to the center and preparing to develop our pieces harmoniously. This move immediately controls the important e5 and c5 squares, preventing Black from establishing a pawn there easily. The d4 opening leads to rich positional play where we'll typically aim for a strong pawn center, active piece development, and often kingside attacking chances. Unlike 1.e4 which leads to more tactical, open games, 1.d4 usually produces strategic middlegames where understanding pawn structures and piece coordination becomes crucial.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet - they could follow up with ...e6 (heading for a Queen's Gambit or Nimzo-Indian), ...g6 (going for a King's Indian setup), or even ...b6 as we'll see. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to expand in the center immediately. This move keeps Black's options open while developing a piece toward the center."
+      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet - they could follow up with ...e6 (heading for a Queen's Gambit or Nimzo-Indian), ...g6 (going for a King's Indian setup), or even ...b6 as we'll see. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to expand in the center immediately. This move keeps Black's options open while developing a piece toward the center.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and controlling the important e5 and g5 squares. This natural developing move also prepares several opening systems - we could continue with c4 (heading for a Queen's Gambit), Bg5 (going for a Torre Attack), or as we'll see, g3 leading to a King's Indian Attack setup. The knight on f3 is beautifully placed because it can't easily be kicked away by pawns, unlike a knight that might go to c3 where ...d5-d4 could attack it later. From f3, our knight supports central control while keeping our options flexible for the next few moves."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and controlling the important e5 and g5 squares. This natural developing move also prepares several opening systems - we could continue with c4 (heading for a Queen's Gambit), Bg5 (going for a Torre Attack), or as we'll see, g3 leading to a King's Indian Attack setup. The knight on f3 is beautifully placed because it can't easily be kicked away by pawns, unlike a knight that might go to c3 where ...d5-d4 could attack it later. From f3, our knight supports central control while keeping our options flexible for the next few moves.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b6",
-      "annotation": "Black chooses the Queen's Indian Defense approach, preparing to fianchetto the dark-squared bishop on b7 where it will exert tremendous pressure along the long diagonal toward our kingside. This move signals Black's intention to avoid the main lines of the Queen's Gambit (which would come after ...e6 and our c4) and instead pursue a hypermodern strategy of controlling the center from afar. The pawn on b6 also prepares potential expansion on the queenside later with moves like ...a5 and ...c5, giving Black counterplay. However, Black does weaken the c6 and a6 squares slightly, which we might be able to exploit later in the game."
+      "annotation": "Black chooses the Queen's Indian Defense approach, preparing to fianchetto the dark-squared bishop on b7 where it will exert tremendous pressure along the long diagonal toward our kingside. This move signals Black's intention to avoid the main lines of the Queen's Gambit (which would come after ...e6 and our c4) and instead pursue a hypermodern strategy of controlling the center from afar. The pawn on b6 also prepares potential expansion on the queenside later with moves like ...a5 and ...c5, giving Black counterplay. However, Black does weaken the c6 and a6 squares slightly, which we might be able to exploit later in the game.",
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g3",
-      "annotation": "We're entering the Marienbad System, a flexible King's Indian Attack setup where we'll fianchetto our light-squared bishop on g2 to control the long diagonal. This move prepares Bg2, after which our bishop will be a monster piece aimed directly at Black's kingside, particularly if Black castles short. The g3 move also supports a potential f4 advance later, which could launch a dangerous kingside attack - a hallmark of the King's Indian Attack. By avoiding c4 (the Queen's Gambit), we're keeping the position more closed and strategic, planning to build up our position methodically while maintaining attacking potential on the kingside."
+      "annotation": "We're entering the Marienbad System, a flexible King's Indian Attack setup where we'll fianchetto our light-squared bishop on g2 to control the long diagonal. This move prepares Bg2, after which our bishop will be a monster piece aimed directly at Black's kingside, particularly if Black castles short. The g3 move also supports a potential f4 advance later, which could launch a dangerous kingside attack - a hallmark of the King's Indian Attack. By avoiding c4 (the Queen's Gambit), we're keeping the position more closed and strategic, planning to build up our position methodically while maintaining attacking potential on the kingside.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb7",
-      "annotation": "Black completes the fianchetto, placing the dark-squared bishop on its dream square where it controls the long diagonal and puts immediate pressure on our center. This bishop is now eyeing our e4 square (preventing us from advancing e2-e4 easily) and also supports Black's control of the dark squares throughout the position. The bishop on b7 works harmoniously with the pawn structure Black is building - it's a key piece in the Queen's Indian setup. However, Black has now committed to a somewhat slow development plan, and we need to be alert for opportunities to seize the initiative while Black is still completing development."
+      "annotation": "Black completes the fianchetto, placing the dark-squared bishop on its dream square where it controls the long diagonal and puts immediate pressure on our center. This bishop is now eyeing our e4 square (preventing us from advancing e2-e4 easily) and also supports Black's control of the dark squares throughout the position. The bishop on b7 works harmoniously with the pawn structure Black is building - it's a key piece in the Queen's Indian setup. However, Black has now committed to a somewhat slow development plan, and we need to be alert for opportunities to seize the initiative while Black is still completing development.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "b7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg2",
-      "annotation": "We complete our fianchetto, and now our light-squared bishop is perfectly placed on the long diagonal, controlling key squares like d5, e4, f5, and putting potential pressure on Black's kingside. This bishop is the cornerstone of our King's Indian Attack setup - it will support both our central control and our eventual kingside attacking ambitions. The diagonal clearance also means our king will have an escape square on g2 if needed, making our kingside safer. With both bishops now developed, we have a classical 'bishops pointing at each other' structure where both sides will be fighting for control of their respective long diagonals throughout the middlegame."
+      "annotation": "We complete our fianchetto, and now our light-squared bishop is perfectly placed on the long diagonal, controlling key squares like d5, e4, f5, and putting potential pressure on Black's kingside. This bishop is the cornerstone of our King's Indian Attack setup - it will support both our central control and our eventual kingside attacking ambitions. The diagonal clearance also means our king will have an escape square on g2 if needed, making our kingside safer. With both bishops now developed, we have a classical 'bishops pointing at each other' structure where both sides will be fighting for control of their respective long diagonals throughout the middlegame.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at our pawn center immediately, challenging our d4 pawn and fighting for central space - a critical moment in the opening. This advance is thematic in the Queen's Indian Defense, as Black uses the support of the b7 bishop to challenge our central pawn structure before we can consolidate it further. The move also opens up the c-file for potential future use and gives Black's pieces more breathing room. However, Black has now created some pawn tension that we'll need to resolve carefully - we can capture with dxc5, maintain the tension, or advance d5 to gain space, each leading to different types of positions with distinct strategic themes."
+      "annotation": "Black strikes at our pawn center immediately, challenging our d4 pawn and fighting for central space - a critical moment in the opening. This advance is thematic in the Queen's Indian Defense, as Black uses the support of the b7 bishop to challenge our central pawn structure before we can consolidate it further. The move also opens up the c-file for potential future use and gives Black's pieces more breathing room. However, Black has now created some pawn tension that we'll need to resolve carefully - we can capture with dxc5, maintain the tension, or advance d5 to gain space, each leading to different types of positions with distinct strategic themes.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

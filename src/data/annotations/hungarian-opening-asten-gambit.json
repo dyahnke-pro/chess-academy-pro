@@ -3,43 +3,88 @@
   "moveAnnotations": [
     {
       "san": "g3",
-      "annotation": "We begin with the Hungarian Opening, a subtle and flexible system where we fianchetto the kingside bishop rather than launching an immediate pawn storm. By playing g3, we prepare to develop our bishop to g2, where it will control the long diagonal and support a solid center. This move is less committal than 1.e4 or 1.d4, giving us room to adapt to Black's setup while maintaining flexibility in our pawn structure."
+      "annotation": "We begin with the Hungarian Opening, a subtle and flexible system where we fianchetto the kingside bishop rather than launching an immediate pawn storm. By playing g3, we prepare to develop our bishop to g2, where it will control the long diagonal and support a solid center. This move is less committal than 1.e4 or 1.d4, giving us room to adapt to Black's setup while maintaining flexibility in our pawn structure.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops a piece and controls the center, preparing to support a d5 push. The knight is well-placed on c6, defending against any ideas of Nd5 and preparing to reroute toward d4 or e5 depending on how White continues."
+      "annotation": "Black develops a piece and controls the center, preparing to support a d5 push. The knight is well-placed on c6, defending against any ideas of Nd5 and preparing to reroute toward d4 or e5 depending on how White continues.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight naturally, controlling key central squares (d5 and e4) and preparing to support our center. From c3, the knight is well-posted and flexible—it can later move to e4 (as we'll see) or stay to defend the center, depending on Black's play."
+      "annotation": "We develop our knight naturally, controlling key central squares (d5 and e4) and preparing to support our center. From c3, the knight is well-posted and flexible—it can later move to e4 (as we'll see) or stay to defend the center, depending on Black's play.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black stakes a claim in the center, challenging us immediately. This is a principled central move, and by playing actively Black prevents us from establishing complete control of d4 and e4."
+      "annotation": "Black stakes a claim in the center, challenging us immediately. This is a principled central move, and by playing actively Black prevents us from establishing complete control of d4 and e4.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We push into the center with tempo, meeting Black's challenge directly and opening lines for our pieces. This aggressive move forces Black to make immediate decisions about how to handle the tension, and we'll soon see that our d4 pawn becomes a key feature of our position."
-    },
-    {
-      "san": "dxe5",
-      "annotation": "Black captures our d4 pawn, removing a central defender. However, this decision leaves Black's king more exposed and allows us to continue developing with threats. Black is playing for piece activity and compensation, but we're confident in our position."
-    },
-    {
-      "san": "d4",
-      "annotation": "We recapture with the d-pawn, reestablishing a strong presence in the center and keeping Black's pieces under pressure. This pawn on d4 is now firmly planted and difficult to remove, and it opens the d-file for potential rook activity."
-    },
-    {
-      "san": "Ne4",
-      "annotation": "Our knight jumps actively into the game, attacking Black's d4 pawn and controlling important squares like d6 and f6. From e4, our knight is aggressively placed and threatens to jump to dangerous outposts; this move embodies the aggressive spirit of the Asten Gambit, where we sacrifice material for rapid piece activity and initiative."
-    },
-    {
-      "san": "f5",
-      "annotation": "Black attacks our knight and tries to open lines for the kingside attack, keeping the position sharp and complex. By pushing the f-pawn, Black gains space and creates threats against our exposed king position, so we must be careful not to allow Black too much initiative."
-    },
-    {
-      "san": "exf6",
-      "annotation": "We capture the f-pawn en passant (if it were Black's last move that created the en passant opportunity) or simply take on f5 with our e5 pawn, opening lines and removing a dangerous pawn that was threatening our knight. This capture keeps our material advantage and prevents Black from opening too many lines toward our king, though we remain in a sharp, tactical position where both sides have compensation and attacking chances."
+      "annotation": "We push into the center with tempo, meeting Black's challenge directly and opening lines for our pieces. This aggressive move forces Black to make immediate decisions about how to handle the tension, and we'll soon see that our d4 pawn becomes a key feature of our position.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

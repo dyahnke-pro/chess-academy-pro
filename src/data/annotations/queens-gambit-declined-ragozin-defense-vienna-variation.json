@@ -3,43 +3,173 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the center and controlling the important e5 and c5 squares. This move opens lines for our queen and dark-squared bishop while beginning our fight for central dominance. The d4 opening leads to rich, strategic positions where we'll typically build a strong pawn center and develop our pieces harmoniously. Unlike 1.e4 openings that often lead to sharp tactical battles, queen's pawn games tend to emphasize positional understanding and long-term planning."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the center and controlling the important e5 and c5 squares. This move opens lines for our queen and dark-squared bishop while beginning our fight for central dominance. The d4 opening leads to rich, strategic positions where we'll typically build a strong pawn center and develop our pieces harmoniously. Unlike 1.e4 openings that often lead to sharp tactical battles, queen's pawn games tend to emphasize positional understanding and long-term planning.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This flexible move doesn't commit Black to any particular pawn structure yet, keeping options open for both ...e6 and ...g6 setups. The knight on f6 also eyes the important e4 square, preventing us from easily advancing our e-pawn to dominate the center. This is one of the most popular responses to 1.d4 because it combines solid development with active piece play."
+      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This flexible move doesn't commit Black to any particular pawn structure yet, keeping options open for both ...e6 and ...g6 setups. The knight on f6 also eyes the important e4 square, preventing us from easily advancing our e-pawn to dominate the center. This is one of the most popular responses to 1.d4 because it combines solid development with active piece play.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, but since Black has already played ...Nf6, we're actually entering Queen's Gambit territory. This pawn advance attacks Black's future d5 pawn and expands our control over the center, particularly the important d5 and b5 squares. The c4 pawn also supports a potential d4-d5 advance later, which could give us a space advantage. By playing c4, we're inviting Black to establish a pawn on d5, after which we can either capture it (offering the Queen's Gambit) or support our center with moves like e3 and Nc3."
+      "annotation": "We're playing the English Opening move order, but since Black has already played ...Nf6, we're actually entering Queen's Gambit territory. This pawn advance attacks Black's future d5 pawn and expands our control over the center, particularly the important d5 and b5 squares. The c4 pawn also supports a potential d4-d5 advance later, which could give us a space advantage. By playing c4, we're inviting Black to establish a pawn on d5, after which we can either capture it (offering the Queen's Gambit) or support our center with moves like e3 and Nc3.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black chooses the classical approach, supporting the future ...d5 advance while opening lines for the light-squared bishop. This move prepares Black to establish a solid pawn chain in the center but does come with the drawback of restricting the dark-squared bishop's development. The pawn on e6 also controls the important d5 and f5 squares, helping Black maintain central presence. This setup typically leads to the Queen's Gambit Declined structures, where Black aims for solid, slightly passive but resilient positions."
+      "annotation": "Black chooses the classical approach, supporting the future ...d5 advance while opening lines for the light-squared bishop. This move prepares Black to establish a solid pawn chain in the center but does come with the drawback of restricting the dark-squared bishop's development. The pawn on e6 also controls the important d5 and f5 squares, helping Black maintain central presence. This setup typically leads to the Queen's Gambit Declined structures, where Black aims for solid, slightly passive but resilient positions.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, supporting our d4 pawn while preparing to castle kingside safely. The knight on f3 also controls the important e5 and h4 squares, preventing Black from easily advancing the e-pawn or launching kingside attacks. This natural development move keeps our options open - we can still transpose to various Queen's Gambit systems depending on how Black continues. From f3, our knight can later jump to e5 (if Black plays ...d5) or support central advances like e4 under the right circumstances."
+      "annotation": "We're developing our knight to its optimal square, supporting our d4 pawn while preparing to castle kingside safely. The knight on f3 also controls the important e5 and h4 squares, preventing Black from easily advancing the e-pawn or launching kingside attacks. This natural development move keeps our options open - we can still transpose to various Queen's Gambit systems depending on how Black continues. From f3, our knight can later jump to e5 (if Black plays ...d5) or support central advances like e4 under the right circumstances.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes back in the center, establishing the classical Queen's Gambit Declined pawn structure and challenging our c4 pawn directly. This move opens up the diagonal for Black's light-squared bishop and creates tension in the center that will define the character of the position. Now we must decide whether to capture on d5 (offering the gambit pawn) or support our center with moves like e3 or Nc3. Black's pawn on d5 also restricts our pieces somewhat, particularly limiting easy access to the e4 square for our knights."
+      "annotation": "Black strikes back in the center, establishing the classical Queen's Gambit Declined pawn structure and challenging our c4 pawn directly. This move opens up the diagonal for Black's light-squared bishop and creates tension in the center that will define the character of the position. Now we must decide whether to capture on d5 (offering the gambit pawn) or support our center with moves like e3 or Nc3. Black's pawn on d5 also restricts our pieces somewhat, particularly limiting easy access to the e4 square for our knights.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square while increasing the pressure on Black's d5 pawn, now attacked twice and defended only once. This move prepares various strategic ideas including e4 (after proper preparation) or simply maintaining tension in the center. The knight on c3 also supports a potential d4-d5 pawn break and controls important central squares like e4 and b5. By not immediately capturing on d5, we're keeping the tension and forcing Black to make decisions about the pawn structure, which often favors the side with better development."
+      "annotation": "We're developing our knight to its most active square while increasing the pressure on Black's d5 pawn, now attacked twice and defended only once. This move prepares various strategic ideas including e4 (after proper preparation) or simply maintaining tension in the center. The knight on c3 also supports a potential d4-d5 pawn break and controls important central squares like e4 and b5. By not immediately capturing on d5, we're keeping the tension and forcing Black to make decisions about the pawn structure, which often favors the side with better development.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb4",
-      "annotation": "Black plays the defining move of the Ragozin Defense, pinning our knight to the king and creating immediate tactical pressure in the center. This active bishop development challenges our setup by attacking the knight that defends our d4 pawn, potentially forcing us to make structural concessions. The bishop on b4 also eyes our e1 king and can support ...dxc4 ideas, winning our c4 pawn under certain circumstances. This move transforms the position from a quiet Queen's Gambit Declined into something much sharper and more tactical, requiring precise calculation from both sides."
+      "annotation": "Black plays the defining move of the Ragozin Defense, pinning our knight to the king and creating immediate tactical pressure in the center. This active bishop development challenges our setup by attacking the knight that defends our d4 pawn, potentially forcing us to make structural concessions. The bishop on b4 also eyes our e1 king and can support ...dxc4 ideas, winning our c4 pawn under certain circumstances. This move transforms the position from a quiet Queen's Gambit Declined into something much sharper and more tactical, requiring precise calculation from both sides.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg5",
-      "annotation": "We're counter-pinning Black's knight, creating our own tactical pressure and fighting for the initiative in this complex position. This bishop move attacks the f6 knight that defends against our central ambitions and supports the important h4-d8 diagonal. The pin also indirectly supports our d4 pawn since Black's knight cannot easily move without allowing tactical complications. By playing Bg5, we're accepting the challenge of the Ragozin Defense and entering sharp theoretical territory where both sides must navigate carefully to avoid tactical pitfalls."
+      "annotation": "We're counter-pinning Black's knight, creating our own tactical pressure and fighting for the initiative in this complex position. This bishop move attacks the f6 knight that defends against our central ambitions and supports the important h4-d8 diagonal. The pin also indirectly supports our d4 pawn since Black's knight cannot easily move without allowing tactical complications. By playing Bg5, we're accepting the challenge of the Ragozin Defense and entering sharp theoretical territory where both sides must navigate carefully to avoid tactical pitfalls.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxc4",
-      "annotation": "Black captures our c4 pawn, temporarily winning material while opening the d-file and activating the light-squared bishop's diagonal. This capture also eliminates the central tension and commits Black to defending the extra pawn, which can become a target for our pieces. The move ...dxc4 is the critical test of our setup - Black is essentially calling our bluff and challenging us to prove compensation for the sacrificed pawn. Now we must decide how to recapture or whether to ignore the pawn temporarily in favor of piece activity, with moves like e3, Rc1, or even a4 all coming into consideration in this Vienna Variation of the Ragozin Defense."
+      "annotation": "Black captures our c4 pawn, temporarily winning material while opening the d-file and activating the light-squared bishop's diagonal. This capture also eliminates the central tension and commits Black to defending the extra pawn, which can become a target for our pieces. The move ...dxc4 is the critical test of our setup - Black is essentially calling our bluff and challenging us to prove compensation for the sacrificed pawn. Now we must decide how to recapture or whether to ignore the pawn temporarily in favor of piece activity, with moves like e3, Rc1, or even a4 all coming into consideration in this Vienna Variation of the Ragozin Defense.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     }
   ]
 }

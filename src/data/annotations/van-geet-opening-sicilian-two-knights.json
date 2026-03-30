@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "Nc3",
-      "annotation": "The Van Geet Opening is an offbeat way to avoid mainstream theory by controlling d5 and e4 before committing to a central pawn. By developing the knight first, we keep our options open and can transpose into various systems depending on Black's response—this flexibility is the opening's main appeal against well-prepared opponents."
+      "annotation": "The Van Geet Opening is an offbeat way to avoid mainstream theory by controlling d5 and e4 before committing to a central pawn. By developing the knight first, we keep our options open and can transpose into various systems depending on Black's response—this flexibility is the opening's main appeal against well-prepared opponents.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black immediately stakes a claim in the center with the Sicilian pawn break, the most combative response. This move challenges us to make a decision: will we support the center with d4, or will we play a quieter system? Black is signaling they want active, tactical play."
+      "annotation": "Black immediately stakes a claim in the center with the Sicilian pawn break, the most combative response. This move challenges us to make a decision: will we support the center with d4, or will we play a quieter system? Black is signaling they want active, tactical play.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our second piece while maintaining pressure on e5 and d4, keeping the d4 push in reserve. This natural developing move doesn't commit us yet—we're building flexibility and preparing to meet Black's plans with good piece coordination."
+      "annotation": "We develop our second piece while maintaining pressure on e5 and d4, keeping the d4 push in reserve. This natural developing move doesn't commit us yet—we're building flexibility and preparing to meet Black's plans with good piece coordination.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to its most active square, controlling d4 and e5 while preparing to support further central operations. This is the main line continuation, and now we have a genuine choice: do we push d4 to challenge their control, or play something quieter?"
+      "annotation": "Black develops their knight to its most active square, controlling d4 and e5 while preparing to support further central operations. This is the main line continuation, and now we have a genuine choice: do we push d4 to challenge their control, or play something quieter?",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We strike at the center with the natural break, immediately creating concrete tactical issues for Black to solve. This move attacks their c5 pawn and opens lines for our pieces, forcing them to make a decision—they can't ignore this central challenge."
+      "annotation": "We strike at the center with the natural break, immediately creating concrete tactical issues for Black to solve. This move attacks their c5 pawn and opens lines for our pieces, forcing them to make a decision—they can't ignore this central challenge.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxd4",
-      "annotation": "Black captures in the center, which is the most natural and critical response. By taking on d4, they remove our central tension but allow us to recapture with the knight, which centralizes our piece and puts pressure on Black's position."
+      "annotation": "Black captures in the center, which is the most natural and critical response. By taking on d4, they remove our central tension but allow us to recapture with the knight, which centralizes our piece and puts pressure on Black's position.",
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxd4",
-      "annotation": "We recapture with our knight, placing it actively on d4 where it controls crucial squares like f5, e6, b5, and c6. This gives us a well-placed piece in the center that will dominate Black's position, and we've successfully transposed into Sicilian Two Knights territory with a solid developmental advantage."
+      "annotation": "We recapture with our knight, placing it actively on d4 where it controls crucial squares like f5, e6, b5, and c6. This gives us a well-placed piece in the center that will dominate Black's position, and we've successfully transposed into Sicilian Two Knights territory with a solid developmental advantage.",
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     }
   ]
 }

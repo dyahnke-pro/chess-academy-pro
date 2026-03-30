@@ -3,43 +3,173 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, staking our claim to the central light squares and preparing to build a strong pawn center. This move controls the important e5 and c5 squares while opening lines for our dark-squared bishop and queen. The d4 opening leads to rich strategic positions where we'll often aim for central control and space advantage. Our plan is typically to follow up with moves like Nf3, c4, or e3 to support our central presence."
+      "annotation": "We're opening with the queen's pawn, staking our claim to the central light squares and preparing to build a strong pawn center. This move controls the important e5 and c5 squares while opening lines for our dark-squared bishop and queen. The d4 opening leads to rich strategic positions where we'll often aim for central control and space advantage. Our plan is typically to follow up with moves like Nf3, c4, or e3 to support our central presence.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black chooses the Modern Defense, immediately signaling a hypermodern approach where they'll allow us central control while preparing to strike back later. This fianchetto move prepares ...Bg7, where the bishop will eye our center from the long diagonal and potentially support a future ...c5 or ...e5 break. The Modern Defense is flexible but can be slow to develop, giving us opportunities to build a strong center. We should continue developing while maintaining our space advantage and looking for ways to restrict Black's counterplay."
+      "annotation": "Black chooses the Modern Defense, immediately signaling a hypermodern approach where they'll allow us central control while preparing to strike back later. This fianchetto move prepares ...Bg7, where the bishop will eye our center from the long diagonal and potentially support a future ...c5 or ...e5 break. The Modern Defense is flexible but can be slow to develop, giving us opportunities to build a strong center. We should continue developing while maintaining our space advantage and looking for ways to restrict Black's counterplay.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're expanding our central control with the English Attack setup, grabbing more space and preparing to support our d4 pawn. This move controls the important d5 and b5 squares while opening lines for our queen and potentially preparing Nc3. The c4 advance is particularly strong against the Modern Defense because it limits Black's central pawn breaks and gives us excellent control of the center. Our pawn duo on c4 and d4 will be the foundation of our positional advantage throughout the middlegame."
+      "annotation": "We're expanding our central control with the English Attack setup, grabbing more space and preparing to support our d4 pawn. This move controls the important d5 and b5 squares while opening lines for our queen and potentially preparing Nc3. The c4 advance is particularly strong against the Modern Defense because it limits Black's central pawn breaks and gives us excellent control of the center. Our pawn duo on c4 and d4 will be the foundation of our positional advantage throughout the middlegame.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes their kingside fianchetto, placing the bishop on its most active square where it pressures our center and controls key dark squares. From g7, this bishop will be Black's primary piece for challenging our central dominance and supporting counterattacks. The bishop eyes our d4 pawn and will be ready to support typical Modern Defense breaks like ...c5 or ...e6. We need to be mindful of this bishop's influence and consider how to limit its scope while maintaining our central bind."
+      "annotation": "Black completes their kingside fianchetto, placing the bishop on its most active square where it pressures our center and controls key dark squares. From g7, this bishop will be Black's primary piece for challenging our central dominance and supporting counterattacks. The bishop eyes our d4 pawn and will be ready to support typical Modern Defense breaks like ...c5 or ...e6. We need to be mindful of this bishop's influence and consider how to limit its scope while maintaining our central bind.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and prepares to contest Black's central counterplay. This knight also eyes important squares like e4 and b5, and keeps our options open for different pawn structures. The knight on c3 is perfectly placed to support our central pawns and can quickly redeploy to more active squares if needed. However, we should be aware that placing the knight here makes it a potential target for Black's tactical shots, particularly if they can arrange ...Bxc3+ ideas."
+      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and prepares to contest Black's central counterplay. This knight also eyes important squares like e4 and b5, and keeps our options open for different pawn structures. The knight on c3 is perfectly placed to support our central pawns and can quickly redeploy to more active squares if needed. However, we should be aware that placing the knight here makes it a potential target for Black's tactical shots, particularly if they can arrange ...Bxc3+ ideas.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at our center with the typical Modern Defense counterattack, immediately challenging our space advantage and trying to open lines for their pieces. This pawn break is the key to Black's strategy - they've allowed us to build a center only to attack it at the right moment. The move opens the c-file and gives Black's pieces more activity while potentially weakening our pawn structure. We need to decide how to handle this central tension - we can capture, advance, or maintain the tension depending on our strategic goals."
+      "annotation": "Black strikes at our center with the typical Modern Defense counterattack, immediately challenging our space advantage and trying to open lines for their pieces. This pawn break is the key to Black's strategy - they've allowed us to build a center only to attack it at the right moment. The move opens the c-file and gives Black's pieces more activity while potentially weakening our pawn structure. We need to decide how to handle this central tension - we can capture, advance, or maintain the tension depending on our strategic goals.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "We're advancing our pawn to gain maximum space and create a powerful pawn wedge that restricts Black's pieces. This advance gives us excellent control of central squares and makes it difficult for Black to coordinate their forces effectively. The d5 pawn cramps Black's position and will serve as an excellent support point for our pieces in the middlegame. By advancing rather than capturing on c5, we're maintaining our central pawn and transforming the position into a more closed, strategic battle where our space advantage should be telling."
+      "annotation": "We're advancing our pawn to gain maximum space and create a powerful pawn wedge that restricts Black's pieces. This advance gives us excellent control of central squares and makes it difficult for Black to coordinate their forces effectively. The d5 pawn cramps Black's position and will serve as an excellent support point for our pieces in the middlegame. By advancing rather than capturing on c5, we're maintaining our central pawn and transforming the position into a more closed, strategic battle where our space advantage should be telling.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bxc3+",
-      "annotation": "Black plays this surprising tactical shot, sacrificing their prized dark-squared bishop to damage our pawn structure and gain dynamic compensation. This bishop sacrifice is the hallmark of the Beefeater Variation, where Black gives up the long diagonal in exchange for doubling our c-pawns and gaining rapid piece activity. The check forces us to recapture immediately, and Black will follow up with moves that exploit our compromised kingside and weakened dark squares. This is a sharp continuation that transforms the position from positional to tactical, requiring precise handling from both sides."
+      "annotation": "Black plays this surprising tactical shot, sacrificing their prized dark-squared bishop to damage our pawn structure and gain dynamic compensation. This bishop sacrifice is the hallmark of the Beefeater Variation, where Black gives up the long diagonal in exchange for doubling our c-pawns and gaining rapid piece activity. The check forces us to recapture immediately, and Black will follow up with moves that exploit our compromised kingside and weakened dark squares. This is a sharp continuation that transforms the position from positional to tactical, requiring precise handling from both sides.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "bxc3",
-      "annotation": "We're forced to recapture with the b-pawn, accepting doubled c-pawns in exchange for maintaining our material advantage and central control. While our pawn structure is now compromised, we still have the bishop pair and our space advantage remains significant. The doubled c-pawns give us control of important squares like b4 and d4, though they may become targets later in the game. Our main concern now is our weakened dark squares and the need to complete development while maintaining our positional advantages."
+      "annotation": "We're forced to recapture with the b-pawn, accepting doubled c-pawns in exchange for maintaining our material advantage and central control. While our pawn structure is now compromised, we still have the bishop pair and our space advantage remains significant. The doubled c-pawns give us control of important squares like b4 and d4, though they may become targets later in the game. Our main concern now is our weakened dark squares and the need to complete development while maintaining our positional advantages.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "f5",
-      "annotation": "Black follows up their bishop sacrifice with this aggressive pawn advance, immediately seizing space on the kingside and preparing to launch a quick attack. This move is the point of the Beefeater Variation - Black uses their lead in development and our weakened dark squares to create immediate threats against our king. The f5 pawn supports a potential ...f4 advance and gives Black excellent attacking chances, particularly since we still need to develop our pieces. We must be extremely careful about our king safety and consider rapid development moves like Nf3 and e3 to consolidate our position while maintaining our material advantage."
+      "annotation": "Black follows up their bishop sacrifice with this aggressive pawn advance, immediately seizing space on the kingside and preparing to launch a quick attack. This move is the point of the Beefeater Variation - Black uses their lead in development and our weakened dark squares to create immediate threats against our king. The f5 pawn supports a potential ...f4 advance and gives Black excellent attacking chances, particularly since we still need to develop our pieces. We must be extremely careful about our king safety and consider rapid development moves like Nf3 and e3 to consolidate our position while maintaining our material advantage.",
+      "arrows": [
+        {
+          "from": "f7",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

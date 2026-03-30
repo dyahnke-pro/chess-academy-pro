@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "b3",
-      "annotation": "We're entering the Nimzo-Larsen Attack, an unusual but principled first move that immediately stakes a claim on the long diagonal. By pushing the b-pawn, we prepare to fianchetto our light-squared bishop on b2, where it will aim down the a1-h8 diagonal toward Black's center and kingside. This move is slower and more positional than 1.e4 or 1.d4, but it gives us flexibility in our setup while quietly controlling key squares like c4 and d4—you want to put pressure on Black's position before committing your pawns to the center."
+      "annotation": "We're entering the Nimzo-Larsen Attack, an unusual but principled first move that immediately stakes a claim on the long diagonal. By pushing the b-pawn, we prepare to fianchetto our light-squared bishop on b2, where it will aim down the a1-h8 diagonal toward Black's center and kingside. This move is slower and more positional than 1.e4 or 1.d4, but it gives us flexibility in our setup while quietly controlling key squares like c4 and d4—you want to put pressure on Black's position before committing your pawns to the center.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black immediately strikes at the center, claiming space on the queenside and preventing us from easily playing d4 in the future. This is the most natural response, fighting for central control and preparing to develop pieces toward the center. By playing c5, Black also opens lines for the queen and bishop on the long diagonal, keeping the position balanced and avoiding any early passive setup—Black is not afraid of the offbeat move order and meets it with standard central ambitions."
+      "annotation": "Black immediately strikes at the center, claiming space on the queenside and preventing us from easily playing d4 in the future. This is the most natural response, fighting for central control and preparing to develop pieces toward the center. By playing c5, Black also opens lines for the queen and bishop on the long diagonal, keeping the position balanced and avoiding any early passive setup—Black is not afraid of the offbeat move order and meets it with standard central ambitions.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

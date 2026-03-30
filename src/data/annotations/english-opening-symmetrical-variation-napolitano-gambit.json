@@ -3,23 +3,88 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich openings in chess. By advancing the c-pawn two squares, we immediately stake a claim to the central d5 square while keeping our options open for various pawn structures. This move allows us to transpose into many different openings depending on Black's response, giving us excellent flexibility in our setup. The English is particularly appealing because it often leads to rich middlegame positions where understanding pawn structures and piece coordination matters more than memorizing long theoretical lines."
+      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich openings in chess. By advancing the c-pawn two squares, we immediately stake a claim to the central d5 square while keeping our options open for various pawn structures. This move allows us to transpose into many different openings depending on Black's response, giving us excellent flexibility in our setup. The English is particularly appealing because it often leads to rich middlegame positions where understanding pawn structures and piece coordination matters more than memorizing long theoretical lines.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black mirrors our move with the Symmetrical Variation, which is one of the most principled responses to the English Opening. Our opponent is essentially saying 'anything you can do, I can do too' and stakes an equal claim to the d4 square while maintaining perfect symmetry. This creates a balanced position where both sides have similar chances, but it also means we need to be the first to break the symmetry if we want to press for an advantage. The symmetrical structure often leads to maneuvering games where small improvements in piece placement can become significant over time."
+      "annotation": "Black mirrors our move with the Symmetrical Variation, which is one of the most principled responses to the English Opening. Our opponent is essentially saying 'anything you can do, I can do too' and stakes an equal claim to the d4 square while maintaining perfect symmetry. This creates a balanced position where both sides have similar chances, but it also means we need to be the first to break the symmetry if we want to press for an advantage. The symmetrical structure often leads to maneuvering games where small improvements in piece placement can become significant over time.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4. This move fits perfectly with our flexible English Opening strategy, as the knight on f3 supports potential pawn advances like d4 or e4 while also preparing to castle kingside. From f3, our knight has excellent scope and can potentially relocate to more active squares like e5 or d4 later in the game. We're also keeping our options open for different pawn structures, as this knight development works well with virtually any setup we might choose."
+      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4. This move fits perfectly with our flexible English Opening strategy, as the knight on f3 supports potential pawn advances like d4 or e4 while also preparing to castle kingside. From f3, our knight has excellent scope and can potentially relocate to more active squares like e5 or d4 later in the game. We're also keeping our options open for different pawn structures, as this knight development works well with virtually any setup we might choose.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black continues the symmetrical approach by developing their knight to f6, mirroring our setup perfectly. Our opponent is controlling the same central squares (e4 and d5) that our knight controls, maintaining the balance in the center. This knight development is quite natural and sound, preparing to castle kingside while keeping all options open for Black's future plans. However, by maintaining complete symmetry, Black is essentially allowing us to choose the direction of the game, which gives us a slight psychological advantage as the player who gets to 'set the agenda.'"
+      "annotation": "Black continues the symmetrical approach by developing their knight to f6, mirroring our setup perfectly. Our opponent is controlling the same central squares (e4 and d5) that our knight controls, maintaining the balance in the center. This knight development is quite natural and sound, preparing to castle kingside while keeping all options open for Black's future plans. However, by maintaining complete symmetry, Black is essentially allowing us to choose the direction of the game, which gives us a slight psychological advantage as the player who gets to 'set the agenda.'",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b4",
-      "annotation": "Now we break the symmetry with the sharp Napolitano Gambit, immediately challenging Black's c5 pawn and creating tactical complications! This aggressive move transforms the quiet positional game into something much more concrete and forcing. We're essentially offering a pawn sacrifice if Black captures with cxb4, but in return we'll get rapid development and strong pressure against Black's queenside. The beauty of this gambit is that it catches many players off guard who were expecting a slow, symmetrical middlegame, and instead they're suddenly faced with tactical decisions where one wrong move can lead to a difficult position."
+      "annotation": "Now we break the symmetry with the sharp Napolitano Gambit, immediately challenging Black's c5 pawn and creating tactical complications! This aggressive move transforms the quiet positional game into something much more concrete and forcing. We're essentially offering a pawn sacrifice if Black captures with cxb4, but in return we'll get rapid development and strong pressure against Black's queenside. The beauty of this gambit is that it catches many players off guard who were expecting a slow, symmetrical middlegame, and instead they're suddenly faced with tactical decisions where one wrong move can lead to a difficult position.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

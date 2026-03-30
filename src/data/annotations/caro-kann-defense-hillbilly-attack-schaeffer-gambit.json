@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, claiming central space and freeing both our bishop and queen for rapid development. This move controls the important d5 and f5 squares, preventing Black from easily establishing pieces there. The e4 pawn also opens diagonals for our light-squared bishop to potentially go to c4 or b5, and gives our queen access to dangerous squares like h5. This is one of the most principled first moves, immediately fighting for the center and creating attacking chances."
+      "annotation": "We're opening with the king's pawn, claiming central space and freeing both our bishop and queen for rapid development. This move controls the important d5 and f5 squares, preventing Black from easily establishing pieces there. The e4 pawn also opens diagonals for our light-squared bishop to potentially go to c4 or b5, and gives our queen access to dangerous squares like h5. This is one of the most principled first moves, immediately fighting for the center and creating attacking chances.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black chooses the Caro-Kann Defense, a solid and reliable system that prepares to challenge our central pawn with d5 on the next move. This seemingly quiet move actually serves multiple purposes: it supports the advance d5, keeps the e8-h5 diagonal blocked (preventing early queen checks), and maintains flexibility for Black's light-squared bishop. The Caro-Kann is known for giving Black a solid pawn structure and good piece coordination, though it can be somewhat slower to develop than more aggressive defenses like the Sicilian."
+      "annotation": "Black chooses the Caro-Kann Defense, a solid and reliable system that prepares to challenge our central pawn with d5 on the next move. This seemingly quiet move actually serves multiple purposes: it supports the advance d5, keeps the e8-h5 diagonal blocked (preventing early queen checks), and maintains flexibility for Black's light-squared bishop. The Caro-Kann is known for giving Black a solid pawn structure and good piece coordination, though it can be somewhat slower to develop than more aggressive defenses like the Sicilian.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bc4",
-      "annotation": "We're developing our light-squared bishop to an active square, pointing directly at Black's f7 pawn - often the weakest point in Black's position since it's only defended by the king. This move is the hallmark of the so-called 'Hillbilly Attack,' an offbeat but aggressive system that prioritizes quick development and attacking chances over theoretical soundness. The bishop on c4 also controls the important central square d5, making it harder for Black to establish the typical d5 pawn break. While not as solid as traditional moves like Nf3 or d3, this bishop development creates immediate tactical threats and can catch unprepared opponents off guard."
+      "annotation": "We're developing our light-squared bishop to an active square, pointing directly at Black's f7 pawn - often the weakest point in Black's position since it's only defended by the king. This move is the hallmark of the so-called 'Hillbilly Attack,' an offbeat but aggressive system that prioritizes quick development and attacking chances over theoretical soundness. The bishop on c4 also controls the important central square d5, making it harder for Black to establish the typical d5 pawn break. While not as solid as traditional moves like Nf3 or d3, this bishop development creates immediate tactical threats and can catch unprepared opponents off guard.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Our opponent strikes back in the center immediately, challenging our e4 pawn and trying to establish an equal share of central space. This move is the most principled response to our setup, as it forces us to make a decision about our central pawn and opens lines for Black's pieces. Black is following classical opening principles by fighting for the center rather than allowing us to maintain our space advantage unopposed. The d5 advance also attacks our bishop on c4, forcing it to move and potentially losing time, which is why many players prefer the more solid Nf3 on move 2."
+      "annotation": "Our opponent strikes back in the center immediately, challenging our e4 pawn and trying to establish an equal share of central space. This move is the most principled response to our setup, as it forces us to make a decision about our central pawn and opens lines for Black's pieces. Black is following classical opening principles by fighting for the center rather than allowing us to maintain our space advantage unopposed. The d5 advance also attacks our bishop on c4, forcing it to move and potentially losing time, which is why many players prefer the more solid Nf3 on move 2.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb3",
-      "annotation": "We're retreating our bishop to b3, maintaining it on the long diagonal while keeping pressure on Black's position. This square allows our bishop to stay active without being constantly harassed by Black's pawns, and it still eyes important central squares. From b3, the bishop supports potential tactics involving f7 and also clears the c4 square for possible future piece maneuvers. While this retreat does cost us some tempo, it's better than allowing our bishop to be driven to a passive square or exchanged unfavorably."
+      "annotation": "We're retreating our bishop to b3, maintaining it on the long diagonal while keeping pressure on Black's position. This square allows our bishop to stay active without being constantly harassed by Black's pawns, and it still eyes important central squares. From b3, the bishop supports potential tactics involving f7 and also clears the c4 square for possible future piece maneuvers. While this retreat does cost us some tempo, it's better than allowing our bishop to be driven to a passive square or exchanged unfavorably.",
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe4",
-      "annotation": "Black captures our central pawn, gaining material and opening the position for piece development. This capture is natural and strong, as it eliminates our central pawn presence and gives Black good chances for equality. Our opponent is correctly following the principle of capturing when advantageous, and this move also opens the d-file for Black's queen and potentially the light-squared diagonal for the bishop. However, by accepting the pawn, Black also opens lines for our pieces and allows us to pursue sharp tactical complications."
+      "annotation": "Black captures our central pawn, gaining material and opening the position for piece development. This capture is natural and strong, as it eliminates our central pawn presence and gives Black good chances for equality. Our opponent is correctly following the principle of capturing when advantageous, and this move also opens the d-file for Black's queen and potentially the light-squared diagonal for the bishop. However, by accepting the pawn, Black also opens lines for our pieces and allows us to pursue sharp tactical complications.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Qh5",
-      "annotation": "We're launching an immediate attack with our queen, targeting both the h7 pawn and the f7 square in what constitutes the Schaeffer Gambit. This aggressive move sacrifices traditional development principles for concrete tactical threats, putting immediate pressure on Black's kingside before the opponent can castle to safety. The queen on h5 creates a dual threat: if Black plays carelessly, we might have tactics involving Qxf7+ or pressure against h7. While this early queen development goes against classical theory and can be somewhat risky if Black defends accurately, it creates practical problems for our opponent and can lead to quick wins against unprepared players who don't know how to handle the tactical complications."
+      "annotation": "We're launching an immediate attack with our queen, targeting both the h7 pawn and the f7 square in what constitutes the Schaeffer Gambit. This aggressive move sacrifices traditional development principles for concrete tactical threats, putting immediate pressure on Black's kingside before the opponent can castle to safety. The queen on h5 creates a dual threat: if Black plays carelessly, we might have tactics involving Qxf7+ or pressure against h7. While this early queen development goes against classical theory and can be somewhat risky if Black defends accurately, it creates practical problems for our opponent and can lead to quick wins against unprepared players who don't know how to handle the tactical complications.",
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "h5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're starting with the most classical opening move, staking our claim to the center by controlling the d5 and f5 squares while opening lines for both our bishop and queen. This move follows fundamental opening principles by fighting for central control from move one, and it leads to sharp, tactical games where both sides have chances for active play. The e4 pawn also supports a potential d4 advance later, which would give us an ideal pawn center. Most of chess's richest and most analyzed openings begin with this move, making it an excellent choice for players who want to enter mainstream theoretical battles."
+      "annotation": "We're starting with the most classical opening move, staking our claim to the center by controlling the d5 and f5 squares while opening lines for both our bishop and queen. This move follows fundamental opening principles by fighting for central control from move one, and it leads to sharp, tactical games where both sides have chances for active play. The e4 pawn also supports a potential d4 advance later, which would give us an ideal pawn center. Most of chess's richest and most analyzed openings begin with this move, making it an excellent choice for players who want to enter mainstream theoretical battles.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent chooses the provocative Nimzowitsch Defense, immediately developing the knight to an active square that attacks our e4 pawn while avoiding the more common e5 response. This hypermodern approach, named after the great theorist Aron Nimzowitsch, deliberately avoids occupying the center with pawns in favor of pressuring it with pieces. Black's idea is to make us commit our central pawns early, then later undermine them with moves like d6, f5, or d5. While this defense is less theoretical than 1...e5 or 1...c5, it can lead to sharp, unbalanced positions where Black gets counterplay against our pawn center."
+      "annotation": "Our opponent chooses the provocative Nimzowitsch Defense, immediately developing the knight to an active square that attacks our e4 pawn while avoiding the more common e5 response. This hypermodern approach, named after the great theorist Aron Nimzowitsch, deliberately avoids occupying the center with pawns in favor of pressuring it with pieces. Black's idea is to make us commit our central pawns early, then later undermine them with moves like d6, f5, or d5. While this defense is less theoretical than 1...e5 or 1...c5, it can lead to sharp, unbalanced positions where Black gets counterplay against our pawn center.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We respond by establishing the ideal pawn center, controlling key central squares like c5, e5, f5, and c5 while supporting our attacked e4 pawn. This move transforms the position into a complex middlegame structure where we have space in the center but must be prepared for Black's counterattacking ideas. The d4 pawn also opens the diagonal for our dark-squared bishop and gives us more options for piece development. We're essentially calling Black's bluff - if they want to avoid classical pawn structures, we'll gladly take maximum central space and make them prove their concept works."
+      "annotation": "We respond by establishing the ideal pawn center, controlling key central squares like c5, e5, f5, and c5 while supporting our attacked e4 pawn. This move transforms the position into a complex middlegame structure where we have space in the center but must be prepared for Black's counterattacking ideas. The d4 pawn also opens the diagonal for our dark-squared bishop and gives us more options for piece development. We're essentially calling Black's bluff - if they want to avoid classical pawn structures, we'll gladly take maximum central space and make them prove their concept works.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes back in the center with this pawn break, directly challenging our e4 pawn and creating immediate tension in the position. This move transforms the opening into the Scandinavian Variation of the Nimzowitsch Defense, combining ideas from both the Scandinavian Defense (1...d5) and the Nimzowitsch system. Our opponent is trying to eliminate our central e-pawn while opening lines for their pieces, particularly the light-squared bishop on c8. We now face a critical decision: do we capture on d5, trade pawns, or try to maintain the tension with a different approach?"
+      "annotation": "Black strikes back in the center with this pawn break, directly challenging our e4 pawn and creating immediate tension in the position. This move transforms the opening into the Scandinavian Variation of the Nimzowitsch Defense, combining ideas from both the Scandinavian Defense (1...d5) and the Nimzowitsch system. Our opponent is trying to eliminate our central e-pawn while opening lines for their pieces, particularly the light-squared bishop on c8. We now face a critical decision: do we capture on d5, trade pawns, or try to maintain the tension with a different approach?",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while maintaining central tension and preparing for active piece play. This move keeps our pawn center intact for now and develops toward the center, following classical opening principles. The knight on c3 also eyes important central squares like d5 and e4, and it prepares potential advances like f3 and Be3 to further support our center. By not immediately resolving the tension with exd5, we're keeping our options open and forcing Black to decide how to proceed with their central challenge."
+      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while maintaining central tension and preparing for active piece play. This move keeps our pawn center intact for now and develops toward the center, following classical opening principles. The knight on c3 also eyes important central squares like d5 and e4, and it prepares potential advances like f3 and Be3 to further support our center. By not immediately resolving the tension with exd5, we're keeping our options open and forcing Black to decide how to proceed with their central challenge.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Our opponent plays this flexible fianchetto move, preparing to develop the dark-squared bishop to g7 where it will eye our center and the long diagonal. This setup, combined with the knight on c6 and pawn on d5, creates what's known as the Bogoljubow Variation, Erben Gambit - a hypermodern system that attacks our center from the flanks rather than meeting it head-on. Black is essentially preparing a kingside castle while keeping maximum pressure on our central pawns, particularly targeting the e4 pawn with potential moves like Bg7 and f6. We need to be ready for Black's piece activity and consider whether to maintain our pawn center or trade it off for rapid development."
+      "annotation": "Our opponent plays this flexible fianchetto move, preparing to develop the dark-squared bishop to g7 where it will eye our center and the long diagonal. This setup, combined with the knight on c6 and pawn on d5, creates what's known as the Bogoljubow Variation, Erben Gambit - a hypermodern system that attacks our center from the flanks rather than meeting it head-on. Black is essentially preparing a kingside castle while keeping maximum pressure on our central pawns, particularly targeting the e4 pawn with potential moves like Bg7 and f6. We need to be ready for Black's piece activity and consider whether to maintain our pawn center or trade it off for rapid development.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

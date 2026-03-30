@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "b3",
-      "annotation": "We're playing the Nimzo-Larsen Attack, an unconventional opening where we control the center indirectly before committing our central pawns. By playing b3, we prepare to fianchetto our light-squared bishop on b2, where it will exert long-term pressure along the a1-h8 diagonal toward Black's center and kingside. This move is uniquely flexible—we avoid early pawn tension in the center, keeping our options open while quietly improving our piece placement. The Nimzo-Larsen is favored by creative players who want to outmaneuver rather than outforce their opponents."
+      "annotation": "We're playing the Nimzo-Larsen Attack, an unconventional opening where we control the center indirectly before committing our central pawns. By playing b3, we prepare to fianchetto our light-squared bishop on b2, where it will exert long-term pressure along the a1-h8 diagonal toward Black's center and kingside. This move is uniquely flexible—we avoid early pawn tension in the center, keeping our options open while quietly improving our piece placement. The Nimzo-Larsen is favored by creative players who want to outmaneuver rather than outforce their opponents.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b6",
-      "annotation": "Black mirrors our setup with b6, preparing their own fianchetto on b7 to control the long diagonal. This symmetrical response is solid and avoids being pushed around early—both sides will develop their bishops on the long diagonal with roughly equal influence. By playing this, Black accepts a slow, positional game where the battle will be fought over space, piece placement, and pawn breaks rather than tactical fireworks."
+      "annotation": "Black mirrors our setup with b6, preparing their own fianchetto on b7 to control the long diagonal. This symmetrical response is solid and avoids being pushed around early—both sides will develop their bishops on the long diagonal with roughly equal influence. By playing this, Black accepts a slow, positional game where the battle will be fought over space, piece placement, and pawn breaks rather than tactical fireworks.",
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

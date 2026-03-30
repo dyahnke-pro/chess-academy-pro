@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn move, staking our claim to the center and preparing to develop our pieces rapidly. This move controls the crucial d5 and f5 squares while opening lines for both our bishop on f1 and our queen. The move 1.e4 leads to sharp, tactical games where piece activity and central control often matter more than pawn structure. We're setting the stage for aggressive development and putting immediate pressure on Black to respond to our central presence."
+      "annotation": "We're opening with the king's pawn move, staking our claim to the center and preparing to develop our pieces rapidly. This move controls the crucial d5 and f5 squares while opening lines for both our bishop on f1 and our queen. The move 1.e4 leads to sharp, tactical games where piece activity and central control often matter more than pawn structure. We're setting the stage for aggressive development and putting immediate pressure on Black to respond to our central presence.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent responds with an unusual but perfectly playable knight development that immediately challenges our central pawn. Black is avoiding the main lines like 1...e5 or 1...c5, instead choosing a hypermodern approach that develops a piece while keeping options open for the pawn structure. This move prepares ...d5 to strike at our center and can transpose into various defenses depending on how we continue. Black is essentially saying 'I'll develop first and challenge your center later' rather than immediately contesting it with pawns."
+      "annotation": "Our opponent responds with an unusual but perfectly playable knight development that immediately challenges our central pawn. Black is avoiding the main lines like 1...e5 or 1...c5, instead choosing a hypermodern approach that develops a piece while keeping options open for the pawn structure. This move prepares ...d5 to strike at our center and can transpose into various defenses depending on how we continue. Black is essentially saying 'I'll develop first and challenge your center later' rather than immediately contesting it with pawns.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're expanding in the center with our second pawn, creating a classical pawn center and taking maximum space. This move supports our e4 pawn while controlling the important c5 and e5 squares, giving us excellent central influence. By playing d4, we're also preparing to develop our pieces harmoniously - the bishop can go to c4 or d3, and we maintain flexibility in our setup. Our opponent now faces the typical challenge against a big pawn center: whether to challenge it immediately or continue developing and attack it later."
+      "annotation": "We're expanding in the center with our second pawn, creating a classical pawn center and taking maximum space. This move supports our e4 pawn while controlling the important c5 and e5 squares, giving us excellent central influence. By playing d4, we're also preparing to develop our pieces harmoniously - the bishop can go to c4 or d3, and we maintain flexibility in our setup. Our opponent now faces the typical challenge against a big pawn center: whether to challenge it immediately or continue developing and attack it later.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the heart of our pawn center immediately, challenging our e4 pawn and creating immediate tension in the position. This central counter-strike is Black's most principled response, as it prevents us from simply consolidating our space advantage with moves like Nc3 and Nf3. Our opponent is following the classical principle of meeting a pawn center with a pawn break, creating tactical complications in the position. Now we must decide how to handle this central tension - do we trade, advance, or support our attacked pawn?"
+      "annotation": "Black strikes at the heart of our pawn center immediately, challenging our e4 pawn and creating immediate tension in the position. This central counter-strike is Black's most principled response, as it prevents us from simply consolidating our space advantage with moves like Nc3 and Nf3. Our opponent is following the classical principle of meeting a pawn center with a pawn break, creating tactical complications in the position. Now we must decide how to handle this central tension - do we trade, advance, or support our attacked pawn?",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending our attacked e4 pawn, maintaining the central tension for now. This move also adds pressure to Black's d5 pawn, creating a mutual pawn tension that will soon need to be resolved. The knight on c3 supports a potential d4-d5 advance and keeps our options open for how to handle the center. We're following sound opening principles by developing pieces toward the center while maintaining our pawn structure, forcing Black to make the next critical decision about the central tension."
+      "annotation": "We're developing our knight to its most natural square while defending our attacked e4 pawn, maintaining the central tension for now. This move also adds pressure to Black's d5 pawn, creating a mutual pawn tension that will soon need to be resolved. The knight on c3 supports a potential d4-d5 advance and keeps our options open for how to handle the center. We're following sound opening principles by developing pieces toward the center while maintaining our pawn structure, forcing Black to make the next critical decision about the central tension.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe4",
-      "annotation": "Our opponent captures our e4 pawn, releasing the central tension and gaining material temporarily while opening up the position. Black is accepting that we'll likely recapture and create a lead in development, but in return gets rid of our strong central pawn and creates immediate tactics. This capture also opens the d-file and gives Black's pieces more scope, particularly the light-squared bishop which will soon have the long diagonal available. By taking on e4, Black is essentially accepting a gambit-like position where we'll get compensation in the form of rapid development and central control."
+      "annotation": "Our opponent captures our e4 pawn, releasing the central tension and gaining material temporarily while opening up the position. Black is accepting that we'll likely recapture and create a lead in development, but in return gets rid of our strong central pawn and creates immediate tactics. This capture also opens the d-file and gives Black's pieces more scope, particularly the light-squared bishop which will soon have the long diagonal available. By taking on e4, Black is essentially accepting a gambit-like position where we'll get compensation in the form of rapid development and central control.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "We're launching our thematic pawn advance, creating the signature move of this gambit line and dramatically opening up the position in our favor. This advance attacks Black's knight on c6, forcing it to make an immediate decision while giving us excellent piece activity and central space. Our d5 pawn becomes a powerful wedge in Black's position, restricting their pieces and giving us long-term positional advantages. This is the point of our opening - we've sacrificed the e4 pawn to gain time, space, and piece activity, and now Black must deal with the immediate tactical threats while we continue our rapid development."
+      "annotation": "We're launching our thematic pawn advance, creating the signature move of this gambit line and dramatically opening up the position in our favor. This advance attacks Black's knight on c6, forcing it to make an immediate decision while giving us excellent piece activity and central space. Our d5 pawn becomes a powerful wedge in Black's position, restricting their pieces and giving us long-term positional advantages. This is the point of our opening - we've sacrificed the e4 pawn to gain time, space, and piece activity, and now Black must deal with the immediate tactical threats while we continue our rapid development.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

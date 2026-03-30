@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We start with the English Opening, a flexible and positional approach that immediately controls the d4 square and prepares to develop our pieces harmoniously. By playing on the queenside first, we avoid the heavily analyzed main lines of 1.e4 while keeping full control of the center—we can support d4 or maintain pressure on the long diagonal depending on how Black responds. This move is favored by players who enjoy maneuvering and subtle positional advantages over sharp tactical battles."
+      "annotation": "We start with the English Opening, a flexible and positional approach that immediately controls the d4 square and prepares to develop our pieces harmoniously. By playing on the queenside first, we avoid the heavily analyzed main lines of 1.e4 while keeping full control of the center—we can support d4 or maintain pressure on the long diagonal depending on how Black responds. This move is favored by players who enjoy maneuvering and subtle positional advantages over sharp tactical battles.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f5",
-      "annotation": "Black immediately strikes back in the center with a counterattacking pawn move, looking to stake a claim on e4 and open lines for their pieces. This is an aggressive response that signals Black wants to create immediate problems rather than allow us to consolidate our position peacefully. However, this move also weakens Black's kingside, leaving e6 vulnerable and creating potential tactical opportunities along the a2-g8 diagonal."
+      "annotation": "Black immediately strikes back in the center with a counterattacking pawn move, looking to stake a claim on e4 and open lines for their pieces. This is an aggressive response that signals Black wants to create immediate problems rather than allow us to consolidate our position peacefully. However, this move also weakens Black's kingside, leaving e6 vulnerable and creating potential tactical opportunities along the a2-g8 diagonal.",
+      "arrows": [
+        {
+          "from": "f7",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g4",
-      "annotation": "This is the Wade Gambit—a sharp and somewhat unusual response where we aggressively challenge Black's advanced pawn and ignore the traditional rules of central control. By pushing g4, we threaten to capture on f5 or advance further, forcing Black into immediate tactical decisions while we can push forward with kingside expansion. This move is provocative and best suited for players who enjoy sharp positions and aren't afraid to accept imbalanced pawn structures; it signals we're willing to fight for the initiative rather than play it safe."
+      "annotation": "This is the Wade Gambit—a sharp and somewhat unusual response where we aggressively challenge Black's advanced pawn and ignore the traditional rules of central control. By pushing g4, we threaten to capture on f5 or advance further, forcing Black into immediate tactical decisions while we can push forward with kingside expansion. This move is provocative and best suited for players who enjoy sharp positions and aren't afraid to accept imbalanced pawn structures; it signals we're willing to fight for the initiative rather than play it safe.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

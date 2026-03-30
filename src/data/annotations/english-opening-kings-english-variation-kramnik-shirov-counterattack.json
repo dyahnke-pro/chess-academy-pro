@@ -3,19 +3,71 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and strategically rich choices available to White. By controlling the central d5 square immediately, we're preparing to build a strong pawn center while keeping our options open for piece development. Unlike 1.e4 or 1.d4, the English allows us to transpose into many different pawn structures depending on how Black responds, making it a favorite of positional players who like to maintain flexibility. The move also prepares to fianchetto our light-squared bishop on g2, creating long-term pressure along the long diagonal toward Black's kingside."
+      "annotation": "We're opening with the English Opening, one of the most flexible and strategically rich choices available to White. By controlling the central d5 square immediately, we're preparing to build a strong pawn center while keeping our options open for piece development. Unlike 1.e4 or 1.d4, the English allows us to transpose into many different pawn structures depending on how Black responds, making it a favorite of positional players who like to maintain flexibility. The move also prepares to fianchetto our light-squared bishop on g2, creating long-term pressure along the long diagonal toward Black's kingside.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black immediately stakes a claim in the center with this classical response, occupying the e5 square and preventing us from playing d4 in one move. This is one of the most principled defenses against the English, as our opponent is saying 'I'll take space in the center and dare you to challenge it.' The pawn on e5 also opens lines for Black's light-squared bishop and queen while supporting a potential ...d6 and ...f5 pawn storm later. We need to be prepared for Black's aggressive intentions, as this move often leads to sharp, tactical play where Black seeks counterplay against our more positional approach."
+      "annotation": "Black immediately stakes a claim in the center with this classical response, occupying the e5 square and preventing us from playing d4 in one move. This is one of the most principled defenses against the English, as our opponent is saying 'I'll take space in the center and dare you to challenge it.' The pawn on e5 also opens lines for Black's light-squared bishop and queen while supporting a potential ...d6 and ...f5 pawn storm later. We need to be prepared for Black's aggressive intentions, as this move often leads to sharp, tactical play where Black seeks counterplay against our more positional approach.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while putting immediate pressure on Black's central pawn. This move supports a future d3 or f4 advance, both of which would challenge Black's space advantage in the center. The knight on c3 also keeps our options open for various pawn breaks - we might play d3 followed by f4, or we could transpose into a Reversed Sicilian with g3 and Bg2. By developing this knight first, we're following the principle of improving our pieces before committing to a specific pawn structure, which is essential in the flexible English Opening."
+      "annotation": "We're developing our knight to its most natural square while putting immediate pressure on Black's central pawn. This move supports a future d3 or f4 advance, both of which would challenge Black's space advantage in the center. The knight on c3 also keeps our options open for various pawn breaks - we might play d3 followed by f4, or we could transpose into a Reversed Sicilian with g3 and Bg2. By developing this knight first, we're following the principle of improving our pieces before committing to a specific pawn structure, which is essential in the flexible English Opening.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb4",
-      "annotation": "Our opponent plays the Kramnik-Shirov Counterattack, immediately pinning our knight to the king and creating tactical complications. This aggressive move puts pressure on our position by threatening to capture on c3, which would double our pawns and give Black the bishop pair. The pin also prevents us from playing d3 naturally, as moving the knight would hang the d-pawn. We need to be prepared to deal with this pin, either by breaking it with a3 or Bd2, or by accepting doubled pawns after ...Bxc3+ in exchange for rapid development and central control. This variation often leads to sharp tactical play where both sides must calculate carefully."
+      "annotation": "Our opponent plays the Kramnik-Shirov Counterattack, immediately pinning our knight to the king and creating tactical complications. This aggressive move puts pressure on our position by threatening to capture on c3, which would double our pawns and give Black the bishop pair. The pin also prevents us from playing d3 naturally, as moving the knight would hang the d-pawn. We need to be prepared to deal with this pin, either by breaking it with a3 or Bd2, or by accepting doubled pawns after ...Bxc3+ in exchange for rapid development and central control. This variation often leads to sharp tactical play where both sides must calculate carefully.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

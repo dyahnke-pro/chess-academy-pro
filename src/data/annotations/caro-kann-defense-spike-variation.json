@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn two squares forward, immediately staking a claim to the center and controlling the crucial d5 and f5 squares. This classical move develops our position with tempo, as it opens diagonals for both our queen and light-squared bishop while creating space for castling. The move follows fundamental opening principles by fighting for central control from the very first move, and it's the starting point for many of the most respected openings in chess. By playing e4, we're also preparing to support this central pawn with moves like d3 or f3 later, creating a solid foundation for our position."
+      "annotation": "We're opening with the king's pawn two squares forward, immediately staking a claim to the center and controlling the crucial d5 and f5 squares. This classical move develops our position with tempo, as it opens diagonals for both our queen and light-squared bishop while creating space for castling. The move follows fundamental opening principles by fighting for central control from the very first move, and it's the starting point for many of the most respected openings in chess. By playing e4, we're also preparing to support this central pawn with moves like d3 or f3 later, creating a solid foundation for our position.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Our opponent chooses the Caro-Kann Defense, a solid and strategically rich opening that immediately prepares ...d5 to challenge our central e4 pawn. Unlike 1...e5, which creates symmetrical tension, the Caro-Kann allows Black to support the d5 advance with the c6 pawn, leading to a different pawn structure where Black often gets a solid but slightly cramped position. This move also prepares to develop the queen's knight to d7 (rather than the more natural c6 square), which is a key characteristic of Caro-Kann systems. The opening is known for leading to positions where Black has good piece coordination and fewer weaknesses, though often at the cost of some space and initiative in the early middlegame."
+      "annotation": "Our opponent chooses the Caro-Kann Defense, a solid and strategically rich opening that immediately prepares ...d5 to challenge our central e4 pawn. Unlike 1...e5, which creates symmetrical tension, the Caro-Kann allows Black to support the d5 advance with the c6 pawn, leading to a different pawn structure where Black often gets a solid but slightly cramped position. This move also prepares to develop the queen's knight to d7 (rather than the more natural c6 square), which is a key characteristic of Caro-Kann systems. The opening is known for leading to positions where Black has good piece coordination and fewer weaknesses, though often at the cost of some space and initiative in the early middlegame.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g4",
-      "annotation": "We're playing the Spike Variation, an aggressive and somewhat provocative system that immediately launches a kingside pawn storm before completing our development. This move controls the h5 and f5 squares while preparing to advance further with g5, potentially cramping Black's kingside and making it harder for them to develop their knight to f6. While this approach violates classical opening principles by moving the same side's pawns repeatedly before developing pieces, it can create immediate practical problems for our opponent and lead to sharp, tactical positions. The Spike Variation is particularly effective against players who prefer solid, positional play, as it forces them into unfamiliar tactical complications right from the opening moves."
+      "annotation": "We're playing the Spike Variation, an aggressive and somewhat provocative system that immediately launches a kingside pawn storm before completing our development. This move controls the h5 and f5 squares while preparing to advance further with g5, potentially cramping Black's kingside and making it harder for them to develop their knight to f6. While this approach violates classical opening principles by moving the same side's pawns repeatedly before developing pieces, it can create immediate practical problems for our opponent and lead to sharp, tactical positions. The Spike Variation is particularly effective against players who prefer solid, positional play, as it forces them into unfamiliar tactical complications right from the opening moves.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

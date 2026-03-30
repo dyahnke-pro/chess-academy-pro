@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're starting with the king's pawn, claiming central space and opening lines for our bishop and queen. This move controls the critical d5 and f5 squares, giving us excellent prospects for rapid piece development. The move 1.e4 leads to sharp, tactical games where understanding central control and quick development often determines the outcome. Our plan is to build a strong pawn center and launch a kingside attack, putting immediate pressure on Black to respond accurately."
+      "annotation": "We're starting with the king's pawn, claiming central space and opening lines for our bishop and queen. This move controls the critical d5 and f5 squares, giving us excellent prospects for rapid piece development. The move 1.e4 leads to sharp, tactical games where understanding central control and quick development often determines the outcome. Our plan is to build a strong pawn center and launch a kingside attack, putting immediate pressure on Black to respond accurately.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black chooses the Caro-Kann Defense, a solid and reliable system that immediately prepares to challenge our central pawn with ...d5. This move supports the advance of the d-pawn while keeping the light-squared bishop's diagonal open, unlike the French Defense where ...e6 blocks it. The Caro-Kann is known for giving Black a solid pawn structure and good piece activity, though it can sometimes lead to slightly passive positions. Black is signaling a preference for positional play over the sharp tactical battles that arise from 1...e5 or 1...c5."
+      "annotation": "Black chooses the Caro-Kann Defense, a solid and reliable system that immediately prepares to challenge our central pawn with ...d5. This move supports the advance of the d-pawn while keeping the light-squared bishop's diagonal open, unlike the French Defense where ...e6 blocks it. The Caro-Kann is known for giving Black a solid pawn structure and good piece activity, though it can sometimes lead to slightly passive positions. Black is signaling a preference for positional play over the sharp tactical battles that arise from 1...e5 or 1...c5.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding extra pressure to the d5 square that Black wants to occupy. This knight placement supports our central ambitions and prepares for various pawn advances like d4 or f4 depending on how the position develops. The knight on c3 also keeps our options open for different setups - we might later play d3 and f4 for a King's Indian Attack formation, or go for the more direct d4. By developing this knight first, we're avoiding some of Black's main line defenses and steering the game toward the Two Knights variation."
+      "annotation": "We're developing our knight to its most natural square while adding extra pressure to the d5 square that Black wants to occupy. This knight placement supports our central ambitions and prepares for various pawn advances like d4 or f4 depending on how the position develops. The knight on c3 also keeps our options open for different setups - we might later play d3 and f4 for a King's Indian Attack formation, or go for the more direct d4. By developing this knight first, we're avoiding some of Black's main line defenses and steering the game toward the Two Knights variation.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately strikes at our central pawn, following through on the plan begun with 1...c6. This move challenges our space advantage in the center and aims to establish a solid pawn on d5, which would give Black equal central control. The advance also opens the light-squared bishop's diagonal and allows Black's pieces to develop more actively. We now need to decide how to handle this central tension - we can capture, advance, or support our e4 pawn, each leading to different types of positions."
+      "annotation": "Black immediately strikes at our central pawn, following through on the plan begun with 1...c6. This move challenges our space advantage in the center and aims to establish a solid pawn on d5, which would give Black equal central control. The advance also opens the light-squared bishop's diagonal and allows Black's pieces to develop more actively. We now need to decide how to handle this central tension - we can capture, advance, or support our e4 pawn, each leading to different types of positions.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development while maintaining the central tension, refusing to make any commitments with our e4 pawn just yet. This knight development attacks the e5 square and prepares to castle kingside, getting our king to safety quickly. The knight on f3 also supports a potential d4 advance later, which could help us maintain central control if Black captures on e4. This move is characteristic of the Two Knights Attack, where we prioritize piece development and maintaining flexibility before deciding how to resolve the central pawn tension."
+      "annotation": "We're completing our kingside development while maintaining the central tension, refusing to make any commitments with our e4 pawn just yet. This knight development attacks the e5 square and prepares to castle kingside, getting our king to safety quickly. The knight on f3 also supports a potential d4 advance later, which could help us maintain central control if Black captures on e4. This move is characteristic of the Two Knights Attack, where we prioritize piece development and maintaining flexibility before deciding how to resolve the central pawn tension.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg4",
-      "annotation": "Black develops the light-squared bishop with tempo, pinning our knight to the queen and creating immediate tactical complications. This aggressive move is the hallmark of the Mindeno Variation, where Black seeks active piece play rather than the more solid ...Nf6 or ...e6 setups. The bishop on g4 puts pressure on our position and makes it difficult for us to play natural developing moves like Be2 or h3 without careful consideration. We now need to decide how to handle this pin - we can break it with h3, defend the knight with Be2, or even ignore it temporarily while continuing our development, each approach leading to different middlegame structures."
+      "annotation": "Black develops the light-squared bishop with tempo, pinning our knight to the queen and creating immediate tactical complications. This aggressive move is the hallmark of the Mindeno Variation, where Black seeks active piece play rather than the more solid ...Nf6 or ...e6 setups. The bishop on g4 puts pressure on our position and makes it difficult for us to play natural developing moves like Be2 or h3 without careful consideration. We now need to decide how to handle this pin - we can break it with h3, defend the knight with Be2, or even ignore it temporarily while continuing our development, each approach leading to different middlegame structures.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

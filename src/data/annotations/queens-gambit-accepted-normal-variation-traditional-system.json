@@ -3,35 +3,139 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the Queen's pawn, immediately staking our claim to the center and preparing to build a strong pawn chain. This move controls the crucial e5 and c5 squares while opening lines for our dark-squared bishop and queen. The d4 opening leads to more positional, strategic games compared to 1.e4, where we'll focus on long-term advantages like superior pawn structure and piece coordination. This is the starting move of the Queen's Gambit family, one of the most respected and time-tested opening systems in chess."
+      "annotation": "We're opening with the Queen's pawn, immediately staking our claim to the center and preparing to build a strong pawn chain. This move controls the crucial e5 and c5 squares while opening lines for our dark-squared bishop and queen. The d4 opening leads to more positional, strategic games compared to 1.e4, where we'll focus on long-term advantages like superior pawn structure and piece coordination. This is the starting move of the Queen's Gambit family, one of the most respected and time-tested opening systems in chess.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black responds by mirroring our central control, immediately challenging our d4 pawn and establishing their own presence in the center. This classical response shows our opponent wants to meet us head-on in the center rather than allowing us free rein with moves like the Indian defenses. By playing d5, Black controls the e4 and c4 squares and opens up their own dark-squared bishop. This move sets up the fundamental tension that defines the Queen's Gambit - we'll soon offer our c-pawn to disrupt Black's central stronghold."
+      "annotation": "Black responds by mirroring our central control, immediately challenging our d4 pawn and establishing their own presence in the center. This classical response shows our opponent wants to meet us head-on in the center rather than allowing us free rein with moves like the Indian defenses. By playing d5, Black controls the e4 and c4 squares and opens up their own dark-squared bishop. This move sets up the fundamental tension that defines the Queen's Gambit - we'll soon offer our c-pawn to disrupt Black's central stronghold.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "Here's the Queen's Gambit itself - we're offering our c-pawn to eliminate Black's strong d5 pawn and gain central control. This isn't a true gambit since we can usually regain the pawn, but rather a strategic pawn sacrifice to improve our position. If Black takes on c4, we'll have eliminated their central d-pawn and can build a strong pawn center with e3 and later d5. The move also develops our queenside by preparing Nc3 and puts immediate pressure on Black's position, forcing them to make a critical decision about the center."
+      "annotation": "Here's the Queen's Gambit itself - we're offering our c-pawn to eliminate Black's strong d5 pawn and gain central control. This isn't a true gambit since we can usually regain the pawn, but rather a strategic pawn sacrifice to improve our position. If Black takes on c4, we'll have eliminated their central d-pawn and can build a strong pawn center with e3 and later d5. The move also develops our queenside by preparing Nc3 and puts immediate pressure on Black's position, forcing them to make a critical decision about the center.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxc4",
-      "annotation": "Black accepts the gambit, capturing our c-pawn and creating the Queen's Gambit Accepted structure. By taking on c4, our opponent eliminates the central tension but also removes their own strong d5 pawn from the center. This gives us excellent prospects for central control since we can potentially build a strong pawn center with e3 and d5. Black's plan will be to hold onto the extra pawn temporarily while developing quickly, but we'll have dynamic compensation through better central control and faster development."
+      "annotation": "Black accepts the gambit, capturing our c-pawn and creating the Queen's Gambit Accepted structure. By taking on c4, our opponent eliminates the central tension but also removes their own strong d5 pawn from the center. This gives us excellent prospects for central control since we can potentially build a strong pawn center with e3 and d5. Black's plan will be to hold onto the extra pawn temporarily while developing quickly, but we'll have dynamic compensation through better central control and faster development.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 square and preparing to support our central advance with e3. This move is more flexible than immediate attempts to regain the c4 pawn because it allows us to complete our development while keeping pressure on Black's position. The knight on f3 also prepares potential tactics involving the e5 square and supports a future e4 advance if the position allows it. We're following the principle of development before material recovery, which typically leads to better positions in the Queen's Gambit Accepted."
+      "annotation": "We develop our knight to its most natural square, attacking Black's e5 square and preparing to support our central advance with e3. This move is more flexible than immediate attempts to regain the c4 pawn because it allows us to complete our development while keeping pressure on Black's position. The knight on f3 also prepares potential tactics involving the e5 square and supports a future e4 advance if the position allows it. We're following the principle of development before material recovery, which typically leads to better positions in the Queen's Gambit Accepted.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to mirror our development, controlling the central e4 and d5 squares while preparing to castle kingside. This is Black's most natural developing move, following the same principles we used with Nf3. The knight on f6 also helps defend against any potential e4-e5 pawn advances and prepares Black's kingside development with moves like Be7 and 0-0. Our opponent is showing they understand that quick development is crucial in the Queen's Gambit Accepted, as holding the extra c4 pawn requires efficient piece coordination."
+      "annotation": "Black develops their knight to mirror our development, controlling the central e4 and d5 squares while preparing to castle kingside. This is Black's most natural developing move, following the same principles we used with Nf3. The knight on f6 also helps defend against any potential e4-e5 pawn advances and prepares Black's kingside development with moves like Be7 and 0-0. Our opponent is showing they understand that quick development is crucial in the Queen's Gambit Accepted, as holding the extra c4 pawn requires efficient piece coordination.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We play the solid e3, supporting our d4 pawn and preparing to recapture the c4 pawn with our light-squared bishop. This move creates a stable pawn chain and opens the diagonal for our dark-squared bishop on f1. While e3 is less aggressive than e4, it gives us a rock-solid center and excellent piece coordination - our bishop will come to xc4, and we can complete development with Nc3 and Be2. This approach, known as the Traditional System, prioritizes solid development and long-term positional advantages over immediate tactical complications."
+      "annotation": "We play the solid e3, supporting our d4 pawn and preparing to recapture the c4 pawn with our light-squared bishop. This move creates a stable pawn chain and opens the diagonal for our dark-squared bishop on f1. While e3 is less aggressive than e4, it gives us a rock-solid center and excellent piece coordination - our bishop will come to xc4, and we can complete development with Nc3 and Be2. This approach, known as the Traditional System, prioritizes solid development and long-term positional advantages over immediate tactical complications.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black supports their position with e6, preparing to develop the light-squared bishop and creating a solid but somewhat passive pawn structure. This move also prepares c5 to challenge our center, which is Black's main plan in many Queen's Gambit Accepted lines. While e6 blocks in Black's dark-squared bishop temporarily, it creates a secure foundation for Black's pieces and prevents any immediate tactics on the kingside. Our opponent is following a classical development scheme, but we maintain a slight initiative due to our better central control and more active piece possibilities."
+      "annotation": "Black supports their position with e6, preparing to develop the light-squared bishop and creating a solid but somewhat passive pawn structure. This move also prepares c5 to challenge our center, which is Black's main plan in many Queen's Gambit Accepted lines. While e6 blocks in Black's dark-squared bishop temporarily, it creates a secure foundation for Black's pieces and prevents any immediate tactics on the kingside. Our opponent is following a classical development scheme, but we maintain a slight initiative due to our better central control and more active piece possibilities.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

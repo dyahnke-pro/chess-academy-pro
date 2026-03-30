@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, which is a flexible and positional choice that aims to control the center from a distance rather than occupying it immediately. This move stakes a claim to the important d5 and b5 squares while preparing to fianchetto our light-squared bishop on g2 in many lines. The English is beloved by positional players because it often leads to rich middlegame structures where we can gradually build pressure and outmaneuver our opponent. By starting with c4, we're inviting Black to establish a pawn center with moves like e5 and d5, which we can then challenge with our pieces and pawns later."
+      "annotation": "We're opening with the English Opening, which is a flexible and positional choice that aims to control the center from a distance rather than occupying it immediately. This move stakes a claim to the important d5 and b5 squares while preparing to fianchetto our light-squared bishop on g2 in many lines. The English is beloved by positional players because it often leads to rich middlegame structures where we can gradually build pressure and outmaneuver our opponent. By starting with c4, we're inviting Black to establish a pawn center with moves like e5 and d5, which we can then challenge with our pieces and pawns later.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black responds classically by establishing a strong pawn presence in the center, immediately claiming the important e5 square and preparing to develop the kingside pieces naturally. This is one of the most principled responses to the English Opening, as it challenges us to prove that our flank approach can effectively counter Black's central control. Our opponent is likely planning to follow up with moves like Nf6, Bc5 or Be7, and castle kingside, creating a solid setup. We need to be ready to either support our own central advance with d3 and e4, or continue with our positional approach by fianchettoing the bishop and pressuring Black's center from the wings."
+      "annotation": "Black responds classically by establishing a strong pawn presence in the center, immediately claiming the important e5 square and preparing to develop the kingside pieces naturally. This is one of the most principled responses to the English Opening, as it challenges us to prove that our flank approach can effectively counter Black's central control. Our opponent is likely planning to follow up with moves like Nf6, Bc5 or Be7, and castle kingside, creating a solid setup. We need to be ready to either support our own central advance with d3 and e4, or continue with our positional approach by fianchettoing the bishop and pressuring Black's center from the wings.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We're playing a more restrained approach here, supporting a potential d4 advance while keeping our options open for piece development. This move also prepares to fianchetto our dark-squared bishop on f1-a6 diagonal or develop it more actively, and crucially supports the f4 advance that's coming next. The pawn on e3 provides a solid foundation for our kingside and prevents Black from establishing a knight on d4 later. While this looks modest, it's actually setting up a dynamic pawn storm with f4, which will challenge Black's central stronghold and potentially open lines for our pieces to create attacking chances."
+      "annotation": "We're playing a more restrained approach here, supporting a potential d4 advance while keeping our options open for piece development. This move also prepares to fianchetto our dark-squared bishop on f1-a6 diagonal or develop it more actively, and crucially supports the f4 advance that's coming next. The pawn on e3 provides a solid foundation for our kingside and prevents Black from establishing a knight on d4 later. While this looks modest, it's actually setting up a dynamic pawn storm with f4, which will challenge Black's central stronghold and potentially open lines for our pieces to create attacking chances.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops naturally, bringing the knight to its ideal square where it attacks our c4 pawn and supports the central e5 pawn. This is exactly what we'd expect - our opponent is following sound developmental principles by getting pieces into the game while maintaining central control. The knight on f6 also prepares castling and keeps an eye on important central squares like d5 and e4. From our perspective, we should note that this knight placement means Black is committed to a more classical setup, and we can now proceed with our planned f4 advance to immediately challenge the e5 pawn and create tactical complications."
+      "annotation": "Black develops naturally, bringing the knight to its ideal square where it attacks our c4 pawn and supports the central e5 pawn. This is exactly what we'd expect - our opponent is following sound developmental principles by getting pieces into the game while maintaining central control. The knight on f6 also prepares castling and keeps an eye on important central squares like d5 and e4. From our perspective, we should note that this knight placement means Black is committed to a more classical setup, and we can now proceed with our planned f4 advance to immediately challenge the e5 pawn and create tactical complications.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f4",
-      "annotation": "Here's the key move that defines the Kahiko-Hula Gambit - we're directly challenging Black's central pawn with a bold pawn advance that creates immediate tactical tension. This move is both aggressive and risky, as we're potentially weakening our kingside structure in exchange for dynamic play and the initiative. If Black captures with exf4, we'll have opened the e-file and created attacking chances against the black king, while also preparing to recapture with our pieces and maintain central pressure. The name 'Kahiko-Hula' reflects the flowing, dance-like nature of the tactics that can arise from this gambit, where pieces weave in and out of tactical motifs."
+      "annotation": "Here's the key move that defines the Kahiko-Hula Gambit - we're directly challenging Black's central pawn with a bold pawn advance that creates immediate tactical tension. This move is both aggressive and risky, as we're potentially weakening our kingside structure in exchange for dynamic play and the initiative. If Black captures with exf4, we'll have opened the e-file and created attacking chances against the black king, while also preparing to recapture with our pieces and maintain central pressure. The name 'Kahiko-Hula' reflects the flowing, dance-like nature of the tactics that can arise from this gambit, where pieces weave in and out of tactical motifs.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "exf4",
-      "annotation": "Black accepts the gambit by capturing our f4 pawn, which is the most testing response that forces us to prove our compensation for the sacrificed material. Our opponent has gained a pawn but has also opened the e-file for our potential use and given us targets to attack. This capture also means that Black's central pawn presence is somewhat diminished, and we now have excellent piece activity coming up. The key for us is to develop quickly and create threats against Black's king before our opponent can consolidate the extra material - typical gambit play where time and initiative matter more than material in the short term."
+      "annotation": "Black accepts the gambit by capturing our f4 pawn, which is the most testing response that forces us to prove our compensation for the sacrificed material. Our opponent has gained a pawn but has also opened the e-file for our potential use and given us targets to attack. This capture also means that Black's central pawn presence is somewhat diminished, and we now have excellent piece activity coming up. The key for us is to develop quickly and create threats against Black's king before our opponent can consolidate the extra material - typical gambit play where time and initiative matter more than material in the short term.",
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the loose pawn on f4 while simultaneously developing toward the center and supporting our kingside. This move is the point of our gambit - we're not just winning back the pawn, but we're doing so while improving our position and maintaining the initiative. The knight on f3 also prepares castling kingside and eyes important central squares like e5 and d4. Most importantly, this move keeps the tactical tension high, as Black must now decide whether to defend the f4 pawn or allow us to recapture it, all while we're rapidly completing our development and preparing to launch an attack."
+      "annotation": "We develop our knight to its most natural square, attacking the loose pawn on f4 while simultaneously developing toward the center and supporting our kingside. This move is the point of our gambit - we're not just winning back the pawn, but we're doing so while improving our position and maintaining the initiative. The knight on f3 also prepares castling kingside and eyes important central squares like e5 and d4. Most importantly, this move keeps the tactical tension high, as Black must now decide whether to defend the f4 pawn or allow us to recapture it, all while we're rapidly completing our development and preparing to launch an attack.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

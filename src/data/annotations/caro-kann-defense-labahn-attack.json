@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the most classical of chess moves, staking our claim to the center and immediately freeing both our light-squared bishop and our queen for future development. This move controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there, and opens up rapid development possibilities. The e4 pawn also supports a potential d4 advance later, which would give us a powerful pawn center. Most importantly, we're fighting for the initiative right from move one, putting immediate pressure on Black to respond to our central presence."
+      "annotation": "We're opening with the most classical of chess moves, staking our claim to the center and immediately freeing both our light-squared bishop and our queen for future development. This move controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there, and opens up rapid development possibilities. The e4 pawn also supports a potential d4 advance later, which would give us a powerful pawn center. Most importantly, we're fighting for the initiative right from move one, putting immediate pressure on Black to respond to our central presence.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Our opponent chooses the solid Caro-Kann Defense, immediately preparing to challenge our e4 pawn with ...d5 on the next move. This is a more positional approach than 1...e5, as Black isn't immediately fighting for central space but rather preparing a methodical buildup. The c6 pawn supports the crucial d5 advance while keeping the c8-bishop's diagonal open for future development. Black is essentially saying 'I'll let you have the center for now, but I'm going to challenge it systematically and build a solid, hard-to-attack position.'"
+      "annotation": "Our opponent chooses the solid Caro-Kann Defense, immediately preparing to challenge our e4 pawn with ...d5 on the next move. This is a more positional approach than 1...e5, as Black isn't immediately fighting for central space but rather preparing a methodical buildup. The c6 pawn supports the crucial d5 advance while keeping the c8-bishop's diagonal open for future development. Black is essentially saying 'I'll let you have the center for now, but I'm going to challenge it systematically and build a solid, hard-to-attack position.'",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b4",
-      "annotation": "We're launching the aggressive Labahn Attack, an unorthodox but venomous sideline that immediately puts Black in unfamiliar territory. This move serves multiple purposes: it prepares to fianchetto our dark-squared bishop on b2, where it will eye the long diagonal toward Black's kingside, and it also supports a potential c4-c5 pawn storm on the queenside. The b4 advance can be quite disorienting for Caro-Kann players who expect more traditional setups like Nf3, d4, or Nc3. While this isn't theoretically critical, it leads to sharp, tactical positions where concrete calculation matters more than opening theory, giving us practical chances to outplay opponents who aren't familiar with these unusual structures."
+      "annotation": "We're launching the aggressive Labahn Attack, an unorthodox but venomous sideline that immediately puts Black in unfamiliar territory. This move serves multiple purposes: it prepares to fianchetto our dark-squared bishop on b2, where it will eye the long diagonal toward Black's kingside, and it also supports a potential c4-c5 pawn storm on the queenside. The b4 advance can be quite disorienting for Caro-Kann players who expect more traditional setups like Nf3, d4, or Nc3. While this isn't theoretically critical, it leads to sharp, tactical positions where concrete calculation matters more than opening theory, giving us practical chances to outplay opponents who aren't familiar with these unusual structures.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

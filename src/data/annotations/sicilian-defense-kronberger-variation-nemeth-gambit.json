@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing rapid development. This move controls the crucial d5 and f5 squares while opening diagonals for our bishop and queen. The move e4 is the most direct way to fight for central space and leads to sharp, tactical games where both sides must be well-prepared. Our plan revolves around quick piece development and maintaining central control, setting the stage for the complex Sicilian battles ahead."
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing rapid development. This move controls the crucial d5 and f5 squares while opening diagonals for our bishop and queen. The move e4 is the most direct way to fight for central space and leads to sharp, tactical games where both sides must be well-prepared. Our plan revolves around quick piece development and maintaining central control, setting the stage for the complex Sicilian battles ahead.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black responds with the Sicilian Defense, one of the most popular and combative replies to 1.e4. Instead of meeting our central pawn with d6 or e6, our opponent immediately challenges our control of the d4 square from the side. This asymmetrical pawn structure typically leads to unbalanced positions where Black gets counterplay on the queenside while we focus on kingside attack. The Sicilian is Black's way of saying 'I'm not just going to equalize - I want to fight for the initiative from move one.'"
+      "annotation": "Black responds with the Sicilian Defense, one of the most popular and combative replies to 1.e4. Instead of meeting our central pawn with d6 or e6, our opponent immediately challenges our control of the d4 square from the side. This asymmetrical pawn structure typically leads to unbalanced positions where Black gets counterplay on the queenside while we focus on kingside attack. The Sicilian is Black's way of saying 'I'm not just going to equalize - I want to fight for the initiative from move one.'",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Na3",
-      "annotation": "We're playing the unusual Kronberger Variation, developing our knight to the rim where it appears less active than the standard Nf3. However, this eccentric-looking move has some hidden venom - the knight eyes the important c4 and b5 squares, and importantly, it doesn't block our f-pawn should we want to advance it later. This system is designed to catch opponents off-guard who are expecting main-line Sicilian theory, leading them into unfamiliar territory where practical knowledge matters more than memorized variations. While the knight looks awkward on a3, it can quickly relocate to more active squares like c4 or b5 depending on how Black develops."
+      "annotation": "We're playing the unusual Kronberger Variation, developing our knight to the rim where it appears less active than the standard Nf3. However, this eccentric-looking move has some hidden venom - the knight eyes the important c4 and b5 squares, and importantly, it doesn't block our f-pawn should we want to advance it later. This system is designed to catch opponents off-guard who are expecting main-line Sicilian theory, leading them into unfamiliar territory where practical knowledge matters more than memorized variations. While the knight looks awkward on a3, it can quickly relocate to more active squares like c4 or b5 depending on how Black develops.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "a3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops naturally with Nc6, bringing a piece toward the center and adding pressure to our e4 pawn. This is one of the most logical moves in the Sicilian, as the knight supports potential d6 or d5 pawn advances while maintaining flexibility for different setups. Our opponent is following sound developmental principles, though they might be wondering about our unusual knight placement on a3. The knight on c6 also prepares to contest our central control, particularly if we advance d4, which is exactly what we're planning to do next."
+      "annotation": "Black develops naturally with Nc6, bringing a piece toward the center and adding pressure to our e4 pawn. This is one of the most logical moves in the Sicilian, as the knight supports potential d6 or d5 pawn advances while maintaining flexibility for different setups. Our opponent is following sound developmental principles, though they might be wondering about our unusual knight placement on a3. The knight on c6 also prepares to contest our central control, particularly if we advance d4, which is exactly what we're planning to do next.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're striking in the center with d4, following up on our opening theme of fighting for central control. This pawn advance opens the position and forces Black to make a decision about the tension in the center. Our d4 pawn attacks Black's c5 pawn while opening lines for our dark-squared bishop and queen. This is the critical moment where the position will become more defined - Black almost certainly needs to capture on d4 to avoid falling behind in development, which plays right into our gambit idea."
+      "annotation": "We're striking in the center with d4, following up on our opening theme of fighting for central control. This pawn advance opens the position and forces Black to make a decision about the tension in the center. Our d4 pawn attacks Black's c5 pawn while opening lines for our dark-squared bishop and queen. This is the critical moment where the position will become more defined - Black almost certainly needs to capture on d4 to avoid falling behind in development, which plays right into our gambit idea.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxd4",
-      "annotation": "Black captures our d4 pawn, which is the most natural and probably best response to avoid getting a cramped position. Our opponent has gained a central pawn, but we're about to demonstrate the point of our unusual setup. By taking on d4, Black has opened the center and given us excellent piece activity in return for the pawn. This capture is almost forced because allowing us to maintain pawns on both d4 and e4 would give us an overwhelming space advantage in the center."
+      "annotation": "Black captures our d4 pawn, which is the most natural and probably best response to avoid getting a cramped position. Our opponent has gained a central pawn, but we're about to demonstrate the point of our unusual setup. By taking on d4, Black has opened the center and given us excellent piece activity in return for the pawn. This capture is almost forced because allowing us to maintain pawns on both d4 and e4 would give us an overwhelming space advantage in the center.",
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bc4",
-      "annotation": "We're completing the Nemeth Gambit by developing our bishop to the aggressive c4 square, targeting the weak f7 point in Black's position. This bishop placement is the key to our compensation for the sacrificed pawn - it aims directly at Black's kingside and controls important central squares. The bishop on c4 works perfectly with our knight that can come to c4 or b5, creating multiple threats against Black's position. Our development advantage and the pressure on f7 give us excellent practical chances, as Black must be very careful about where to place the king and how to complete development safely."
+      "annotation": "We're completing the Nemeth Gambit by developing our bishop to the aggressive c4 square, targeting the weak f7 point in Black's position. This bishop placement is the key to our compensation for the sacrificed pawn - it aims directly at Black's kingside and controls important central squares. The bishop on c4 works perfectly with our knight that can come to c4 or b5, creating multiple threats against Black's position. Our development advantage and the pressure on f7 give us excellent practical chances, as Black must be very careful about where to place the king and how to complete development safely.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

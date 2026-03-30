@@ -3,59 +3,241 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, one of the most principled first moves in chess. This immediately stakes a claim to the central e5 square and prepares to develop our pieces harmoniously. The d4 move is the starting point for many of the world's most respected opening systems, including the Queen's Gambit, King's Indian setups, and as we'll see here, the Nimzo-Indian complex. Our plan is to build a strong pawn center and develop our pieces to active squares while maintaining maximum flexibility in our setup."
+      "annotation": "We're opening with the queen's pawn, one of the most principled first moves in chess. This immediately stakes a claim to the central e5 square and prepares to develop our pieces harmoniously. The d4 move is the starting point for many of the world's most respected opening systems, including the Queen's Gambit, King's Indian setups, and as we'll see here, the Nimzo-Indian complex. Our plan is to build a strong pawn center and develop our pieces to active squares while maintaining maximum flexibility in our setup.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move. This knight attacks our d4 pawn and prepares to support central counterplay with moves like e6 and d5. The Nf6 development is a hallmark of hypermodern opening philosophy - rather than immediately occupying the center with pawns, Black develops pieces that put pressure on our central pawns from afar. This move keeps Black's options open for several different defensive setups including the King's Indian, Queen's Indian, or as we'll see, the Nimzo-Indian Defense."
+      "annotation": "Black immediately challenges our central pawn with the most natural developing move. This knight attacks our d4 pawn and prepares to support central counterplay with moves like e6 and d5. The Nf6 development is a hallmark of hypermodern opening philosophy - rather than immediately occupying the center with pawns, Black develops pieces that put pressure on our central pawns from afar. This move keeps Black's options open for several different defensive setups including the King's Indian, Queen's Indian, or as we'll see, the Nimzo-Indian Defense.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, but this will likely transpose into Queen's Gambit or Indian Defense structures. This pawn move supports our d4 pawn, contests the important d5 square, and prepares to expand our influence in the center. The c4 advance is particularly effective because it prevents Black from easily establishing a pawn on d5, which would give them a solid central foothold. We're also preparing to develop our knight to c3, where it will have maximum influence over the center."
+      "annotation": "We're playing the English Opening move order, but this will likely transpose into Queen's Gambit or Indian Defense structures. This pawn move supports our d4 pawn, contests the important d5 square, and prepares to expand our influence in the center. The c4 advance is particularly effective because it prevents Black from easily establishing a pawn on d5, which would give them a solid central foothold. We're also preparing to develop our knight to c3, where it will have maximum influence over the center.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black chooses the solid Queen's Pawn Game approach, preparing to challenge our pawn center with d5. This pawn move supports an eventual d5 advance while keeping the option of developing the dark-squared bishop to b4, which is exactly what we'll see next. The e6 move is more restrained than the sharp King's Indian setup with g6, but it leads to rich strategic battles. Black is preparing to either transpose into a Queen's Gambit Declined structure or, as happens here, enter the sophisticated Nimzo-Indian Defense."
+      "annotation": "Black chooses the solid Queen's Pawn Game approach, preparing to challenge our pawn center with d5. This pawn move supports an eventual d5 advance while keeping the option of developing the dark-squared bishop to b4, which is exactly what we'll see next. The e6 move is more restrained than the sharp King's Indian setup with g6, but it leads to rich strategic battles. Black is preparing to either transpose into a Queen's Gambit Declined structure or, as happens here, enter the sophisticated Nimzo-Indian Defense.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting the d4 pawn and preparing to contest the center. This natural development completes the prerequisites for Black to enter the Nimzo-Indian Defense, since the knight on c3 can now be pinned by a bishop on b4. Our knight is excellently placed here, supporting both our central pawns and eyeing important squares like e4 and d5. We're maintaining maximum flexibility in our setup while inviting Black to show their hand regarding which Indian Defense system they prefer."
+      "annotation": "We develop our knight to its most active square, supporting the d4 pawn and preparing to contest the center. This natural development completes the prerequisites for Black to enter the Nimzo-Indian Defense, since the knight on c3 can now be pinned by a bishop on b4. Our knight is excellently placed here, supporting both our central pawns and eyeing important squares like e4 and d5. We're maintaining maximum flexibility in our setup while inviting Black to show their hand regarding which Indian Defense system they prefer.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb4",
-      "annotation": "Black enters the Nimzo-Indian Defense, one of the most respected and strategically rich openings in chess! This bishop move pins our knight to the king and immediately creates concrete threats against our position. The Bb4 pin is the defining characteristic of the Nimzo-Indian - Black is willing to trade their valuable dark-squared bishop for our knight in order to damage our pawn structure and gain central control. This opening leads to complex strategic battles where Black gets excellent piece play and central control in exchange for potentially weakened dark squares."
+      "annotation": "Black enters the Nimzo-Indian Defense, one of the most respected and strategically rich openings in chess! This bishop move pins our knight to the king and immediately creates concrete threats against our position. The Bb4 pin is the defining characteristic of the Nimzo-Indian - Black is willing to trade their valuable dark-squared bishop for our knight in order to damage our pawn structure and gain central control. This opening leads to complex strategic battles where Black gets excellent piece play and central control in exchange for potentially weakened dark squares.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qc2",
-      "annotation": "We're entering the Classical Variation of the Nimzo-Indian, unpinning our knight and preparing to maintain our pawn structure. This queen move serves multiple purposes: it breaks the pin, supports the knight, and prepares to recapture on c3 with the queen rather than accepting doubled pawns. The Qc2 setup leads to sharp tactical play and is considered one of the most testing responses to the Nimzo-Indian. We're keeping our pawn structure intact while challenging Black to prove their compensation for the early bishop development."
+      "annotation": "We're entering the Classical Variation of the Nimzo-Indian, unpinning our knight and preparing to maintain our pawn structure. This queen move serves multiple purposes: it breaks the pin, supports the knight, and prepares to recapture on c3 with the queen rather than accepting doubled pawns. The Qc2 setup leads to sharp tactical play and is considered one of the most testing responses to the Nimzo-Indian. We're keeping our pawn structure intact while challenging Black to prove their compensation for the early bishop development.",
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "c2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes in the center with the thematic pawn break, immediately challenging our pawn chain and opening up the position. This advance is the logical follow-up to the Nimzo-Indian setup, as Black seeks to dissolve our central pawn duo and create piece activity. The d5 push also opens lines for Black's pieces, particularly the light-squared bishop and queen, while challenging us to make a critical decision about our pawn structure. This move transforms the position from a quiet positional battle into a more tactical struggle with concrete variations."
+      "annotation": "Black strikes in the center with the thematic pawn break, immediately challenging our pawn chain and opening up the position. This advance is the logical follow-up to the Nimzo-Indian setup, as Black seeks to dissolve our central pawn duo and create piece activity. The d5 push also opens lines for Black's pieces, particularly the light-squared bishop and queen, while challenging us to make a critical decision about our pawn structure. This move transforms the position from a quiet positional battle into a more tactical struggle with concrete variations.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxd5",
-      "annotation": "We accept the pawn trade, opening the c-file and maintaining our central pawn presence with the d4 pawn. This capture is almost forced, as allowing Black to maintain the pawn on d5 would give them an excellent central foothold and superior piece activity. By trading pawns, we're opening lines for our pieces while keeping material balance. The position is about to become quite sharp, as Black has several ways to recapture, each leading to different types of middlegame positions with distinct strategic themes."
+      "annotation": "We accept the pawn trade, opening the c-file and maintaining our central pawn presence with the d4 pawn. This capture is almost forced, as allowing Black to maintain the pawn on d5 would give them an excellent central foothold and superior piece activity. By trading pawns, we're opening lines for our pieces while keeping material balance. The position is about to become quite sharp, as Black has several ways to recapture, each leading to different types of middlegame positions with distinct strategic themes.",
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Qxd5",
-      "annotation": "Black recaptures with the queen, centralizing this powerful piece and creating immediate threats against our position. This is the most aggressive recapture, putting maximum pressure on our setup and preparing to create tactical complications. The centralized queen attacks multiple targets and supports Black's piece activity, though it also becomes a potential target for our developing pieces. Black is embracing the tactical nature of the position and challenging us to prove that the early queen development can be punished."
+      "annotation": "Black recaptures with the queen, centralizing this powerful piece and creating immediate threats against our position. This is the most aggressive recapture, putting maximum pressure on our setup and preparing to create tactical complications. The centralized queen attacks multiple targets and supports Black's piece activity, though it also becomes a potential target for our developing pieces. Black is embracing the tactical nature of the position and challenging us to prove that the early queen development can be punished.",
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its natural square, attacking the centralized black queen and preparing to castle short. This forcing move compels Black's queen to move again, gaining us tempo in development while improving our piece coordination. The knight on f3 also supports our central control and prepares to challenge Black's pieces if they become overextended. We're following sound opening principles by developing with tempo while maintaining pressure on Black's somewhat exposed piece placement."
+      "annotation": "We develop our kingside knight to its natural square, attacking the centralized black queen and preparing to castle short. This forcing move compels Black's queen to move again, gaining us tempo in development while improving our piece coordination. The knight on f3 also supports our central control and prepares to challenge Black's pieces if they become overextended. We're following sound opening principles by developing with tempo while maintaining pressure on Black's somewhat exposed piece placement.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qf5",
-      "annotation": "Black's queen moves to an aggressive square, maintaining central influence while eyeing both our f2 pawn and preparing potential tactical shots. This queen placement is quite bold, as the queen remains in the center of the board where it can become a target, but it also supports Black's active piece play. The Qf5 square allows the queen to coordinate with Black's other pieces and maintain pressure on our position. Black is continuing with the hyperactive approach, trusting in their piece activity to compensate for the somewhat exposed queen position."
+      "annotation": "Black's queen moves to an aggressive square, maintaining central influence while eyeing both our f2 pawn and preparing potential tactical shots. This queen placement is quite bold, as the queen remains in the center of the board where it can become a target, but it also supports Black's active piece play. The Qf5 square allows the queen to coordinate with Black's other pieces and maintain pressure on our position. Black is continuing with the hyperactive approach, trusting in their piece activity to compensate for the somewhat exposed queen position.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qd1",
-      "annotation": "We retreat our queen to safety, removing it from potential tactical shots while preparing to complete our development. This quiet move might look passive, but it's actually quite principled - we're avoiding tactical complications and focusing on solid piece development. The queen retreat also prepares to support our central pawns and allows us to develop our pieces without worrying about back-rank tactics. Sometimes in sharp openings, a quiet consolidating move like this is exactly what's needed to maintain our balance and prepare for the middlegame complexities ahead."
+      "annotation": "We retreat our queen to safety, removing it from potential tactical shots while preparing to complete our development. This quiet move might look passive, but it's actually quite principled - we're avoiding tactical complications and focusing on solid piece development. The queen retreat also prepares to support our central pawns and allows us to develop our pieces without worrying about back-rank tactics. Sometimes in sharp openings, a quiet consolidating move like this is exactly what's needed to maintain our balance and prepare for the middlegame complexities ahead.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "d1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black launches the Belyavsky Gambit, sacrificing the e5 pawn to open lines and create maximum piece activity! This bold pawn advance strikes at our d4 pawn and opens the e-file for potential tactical operations. The e5 push is the defining move of this sharp variation - Black is offering material in exchange for rapid development, open lines, and attacking chances against our somewhat underdeveloped position. This gambit leads to extremely sharp play where both sides must calculate precisely, and Black's compensation lies in superior piece activity and potential mating attacks if we're not careful in our defense."
+      "annotation": "Black launches the Belyavsky Gambit, sacrificing the e5 pawn to open lines and create maximum piece activity! This bold pawn advance strikes at our d4 pawn and opens the e-file for potential tactical operations. The e5 push is the defining move of this sharp variation - Black is offering material in exchange for rapid development, open lines, and attacking chances against our somewhat underdeveloped position. This gambit leads to extremely sharp play where both sides must calculate precisely, and Black's compensation lies in superior piece activity and potential mating attacks if we're not careful in our defense.",
+      "arrows": [
+        {
+          "from": "e6",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

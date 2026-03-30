@@ -3,43 +3,173 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, which is the starting move of the aggressive Blackmar-Diemer Gambit. This move controls the central e5 and c5 squares immediately, and prepares for our upcoming gambit concept where we'll sacrifice material for rapid development and attacking chances. The Blackmar-Diemer is a sharp, tactical opening that's perfect for players who want to create immediate complications and put pressure on opponents who prefer quiet, positional games. Our plan is to quickly offer a pawn sacrifice to accelerate our piece development and create dangerous attacking opportunities against the enemy king."
+      "annotation": "We're opening with the queen's pawn, which is the starting move of the aggressive Blackmar-Diemer Gambit. This move controls the central e5 and c5 squares immediately, and prepares for our upcoming gambit concept where we'll sacrifice material for rapid development and attacking chances. The Blackmar-Diemer is a sharp, tactical opening that's perfect for players who want to create immediate complications and put pressure on opponents who prefer quiet, positional games. Our plan is to quickly offer a pawn sacrifice to accelerate our piece development and create dangerous attacking opportunities against the enemy king.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most principled response, as our opponent is fighting for central control and preventing us from simply advancing with e4 later. Black's move also opens lines for the light-squared bishop and queen, following sound opening principles of central control and piece development. However, this direct challenge to our pawn is exactly what we want to see, as it allows us to execute our gambit idea with maximum effect."
+      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most principled response, as our opponent is fighting for central control and preventing us from simply advancing with e4 later. Black's move also opens lines for the light-squared bishop and queen, following sound opening principles of central control and piece development. However, this direct challenge to our pawn is exactly what we want to see, as it allows us to execute our gambit idea with maximum effect.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We're now offering the characteristic pawn sacrifice that defines the Blackmar-Diemer Gambit! This bold advance attacks Black's d5 pawn and forces a critical decision - our opponent must either capture and accept our gambit, or find another way to deal with the central tension. The move demonstrates the gambit's core philosophy: we're willing to sacrifice material to gain rapid development, open lines for our pieces, and create immediate tactical threats. This is the moment where we commit to sharp, tactical play rather than slow positional maneuvering."
+      "annotation": "We're now offering the characteristic pawn sacrifice that defines the Blackmar-Diemer Gambit! This bold advance attacks Black's d5 pawn and forces a critical decision - our opponent must either capture and accept our gambit, or find another way to deal with the central tension. The move demonstrates the gambit's core philosophy: we're willing to sacrifice material to gain rapid development, open lines for our pieces, and create immediate tactical threats. This is the moment where we commit to sharp, tactical play rather than slow positional maneuvering.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe4",
-      "annotation": "Our opponent accepts the gambit by capturing our e4 pawn, which is generally considered the most challenging response. Black is now ahead in material but has also opened the center and given us exactly what we wanted - the chance to develop our pieces with tempo and create immediate threats. This capture opens the e-file for potential future use and eliminates our central pawn, but it also allows us to develop our pieces rapidly with attacks on Black's advanced e4 pawn. The position is now entering the sharp tactical realm where the Blackmar-Diemer Gambit truly shines."
+      "annotation": "Our opponent accepts the gambit by capturing our e4 pawn, which is generally considered the most challenging response. Black is now ahead in material but has also opened the center and given us exactly what we wanted - the chance to develop our pieces with tempo and create immediate threats. This capture opens the e-file for potential future use and eliminates our central pawn, but it also allows us to develop our pieces rapidly with attacks on Black's advanced e4 pawn. The position is now entering the sharp tactical realm where the Blackmar-Diemer Gambit truly shines.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight with a direct attack on Black's advanced e4 pawn, which is the key to our gambit strategy. This move not only develops a piece but also puts immediate pressure on our opponent's extra material, forcing Black to make decisions about how to defend the pawn. The knight on c3 also controls important central squares like e4, d5, and b5, while supporting our future plans to recapture the center. This is far more energetic than quiet moves like Nf3, as we're maintaining the tactical tension and forcing Black to constantly respond to threats."
+      "annotation": "We're developing our knight with a direct attack on Black's advanced e4 pawn, which is the key to our gambit strategy. This move not only develops a piece but also puts immediate pressure on our opponent's extra material, forcing Black to make decisions about how to defend the pawn. The knight on c3 also controls important central squares like e4, d5, and b5, while supporting our future plans to recapture the center. This is far more energetic than quiet moves like Nf3, as we're maintaining the tactical tension and forcing Black to constantly respond to threats.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending the e4 pawn while also developing toward the center. This is one of the most solid responses in the Blackmar-Diemer, as our opponent is both protecting the extra material and bringing a piece into active play. The knight on f6 also controls important central squares like e4, d5, and h5, while preparing potential future moves like ...g6 and ...Bg7 in some variations. However, by placing the knight on f6, Black is also putting it in the potential line of fire of our future attacking pieces."
+      "annotation": "Black develops the knight to its most natural square, defending the e4 pawn while also developing toward the center. This is one of the most solid responses in the Blackmar-Diemer, as our opponent is both protecting the extra material and bringing a piece into active play. The knight on f6 also controls important central squares like e4, d5, and h5, while preparing potential future moves like ...g6 and ...Bg7 in some variations. However, by placing the knight on f6, Black is also putting it in the potential line of fire of our future attacking pieces.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f3",
-      "annotation": "We're playing the signature move of the Blackmar-Diemer Gambit, directly attacking the defended e4 pawn and forcing the central tension to a head! This aggressive pawn advance is what separates the Blackmar-Diemer from other gambits - we're not just sacrificing one pawn, but potentially offering a second to accelerate our development even further. The move also opens the f1-a6 diagonal for our light-squared bishop and prepares to recapture on f3 with our knight, gaining tempo. While f3 does weaken our kingside slightly, the tactical benefits of rapid piece coordination far outweigh the positional drawbacks in this sharp opening."
+      "annotation": "We're playing the signature move of the Blackmar-Diemer Gambit, directly attacking the defended e4 pawn and forcing the central tension to a head! This aggressive pawn advance is what separates the Blackmar-Diemer from other gambits - we're not just sacrificing one pawn, but potentially offering a second to accelerate our development even further. The move also opens the f1-a6 diagonal for our light-squared bishop and prepares to recapture on f3 with our knight, gaining tempo. While f3 does weaken our kingside slightly, the tactical benefits of rapid piece coordination far outweigh the positional drawbacks in this sharp opening.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "exf3",
-      "annotation": "Our opponent captures the f3 pawn, and we've now successfully sacrificed two pawns for rapid development - this is the pure Blackmar-Diemer Gambit accepted! Black is now significantly ahead in material but has also allowed us to achieve exactly what we wanted: open lines, rapid piece development, and immediate tactical opportunities. The capture also means that when we recapture with our knight, we'll be developing with tempo while Black's pieces are not yet fully coordinated. This is the critical moment where our gambit compensation must prove itself through energetic piece play."
+      "annotation": "Our opponent captures the f3 pawn, and we've now successfully sacrificed two pawns for rapid development - this is the pure Blackmar-Diemer Gambit accepted! Black is now significantly ahead in material but has also allowed us to achieve exactly what we wanted: open lines, rapid piece development, and immediate tactical opportunities. The capture also means that when we recapture with our knight, we'll be developing with tempo while Black's pieces are not yet fully coordinated. This is the critical moment where our gambit compensation must prove itself through energetic piece play.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxf3",
-      "annotation": "We're recapturing the pawn with our knight, developing another piece with tempo while maintaining our aggressive stance. The knight on f3 is perfectly placed - it controls the central e5 and d4 squares, eyes the weakened kingside around g5 and h4, and supports our rapid development plan. Most importantly, we're now two moves ahead in development despite being two pawns down, which is exactly the type of compensation the Blackmar-Diemer Gambit seeks. Our next moves will focus on completing development with moves like Bc4, 0-0, and potentially Qd3 or Re1, creating immediate threats against Black's uncastled king."
+      "annotation": "We're recapturing the pawn with our knight, developing another piece with tempo while maintaining our aggressive stance. The knight on f3 is perfectly placed - it controls the central e5 and d4 squares, eyes the weakened kingside around g5 and h4, and supports our rapid development plan. Most importantly, we're now two moves ahead in development despite being two pawns down, which is exactly the type of compensation the Blackmar-Diemer Gambit seeks. Our next moves will focus on completing development with moves like Bc4, 0-0, and potentially Qd3 or Re1, creating immediate threats against Black's uncastled king.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes back in the center with the Kaulich Defense, immediately challenging our d4 pawn and trying to disrupt our development plans. This is a principled response that aims to open lines for Black's pieces while questioning whether our piece activity can truly compensate for the two-pawn material deficit. The move also prepares ...Nc6 and potentially ...Qa5+ in some lines, putting immediate counter-pressure on our position. However, this central advance also opens lines that we can potentially exploit with our better-developed pieces, and we should respond energetically with moves like dxc5 or d5, maintaining the tactical complexity that favors our gambit compensation."
+      "annotation": "Black strikes back in the center with the Kaulich Defense, immediately challenging our d4 pawn and trying to disrupt our development plans. This is a principled response that aims to open lines for Black's pieces while questioning whether our piece activity can truly compensate for the two-pawn material deficit. The move also prepares ...Nc6 and potentially ...Qa5+ in some lines, putting immediate counter-pressure on our position. However, this central advance also opens lines that we can potentially exploit with our better-developed pieces, and we should respond energetically with moves like dxc5 or d5, maintaining the tactical complexity that favors our gambit compensation.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn advance, claiming the central squares and preparing rapid development. This classical move controls the d5 and f5 squares immediately while opening lines for both our bishop and queen. The move sets up a strong pawn center and gives us excellent chances for a kingside attack later in the game. By occupying the center early, we're following the fundamental opening principle of controlling key central squares before our opponent can establish their own presence there."
+      "annotation": "We're opening with the king's pawn advance, claiming the central squares and preparing rapid development. This classical move controls the d5 and f5 squares immediately while opening lines for both our bishop and queen. The move sets up a strong pawn center and gives us excellent chances for a kingside attack later in the game. By occupying the center early, we're following the fundamental opening principle of controlling key central squares before our opponent can establish their own presence there.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black chooses the flexible and somewhat provocative Rat Defense, immediately signaling hypermodern intentions by preparing to fianchetto the king's bishop. This move doesn't directly challenge our central pawn but instead prepares to control the center from a distance with the dark-squared bishop on g7. The Rat Defense is an uncompromising system that often leads to sharp, tactical positions where Black sacrifices early central control for piece activity and counterplay. While this looks passive, experienced Rat players are often setting traps and preparing dynamic pawn breaks like d6-d5 or f7-f5 at the right moment."
+      "annotation": "Black chooses the flexible and somewhat provocative Rat Defense, immediately signaling hypermodern intentions by preparing to fianchetto the king's bishop. This move doesn't directly challenge our central pawn but instead prepares to control the center from a distance with the dark-squared bishop on g7. The Rat Defense is an uncompromising system that often leads to sharp, tactical positions where Black sacrifices early central control for piece activity and counterplay. While this looks passive, experienced Rat players are often setting traps and preparing dynamic pawn breaks like d6-d5 or f7-f5 at the right moment.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're establishing the ideal pawn center by occupying both central files with our pawns, giving us maximum space advantage and control over key squares. This move supports our e4 pawn while also preparing to develop our pieces harmoniously behind this strong pawn duo. The d4-e4 pawn center restricts Black's piece placement and gives us excellent chances to launch attacks on either flank later in the game. Against the Rat Defense setup, this central dominance is particularly effective since Black has voluntarily ceded the center in the opening moves."
+      "annotation": "We're establishing the ideal pawn center by occupying both central files with our pawns, giving us maximum space advantage and control over key squares. This move supports our e4 pawn while also preparing to develop our pieces harmoniously behind this strong pawn duo. The d4-e4 pawn center restricts Black's piece placement and gives us excellent chances to launch attacks on either flank later in the game. Against the Rat Defense setup, this central dominance is particularly effective since Black has voluntarily ceded the center in the opening moves.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Our opponent continues with the typical Rat Defense structure, supporting an eventual e7-e5 advance while keeping maximum flexibility in their setup. This move also opens the c8-h3 diagonal for Black's light-squared bishop, though it somewhat restricts the dark-squared bishop that will soon be fianchettoed on g7. Black is following a hypermodern philosophy, allowing us to occupy the center while preparing to challenge it later with moves like e5 or c5. The pawn on d6 also provides a solid foundation for Black's kingside, though it does create some weaknesses on the light squares."
+      "annotation": "Our opponent continues with the typical Rat Defense structure, supporting an eventual e7-e5 advance while keeping maximum flexibility in their setup. This move also opens the c8-h3 diagonal for Black's light-squared bishop, though it somewhat restricts the dark-squared bishop that will soon be fianchettoed on g7. Black is following a hypermodern philosophy, allowing us to occupy the center while preparing to challenge it later with moves like e5 or c5. The pawn on d6 also provides a solid foundation for Black's kingside, though it does create some weaknesses on the light squares.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawn duo and prepares for rapid kingside development. This knight perfectly complements our pawn center by controlling key squares like b5, d5, and e4, while also preparing potential advances like d4-d5 to cramp Black's position. The knight on c3 also supports various tactical ideas, including sacrifices on d5 or e4 if Black becomes careless with their king safety. From c3, our knight maintains excellent flexibility, able to redeploy to e2, a4, or b5 depending on how Black continues their setup."
+      "annotation": "We're developing our knight to its most natural square, where it supports our central pawn duo and prepares for rapid kingside development. This knight perfectly complements our pawn center by controlling key squares like b5, d5, and e4, while also preparing potential advances like d4-d5 to cramp Black's position. The knight on c3 also supports various tactical ideas, including sacrifices on d5 or e4 if Black becomes careless with their king safety. From c3, our knight maintains excellent flexibility, able to redeploy to e2, a4, or b5 depending on how Black continues their setup.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black plays this interesting move that's characteristic of the Accelerated Gurgenidze variation, preparing to challenge our central dominance with an eventual d6-d5 advance. This pawn move controls the important d5 and b5 squares, preventing our pieces from occupying these key outposts while supporting Black's central counterplay. The move also opens possibilities for Black's queen to become active via a5 or c7, and it prepares the development of the knight to d7 where it can support the critical d5 break. While this looks slow, it's actually a concrete way for Black to prepare serious central counterplay against our imposing pawn center."
+      "annotation": "Black plays this interesting move that's characteristic of the Accelerated Gurgenidze variation, preparing to challenge our central dominance with an eventual d6-d5 advance. This pawn move controls the important d5 and b5 squares, preventing our pieces from occupying these key outposts while supporting Black's central counterplay. The move also opens possibilities for Black's queen to become active via a5 or c7, and it prepares the development of the knight to d7 where it can support the critical d5 break. While this looks slow, it's actually a concrete way for Black to prepare serious central counterplay against our imposing pawn center.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

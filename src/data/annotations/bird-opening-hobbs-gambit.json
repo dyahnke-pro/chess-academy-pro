@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "f4",
-      "annotation": "We're playing the Bird Opening, an uncommon but principled alternative to 1.e4 or 1.d4 that immediately stakes a claim to the e5 square and prepares to control the center from the side. By advancing the f-pawn, we support a potential e4 advance while keeping our position flexible and avoiding the well-trodden paths of 1.e4 theory. The move controls e5 and opens the f-file for our rook, making this an interesting weapon for players seeking off-beat, strategic play rather than sharp theoretical battles."
+      "annotation": "We're playing the Bird Opening, an uncommon but principled alternative to 1.e4 or 1.d4 that immediately stakes a claim to the e5 square and prepares to control the center from the side. By advancing the f-pawn, we support a potential e4 advance while keeping our position flexible and avoiding the well-trodden paths of 1.e4 theory. The move controls e5 and opens the f-file for our rook, making this an interesting weapon for players seeking off-beat, strategic play rather than sharp theoretical battles.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g5",
-      "annotation": "Black aggressively gambles with the Hobbs Gambit, immediately challenging our f4 pawn and hoping to deflect it or expose our kingside. This is a risky but committal approach that weakens Black's kingside structure (f5 becomes a permanent weakness) and loosens the e6-h3 diagonal, all for the dubious compensation of attacking our pawn. You should be ready to accept the challenge by playing 2.fxg5, after which Black's compensation is minimal and White's king often becomes a dangerous attacking force."
+      "annotation": "Black aggressively gambles with the Hobbs Gambit, immediately challenging our f4 pawn and hoping to deflect it or expose our kingside. This is a risky but committal approach that weakens Black's kingside structure (f5 becomes a permanent weakness) and loosens the e6-h3 diagonal, all for the dubious compensation of attacking our pawn. You should be ready to accept the challenge by playing 2.fxg5, after which Black's compensation is minimal and White's king often becomes a dangerous attacking force.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,23 +3,54 @@
   "moveAnnotations": [
     {
       "san": "b4",
-      "annotation": "We're playing the Polish Opening, an offbeat system where we immediately stake a claim on the queenside with a move that looks unconventional—but that's exactly the point. By advancing the b-pawn, we control c5 and prepare to develop our bishop to b2, where it will target the long diagonal toward g1. This move is less direct than 1.e4 or 1.d4, which gives us surprise value and flexibility; we're not committing to a traditional center structure, so Black has to make decisions without a clear template."
+      "annotation": "We're playing the Polish Opening, an offbeat system where we immediately stake a claim on the queenside with a move that looks unconventional—but that's exactly the point. By advancing the b-pawn, we control c5 and prepare to develop our bishop to b2, where it will target the long diagonal toward g1. This move is less direct than 1.e4 or 1.d4, which gives us surprise value and flexibility; we're not committing to a traditional center structure, so Black has to make decisions without a clear template.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black takes space in the center immediately, which is the natural response to our unconventional start. By playing d5, Black claims the d5 square and prevents us from easily establishing a pawn center. This is a solid, principled reply that controls the board's core and prepares Black's pieces for active development."
+      "annotation": "Black takes space in the center immediately, which is the natural response to our unconventional start. By playing d5, Black claims the d5 square and prevents us from easily establishing a pawn center. This is a solid, principled reply that controls the board's core and prepares Black's pieces for active development.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb2",
-      "annotation": "Now we complete our plan: our bishop settles on b2, aiming down the long diagonal at g7 and putting gentle pressure on Black's center. Notice how this move coordinates with our b4 pawn—together they control the central squares c5 and c4, and our bishop eyes the weakness on g7 if Black's kingside becomes loose. We're building a positional setup rather than forcing immediate tactics."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We develop with purpose: the knight goes to f3, controlling e5 and d4 while supporting our future central plans. This is our most natural developing move, and it prevents Black from freely pushing e5 to claim space. The knight on f3 also keeps options open—we might still play d4 or e3, depending on Black's setup, so we're maintaining flexibility while improving our piece coordination."
-    },
-    {
-      "san": "Nf6",
-      "annotation": "Black develops their kingside knight to attack our e4 square (if we ever place a pawn there) and control important central outposts like d5 and e4. By playing Nf6 now, Black completes a flexible setup and prepares to build a solid position, whether with a future e6, ...c6, or even ...Bg4 to challenge our bishop pair. This is sensible development that keeps Black's options open."
+      "annotation": "Now we complete our plan: our bishop settles on b2, aiming down the long diagonal at g7 and putting gentle pressure on Black's center. Notice how this move coordinates with our b4 pawn—together they control the central squares c5 and c4, and our bishop eyes the weakness on g7 if Black's kingside becomes loose. We're building a positional setup rather than forcing immediate tactics.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "b2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

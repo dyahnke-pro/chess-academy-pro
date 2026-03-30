@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "d3",
-      "annotation": "We're playing the Valencia Opening, a quiet and flexible system that avoids sharp early theory. By advancing the d-pawn just one square, we control the important central square e4 while keeping our options open—we can later support our center with moves like e4, or shift our pawn structure entirely. This move is particularly useful for players who prefer strategic maneuvering over tactical complications, giving us flexibility to adapt to Black's setup."
+      "annotation": "We're playing the Valencia Opening, a quiet and flexible system that avoids sharp early theory. By advancing the d-pawn just one square, we control the important central square e4 while keeping our options open—we can later support our center with moves like e4, or shift our pawn structure entirely. This move is particularly useful for players who prefer strategic maneuvering over tactical complications, giving us flexibility to adapt to Black's setup.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black stakes a claim in the center, which is the natural response to our slow approach. By playing e5, Black gains space and prevents us from easily establishing a pawn on e4; Black is essentially saying they want active piece play and central influence rather than allowing a quiet game."
+      "annotation": "Black stakes a claim in the center, which is the natural response to our slow approach. By playing e5, Black gains space and prevents us from easily establishing a pawn on e4; Black is essentially saying they want active piece play and central influence rather than allowing a quiet game.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd2",
-      "annotation": "We develop our knight to d2, which serves multiple purposes: it supports a future e4 push without blocking our c-pawn (unlike Nf3), keeps our position flexible, and prepares to reroute the knight to c4 or f3 depending on how Black develops. The d2 square is an ideal outpost for our knight in this opening, as it doesn't commit us to any particular pawn structure yet while maintaining control of key central and queenside squares."
+      "annotation": "We develop our knight to d2, which serves multiple purposes: it supports a future e4 push without blocking our c-pawn (unlike Nf3), keeps our position flexible, and prepares to reroute the knight to c4 or f3 depending on how Black develops. The d2 square is an ideal outpost for our knight in this opening, as it doesn't commit us to any particular pawn structure yet while maintaining control of key central and queenside squares.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

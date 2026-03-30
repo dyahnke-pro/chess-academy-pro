@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces harmoniously. This move controls the crucial d5 and f5 squares while opening diagonals for both our bishop and queen. The move 1.e4 leads to sharp, tactical games and allows us to seize the initiative from move one. Our plan is to build a strong pawn center, develop quickly, and launch an attack against Black's king."
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces harmoniously. This move controls the crucial d5 and f5 squares while opening diagonals for both our bishop and queen. The move 1.e4 leads to sharp, tactical games and allows us to seize the initiative from move one. Our plan is to build a strong pawn center, develop quickly, and launch an attack against Black's king.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black responds with the provocative Nimzowitsch Defense, immediately attacking our central pawn and avoiding the main lines. This knight move puts pressure on our e4 pawn while developing a piece, but it violates the opening principle of controlling the center with pawns first. Black is signaling an unorthodox approach where they'll try to undermine our center from the sides rather than contest it directly. We should be prepared for sharp tactical complications as Black often sacrifices material for rapid piece play in these systems."
+      "annotation": "Black responds with the provocative Nimzowitsch Defense, immediately attacking our central pawn and avoiding the main lines. This knight move puts pressure on our e4 pawn while developing a piece, but it violates the opening principle of controlling the center with pawns first. Black is signaling an unorthodox approach where they'll try to undermine our center from the sides rather than contest it directly. We should be prepared for sharp tactical complications as Black often sacrifices material for rapid piece play in these systems.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're establishing the ideal pawn center by placing pawns on both e4 and d4, giving us maximum space and central control. This move supports our e4 pawn, opens the diagonal for our dark-squared bishop, and prepares to develop our pieces with tempo. The two-pawn center gives us excellent prospects in the middlegame, as we can advance these pawns to cramp Black's position or use them as a foundation for piece attacks. Black will now need to decide how to deal with our imposing central presence."
+      "annotation": "We're establishing the ideal pawn center by placing pawns on both e4 and d4, giving us maximum space and central control. This move supports our e4 pawn, opens the diagonal for our dark-squared bishop, and prepares to develop our pieces with tempo. The two-pawn center gives us excellent prospects in the middlegame, as we can advance these pawns to cramp Black's position or use them as a foundation for piece attacks. Black will now need to decide how to deal with our imposing central presence.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at our pawn center with the Scandinavian Defense move, immediately challenging our e4 pawn and opening the position. This aggressive pawn break aims to eliminate one of our central pawns and free Black's light-squared bishop while gaining space on the queenside. Our opponent is following the principle of meeting a flank attack (the knight on c6) with a central counter-strike, which is theoretically sound. We now face a critical decision: should we capture the pawn, advance it, or find another way to maintain our central advantage?"
+      "annotation": "Black strikes at our pawn center with the Scandinavian Defense move, immediately challenging our e4 pawn and opening the position. This aggressive pawn break aims to eliminate one of our central pawns and free Black's light-squared bishop while gaining space on the queenside. Our opponent is following the principle of meeting a flank attack (the knight on c6) with a central counter-strike, which is theoretically sound. We now face a critical decision: should we capture the pawn, advance it, or find another way to maintain our central advantage?",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight while defending the attacked e4 pawn, maintaining our strong pawn center intact. This natural developing move also prepares potential advances like e4-e5 or supports the center if Black captures on e4. The knight on c3 aims toward the kingside and can potentially jump to d5 or f5 later in the game. By keeping our pawn center together, we maintain maximum space advantage and keep Black's pieces somewhat cramped, though we must be ready for Black's next challenge to our center."
+      "annotation": "We're developing our knight while defending the attacked e4 pawn, maintaining our strong pawn center intact. This natural developing move also prepares potential advances like e4-e5 or supports the center if Black captures on e4. The knight on c3 aims toward the kingside and can potentially jump to d5 or f5 later in the game. By keeping our pawn center together, we maintain maximum space advantage and keep Black's pieces somewhat cramped, though we must be ready for Black's next challenge to our center.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black launches the Heinola-Deppe Gambit with this bold pawn sacrifice, immediately attacking our d4 pawn and opening lines for rapid piece development. This move transforms the position into a sharp tactical battle where Black sacrifices material for quick development and attacking chances against our king. Our opponent is betting that the open e-file, active piece play, and potential weaknesses in our position will provide sufficient compensation for the pawn. We should accept the gambit by capturing on e5, as declining it allows Black to maintain equality without having sacrificed anything meaningful."
+      "annotation": "Black launches the Heinola-Deppe Gambit with this bold pawn sacrifice, immediately attacking our d4 pawn and opening lines for rapid piece development. This move transforms the position into a sharp tactical battle where Black sacrifices material for quick development and attacking chances against our king. Our opponent is betting that the open e-file, active piece play, and potential weaknesses in our position will provide sufficient compensation for the pawn. We should accept the gambit by capturing on e5, as declining it allows Black to maintain equality without having sacrificed anything meaningful.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim in the center and controlling the crucial e5 and c5 squares. This move begins one of the most flexible opening systems in chess, as we can transpose into many different pawn structures depending on how our opponent responds. The d4 opening typically leads to more positional, strategic games compared to 1.e4, and we're preparing to support our central control with moves like Nf3 and c4. Our long-term plan revolves around building a strong pawn center and then using that spatial advantage to launch attacks on either flank."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim in the center and controlling the crucial e5 and c5 squares. This move begins one of the most flexible opening systems in chess, as we can transpose into many different pawn structures depending on how our opponent responds. The d4 opening typically leads to more positional, strategic games compared to 1.e4, and we're preparing to support our central control with moves like Nf3 and c4. Our long-term plan revolves around building a strong pawn center and then using that spatial advantage to launch attacks on either flank.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central control by attacking the d4 pawn with the knight, a principled approach that prevents us from simply occupying the center with e4 on the next move. This is one of the most flexible responses to 1.d4, as Black keeps options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Indian defenses. The knight on f6 also prepares kingside castling while maintaining pressure on our center. We need to be prepared for Black's hypermodern approach, where they'll likely fianchetto bishops and strike at our center from the flanks rather than occupying it directly."
+      "annotation": "Black immediately challenges our central control by attacking the d4 pawn with the knight, a principled approach that prevents us from simply occupying the center with e4 on the next move. This is one of the most flexible responses to 1.d4, as Black keeps options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Indian defenses. The knight on f6 also prepares kingside castling while maintaining pressure on our center. We need to be prepared for Black's hypermodern approach, where they'll likely fianchetto bishops and strike at our center from the flanks rather than occupying it directly.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order within our 1.d4 system, grabbing space on the queenside and preparing to support our d4 pawn while preventing Black from playing ...d5. This move is the hallmark of the English Opening approach, controlling the crucial b5 and d5 squares while preparing to fianchetto our light-squared bishop or develop it more actively. The c4 advance also gives us excellent chances for a queenside pawn majority later in the game, and it supports potential central advances like e4. By playing c4, we're telling Black that we intend to maintain a space advantage and are willing to accept slightly slower piece development in exchange for superior pawn structure."
+      "annotation": "We're playing the English Opening move order within our 1.d4 system, grabbing space on the queenside and preparing to support our d4 pawn while preventing Black from playing ...d5. This move is the hallmark of the English Opening approach, controlling the crucial b5 and d5 squares while preparing to fianchetto our light-squared bishop or develop it more actively. The c4 advance also gives us excellent chances for a queenside pawn majority later in the game, and it supports potential central advances like e4. By playing c4, we're telling Black that we intend to maintain a space advantage and are willing to accept slightly slower piece development in exchange for superior pawn structure.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black chooses a solid, flexible setup that supports the knight on f6 while preparing to develop the light-squared bishop, typically to g7 in a King's Indian-style fianchetto. This move keeps Black's options open - they can still transpose into various defenses including the King's Indian, Pirc, or even the Old Indian Defense that we're heading toward. The d6 move also prepares ...e5 at some point, challenging our central control, though Black is taking a more patient approach than the immediate ...d5 or ...g6. We should continue with our natural development, keeping in mind that Black's setup is inherently flexible and we need to be ready for various pawn breaks and piece arrangements."
+      "annotation": "Black chooses a solid, flexible setup that supports the knight on f6 while preparing to develop the light-squared bishop, typically to g7 in a King's Indian-style fianchetto. This move keeps Black's options open - they can still transpose into various defenses including the King's Indian, Pirc, or even the Old Indian Defense that we're heading toward. The d6 move also prepares ...e5 at some point, challenging our central control, though Black is taking a more patient approach than the immediate ...d5 or ...g6. We should continue with our natural development, keeping in mind that Black's setup is inherently flexible and we need to be ready for various pawn breaks and piece arrangements.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing kingside castling and keeping our options open for various pawn structures. The knight on f3 also prevents any immediate ...e5 breaks from Black, as we would simply capture and maintain our central control. This move fits perfectly with our flexible approach - we're not committing to any specific pawn structure yet, but we're improving our position and preparing for whatever setup Black chooses. The knight from f3 can later jump to e5, g5, or even reroute via e2-d4 if needed, giving us excellent flexibility in our piece coordination."
+      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing kingside castling and keeping our options open for various pawn structures. The knight on f3 also prevents any immediate ...e5 breaks from Black, as we would simply capture and maintain our central control. This move fits perfectly with our flexible approach - we're not committing to any specific pawn structure yet, but we're improving our position and preparing for whatever setup Black chooses. The knight from f3 can later jump to e5, g5, or even reroute via e2-d4 if needed, giving us excellent flexibility in our piece coordination.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black plays the characteristic move of the Old Indian Defense Czech Variation, preparing to support the center with ...d5 or ...e5 while also giving the queen an escape square on c7. This setup is more solid than the typical King's Indian with ...g6, as Black is preparing a central pawn break while maintaining a firm grip on the light squares. The c6 move also prepares potential queenside expansion with ...b5, challenging our c4 pawn and creating counterplay on that flank. We should continue with normal development, but we need to be aware that Black's setup is quite solid and may require patient maneuvering to create winning chances, often involving moves like Nc3, e4, and Be2 to complete our development while maintaining central control."
+      "annotation": "Black plays the characteristic move of the Old Indian Defense Czech Variation, preparing to support the center with ...d5 or ...e5 while also giving the queen an escape square on c7. This setup is more solid than the typical King's Indian with ...g6, as Black is preparing a central pawn break while maintaining a firm grip on the light squares. The c6 move also prepares potential queenside expansion with ...b5, challenging our c4 pawn and creating counterplay on that flank. We should continue with normal development, but we need to be aware that Black's setup is quite solid and may require patient maneuvering to create winning chances, often involving moves like Nc3, e4, and Be2 to complete our development while maintaining central control.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

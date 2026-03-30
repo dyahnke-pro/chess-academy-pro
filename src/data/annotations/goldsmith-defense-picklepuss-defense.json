@@ -3,19 +3,71 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, claiming the central e4 square and beginning our fight for the center of the board. This move opens diagonals for our bishop and queen while giving us excellent development prospects. The e4 pawn controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there. This is one of the most principled first moves in chess, leading to sharp tactical play and quick development."
+      "annotation": "We're opening with the king's pawn, claiming the central e4 square and beginning our fight for the center of the board. This move opens diagonals for our bishop and queen while giving us excellent development prospects. The e4 pawn controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there. This is one of the most principled first moves in chess, leading to sharp tactical play and quick development.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "h5",
-      "annotation": "Black plays the highly unusual h5, which is the defining move of the Goldsmith Defense's Picklepuss variation. This move appears to violate opening principles by moving a wing pawn instead of fighting for the center, but it has a sneaky point - Black is preparing to potentially advance the h-pawn further to create kingside attacking chances or simply confuse us with unconventional play. While this looks weakening and slow, we need to be careful not to underestimate Black's creative intentions. The move also prevents our bishop from ever going to g5 to pin a future knight on f6."
+      "annotation": "Black plays the highly unusual h5, which is the defining move of the Goldsmith Defense's Picklepuss variation. This move appears to violate opening principles by moving a wing pawn instead of fighting for the center, but it has a sneaky point - Black is preparing to potentially advance the h-pawn further to create kingside attacking chances or simply confuse us with unconventional play. While this looks weakening and slow, we need to be careful not to underestimate Black's creative intentions. The move also prevents our bishop from ever going to g5 to pin a future knight on f6.",
+      "arrows": [
+        {
+          "from": "h7",
+          "to": "h5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We respond with the classical d4, seizing maximum central space and refusing to be distracted by Black's offbeat opening choice. This pawn move controls the important c5 and e5 squares while opening the diagonal for our light-squared bishop. By occupying both central squares with pawns, we're following sound opening principles and putting pressure on Black to justify their unusual first move. This gives us a strong pawn center and excellent development prospects, making Black's task of equalizing much more difficult."
+      "annotation": "We respond with the classical d4, seizing maximum central space and refusing to be distracted by Black's offbeat opening choice. This pawn move controls the important c5 and e5 squares while opening the diagonal for our light-squared bishop. By occupying both central squares with pawns, we're following sound opening principles and putting pressure on Black to justify their unusual first move. This gives us a strong pawn center and excellent development prospects, making Black's task of equalizing much more difficult.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black finally develops a piece with Nf6, attacking our e4 pawn and beginning to challenge our central dominance. This is a much more sensible move than the opening h5, as the knight develops to its most natural square where it eyes the center and prepares kingside castling. However, Black is already behind in development due to the time spent on h5, and we have several good options to maintain our advantage. The knight on f6 does provide some central pressure, but we can easily defend our e4 pawn while continuing our smooth development."
+      "annotation": "Black finally develops a piece with Nf6, attacking our e4 pawn and beginning to challenge our central dominance. This is a much more sensible move than the opening h5, as the knight develops to its most natural square where it eyes the center and prepares kingside castling. However, Black is already behind in development due to the time spent on h5, and we have several good options to maintain our advantage. The knight on f6 does provide some central pressure, but we can easily defend our e4 pawn while continuing our smooth development.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

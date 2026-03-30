@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "Nc3",
-      "annotation": "We're entering the Van Geet Opening, a rare but creative sideline where we develop our knight before establishing a pawn center. This move immediately fights for control of d5 and e4, the central squares, while keeping our options flexible—we might play f4 or e4 next depending on Black's response. It's unconventional, which can catch unprepared opponents off-guard, though it requires good tactical awareness since we're delaying our kingside development."
+      "annotation": "We're entering the Van Geet Opening, a rare but creative sideline where we develop our knight before establishing a pawn center. This move immediately fights for control of d5 and e4, the central squares, while keeping our options flexible—we might play f4 or e4 next depending on Black's response. It's unconventional, which can catch unprepared opponents off-guard, though it requires good tactical awareness since we're delaying our kingside development.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately stakes a claim in the center, which is the natural response to our offbeat knight move. This advance occupies space and prevents us from easily playing e4, forcing us to think carefully about how we'll establish central control without a traditional pawn duo."
+      "annotation": "Black immediately stakes a claim in the center, which is the natural response to our offbeat knight move. This advance occupies space and prevents us from easily playing e4, forcing us to think carefully about how we'll establish central control without a traditional pawn duo.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f4",
-      "annotation": "Now we launch the Melleby Gambit! By pushing f4, we're offering to sacrifice the f-pawn to open lines and create attacking chances along the e-file and long diagonal. This aggressive continuation supports our knight on e4 (after it moves there) and gives us dynamic compensation—we're betting on rapid piece activity and central control rather than material. This is exactly the kind of offbeat gambit that works well at intermediate level because most players haven't studied it."
+      "annotation": "Now we launch the Melleby Gambit! By pushing f4, we're offering to sacrifice the f-pawn to open lines and create attacking chances along the e-file and long diagonal. This aggressive continuation supports our knight on e4 (after it moves there) and gives us dynamic compensation—we're betting on rapid piece activity and central control rather than material. This is exactly the kind of offbeat gambit that works well at intermediate level because most players haven't studied it.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "Black wisely avoids capturing on f4, which would allow our knight to jump to e4 with a strong initiative. Instead, Black advances the center pawn, trying to occupy space and maintain a solid position. This move solidifies Black's pawn presence while keeping tension in the center."
+      "annotation": "Black wisely avoids capturing on f4, which would allow our knight to jump to e4 with a strong initiative. Instead, Black advances the center pawn, trying to occupy space and maintain a solid position. This move solidifies Black's pawn presence while keeping tension in the center.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ne4",
-      "annotation": "Our knight finally lands on its outpost! From e4, it's aggressively centralized, controls critical squares like d6, f6, and c5, and eyes the weakened dark squares around Black's king. Combined with our f4 push, this knight is a powerful piece that justifies the earlier f-pawn advance. We're now creating real tactical threats and keeping Black under pressure."
+      "annotation": "Our knight finally lands on its outpost! From e4, it's aggressively centralized, controls critical squares like d6, f6, and c5, and eyes the weakened dark squares around Black's king. Combined with our f4 push, this knight is a powerful piece that justifies the earlier f-pawn advance. We're now creating real tactical threats and keeping Black under pressure.",
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black counterattacks in the center, challenging our advanced knight and trying to open lines for counterplay. This move maintains central tension and prevents us from consolidating our position too comfortably. The position is now dynamically balanced—we have active pieces and space, but Black has central pawns and fighting chances. The game remains sharp and tactical from here."
+      "annotation": "Black counterattacks in the center, challenging our advanced knight and trying to open lines for counterplay. This move maintains central tension and prevents us from consolidating our position too comfortably. The position is now dynamically balanced—we have active pieces and space, but Black has central pawns and fighting chances. The game remains sharp and tactical from here.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

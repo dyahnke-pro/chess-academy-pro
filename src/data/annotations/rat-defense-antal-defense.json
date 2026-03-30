@@ -3,19 +3,71 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, seizing control of the central squares d5 and f5 while opening lines for our bishop and queen. This classical first move puts immediate pressure on the center and gives us excellent development prospects. The move 1.e4 leads to sharp, tactical games and is perfect for players who want to create attacking chances early in the game. Our pawn on e4 also supports a future d4 advance, potentially giving us a strong pawn center that can dominate the board."
+      "annotation": "We're opening with the king's pawn, seizing control of the central squares d5 and f5 while opening lines for our bishop and queen. This classical first move puts immediate pressure on the center and gives us excellent development prospects. The move 1.e4 leads to sharp, tactical games and is perfect for players who want to create attacking chances early in the game. Our pawn on e4 also supports a future d4 advance, potentially giving us a strong pawn center that can dominate the board.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Our opponent chooses the Rat Defense, a hypermodern approach that immediately signals unconventional play ahead. Black isn't contesting the center directly but instead supports a future ...e5 advance while keeping maximum flexibility in the position. This move also prepares to fianchetto the king's bishop on g6 or develop it to e7, and it opens up the possibility of ...f5 in some lines to challenge our e4 pawn. The Rat Defense is less theoretical than main-line defenses, which can be both an advantage and disadvantage depending on our preparation."
+      "annotation": "Our opponent chooses the Rat Defense, a hypermodern approach that immediately signals unconventional play ahead. Black isn't contesting the center directly but instead supports a future ...e5 advance while keeping maximum flexibility in the position. This move also prepares to fianchetto the king's bishop on g6 or develop it to e7, and it opens up the possibility of ...f5 in some lines to challenge our e4 pawn. The Rat Defense is less theoretical than main-line defenses, which can be both an advantage and disadvantage depending on our preparation.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're establishing our ideal pawn center, taking control of the key central squares c5, d5, e5, and f5 with our two pawns. This classical setup gives us a significant space advantage and makes it difficult for Black to achieve comfortable piece development. Our d4 pawn also opens the diagonal for our dark-squared bishop and prepares quick queenside development with moves like Nc3 or c3 followed by Nf3. The strong pawn center will serve as a launching pad for our middlegame attack, and Black will need to find creative ways to challenge our space advantage."
+      "annotation": "We're establishing our ideal pawn center, taking control of the key central squares c5, d5, e5, and f5 with our two pawns. This classical setup gives us a significant space advantage and makes it difficult for Black to achieve comfortable piece development. Our d4 pawn also opens the diagonal for our dark-squared bishop and prepares quick queenside development with moves like Nc3 or c3 followed by Nf3. The strong pawn center will serve as a launching pad for our middlegame attack, and Black will need to find creative ways to challenge our space advantage.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd7",
-      "annotation": "Black plays the Antal Defense variation, developing the knight to an unusual square that supports future central breaks while avoiding the more typical Nf6. This knight placement keeps the f6 square available for the king's bishop or potentially for a pawn advance, and it prepares ...e5 or ...c5 to challenge our central dominance. The knight on d7 also supports a potential ...b5 advance on the queenside and doesn't block the c8 bishop's development. While this looks passive, Black is maintaining maximum flexibility and waiting to see how we arrange our pieces before committing to a specific pawn structure."
+      "annotation": "Black plays the Antal Defense variation, developing the knight to an unusual square that supports future central breaks while avoiding the more typical Nf6. This knight placement keeps the f6 square available for the king's bishop or potentially for a pawn advance, and it prepares ...e5 or ...c5 to challenge our central dominance. The knight on d7 also supports a potential ...b5 advance on the queenside and doesn't block the c8 bishop's development. While this looks passive, Black is maintaining maximum flexibility and waiting to see how we arrange our pieces before committing to a specific pawn structure.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "d7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

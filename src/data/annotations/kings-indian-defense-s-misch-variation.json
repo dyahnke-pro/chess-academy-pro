@@ -3,59 +3,241 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the Queen's Pawn, staking our claim to the center and preparing to build a classical pawn structure. This move controls the important e5 and c5 squares while opening lines for our dark-squared bishop and queen. The d4 opening leads to rich positional games where we'll often aim for a space advantage in the center and kingside attacking chances. Against the King's Indian Defense that's coming, we'll be looking to maintain central control and launch a kingside pawn storm."
+      "annotation": "We're opening with the Queen's Pawn, staking our claim to the center and preparing to build a classical pawn structure. This move controls the important e5 and c5 squares while opening lines for our dark-squared bishop and queen. The d4 opening leads to rich positional games where we'll often aim for a space advantage in the center and kingside attacking chances. Against the King's Indian Defense that's coming, we'll be looking to maintain central control and launch a kingside pawn storm.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the king's knight, a hallmark of hypermodern opening play. This knight attacks our d4 pawn and prepares to support the advance ...e5, which will challenge our pawn center from a different angle. The Knight on f6 is a key piece in the King's Indian Defense, where Black willingly allows us central space in exchange for dynamic counterplay later. We need to be ready to support our d4 pawn and continue our development while maintaining central pressure."
+      "annotation": "Black immediately challenges our central pawn with the king's knight, a hallmark of hypermodern opening play. This knight attacks our d4 pawn and prepares to support the advance ...e5, which will challenge our pawn center from a different angle. The Knight on f6 is a key piece in the King's Indian Defense, where Black willingly allows us central space in exchange for dynamic counterplay later. We need to be ready to support our d4 pawn and continue our development while maintaining central pressure.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're expanding on the queenside and reinforcing our control over the central d5 square with this English Opening move combined with our d4 pawn. This pawn duo gives us excellent space advantage and prevents Black from easily establishing pieces on d5 or b5. The c4 advance also opens the c-file for potential future use and supports a future d4-d5 advance that could give us a space advantage. This move signals our intention to play the Sämisch Variation of the King's Indian Defense, where we'll build a strong pawn center before launching our pieces into attack."
+      "annotation": "We're expanding on the queenside and reinforcing our control over the central d5 square with this English Opening move combined with our d4 pawn. This pawn duo gives us excellent space advantage and prevents Black from easily establishing pieces on d5 or b5. The c4 advance also opens the c-file for potential future use and supports a future d4-d5 advance that could give us a space advantage. This move signals our intention to play the Sämisch Variation of the King's Indian Defense, where we'll build a strong pawn center before launching our pieces into attack.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black begins the characteristic King's Indian setup by preparing to fianchetto the dark-squared bishop on g7. This move creates a solid foundation for Black's kingside and prepares to exert long-range pressure on our center from the long diagonal. The pawn on g6 also provides an escape square for the king on h8 if needed and supports a future ...f5 break that's thematic in the King's Indian. We should continue building our center and prepare for Black's typical counterplay against our pawn structure."
+      "annotation": "Black begins the characteristic King's Indian setup by preparing to fianchetto the dark-squared bishop on g7. This move creates a solid foundation for Black's kingside and prepares to exert long-range pressure on our center from the long diagonal. The pawn on g6 also provides an escape square for the king on h8 if needed and supports a future ...f5 break that's thematic in the King's Indian. We should continue building our center and prepare for Black's typical counterplay against our pawn structure.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, where it supports our d4 pawn and eyes important central squares like e4 and d5. This knight placement is crucial for the Sämisch system, as it will often support our central pawn advances and can later swing to kingside attacking positions via e2-g3 or directly to f5. The knight on c3 also prevents Black from playing ...d5 easily, maintaining our central space advantage. From c3, our knight coordinates beautifully with our coming e4 advance, creating a formidable pawn center."
+      "annotation": "We're developing our queenside knight to its most natural square, where it supports our d4 pawn and eyes important central squares like e4 and d5. This knight placement is crucial for the Sämisch system, as it will often support our central pawn advances and can later swing to kingside attacking positions via e2-g3 or directly to f5. The knight on c3 also prevents Black from playing ...d5 easily, maintaining our central space advantage. From c3, our knight coordinates beautifully with our coming e4 advance, creating a formidable pawn center.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup by placing the dark-squared bishop on its most active diagonal, where it will exert long-range pressure against our center. This bishop will be a key defensive piece for Black's king while simultaneously attacking our d4 pawn and potentially supporting central breaks like ...e5. The bishop on g7 is also preparing to support the typical King's Indian pawn storm with ...f5 and ...f4. We need to be mindful that this bishop can become very dangerous if we're not careful with our central pawn structure and king safety."
+      "annotation": "Black completes the fianchetto setup by placing the dark-squared bishop on its most active diagonal, where it will exert long-range pressure against our center. This bishop will be a key defensive piece for Black's king while simultaneously attacking our d4 pawn and potentially supporting central breaks like ...e5. The bishop on g7 is also preparing to support the typical King's Indian pawn storm with ...f5 and ...f4. We need to be mindful that this bishop can become very dangerous if we're not careful with our central pawn structure and king safety.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We're establishing our ideal pawn center with this advance, creating a formidable duo on d4 and e4 that controls vast amounts of central territory. This move supports our plans for kingside expansion with f2-f3 and g2-g4-g5, while also opening lines for our light-squared bishop. The e4 pawn particularly controls the important d5 and f5 squares, limiting Black's piece activity and central breaks. This central supremacy is the foundation of the Sämisch Variation, where we'll use our space advantage to launch a crushing kingside attack."
+      "annotation": "We're establishing our ideal pawn center with this advance, creating a formidable duo on d4 and e4 that controls vast amounts of central territory. This move supports our plans for kingside expansion with f2-f3 and g2-g4-g5, while also opening lines for our light-squared bishop. The e4 pawn particularly controls the important d5 and f5 squares, limiting Black's piece activity and central breaks. This central supremacy is the foundation of the Sämisch Variation, where we'll use our space advantage to launch a crushing kingside attack.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black establishes a solid pawn structure and prepares the typical King's Indian central break with ...e5. This move supports the knight on f6 and creates a solid foundation for Black's position while opening the c8-h3 diagonal for the light-squared bishop. The pawn on d6 also prevents our pieces from occupying e5 and prepares Black's counterplay in the center. We should recognize that this modest-looking move is setting up Black's main strategic theme: the ...e5 break that will challenge our impressive pawn center."
+      "annotation": "Black establishes a solid pawn structure and prepares the typical King's Indian central break with ...e5. This move supports the knight on f6 and creates a solid foundation for Black's position while opening the c8-h3 diagonal for the light-squared bishop. The pawn on d6 also prevents our pieces from occupying e5 and prepares Black's counterplay in the center. We should recognize that this modest-looking move is setting up Black's main strategic theme: the ...e5 break that will challenge our impressive pawn center.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f3",
-      "annotation": "We're playing the characteristic move of the Sämisch Variation, supporting our e4 pawn and preparing to expand further with g4-g5. This move may look weakening since it creates holes around our king, but it's essential for our attacking setup and prevents Black's pieces from occupying e4 or g4. The f3 pawn also supports a future g4 advance, which will be part of our kingside pawn storm aimed at Black's fianchettoed king. While this move does slow our development slightly, it's crucial for establishing the pawn structure that makes the Sämisch Variation so dangerous for Black."
+      "annotation": "We're playing the characteristic move of the Sämisch Variation, supporting our e4 pawn and preparing to expand further with g4-g5. This move may look weakening since it creates holes around our king, but it's essential for our attacking setup and prevents Black's pieces from occupying e4 or g4. The f3 pawn also supports a future g4 advance, which will be part of our kingside pawn storm aimed at Black's fianchettoed king. While this move does slow our development slightly, it's crucial for establishing the pawn structure that makes the Sämisch Variation so dangerous for Black.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "Black wisely castles kingside to bring the king to safety before we can launch our attack, though this also puts the king directly in the path of our coming pawn storm. This natural developing move connects the rooks and prepares Black's typical King's Indian counterplay with moves like ...Nbd7, ...Re8, and the central ...e5 break. While castling is necessary, Black must be aware that our f3-g4-g5-h4-h5 pawn storm will be targeting exactly where the king has moved. The timing of this castle is good since we haven't yet begun our kingside expansion in earnest."
+      "annotation": "Black wisely castles kingside to bring the king to safety before we can launch our attack, though this also puts the king directly in the path of our coming pawn storm. This natural developing move connects the rooks and prepares Black's typical King's Indian counterplay with moves like ...Nbd7, ...Re8, and the central ...e5 break. While castling is necessary, Black must be aware that our f3-g4-g5-h4-h5 pawn storm will be targeting exactly where the king has moved. The timing of this castle is good since we haven't yet begun our kingside expansion in earnest.",
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Be3",
-      "annotation": "We're developing our light-squared bishop to an excellent central square where it supports our d4 pawn and prepares for both kingside and queenside operations. This bishop placement is typical in the Sämisch system, as it keeps the bishop flexible while maintaining central control and supporting our pawn advances. The bishop on e3 also eyes the important a7-g1 diagonal and can potentially support a future f3-f4 advance or swing to h6 to trade off Black's important dark-squared bishop. From e3, our bishop coordinates well with our other pieces and maintains the central pressure that's essential to our opening strategy."
+      "annotation": "We're developing our light-squared bishop to an excellent central square where it supports our d4 pawn and prepares for both kingside and queenside operations. This bishop placement is typical in the Sämisch system, as it keeps the bishop flexible while maintaining central control and supporting our pawn advances. The bishop on e3 also eyes the important a7-g1 diagonal and can potentially support a future f3-f4 advance or swing to h6 to trade off Black's important dark-squared bishop. From e3, our bishop coordinates well with our other pieces and maintains the central pressure that's essential to our opening strategy.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black strikes at our pawn center with the thematic King's Indian break, challenging our d4 pawn and opening lines for piece activity. This central advance is Black's main strategic goal in the King's Indian Defense, as it activates the dark-squared bishop on g7 and creates potential for piece play on the newly opened files and diagonals. The ...e5 break also gives Black's pieces more breathing room and can support future central advances like ...f5. We now face a critical decision: whether to maintain the tension, advance d5, or allow the exchange on d4, each leading to very different pawn structures and strategic plans."
+      "annotation": "Black strikes at our pawn center with the thematic King's Indian break, challenging our d4 pawn and opening lines for piece activity. This central advance is Black's main strategic goal in the King's Indian Defense, as it activates the dark-squared bishop on g7 and creates potential for piece play on the newly opened files and diagonals. The ...e5 break also gives Black's pieces more breathing room and can support future central advances like ...f5. We now face a critical decision: whether to maintain the tension, advance d5, or allow the exchange on d4, each leading to very different pawn structures and strategic plans.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nge2",
-      "annotation": "We're developing our king's knight to e2, a flexible square that keeps our options open while supporting our central structure. This knight placement is characteristic of the Sämisch Variation, as the knight can later jump to g3 to support kingside attacking moves or to c3 to reinforce the center. The knight on e2 also doesn't block our f-pawn, which is important since we may want to play f4 later to support our center or launch our attack. From e2, our knight maintains good central influence while preparing for the complex middlegame positions that arise in the Sämisch King's Indian."
+      "annotation": "We're developing our king's knight to e2, a flexible square that keeps our options open while supporting our central structure. This knight placement is characteristic of the Sämisch Variation, as the knight can later jump to g3 to support kingside attacking moves or to c3 to reinforce the center. The knight on e2 also doesn't block our f-pawn, which is important since we may want to play f4 later to support our center or launch our attack. From e2, our knight maintains good central influence while preparing for the complex middlegame positions that arise in the Sämisch King's Indian.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "e2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black plays a solid move that prevents our d4-d5 advance and prepares to support the center with ...b5 or develop the queenside with ...Nbd7-c5. This move also gives Black's king a potential escape route via c7 if our kingside attack becomes too dangerous. The c6 advance is a flexible choice that maintains Black's central options while preventing us from gaining too much space with d5. However, this move does slightly weaken Black's queenside pawn structure and commits to a specific plan, so we should look for ways to exploit these slight concessions while continuing our own development and attack preparation."
+      "annotation": "Black plays a solid move that prevents our d4-d5 advance and prepares to support the center with ...b5 or develop the queenside with ...Nbd7-c5. This move also gives Black's king a potential escape route via c7 if our kingside attack becomes too dangerous. The c6 advance is a flexible choice that maintains Black's central options while preventing us from gaining too much space with d5. However, this move does slightly weaken Black's queenside pawn structure and commits to a specific plan, so we should look for ways to exploit these slight concessions while continuing our own development and attack preparation.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

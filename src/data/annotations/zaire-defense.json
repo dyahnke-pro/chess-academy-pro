@@ -3,35 +3,139 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, establishing central control and preparing to build a strong pawn center. This move controls the important e5 and c5 squares while opening lines for our queen and dark-squared bishop. The d4 opening leads to rich, strategic positions where we can often build space advantages and launch kingside attacks. Our plan is typically to follow up with moves like Nf3, c4, or e4 to maximize our central influence."
+      "annotation": "We're opening with the queen's pawn, establishing central control and preparing to build a strong pawn center. This move controls the important e5 and c5 squares while opening lines for our queen and dark-squared bishop. The d4 opening leads to rich, strategic positions where we can often build space advantages and launch kingside attacks. Our plan is typically to follow up with moves like Nf3, c4, or e4 to maximize our central influence.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black responds with the unusual Zaire Defense, immediately developing the knight to a central square but to an unconventional location. This move attacks our d4 pawn and prepares to contest the center, but it's considered dubious because the knight can be easily attacked and displaced. Our opponent is trying to avoid mainstream theory and create an unbalanced position early, but this knight placement violates opening principles by developing to a square where it can be harassed. We should look to exploit this by advancing our center pawns to gain space and time."
+      "annotation": "Black responds with the unusual Zaire Defense, immediately developing the knight to a central square but to an unconventional location. This move attacks our d4 pawn and prepares to contest the center, but it's considered dubious because the knight can be easily attacked and displaced. Our opponent is trying to avoid mainstream theory and create an unbalanced position early, but this knight placement violates opening principles by developing to a square where it can be harassed. We should look to exploit this by advancing our center pawns to gain space and time.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "We're immediately challenging the poorly-placed knight by advancing our central pawn with tempo. This aggressive pawn push forces Black's knight to retreat since all its natural squares (d4, e5, b4, a5) are either controlled by us or lead to further problems. Our pawn on d5 now claims significant central space and restricts Black's pieces, particularly limiting the scope of their pieces on the queenside. This move demonstrates why the Zaire Defense is problematic – we gain time and space while Black's pieces become awkwardly placed."
+      "annotation": "We're immediately challenging the poorly-placed knight by advancing our central pawn with tempo. This aggressive pawn push forces Black's knight to retreat since all its natural squares (d4, e5, b4, a5) are either controlled by us or lead to further problems. Our pawn on d5 now claims significant central space and restricts Black's pieces, particularly limiting the scope of their pieces on the queenside. This move demonstrates why the Zaire Defense is problematic – we gain time and space while Black's pieces become awkwardly placed.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nb8",
-      "annotation": "Our opponent is forced into the embarrassing retreat of moving the knight back to its starting square, having wasted two precious tempi in the opening. This retreat violates fundamental opening principles of developing pieces efficiently and demonstrates the weakness of Black's second move. Black has essentially given us a two-move head start in development while we've gained central space with our d5 pawn. The knight on b8 will need to find a new path to enter the game, likely through d7 or a6, both of which are less active than normal development squares."
+      "annotation": "Our opponent is forced into the embarrassing retreat of moving the knight back to its starting square, having wasted two precious tempi in the opening. This retreat violates fundamental opening principles of developing pieces efficiently and demonstrates the weakness of Black's second move. Black has essentially given us a two-move head start in development while we've gained central space with our d5 pawn. The knight on b8 will need to find a new path to enter the game, likely through d7 or a6, both of which are less active than normal development squares.",
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "b8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We're building an impressive pawn center by placing our second central pawn, creating what's known as the 'ideal pawn center' with pawns on d5 and e4. This powerful pawn duo controls key central squares like c6, e6, f5, and c5, severely restricting Black's piece mobility and creating a space advantage. Our pawns also open diagonals for our bishops and prepare potential kingside attacking chances with moves like f4-f5 later. With Black having wasted time retreating the knight, we're accelerating our development and central control to maximum effect."
+      "annotation": "We're building an impressive pawn center by placing our second central pawn, creating what's known as the 'ideal pawn center' with pawns on d5 and e4. This powerful pawn duo controls key central squares like c6, e6, f5, and c5, severely restricting Black's piece mobility and creating a space advantage. Our pawns also open diagonals for our bishops and prepare potential kingside attacking chances with moves like f4-f5 later. With Black having wasted time retreating the knight, we're accelerating our development and central control to maximum effect.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black finally makes a normal developing move, bringing the knight to its most active square where it attacks our advanced e4 pawn. This is actually Black's most principled try in this dubious opening, as the knight on f6 is well-placed to contest our central pawns and prepare kingside development. Our opponent is trying to challenge our pawn center before we can consolidate our advantage completely. However, we have a strong continuation that will maintain our space advantage and keep Black under pressure."
+      "annotation": "Black finally makes a normal developing move, bringing the knight to its most active square where it attacks our advanced e4 pawn. This is actually Black's most principled try in this dubious opening, as the knight on f6 is well-placed to contest our central pawns and prepare kingside development. Our opponent is trying to challenge our pawn center before we can consolidate our advantage completely. However, we have a strong continuation that will maintain our space advantage and keep Black under pressure.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "We're advancing our pawn to attack the knight and further expand our central space advantage, creating an even more dominant pawn structure. This move forces Black's well-placed knight to retreat again, continuing the theme of gaining time and space throughout this opening. Our pawn on e5 now controls crucial squares like d6 and f6, severely limiting Black's piece coordination and kingside development options. The advanced pawn also supports potential attacking ideas on the kingside while maintaining our stranglehold on the center."
+      "annotation": "We're advancing our pawn to attack the knight and further expand our central space advantage, creating an even more dominant pawn structure. This move forces Black's well-placed knight to retreat again, continuing the theme of gaining time and space throughout this opening. Our pawn on e5 now controls crucial squares like d6 and f6, severely limiting Black's piece coordination and kingside development options. The advanced pawn also supports potential attacking ideas on the kingside while maintaining our stranglehold on the center.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ng8",
-      "annotation": "Black is forced into another humiliating retreat, moving the knight back to its starting square for the second time in just four moves. This demonstrates the complete failure of Black's opening strategy – they've now wasted four tempi moving the same piece back and forth while we've built a crushing central pawn duo. Our opponent's position is already strategically lost, with severely restricted piece development and no compensation for our massive space advantage. We should continue developing our pieces naturally while maintaining our central dominance, as Black will struggle to find adequate piece coordination for the entire game."
+      "annotation": "Black is forced into another humiliating retreat, moving the knight back to its starting square for the second time in just four moves. This demonstrates the complete failure of Black's opening strategy – they've now wasted four tempi moving the same piece back and forth while we've built a crushing central pawn duo. Our opponent's position is already strategically lost, with severely restricted piece development and no compensation for our massive space advantage. We should continue developing our pieces naturally while maintaining our central dominance, as Black will struggle to find adequate piece coordination for the entire game.",
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

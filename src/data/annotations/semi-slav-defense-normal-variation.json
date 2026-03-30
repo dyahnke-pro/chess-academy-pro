@@ -3,59 +3,207 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately claiming central space and controlling the important e5 and c5 squares. This is one of the most solid and principled first moves in chess, as it develops our position from the center outward while preparing to bring our pieces into active play. The d4 move also opens lines for our dark-squared bishop and queen, giving us flexible development options. Unlike 1.e4 which leads to more tactical, open games, 1.d4 typically produces strategic, positional battles where understanding pawn structures and piece coordination becomes crucial."
+      "annotation": "We're opening with the queen's pawn, immediately claiming central space and controlling the important e5 and c5 squares. This is one of the most solid and principled first moves in chess, as it develops our position from the center outward while preparing to bring our pieces into active play. The d4 move also opens lines for our dark-squared bishop and queen, giving us flexible development options. Unlike 1.e4 which leads to more tactical, open games, 1.d4 typically produces strategic, positional battles where understanding pawn structures and piece coordination becomes crucial.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Our opponent responds by immediately challenging our central pawn with the most principled defense. Black stakes an equal claim to the center, preventing us from establishing a strong pawn duo with e2-e4, and prepares to develop their pieces harmoniously. This move leads to the rich Queen's Gambit complex of openings, where the central tension between our pawns will define much of the strategic play. Black's setup is solid and classical, aiming for a sound position where they can gradually equalize and look for counterplay."
+      "annotation": "Our opponent responds by immediately challenging our central pawn with the most principled defense. Black stakes an equal claim to the center, preventing us from establishing a strong pawn duo with e2-e4, and prepares to develop their pieces harmoniously. This move leads to the rich Queen's Gambit complex of openings, where the central tension between our pawns will define much of the strategic play. Black's setup is solid and classical, aiming for a sound position where they can gradually equalize and look for counterplay.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're launching the famous Queen's Gambit, offering our c-pawn to deflect Black's central d5 pawn and gain more space in the center. This isn't a true gambit since Black can't hold the pawn safely, but rather a strategic pawn offer that aims to disrupt Black's central control. If Black takes on c4, we can recapture and gain a strong pawn center with e2-e4, while if they decline, we maintain pressure on their d5 pawn. This move also prepares the development of our queenside pieces, particularly our light-squared bishop which will find a good home on the long diagonal."
+      "annotation": "We're launching the famous Queen's Gambit, offering our c-pawn to deflect Black's central d5 pawn and gain more space in the center. This isn't a true gambit since Black can't hold the pawn safely, but rather a strategic pawn offer that aims to disrupt Black's central control. If Black takes on c4, we can recapture and gain a strong pawn center with e2-e4, while if they decline, we maintain pressure on their d5 pawn. This move also prepares the development of our queenside pieces, particularly our light-squared bishop which will find a good home on the long diagonal.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black declines the Queen's Gambit and instead supports their d5 pawn with this solid move, entering the Orthodox Defense system. This pawn move creates a strong pawn chain on d5-e6 but does restrict the development of Black's light-squared bishop, which is now blocked by its own pawn. Our opponent is choosing a classical, positional approach rather than the more dynamic lines that arise after accepting the gambit. The e6 pawn also prepares potential breaks with ...c5 or ...f5 later in the game, giving Black strategic flexibility."
+      "annotation": "Black declines the Queen's Gambit and instead supports their d5 pawn with this solid move, entering the Orthodox Defense system. This pawn move creates a strong pawn chain on d5-e6 but does restrict the development of Black's light-squared bishop, which is now blocked by its own pawn. Our opponent is choosing a classical, positional approach rather than the more dynamic lines that arise after accepting the gambit. The e6 pawn also prepares potential breaks with ...c5 or ...f5 later in the game, giving Black strategic flexibility.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and adds more pressure to Black's central d5 pawn. This knight placement is incredibly flexible, as from c3 it can later jump to e4, a5, or b5 depending on how the position develops. The knight also controls important central squares like e4 and d5, contributing to our overall central control. This move fits perfectly with our Queen's Gambit setup, maintaining pressure while developing our pieces to active squares."
+      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and adds more pressure to Black's central d5 pawn. This knight placement is incredibly flexible, as from c3 it can later jump to e4, a5, or b5 depending on how the position develops. The knight also controls important central squares like e4 and d5, contributing to our overall central control. This move fits perfectly with our Queen's Gambit setup, maintaining pressure while developing our pieces to active squares.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Our opponent plays the characteristic move of the Semi-Slav Defense, supporting their d5 pawn from the side while preparing potential expansion with ...b5 or ...dxc4 followed by ...b5. This creates a solid but slightly passive pawn structure, as the c6 pawn blocks the natural development square for Black's queen's knight. However, this setup gives Black a very resilient center and prepares the thematic Semi-Slav ideas of queenside expansion or central counterplay. Black is essentially saying they're willing to accept some developmental difficulties in exchange for maintaining their central pawn on d5."
+      "annotation": "Our opponent plays the characteristic move of the Semi-Slav Defense, supporting their d5 pawn from the side while preparing potential expansion with ...b5 or ...dxc4 followed by ...b5. This creates a solid but slightly passive pawn structure, as the c6 pawn blocks the natural development square for Black's queen's knight. However, this setup gives Black a very resilient center and prepares the thematic Semi-Slav ideas of queenside expansion or central counterplay. Black is essentially saying they're willing to accept some developmental difficulties in exchange for maintaining their central pawn on d5.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most active square, where it controls the crucial central squares e5 and d4 while supporting our overall position. This knight development is part of our systematic approach to mobilizing our pieces, and from f3 the knight can later relocate to e5 or g5 for more aggressive posts. The knight also provides additional defense to our kingside, which will become important when we castle. Most importantly, this move maintains all our options - we can still play e3 or e4 depending on how Black continues, keeping maximum flexibility in our setup."
+      "annotation": "We're developing our king's knight to its most active square, where it controls the crucial central squares e5 and d4 while supporting our overall position. This knight development is part of our systematic approach to mobilizing our pieces, and from f3 the knight can later relocate to e5 or g5 for more aggressive posts. The knight also provides additional defense to our kingside, which will become important when we castle. Most importantly, this move maintains all our options - we can still play e3 or e4 depending on how Black continues, keeping maximum flexibility in our setup.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their king's knight to its most natural square, attacking our e4 square and preventing us from establishing a strong pawn center with e2-e4. This is the most principled development, as the knight on f6 is actively placed and contributes to Black's central control. The knight also prepares kingside castling and can later support pawn breaks like ...e5 or ...c5. Our opponent is following sound developmental principles, bringing pieces out to squares where they control the center and prepare coordinated action."
+      "annotation": "Black develops their king's knight to its most natural square, attacking our e4 square and preventing us from establishing a strong pawn center with e2-e4. This is the most principled development, as the knight on f6 is actively placed and contributes to Black's central control. The knight also prepares kingside castling and can later support pawn breaks like ...e5 or ...c5. Our opponent is following sound developmental principles, bringing pieces out to squares where they control the center and prepare coordinated action.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We're choosing the more positional approach with this pawn move, supporting our d4 pawn and preparing to develop our light-squared bishop to d3 or e2. This move leads to quieter, more strategic middlegames compared to the sharper lines that arise after Bg5 or e4 attempts. The e3 pawn also opens a diagonal for our dark-squared bishop to potentially go to b2, creating the foundation of our queenside fianchetto setup. While this looks modest, it's actually a very principled way to handle the Semi-Slav, as we're building a solid position while maintaining central control and preparing harmonious piece development."
+      "annotation": "We're choosing the more positional approach with this pawn move, supporting our d4 pawn and preparing to develop our light-squared bishop to d3 or e2. This move leads to quieter, more strategic middlegames compared to the sharper lines that arise after Bg5 or e4 attempts. The e3 pawn also opens a diagonal for our dark-squared bishop to potentially go to b2, creating the foundation of our queenside fianchetto setup. While this looks modest, it's actually a very principled way to handle the Semi-Slav, as we're building a solid position while maintaining central control and preparing harmonious piece development.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nbd7",
-      "annotation": "Our opponent develops their queen's knight to d7, which is typical in Semi-Slav structures even though it appears somewhat passive. This knight placement supports the important e5 square and can later relocate to more active posts via e5 or b6-c4. The knight on d7 also doesn't interfere with the potential development of Black's light-squared bishop, keeping options open for ...Bd6 or a fianchetto with ...b6 and ...Bb7. While this knight looks less active than if it were on c6, it actually provides more strategic flexibility in the Semi-Slav pawn structure."
+      "annotation": "Our opponent develops their queen's knight to d7, which is typical in Semi-Slav structures even though it appears somewhat passive. This knight placement supports the important e5 square and can later relocate to more active posts via e5 or b6-c4. The knight on d7 also doesn't interfere with the potential development of Black's light-squared bishop, keeping options open for ...Bd6 or a fianchetto with ...b6 and ...Bb7. While this knight looks less active than if it were on c6, it actually provides more strategic flexibility in the Semi-Slav pawn structure.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "d7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b3",
-      "annotation": "We're preparing to fianchetto our dark-squared bishop on b2, which will exert tremendous pressure along the long diagonal toward Black's king position. This setup is a hallmark of many Queen's Gambit systems, as the bishop on b2 will support our central pawns while eyeing Black's kingside. The b3 move also gives our bishop an escape square on b1 if needed, and prepares potential queenside expansion with a2-a4-a5. This patient, positional approach allows us to build up pressure gradually while maintaining a solid position, perfectly suiting the strategic nature of the Semi-Slav Defense."
+      "annotation": "We're preparing to fianchetto our dark-squared bishop on b2, which will exert tremendous pressure along the long diagonal toward Black's king position. This setup is a hallmark of many Queen's Gambit systems, as the bishop on b2 will support our central pawns while eyeing Black's kingside. The b3 move also gives our bishop an escape square on b1 if needed, and prepares potential queenside expansion with a2-a4-a5. This patient, positional approach allows us to build up pressure gradually while maintaining a solid position, perfectly suiting the strategic nature of the Semi-Slav Defense.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bd6",
-      "annotation": "Black develops their light-squared bishop to an active central square, where it eyes our kingside and particularly the h2 square near our future king position. This bishop placement is more active than the alternative ...Be7, as from d6 the bishop controls important central squares and can support various pawn breaks. The bishop also connects with potential tactical themes involving ...Bxh2+ discoveries or supporting an eventual ...e5 pawn break. However, this bishop placement does make it a potential target for our pieces, and Black needs to be careful about tactics involving our knight potentially reaching e4."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Our opponent castles kingside to bring their king to safety and connect their rooks, which is essential before the position becomes more tactical. This is the logical culmination of Black's kingside development, and now they have a secure king position from which to launch central or queenside operations. The rook on f8 also adds support to the f7 square and can potentially support an ...f5 pawn break later. Black has now completed their basic development and can focus on more active plans like ...e5, ...c5, or queenside expansion with ...a6 and ...b5."
-    },
-    {
-      "san": "Be2",
-      "annotation": "We're developing our light-squared bishop to a flexible square where it supports our kingside while maintaining the option to castle. The bishop on e2 is less aggressive than on d3, but it's also safer from enemy pieces and doesn't block our own pawns' mobility. This modest development fits our positional approach perfectly, as we're building a solid foundation before committing to more aggressive operations. The bishop can later potentially relocate to f3 or h5 if the position calls for more active play, while for now it simply completes our basic development and prepares castling."
+      "annotation": "Black develops their light-squared bishop to an active central square, where it eyes our kingside and particularly the h2 square near our future king position. This bishop placement is more active than the alternative ...Be7, as from d6 the bishop controls important central squares and can support various pawn breaks. The bishop also connects with potential tactical themes involving ...Bxh2+ discoveries or supporting an eventual ...e5 pawn break. However, this bishop placement does make it a potential target for our pieces, and Black needs to be careful about tactics involving our knight potentially reaching e4.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,43 +3,173 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We're starting with the Réti Opening, a flexible system that allows us to transpose into various structures while keeping our options open. This knight development immediately controls the central e5 and d4 squares, preventing Black from establishing a strong pawn center with ...e5 and ...d5. The move also prepares to support a later d4 advance while keeping the door open for hypermodern setups where we might fianchetto our king's bishop. Unlike 1.e4 or 1.d4, this approach lets us see what our opponent has in mind before committing to a specific pawn structure."
+      "annotation": "We're starting with the Réti Opening, a flexible system that allows us to transpose into various structures while keeping our options open. This knight development immediately controls the central e5 and d4 squares, preventing Black from establishing a strong pawn center with ...e5 and ...d5. The move also prepares to support a later d4 advance while keeping the door open for hypermodern setups where we might fianchetto our king's bishop. Unlike 1.e4 or 1.d4, this approach lets us see what our opponent has in mind before committing to a specific pawn structure.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black immediately challenges our potential central control with this Sicilian-style pawn advance, staking a claim to the d4 and b4 squares. This move signals that our opponent is comfortable with asymmetrical positions and wants to fight for the initiative from move one. The c5 pawn also prepares ...Nc6 and ...d6, leading toward the Pterodactyl Defense setup that's coming. By playing ...c5 before we've committed to d4, Black is trying to dictate the opening battle and avoid getting into a standard King's Indian or other mainline system."
+      "annotation": "Black immediately challenges our potential central control with this Sicilian-style pawn advance, staking a claim to the d4 and b4 squares. This move signals that our opponent is comfortable with asymmetrical positions and wants to fight for the initiative from move one. The c5 pawn also prepares ...Nc6 and ...d6, leading toward the Pterodactyl Defense setup that's coming. By playing ...c5 before we've committed to d4, Black is trying to dictate the opening battle and avoid getting into a standard King's Indian or other mainline system.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We respond with the English Opening setup, creating our own space advantage on the queenside and preparing to meet Black's central ambitions head-on. This pawn controls the crucial d5 and b5 squares, making it harder for Black to achieve the ...d5 break that would equalize central control. Our c4 pawn also supports a future d4 advance, after which we'll have a strong pawn center. The move fits perfectly with our Nf3 development, as we're building a flexible system that can transpose into favorable versions of the King's Indian Attack or other setups depending on how Black continues."
+      "annotation": "We respond with the English Opening setup, creating our own space advantage on the queenside and preparing to meet Black's central ambitions head-on. This pawn controls the crucial d5 and b5 squares, making it harder for Black to achieve the ...d5 break that would equalize central control. Our c4 pawn also supports a future d4 advance, after which we'll have a strong pawn center. The move fits perfectly with our Nf3 development, as we're building a flexible system that can transpose into favorable versions of the King's Indian Attack or other setups depending on how Black continues.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black begins the characteristic Pterodactyl Defense setup with this fianchetto preparation, signaling a hypermodern approach where the dark-squared bishop will exert pressure along the long diagonal. This move prepares ...Bg7, from where the bishop will eye our center and potentially support counterplay against our kingside. The g6-Bg7 structure is a hallmark of the Pterodactyl, named for its resemblance to the prehistoric creature's extended wing. While this looks somewhat passive, Black is actually preparing dynamic piece play and potential pawn breaks that can quickly turn the tables if we're not careful with our central expansion."
+      "annotation": "Black begins the characteristic Pterodactyl Defense setup with this fianchetto preparation, signaling a hypermodern approach where the dark-squared bishop will exert pressure along the long diagonal. This move prepares ...Bg7, from where the bishop will eye our center and potentially support counterplay against our kingside. The g6-Bg7 structure is a hallmark of the Pterodactyl, named for its resemblance to the prehistoric creature's extended wing. While this looks somewhat passive, Black is actually preparing dynamic piece play and potential pawn breaks that can quickly turn the tables if we're not careful with our central expansion.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We establish our ideal pawn center, taking advantage of Black's somewhat slow piece development to claim maximum central space. This advance opens lines for our light-squared bishop and queen while supporting our c4 pawn to create a powerful pawn duo. The d4 pawn attacks Black's c5 pawn, forcing a decision about the central tension and potentially opening the position to our advantage with our superior development. This is the critical moment where our opening strategy comes together – we have more space and faster piece development, which should translate into a pleasant advantage if we continue accurately."
+      "annotation": "We establish our ideal pawn center, taking advantage of Black's somewhat slow piece development to claim maximum central space. This advance opens lines for our light-squared bishop and queen while supporting our c4 pawn to create a powerful pawn duo. The d4 pawn attacks Black's c5 pawn, forcing a decision about the central tension and potentially opening the position to our advantage with our superior development. This is the critical moment where our opening strategy comes together – we have more space and faster piece development, which should translate into a pleasant advantage if we continue accurately.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup that defines the Pterodactyl Defense, placing the dark-squared bishop on its most active diagonal where it exerts maximum pressure. From g7, this bishop controls important central squares like e5 and d4, while also providing crucial defense for Black's kingside. The bishop also supports potential tactical ideas involving ...f5 or other pawn breaks that could open attacking lines. However, this development comes at the cost of time, as we're already dominating the center while Black is still arranging pieces, giving us a clear initiative to press forward with our advantage."
+      "annotation": "Black completes the fianchetto setup that defines the Pterodactyl Defense, placing the dark-squared bishop on its most active diagonal where it exerts maximum pressure. From g7, this bishop controls important central squares like e5 and d4, while also providing crucial defense for Black's kingside. The bishop also supports potential tactical ideas involving ...f5 or other pawn breaks that could open attacking lines. However, this development comes at the cost of time, as we're already dominating the center while Black is still arranging pieces, giving us a clear initiative to press forward with our advantage.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We complete our classical pawn center with this powerful advance, creating maximum central control and opening attacking lines for our pieces. The e4 pawn works in harmony with our d4 pawn to control crucial squares like f5 and c5, severely limiting Black's piece mobility. This move also opens the diagonal for our light-squared bishop and provides more space for our pieces to maneuver effectively. With this central dominance established, we're ready to develop our remaining pieces with tempo and start converting our space advantage into concrete attacking chances against Black's somewhat cramped position."
+      "annotation": "We complete our classical pawn center with this powerful advance, creating maximum central control and opening attacking lines for our pieces. The e4 pawn works in harmony with our d4 pawn to control crucial squares like f5 and c5, severely limiting Black's piece mobility. This move also opens the diagonal for our light-squared bishop and provides more space for our pieces to maneuver effectively. With this central dominance established, we're ready to develop our remaining pieces with tempo and start converting our space advantage into concrete attacking chances against Black's somewhat cramped position.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qa5+",
-      "annotation": "Black launches the trademark Pterodactyl counterattack with this bold queen sortie, immediately creating tactical complications and forcing us to respond to the check. This aggressive move targets our temporarily undefended pieces and creates immediate threats that we must address carefully. The queen on a5 also pins our a2-g8 diagonal temporarily and prepares to potentially capture on c3 if we block with the knight. While this looks dangerous, it's actually somewhat premature since Black's king is still uncastled and the queen may become a target for our developing pieces – but we need to handle the immediate tactics precisely to maintain our advantage."
+      "annotation": "Black launches the trademark Pterodactyl counterattack with this bold queen sortie, immediately creating tactical complications and forcing us to respond to the check. This aggressive move targets our temporarily undefended pieces and creates immediate threats that we must address carefully. The queen on a5 also pins our a2-g8 diagonal temporarily and prepares to potentially capture on c3 if we block with the knight. While this looks dangerous, it's actually somewhat premature since Black's king is still uncastled and the queen may become a target for our developing pieces – but we need to handle the immediate tactics precisely to maintain our advantage.",
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "a5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We block the check with our most natural developing move, bringing the knight to its ideal central square where it supports our pawn structure and prepares further piece coordination. This knight on c3 defends our e4 pawn, controls important squares like d5 and b5, and keeps our development momentum going. The move also prevents Black's queen from capturing anything material while developing with tempo. From c3, our knight can potentially jump to more active squares like d5 or support tactical operations in the center, maintaining the pressure while consolidating our position safely."
+      "annotation": "We block the check with our most natural developing move, bringing the knight to its ideal central square where it supports our pawn structure and prepares further piece coordination. This knight on c3 defends our e4 pawn, controls important squares like d5 and b5, and keeps our development momentum going. The move also prevents Black's queen from capturing anything material while developing with tempo. From c3, our knight can potentially jump to more active squares like d5 or support tactical operations in the center, maintaining the pressure while consolidating our position safely.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black finally addresses the central tension and completes a solid if somewhat passive setup, supporting the c5 pawn while preparing to develop the remaining pieces. This move creates a small pawn chain and opens a potential retreat square for the queen on a5, which was becoming increasingly uncomfortable under pressure. The d6 pawn also prepares ...Nf6 and ...0-0, allowing Black to complete development and start organizing counterplay. However, this structure leaves Black with less central space and piece mobility, giving us excellent winning chances if we can convert our development advantage and central control into concrete threats against Black's somewhat compromised king position."
+      "annotation": "Black finally addresses the central tension and completes a solid if somewhat passive setup, supporting the c5 pawn while preparing to develop the remaining pieces. This move creates a small pawn chain and opens a potential retreat square for the queen on a5, which was becoming increasingly uncomfortable under pressure. The d6 pawn also prepares ...Nf6 and ...0-0, allowing Black to complete development and start organizing counterplay. However, this structure leaves Black with less central space and piece mobility, giving us excellent winning chances if we can convert our development advantage and central control into concrete threats against Black's somewhat compromised king position.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

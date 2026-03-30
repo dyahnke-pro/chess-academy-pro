@@ -3,31 +3,71 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, claiming central space and freeing both our bishop and queen for development. This classical move controls the d5 and f5 squares while preparing to build a strong pawn center. Our plan is to develop quickly and take advantage of the center, especially since many hypermodern defenses like what's coming will allow us to occupy it freely. The move also prepares us for various setups depending on how Black responds to our central challenge."
+      "annotation": "We're opening with the king's pawn, claiming central space and freeing both our bishop and queen for development. This classical move controls the d5 and f5 squares while preparing to build a strong pawn center. Our plan is to develop quickly and take advantage of the center, especially since many hypermodern defenses like what's coming will allow us to occupy it freely. The move also prepares us for various setups depending on how Black responds to our central challenge.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black immediately signals their intention to play the Pterodactyl Defense, a hypermodern system that prioritizes piece development over immediate central occupation. This move prepares to fianchetto the dark-squared bishop on g7, where it will exert long-range pressure along the diagonal toward our kingside. Our opponent is essentially saying 'go ahead and take the center - I'll attack it from the flanks.' This defense can be tricky because it often leads to unbalanced positions where Black gets active piece play in exchange for giving us central space."
+      "annotation": "Black immediately signals their intention to play the Pterodactyl Defense, a hypermodern system that prioritizes piece development over immediate central occupation. This move prepares to fianchetto the dark-squared bishop on g7, where it will exert long-range pressure along the diagonal toward our kingside. Our opponent is essentially saying 'go ahead and take the center - I'll attack it from the flanks.' This defense can be tricky because it often leads to unbalanced positions where Black gets active piece play in exchange for giving us central space.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We gladly accept the invitation to establish a classical two-pawn center, now controlling key central squares like e5 and c5. This move completes our ideal pawn center and gives us excellent development prospects for our pieces. Against hypermodern defenses, occupying the center early is usually the right approach since our opponent has voluntarily allowed us this luxury. The d4 pawn also supports a future Nc3 and opens lines for our dark-squared bishop, giving us multiple development options."
+      "annotation": "We gladly accept the invitation to establish a classical two-pawn center, now controlling key central squares like e5 and c5. This move completes our ideal pawn center and gives us excellent development prospects for our pieces. Against hypermodern defenses, occupying the center early is usually the right approach since our opponent has voluntarily allowed us this luxury. The d4 pawn also supports a future Nc3 and opens lines for our dark-squared bishop, giving us multiple development options.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup, placing their dark-squared bishop on its most active square where it eyes our central pawns and potentially our kingside. This bishop becomes the cornerstone of Black's position, often supporting counterplay with moves like ...c5 or ...d6 followed by ...f5. Our opponent is now ready to challenge our center from this strong diagonal, and we need to be aware that this bishop can become quite dangerous if we're not careful with our king safety. The Pterodactyl is starting to take shape as Black prepares to strike at our pawn center."
-    },
-    {
-      "san": "c5",
-      "annotation": "This is the characteristic strike at our pawn center that defines the Pterodactyl's aggressive nature - Black immediately challenges our d4 pawn before we can consolidate. Our opponent is hoping to either win the d4 pawn outright or force us into a favorable pawn exchange that opens lines for their pieces. This move also prepares potential tactics along the c-file and gives Black's position more dynamic potential. We need to respond carefully because simply advancing d5 isn't always best, and taking on c5 might give Black exactly the open lines they're seeking."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square while defending the attacked d4 pawn, maintaining our strong central presence. This move also prepares potential advances like d5 or supports the center while keeping our development flowing smoothly. The knight on c3 eyes important squares like e4, d5, and b5, giving us tactical possibilities in the center and on the queenside. By defending rather than advancing or exchanging, we're forcing Black to show their hand first while keeping maximum flexibility in our position."
-    },
-    {
-      "san": "Be3",
-      "annotation": "We develop our light-squared bishop to an active square where it supports our d4 pawn and prepares to meet Black's central pressure head-on. This move also opens up the possibility of castling queenside in some lines, while keeping the option of f2-f3 followed by Qd2 and 0-0-0 for a kingside attack. The bishop on e3 is well-placed to support our central pawns and can potentially retreat to d2 or f2 if Black continues to pressure our center with moves like ...cxd4. This solid development move maintains our space advantage while preparing for the middlegame complications that are sure to arise from Black's hypermodern setup."
+      "annotation": "Black completes the fianchetto setup, placing their dark-squared bishop on its most active square where it eyes our central pawns and potentially our kingside. This bishop becomes the cornerstone of Black's position, often supporting counterplay with moves like ...c5 or ...d6 followed by ...f5. Our opponent is now ready to challenge our center from this strong diagonal, and we need to be aware that this bishop can become quite dangerous if we're not careful with our king safety. The Pterodactyl is starting to take shape as Black prepares to strike at our pawn center.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

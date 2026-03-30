@@ -3,47 +3,190 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing rapid development. This move controls the crucial d5 and f5 squares while opening diagonals for our bishop and queen. The move 1.e4 leads to sharp, tactical games where we can often launch quick attacks against the enemy king. Against the upcoming Caro-Kann Defense, we'll need to be prepared for Black's solid, positionally-oriented approach that aims to undermine our central pawn structure."
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing rapid development. This move controls the crucial d5 and f5 squares while opening diagonals for our bishop and queen. The move 1.e4 leads to sharp, tactical games where we can often launch quick attacks against the enemy king. Against the upcoming Caro-Kann Defense, we'll need to be prepared for Black's solid, positionally-oriented approach that aims to undermine our central pawn structure.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black signals the Caro-Kann Defense, one of the most solid responses to 1.e4 that focuses on controlling the d5 square from a safe distance. Unlike 1...e5, this move doesn't immediately occupy the center but prepares ...d5 while keeping the d8-h4 diagonal closed for safety. The Caro-Kann is beloved by positional players because it leads to sound pawn structures and fewer tactical complications than the Sicilian or French Defense. Our opponent is essentially saying 'I'll challenge your center methodically rather than meeting force with force.'"
+      "annotation": "Black signals the Caro-Kann Defense, one of the most solid responses to 1.e4 that focuses on controlling the d5 square from a safe distance. Unlike 1...e5, this move doesn't immediately occupy the center but prepares ...d5 while keeping the d8-h4 diagonal closed for safety. The Caro-Kann is beloved by positional players because it leads to sound pawn structures and fewer tactical complications than the Sicilian or French Defense. Our opponent is essentially saying 'I'll challenge your center methodically rather than meeting force with force.'",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We establish a classical pawn center with our queen's pawn, now controlling both e5 and c5 squares while supporting our e4 pawn. This creates maximum central space and gives us excellent piece development prospects. The move also opens the diagonal for our light-squared bishop and prepares to meet Black's coming ...d5 with a solid pawn structure. By occupying the center with both pawns, we're setting the stage for a space advantage that can translate into attacking chances later in the game."
+      "annotation": "We establish a classical pawn center with our queen's pawn, now controlling both e5 and c5 squares while supporting our e4 pawn. This creates maximum central space and gives us excellent piece development prospects. The move also opens the diagonal for our light-squared bishop and prepares to meet Black's coming ...d5 with a solid pawn structure. By occupying the center with both pawns, we're setting the stage for a space advantage that can translate into attacking chances later in the game.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at our central pawn immediately, which is the defining characteristic of the Caro-Kann Defense. This move challenges our e4 pawn and forces us to make an important decision about how to recapture. Our opponent is following the opening's main strategic idea: liquidate our strong e4 pawn to achieve equality in the center. The move also opens the c8-h3 diagonal for Black's light-squared bishop and begins the process of completing kingside development."
+      "annotation": "Black strikes at our central pawn immediately, which is the defining characteristic of the Caro-Kann Defense. This move challenges our e4 pawn and forces us to make an important decision about how to recapture. Our opponent is following the opening's main strategic idea: liquidate our strong e4 pawn to achieve equality in the center. The move also opens the c8-h3 diagonal for Black's light-squared bishop and begins the process of completing kingside development.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd2",
-      "annotation": "We develop our knight to a flexible square that supports the e4 pawn while keeping multiple options open for recapturing on e4. This is more sophisticated than the immediate 3.exd5 or 3.e5, as it avoids giving Black the easy equality that comes with pawn trades. The knight on d2 can later jump to f3 (after recapturing on e4) or support a future f2-f4 advance in some variations. We're essentially telling Black: 'Go ahead and take on e4, but I'll recapture with the knight and maintain central influence while developing actively.'"
+      "annotation": "We develop our knight to a flexible square that supports the e4 pawn while keeping multiple options open for recapturing on e4. This is more sophisticated than the immediate 3.exd5 or 3.e5, as it avoids giving Black the easy equality that comes with pawn trades. The knight on d2 can later jump to f3 (after recapturing on e4) or support a future f2-f4 advance in some variations. We're essentially telling Black: 'Go ahead and take on e4, but I'll recapture with the knight and maintain central influence while developing actively.'",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe4",
-      "annotation": "Black captures our central pawn, which is practically forced since leaving it hanging would be strategically disastrous. This trade is what Black was aiming for from move one - eliminating our strong e4 pawn to reduce our central advantage. However, our opponent must now deal with the fact that we'll recapture with the knight, which will centralize our piece beautifully. The capture also opens the e-file, which could become important if we castle kingside and want to use the file for attacking purposes later in the game."
+      "annotation": "Black captures our central pawn, which is practically forced since leaving it hanging would be strategically disastrous. This trade is what Black was aiming for from move one - eliminating our strong e4 pawn to reduce our central advantage. However, our opponent must now deal with the fact that we'll recapture with the knight, which will centralize our piece beautifully. The capture also opens the e-file, which could become important if we castle kingside and want to use the file for attacking purposes later in the game.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxe4",
-      "annotation": "We recapture with the knight, placing it on the excellent e4 square where it controls key central squares like d6, f6, c5, and g5. This centralized knight is one of our main advantages in the Caro-Kann - it's more active than Black's pieces and can support various attacking ideas. The knight also maintains our central presence even after the pawn trade, ensuring that Black hasn't completely equalized. From e4, the knight can later jump to more aggressive squares or retreat to support other pieces, giving us excellent flexibility in our piece coordination."
+      "annotation": "We recapture with the knight, placing it on the excellent e4 square where it controls key central squares like d6, f6, c5, and g5. This centralized knight is one of our main advantages in the Caro-Kann - it's more active than Black's pieces and can support various attacking ideas. The knight also maintains our central presence even after the pawn trade, ensuring that Black hasn't completely equalized. From e4, the knight can later jump to more aggressive squares or retreat to support other pieces, giving us excellent flexibility in our piece coordination.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops the light-squared bishop actively, attacking our centralized knight and following one of the Caro-Kann's key strategic principles. This bishop move is much more natural here than in the French Defense, where the same bishop often gets trapped behind Black's own pawn chain. Our opponent is forcing us to make a decision about the knight while developing a piece to an active square outside the pawn chain. However, we need to be careful that this bishop doesn't become too active - it's eyeing important squares like e4 and potentially supporting tactics against our kingside."
+      "annotation": "Black develops the light-squared bishop actively, attacking our centralized knight and following one of the Caro-Kann's key strategic principles. This bishop move is much more natural here than in the French Defense, where the same bishop often gets trapped behind Black's own pawn chain. Our opponent is forcing us to make a decision about the knight while developing a piece to an active square outside the pawn chain. However, we need to be careful that this bishop doesn't become too active - it's eyeing important squares like e4 and potentially supporting tactics against our kingside.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ng3",
-      "annotation": "We retreat the knight to g3, maintaining its influence while avoiding the bishop's attack. This square keeps the knight well-placed for future operations, as it can still jump to f5 or h5 for attacking purposes, or return to e4 if needed. The move also prepares our kingside development, particularly getting ready to castle and potentially supporting a future f2-f4 advance. While the knight move might seem passive, it actually keeps excellent piece coordination and maintains our slight advantage - we're not allowing Black to dictate the game's tempo completely."
+      "annotation": "We retreat the knight to g3, maintaining its influence while avoiding the bishop's attack. This square keeps the knight well-placed for future operations, as it can still jump to f5 or h5 for attacking purposes, or return to e4 if needed. The move also prepares our kingside development, particularly getting ready to castle and potentially supporting a future f2-f4 advance. While the knight move might seem passive, it actually keeps excellent piece coordination and maintains our slight advantage - we're not allowing Black to dictate the game's tempo completely.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg6",
-      "annotation": "Black retreats the bishop to g6, keeping it active while avoiding any potential knight forks or attacks. This is a typical square for this bishop in the Caro-Kann, where it maintains good scope along the long diagonal and can potentially support ...e6 and kingside castling. Our opponent has successfully developed a piece to a reasonable square, though the bishop might become a target later if we can organize an attack with h2-h4-h5. The move completes Black's light-squared bishop development while maintaining the piece's activity - a hallmark of good Caro-Kann play."
+      "annotation": "Black retreats the bishop to g6, keeping it active while avoiding any potential knight forks or attacks. This is a typical square for this bishop in the Caro-Kann, where it maintains good scope along the long diagonal and can potentially support ...e6 and kingside castling. Our opponent has successfully developed a piece to a reasonable square, though the bishop might become a target later if we can organize an attack with h2-h4-h5. The move completes Black's light-squared bishop development while maintaining the piece's activity - a hallmark of good Caro-Kann play.",
+      "arrows": [
+        {
+          "from": "f5",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f4",
-      "annotation": "We launch the Maróczy Attack with this aggressive pawn advance, signaling our intention to create attacking chances on the kingside. This move supports our knight on g3, controls the important e5 square, and prepares potential tactics like Ng3-f5 or even h2-h4-h5 to attack Black's bishop on g6. The f4 advance is the defining move of this variation - it shows we're not content with quiet positional play but want to create imbalances and attacking opportunities. However, we must be careful that this advance doesn't weaken our king position too much, especially if Black can organize counterplay in the center or on the queenside."
+      "annotation": "We launch the Maróczy Attack with this aggressive pawn advance, signaling our intention to create attacking chances on the kingside. This move supports our knight on g3, controls the important e5 square, and prepares potential tactics like Ng3-f5 or even h2-h4-h5 to attack Black's bishop on g6. The f4 advance is the defining move of this variation - it shows we're not content with quiet positional play but want to create imbalances and attacking opportunities. However, we must be careful that this advance doesn't weaken our king position too much, especially if Black can organize counterplay in the center or on the queenside.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

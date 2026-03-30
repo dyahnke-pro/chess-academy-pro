@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn two squares forward, immediately seizing control of the central squares d5 and f5 while opening lines for both our queen and light-squared bishop. This classical first move stakes our claim to the center and allows for rapid piece development, forming the foundation for countless opening systems. The move 1.e4 is particularly attractive because it leads to sharp, tactical games where both sides have chances for active play. Our immediate plan is to continue developing pieces toward the center, often with moves like Nf3, Bc4, or d3, depending on how Black responds."
+      "annotation": "We're opening with the king's pawn two squares forward, immediately seizing control of the central squares d5 and f5 while opening lines for both our queen and light-squared bishop. This classical first move stakes our claim to the center and allows for rapid piece development, forming the foundation for countless opening systems. The move 1.e4 is particularly attractive because it leads to sharp, tactical games where both sides have chances for active play. Our immediate plan is to continue developing pieces toward the center, often with moves like Nf3, Bc4, or d3, depending on how Black responds.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Na6",
-      "annotation": "Black chooses the highly unusual Lemming Defense, developing the knight to the rim where it's far from the central action and contributes little to Black's opening development. This eccentric move violates the fundamental opening principle of developing pieces toward the center, as the knight on a6 doesn't control any central squares and can easily become a target for our pieces. While this move isn't immediately losing, it gives us a significant advantage in the opening battle since we can continue with normal developing moves like Nf3, d3, and Bc4 while Black struggles to find good squares for the remaining pieces. The knight on a6 will likely need to be repositioned later with moves like Nc7 or Nc5, costing Black valuable time in the opening phase."
+      "annotation": "Black chooses the highly unusual Lemming Defense, developing the knight to the rim where it's far from the central action and contributes little to Black's opening development. This eccentric move violates the fundamental opening principle of developing pieces toward the center, as the knight on a6 doesn't control any central squares and can easily become a target for our pieces. While this move isn't immediately losing, it gives us a significant advantage in the opening battle since we can continue with normal developing moves like Nf3, d3, and Bc4 while Black struggles to find good squares for the remaining pieces. The knight on a6 will likely need to be repositioned later with moves like Nc7 or Nc5, costing Black valuable time in the opening phase.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

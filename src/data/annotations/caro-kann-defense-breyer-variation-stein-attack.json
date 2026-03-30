@@ -3,63 +3,258 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces with tempo. This move immediately controls the important d5 and f5 squares, while opening lines for our bishop and queen. The move 1.e4 leads to sharper, more tactical games compared to 1.d4, and we're inviting Black into the vast world of 1...e5, the Sicilian, French, or Caro-Kann defenses. Our plan is to quickly castle kingside and launch an attack, taking advantage of our space advantage in the center."
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces with tempo. This move immediately controls the important d5 and f5 squares, while opening lines for our bishop and queen. The move 1.e4 leads to sharper, more tactical games compared to 1.d4, and we're inviting Black into the vast world of 1...e5, the Sicilian, French, or Caro-Kann defenses. Our plan is to quickly castle kingside and launch an attack, taking advantage of our space advantage in the center.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black chooses the Caro-Kann Defense, a solid and reliable system that aims to challenge our central pawn on e4 with ...d5 on the next move. This opening is favored by players who want a solid pawn structure and good piece coordination without the tactical complications of 1...e5 or the blocked positions that can arise in the French Defense. The c6 pawn supports Black's coming ...d5 advance while keeping the c8-bishop's diagonal clear, unlike in the French where it gets blocked by the e6 pawn. Black is essentially saying 'I'll let you have the center for now, but I'm going to systematically challenge it with my pawns and pieces.'"
+      "annotation": "Black chooses the Caro-Kann Defense, a solid and reliable system that aims to challenge our central pawn on e4 with ...d5 on the next move. This opening is favored by players who want a solid pawn structure and good piece coordination without the tactical complications of 1...e5 or the blocked positions that can arise in the French Defense. The c6 pawn supports Black's coming ...d5 advance while keeping the c8-bishop's diagonal clear, unlike in the French where it gets blocked by the e6 pawn. Black is essentially saying 'I'll let you have the center for now, but I'm going to systematically challenge it with my pawns and pieces.'",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d3",
-      "annotation": "We're choosing a quiet, positional approach with the King's Indian Attack setup rather than the more forcing 2.d4 or 2.Nc3. This move supports our e4 pawn and prepares to develop our knight to d2, from where it can later jump to more active squares like f3 or e4. The King's Indian Attack is a flexible system that can be used against many Black setups - we'll typically follow with Nd2, Ngf3, g3, Bg2, and castle kingside. This approach aims for a middlegame where we can launch a kingside attack while maintaining a solid pawn structure, though it does give Black more freedom to equalize in the center than the main lines."
+      "annotation": "We're choosing a quiet, positional approach with the King's Indian Attack setup rather than the more forcing 2.d4 or 2.Nc3. This move supports our e4 pawn and prepares to develop our knight to d2, from where it can later jump to more active squares like f3 or e4. The King's Indian Attack is a flexible system that can be used against many Black setups - we'll typically follow with Nd2, Ngf3, g3, Bg2, and castle kingside. This approach aims for a middlegame where we can launch a kingside attack while maintaining a solid pawn structure, though it does give Black more freedom to equalize in the center than the main lines.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately strikes at our e4 pawn, the central point of our position, following through on the Caro-Kann's main strategic idea. This move opens up the c8-bishop's diagonal and gives Black a strong foothold in the center, challenging our space advantage. Now Black threatens to capture on e4, and we'll need to decide how to maintain our central presence. The d5 pawn also supports potential piece development to squares like c5 or e6, giving Black good central control and piece coordination."
+      "annotation": "Black immediately strikes at our e4 pawn, the central point of our position, following through on the Caro-Kann's main strategic idea. This move opens up the c8-bishop's diagonal and gives Black a strong foothold in the center, challenging our space advantage. Now Black threatens to capture on e4, and we'll need to decide how to maintain our central presence. The d5 pawn also supports potential piece development to squares like c5 or e6, giving Black good central control and piece coordination.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd2",
-      "annotation": "We're developing our knight to d2, a key square in the King's Indian Attack formation where it supports our central pawn structure and prepares to redeploy later. From d2, this knight can jump to f3 to support our kingside development, or potentially to e4 or c4 to create central pressure. This move also keeps the c1-bishop's diagonal clear, allowing us to potentially develop it to b2 or a3 later in the game. The knight on d2 is less active than it would be on c3, but it fits perfectly into our positional system and doesn't block any pawns, maintaining maximum flexibility for our pawn structure."
+      "annotation": "We're developing our knight to d2, a key square in the King's Indian Attack formation where it supports our central pawn structure and prepares to redeploy later. From d2, this knight can jump to f3 to support our kingside development, or potentially to e4 or c4 to create central pressure. This move also keeps the c1-bishop's diagonal clear, allowing us to potentially develop it to b2 or a3 later in the game. The knight on d2 is less active than it would be on c3, but it fits perfectly into our positional system and doesn't block any pawns, maintaining maximum flexibility for our pawn structure.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black adopts a hypermodern approach, preparing to fianchetto the dark-squared bishop on g7 where it will exert tremendous pressure along the long diagonal. This setup is very flexible and allows Black to maintain central control with the d5 pawn while preparing kingside castling. The g6 move also prevents any future Qh5+ tactics and gives the king an escape square on g7 if needed. By combining the Caro-Kann's solid pawn structure with the dynamic bishop on g7, Black is creating a robust and flexible position that can adapt to various middlegame plans."
+      "annotation": "Black adopts a hypermodern approach, preparing to fianchetto the dark-squared bishop on g7 where it will exert tremendous pressure along the long diagonal. This setup is very flexible and allows Black to maintain central control with the d5 pawn while preparing kingside castling. The g6 move also prevents any future Qh5+ tactics and gives the king an escape square on g7 if needed. By combining the Caro-Kann's solid pawn structure with the dynamic bishop on g7, Black is creating a robust and flexible position that can adapt to various middlegame plans.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ngf3",
-      "annotation": "We're completing our kingside development by bringing the knight to its most natural square, where it controls important central squares like e5 and d4. This knight on f3 is a cornerstone of our King's Indian Attack setup, supporting our eventual g3 and Bg2 development while eyeing potential outposts in Black's position. The knight also adds another defender to our e5 square, which could become important if Black tries to advance ...e5 later. From f3, this knight can potentially jump to g5 to create kingside pressure, or to h4 and f5 in some attacking scenarios, making it a very versatile piece in our formation."
+      "annotation": "We're completing our kingside development by bringing the knight to its most natural square, where it controls important central squares like e5 and d4. This knight on f3 is a cornerstone of our King's Indian Attack setup, supporting our eventual g3 and Bg2 development while eyeing potential outposts in Black's position. The knight also adds another defender to our e5 square, which could become important if Black tries to advance ...e5 later. From f3, this knight can potentially jump to g5 to create kingside pressure, or to h4 and f5 in some attacking scenarios, making it a very versatile piece in our formation.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its most active diagonal where it eyes our entire kingside and central complex. This bishop on g7 becomes a powerful long-range piece that controls key squares like e5, d4, and even a1, while also providing excellent defense for Black's king position. The fianchettoed bishop works harmoniously with Black's pawn structure - the d5 pawn controls light squares while the bishop dominates dark squares. This setup gives Black excellent piece coordination and the potential for counterplay along the long diagonal, making it much harder for us to launch a straightforward kingside attack."
+      "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its most active diagonal where it eyes our entire kingside and central complex. This bishop on g7 becomes a powerful long-range piece that controls key squares like e5, d4, and even a1, while also providing excellent defense for Black's king position. The fianchettoed bishop works harmoniously with Black's pawn structure - the d5 pawn controls light squares while the bishop dominates dark squares. This setup gives Black excellent piece coordination and the potential for counterplay along the long diagonal, making it much harder for us to launch a straightforward kingside attack.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g3",
-      "annotation": "We're preparing to fianchetto our own dark-squared bishop, creating a classic King's Indian Attack formation that mirrors Black's setup to some degree. This move supports a future Bg2, which will give us control over the long diagonal and help support our central pawn structure. The g3 pawn also provides additional safety for our king by controlling the f4 and h4 squares, preventing Black pieces from landing there with check. By fianchettoing our bishop, we're essentially accepting that this will be a positional struggle for control of key squares rather than a sharp tactical battle, and we're preparing to gradually build pressure on Black's position."
+      "annotation": "We're preparing to fianchetto our own dark-squared bishop, creating a classic King's Indian Attack formation that mirrors Black's setup to some degree. This move supports a future Bg2, which will give us control over the long diagonal and help support our central pawn structure. The g3 pawn also provides additional safety for our king by controlling the f4 and h4 squares, preventing Black pieces from landing there with check. By fianchettoing our bishop, we're essentially accepting that this will be a positional struggle for control of key squares rather than a sharp tactical battle, and we're preparing to gradually build pressure on Black's position.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black seizes the initiative in the center with this powerful pawn advance, gaining space and challenging our knight's position on f3. This move transforms the pawn structure significantly - Black now has a strong central wedge with pawns on d5 and e5, controlling key squares like f4, d4, and c4. The e5 pawn also opens up potential piece activity, particularly for Black's pieces to find more active posts. However, this move also creates some weaknesses in Black's position, particularly the d5 pawn which may become a target, and the f5 square which could become an excellent outpost for our pieces later in the game."
+      "annotation": "Black seizes the initiative in the center with this powerful pawn advance, gaining space and challenging our knight's position on f3. This move transforms the pawn structure significantly - Black now has a strong central wedge with pawns on d5 and e5, controlling key squares like f4, d4, and c4. The e5 pawn also opens up potential piece activity, particularly for Black's pieces to find more active posts. However, this move also creates some weaknesses in Black's position, particularly the d5 pawn which may become a target, and the f5 square which could become an excellent outpost for our pieces later in the game.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg2",
-      "annotation": "We're completing our fianchetto development, placing our dark-squared bishop on its most active diagonal where it can influence the entire center and Black's kingside. This bishop on g2 is perfectly placed to support our pawn structure, particularly the d3 and e4 pawns, while also eyeing potential weaknesses in Black's camp. The bishop works in harmony with our knight on f3 to control key central squares, and it provides excellent defense for our castled king position. From g2, this bishop can also support future pawn advances like f4 or h4 if we decide to launch a kingside attack, making it an incredibly versatile piece in our King's Indian Attack setup."
+      "annotation": "We're completing our fianchetto development, placing our dark-squared bishop on its most active diagonal where it can influence the entire center and Black's kingside. This bishop on g2 is perfectly placed to support our pawn structure, particularly the d3 and e4 pawns, while also eyeing potential weaknesses in Black's camp. The bishop works in harmony with our knight on f3 to control key central squares, and it provides excellent defense for our castled king position. From g2, this bishop can also support future pawn advances like f4 or h4 if we decide to launch a kingside attack, making it an incredibly versatile piece in our King's Indian Attack setup.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ne7",
-      "annotation": "Black develops the knight to e7, a flexible square that supports the central pawn structure while keeping multiple options open for future deployment. From e7, this knight can jump to several interesting squares: f5 to attack our bishop and control key central squares, d4 to challenge our position, or g6 to support the kingside defense. This development also clears the way for Black to potentially advance the f-pawn later, creating more space on the kingside. The knight on e7 doesn't look particularly active, but it's a solid developing move that maintains Black's position while preparing for more concrete action in the middlegame."
+      "annotation": "Black develops the knight to e7, a flexible square that supports the central pawn structure while keeping multiple options open for future deployment. From e7, this knight can jump to several interesting squares: f5 to attack our bishop and control key central squares, d4 to challenge our position, or g6 to support the kingside defense. This development also clears the way for Black to potentially advance the f-pawn later, creating more space on the kingside. The knight on e7 doesn't look particularly active, but it's a solid developing move that maintains Black's position while preparing for more concrete action in the middlegame.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "e7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "We're castling kingside to bring our king to safety and connect our rooks, completing the basic requirements of opening development. This move is particularly important in the King's Indian Attack because our king will be relatively safe behind the fianchettoed bishop and the solid pawn structure on f2, g3, and h2. Castling also brings our rook from h1 into potential play along the h-file, which could become important if we launch a kingside attack with h4-h5 later. With our king safely tucked away, we can now focus on improving our piece positions and looking for ways to create pressure against Black's solid but somewhat passive setup."
+      "annotation": "We're castling kingside to bring our king to safety and connect our rooks, completing the basic requirements of opening development. This move is particularly important in the King's Indian Attack because our king will be relatively safe behind the fianchettoed bishop and the solid pawn structure on f2, g3, and h2. Castling also brings our rook from h1 into potential play along the h-file, which could become important if we launch a kingside attack with h4-h5 later. With our king safely tucked away, we can now focus on improving our piece positions and looking for ways to create pressure against Black's solid but somewhat passive setup.",
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "Black follows our lead by castling kingside, bringing the king to safety behind the solid pawn shelter and the powerful bishop on g7. This completes Black's basic development and connects the rooks, allowing for better coordination between the pieces. The king on g8 is well-protected by the fianchettoed bishop structure and the pawns on f7, g6, and h7, making it difficult for us to create immediate threats. With both kings safely castled, the game is transitioning into the middlegame where both sides will need to create concrete plans - Black will look to challenge our center or create counterplay, while we'll seek ways to exploit our space advantage and create attacking chances."
+      "annotation": "Black follows our lead by castling kingside, bringing the king to safety behind the solid pawn shelter and the powerful bishop on g7. This completes Black's basic development and connects the rooks, allowing for better coordination between the pieces. The king on g8 is well-protected by the fianchettoed bishop structure and the pawns on f7, g6, and h7, making it difficult for us to create immediate threats. With both kings safely castled, the game is transitioning into the middlegame where both sides will need to create concrete plans - Black will look to challenge our center or create counterplay, while we'll seek ways to exploit our space advantage and create attacking chances.",
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b4",
-      "annotation": "We're launching the Stein Attack with this aggressive pawn advance on the queenside, aiming to create space and potentially weaken Black's pawn structure. This move threatens to advance further with b5, putting pressure on Black's c6 pawn and potentially disrupting Black's coordination. The b4 pawn also controls the important c5 and a5 squares, limiting Black's piece activity on the queenside. This is a double-edged move - while it creates attacking chances and space, it also weakens our c4 square and commits us to active play before we've fully consolidated our position, making accurate follow-up essential to justify this aggressive approach."
+      "annotation": "We're launching the Stein Attack with this aggressive pawn advance on the queenside, aiming to create space and potentially weaken Black's pawn structure. This move threatens to advance further with b5, putting pressure on Black's c6 pawn and potentially disrupting Black's coordination. The b4 pawn also controls the important c5 and a5 squares, limiting Black's piece activity on the queenside. This is a double-edged move - while it creates attacking chances and space, it also weakens our c4 square and commits us to active play before we've fully consolidated our position, making accurate follow-up essential to justify this aggressive approach.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

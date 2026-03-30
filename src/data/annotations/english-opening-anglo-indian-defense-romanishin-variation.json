@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich systems in chess. This move immediately stakes a claim on the central d5 square while keeping our options wide open - we can transpose into various systems like the Sicilian Reversed, King's Indian structures, or pure English formations. The c4 pawn also supports a potential d4 advance later, giving us excellent central control without committing to any specific pawn structure yet. What makes the English special is that we're playing for long-term positional pressure rather than immediate tactical fireworks, making it a favorite of strategic masters like Botvinnik and Petrosian."
+      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich systems in chess. This move immediately stakes a claim on the central d5 square while keeping our options wide open - we can transpose into various systems like the Sicilian Reversed, King's Indian structures, or pure English formations. The c4 pawn also supports a potential d4 advance later, giving us excellent central control without committing to any specific pawn structure yet. What makes the English special is that we're playing for long-term positional pressure rather than immediate tactical fireworks, making it a favorite of strategic masters like Botvinnik and Petrosian.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black chooses a solid, French Defense-style setup that controls the important d5 square and prepares to develop the kingside pieces harmoniously. This move prevents us from immediately occupying the center with d4-e4, but it also slightly restricts Black's dark-squared bishop to a more passive role. Our opponent is signaling an intention to build a solid, somewhat cramped but resilient position - typical of players who prefer strategic maneuvering over sharp tactical battles. We should note that e6 keeps many options open for Black, including ...d5, ...f5, or even ...d6 setups depending on how we continue."
+      "annotation": "Black chooses a solid, French Defense-style setup that controls the important d5 square and prepares to develop the kingside pieces harmoniously. This move prevents us from immediately occupying the center with d4-e4, but it also slightly restricts Black's dark-squared bishop to a more passive role. Our opponent is signaling an intention to build a solid, somewhat cramped but resilient position - typical of players who prefer strategic maneuvering over sharp tactical battles. We should note that e6 keeps many options open for Black, including ...d5, ...f5, or even ...d6 setups depending on how we continue.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while keeping maximum flexibility in our setup. This move supports a potential d4 advance and doesn't commit us to any particular pawn structure yet - we could still play g3 and fianchetto our bishop, or go for a more classical development with d4 and e3. The knight on f3 also provides important kingside safety, making castling kingside a comfortable option later. From f3, our knight eyes several key central outposts and can potentially reroute to e5, d4, or even h4 in some tactical sequences."
+      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while keeping maximum flexibility in our setup. This move supports a potential d4 advance and doesn't commit us to any particular pawn structure yet - we could still play g3 and fianchetto our bishop, or go for a more classical development with d4 and e3. The knight on f3 also provides important kingside safety, making castling kingside a comfortable option later. From f3, our knight eyes several key central outposts and can potentially reroute to e5, d4, or even h4 in some tactical sequences.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development with the most natural knight move, developing toward the center and controlling the important e4 and d5 squares. This is a classical developing move that fits perfectly with Black's e6 setup, preparing to castle kingside and potentially support a central ...d5 break later. Our opponent is following sound opening principles by developing pieces before moving pawns unnecessarily, and the knight on f6 can support various pawn breaks like ...d5 or even ...c5 depending on how the position evolves. We should appreciate that Black is building a solid, flexible position that doesn't give us any immediate targets to attack."
+      "annotation": "Black mirrors our development with the most natural knight move, developing toward the center and controlling the important e4 and d5 squares. This is a classical developing move that fits perfectly with Black's e6 setup, preparing to castle kingside and potentially support a central ...d5 break later. Our opponent is following sound opening principles by developing pieces before moving pawns unnecessarily, and the knight on f6 can support various pawn breaks like ...d5 or even ...c5 depending on how the position evolves. We should appreciate that Black is building a solid, flexible position that doesn't give us any immediate targets to attack.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g3",
-      "annotation": "We're committing to the fianchetto development of our light-squared bishop, which will give us excellent long-term pressure along the a1-h8 diagonal and particularly target Black's kingside. This setup, combined with our c4 pawn, creates what's known as the 'English Attack' formation - a flexible system that can adapt to many different pawn structures while maintaining constant pressure on Black's position. The g3 move also prepares a safe haven for our king on g2 after castling, creating a solid defensive setup while maintaining attacking potential. Our light-squared bishop will become a powerful piece, eyeing the central squares and potentially supporting future breakthroughs with moves like f4-f5."
+      "annotation": "We're committing to the fianchetto development of our light-squared bishop, which will give us excellent long-term pressure along the a1-h8 diagonal and particularly target Black's kingside. This setup, combined with our c4 pawn, creates what's known as the 'English Attack' formation - a flexible system that can adapt to many different pawn structures while maintaining constant pressure on Black's position. The g3 move also prepares a safe haven for our king on g2 after castling, creating a solid defensive setup while maintaining attacking potential. Our light-squared bishop will become a powerful piece, eyeing the central squares and potentially supporting future breakthroughs with moves like f4-f5.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a6",
-      "annotation": "Black plays the characteristic move of the Romanishin Variation, a subtle but deep positional idea that prepares to expand on the queenside with ...b5 while also giving the king a potential escape square on a7 in some lines. This seemingly modest pawn move actually serves multiple purposes: it prevents any future Nb5 ideas from us, prepares ...b5 to challenge our c4 pawn, and in some variations can support a ...Bb7 development after ...b5-b4. Romanishin, the Ukrainian grandmaster who popularized this system, understood that controlling space on the queenside early can lead to excellent counterplay against White's kingside ambitions. We should recognize that Black is playing for a complex middlegame where both sides will have chances, but Black's position remains sound and strategically coherent."
+      "annotation": "Black plays the characteristic move of the Romanishin Variation, a subtle but deep positional idea that prepares to expand on the queenside with ...b5 while also giving the king a potential escape square on a7 in some lines. This seemingly modest pawn move actually serves multiple purposes: it prevents any future Nb5 ideas from us, prepares ...b5 to challenge our c4 pawn, and in some variations can support a ...Bb7 development after ...b5-b4. Romanishin, the Ukrainian grandmaster who popularized this system, understood that controlling space on the queenside early can lead to excellent counterplay against White's kingside ambitions. We should recognize that Black is playing for a complex middlegame where both sides will have chances, but Black's position remains sound and strategically coherent.",
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,67 +3,88 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, staking our claim to the central light squares and preparing to develop our pieces with maximum flexibility. This move controls the important e5 and c5 squares while opening lines for our light-squared bishop and queen. The d4 opening is less forcing than 1.e4, allowing us to build up positional pressure gradually rather than seeking immediate tactical complications. Our plan is to establish a strong pawn center and develop our pieces harmoniously, keeping multiple strategic options open depending on how Black responds."
+      "annotation": "We're opening with the queen's pawn, staking our claim to the central light squares and preparing to develop our pieces with maximum flexibility. This move controls the important e5 and c5 squares while opening lines for our light-squared bishop and queen. The d4 opening is less forcing than 1.e4, allowing us to build up positional pressure gradually rather than seeking immediate tactical complications. Our plan is to establish a strong pawn center and develop our pieces harmoniously, keeping multiple strategic options open depending on how Black responds.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black chooses the French Defense structure, supporting an eventual d5 advance while keeping the position relatively closed and strategic. This move controls the important d5 and f5 squares and prepares to challenge our central pawn with d5 on the next move. Our opponent is signaling a preference for solid, positional play rather than sharp tactical battles. We should be prepared for Black to establish a strong pawn chain and develop pieces behind it, making the position more about maneuvering than immediate tactics."
+      "annotation": "Black chooses the French Defense structure, supporting an eventual d5 advance while keeping the position relatively closed and strategic. This move controls the important d5 and f5 squares and prepares to challenge our central pawn with d5 on the next move. Our opponent is signaling a preference for solid, positional play rather than sharp tactical battles. We should be prepared for Black to establish a strong pawn chain and develop pieces behind it, making the position more about maneuvering than immediate tactics.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, combining with our d4 to create the powerful 'Maróczy bind' setup that controls crucial central squares. This move prevents Black from easily playing d5 and prepares to expand on the queenside with moves like b3 and Bb2. By controlling the d5 and b5 squares, we're making it difficult for Black to achieve easy equality in the center. This flexible approach allows us to transpose into various opening systems depending on Black's response, including the Queen's Gambit, English Opening, or as we'll see, the Catalan Opening."
+      "annotation": "We're playing the English Opening move order, combining with our d4 to create the powerful 'Maróczy bind' setup that controls crucial central squares. This move prevents Black from easily playing d5 and prepares to expand on the queenside with moves like b3 and Bb2. By controlling the d5 and b5 squares, we're making it difficult for Black to achieve easy equality in the center. This flexible approach allows us to transpose into various opening systems depending on Black's response, including the Queen's Gambit, English Opening, or as we'll see, the Catalan Opening.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 square and preparing to support the central advance d5. This is a principled developing move that doesn't commit Black to any particular pawn structure yet. Our opponent is keeping maximum flexibility while developing a piece toward the center and preparing to castle kingside. We should note that Black can still transpose into various Indian Defense systems depending on how the position develops, making this a very sound and flexible choice."
+      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 square and preparing to support the central advance d5. This is a principled developing move that doesn't commit Black to any particular pawn structure yet. Our opponent is keeping maximum flexibility while developing a piece toward the center and preparing to castle kingside. We should note that Black can still transpose into various Indian Defense systems depending on how the position develops, making this a very sound and flexible choice.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Our opponent strikes in the center immediately, creating tension and forcing us to make a decision about the pawn structure. This move challenges our c4 pawn and aims to equalize space in the center, which is Black's primary goal in most queen's pawn openings. Black is following the classical principle of occupying the center when possible, and this move prepares to develop the light-squared bishop to d7 or c8. We now need to decide whether to capture, advance, or support our c4 pawn, and each choice leads to different types of positions with distinct strategic characteristics."
-    },
-    {
-      "san": "g3",
-      "annotation": "We're entering the Catalan Opening, one of the most sophisticated and positionally rich systems in chess! This fianchetto move prepares to develop our light-squared bishop to g2, where it will exert tremendous pressure along the long diagonal toward Black's queenside. The Catalan is characterized by this powerful bishop, flexible pawn structure, and excellent coordination between our pieces. By choosing this setup, we're aiming for long-term positional pressure rather than immediate tactical complications, and we'll often regain the pawn if Black captures on c4 through superior piece activity and the bishop's influence on the long diagonal."
-    },
-    {
-      "san": "Be7",
-      "annotation": "Black chooses the solid, classical approach by developing the bishop to e7, preparing to castle kingside and maintaining a compact position. This move supports the knight on f6 and prepares to complete kingside development, though it does block the e7 square which could sometimes be useful for the knight on d7 later. Our opponent is following sound developing principles and avoiding the more committal fianchetto with g6, which would create different pawn structure considerations. This setup is very solid but can sometimes lead to slightly passive piece coordination, giving us good chances for a lasting positional initiative with our fianchettoed bishop."
-    },
-    {
-      "san": "Bg2",
-      "annotation": "We complete our fianchetto, placing the bishop on its dream square where it controls the entire long diagonal and creates lasting positional pressure. This bishop is the cornerstone of our Catalan strategy, eyeing the Black queenside and making it very difficult for our opponent to maintain the d5 pawn if they capture on c4. The bishop also provides excellent support for our kingside and will often become a dominant force in the middlegame. From g2, our bishop coordinates beautifully with potential moves like Qc2, Rd1, and the eventual regaining of material if Black captures our c-pawn, making this one of the most important moves in the entire Catalan system."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black castles kingside, prioritizing king safety and connecting the rooks, which is absolutely essential before committing to any major pawn breaks or piece maneuvers. This move completes Black's basic development and prepares to potentially challenge our center or develop the queenside pieces. Our opponent is following the fundamental principle of getting the king to safety early, especially important in a position where central tension exists. With the king safely tucked away, Black can now consider various plans including c6 and b6 to support the queenside, or perhaps Nbd7 to prepare central counterplay."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We mirror Black's castling, ensuring our king's safety and connecting our rooks, which will be crucial for the coming middlegame battles. This move also brings our king's rook into the game, potentially supporting operations along the d-file or providing tactical support for central advances. By castling, we're also freeing up our king's rook to potentially support the recapture of the c4 pawn if Black takes it, as the rook can quickly swing to c1 or support advances with moves like Re1. Now both sides have completed their basic king safety, and the real strategic battle for control of the center and long-term positional advantages can begin in earnest."
-    },
-    {
-      "san": "Nbd7",
-      "annotation": "Black develops the queen's knight to its most flexible square, supporting the center and preparing various strategic plans including c6-b6 or c5 advances. This knight on d7 can later relocate to more active squares like b6, c5, or e5, depending on how the position develops. Our opponent is also preparing to potentially support the d5 pawn more effectively and keeping options open for both queenside expansion and central counterplay. The knight on d7 also supports potential breaks like e5, though this is still several moves away, and it clears the c8 square for potential bishop development or rook activity along the c-file."
-    },
-    {
-      "san": "Qc2",
-      "annotation": "We develop our queen to an excellent central square, supporting the c4 pawn while maintaining pressure along the long diagonal in coordination with our Catalan bishop. This move is tremendously flexible, as the queen supports both potential central advances and keeps an eye on tactical opportunities that might arise from Black's pawn captures. From c2, our queen also eyes the kingside, particularly the h7 square, which can become important in attacking scenarios. The queen on c2 is a hallmark of the Catalan system, working in perfect harmony with the fianchettoed bishop and often enabling us to regain material with interest if Black captures on c4."
-    },
-    {
-      "san": "c6",
-      "annotation": "Black reinforces the d5 pawn with this solid central support, creating a more stable pawn structure and preparing potential queenside expansion with b6 and Bb7. This move also controls the important b5 and d5 squares more firmly, making it harder for us to challenge Black's central presence. Our opponent is following a classical plan of consolidating the center before expanding, though this does commit the c-pawn and slightly reduces Black's flexibility. We should note that while this makes Black's position more solid, it also makes it somewhat more static, potentially allowing us to build long-term positional pressure with moves like Rd1 and strategic piece improvements."
-    },
-    {
-      "san": "Rd1",
-      "annotation": "We place our rook on the central d-file, increasing pressure on Black's d5 pawn and preparing to support central operations or potential tactical strikes. This move is extremely logical in the Catalan, as it coordinates perfectly with our queen on c2 and bishop on g2 to create maximum pressure on Black's center. The rook on d1 also prepares potential advances like e4 or supports the recapture sequence if Black ever takes on c4, as we can often regain the pawn with tremendous positional compensation. This rook placement is so natural in the Catalan that it's almost automatic, demonstrating how all our pieces work together harmoniously in this opening system."
-    },
-    {
-      "san": "b6",
-      "annotation": "Black begins queenside development by preparing to fianchetto the light-squared bishop to b7, which will help counterbalance our powerful Catalan bishop on g2. This move also supports potential expansion with moves like c5 and creates more space for Black's pieces on the queenside. Our opponent is following a logical plan of developing the remaining pieces while maintaining the central pawn structure, though this does weaken the c6 pawn slightly and creates some light square weaknesses. We should be alert to the fact that Black's light-squared bishop on b7 will create interesting tactical possibilities along the long diagonal, potentially leading to bishop trades or tactical complications."
-    },
-    {
-      "san": "a4",
-      "annotation": "We initiate the Zagoryansky Variation with this aggressive queenside advance, preventing Black from easily playing b5 and beginning our own space-gaining operations on the flank. This move is particularly strong because it limits Black's queenside mobility while preparing potential expansion with a5, creating long-term pressure on Black's pawn structure. The advance also prepares to potentially support our pieces with moves like Na3-c4 or creates tactical possibilities if Black's pieces become awkwardly placed on the queenside. By playing a4, we're demonstrating that the Catalan isn't just about central pressure – we can create threats and imbalances across the entire board while maintaining our superior piece coordination and the power of our fianchettoed bishop."
+      "annotation": "Our opponent strikes in the center immediately, creating tension and forcing us to make a decision about the pawn structure. This move challenges our c4 pawn and aims to equalize space in the center, which is Black's primary goal in most queen's pawn openings. Black is following the classical principle of occupying the center when possible, and this move prepares to develop the light-squared bishop to d7 or c8. We now need to decide whether to capture, advance, or support our c4 pawn, and each choice leads to different types of positions with distinct strategic characteristics.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

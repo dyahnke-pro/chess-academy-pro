@@ -3,43 +3,173 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking an immediate claim to the center and freeing both our bishop on f1 and our queen for future development. This classical move controls the key central squares d5 and f5, giving us excellent prospects for a space advantage in the center. The move also allows for quick kingside castling, which is always a priority in the opening phase. Against 1.e4, Black has many defenses to choose from, but we're hoping to get a comfortable position with good central control and active piece play."
+      "annotation": "We're opening with the king's pawn, staking an immediate claim to the center and freeing both our bishop on f1 and our queen for future development. This classical move controls the key central squares d5 and f5, giving us excellent prospects for a space advantage in the center. The move also allows for quick kingside castling, which is always a priority in the opening phase. Against 1.e4, Black has many defenses to choose from, but we're hoping to get a comfortable position with good central control and active piece play.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Our opponent chooses the Caro-Kann Defense, a solid and somewhat passive system that prepares to challenge our central pawn with ...d5 on the next move. This move supports the advance ...d5 while keeping the knight on b8 flexible - it can later go to d7 instead of the more cramped c6 square. The Caro-Kann is known for giving Black a solid but slightly passive position, and it often leads to positions where Black has fewer weaknesses but also less active piece play than in more aggressive defenses like the Sicilian. Black is essentially saying 'I'm willing to accept a slightly passive position in exchange for structural soundness.'"
+      "annotation": "Our opponent chooses the Caro-Kann Defense, a solid and somewhat passive system that prepares to challenge our central pawn with ...d5 on the next move. This move supports the advance ...d5 while keeping the knight on b8 flexible - it can later go to d7 instead of the more cramped c6 square. The Caro-Kann is known for giving Black a solid but slightly passive position, and it often leads to positions where Black has fewer weaknesses but also less active piece play than in more aggressive defenses like the Sicilian. Black is essentially saying 'I'm willing to accept a slightly passive position in exchange for structural soundness.'",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're expanding our central presence with a second pawn in the center, now controlling the vital squares c5, e5, f5, and c3. This move opens the diagonal for our light-squared bishop on c1 and gives us maximum central space. The combination of pawns on e4 and d4 creates what's called a 'classical center' and puts immediate pressure on Black to decide how to handle our space advantage. This is the most principled continuation against the Caro-Kann, as we're not allowing Black to simply develop pieces without addressing our central dominance."
+      "annotation": "We're expanding our central presence with a second pawn in the center, now controlling the vital squares c5, e5, f5, and c3. This move opens the diagonal for our light-squared bishop on c1 and gives us maximum central space. The combination of pawns on e4 and d4 creates what's called a 'classical center' and puts immediate pressure on Black to decide how to handle our space advantage. This is the most principled continuation against the Caro-Kann, as we're not allowing Black to simply develop pieces without addressing our central dominance.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at our e4 pawn immediately, which is the thematic and correct response in the Caro-Kann Defense. This move challenges our central space advantage and aims to simplify the position by trading pawns. Our opponent is following the main strategic idea of the Caro-Kann: to challenge White's center directly rather than allowing us to maintain pawns on both e4 and d4. Now we need to decide how to recapture, and our choice will determine the character of the middlegame. Black is hoping to reach a position with good piece activity and no structural weaknesses."
+      "annotation": "Black strikes at our e4 pawn immediately, which is the thematic and correct response in the Caro-Kann Defense. This move challenges our central space advantage and aims to simplify the position by trading pawns. Our opponent is following the main strategic idea of the Caro-Kann: to challenge White's center directly rather than allowing us to maintain pawns on both e4 and d4. Now we need to decide how to recapture, and our choice will determine the character of the middlegame. Black is hoping to reach a position with good piece activity and no structural weaknesses.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "exd5",
-      "annotation": "We're choosing the Panov Attack by capturing toward the center, which leads to sharp, tactical play and gives us excellent winning chances. This recapture opens the e-file for our rook and maintains central tension, as Black must now decide how to recapture. The Panov Attack is considered one of the most challenging systems for Black to face in the Caro-Kann, as it leads to positions with opposite-side castling and attacking chances for both sides. By playing this way, we're steering the game toward complex middlegame positions where tactical awareness and active piece play become crucial."
+      "annotation": "We're choosing the Panov Attack by capturing toward the center, which leads to sharp, tactical play and gives us excellent winning chances. This recapture opens the e-file for our rook and maintains central tension, as Black must now decide how to recapture. The Panov Attack is considered one of the most challenging systems for Black to face in the Caro-Kann, as it leads to positions with opposite-side castling and attacking chances for both sides. By playing this way, we're steering the game toward complex middlegame positions where tactical awareness and active piece play become crucial.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "cxd5",
-      "annotation": "Our opponent recaptures with the c-pawn, which is the only reasonable choice and leads us into the main lines of the Panov Attack. This recapture opens the c-file for Black's rook and gives Black's queen access to the a5 square, where it can potentially cause some early pressure. However, Black's d5 pawn is now somewhat isolated and could become a long-term weakness if we can maintain pressure against it. Black is accepting these structural commitments in exchange for active piece development and counterplay against our position."
+      "annotation": "Our opponent recaptures with the c-pawn, which is the only reasonable choice and leads us into the main lines of the Panov Attack. This recapture opens the c-file for Black's rook and gives Black's queen access to the a5 square, where it can potentially cause some early pressure. However, Black's d5 pawn is now somewhat isolated and could become a long-term weakness if we can maintain pressure against it. Black is accepting these structural commitments in exchange for active piece development and counterplay against our position.",
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're immediately attacking Black's central d5 pawn with our c-pawn, which is the key move that defines the Panov Attack. This aggressive advance puts immediate pressure on Black's position and forces our opponent to make a critical decision about the d5 pawn. The move also opens the c-file for our queen and rook, and allows our queen to potentially reach an active square on a4 or b3. This is why the Panov Attack is considered so dangerous for Black - we're not giving our opponent time to consolidate, but instead maintaining constant pressure on the central pawn structure."
+      "annotation": "We're immediately attacking Black's central d5 pawn with our c-pawn, which is the key move that defines the Panov Attack. This aggressive advance puts immediate pressure on Black's position and forces our opponent to make a critical decision about the d5 pawn. The move also opens the c-file for our queen and rook, and allows our queen to potentially reach an active square on a4 or b3. This is why the Panov Attack is considered so dangerous for Black - we're not giving our opponent time to consolidate, but instead maintaining constant pressure on the central pawn structure.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending the d5 pawn and preparing for quick kingside development. This is considered the most flexible and sound response to our c4 advance, as the knight on f6 controls important central squares like e4 and d5 while preparing to castle kingside. Our opponent is also keeping options open for the light-squared bishop, which could go to e7 or potentially to more active squares like g4 or f5. The knight on f6 fits perfectly with Black's plan of developing pieces quickly while maintaining the central pawn on d5 as long as possible."
+      "annotation": "Black develops the knight to its most natural square, defending the d5 pawn and preparing for quick kingside development. This is considered the most flexible and sound response to our c4 advance, as the knight on f6 controls important central squares like e4 and d5 while preparing to castle kingside. Our opponent is also keeping options open for the light-squared bishop, which could go to e7 or potentially to more active squares like g4 or f5. The knight on f6 fits perfectly with Black's plan of developing pieces quickly while maintaining the central pawn on d5 as long as possible.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to an excellent central square where it supports our attack on the d5 pawn and prepares for further piece development. This knight on c3 is perfectly placed in the Panov Attack structure, as it can potentially jump to b5 or e4 in the future, creating threats against Black's position. The move also prepares for moves like Nf3 and Be2, completing our kingside development. From c3, our knight works in harmony with the c4 pawn to maintain constant pressure on Black's central pawn structure, which is exactly what we want in this aggressive opening system."
+      "annotation": "We're developing our knight to an excellent central square where it supports our attack on the d5 pawn and prepares for further piece development. This knight on c3 is perfectly placed in the Panov Attack structure, as it can potentially jump to b5 or e4 in the future, creating threats against Black's position. The move also prepares for moves like Nf3 and Be2, completing our kingside development. From c3, our knight works in harmony with the c4 pawn to maintain constant pressure on Black's central pawn structure, which is exactly what we want in this aggressive opening system.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent develops the second knight to c6, adding another defender to the d5 pawn and preparing for active piece play in the center. This is the Modern Defense setup within the Panov Attack, where Black accepts that the d5 pawn might be exchanged but gains rapid piece development in return. The knight on c6 also eyes important squares like b4 and e5, potentially giving Black some counterplay options. While this development looks natural, it does allow us to continue building pressure with moves like Nf3, Be2, and potentially Bg5, maintaining our initiative in this sharp opening variation."
+      "annotation": "Our opponent develops the second knight to c6, adding another defender to the d5 pawn and preparing for active piece play in the center. This is the Modern Defense setup within the Panov Attack, where Black accepts that the d5 pawn might be exchanged but gains rapid piece development in return. The knight on c6 also eyes important squares like b4 and e5, potentially giving Black some counterplay options. While this development looks natural, it does allow us to continue building pressure with moves like Nf3, Be2, and potentially Bg5, maintaining our initiative in this sharp opening variation.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

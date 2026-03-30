@@ -3,47 +3,190 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn advance, claiming the central e4 square and freeing our bishop and queen for development. This classical first move gives us immediate central presence and opens lines for our pieces to enter the game actively. The move supports a future d2-d4 advance, which would give us an ideal pawn center. Most players are familiar with e4 openings, so we're entering well-charted theoretical waters where our preparation should serve us well."
+      "annotation": "We're opening with the king's pawn advance, claiming the central e4 square and freeing our bishop and queen for development. This classical first move gives us immediate central presence and opens lines for our pieces to enter the game actively. The move supports a future d2-d4 advance, which would give us an ideal pawn center. Most players are familiar with e4 openings, so we're entering well-charted theoretical waters where our preparation should serve us well.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent chooses the provocative Nimzowitsch Defense, immediately challenging our central pawn rather than mirroring with e5. This knight move attacks our e4 pawn and develops a piece, but it's considered somewhat irregular because the knight can become a target on c6. Black is signaling an intention to fight for central control from the flanks rather than establishing a classical pawn center. We should be prepared for unconventional play and look to gain time by attacking this knight later."
+      "annotation": "Our opponent chooses the provocative Nimzowitsch Defense, immediately challenging our central pawn rather than mirroring with e5. This knight move attacks our e4 pawn and develops a piece, but it's considered somewhat irregular because the knight can become a target on c6. Black is signaling an intention to fight for central control from the flanks rather than establishing a classical pawn center. We should be prepared for unconventional play and look to gain time by attacking this knight later.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while controlling the central d4 and e5 squares. This move keeps all our options open - we can still play d4, support the center, and complete our development harmoniously. The knight on f3 also eyes the weak h4 and g5 squares in Black's position. By not immediately pushing d4, we're allowing Black to reveal more of their intentions before committing to a specific pawn structure."
+      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while controlling the central d4 and e5 squares. This move keeps all our options open - we can still play d4, support the center, and complete our development harmoniously. The knight on f3 also eyes the weak h4 and g5 squares in Black's position. By not immediately pushing d4, we're allowing Black to reveal more of their intentions before committing to a specific pawn structure.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops another piece while increasing the pressure on our e4 pawn, which is now attacked twice and defended only once. This creates immediate tactical tension in the center and forces us to make a decision about our pawn structure. The knight on f6 is well-placed, controlling key central squares like e4 and d5, and supporting Black's plan to undermine our central presence. We need to decide whether to defend the pawn, advance it, or allow the exchange - each choice leads to different types of positions."
+      "annotation": "Black develops another piece while increasing the pressure on our e4 pawn, which is now attacked twice and defended only once. This creates immediate tactical tension in the center and forces us to make a decision about our pawn structure. The knight on f6 is well-placed, controlling key central squares like e4 and d5, and supporting Black's plan to undermine our central presence. We need to decide whether to defend the pawn, advance it, or allow the exchange - each choice leads to different types of positions.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "We advance our pawn boldly, gaining space in the center and forcing Black's knight to retreat from its excellent f6 square. This pawn advance creates a space advantage and gives us more room to maneuver our pieces, particularly on the kingside. The pawn on e5 also supports a potential future f4-f5 advance and limits Black's piece activity. However, we must be aware that this pawn could become a target, and we're committing to a more aggressive pawn structure that requires active piece play to justify."
+      "annotation": "We advance our pawn boldly, gaining space in the center and forcing Black's knight to retreat from its excellent f6 square. This pawn advance creates a space advantage and gives us more room to maneuver our pieces, particularly on the kingside. The pawn on e5 also supports a potential future f4-f5 advance and limits Black's piece activity. However, we must be aware that this pawn could become a target, and we're committing to a more aggressive pawn structure that requires active piece play to justify.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ng4",
-      "annotation": "Our opponent retreats the knight to an unusual but provocative square, immediately putting pressure on our f2 point and h2 pawn. This knight placement looks aggressive but is actually quite risky - the knight on g4 can be easily attacked by h2-h3 and doesn't have many good retreat squares. Black is trying to create immediate tactical threats and complicate the position, hoping we'll make an inaccurate response. The knight eyes the f2 square and supports potential tactics involving the f7-b3 diagonal, but it's somewhat out of play on the rim."
+      "annotation": "Our opponent retreats the knight to an unusual but provocative square, immediately putting pressure on our f2 point and h2 pawn. This knight placement looks aggressive but is actually quite risky - the knight on g4 can be easily attacked by h2-h3 and doesn't have many good retreat squares. Black is trying to create immediate tactical threats and complicate the position, hoping we'll make an inaccurate response. The knight eyes the f2 square and supports potential tactics involving the f7-b3 diagonal, but it's somewhat out of play on the rim.",
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We establish our ideal pawn center with this natural advance, taking control of key central squares and supporting our advanced e5 pawn. This move completes our classical pawn center and opens lines for our dark-squared bishop while gaining more space. The d4 pawn also helps restrict Black's pieces and gives us a solid foundation for our middlegame plans. With pawns on d4 and e5, we have a space advantage and can look forward to developing our pieces to active squares while maintaining central control."
+      "annotation": "We establish our ideal pawn center with this natural advance, taking control of key central squares and supporting our advanced e5 pawn. This move completes our classical pawn center and opens lines for our dark-squared bishop while gaining more space. The d4 pawn also helps restrict Black's pieces and gives us a solid foundation for our middlegame plans. With pawns on d4 and e5, we have a space advantage and can look forward to developing our pieces to active squares while maintaining central control.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black finally challenges our advanced e5 pawn, trying to undermine our space advantage in the center. This pawn break is logical as it opens lines for Black's pieces and contests our central dominance, though it also weakens the light squares around Black's king. The move prepares to recapture on e5 if we exchange pawns, and it gives Black's dark-squared bishop a potential diagonal. However, this also creates some weaknesses in Black's position, particularly the c5 and e6 squares which could become outposts for our pieces."
+      "annotation": "Black finally challenges our advanced e5 pawn, trying to undermine our space advantage in the center. This pawn break is logical as it opens lines for Black's pieces and contests our central dominance, though it also weakens the light squares around Black's king. The move prepares to recapture on e5 if we exchange pawns, and it gives Black's dark-squared bishop a potential diagonal. However, this also creates some weaknesses in Black's position, particularly the c5 and e6 squares which could become outposts for our pieces.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "h3",
-      "annotation": "We attack the awkwardly placed knight on g4, forcing it to make another move and lose more time in the opening. This simple pawn advance serves multiple purposes - it kicks the knight away from our kingside while also creating a flight square for our king on h2 if needed. The move doesn't directly improve our development, but it forces Black's knight to retreat to an even less active square. Sometimes in chess, making your opponent's pieces worse is just as valuable as improving your own, and this move exemplifies that principle perfectly."
+      "annotation": "We attack the awkwardly placed knight on g4, forcing it to make another move and lose more time in the opening. This simple pawn advance serves multiple purposes - it kicks the knight away from our kingside while also creating a flight square for our king on h2 if needed. The move doesn't directly improve our development, but it forces Black's knight to retreat to an even less active square. Sometimes in chess, making your opponent's pieces worse is just as valuable as improving your own, and this move exemplifies that principle perfectly.",
+      "arrows": [
+        {
+          "from": "h2",
+          "to": "h3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nh6",
-      "annotation": "Black's knight retreats to the rim of the board, where it's largely out of play and contributes little to Black's position. This knight on h6 is poorly placed - it doesn't control any central squares and can potentially become trapped if we play g4-g5 later. The move demonstrates the cost of Black's early knight adventure to g4, as the piece has now consumed several tempi only to end up on a poor square. From h6, the knight has limited options and Black will struggle to bring it back into meaningful play quickly."
+      "annotation": "Black's knight retreats to the rim of the board, where it's largely out of play and contributes little to Black's position. This knight on h6 is poorly placed - it doesn't control any central squares and can potentially become trapped if we play g4-g5 later. The move demonstrates the cost of Black's early knight adventure to g4, as the piece has now consumed several tempi only to end up on a poor square. From h6, the knight has limited options and Black will struggle to bring it back into meaningful play quickly.",
+      "arrows": [
+        {
+          "from": "g4",
+          "to": "h6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "exd6",
-      "annotation": "We capture the pawn, opening the position and maintaining our material balance while improving our pawn structure. This exchange removes Black's pawn pressure against our center and gives us a cleaner position where our pieces can develop more freely. The capture also opens the e-file for our future rook and eliminates Black's main central counterplay. With Black's knight stranded on h6 and our superior development, we're emerging from the opening with a clear advantage in both piece activity and central control."
+      "annotation": "We capture the pawn, opening the position and maintaining our material balance while improving our pawn structure. This exchange removes Black's pawn pressure against our center and gives us a cleaner position where our pieces can develop more freely. The capture also opens the e-file for our future rook and eliminates Black's main central counterplay. With Black's knight stranded on h6 and our superior development, we're emerging from the opening with a clear advantage in both piece activity and central control.",
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     }
   ]
 }

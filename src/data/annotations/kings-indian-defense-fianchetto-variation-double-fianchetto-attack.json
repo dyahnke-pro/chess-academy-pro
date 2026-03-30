@@ -3,63 +3,105 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, staking an immediate claim to the center and preparing to develop our pieces with maximum flexibility. This move controls the important e5 and c5 squares while opening lines for our queen and dark-squared bishop. The d4 opening leads to more positional, strategic games compared to 1.e4, and we're setting up systems where we can build a strong pawn center and coordinate our pieces harmoniously. Against the King's Indian Defense that's coming, we'll aim to maintain central control while Black creates counterplay on the kingside."
+      "annotation": "We're opening with the queen's pawn, staking an immediate claim to the center and preparing to develop our pieces with maximum flexibility. This move controls the important e5 and c5 squares while opening lines for our queen and dark-squared bishop. The d4 opening leads to more positional, strategic games compared to 1.e4, and we're setting up systems where we can build a strong pawn center and coordinate our pieces harmoniously. Against the King's Indian Defense that's coming, we'll aim to maintain central control while Black creates counterplay on the kingside.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the knight, applying pressure to both d4 and e4 squares. This is the starting move of the King's Indian Defense, one of the most dynamic and counterattacking defenses in chess. Our opponent is signaling their intention to fight for the center from the flanks rather than occupy it directly with pawns. The knight on f6 also prepares the typical King's Indian setup with ...g6 and ...Bg7, creating a powerful fianchettoed bishop that will eye our long diagonal."
+      "annotation": "Black immediately challenges our central pawn with the knight, applying pressure to both d4 and e4 squares. This is the starting move of the King's Indian Defense, one of the most dynamic and counterattacking defenses in chess. Our opponent is signaling their intention to fight for the center from the flanks rather than occupy it directly with pawns. The knight on f6 also prepares the typical King's Indian setup with ...g6 and ...Bg7, creating a powerful fianchettoed bishop that will eye our long diagonal.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're expanding our central control by supporting the d4 pawn and preventing Black from playing ...d5, which would give them equal central space. This move also prepares to fianchetto our light-squared bishop on g2, where it will have tremendous scope along the long diagonal. The c4 advance is characteristic of the English Opening systems and gives us excellent piece coordination possibilities. By controlling the d5 and b5 squares, we're also limiting Black's pawn breaks and forcing them to look for more creative ways to generate counterplay."
+      "annotation": "We're expanding our central control by supporting the d4 pawn and preventing Black from playing ...d5, which would give them equal central space. This move also prepares to fianchetto our light-squared bishop on g2, where it will have tremendous scope along the long diagonal. The c4 advance is characteristic of the English Opening systems and gives us excellent piece coordination possibilities. By controlling the d5 and b5 squares, we're also limiting Black's pawn breaks and forcing them to look for more creative ways to generate counterplay.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black continues with the signature King's Indian move, preparing to fianchetto the dark-squared bishop on g7. This setup will give Black's bishop incredible scope along the long diagonal, eyeing our castled king position and controlling key central squares like e5 and d4. The pawn on g6 also supports a future ...f5 advance, which is often the key pawn break in King's Indian positions. Our opponent is building a flexible pawn structure that can support both defensive and attacking operations, particularly on the kingside where Black often launches dangerous attacks."
+      "annotation": "Black continues with the signature King's Indian move, preparing to fianchetto the dark-squared bishop on g7. This setup will give Black's bishop incredible scope along the long diagonal, eyeing our castled king position and controlling key central squares like e5 and d4. The pawn on g6 also supports a future ...f5 advance, which is often the key pawn break in King's Indian positions. Our opponent is building a flexible pawn structure that can support both defensive and attacking operations, particularly on the kingside where Black often launches dangerous attacks.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn and prepares to castle kingside for safety. The knight on f3 also controls important central squares like e5 and d4, while keeping our options open for various pawn structures. This move fits perfectly with our plan to fianchetto the light-squared bishop, as the knight won't block the bishop's scope from g2. From f3, our knight can later jump to excellent squares like e5 or d5, depending on how the position develops."
+      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn and prepares to castle kingside for safety. The knight on f3 also controls important central squares like e5 and d4, while keeping our options open for various pawn structures. This move fits perfectly with our plan to fianchetto the light-squared bishop, as the knight won't block the bishop's scope from g2. From f3, our knight can later jump to excellent squares like e5 or d5, depending on how the position develops.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its most powerful square in the King's Indian Defense. This bishop becomes the cornerstone of Black's position, controlling the long diagonal and often serving as both a defensive bulwark and an attacking weapon. The bishop on g7 supports the typical King's Indian pawn advances like ...e5 and ...f5, while also defending the castled king. Our opponent now has a solid, flexible structure that can quickly transform into aggressive attacking chances, particularly if we're not careful about our king safety."
-    },
-    {
-      "san": "d6",
-      "annotation": "Black solidifies the center with this pawn move, supporting a future ...e5 advance while also preparing to develop the light-squared bishop. This move creates a solid pawn chain and gives Black's king additional protection by controlling key squares around the kingside. The d6 pawn also prepares various piece maneuvers, including bringing the knight from b8 to d7 and eventually to more active squares. While this move appears modest, it's actually setting up the explosive pawn breaks that make the King's Indian Defense so dangerous in the middlegame."
-    },
-    {
-      "san": "g3",
-      "annotation": "We're beginning our own fianchetto setup, preparing to place our light-squared bishop on g2 where it will have maximum scope along the long diagonal. This creates the famous 'double fianchetto' formation that gives this variation its name, with both sides having powerful bishops on the long diagonals. Our bishop on g2 will support central control and also eye Black's queenside, potentially creating long-term pressure. The g3 move also strengthens our kingside pawn structure and prepares a safe haven for our king after castling."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black wisely gets the king to safety before launching any aggressive operations, which is crucial in King's Indian positions where tactics can explode suddenly. Castling also connects Black's rooks and prepares to bring the f8 rook into the game, often to support the typical ...f5 pawn break. With the king safe, Black can now focus on creating counterplay in the center and on the kingside without worrying about immediate tactical threats. This move also clears the way for potential piece regroupings, such as moving the light-squared bishop or advancing pawns for attack."
-    },
-    {
-      "san": "Bg2",
-      "annotation": "We complete our fianchetto, placing the bishop on its ideal square where it controls the long diagonal and supports our central pawn structure. This bishop will be a long-term asset, putting pressure on Black's queenside while also defending our own king position. The bishop on g2 works in perfect harmony with our other pieces, supporting potential advances like d5 or controlling key squares after pawn exchanges. Our double fianchetto setup is now complete, giving us excellent piece coordination and flexible pawn structure that can adapt to various middlegame plans."
-    },
-    {
-      "san": "Nbd7",
-      "annotation": "Black develops the knight toward the center, preparing to support the crucial ...e5 pawn break that's coming in the next few moves. This knight placement is more flexible than ...Nc6, as it doesn't block the c-pawn and can later redeploy to better squares like f6 or c5. The knight on d7 also supports Black's kingside operations and can quickly swing to the attack if needed. Our opponent is methodically improving their piece coordination while maintaining the flexibility to strike in the center when the moment is right."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We castle kingside to ensure our king's safety before the position becomes more tactical and complex. Castling also brings our rook into the game and completes our basic development, allowing us to focus on more advanced strategic plans. With our king safe and our pieces well-coordinated, we're now ready to compete for central control and respond to Black's upcoming aggressive intentions. This move also prepares potential operations on the queenside or center, as our king will be secure from Black's typical kingside attacks."
-    },
-    {
-      "san": "e5",
-      "annotation": "Black strikes in the center with the thematic King's Indian pawn break, immediately challenging our central control and opening lines for piece activity. This move signals the start of more complex middlegame play, as Black is now ready to create active piece play and potential attacking chances. The e5 advance also opens the diagonal for Black's light-squared bishop and creates potential outposts for Black's pieces. Our opponent is now transitioning from the opening phase to middlegame operations, where the King's Indian's dynamic potential will start to show itself."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn and maintains central control against Black's pawn break. The knight on c3 also prepares various strategic ideas, including potential advances like d5 or supporting queenside operations with moves like a4-a5. This development keeps our position solid and flexible, allowing us to respond to Black's plans while maintaining our own strategic options. The knight also eyes important squares like e4 and d5, which could become excellent outposts depending on how the pawn structure evolves."
-    },
-    {
-      "san": "b3",
-      "annotation": "We begin the characteristic queenside expansion of the Double Fianchetto Attack, preparing to fianchetto our dark-squared bishop on b2 where it will create tremendous pressure along the long diagonal. This move supports our overall strategy of controlling key squares and creating long-term positional pressure while Black focuses on kingside operations. The b3 advance also prepares potential queenside pawn storms with a4-a5, giving us concrete attacking chances on the opposite flank from Black's typical kingside play. Our double fianchetto setup will soon be complete, creating a harmonious piece arrangement that can handle both defense and attack effectively."
+      "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its most powerful square in the King's Indian Defense. This bishop becomes the cornerstone of Black's position, controlling the long diagonal and often serving as both a defensive bulwark and an attacking weapon. The bishop on g7 supports the typical King's Indian pawn advances like ...e5 and ...f5, while also defending the castled king. Our opponent now has a solid, flexible structure that can quickly transform into aggressive attacking chances, particularly if we're not careful about our king safety.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

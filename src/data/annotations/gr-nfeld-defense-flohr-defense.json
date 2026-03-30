@@ -3,59 +3,241 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move launches one of the most positionally rich openings in chess, where we'll typically aim for a strong pawn center and piece coordination. The d4 opening often leads to more strategic, positional battles compared to 1.e4, giving us excellent chances to outplay opponents through superior piece placement and pawn structure understanding. Our immediate plans involve supporting this central pawn and developing our kingside pieces toward the center."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move launches one of the most positionally rich openings in chess, where we'll typically aim for a strong pawn center and piece coordination. The d4 opening often leads to more strategic, positional battles compared to 1.e4, giving us excellent chances to outplay opponents through superior piece placement and pawn structure understanding. Our immediate plans involve supporting this central pawn and developing our kingside pieces toward the center.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our central pawn with classical symmetry, refusing to allow us free rein in the center. This solid response creates immediate tension and forces us to make a decision about the pawn structure - whether to exchange, advance, or support our d4 pawn. Our opponent is signaling an intention to fight for central equality rather than allowing us to build an unopposed pawn center. This move opens lines for Black's light-squared bishop and queen while preparing natural piece development."
+      "annotation": "Black immediately challenges our central pawn with classical symmetry, refusing to allow us free rein in the center. This solid response creates immediate tension and forces us to make a decision about the pawn structure - whether to exchange, advance, or support our d4 pawn. Our opponent is signaling an intention to fight for central equality rather than allowing us to build an unopposed pawn center. This move opens lines for Black's light-squared bishop and queen while preparing natural piece development.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're launching the Queen's Gambit, one of the most respected and time-tested openings in chess history. This pawn advance attacks Black's central d5 pawn and offers a trade - we're willing to give up our c4 pawn to destroy Black's central foothold and gain a lead in development. The move also opens the long diagonal for our light-squared bishop and begins to exert pressure on the queenside. If Black captures on c4, we'll recapture and enjoy superior central control; if Black maintains the tension, we're prepared for the rich positional battle ahead."
+      "annotation": "We're launching the Queen's Gambit, one of the most respected and time-tested openings in chess history. This pawn advance attacks Black's central d5 pawn and offers a trade - we're willing to give up our c4 pawn to destroy Black's central foothold and gain a lead in development. The move also opens the long diagonal for our light-squared bishop and begins to exert pressure on the queenside. If Black captures on c4, we'll recapture and enjoy superior central control; if Black maintains the tension, we're prepared for the rich positional battle ahead.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Our opponent chooses the solid Slav Defense setup, supporting the d5 pawn while keeping the option to capture on c4 later under more favorable circumstances. This move prepares ...dxc4 without allowing us to immediately recapture with the queen, as the c6 pawn would attack it. Black is also preparing to develop the light-squared bishop to f5, one of the key ideas in Slav systems where this piece can find an active square outside the pawn chain. The downside is that the c6 pawn somewhat limits Black's queenside piece development, particularly the b8 knight which now has fewer good squares."
+      "annotation": "Our opponent chooses the solid Slav Defense setup, supporting the d5 pawn while keeping the option to capture on c4 later under more favorable circumstances. This move prepares ...dxc4 without allowing us to immediately recapture with the queen, as the c6 pawn would attack it. Black is also preparing to develop the light-squared bishop to f5, one of the key ideas in Slav systems where this piece can find an active square outside the pawn chain. The downside is that the c6 pawn somewhat limits Black's queenside piece development, particularly the b8 knight which now has fewer good squares.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and increasing the central tension. This knight supports our d4 pawn and prepares to recapture on d4 if needed, while also keeping our options open for various pawn breaks in the center. From c3, our knight can potentially jump to e4 or b5 in the future, depending on how the position develops. We're following classical opening principles by developing pieces toward the center while maintaining pressure on Black's position."
+      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and increasing the central tension. This knight supports our d4 pawn and prepares to recapture on d4 if needed, while also keeping our options open for various pawn breaks in the center. From c3, our knight can potentially jump to e4 or b5 in the future, depending on how the position develops. We're following classical opening principles by developing pieces toward the center while maintaining pressure on Black's position.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight with a dual purpose - attacking our e4 square to prevent us from advancing and controlling important central squares. This move is preparation for the Grünfeld Defense setup, where Black will soon play ...g6 and ...Bg7, creating a powerful fianchetto that will pressure our center from the long diagonal. Our opponent is also keeping the tension in the center while developing pieces harmoniously. The knight on f6 supports potential ...e6 or ...e5 advances later in the opening."
+      "annotation": "Black develops the kingside knight with a dual purpose - attacking our e4 square to prevent us from advancing and controlling important central squares. This move is preparation for the Grünfeld Defense setup, where Black will soon play ...g6 and ...Bg7, creating a powerful fianchetto that will pressure our center from the long diagonal. Our opponent is also keeping the tension in the center while developing pieces harmoniously. The knight on f6 supports potential ...e6 or ...e5 advances later in the opening.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We're choosing a more restrained approach with this solid developing move that supports our d4 pawn while preparing to develop our light-squared bishop. This move creates a small pawn chain (d4-e3) and opens the diagonal for our dark-squared bishop, while keeping our position flexible for various setups. Although less aggressive than alternatives like e4 or f3, this move maintains our central control while avoiding early complications. We're preparing to complete our kingside development with moves like Nf3, Be2, and castling."
+      "annotation": "We're choosing a more restrained approach with this solid developing move that supports our d4 pawn while preparing to develop our light-squared bishop. This move creates a small pawn chain (d4-e3) and opens the diagonal for our dark-squared bishop, while keeping our position flexible for various setups. Although less aggressive than alternatives like e4 or f3, this move maintains our central control while avoiding early complications. We're preparing to complete our kingside development with moves like Nf3, Be2, and castling.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Our opponent reveals the Grünfeld Defense idea with this fianchetto move, preparing to develop the bishop to g7 where it will exert tremendous pressure along the long diagonal. This setup is one of Black's most aggressive responses to our Queen's Gambit, as the fianchettoed bishop will attack our center and potentially support a later ...c5 or ...e5 break. Black is willing to accept a slightly weakened kingside structure in exchange for active piece play and long-term pressure against our central pawns. This move also prepares castling kingside while keeping maximum flexibility for the pawn structure."
+      "annotation": "Our opponent reveals the Grünfeld Defense idea with this fianchetto move, preparing to develop the bishop to g7 where it will exert tremendous pressure along the long diagonal. This setup is one of Black's most aggressive responses to our Queen's Gambit, as the fianchettoed bishop will attack our center and potentially support a later ...c5 or ...e5 break. Black is willing to accept a slightly weakened kingside structure in exchange for active piece play and long-term pressure against our central pawns. This move also prepares castling kingside while keeping maximum flexibility for the pawn structure.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, controlling the central e5 and d4 squares while preparing to castle kingside. This natural developing move also prevents any immediate ...e5 advance by Black and supports our central pawn structure. From f3, our knight can potentially relocate to e5 or d2 depending on how the position develops, maintaining excellent flexibility. We're following sound opening principles by completing our minor piece development before committing to any particular pawn structure changes."
+      "annotation": "We're developing our kingside knight to its ideal square, controlling the central e5 and d4 squares while preparing to castle kingside. This natural developing move also prevents any immediate ...e5 advance by Black and supports our central pawn structure. From f3, our knight can potentially relocate to e5 or d2 depending on how the position develops, maintaining excellent flexibility. We're following sound opening principles by completing our minor piece development before committing to any particular pawn structure changes.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup with this powerful bishop development, creating the signature piece of the Grünfeld Defense. This bishop now pressures our entire pawn center along the long diagonal, particularly targeting our d4 and c3 squares, and will become increasingly dangerous as the position opens. Our opponent has created a dynamic imbalance - while we control more central space with our pawns, Black has superior piece activity and long-term attacking chances against our center. This bishop also supports Black's castling while maintaining pressure that will influence our entire middlegame strategy."
+      "annotation": "Black completes the fianchetto setup with this powerful bishop development, creating the signature piece of the Grünfeld Defense. This bishop now pressures our entire pawn center along the long diagonal, particularly targeting our d4 and c3 squares, and will become increasingly dangerous as the position opens. Our opponent has created a dynamic imbalance - while we control more central space with our pawns, Black has superior piece activity and long-term attacking chances against our center. This bishop also supports Black's castling while maintaining pressure that will influence our entire middlegame strategy.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to an active square where it eyes the kingside, particularly the h7 square, while supporting our central structure. This bishop placement is part of our kingside development plan and prepares castling, while also maintaining some pressure against Black's position. The bishop on d3 can potentially support a future e4 advance or participate in kingside attacks depending on how the position develops. We're maintaining our solid setup while keeping our pieces coordinated and flexible for the middlegame ahead."
+      "annotation": "We're developing our light-squared bishop to an active square where it eyes the kingside, particularly the h7 square, while supporting our central structure. This bishop placement is part of our kingside development plan and prepares castling, while also maintaining some pressure against Black's position. The bishop on d3 can potentially support a future e4 advance or participate in kingside attacks depending on how the position develops. We're maintaining our solid setup while keeping our pieces coordinated and flexible for the middlegame ahead.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, bringing the king to safety while connecting the rooks and completing the most urgent part of development. This move is essential before Black can begin more aggressive operations in the center, as the king needs to be secure before launching any pawn breaks or piece attacks. Our opponent is now ready to increase pressure on our center with moves like ...c5 or ...Qc7, having completed the basic development requirements. The castled king also allows Black's rook to potentially swing to the center via f8-e8 or support queenside operations."
+      "annotation": "Black castles kingside, bringing the king to safety while connecting the rooks and completing the most urgent part of development. This move is essential before Black can begin more aggressive operations in the center, as the king needs to be secure before launching any pawn breaks or piece attacks. Our opponent is now ready to increase pressure on our center with moves like ...c5 or ...Qc7, having completed the basic development requirements. The castled king also allows Black's rook to potentially swing to the center via f8-e8 or support queenside operations.",
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
-      "annotation": "We're following suit and castling kingside, securing our king while bringing our rook into the game and completing our basic development. This move is crucial before we commit to any central advances, as king safety must be ensured before launching operations elsewhere on the board. Our castling also connects our rooks and prepares them for potential central or queenside action, depending on how the position develops. With both sides now castled, the real battle for the center and the characteristic Grünfeld middlegame complications can begin."
+      "annotation": "We're following suit and castling kingside, securing our king while bringing our rook into the game and completing our basic development. This move is crucial before we commit to any central advances, as king safety must be ensured before launching operations elsewhere on the board. Our castling also connects our rooks and prepares them for potential central or queenside action, depending on how the position develops. With both sides now castled, the real battle for the center and the characteristic Grünfeld middlegame complications can begin.",
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bf5",
-      "annotation": "Our opponent plays the Flohr Defense, developing the light-squared bishop to an active square outside the pawn chain before it can be trapped by our potential e4 advance. This bishop placement is a key improvement over other Grünfeld setups, as it finds immediate activity while pressuring our position and supporting potential central operations. The bishop on f5 also supports a future ...e6 or ...Ne4 while keeping pressure on our kingside, particularly eyeing our weakened dark squares. This move represents Black's attempt to achieve active piece play and maintain dynamic equality despite our central pawn majority."
+      "annotation": "Our opponent plays the Flohr Defense, developing the light-squared bishop to an active square outside the pawn chain before it can be trapped by our potential e4 advance. This bishop placement is a key improvement over other Grünfeld setups, as it finds immediate activity while pressuring our position and supporting potential central operations. The bishop on f5 also supports a future ...e6 or ...Ne4 while keeping pressure on our kingside, particularly eyeing our weakened dark squares. This move represents Black's attempt to achieve active piece play and maintain dynamic equality despite our central pawn majority.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,47 +3,139 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces actively. This move controls the crucial d5 and f5 squares while opening lines for our bishop and queen. The Pirc Defense that follows is a hypermodern opening where Black allows us to occupy the center with pawns while planning to challenge it later with pieces. As White, we'll aim to build a strong pawn center and launch a kingside attack, which is exactly what the Austrian Attack system delivers."
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces actively. This move controls the crucial d5 and f5 squares while opening lines for our bishop and queen. The Pirc Defense that follows is a hypermodern opening where Black allows us to occupy the center with pawns while planning to challenge it later with pieces. As White, we'll aim to build a strong pawn center and launch a kingside attack, which is exactly what the Austrian Attack system delivers.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black responds with the characteristic Pirc move, supporting a future ...e5 advance while keeping options open for piece development. This move doesn't immediately challenge our central pawn but follows hypermodern principles - Black is saying 'go ahead and take the center, I'll attack it later.' The d6 pawn also prepares to fianchetto the king's bishop on g7, where it will pressure our center from the long diagonal. This flexible approach gives Black many transposition possibilities into other defenses like the King's Indian or Modern Defense."
+      "annotation": "Black responds with the characteristic Pirc move, supporting a future ...e5 advance while keeping options open for piece development. This move doesn't immediately challenge our central pawn but follows hypermodern principles - Black is saying 'go ahead and take the center, I'll attack it later.' The d6 pawn also prepares to fianchetto the king's bishop on g7, where it will pressure our center from the long diagonal. This flexible approach gives Black many transposition possibilities into other defenses like the King's Indian or Modern Defense.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're establishing our ideal pawn center, controlling the crucial e5 and c5 squares while gaining maximum space in the center. This move completes our classical pawn duo and gives us a significant space advantage that we can use to coordinate a kingside attack. The d4 pawn also supports our knight's development to c3 and opens the diagonal for our dark-squared bishop. Against the Pirc, this central advance is particularly effective because Black hasn't yet challenged our pawn center directly."
+      "annotation": "We're establishing our ideal pawn center, controlling the crucial e5 and c5 squares while gaining maximum space in the center. This move completes our classical pawn duo and gives us a significant space advantage that we can use to coordinate a kingside attack. The d4 pawn also supports our knight's development to c3 and opens the diagonal for our dark-squared bishop. Against the Pirc, this central advance is particularly effective because Black hasn't yet challenged our pawn center directly.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, attacking our e4 pawn and preparing to support central counterplay with moves like ...e5. This is a key move in the Pirc system, as the knight on f6 can later retreat to d7 or h5 depending on how we continue our attack. Our opponent is also keeping the option of ...c5 or ...e5 to challenge our pawn center when the time is right. The knight on f6 will be an important defender of Black's kingside, which becomes crucial as we prepare our Austrian Attack formation."
+      "annotation": "Black develops the knight to its most active square, attacking our e4 pawn and preparing to support central counterplay with moves like ...e5. This is a key move in the Pirc system, as the knight on f6 can later retreat to d7 or h5 depending on how we continue our attack. Our opponent is also keeping the option of ...c5 or ...e5 to challenge our pawn center when the time is right. The knight on f6 will be an important defender of Black's kingside, which becomes crucial as we prepare our Austrian Attack formation.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, defending the e4 pawn and preparing to support our central advance or kingside attack. This move also keeps our options open for both f2-f4 (the Austrian Attack) or Be2 followed by h2-h4 (the 150 Attack). The knight on c3 controls important central squares like d5 and e4, while also supporting a potential d4-d5 advance later in the game. From c3, our knight is perfectly placed to support the aggressive pawn storm we're planning on the kingside."
+      "annotation": "We're developing our knight to its most natural square, defending the e4 pawn and preparing to support our central advance or kingside attack. This move also keeps our options open for both f2-f4 (the Austrian Attack) or Be2 followed by h2-h4 (the 150 Attack). The knight on c3 controls important central squares like d5 and e4, while also supporting a potential d4-d5 advance later in the game. From c3, our knight is perfectly placed to support the aggressive pawn storm we're planning on the kingside.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black continues with the typical Pirc fianchetto setup, preparing to place the dark-squared bishop on g7 where it will become a powerful long-range piece. This move also provides an escape square for the king on h8 if needed and prepares to challenge our center from the long diagonal. The pawn on g6 weakens Black's kingside slightly, particularly the f6 and h6 squares, which we can potentially exploit in our attack. However, Black gets excellent piece activity and central pressure in return, making this a principled hypermodern approach."
+      "annotation": "Black continues with the typical Pirc fianchetto setup, preparing to place the dark-squared bishop on g7 where it will become a powerful long-range piece. This move also provides an escape square for the king on h8 if needed and prepares to challenge our center from the long diagonal. The pawn on g6 weakens Black's kingside slightly, particularly the f6 and h6 squares, which we can potentially exploit in our attack. However, Black gets excellent piece activity and central pressure in return, making this a principled hypermodern approach.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f4",
-      "annotation": "We're launching the Austrian Attack with this aggressive pawn advance, supporting our e4 pawn and preparing a kingside pawn storm with moves like f4-f5. This move signals our clear intention to attack Black's king and creates immediate threats on the kingside. The f4 pawn also controls the crucial e5 square, preventing Black from easily equalizing with ...e5, and prepares to support our pieces in a kingside assault. This is the defining move of the Austrian Attack system - we're prioritizing attack over solid development, which leads to sharp, tactical positions."
+      "annotation": "We're launching the Austrian Attack with this aggressive pawn advance, supporting our e4 pawn and preparing a kingside pawn storm with moves like f4-f5. This move signals our clear intention to attack Black's king and creates immediate threats on the kingside. The f4 pawn also controls the crucial e5 square, preventing Black from easily equalizing with ...e5, and prepares to support our pieces in a kingside assault. This is the defining move of the Austrian Attack system - we're prioritizing attack over solid development, which leads to sharp, tactical positions.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its ideal diagonal where it pressures our pawn center and controls key central squares. This bishop becomes Black's most important piece in the Pirc, exerting pressure on d4 and potentially supporting central breaks like ...c5 or ...e5. Our opponent has now created a solid defensive structure while maintaining counterplay possibilities against our pawn center. The bishop on g7 also provides additional defense for Black's king, though our coming attack will test whether this defensive setup is sufficient."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black wisely castles kingside to get the king to safety before our attack intensifies, while also connecting the rooks and completing basic development. This move is practically forced since delaying castling would allow us to launch devastating attacks with moves like f5, Qd2, and h4-h5. However, castling kingside also means Black's king is exactly where we want to attack, so this is a double-edged decision. Our opponent has now completed the basic Pirc setup and will need to start creating counterplay soon, typically with moves like ...c5, ...Nc6, or ...e5."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most active square, where it supports our pawn center and prepares to join the kingside attack. This knight can later jump to powerful outposts like e5 or g5, or support a pawn advance with h2-h4-h5. The knight on f3 also provides additional defense for our king while maintaining flexibility for our attacking plans. This move keeps all our attacking options open - we can still play Qd2, Be3, h4, or even 0-0-0 depending on how Black continues, making it a perfect developing move in the Austrian Attack system."
-    },
-    {
-      "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to an excellent attacking square, where it eyes Black's kingside and particularly the weak h7 square next to the enemy king. This bishop placement is characteristic of the Austrian Attack, as it can support future sacrificial attacks on h7 or coordinate with our other pieces for a mating attack. The bishop on d3 also maintains flexibility - it can retreat to e2 if needed or swing to c2 to support a queenside castling setup. This completes our basic attacking formation and prepares concrete threats like Qd2 followed by h4-h5, or even immediate sacrificial ideas if Black plays carelessly."
+      "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its ideal diagonal where it pressures our pawn center and controls key central squares. This bishop becomes Black's most important piece in the Pirc, exerting pressure on d4 and potentially supporting central breaks like ...c5 or ...e5. Our opponent has now created a solid defensive structure while maintaining counterplay possibilities against our pawn center. The bishop on g7 also provides additional defense for Black's king, though our coming attack will test whether this defensive setup is sufficient.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn advance, immediately staking our claim in the center and freeing both our light-squared bishop and queen for future development. This move controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there. The e4 pawn also supports a potential d2-d4 advance later, which would give us a classical pawn center. Against the Caro-Kann that's coming, this central presence will be key to our attacking chances."
+      "annotation": "We're opening with the king's pawn advance, immediately staking our claim in the center and freeing both our light-squared bishop and queen for future development. This move controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there. The e4 pawn also supports a potential d2-d4 advance later, which would give us a classical pawn center. Against the Caro-Kann that's coming, this central presence will be key to our attacking chances.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black announces the Caro-Kann Defense, a solid and reliable opening that prepares to challenge our central pawn with d7-d5. This move supports the d5 advance while keeping the e8-h5 diagonal clear for the dark-squared bishop. The Caro-Kann is known for leading to solid, slightly cramped but resilient positions for Black, and it's a favorite of players who prefer strategic maneuvering over sharp tactical battles. Our opponent is essentially saying they're willing to accept a slightly passive position in exchange for long-term structural soundness."
+      "annotation": "Black announces the Caro-Kann Defense, a solid and reliable opening that prepares to challenge our central pawn with d7-d5. This move supports the d5 advance while keeping the e8-h5 diagonal clear for the dark-squared bishop. The Caro-Kann is known for leading to solid, slightly cramped but resilient positions for Black, and it's a favorite of players who prefer strategic maneuvering over sharp tactical battles. Our opponent is essentially saying they're willing to accept a slightly passive position in exchange for long-term structural soundness.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the e4 pawn and preparing for the coming central tension. This knight placement is flexible - from c3, it can later jump to d5, e2, or b5 depending on how the position develops. We're also preparing to meet d7-d5 with either exd5 or by maintaining the tension, and the knight adds extra pressure to Black's setup. This move keeps our options open while maintaining solid development principles."
+      "annotation": "We're developing our knight to its most natural square, supporting the e4 pawn and preparing for the coming central tension. This knight placement is flexible - from c3, it can later jump to d5, e2, or b5 depending on how the position develops. We're also preparing to meet d7-d5 with either exd5 or by maintaining the tension, and the knight adds extra pressure to Black's setup. This move keeps our options open while maintaining solid development principles.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at our central pawn immediately, which is the main point of the Caro-Kann Defense. This move challenges our space advantage and forces us to make a decision about the central tension. Our opponent is trying to simplify the center and reduce our attacking potential by exchanging pawns. The d5 pawn is well-supported by the c6 pawn, making this advance both safe and principled. Black's plan is to complete development smoothly after resolving the central tension."
+      "annotation": "Black strikes at our central pawn immediately, which is the main point of the Caro-Kann Defense. This move challenges our space advantage and forces us to make a decision about the central tension. Our opponent is trying to simplify the center and reduce our attacking potential by exchanging pawns. The d5 pawn is well-supported by the c6 pawn, making this advance both safe and principled. Black's plan is to complete development smoothly after resolving the central tension.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d3",
-      "annotation": "We're choosing a less common but interesting approach by supporting our e4 pawn rather than allowing or forcing an immediate exchange. This move signals our intention to maintain central tension and keep more pieces on the board for attacking chances. The d3 pawn also prepares to develop our light-squared bishop to e2 or d2, and opens the c1-h6 diagonal. While this is more restrained than the main lines with exd5 or f3, it leads to richer middlegame positions where tactical opportunities may arise."
+      "annotation": "We're choosing a less common but interesting approach by supporting our e4 pawn rather than allowing or forcing an immediate exchange. This move signals our intention to maintain central tension and keep more pieces on the board for attacking chances. The d3 pawn also prepares to develop our light-squared bishop to e2 or d2, and opens the c1-h6 diagonal. While this is more restrained than the main lines with exd5 or f3, it leads to richer middlegame positions where tactical opportunities may arise.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe4",
-      "annotation": "Black decides to resolve the central tension by capturing our e4 pawn, which is a natural and principled decision. Our opponent eliminates our central pawn and slightly simplifies the position, but also opens lines and diagonals that we can potentially use for our pieces. This exchange typically leads to positions where Black has eliminated our space advantage but may face more active piece play from our side. Black is probably expecting us to recapture with the d3 pawn, leading to a relatively quiet position."
+      "annotation": "Black decides to resolve the central tension by capturing our e4 pawn, which is a natural and principled decision. Our opponent eliminates our central pawn and slightly simplifies the position, but also opens lines and diagonals that we can potentially use for our pieces. This exchange typically leads to positions where Black has eliminated our space advantage but may face more active piece play from our side. Black is probably expecting us to recapture with the d3 pawn, leading to a relatively quiet position.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bg5",
-      "annotation": "Instead of the expected dxe4 recapture, we're launching the Scorpion-Horus Gambit with this aggressive bishop development! This surprising move sacrifices our e4 pawn temporarily to gain rapid piece activity and create immediate threats. Our bishop targets the f6 square, making it difficult for Black to develop the kingside knight naturally, and we're preparing potential tactics against Black's kingside. This gambit leads to sharp, unbalanced positions where Black must be very careful not to fall into tactical traps, and we get excellent compensation in the form of piece activity and attacking chances."
+      "annotation": "Instead of the expected dxe4 recapture, we're launching the Scorpion-Horus Gambit with this aggressive bishop development! This surprising move sacrifices our e4 pawn temporarily to gain rapid piece activity and create immediate threats. Our bishop targets the f6 square, making it difficult for Black to develop the kingside knight naturally, and we're preparing potential tactics against Black's kingside. This gambit leads to sharp, unbalanced positions where Black must be very careful not to fall into tactical traps, and we get excellent compensation in the form of piece activity and attacking chances.",
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

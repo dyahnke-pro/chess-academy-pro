@@ -3,23 +3,88 @@
   "moveAnnotations": [
     {
       "san": "g3",
-      "annotation": "We're playing the Hungarian Opening, an offbeat system where we prepare to fianchetto our kingside bishop on g2. This move is deceptively flexible—while it looks quiet, we're controlling the long diagonal and planning to build a solid, space-efficient position without committing to e4 early. The Hungarian Opening appeals to positional players who enjoy maneuvering rather than sharp tactical battles."
+      "annotation": "We're playing the Hungarian Opening, an offbeat system where we prepare to fianchetto our kingside bishop on g2. This move is deceptively flexible—while it looks quiet, we're controlling the long diagonal and planning to build a solid, space-efficient position without committing to e4 early. The Hungarian Opening appeals to positional players who enjoy maneuvering rather than sharp tactical battles.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black seizes space in the center, which is a natural response to our modest g3. By playing e5, Black stakes a claim to d4 and threatens to expand further. We need to respect this central presence and respond thoughtfully rather than react emotionally."
+      "annotation": "Black seizes space in the center, which is a natural response to our modest g3. By playing e5, Black stakes a claim to d4 and threatens to expand further. We need to respect this central presence and respond thoughtfully rather than react emotionally.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We attack Black's e4 pawn that will soon advance, and we're developing a piece toward its natural square. Nf3 controls d4 and e5, limiting Black's options for center expansion. This move also prepares our fianchetto setup by getting the knight out of the way of our g2 bishop."
+      "annotation": "We attack Black's e4 pawn that will soon advance, and we're developing a piece toward its natural square. Nf3 controls d4 and e5, limiting Black's options for center expansion. This move also prepares our fianchetto setup by getting the knight out of the way of our g2 bishop.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "Black pushes forward, gaining space and attacking our knight. This advance is logical given the position—Black wants to cramp our pieces and create a kingside pawn chain. We now have a key decision about how to handle this pawn."
+      "annotation": "Black pushes forward, gaining space and attacking our knight. This advance is logical given the position—Black wants to cramp our pieces and create a kingside pawn chain. We now have a key decision about how to handle this pawn.",
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nh4",
-      "annotation": "Rather than defending against the e4 pawn passively, we retreat the knight to h4 with a purpose: we're preparing f2-f3 to undermine Black's advanced pawn, and Nh4 positions our knight to reroute via f3-d4 or g6 later. This move exemplifies the Hungarian Opening's philosophy—we're patient, we control key squares (like d4 via our fianchettoed bishop), and we're not afraid to reposition pieces for a better setup."
+      "annotation": "Rather than defending against the e4 pawn passively, we retreat the knight to h4 with a purpose: we're preparing f2-f3 to undermine Black's advanced pawn, and Nh4 positions our knight to reroute via f3-d4 or g6 later. This move exemplifies the Hungarian Opening's philosophy—we're patient, we control key squares (like d4 via our fianchettoed bishop), and we're not afraid to reposition pieces for a better setup.",
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "h4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

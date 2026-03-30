@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the Queen's Pawn, staking our claim to the central light squares and preparing to build a classical pawn center. This move controls the important e5 and c5 squares while opening lines for our queen and dark-squared bishop. The d4 opening is more positional than 1.e4, often leading to slower, strategic battles where we gradually improve our position before launching an attack. Our plan is typically to follow up with moves like Nf3, c4, and Nc3 to create maximum central pressure."
+      "annotation": "We're opening with the Queen's Pawn, staking our claim to the central light squares and preparing to build a classical pawn center. This move controls the important e5 and c5 squares while opening lines for our queen and dark-squared bishop. The d4 opening is more positional than 1.e4, often leading to slower, strategic battles where we gradually improve our position before launching an attack. Our plan is typically to follow up with moves like Nf3, c4, and Nc3 to create maximum central pressure.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black chooses the Modern Defense setup, immediately signaling hypermodern intentions by preparing to fianchetto the king's bishop on g7. This approach allows Black to control the center from a distance rather than occupying it directly with pawns. While this looks passive, it's actually quite flexible - Black can later strike at our center with moves like ...d6, ...e5, or even ...f5 depending on how we continue. We should be prepared for a complex middlegame where Black's pieces will be very actively placed despite the seemingly quiet opening."
+      "annotation": "Black chooses the Modern Defense setup, immediately signaling hypermodern intentions by preparing to fianchetto the king's bishop on g7. This approach allows Black to control the center from a distance rather than occupying it directly with pawns. While this looks passive, it's actually quite flexible - Black can later strike at our center with moves like ...d6, ...e5, or even ...f5 depending on how we continue. We should be prepared for a complex middlegame where Black's pieces will be very actively placed despite the seemingly quiet opening.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We continue with our classical setup, grabbing more central space and preparing to build the ideal pawn duo on d4 and e4. This move controls the important d5 and b5 squares while supporting a potential e4 advance. The c4 pawn also opens the c-file for potential future use and allows our queen and rook to potentially coordinate along this file. Against the Modern Defense, controlling as much central territory as possible is crucial since Black is hoping to strike back at our center once it becomes overextended."
+      "annotation": "We continue with our classical setup, grabbing more central space and preparing to build the ideal pawn duo on d4 and e4. This move controls the important d5 and b5 squares while supporting a potential e4 advance. The c4 pawn also opens the c-file for potential future use and allows our queen and rook to potentially coordinate along this file. Against the Modern Defense, controlling as much central territory as possible is crucial since Black is hoping to strike back at our center once it becomes overextended.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto, placing the dark-squared bishop on its most active diagonal where it eyes our central pawns and the long diagonal toward our king. This bishop will become a key piece in Black's counterplay, potentially supporting central pawn breaks like ...e5 or ...f5. The g7 bishop also provides excellent king safety once Black castles kingside, creating a solid defensive structure. We need to be mindful that this bishop can become very dangerous if we allow Black to open the center prematurely or if our king remains in the center too long."
+      "annotation": "Black completes the fianchetto, placing the dark-squared bishop on its most active diagonal where it eyes our central pawns and the long diagonal toward our king. This bishop will become a key piece in Black's counterplay, potentially supporting central pawn breaks like ...e5 or ...f5. The g7 bishop also provides excellent king safety once Black castles kingside, creating a solid defensive structure. We need to be mindful that this bishop can become very dangerous if we allow Black to open the center prematurely or if our king remains in the center too long.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We achieve our ideal pawn center with the classical d4-e4 formation, giving us maximum space advantage and control over the central squares. This pawn structure supports our pieces beautifully - our knights will love the f3 and c3 squares, and we're preparing to develop our pieces with tempo. However, we must be careful because this broad pawn center can also become a target for Black's counterplay. The Modern Defense player is specifically waiting for us to advance like this so they can strike back with moves like ...e5 or ...f5 to challenge our seemingly impressive but potentially vulnerable center."
+      "annotation": "We achieve our ideal pawn center with the classical d4-e4 formation, giving us maximum space advantage and control over the central squares. This pawn structure supports our pieces beautifully - our knights will love the f3 and c3 squares, and we're preparing to develop our pieces with tempo. However, we must be careful because this broad pawn center can also become a target for Black's counterplay. The Modern Defense player is specifically waiting for us to advance like this so they can strike back with moves like ...e5 or ...f5 to challenge our seemingly impressive but potentially vulnerable center.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black immediately challenges our pawn center with this central strike, showing the main idea behind the Modern Defense - allowing White to build a big center only to attack it aggressively. This move opens lines for Black's pieces and creates immediate tactical tension in the position. Now we have to make a crucial decision about our d4 pawn - do we advance it to d5, trade it off with dxe5, or maintain the tension? Each choice leads to completely different pawn structures and middlegame plans, making this a critical moment where our understanding of pawn structures and piece coordination will be tested."
+      "annotation": "Black immediately challenges our pawn center with this central strike, showing the main idea behind the Modern Defense - allowing White to build a big center only to attack it aggressively. This move opens lines for Black's pieces and creates immediate tactical tension in the position. Now we have to make a crucial decision about our d4 pawn - do we advance it to d5, trade it off with dxe5, or maintain the tension? Each choice leads to completely different pawn structures and middlegame plans, making this a critical moment where our understanding of pawn structures and piece coordination will be tested.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

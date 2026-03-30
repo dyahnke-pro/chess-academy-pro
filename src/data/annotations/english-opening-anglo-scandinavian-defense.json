@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening, one of the most flexible and sophisticated ways to start the game. Unlike the direct aggression of 1. e4, we're controlling the center from the flank—c4 immediately pressures d5 and allows us to build up piece by piece. This move avoids the heavily analyzed main lines while keeping full strategic richness; White plans to develop pieces harmoniously, often with Nf3, g3, and Bg2 for a long-term space advantage. The beauty of 1. c4 is that it suits many different plans, from quiet positional play to sharp tactical positions depending on how Black responds."
+      "annotation": "We're playing the English Opening, one of the most flexible and sophisticated ways to start the game. Unlike the direct aggression of 1. e4, we're controlling the center from the flank—c4 immediately pressures d5 and allows us to build up piece by piece. This move avoids the heavily analyzed main lines while keeping full strategic richness; White plans to develop pieces harmoniously, often with Nf3, g3, and Bg2 for a long-term space advantage. The beauty of 1. c4 is that it suits many different plans, from quiet positional play to sharp tactical positions depending on how Black responds.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our setup with the Anglo-Scandinavian Defense—a principled move that stakes a claim in the center and prevents us from consolidating quietly. By playing d5, Black forces us to decide how to handle the tension: do we take on d5, allow the d-pawn to sit, or play e4 to dominate the center? This solid response is popular at all levels because it prevents White from simply maneuvering without resistance, and it gives Black good practical chances in the resulting positions."
+      "annotation": "Black immediately challenges our setup with the Anglo-Scandinavian Defense—a principled move that stakes a claim in the center and prevents us from consolidating quietly. By playing d5, Black forces us to decide how to handle the tension: do we take on d5, allow the d-pawn to sit, or play e4 to dominate the center? This solid response is popular at all levels because it prevents White from simply maneuvering without resistance, and it gives Black good practical chances in the resulting positions.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

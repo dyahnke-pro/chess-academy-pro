@@ -3,43 +3,173 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately claiming the central e5 and c5 squares while preparing to develop our pieces with maximum flexibility. This move signals our intention to control the center and potentially transpose into various systems like the Queen's Gambit, King's Indian setups, or Nimzo-Indian complexes. The d4 opening tends to lead to more positional, strategic battles compared to 1.e4, giving us excellent chances to outplay opponents who prefer tactical complications. Our plan involves supporting this central pawn with pieces and potentially advancing it further to cramp Black's position."
+      "annotation": "We're opening with the queen's pawn, immediately claiming the central e5 and c5 squares while preparing to develop our pieces with maximum flexibility. This move signals our intention to control the center and potentially transpose into various systems like the Queen's Gambit, King's Indian setups, or Nimzo-Indian complexes. The d4 opening tends to lead to more positional, strategic battles compared to 1.e4, giving us excellent chances to outplay opponents who prefer tactical complications. Our plan involves supporting this central pawn with pieces and potentially advancing it further to cramp Black's position.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central control by attacking the d4 pawn and preparing to contest the e4 square with the knight. This is one of the most principled responses to 1.d4, as it develops a piece while creating immediate central pressure. Our opponent is keeping maximum flexibility here - this knight move allows transpositions into the King's Indian, Queen's Gambit Declined, Nimzo-Indian, and many other solid defensive systems. Black is essentially saying 'prove that your central control is worth something' while developing harmoniously."
+      "annotation": "Black immediately challenges our central control by attacking the d4 pawn and preparing to contest the e4 square with the knight. This is one of the most principled responses to 1.d4, as it develops a piece while creating immediate central pressure. Our opponent is keeping maximum flexibility here - this knight move allows transpositions into the King's Indian, Queen's Gambit Declined, Nimzo-Indian, and many other solid defensive systems. Black is essentially saying 'prove that your central control is worth something' while developing harmoniously.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're advancing our queen's bishop pawn to support our central control and fight for the crucial d5 and b5 squares. This move characterizes the English Opening setup and prepares to meet Black's potential ...d5 advance by controlling that square from the side. The c4 pawn also opens lines for our queen and supports potential piece development to c3 or b3. By playing c4, we're committing to a system where we'll try to maintain central flexibility while pressuring Black's position from the flanks - a hallmark of modern hypermodern opening theory."
+      "annotation": "We're advancing our queen's bishop pawn to support our central control and fight for the crucial d5 and b5 squares. This move characterizes the English Opening setup and prepares to meet Black's potential ...d5 advance by controlling that square from the side. The c4 pawn also opens lines for our queen and supports potential piece development to c3 or b3. By playing c4, we're committing to a system where we'll try to maintain central flexibility while pressuring Black's position from the flanks - a hallmark of modern hypermodern opening theory.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses the solid French-style pawn structure, supporting an eventual ...d5 advance while keeping the position closed and maneuverable. Black is preparing to challenge our pawn center directly with ...d5, after which the central tension will define the character of the middlegame. This move also opens the diagonal for Black's light-squared bishop, though it does somewhat restrict the dark-squared bishop on c8. The e6 move signals Black's intention to play a solid, positional game rather than the more aggressive King's Indian setup with ...g6 and ...Bg7."
+      "annotation": "Our opponent chooses the solid French-style pawn structure, supporting an eventual ...d5 advance while keeping the position closed and maneuverable. Black is preparing to challenge our pawn center directly with ...d5, after which the central tension will define the character of the middlegame. This move also opens the diagonal for Black's light-squared bishop, though it does somewhat restrict the dark-squared bishop on c8. The e6 move signals Black's intention to play a solid, positional game rather than the more aggressive King's Indian setup with ...g6 and ...Bg7.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to meet Black's anticipated ...d5 with even more central pressure. This knight placement is crucial for the upcoming Nimzo-Indian structures, as it will become the target of Black's light-squared bishop when it lands on b4. Our knight controls important central squares like e4 and d5, while maintaining flexibility to relocate to e2, a4, or other squares depending on how the position develops. The Nc3 move also prepares potential pawn storms on either flank, as the knight provides excellent central support."
+      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to meet Black's anticipated ...d5 with even more central pressure. This knight placement is crucial for the upcoming Nimzo-Indian structures, as it will become the target of Black's light-squared bishop when it lands on b4. Our knight controls important central squares like e4 and d5, while maintaining flexibility to relocate to e2, a4, or other squares depending on how the position develops. The Nc3 move also prepares potential pawn storms on either flank, as the knight provides excellent central support.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb4",
-      "annotation": "Black plays the signature move of the Nimzo-Indian Defense, pinning our knight to the king and immediately creating uncomfortable pressure on our position. This bishop move is strategically brilliant because it prevents us from simply supporting our center with e2-e4, forces us to make concrete decisions about our pawn structure, and potentially saddles us with doubled c-pawns if we're not careful. Our opponent is following Nimzovich's hypermodern principles - instead of occupying the center immediately, Black is controlling it from the flanks while developing pieces actively. The Bb4 move also prepares potential tactical shots involving ...Bxc3+ followed by central breaks."
+      "annotation": "Black plays the signature move of the Nimzo-Indian Defense, pinning our knight to the king and immediately creating uncomfortable pressure on our position. This bishop move is strategically brilliant because it prevents us from simply supporting our center with e2-e4, forces us to make concrete decisions about our pawn structure, and potentially saddles us with doubled c-pawns if we're not careful. Our opponent is following Nimzovich's hypermodern principles - instead of occupying the center immediately, Black is controlling it from the flanks while developing pieces actively. The Bb4 move also prepares potential tactical shots involving ...Bxc3+ followed by central breaks.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qb3",
-      "annotation": "We're launching the aggressive Spielmann Variation by attacking the pinned bishop immediately and putting pressure on the b7 square. This queen move looks to exploit the fact that Black's bishop on b4 is somewhat loose and may need to make uncomfortable retreats. Our queen eyes both the b4 bishop and the b7 pawn, potentially creating tactical complications if Black isn't precise with the follow-up moves. While this early queen development might seem to violate opening principles, it creates immediate concrete threats that Black must address, and we're hoping to gain time by forcing our opponent's pieces to awkward squares."
+      "annotation": "We're launching the aggressive Spielmann Variation by attacking the pinned bishop immediately and putting pressure on the b7 square. This queen move looks to exploit the fact that Black's bishop on b4 is somewhat loose and may need to make uncomfortable retreats. Our queen eyes both the b4 bishop and the b7 pawn, potentially creating tactical complications if Black isn't precise with the follow-up moves. While this early queen development might seem to violate opening principles, it creates immediate concrete threats that Black must address, and we're hoping to gain time by forcing our opponent's pieces to awkward squares.",
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Our opponent strikes back in the center with this principled pawn break, immediately challenging our d4 stronghold and opening lines for piece development. Black is correctly following the strategic principle that when attacked on the flank (our Qb3), you should counter-attack in the center where the real battle lies. This move also opens the c-file for potential rook activity and prepares to develop the knight from b8 to c6 with tempo. By advancing c5, Black is willing to accept some pawn structure compromises in exchange for dynamic piece play and central counterplay."
+      "annotation": "Our opponent strikes back in the center with this principled pawn break, immediately challenging our d4 stronghold and opening lines for piece development. Black is correctly following the strategic principle that when attacked on the flank (our Qb3), you should counter-attack in the center where the real battle lies. This move also opens the c-file for potential rook activity and prepares to develop the knight from b8 to c6 with tempo. By advancing c5, Black is willing to accept some pawn structure compromises in exchange for dynamic piece play and central counterplay.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxc5",
-      "annotation": "We're accepting the pawn sacrifice and opening up the position, believing that our lead in development and central control will compensate for the material deficit. This capture removes Black's central pawn tension and gives us a temporary extra pawn, but more importantly, it opens the d-file for our heavy pieces and maintains our grip on the d5 square. Our decision to take the pawn signals confidence in our attacking chances - we're essentially saying that Black's compensation won't be sufficient. The dxc5 move also prepares to support our advanced pawn with b4 if needed, while keeping maximum pressure on Black's somewhat loose piece coordination."
+      "annotation": "We're accepting the pawn sacrifice and opening up the position, believing that our lead in development and central control will compensate for the material deficit. This capture removes Black's central pawn tension and gives us a temporary extra pawn, but more importantly, it opens the d-file for our heavy pieces and maintains our grip on the d5 square. Our decision to take the pawn signals confidence in our attacking chances - we're essentially saying that Black's compensation won't be sufficient. The dxc5 move also prepares to support our advanced pawn with b4 if needed, while keeping maximum pressure on Black's somewhat loose piece coordination.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black completes the Romanovsky Gambit by developing the knight with tempo, attacking our queen and dramatically improving the coordination of the dark pieces. This knight move is the point of Black's previous pawn sacrifice - the knight lands on an excellent central square, supports potential ...d5 advances, and forces our queen to make a decision about where to retreat. Our opponent has achieved the typical gambit compensation: superior development, piece activity, and pressure against our somewhat awkward piece placement. The Nc6 knight also eyes important squares like d4 and e5, while supporting potential tactical shots involving the pinned knight on c3 and the active bishop on b4."
+      "annotation": "Black completes the Romanovsky Gambit by developing the knight with tempo, attacking our queen and dramatically improving the coordination of the dark pieces. This knight move is the point of Black's previous pawn sacrifice - the knight lands on an excellent central square, supports potential ...d5 advances, and forces our queen to make a decision about where to retreat. Our opponent has achieved the typical gambit compensation: superior development, piece activity, and pressure against our somewhat awkward piece placement. The Nc6 knight also eyes important squares like d4 and e5, while supporting potential tactical shots involving the pinned knight on c3 and the active bishop on b4.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

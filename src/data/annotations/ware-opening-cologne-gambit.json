@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "a4",
-      "annotation": "This unusual opening move immediately signals we're playing the Ware Opening, where White takes unconventional approach to controlling the center. By advancing the a-pawn, we prepare to support a future d4 push while keeping our intentions mysterious—Black can't immediately see whether we're aiming for queenside expansion or central control. This move is rare at high levels but can catch unprepared opponents off-guard, and it's worth understanding because it teaches us about flexibility and not being bound by opening dogma."
+      "annotation": "This unusual opening move immediately signals we're playing the Ware Opening, where White takes unconventional approach to controlling the center. By advancing the a-pawn, we prepare to support a future d4 push while keeping our intentions mysterious—Black can't immediately see whether we're aiming for queenside expansion or central control. This move is rare at high levels but can catch unprepared opponents off-guard, and it's worth understanding because it teaches us about flexibility and not being bound by opening dogma.",
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "a4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b6",
-      "annotation": "Black prepares the fianchetto setup by controlling c5 and d4 with the future bishop on b7, which is a solid, prophylactic approach. This move also hints that Black may want to develop along the long diagonal and control the center indirectly rather than challenge it directly. It's a reasonable response that keeps options open while preventing our immediate ideas."
+      "annotation": "Black prepares the fianchetto setup by controlling c5 and d4 with the future bishop on b7, which is a solid, prophylactic approach. This move also hints that Black may want to develop along the long diagonal and control the center indirectly rather than challenge it directly. It's a reasonable response that keeps options open while preventing our immediate ideas.",
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "Now we commit to the Cologne Gambit by pushing for central control with d4, the most forcing move available. This establishes our bishop and queen on the center files and creates immediate tension with Black's pawn on d5. We're gambling that our lead in development and central control justify moving multiple times without fully developing pieces—it's a gambit because we're taking on some risk for attacking chances."
+      "annotation": "Now we commit to the Cologne Gambit by pushing for central control with d4, the most forcing move available. This establishes our bishop and queen on the center files and creates immediate tension with Black's pawn on d5. We're gambling that our lead in development and central control justify moving multiple times without fully developing pieces—it's a gambit because we're taking on some risk for attacking chances.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black accepts the challenge and meets our center aggressively, taking space in the middle and opening lines for the c8-bishop. By playing d5, Black fights for central control and refuses to be pushed around, even though this move doesn't develop a piece. Black is essentially saying \"I'll contest your center immediately\" rather than preparing with Nf6 first."
+      "annotation": "Black accepts the challenge and meets our center aggressively, taking space in the middle and opening lines for the c8-bishop. By playing d5, Black fights for central control and refuses to be pushed around, even though this move doesn't develop a piece. Black is essentially saying \"I'll contest your center immediately\" rather than preparing with Nf6 first.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its best square, supporting the d4 pawn and controlling important central squares like e4, d5, and b5. The knight on c3 is ideally placed in the Cologne Gambit because it pressures d5 and supports our attacking plans while keeping multiple options open. This move also prepares possible ideas like Nxd5 or Bf4, putting Black under immediate pressure to clarify the position."
+      "annotation": "We develop our knight to its best square, supporting the d4 pawn and controlling important central squares like e4, d5, and b5. The knight on c3 is ideally placed in the Cologne Gambit because it pressures d5 and supports our attacking plans while keeping multiple options open. This move also prepares possible ideas like Nxd5 or Bf4, putting Black under immediate pressure to clarify the position.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd7",
-      "annotation": "Black develops the knight to d7, which is flexible because it supports e5 (potentially a future pawn advance), supports the c5 square, and keeps the f6 square available for the other knight. The d7 knight also stays out of the way of the c-pawn's expansion and maintains Black's fianchetto setup. This is a solid, practical developing move that avoids committing to a specific pawn structure too early."
+      "annotation": "Black develops the knight to d7, which is flexible because it supports e5 (potentially a future pawn advance), supports the c5 square, and keeps the f6 square available for the other knight. The d7 knight also stays out of the way of the c-pawn's expansion and maintains Black's fianchetto setup. This is a solid, practical developing move that avoids committing to a specific pawn structure too early.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "d7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

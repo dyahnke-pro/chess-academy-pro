@@ -3,47 +3,190 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move signals our intention to build a classical pawn center and often leads to rich, strategic middlegames where piece activity and pawn structure play crucial roles. The d4 opening is slightly less forcing than 1.e4, giving us more time to develop our pieces harmoniously while maintaining excellent winning chances. Our plan typically involves supporting this central pawn with c2-c4 and developing our pieces to active squares."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move signals our intention to build a classical pawn center and often leads to rich, strategic middlegames where piece activity and pawn structure play crucial roles. The d4 opening is slightly less forcing than 1.e4, giving us more time to develop our pieces harmoniously while maintaining excellent winning chances. Our plan typically involves supporting this central pawn with c2-c4 and developing our pieces to active squares.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our central control with this solid, classical response that mirrors our own central strategy. This move prevents us from easily advancing to e4-e5 and establishes Black's own foothold in the center, creating immediate tension. Our opponent is signaling they want to fight for central control rather than allow us a free hand in the middle of the board. This leads us toward Queen's Gambit structures where the battle will revolve around whether Black can maintain this central pawn or if we can undermine it."
+      "annotation": "Black immediately challenges our central control with this solid, classical response that mirrors our own central strategy. This move prevents us from easily advancing to e4-e5 and establishes Black's own foothold in the center, creating immediate tension. Our opponent is signaling they want to fight for central control rather than allow us a free hand in the middle of the board. This leads us toward Queen's Gambit structures where the battle will revolve around whether Black can maintain this central pawn or if we can undermine it.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the Queen's Gambit, offering our c-pawn to deflect Black's strong central pawn from d5 and gain superior central control. This isn't a true gambit since Black cannot hold the pawn safely, but rather a strategic tool to open the position and activate our pieces more effectively. By attacking the d5 pawn, we're forcing Black to make a critical decision about the pawn structure and giving ourselves excellent piece development prospects. This move also prepares to recapture on d5 with our queen, centralizing it powerfully, or allows us to build a strong pawn center if Black declines the 'gambit.'"
+      "annotation": "We're playing the Queen's Gambit, offering our c-pawn to deflect Black's strong central pawn from d5 and gain superior central control. This isn't a true gambit since Black cannot hold the pawn safely, but rather a strategic tool to open the position and activate our pieces more effectively. By attacking the d5 pawn, we're forcing Black to make a critical decision about the pawn structure and giving ourselves excellent piece development prospects. This move also prepares to recapture on d5 with our queen, centralizing it powerfully, or allows us to build a strong pawn center if Black declines the 'gambit.'",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black chooses the solid French Defense setup within the Queen's Gambit, supporting the d5 pawn while preparing to develop the dark-squared bishop to d6 or e7. This move keeps the central tension intact and avoids the tactical complications that can arise from accepting the gambit with dxc4. Our opponent is planning a classical development scheme with moves like Nf6, Be7, and castling, leading to the rich strategic battles typical of the Semi-Slav Defense. However, this move does temporarily block the diagonal for Black's light-squared bishop, which will need to find activity later via b7 or a6-b5 advances."
+      "annotation": "Black chooses the solid French Defense setup within the Queen's Gambit, supporting the d5 pawn while preparing to develop the dark-squared bishop to d6 or e7. This move keeps the central tension intact and avoids the tactical complications that can arise from accepting the gambit with dxc4. Our opponent is planning a classical development scheme with moves like Nf6, Be7, and castling, leading to the rich strategic battles typical of the Semi-Slav Defense. However, this move does temporarily block the diagonal for Black's light-squared bishop, which will need to find activity later via b7 or a6-b5 advances.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our potential e2-e4 advance and adds pressure to the d5 pawn from another angle. This move is part of our systematic development plan and prepares to challenge Black's central setup with multiple pieces. The knight on c3 also eyes important central squares like e4 and d5, while keeping our options open for various pawn structures depending on how Black responds. This natural development move maintains the tension and allows us to continue building our position harmoniously while keeping maximum flexibility."
+      "annotation": "We're developing our knight to its most natural square, where it supports our potential e2-e4 advance and adds pressure to the d5 pawn from another angle. This move is part of our systematic development plan and prepares to challenge Black's central setup with multiple pieces. The knight on c3 also eyes important central squares like e4 and d5, while keeping our options open for various pawn structures depending on how Black responds. This natural development move maintains the tension and allows us to continue building our position harmoniously while keeping maximum flexibility.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black plays the defining move of the Semi-Slav Defense, supporting the d5 pawn with the c-pawn while preparing to develop the queen's knight to d7 rather than the more standard c6. This setup gives Black a very solid pawn structure but can lead to somewhat cramped positions where piece coordination becomes crucial. Our opponent is essentially saying they're willing to accept less space in exchange for a rock-solid center and the possibility of later counterplay with moves like b7-b5. This move also prepares the b7-b5 advance to challenge our c4 pawn and gain queenside space."
+      "annotation": "Black plays the defining move of the Semi-Slav Defense, supporting the d5 pawn with the c-pawn while preparing to develop the queen's knight to d7 rather than the more standard c6. This setup gives Black a very solid pawn structure but can lead to somewhat cramped positions where piece coordination becomes crucial. Our opponent is essentially saying they're willing to accept less space in exchange for a rock-solid center and the possibility of later counterplay with moves like b7-b5. This move also prepares the b7-b5 advance to challenge our c4 pawn and gain queenside space.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "We're seizing the initiative with this central advance that transforms the position into the Marshall Gambit of the Semi-Slav Defense, a sharp and tactical line that can catch unprepared opponents off guard. This move immediately opens up the position and forces Black to make critical decisions about how to handle the central tension. By advancing in the center, we're following the principle of striking at the opponent's strongpoint while our development advantage is at its peak. This aggressive continuation leads to complex tactical positions where precise calculation and understanding of typical piece sacrifices become essential for both sides."
+      "annotation": "We're seizing the initiative with this central advance that transforms the position into the Marshall Gambit of the Semi-Slav Defense, a sharp and tactical line that can catch unprepared opponents off guard. This move immediately opens up the position and forces Black to make critical decisions about how to handle the central tension. By advancing in the center, we're following the principle of striking at the opponent's strongpoint while our development advantage is at its peak. This aggressive continuation leads to complex tactical positions where precise calculation and understanding of typical piece sacrifices become essential for both sides.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe4",
-      "annotation": "Black accepts the challenge and captures our e4 pawn, leading us into the sharp tactical complications of the Marshall Gambit where both sides must navigate carefully. Our opponent is essentially calling our bluff and saying they're prepared for the tactical storm that's about to unfold. This capture opens the d-file and gives Black a temporary material advantage, but also allows us to develop our pieces with tempo and create immediate threats. Black must now deal with our active piece development and the weakening of their king position that often accompanies such pawn grabs in the opening."
+      "annotation": "Black accepts the challenge and captures our e4 pawn, leading us into the sharp tactical complications of the Marshall Gambit where both sides must navigate carefully. Our opponent is essentially calling our bluff and saying they're prepared for the tactical storm that's about to unfold. This capture opens the d-file and gives Black a temporary material advantage, but also allows us to develop our pieces with tempo and create immediate threats. Black must now deal with our active piece development and the weakening of their king position that often accompanies such pawn grabs in the opening.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxe4",
-      "annotation": "We're recapturing with the knight to maintain material balance while simultaneously developing a piece to an excellent central square with maximum activity. This knight on e4 becomes a powerful outpost that controls crucial central squares like d6, f6, c5, and g5, while also eyeing Black's kingside for potential tactical opportunities. Our piece is optimally placed to support further aggressive moves and creates immediate pressure on Black's position. The knight centralization exemplifies the key principle of the Marshall Gambit: rapid piece development and central control in exchange for the early pawn advance."
+      "annotation": "We're recapturing with the knight to maintain material balance while simultaneously developing a piece to an excellent central square with maximum activity. This knight on e4 becomes a powerful outpost that controls crucial central squares like d6, f6, c5, and g5, while also eyeing Black's kingside for potential tactical opportunities. Our piece is optimally placed to support further aggressive moves and creates immediate pressure on Black's position. The knight centralization exemplifies the key principle of the Marshall Gambit: rapid piece development and central control in exchange for the early pawn advance.",
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bb4+",
-      "annotation": "Black strikes back immediately with this forcing check that aims to disrupt our smooth development and create immediate tactical complications on the kingside. This move attacks our king and forces us to make a decision about how to block the check, while also developing Black's light-squared bishop to an active square where it pins our c3 knight. Our opponent is following the critical principle in tactical openings of creating counter-threats as quickly as possible rather than passively consolidating material. This bishop move also prepares to potentially exchange on c3, doubling our pawns and compromising our pawn structure if we're not careful about our response."
+      "annotation": "Black strikes back immediately with this forcing check that aims to disrupt our smooth development and create immediate tactical complications on the kingside. This move attacks our king and forces us to make a decision about how to block the check, while also developing Black's light-squared bishop to an active square where it pins our c3 knight. Our opponent is following the critical principle in tactical openings of creating counter-threats as quickly as possible rather than passively consolidating material. This bishop move also prepares to potentially exchange on c3, doubling our pawns and compromising our pawn structure if we're not careful about our response.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're choosing the most natural response by blocking the check with knight development, which maintains our piece coordination while avoiding structural damage to our pawn formation that would occur with moves like Bd2 or Nd2. This move keeps our pieces actively placed and maintains the tactical tension that characterizes the Forgotten Variation of the Marshall Gambit. By returning the knight to c3, we're essentially transposing back to similar structures but with the important difference that Black's bishop is now actively placed on b4, creating ongoing tactical possibilities. This continuation shows that we're confident in our position and willing to continue the tactical fight rather than seeking simplification."
+      "annotation": "We're choosing the most natural response by blocking the check with knight development, which maintains our piece coordination while avoiding structural damage to our pawn formation that would occur with moves like Bd2 or Nd2. This move keeps our pieces actively placed and maintains the tactical tension that characterizes the Forgotten Variation of the Marshall Gambit. By returning the knight to c3, we're essentially transposing back to similar structures but with the important difference that Black's bishop is now actively placed on b4, creating ongoing tactical possibilities. This continuation shows that we're confident in our position and willing to continue the tactical fight rather than seeking simplification.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

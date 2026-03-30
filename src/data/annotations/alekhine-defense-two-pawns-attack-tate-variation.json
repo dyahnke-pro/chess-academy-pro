@@ -3,31 +3,122 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, claiming central space and preparing to develop our pieces harmoniously. This move controls the important d5 and f5 squares while opening lines for both our bishop on f1 and our queen. The center is the most critical battleground in chess, and by occupying e4 early, we're following classical opening principles of controlling the center with pawns before developing pieces."
+      "annotation": "We're opening with the king's pawn, claiming central space and preparing to develop our pieces harmoniously. This move controls the important d5 and f5 squares while opening lines for both our bishop on f1 and our queen. The center is the most critical battleground in chess, and by occupying e4 early, we're following classical opening principles of controlling the center with pawns before developing pieces.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the Alekhine Defense, one of the most provocative and hypermodern openings in chess. Instead of occupying the center with pawns like ...e5 or ...c5, our opponent is inviting us to advance and build a large pawn center, planning to attack it later with pieces. This knight attacks our e4 pawn directly, forcing us to make a decision about how to maintain our central presence."
+      "annotation": "Black immediately challenges our central pawn with the Alekhine Defense, one of the most provocative and hypermodern openings in chess. Instead of occupying the center with pawns like ...e5 or ...c5, our opponent is inviting us to advance and build a large pawn center, planning to attack it later with pieces. This knight attacks our e4 pawn directly, forcing us to make a decision about how to maintain our central presence.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "We're pushing forward to kick the knight and gain even more space in the center, which is the most natural and aggressive response to the Alekhine Defense. This advance gives us a powerful pawn duo on e5 and (soon) d4, controlling important central squares like d6, f6, c6, and g6. By driving the knight away, we're gaining time (tempo) to develop while expanding our space advantage, though we must be careful that our advanced pawns don't become targets later in the game."
+      "annotation": "We're pushing forward to kick the knight and gain even more space in the center, which is the most natural and aggressive response to the Alekhine Defense. This advance gives us a powerful pawn duo on e5 and (soon) d4, controlling important central squares like d6, f6, c6, and g6. By driving the knight away, we're gaining time (tempo) to develop while expanding our space advantage, though we must be careful that our advanced pawns don't become targets later in the game.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd5",
-      "annotation": "Black retreats the knight to its most active square, where it can't be easily attacked again and controls important central territory. From d5, this knight is superbly placed—it controls key squares like c3, e3, f4, and b4, while also eyeing potential outposts. Our opponent is following the hypermodern principle of the Alekhine Defense: let us build a big pawn center, then pressure it with pieces, and this centralized knight is a crucial part of that strategy."
+      "annotation": "Black retreats the knight to its most active square, where it can't be easily attacked again and controls important central territory. From d5, this knight is superbly placed—it controls key squares like c3, e3, f4, and b4, while also eyeing potential outposts. Our opponent is following the hypermodern principle of the Alekhine Defense: let us build a big pawn center, then pressure it with pieces, and this centralized knight is a crucial part of that strategy.",
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're launching the Two Pawns Attack, the most ambitious and aggressive continuation against the Alekhine Defense. This move attacks the knight again, forcing it to retreat while we gain another tempo and further expand our pawn center. Now we control a massive amount of space with pawns on c4 and e5, dominating the center and restricting Black's piece mobility, though we're also committing to a sharp, tactical struggle where both sides will need to play precisely."
+      "annotation": "We're launching the Two Pawns Attack, the most ambitious and aggressive continuation against the Alekhine Defense. This move attacks the knight again, forcing it to retreat while we gain another tempo and further expand our pawn center. Now we control a massive amount of space with pawns on c4 and e5, dominating the center and restricting Black's piece mobility, though we're also committing to a sharp, tactical struggle where both sides will need to play precisely.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nb6",
-      "annotation": "Black retreats the knight to b6, where it's temporarily safe but somewhat out of play on the rim of the board. From b6, the knight eyes the c4 pawn and potentially the d5 square later, but it's not contributing much to Black's development or central control right now. Our opponent is essentially conceding more time and space to focus on the long-term plan of undermining our impressive pawn center, which is the philosophical foundation of the Alekhine Defense."
+      "annotation": "Black retreats the knight to b6, where it's temporarily safe but somewhat out of play on the rim of the board. From b6, the knight eyes the c4 pawn and potentially the d5 square later, but it's not contributing much to Black's development or central control right now. Our opponent is essentially conceding more time and space to focus on the long-term plan of undermining our impressive pawn center, which is the philosophical foundation of the Alekhine Defense.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "b6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a4",
-      "annotation": "We're playing the Tate Variation, an extremely aggressive move that prevents the knight from ever returning to the game via a5 and threatens to trap it completely. This move shows our intention to keep maximum pressure on Black's position by restricting piece mobility, even at the cost of further weakening our queenside pawn structure. The idea is that if Black can't coordinate their pieces effectively, our massive space advantage and superior development will lead to a crushing attack, making this one of the sharpest lines in the entire Alekhine Defense."
+      "annotation": "We're playing the Tate Variation, an extremely aggressive move that prevents the knight from ever returning to the game via a5 and threatens to trap it completely. This move shows our intention to keep maximum pressure on Black's position by restricting piece mobility, even at the cost of further weakening our queenside pawn structure. The idea is that if Black can't coordinate their pieces effectively, our massive space advantage and superior development will lead to a crushing attack, making this one of the sharpest lines in the entire Alekhine Defense.",
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "a4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "g4",
-      "annotation": "We're playing the Grob Opening, one of chess's most provocative and offbeat first moves! Rather than fighting for the center immediately, we fianchetto on the kingside with a twist—we're not preparing a bishop on the long diagonal, but instead launching a flank attack. The move g4 controls the h5 square and prepares to expand on the kingside, hoping to catch Black off-guard with an unusual setup. This isn't sound by classical standards, but it's dangerous in practical play because it forces your opponent into unfamiliar territory where intuition often fails."
+      "annotation": "We're playing the Grob Opening, one of chess's most provocative and offbeat first moves! Rather than fighting for the center immediately, we fianchetto on the kingside with a twist—we're not preparing a bishop on the long diagonal, but instead launching a flank attack. The move g4 controls the h5 square and prepares to expand on the kingside, hoping to catch Black off-guard with an unusual setup. This isn't sound by classical standards, but it's dangerous in practical play because it forces your opponent into unfamiliar territory where intuition often fails.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g5",
-      "annotation": "Black mirrors our strategy with the Double Grob, mirroring our pawn thrust on the kingside. By playing g5, Black contests our h5 square and prepares to fianchetto on the queenside or launch their own kingside counterplay. This symmetrical response is one of the principled ways to meet the Grob—rather than allowing White aggressive space on the kingside, Black fights for the same squares and keeps the position balanced. From here, the game often becomes a race where both sides pursue their own attacking plans on opposite flanks."
+      "annotation": "Black mirrors our strategy with the Double Grob, mirroring our pawn thrust on the kingside. By playing g5, Black contests our h5 square and prepares to fianchetto on the queenside or launch their own kingside counterplay. This symmetrical response is one of the principled ways to meet the Grob—rather than allowing White aggressive space on the kingside, Black fights for the same squares and keeps the position balanced. From here, the game often becomes a race where both sides pursue their own attacking plans on opposite flanks.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

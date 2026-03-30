@@ -3,23 +3,88 @@
   "moveAnnotations": [
     {
       "san": "g4",
-      "annotation": "We're playing the Grob Opening, a rare but aggressive first move that immediately stakes a claim on the kingside. This move prepares to fianchetto our bishop on g2, where it'll dominate the long diagonal toward a8. By moving the g-pawn forward, we're gambling that Black won't be able to exploit the weakened kingside before we complete our setup and launch an attack. It's unconventional and risky, but it surprises many opponents and can lead to dynamic attacking chances if we play accurately."
+      "annotation": "We're playing the Grob Opening, a rare but aggressive first move that immediately stakes a claim on the kingside. This move prepares to fianchetto our bishop on g2, where it'll dominate the long diagonal toward a8. By moving the g-pawn forward, we're gambling that Black won't be able to exploit the weakened kingside before we complete our setup and launch an attack. It's unconventional and risky, but it surprises many opponents and can lead to dynamic attacking chances if we play accurately.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black logically strikes in the center, the most critical area of the board. This move controls the e4 square, prevents us from establishing a strong pawn center, and opens lines for the c8-bishop and queen. Black is playing for control and development rather than panicking about our kingside aggression—a sensible practical choice against such an offbeat opening."
+      "annotation": "Black logically strikes in the center, the most critical area of the board. This move controls the e4 square, prevents us from establishing a strong pawn center, and opens lines for the c8-bishop and queen. Black is playing for control and development rather than panicking about our kingside aggression—a sensible practical choice against such an offbeat opening.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg2",
-      "annotation": "We complete our fianchetto setup, placing the bishop on its ideal square where it commands the long diagonal (a8-h1) and supports our center. The g2-bishop will be a powerful piece as the game progresses, especially if we can keep the center relatively open. This also prepares to potentially advance f4 to support kingside expansion, and we're beginning to make sense of g4 by integrating it into a coherent plan."
+      "annotation": "We complete our fianchetto setup, placing the bishop on its ideal square where it commands the long diagonal (a8-h1) and supports our center. The g2-bishop will be a powerful piece as the game progresses, especially if we can keep the center relatively open. This also prepares to potentially advance f4 to support kingside expansion, and we're beginning to make sense of g4 by integrating it into a coherent plan.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
-      "annotation": "Black prepares d4, solidifying the pawn on d5 and preventing our pieces from landing there. This move also prepares a potential queenside expansion with b5, giving Black counterplay while we're focused on the kingside. The move is flexible and keeps our opponent's options open—they're not yet committing to a clear plan but consolidating their position."
+      "annotation": "Black prepares d4, solidifying the pawn on d5 and preventing our pieces from landing there. This move also prepares a potential queenside expansion with b5, giving Black counterplay while we're focused on the kingside. The move is flexible and keeps our opponent's options open—they're not yet committing to a clear plan but consolidating their position.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g5",
-      "annotation": "We continue the Spike Attack by pushing our g-pawn to g5, creating aggressive intent against Black's kingside and threatening to advance further to g6. This sharpens the game and prevents Black from easily developing the g8-knight while also gaining space. We're betting that our long-diagonal control from g2 and rapid piece development will compensate for the weakened kingside, though Black now has the opportunity to strike back in the center or exploit our loose pawn structure."
+      "annotation": "We continue the Spike Attack by pushing our g-pawn to g5, creating aggressive intent against Black's kingside and threatening to advance further to g6. This sharpens the game and prevents Black from easily developing the g8-knight while also gaining space. We're betting that our long-diagonal control from g2 and rapid piece development will compensate for the weakened kingside, though Black now has the opportunity to strike back in the center or exploit our loose pawn structure.",
+      "arrows": [
+        {
+          "from": "g4",
+          "to": "g5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

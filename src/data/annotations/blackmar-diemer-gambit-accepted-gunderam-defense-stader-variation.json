@@ -3,59 +3,241 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the Queen's Pawn, signaling our intention to play the Blackmar-Diemer Gambit - one of the most aggressive and tactical openings available to White. This gambit sacrifices material (usually a pawn) in exchange for rapid development, open lines, and attacking chances against the enemy king. The d4 move immediately stakes a claim in the center and prepares to challenge Black's response, while keeping our options open for the characteristic pawn storm that defines this opening. What makes the Blackmar-Diemer special is that it transforms a typically positional Queen's Pawn opening into a tactical melee where piece activity and initiative matter more than material."
+      "annotation": "We're opening with the Queen's Pawn, signaling our intention to play the Blackmar-Diemer Gambit - one of the most aggressive and tactical openings available to White. This gambit sacrifices material (usually a pawn) in exchange for rapid development, open lines, and attacking chances against the enemy king. The d4 move immediately stakes a claim in the center and prepares to challenge Black's response, while keeping our options open for the characteristic pawn storm that defines this opening. What makes the Blackmar-Diemer special is that it transforms a typically positional Queen's Pawn opening into a tactical melee where piece activity and initiative matter more than material.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most natural and principled response, as our opponent is following fundamental opening principles by fighting for central control. However, by playing d5, Black is walking right into our gambit preparation - we're about to offer the e4 pawn sacrifice that characterizes the Blackmar-Diemer. Our opponent likely expects a quiet positional game typical of d4 openings, but we're about to shift gears dramatically toward sharp tactical play."
+      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most natural and principled response, as our opponent is following fundamental opening principles by fighting for central control. However, by playing d5, Black is walking right into our gambit preparation - we're about to offer the e4 pawn sacrifice that characterizes the Blackmar-Diemer. Our opponent likely expects a quiet positional game typical of d4 openings, but we're about to shift gears dramatically toward sharp tactical play.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "Here's the signature move of the Blackmar-Diemer Gambit! We're offering our e-pawn as a sacrifice to accelerate our development and create immediate central tension. This move transforms the position from a standard Queen's Pawn game into a tactical battlefield where we'll prioritize piece activity over material. The pawn sacrifice aims to open the e-file for our rook, create diagonals for our bishops, and give us a lead in development that we can convert into a dangerous attack. If Black accepts with dxe4, we'll have exactly the kind of unbalanced, tactical position where the Blackmar-Diemer thrives."
+      "annotation": "Here's the signature move of the Blackmar-Diemer Gambit! We're offering our e-pawn as a sacrifice to accelerate our development and create immediate central tension. This move transforms the position from a standard Queen's Pawn game into a tactical battlefield where we'll prioritize piece activity over material. The pawn sacrifice aims to open the e-file for our rook, create diagonals for our bishops, and give us a lead in development that we can convert into a dangerous attack. If Black accepts with dxe4, we'll have exactly the kind of unbalanced, tactical position where the Blackmar-Diemer thrives.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe4",
-      "annotation": "Our opponent accepts the gambit by capturing our e4 pawn, which is exactly what we wanted them to do! Black is now a pawn ahead materially, but this capture opens up the position and gives us exactly the kind of tactical complications we're seeking. The e4 pawn will become a target that we can attack with f3, and its advance will help us gain time and space in the center. By accepting the gambit, Black commits to defending accurately while we unleash our pieces with tempo and attacking chances."
+      "annotation": "Our opponent accepts the gambit by capturing our e4 pawn, which is exactly what we wanted them to do! Black is now a pawn ahead materially, but this capture opens up the position and gives us exactly the kind of tactical complications we're seeking. The e4 pawn will become a target that we can attack with f3, and its advance will help us gain time and space in the center. By accepting the gambit, Black commits to defending accurately while we unleash our pieces with tempo and attacking chances.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, immediately putting pressure on the e4 pawn and preparing our next tactical blow. The knight on c3 supports our upcoming f3 advance while also eyeing important central squares like e4 and d5. This move follows the classic gambit principle of developing with tempo - we're not just bringing a piece out, but threatening something concrete (the e4 pawn) that forces Black to make decisions. Our development is proceeding much faster than Black's, which is exactly the compensation we seek for our sacrificed pawn."
+      "annotation": "We develop our knight to its most active square, immediately putting pressure on the e4 pawn and preparing our next tactical blow. The knight on c3 supports our upcoming f3 advance while also eyeing important central squares like e4 and d5. This move follows the classic gambit principle of developing with tempo - we're not just bringing a piece out, but threatening something concrete (the e4 pawn) that forces Black to make decisions. Our development is proceeding much faster than Black's, which is exactly the compensation we seek for our sacrificed pawn.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending against our potential threats while bringing a piece into active play. This knight on f6 serves multiple purposes: it guards the e4 pawn indirectly, controls important central squares like e4 and d5, and prepares kingside castling. However, our opponent should be wary that this knight can become a target for our advancing pawns later in the game. Black is playing sensibly by developing pieces rather than trying to hold onto the extra pawn with moves like f5, which would seriously compromise the kingside."
+      "annotation": "Black develops the knight to its most natural square, defending against our potential threats while bringing a piece into active play. This knight on f6 serves multiple purposes: it guards the e4 pawn indirectly, controls important central squares like e4 and d5, and prepares kingside castling. However, our opponent should be wary that this knight can become a target for our advancing pawns later in the game. Black is playing sensibly by developing pieces rather than trying to hold onto the extra pawn with moves like f5, which would seriously compromise the kingside.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f3",
-      "annotation": "This is the critical follow-up to our gambit! We're attacking the e4 pawn directly and forcing Black to make an immediate decision about how to handle our material sacrifice. The f3 move opens the f-file for potential rook activity and prepares to recapture on f3 with our knight, centralizing it powerfully. While f3 does weaken our kingside slightly and blocks the natural development square for our knight, the tactical benefits far outweigh these concerns in the Blackmar-Diemer. We're maintaining maximum pressure and keeping the initiative, which is the whole point of our gambit strategy."
+      "annotation": "This is the critical follow-up to our gambit! We're attacking the e4 pawn directly and forcing Black to make an immediate decision about how to handle our material sacrifice. The f3 move opens the f-file for potential rook activity and prepares to recapture on f3 with our knight, centralizing it powerfully. While f3 does weaken our kingside slightly and blocks the natural development square for our knight, the tactical benefits far outweigh these concerns in the Blackmar-Diemer. We're maintaining maximum pressure and keeping the initiative, which is the whole point of our gambit strategy.",
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "exf3",
-      "annotation": "Black captures our f3 pawn, accepting the second part of our gambit sacrifice and opening up even more tactical possibilities. Our opponent is now two pawns ahead materially, but the position is becoming increasingly sharp and difficult to navigate for Black. This capture opens the f-file completely and allows us to recapture with our knight, placing it on the excellent central square f3 where it will eye key squares like e5, g5, and h4. Black's decision to take on f3 is logical - trying to hold the e4 pawn would be extremely difficult and would leave our opponent's pieces cramped and uncoordinated."
+      "annotation": "Black captures our f3 pawn, accepting the second part of our gambit sacrifice and opening up even more tactical possibilities. Our opponent is now two pawns ahead materially, but the position is becoming increasingly sharp and difficult to navigate for Black. This capture opens the f-file completely and allows us to recapture with our knight, placing it on the excellent central square f3 where it will eye key squares like e5, g5, and h4. Black's decision to take on f3 is logical - trying to hold the e4 pawn would be extremely difficult and would leave our opponent's pieces cramped and uncoordinated.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxf3",
-      "annotation": "We recapture with the knight, placing it on an excellent central outpost where it exerts tremendous influence over the board. From f3, our knight controls key squares like e5 (a perfect advanced post), g5 (attacking f7), h4 (supporting kingside attacks), and d4 (central control). This recapture also opens up our development - our dark-squared bishop can now come to c4 or d3, and we've essentially completed our kingside piece coordination. The knight on f3 is the cornerstone of many Blackmar-Diemer attacking formations, often supporting pawn storms with g4-g5 or jumping to aggressive squares like e5 or g5."
+      "annotation": "We recapture with the knight, placing it on an excellent central outpost where it exerts tremendous influence over the board. From f3, our knight controls key squares like e5 (a perfect advanced post), g5 (attacking f7), h4 (supporting kingside attacks), and d4 (central control). This recapture also opens up our development - our dark-squared bishop can now come to c4 or d3, and we've essentially completed our kingside piece coordination. The knight on f3 is the cornerstone of many Blackmar-Diemer attacking formations, often supporting pawn storms with g4-g5 or jumping to aggressive squares like e5 or g5.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops the light-squared bishop to an active square outside the pawn chain, which is excellent opening technique when you have extra pawns to defend. The bishop on f5 controls important central squares and keeps an eye on our kingside while supporting Black's overall position. However, this bishop placement does have some drawbacks - it can become a target for our advancing g-pawn, and it doesn't directly support kingside castling. Our opponent is making reasonable developing moves but needs to be careful about our increasing piece activity and potential tactical threats."
+      "annotation": "Black develops the light-squared bishop to an active square outside the pawn chain, which is excellent opening technique when you have extra pawns to defend. The bishop on f5 controls important central squares and keeps an eye on our kingside while supporting Black's overall position. However, this bishop placement does have some drawbacks - it can become a target for our advancing g-pawn, and it doesn't directly support kingside castling. Our opponent is making reasonable developing moves but needs to be careful about our increasing piece activity and potential tactical threats.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ne5",
-      "annotation": "We immediately occupy the excellent outpost on e5 that our knight from f3 was eyeing! This centralized knight is incredibly strong - it attacks f7 (Black's weakest point), controls key dark squares, and can't easily be dislodged by Black pawns. The knight on e5 is a classic motif in the Blackmar-Diemer, often serving as the springboard for devastating attacks on the black king. From this central domination point, we're threatening various tactical motifs and putting tremendous pressure on Black's position. Our opponent will have to deal with this powerful piece very carefully."
+      "annotation": "We immediately occupy the excellent outpost on e5 that our knight from f3 was eyeing! This centralized knight is incredibly strong - it attacks f7 (Black's weakest point), controls key dark squares, and can't easily be dislodged by Black pawns. The knight on e5 is a classic motif in the Blackmar-Diemer, often serving as the springboard for devastating attacks on the black king. From this central domination point, we're threatening various tactical motifs and putting tremendous pressure on Black's position. Our opponent will have to deal with this powerful piece very carefully.",
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid central move that supports the d5 square and prepares to develop the dark-squared bishop, while also creating a potential escape square for the king. This move is positionally sound - it strengthens the center and keeps Black's pawn structure intact. However, e6 does have the drawback of potentially blocking in the light-squared bishop that just moved to f5, limiting its future options. Our opponent is trying to consolidate the position and complete development, but needs to be constantly aware of our tactical threats emanating from the powerful knight on e5."
+      "annotation": "Black plays a solid central move that supports the d5 square and prepares to develop the dark-squared bishop, while also creating a potential escape square for the king. This move is positionally sound - it strengthens the center and keeps Black's pawn structure intact. However, e6 does have the drawback of potentially blocking in the light-squared bishop that just moved to f5, limiting its future options. Our opponent is trying to consolidate the position and complete development, but needs to be constantly aware of our tactical threats emanating from the powerful knight on e5.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g4",
-      "annotation": "We launch our signature kingside pawn storm, immediately attacking Black's light-squared bishop and gaining space on the kingside! This aggressive advance is a hallmark of the Blackmar-Diemer - we're using our lead in development to create immediate threats and keep Black on the defensive. The g4 move not only attacks the bishop but also prepares g5, which could drive away the defending knight on f6 and expose Black's kingside. While this advance does weaken our own king position, in gambit play we prioritize attack over defense, trusting that our initiative will be worth more than structural considerations."
+      "annotation": "We launch our signature kingside pawn storm, immediately attacking Black's light-squared bishop and gaining space on the kingside! This aggressive advance is a hallmark of the Blackmar-Diemer - we're using our lead in development to create immediate threats and keep Black on the defensive. The g4 move not only attacks the bishop but also prepares g5, which could drive away the defending knight on f6 and expose Black's kingside. While this advance does weaken our own king position, in gambit play we prioritize attack over defense, trusting that our initiative will be worth more than structural considerations.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Be4",
-      "annotation": "Black retreats the bishop to e4, maintaining its active placement while avoiding our g4 pawn attack. This square allows the bishop to stay centralized and puts pressure on our position by controlling key light squares. However, the bishop on e4 is somewhat exposed and could become a target for further advances or piece attacks. Our opponent is handling the complications reasonably well, but the position remains highly tactical and favorable for our attacking chances. Black needs to complete development quickly and find a way to neutralize our growing kingside initiative while maintaining the extra pawns."
+      "annotation": "Black retreats the bishop to e4, maintaining its active placement while avoiding our g4 pawn attack. This square allows the bishop to stay centralized and puts pressure on our position by controlling key light squares. However, the bishop on e4 is somewhat exposed and could become a target for further advances or piece attacks. Our opponent is handling the complications reasonably well, but the position remains highly tactical and favorable for our attacking chances. Black needs to complete development quickly and find a way to neutralize our growing kingside initiative while maintaining the extra pawns.",
+      "arrows": [
+        {
+          "from": "f5",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

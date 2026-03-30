@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "a3",
-      "annotation": "We're playing Anderssen's Opening, an unconventional setup where we prepare queenside expansion without immediately challenging the center. This move prepares b4 by preventing Black's ...b5 counterattack, and it keeps our position flexible—we're not committing to any particular pawn structure yet. You'll notice we're essentially ignoring the center, which is risky against prepared opponents, but this opening can catch players off-guard and lead to interesting imbalanced positions where we can outmaneuver unprepared rivals."
+      "annotation": "We're playing Anderssen's Opening, an unconventional setup where we prepare queenside expansion without immediately challenging the center. This move prepares b4 by preventing Black's ...b5 counterattack, and it keeps our position flexible—we're not committing to any particular pawn structure yet. You'll notice we're essentially ignoring the center, which is risky against prepared opponents, but this opening can catch players off-guard and lead to interesting imbalanced positions where we can outmaneuver unprepared rivals.",
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "a3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a5",
-      "annotation": "Black mirrors our move, which is a reasonable equalizing response—by playing symmetrically, Black prevents us from gaining space on the queenside without giving up ground elsewhere. This also stops our b4 push from being as effective, since the a5 pawn controls b4's advance. Black is essentially saying 'if you're playing slowly, so am I,' and we'll need to find another plan to justify our offbeat opening choice."
+      "annotation": "Black mirrors our move, which is a reasonable equalizing response—by playing symmetrically, Black prevents us from gaining space on the queenside without giving up ground elsewhere. This also stops our b4 push from being as effective, since the a5 pawn controls b4's advance. Black is essentially saying 'if you're playing slowly, so am I,' and we'll need to find another plan to justify our offbeat opening choice.",
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b4",
-      "annotation": "Now we commit to the Polish Gambit, offering our b4 pawn as bait to either provoke Black's a-pawn to advance further or capture on b4, which would open lines on the queenside. The idea is that after ...axb4, we can play a4, and we've created a pawn structure that gives us queenside activity and space—our a3 move now makes sense as it supported this plan. This is sharp and provocative, so you're inviting Black to either accept the gambit and deal with our resulting pressure, or decline and cede space."
+      "annotation": "Now we commit to the Polish Gambit, offering our b4 pawn as bait to either provoke Black's a-pawn to advance further or capture on b4, which would open lines on the queenside. The idea is that after ...axb4, we can play a4, and we've created a pawn structure that gives us queenside activity and space—our a3 move now makes sense as it supported this plan. This is sharp and provocative, so you're inviting Black to either accept the gambit and deal with our resulting pressure, or decline and cede space.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

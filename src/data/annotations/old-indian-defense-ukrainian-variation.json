@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to build a strong pawn center. This move also opens up our dark-squared bishop on the long diagonal and gives us excellent development prospects. The d4 opening is more positional than 1.e4, often leading to strategic middlegames where we can gradually build pressure. Our plan revolves around controlling space in the center and potentially advancing with c4-c5 or e2-e4 later."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to build a strong pawn center. This move also opens up our dark-squared bishop on the long diagonal and gives us excellent development prospects. The d4 opening is more positional than 1.e4, often leading to strategic middlegames where we can gradually build pressure. Our plan revolves around controlling space in the center and potentially advancing with c4-c5 or e2-e4 later.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, where it controls the important e4 and d5 central squares while developing with tempo. This is a flexible response that doesn't commit to any particular pawn structure yet - Black could still transpose into various defenses like the King's Indian, Nimzo-Indian, or Old Indian. By attacking our d4 pawn, Black forces us to think about how we want to support our center. This move also prepares castling and keeps maximum options open for Black's setup."
+      "annotation": "Black develops the knight to its most natural square, where it controls the important e4 and d5 central squares while developing with tempo. This is a flexible response that doesn't commit to any particular pawn structure yet - Black could still transpose into various defenses like the King's Indian, Nimzo-Indian, or Old Indian. By attacking our d4 pawn, Black forces us to think about how we want to support our center. This move also prepares castling and keeps maximum options open for Black's setup.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, grabbing space on the queenside and preparing to support our center with the c-pawn. This advance controls the crucial d5 square, preventing Black from easily establishing a knight there, and prepares potential expansion with d4-d5 later. The move also opens lines for our queen and supports a future Nc3 development. This is the start of the Queen's Gambit complex, where we're building a broad pawn center and looking to dominate the central squares."
+      "annotation": "We're playing the English Opening move order, grabbing space on the queenside and preparing to support our center with the c-pawn. This advance controls the crucial d5 square, preventing Black from easily establishing a knight there, and prepares potential expansion with d4-d5 later. The move also opens lines for our queen and supports a future Nc3 development. This is the start of the Queen's Gambit complex, where we're building a broad pawn center and looking to dominate the central squares.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black opts for the Old Indian Defense setup, a solid but somewhat passive system that aims for counterplay through piece activity rather than central pawn breaks. This move supports the future ...e5 advance while keeping the position flexible, but it does concede some central space to White. The Old Indian is known for being incredibly solid - Black rarely gets into serious trouble, but also rarely gets active counterplay in the opening. Our opponent is essentially saying 'prove your advantage' and preparing to respond to whatever central formation we choose."
+      "annotation": "Black opts for the Old Indian Defense setup, a solid but somewhat passive system that aims for counterplay through piece activity rather than central pawn breaks. This move supports the future ...e5 advance while keeping the position flexible, but it does concede some central space to White. The Old Indian is known for being incredibly solid - Black rarely gets into serious trouble, but also rarely gets active counterplay in the opening. Our opponent is essentially saying 'prove your advantage' and preparing to respond to whatever central formation we choose.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and prepares for multiple strategic plans. This knight controls key central squares like e4 and d5, and keeps our options open for both e2-e4 (leading to a King's Indian Attack setup) or more restrained development. The knight also supports potential pawn advances like d4-d5 or e2-e4, giving us maximum flexibility in how we want to shape the center. From c3, the knight can later jump to e4 or d5 if those squares become available."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and prepares for multiple strategic plans. This knight controls key central squares like e4 and d5, and keeps our options open for both e2-e4 (leading to a King's Indian Attack setup) or more restrained development. The knight also supports potential pawn advances like d4-d5 or e2-e4, giving us maximum flexibility in how we want to shape the center. From c3, the knight can later jump to e4 or d5 if those squares become available.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black strikes back in the center with the Ukrainian Variation of the Old Indian Defense, immediately challenging our central pawn and creating counterplay. This move opens up Black's dark-squared bishop and creates potential for piece activity, but it also creates a slight weakness on d6 and gives us targets to attack. The pawn structure is now fixed in the center, and we need to decide whether to capture on e5, advance with d5, or maintain the tension. This is a more active approach than the typical Old Indian setup, showing Black wants to fight for central control rather than just defend passively."
+      "annotation": "Black strikes back in the center with the Ukrainian Variation of the Old Indian Defense, immediately challenging our central pawn and creating counterplay. This move opens up Black's dark-squared bishop and creates potential for piece activity, but it also creates a slight weakness on d6 and gives us targets to attack. The pawn structure is now fixed in the center, and we need to decide whether to capture on e5, advance with d5, or maintain the tension. This is a more active approach than the typical Old Indian setup, showing Black wants to fight for central control rather than just defend passively.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

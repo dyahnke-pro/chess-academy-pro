@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to build a strong pawn center. This move also opens lines for our dark-squared bishop and queen, giving us excellent piece development prospects. The d4 opening leads to rich positional play where we'll often gain space advantages and create long-term pressure against Black's position. Unlike 1.e4 which often leads to tactical fireworks, 1.d4 typically produces games where strategic understanding and positional maneuvering are key to success."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to build a strong pawn center. This move also opens lines for our dark-squared bishop and queen, giving us excellent piece development prospects. The d4 opening leads to rich positional play where we'll often gain space advantages and create long-term pressure against Black's position. Unlike 1.e4 which often leads to tactical fireworks, 1.d4 typically produces games where strategic understanding and positional maneuvering are key to success.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central presence. This solid move prevents us from simply playing e4 on the next turn and creating an ideal pawn center. Our opponent is signaling their intention to fight for central equality rather than allowing us to dictate the pace with a space advantage. This leads to the rich complex of Queen's Pawn Game positions where both sides will need to carefully coordinate their pieces to gain any meaningful advantage."
+      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central presence. This solid move prevents us from simply playing e4 on the next turn and creating an ideal pawn center. Our opponent is signaling their intention to fight for central equality rather than allowing us to dictate the pace with a space advantage. This leads to the rich complex of Queen's Pawn Game positions where both sides will need to carefully coordinate their pieces to gain any meaningful advantage.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're launching the Queen's Gambit, offering our c-pawn to deflect Black's central d5 pawn and potentially gain a powerful pawn center with d4-e4. This move puts immediate pressure on Black's position, forcing them to make a critical decision about whether to accept the gambit, decline it, or try some other approach. Even if Black doesn't capture, we've gained important space on the queenside and opened the c-file for potential future pressure. The Queen's Gambit is one of the most sound and positionally rich openings in chess, leading to positions where small advantages can be converted into lasting pressure."
+      "annotation": "We're launching the Queen's Gambit, offering our c-pawn to deflect Black's central d5 pawn and potentially gain a powerful pawn center with d4-e4. This move puts immediate pressure on Black's position, forcing them to make a critical decision about whether to accept the gambit, decline it, or try some other approach. Even if Black doesn't capture, we've gained important space on the queenside and opened the c-file for potential future pressure. The Queen's Gambit is one of the most sound and positionally rich openings in chess, leading to positions where small advantages can be converted into lasting pressure.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses the solid Queen's Gambit Declined, supporting their d5 pawn with the e6 pawn and maintaining central equality for now. This move also prepares to develop the dark-squared bishop to e7 or d6, though it does somewhat limit the bishop's scope by blocking the e6 square. Black is prioritizing solid development over the material gain from capturing our c4 pawn, which shows they're comfortable entering the complex positional battles typical of QGD structures. We now know we're heading into classical QGD territory where piece activity, central control, and long-term pawn structure considerations will determine the outcome."
+      "annotation": "Our opponent chooses the solid Queen's Gambit Declined, supporting their d5 pawn with the e6 pawn and maintaining central equality for now. This move also prepares to develop the dark-squared bishop to e7 or d6, though it does somewhat limit the bishop's scope by blocking the e6 square. Black is prioritizing solid development over the material gain from capturing our c4 pawn, which shows they're comfortable entering the complex positional battles typical of QGD structures. We now know we're heading into classical QGD territory where piece activity, central control, and long-term pawn structure considerations will determine the outcome.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our c4 pawn and increasing the pressure on Black's d5 point. This knight placement is extremely flexible, as it can later jump to e4, b5, or e2 depending on how the position develops. The knight also eyes important central squares like e4 and b5, while keeping our options open for various pawn breaks like e4 or b4 later in the game. This is one of the most principled developing moves in the Queen's Gambit, preparing to complete our kingside development while maintaining maximum pressure on Black's position."
+      "annotation": "We're developing our knight to its most natural square, supporting our c4 pawn and increasing the pressure on Black's d5 point. This knight placement is extremely flexible, as it can later jump to e4, b5, or e2 depending on how the position develops. The knight also eyes important central squares like e4 and b5, while keeping our options open for various pawn breaks like e4 or b4 later in the game. This is one of the most principled developing moves in the Queen's Gambit, preparing to complete our kingside development while maintaining maximum pressure on Black's position.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a6",
-      "annotation": "Black plays the Janowski Variation, a somewhat unusual but perfectly playable move that serves multiple purposes in this position. This pawn move prevents our knight from jumping to b5, where it could create uncomfortable pressure on Black's position and potentially support a future c4-c5 advance. The move also prepares possible expansion with b5, giving Black some queenside counterplay options and potentially challenging our c4 pawn later. While this looks slow compared to normal developing moves like Nf6 or Be7, it's actually quite clever positional preparation that limits our tactical options while keeping Black's position completely sound and flexible."
+      "annotation": "Black plays the Janowski Variation, a somewhat unusual but perfectly playable move that serves multiple purposes in this position. This pawn move prevents our knight from jumping to b5, where it could create uncomfortable pressure on Black's position and potentially support a future c4-c5 advance. The move also prepares possible expansion with b5, giving Black some queenside counterplay options and potentially challenging our c4 pawn later. While this looks slow compared to normal developing moves like Nf6 or Be7, it's actually quite clever positional preparation that limits our tactical options while keeping Black's position completely sound and flexible.",
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

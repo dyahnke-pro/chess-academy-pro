@@ -3,51 +3,207 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing for the Smith-Morra Gambit. This move controls the crucial d5 and f5 squares while freeing our light-squared bishop and queen for future development. The Smith-Morra is a sharp attacking system where we'll sacrifice a pawn for rapid development and attacking chances against Black's king. Our plan revolves around quick piece mobilization, central control, and creating immediate threats that put pressure on our opponent from the very beginning."
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing for the Smith-Morra Gambit. This move controls the crucial d5 and f5 squares while freeing our light-squared bishop and queen for future development. The Smith-Morra is a sharp attacking system where we'll sacrifice a pawn for rapid development and attacking chances against Black's king. Our plan revolves around quick piece mobilization, central control, and creating immediate threats that put pressure on our opponent from the very beginning.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black responds with the Sicilian Defense, immediately challenging our central control by attacking the d4 square from the side. This asymmetrical pawn structure leads to imbalanced positions where both sides will castle on opposite sides and launch attacks. Our opponent is signaling their intention to fight for the initiative rather than allowing us to establish a classical pawn center. The c5 move also prepares ...Nc6 and opens lines for Black's queenside pieces, setting up the typical Sicilian counterplay themes."
+      "annotation": "Black responds with the Sicilian Defense, immediately challenging our central control by attacking the d4 square from the side. This asymmetrical pawn structure leads to imbalanced positions where both sides will castle on opposite sides and launch attacks. Our opponent is signaling their intention to fight for the initiative rather than allowing us to establish a classical pawn center. The c5 move also prepares ...Nc6 and opens lines for Black's queenside pieces, setting up the typical Sicilian counterplay themes.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We're launching the Smith-Morra Gambit by immediately challenging Black's c5 pawn and offering to sacrifice material for development. This aggressive move opens the center and forces Black to make a critical decision about whether to accept our gambit. By playing d4, we're also activating our light-squared bishop's diagonal and preparing to recapture with c3, which will give us rapid piece development. The key idea is that after the pawn trades, we'll have a significant lead in development that compensates for the sacrificed material."
+      "annotation": "We're launching the Smith-Morra Gambit by immediately challenging Black's c5 pawn and offering to sacrifice material for development. This aggressive move opens the center and forces Black to make a critical decision about whether to accept our gambit. By playing d4, we're also activating our light-squared bishop's diagonal and preparing to recapture with c3, which will give us rapid piece development. The key idea is that after the pawn trades, we'll have a significant lead in development that compensates for the sacrificed material.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxd4",
-      "annotation": "Black accepts our gambit offer by capturing on d4, taking the material but allowing us to gain tempo and development advantages. Our opponent is essentially saying they're confident they can handle our attacking chances while maintaining their extra pawn. This capture opens up the c-file for Black's pieces but also allows us to continue with our planned pawn sacrifice. Black's decision to accept means we're entering the main theoretical lines of the Smith-Morra, where our compensation will come from rapid development and attacking potential."
+      "annotation": "Black accepts our gambit offer by capturing on d4, taking the material but allowing us to gain tempo and development advantages. Our opponent is essentially saying they're confident they can handle our attacking chances while maintaining their extra pawn. This capture opens up the c-file for Black's pieces but also allows us to continue with our planned pawn sacrifice. Black's decision to accept means we're entering the main theoretical lines of the Smith-Morra, where our compensation will come from rapid development and attacking potential.",
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "c3",
-      "annotation": "We're offering a second pawn to maintain the initiative and accelerate our piece development. This move attacks Black's d4 pawn and forces another capture, after which we'll recapture with our knight, bringing it to an excellent central square. The c3 move is the essence of the Smith-Morra philosophy - we're willing to invest material to get our pieces into active positions quickly. Our compensation will come from controlling key central squares, rapid castling, and the ability to create immediate threats against Black's potentially exposed king."
+      "annotation": "We're offering a second pawn to maintain the initiative and accelerate our piece development. This move attacks Black's d4 pawn and forces another capture, after which we'll recapture with our knight, bringing it to an excellent central square. The c3 move is the essence of the Smith-Morra philosophy - we're willing to invest material to get our pieces into active positions quickly. Our compensation will come from controlling key central squares, rapid castling, and the ability to create immediate threats against Black's potentially exposed king.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxc3",
-      "annotation": "Black continues to accept our material offerings, now being up two full pawns but falling further behind in development. Our opponent is playing consistently with the gambit acceptance, but each capture gives us more tempo and piece activity. This capture opens up the long diagonal for our light-squared bishop and allows our knight to recapture on c3 with a powerful central posting. Black's king is still in the center, which will become increasingly dangerous as we bring more pieces into the attack."
+      "annotation": "Black continues to accept our material offerings, now being up two full pawns but falling further behind in development. Our opponent is playing consistently with the gambit acceptance, but each capture gives us more tempo and piece activity. This capture opens up the long diagonal for our light-squared bishop and allows our knight to recapture on c3 with a powerful central posting. Black's king is still in the center, which will become increasingly dangerous as we bring more pieces into the attack.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxc3",
-      "annotation": "We recapture with the knight, immediately placing it on an excellent central square where it controls important squares like d5, e4, b5, and a4. This knight is perfectly placed to support our attacking ambitions and can quickly jump to more aggressive squares as the position develops. Our piece development is now accelerating rapidly while Black's king remains uncastled and vulnerable. The knight on c3 also prepares moves like Bc4 and Nf3, completing our development with maximum efficiency while maintaining pressure on Black's position."
+      "annotation": "We recapture with the knight, immediately placing it on an excellent central square where it controls important squares like d5, e4, b5, and a4. This knight is perfectly placed to support our attacking ambitions and can quickly jump to more aggressive squares as the position develops. Our piece development is now accelerating rapidly while Black's king remains uncastled and vulnerable. The knight on c3 also prepares moves like Bc4 and Nf3, completing our development with maximum efficiency while maintaining pressure on Black's position.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to a natural square, challenging our central control and preparing to support their d-pawn with moves like ...d6. Our opponent is trying to catch up in development while maintaining their material advantage, but this knight placement also blocks the c-file that was opened earlier. The knight on c6 is a double-edged piece - it develops actively but can become a target for our attacking pieces. Black is still behind in development and hasn't addressed the central vulnerability of their uncastled king."
+      "annotation": "Black develops their knight to a natural square, challenging our central control and preparing to support their d-pawn with moves like ...d6. Our opponent is trying to catch up in development while maintaining their material advantage, but this knight placement also blocks the c-file that was opened earlier. The knight on c6 is a double-edged piece - it develops actively but can become a target for our attacking pieces. Black is still behind in development and hasn't addressed the central vulnerability of their uncastled king.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We complete another crucial developing move, bringing our knight to its most active square where it controls the center and prepares to support our kingside attack. This knight immediately eyes the e5 and d4 squares while preparing to support a potential f4-f5 pawn storm later. The move also clears the way for our kingside castling while maintaining maximum pressure on Black's position. Our development advantage is becoming more pronounced with each move, and we're creating multiple threats that Black will struggle to address simultaneously."
+      "annotation": "We complete another crucial developing move, bringing our knight to its most active square where it controls the center and prepares to support our kingside attack. This knight immediately eyes the e5 and d4 squares while preparing to support a potential f4-f5 pawn storm later. The move also clears the way for our kingside castling while maintaining maximum pressure on Black's position. Our development advantage is becoming more pronounced with each move, and we're creating multiple threats that Black will struggle to address simultaneously.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black plays a solid developing move, supporting their knight on c6 and preparing to develop their light-squared bishop, but this also creates the Scheveningen pawn structure. Our opponent is trying to consolidate their position and create a solid defensive setup, but the d6 move slightly weakens the dark squares around Black's king. This pawn formation is typical in Sicilian structures and gives Black a solid but somewhat passive setup. However, with our significant development advantage, Black's king safety remains a major concern that we can exploit."
+      "annotation": "Black plays a solid developing move, supporting their knight on c6 and preparing to develop their light-squared bishop, but this also creates the Scheveningen pawn structure. Our opponent is trying to consolidate their position and create a solid defensive setup, but the d6 move slightly weakens the dark squares around Black's king. This pawn formation is typical in Sicilian structures and gives Black a solid but somewhat passive setup. However, with our significant development advantage, Black's king safety remains a major concern that we can exploit.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bc4",
-      "annotation": "We develop our light-squared bishop to its most aggressive square, directly targeting the f7 weakness and completing our rapid kingside development. This bishop placement is a key component of the Smith-Morra attack, as it creates immediate threats against Black's uncastled king and controls the long diagonal. The bishop on c4 also supports potential sacrificial ideas on f7 and works harmoniously with our other pieces to maintain maximum pressure. Our development lead is now overwhelming, and Black will struggle to complete their development safely while dealing with our mounting threats."
+      "annotation": "We develop our light-squared bishop to its most aggressive square, directly targeting the f7 weakness and completing our rapid kingside development. This bishop placement is a key component of the Smith-Morra attack, as it creates immediate threats against Black's uncastled king and controls the long diagonal. The bishop on c4 also supports potential sacrificial ideas on f7 and works harmoniously with our other pieces to maintain maximum pressure. Our development lead is now overwhelming, and Black will struggle to complete their development safely while dealing with our mounting threats.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black plays the characteristic Scheveningen move, creating a solid pawn chain and preparing to develop the dark-squared bishop, but this move has significant drawbacks in our gambit setup. Our opponent's pawn structure is solid but passive, and the e6 move blocks the development of the light-squared bishop while creating permanent dark-square weaknesses. With our pieces actively placed and Black's king still in the center, we have excellent attacking prospects despite being two pawns down. Black's position looks solid on paper, but the delayed development and king safety issues give us exactly the kind of dynamic compensation the Smith-Morra Gambit aims to achieve."
+      "annotation": "Black plays the characteristic Scheveningen move, creating a solid pawn chain and preparing to develop the dark-squared bishop, but this move has significant drawbacks in our gambit setup. Our opponent's pawn structure is solid but passive, and the e6 move blocks the development of the light-squared bishop while creating permanent dark-square weaknesses. With our pieces actively placed and Black's king still in the center, we have excellent attacking prospects despite being two pawns down. Black's position looks solid on paper, but the delayed development and king safety issues give us exactly the kind of dynamic compensation the Smith-Morra Gambit aims to achieve.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

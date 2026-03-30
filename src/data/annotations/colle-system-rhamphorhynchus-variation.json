@@ -3,35 +3,139 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We begin the Colle System, a quiet yet strategic opening that emphasizes solid development and central control. The knight move to f3 immediately supports the center and prepares d4, our key break—we're building a flexible position that suits patient, positional players."
+      "annotation": "We begin the Colle System, a quiet yet strategic opening that emphasizes solid development and central control. The knight move to f3 immediately supports the center and prepares d4, our key break—we're building a flexible position that suits patient, positional players.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at our center immediately, challenging our d4 break and fighting for space on the queenside. This aggressive counter-thrust means we can't just leisurely build; Black wants dynamic counterplay and will keep our position under pressure."
+      "annotation": "Black strikes at our center immediately, challenging our d4 break and fighting for space on the queenside. This aggressive counter-thrust means we can't just leisurely build; Black wants dynamic counterplay and will keep our position under pressure.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We solidify the center and prepare to play d4 next move while keeping our position flexible. By playing e3 instead of an immediate d4, we maintain the option to support our center pawn with the bishop and control key squares like d4 and e4 without committing too early."
+      "annotation": "We solidify the center and prepare to play d4 next move while keeping our position flexible. By playing e3 instead of an immediate d4, we maintain the option to support our center pawn with the bishop and control key squares like d4 and e4 without committing too early.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Black prepares to fianchetto the kingside bishop to g7, creating a long diagonal that controls our center and preparing kingside castling. This setup is typical in Sicilian Defenses and gives Black's pieces good scope, though it takes a move and weakens the d6 square slightly."
+      "annotation": "Black prepares to fianchetto the kingside bishop to g7, creating a long diagonal that controls our center and preparing kingside castling. This setup is typical in Sicilian Defenses and gives Black's pieces good scope, though it takes a move and weakens the d6 square slightly.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "Now we finally strike in the center with proper preparation—our e3 pawn supports d4, and we've gained time since Black's g6 move didn't directly contest the center. This move establishes our typical Colle structure and forces Black to decide how to handle our central presence."
+      "annotation": "Now we finally strike in the center with proper preparation—our e3 pawn supports d4, and we've gained time since Black's g6 move didn't directly contest the center. This move establishes our typical Colle structure and forces Black to decide how to handle our central presence.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto, placing the bishop on our b2-g7 long diagonal where it pressures our center. This bishop is powerfully placed and will be Black's most active piece, so we'll need to respect its control of d4 and the queenside throughout the middlegame."
+      "annotation": "Black completes the fianchetto, placing the bishop on our b2-g7 long diagonal where it pressures our center. This bishop is powerfully placed and will be Black's most active piece, so we'll need to respect its control of d4 and the queenside throughout the middlegame.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxc5",
-      "annotation": "We capture on c5, accepting a slight weakness (the d-file and d3 square) in exchange for winning a pawn and opening up the center a bit. This move is risky but fighting—we're gambling that our better piece development and Black's exposed queen after Qa5+ won't fully compensate Black for the lost pawn."
+      "annotation": "We capture on c5, accepting a slight weakness (the d-file and d3 square) in exchange for winning a pawn and opening up the center a bit. This move is risky but fighting—we're gambling that our better piece development and Black's exposed queen after Qa5+ won't fully compensate Black for the lost pawn.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Qa5+",
-      "annotation": "Black counterattacks with a check, forcing us to respond immediately and disrupting our development rhythm. The queen on a5 will be somewhat out of play, but Black gets the dangerous idea of Qxc5, threatening our position after we respond to the check—we must be precise now about where our king moves and how we defend."
+      "annotation": "Black counterattacks with a check, forcing us to respond immediately and disrupting our development rhythm. The queen on a5 will be somewhat out of play, but Black gets the dangerous idea of Qxc5, threatening our position after we respond to the check—we must be precise now about where our king moves and how we defend.",
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "a5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

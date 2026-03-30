@@ -3,63 +3,258 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, controlling the central d5 and f5 squares while preparing rapid piece development. This move stakes our claim to the center and opens lines for both our bishop and queen. The e4 advance is fundamental to many sharp, tactical openings where we'll look to build an early initiative through active piece play and central control."
+      "annotation": "We're opening with the king's pawn, controlling the central d5 and f5 squares while preparing rapid piece development. This move stakes our claim to the center and opens lines for both our bishop and queen. The e4 advance is fundamental to many sharp, tactical openings where we'll look to build an early initiative through active piece play and central control.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Our opponent chooses the Sicilian Defense, immediately challenging our central control by attacking the d4 square from the side. Black avoids symmetry and creates an unbalanced position where both sides will castle on opposite sides and launch attacks. This is one of the most complex and fighting defenses to 1.e4, promising rich middlegame positions where tactical awareness will be crucial."
+      "annotation": "Our opponent chooses the Sicilian Defense, immediately challenging our central control by attacking the d4 square from the side. Black avoids symmetry and creates an unbalanced position where both sides will castle on opposite sides and launch attacks. This is one of the most complex and fighting defenses to 1.e4, promising rich middlegame positions where tactical awareness will be crucial.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c3",
-      "annotation": "We're entering the Alapin Variation, a solid system that aims to establish a strong pawn center with d2-d4. This move supports the upcoming d4 advance and gives our position a classical structure, though it does slow down our piece development slightly. The c3 move is particularly effective against players who prefer the sharp main lines of the Sicilian, as we're steering toward more positional territory."
+      "annotation": "We're entering the Alapin Variation, a solid system that aims to establish a strong pawn center with d2-d4. This move supports the upcoming d4 advance and gives our position a classical structure, though it does slow down our piece development slightly. The c3 move is particularly effective against players who prefer the sharp main lines of the Sicilian, as we're steering toward more positional territory.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black strikes immediately in the center with this aggressive counter-thrust, challenging our e4 pawn and opening lines for quick development. This move leads to early tactical complications and forces us to make a critical decision about how to maintain our central presence. Our opponent is choosing the Barmen Defense, a sharp line that aims to equalize quickly through active piece play and central counterplay."
+      "annotation": "Black strikes immediately in the center with this aggressive counter-thrust, challenging our e4 pawn and opening lines for quick development. This move leads to early tactical complications and forces us to make a critical decision about how to maintain our central presence. Our opponent is choosing the Barmen Defense, a sharp line that aims to equalize quickly through active piece play and central counterplay.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "exd5",
-      "annotation": "We capture toward the center, maintaining our pawn on d5 and opening the e-file for potential future use. This exchange simplifies the position slightly but keeps central tension, as Black will likely recapture and we'll need to decide how to support our d4 advance. By taking with the e-pawn, we're committing to a structure where our d-pawn will become central to our plans."
+      "annotation": "We capture toward the center, maintaining our pawn on d5 and opening the e-file for potential future use. This exchange simplifies the position slightly but keeps central tension, as Black will likely recapture and we'll need to decide how to support our d4 advance. By taking with the e-pawn, we're committing to a structure where our d-pawn will become central to our plans.",
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Qxd5",
-      "annotation": "Our opponent recaptures with the queen, bringing this powerful piece into the center early but also exposing it to potential attacks. Black's queen on d5 controls important central squares and supports the upcoming ...e6 or ...e5, but we'll soon have opportunities to gain tempo by attacking this centralized piece. This recapture is more ambitious than ...Nxd5, as it maintains more tension but gives us tactical targets to work with."
+      "annotation": "Our opponent recaptures with the queen, bringing this powerful piece into the center early but also exposing it to potential attacks. Black's queen on d5 controls important central squares and supports the upcoming ...e6 or ...e5, but we'll soon have opportunities to gain tempo by attacking this centralized piece. This recapture is more ambitious than ...Nxd5, as it maintains more tension but gives us tactical targets to work with.",
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "d4",
-      "annotation": "We follow through with our central pawn advance, attacking Black's c5 pawn and establishing the ideal pawn center we've been working toward. This move opens diagonals for our bishops and creates immediate tactical threats that Black must address carefully. The d4 advance is the point of the Alapin system - we've achieved our goal of establishing pawns on both d4 and c3, giving us a solid central foundation."
+      "annotation": "We follow through with our central pawn advance, attacking Black's c5 pawn and establishing the ideal pawn center we've been working toward. This move opens diagonals for our bishops and creates immediate tactical threats that Black must address carefully. The d4 advance is the point of the Alapin system - we've achieved our goal of establishing pawns on both d4 and c3, giving us a solid central foundation.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, defending the attacked c5 pawn while preparing to support central operations. This move also prepares ...e5, which would challenge our newly established d4 pawn and create further central tension. Our opponent is following sound developmental principles while keeping tactical options open, but the knight on c6 may become a target for our future piece attacks."
+      "annotation": "Black develops the knight to its most natural square, defending the attacked c5 pawn while preparing to support central operations. This move also prepares ...e5, which would challenge our newly established d4 pawn and create further central tension. Our opponent is following sound developmental principles while keeping tactical options open, but the knight on c6 may become a target for our future piece attacks.",
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, controlling the important e5 and d4 squares while preparing kingside castling. This natural development move also attacks Black's centralized queen, forcing our opponent to make a decision about where to retreat this valuable piece. The knight on f3 supports our central pawn and will be perfectly placed to support our middlegame plans, whether that involves attacking or defending."
+      "annotation": "We develop our knight to its optimal square, controlling the important e5 and d4 squares while preparing kingside castling. This natural development move also attacks Black's centralized queen, forcing our opponent to make a decision about where to retreat this valuable piece. The knight on f3 supports our central pawn and will be perfectly placed to support our middlegame plans, whether that involves attacking or defending.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxd4",
-      "annotation": "Our opponent exchanges in the center, eliminating our d4 pawn and opening the c-file for potential rook activity. Black is simplifying the pawn structure while maintaining equality in development, though this does relieve some pressure on their position. This capture forces us to recapture and make a choice about how to maintain central control, while Black prepares to challenge our remaining central influence."
+      "annotation": "Our opponent exchanges in the center, eliminating our d4 pawn and opening the c-file for potential rook activity. Black is simplifying the pawn structure while maintaining equality in development, though this does relieve some pressure on their position. This capture forces us to recapture and make a choice about how to maintain central control, while Black prepares to challenge our remaining central influence.",
+      "arrows": [
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "cxd4",
-      "annotation": "We recapture with the c-pawn, maintaining a pawn in the center and keeping our pieces actively placed. This recapture opens the c-file for our rook and maintains tension in the position, as our d4 pawn remains a strong central presence. Our pawn structure is now slightly compromised with doubled d-pawns potentially, but we maintain good piece activity and central control."
+      "annotation": "We recapture with the c-pawn, maintaining a pawn in the center and keeping our pieces actively placed. This recapture opens the c-file for our rook and maintains tension in the position, as our d4 pawn remains a strong central presence. Our pawn structure is now slightly compromised with doubled d-pawns potentially, but we maintain good piece activity and central control.",
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black advances in the center with this thematic pawn break, immediately attacking our knight on f3 and our d4 pawn. This move is the hallmark of the Barmen Defense's fighting spirit, creating immediate tactical complications and challenging our central dominance. Our opponent is opening lines for piece development while putting pressure on our position, forcing us to make precise decisions about how to maintain our coordination."
+      "annotation": "Black advances in the center with this thematic pawn break, immediately attacking our knight on f3 and our d4 pawn. This move is the hallmark of the Barmen Defense's fighting spirit, creating immediate tactical complications and challenging our central dominance. Our opponent is opening lines for piece development while putting pressure on our position, forcing us to make precise decisions about how to maintain our coordination.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its natural square, attacking Black's centralized queen and forcing it to move while improving our piece coordination. This move also supports our d4 pawn, which is under pressure from Black's e5 advance, and prepares us for the tactical complications ahead. The knight on c3 will be well-placed to support our central operations and potentially participate in kingside attacking chances."
+      "annotation": "We develop our knight to its natural square, attacking Black's centralized queen and forcing it to move while improving our piece coordination. This move also supports our d4 pawn, which is under pressure from Black's e5 advance, and prepares us for the tactical complications ahead. The knight on c3 will be well-placed to support our central operations and potentially participate in kingside attacking chances.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb4",
-      "annotation": "Our opponent develops the bishop with a pin on our knight, adding pressure to our position and preparing to castle queenside. This move is typical of the Milner-Barry Attack setup, where Black seeks active piece play and puts immediate pressure on our coordination. The bishop on b4 also supports potential tactical operations in the center and gives Black good practical chances for counterplay."
+      "annotation": "Our opponent develops the bishop with a pin on our knight, adding pressure to our position and preparing to castle queenside. This move is typical of the Milner-Barry Attack setup, where Black seeks active piece play and puts immediate pressure on our coordination. The bishop on b4 also supports potential tactical operations in the center and gives Black good practical chances for counterplay.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Be2",
-      "annotation": "We develop our bishop to a solid square, preparing to castle kingside while breaking the pin on our knight. This move maintains our piece coordination and prepares us for the middlegame battle ahead, where our central pawn and active pieces will give us good chances. The bishop on e2 also supports our d4 pawn and keeps our king safe, allowing us to complete development and look for our chances in the resulting complex position."
+      "annotation": "We develop our bishop to a solid square, preparing to castle kingside while breaking the pin on our knight. This move maintains our piece coordination and prepares us for the middlegame battle ahead, where our central pawn and active pieces will give us good chances. The bishop on e2 also supports our d4 pawn and keeps our king safe, allowing us to complete development and look for our chances in the resulting complex position.",
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "e2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

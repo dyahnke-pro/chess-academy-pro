@@ -3,27 +3,105 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich choices available. This move immediately stakes a claim on the central d5 square and prepares to fianchetto our king's bishop on g2, creating a powerful long diagonal battery. The English is beloved by positional players because it allows us to develop harmoniously while keeping our central pawn structure flexible - we can transpose into many different setups depending on how Black responds. Unlike 1.e4 or 1.d4, the English doesn't immediately occupy the center but controls it from afar, embodying the hypermodern principle of central control through pieces rather than pawns."
+      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich choices available. This move immediately stakes a claim on the central d5 square and prepares to fianchetto our king's bishop on g2, creating a powerful long diagonal battery. The English is beloved by positional players because it allows us to develop harmoniously while keeping our central pawn structure flexible - we can transpose into many different setups depending on how Black responds. Unlike 1.e4 or 1.d4, the English doesn't immediately occupy the center but controls it from afar, embodying the hypermodern principle of central control through pieces rather than pawns.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black responds with the most direct and classical approach, immediately seizing central space and challenging our queenside influence. This move creates a reversed Sicilian structure where Black has gained a tempo, since in the normal Sicilian Black plays ...c5 in response to White's 1.e4. Our opponent is saying they're comfortable with sharp, tactical play and want to establish a strong pawn presence in the center right away. This setup often leads to rich middlegame positions where Black's space advantage must be balanced against White's superior development and piece coordination."
+      "annotation": "Black responds with the most direct and classical approach, immediately seizing central space and challenging our queenside influence. This move creates a reversed Sicilian structure where Black has gained a tempo, since in the normal Sicilian Black plays ...c5 in response to White's 1.e4. Our opponent is saying they're comfortable with sharp, tactical play and want to establish a strong pawn presence in the center right away. This setup often leads to rich middlegame positions where Black's space advantage must be balanced against White's superior development and piece coordination.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our c4 pawn and prepares to either advance d3 or even d4 to challenge Black's central stronghold. This knight placement is extremely flexible - it can later jump to d5, b5, or support a kingside attack via Ne4. The knight also eyes the important e4 square, potentially limiting Black's piece development. From c3, our knight works in perfect harmony with the planned fianchetto setup, supporting both central control and kingside attacking chances while maintaining maximum flexibility in our pawn structure."
+      "annotation": "We develop our knight to its most natural square, where it supports our c4 pawn and prepares to either advance d3 or even d4 to challenge Black's central stronghold. This knight placement is extremely flexible - it can later jump to d5, b5, or support a kingside attack via Ne4. The knight also eyes the important e4 square, potentially limiting Black's piece development. From c3, our knight works in perfect harmony with the planned fianchetto setup, supporting both central control and kingside attacking chances while maintaining maximum flexibility in our pawn structure.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
-      "annotation": "Black chooses the solid Smyslov Defense, preparing to develop the dark-squared bishop while maintaining the strong e5 pawn. This move creates a small but important weakness on the light squares, particularly d6 itself, which we might target later with moves like Qc2 or even Nb5. Our opponent is prioritizing piece development over immediate central confrontation, which is a classical approach that aims for a solid but slightly passive setup. The d6 move also prepares ...f5 in some lines, giving Black potential kingside attacking chances, though this comes at the cost of creating light-square weaknesses around the king."
+      "annotation": "Black chooses the solid Smyslov Defense, preparing to develop the dark-squared bishop while maintaining the strong e5 pawn. This move creates a small but important weakness on the light squares, particularly d6 itself, which we might target later with moves like Qc2 or even Nb5. Our opponent is prioritizing piece development over immediate central confrontation, which is a classical approach that aims for a solid but slightly passive setup. The d6 move also prepares ...f5 in some lines, giving Black potential kingside attacking chances, though this comes at the cost of creating light-square weaknesses around the king.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our knight development with this natural move that controls the central e5 and d4 squares while preparing kingside castling. This knight placement puts immediate pressure on Black's e5 pawn, forcing them to make a decision about how to defend it - they can't simply ignore this pressure. Our development is proceeding harmoniously, and we're ready to continue with g3 and Bg2 to complete our fianchetto setup. The knight on f3 also prepares potential tactical shots like Ng5 if Black castles kingside carelessly, and it supports a future d4 advance to challenge Black's central pawn chain directly."
+      "annotation": "We complete our knight development with this natural move that controls the central e5 and d4 squares while preparing kingside castling. This knight placement puts immediate pressure on Black's e5 pawn, forcing them to make a decision about how to defend it - they can't simply ignore this pressure. Our development is proceeding harmoniously, and we're ready to continue with g3 and Bg2 to complete our fianchetto setup. The knight on f3 also prepares potential tactical shots like Ng5 if Black castles kingside carelessly, and it supports a future d4 advance to challenge Black's central pawn chain directly.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg4",
-      "annotation": "Our opponent develops the bishop with tempo, pinning our knight to the queen and creating immediate tactical pressure. This is a double-edged move - while it develops a piece actively and creates some discomfort for us, it also places the bishop on a square where it might become a target after h3. Black is following the principle of developing with threats, but this bishop might need to retreat soon, potentially losing time in the opening. We'll likely need to deal with this pin carefully, perhaps with h3 followed by g3, or by developing our kingside quickly with g3 and Bg2 to break the pin naturally while completing our setup."
+      "annotation": "Our opponent develops the bishop with tempo, pinning our knight to the queen and creating immediate tactical pressure. This is a double-edged move - while it develops a piece actively and creates some discomfort for us, it also places the bishop on a square where it might become a target after h3. Black is following the principle of developing with threats, but this bishop might need to retreat soon, potentially losing time in the opening. We'll likely need to deal with this pin carefully, perhaps with h3 followed by g3, or by developing our kingside quickly with g3 and Bg2 to break the pin naturally while completing our setup.",
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

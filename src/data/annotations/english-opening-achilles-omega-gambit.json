@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We start with the English Opening, a flexible and strategic weapon that's less forcing than 1.e4 but gives us excellent control of the center. By playing 1.c4, we immediately stake a claim on d4 and prepare to build a strong pawn center while maintaining options for our setup—we might play e4 later, or build more gradually with moves like g3 and Bg2. This move has been a favorite of world champions like Karpov and Fischer because it avoids the sharp tactical lines of 1.e4 while keeping the initiative."
+      "annotation": "We start with the English Opening, a flexible and strategic weapon that's less forcing than 1.e4 but gives us excellent control of the center. By playing 1.c4, we immediately stake a claim on d4 and prepare to build a strong pawn center while maintaining options for our setup—we might play e4 later, or build more gradually with moves like g3 and Bg2. This move has been a favorite of world champions like Karpov and Fischer because it avoids the sharp tactical lines of 1.e4 while keeping the initiative.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black's most natural response, developing a piece while attacking our e4 square and preparing to contest the center. The knight on f6 is ideally placed for most Black setups, whether planning ...e5, ...c5, or a kingside fianchetto. This flexible move doesn't commit Black to a specific plan yet, which is why it's the most popular choice here."
+      "annotation": "Black's most natural response, developing a piece while attacking our e4 square and preparing to contest the center. The knight on f6 is ideally placed for most Black setups, whether planning ...e5, ...c5, or a kingside fianchetto. This flexible move doesn't commit Black to a specific plan yet, which is why it's the most popular choice here.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
-      "annotation": "Now we strike in the center with our second pawn, creating the Achilles-Omega Gambit—a dynamic attempt to occupy the heart of the board while offering a tempo-based initiative. By playing e4 after c4, we're essentially inviting Black to capture on c4 (or maintain tension with moves like ...e5), but we get active piece play and central control in return. This aggressive continuation shows we're not interested in slow maneuvering; instead, we're building a classical pawn center and preparing quick development with moves like Nc3 and Nf3, seizing the initiative before Black can fully coordinate their position."
+      "annotation": "Now we strike in the center with our second pawn, creating the Achilles-Omega Gambit—a dynamic attempt to occupy the heart of the board while offering a tempo-based initiative. By playing e4 after c4, we're essentially inviting Black to capture on c4 (or maintain tension with moves like ...e5), but we get active piece play and central control in return. This aggressive continuation shows we're not interested in slow maneuvering; instead, we're building a classical pawn center and preparing quick development with moves like Nc3 and Nf3, seizing the initiative before Black can fully coordinate their position.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

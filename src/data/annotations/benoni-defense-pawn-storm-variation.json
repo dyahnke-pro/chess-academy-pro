@@ -3,55 +3,122 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're starting with the queen's pawn, staking an immediate claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move begins one of the most principled openings in chess, as we're fighting for central control right from move one. The d4 opening typically leads to more positional, strategic games compared to 1.e4, though it can become quite sharp when Black chooses aggressive defenses like the Benoni. Our plan is to build a strong pawn center and develop our pieces harmoniously, putting pressure on Black to find accurate responses to avoid falling into a passive position."
+      "annotation": "We're starting with the queen's pawn, staking an immediate claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move begins one of the most principled openings in chess, as we're fighting for central control right from move one. The d4 opening typically leads to more positional, strategic games compared to 1.e4, though it can become quite sharp when Black chooses aggressive defenses like the Benoni. Our plan is to build a strong pawn center and develop our pieces harmoniously, putting pressure on Black to find accurate responses to avoid falling into a passive position.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing the knight to its most active square. This move is the hallmark of hypermodern openings - rather than occupying the center with pawns immediately, Black is preparing to attack our center from the flanks. The knight on f6 also prepares kingside castling and keeps options open for various pawn structures. We need to be ready for Black's next moves, which will likely involve moves like c5, d6, or g6, all aimed at undermining our central control."
+      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing the knight to its most active square. This move is the hallmark of hypermodern openings - rather than occupying the center with pawns immediately, Black is preparing to attack our center from the flanks. The knight on f6 also prepares kingside castling and keeps options open for various pawn structures. We need to be ready for Black's next moves, which will likely involve moves like c5, d6, or g6, all aimed at undermining our central control.",
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Attack setup, supporting our d4 pawn while gaining space on the queenside and controlling the crucial b5 and d5 squares. This move begins the formation of what could become a powerful pawn center if we can maintain both pawns. The c4 pawn also opens up possibilities for our queen and rook on the c-file later in the game. Most importantly, this move prevents Black from easily equalizing with moves like d5, forcing Black to choose between various pawn breaks that will define the character of the position."
+      "annotation": "We're playing the English Attack setup, supporting our d4 pawn while gaining space on the queenside and controlling the crucial b5 and d5 squares. This move begins the formation of what could become a powerful pawn center if we can maintain both pawns. The c4 pawn also opens up possibilities for our queen and rook on the c-file later in the game. Most importantly, this move prevents Black from easily equalizing with moves like d5, forcing Black to choose between various pawn breaks that will define the character of the position.",
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Our opponent strikes at the heart of our pawn center with the signature move of the Benoni Defense, immediately creating an asymmetrical pawn structure that will define the entire game. Black is following hypermodern principles by attacking our center rather than trying to occupy it, accepting that the position will become sharp and double-edged. This pawn break gives Black active piece play and counterplay on the queenside, but it also allows us to advance our d-pawn with tempo. The Benoni is one of Black's most aggressive defenses, signaling that our opponent is ready for a complex, tactical battle rather than a quiet positional game."
+      "annotation": "Our opponent strikes at the heart of our pawn center with the signature move of the Benoni Defense, immediately creating an asymmetrical pawn structure that will define the entire game. Black is following hypermodern principles by attacking our center rather than trying to occupy it, accepting that the position will become sharp and double-edged. This pawn break gives Black active piece play and counterplay on the queenside, but it also allows us to advance our d-pawn with tempo. The Benoni is one of Black's most aggressive defenses, signaling that our opponent is ready for a complex, tactical battle rather than a quiet positional game.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "We're advancing our d-pawn with tempo, gaining space in the center while attacking Black's knight and forcing it to retreat. This central wedge is the cornerstone of our entire strategy - it gives us a significant space advantage and restricts Black's pieces, particularly the light-squared bishop which will struggle to find good squares. The d5 pawn also serves as a launching pad for a potential kingside attack, as it supports advances like e4-e5 later in the game. Black now faces the critical decision of how to challenge this powerful pawn center, with the most common approaches being e6 to immediately attack the pawn or preparing d6 and e6 to undermine it gradually."
+      "annotation": "We're advancing our d-pawn with tempo, gaining space in the center while attacking Black's knight and forcing it to retreat. This central wedge is the cornerstone of our entire strategy - it gives us a significant space advantage and restricts Black's pieces, particularly the light-squared bishop which will struggle to find good squares. The d5 pawn also serves as a launching pad for a potential kingside attack, as it supports advances like e4-e5 later in the game. Black now faces the critical decision of how to challenge this powerful pawn center, with the most common approaches being e6 to immediately attack the pawn or preparing d6 and e6 to undermine it gradually.",
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e6",
-      "annotation": "Black immediately challenges our advanced d-pawn with this principled central break, following classical opening principles by fighting for the center. This move opens lines for Black's light-squared bishop and queen while preparing to potentially recapture on d5 with the pawn, which would give Black a solid pawn structure. However, this advance also slightly weakens Black's kingside, particularly the f6 and h6 squares, which we might be able to exploit later with our pieces. The tension in the center is now at its peak, and both sides must decide whether to maintain or resolve it - a decision that will fundamentally shape the middlegame structure."
+      "annotation": "Black immediately challenges our advanced d-pawn with this principled central break, following classical opening principles by fighting for the center. This move opens lines for Black's light-squared bishop and queen while preparing to potentially recapture on d5 with the pawn, which would give Black a solid pawn structure. However, this advance also slightly weakens Black's kingside, particularly the f6 and h6 squares, which we might be able to exploit later with our pieces. The tension in the center is now at its peak, and both sides must decide whether to maintain or resolve it - a decision that will fundamentally shape the middlegame structure.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "dxe6",
-      "annotation": "We're capturing the pawn to eliminate Black's central pressure while opening the d-file for our pieces, though this does surrender our powerful space-gaining d5 pawn. This exchange is typical in Benoni structures - we trade our space advantage for more immediate piece activity and the opening of lines. The recapture will determine the pawn structure: if Black takes with the pawn, we get a more open position with piece play, while if Black recaptures with a piece, the position remains more closed. Our decision to capture immediately rather than maintaining the tension shows we're ready to transition from the opening phase into early middlegame maneuvering."
-    },
-    {
-      "san": "exd5",
-      "annotation": "Black recaptures with the pawn, establishing a solid but slightly passive pawn structure while keeping the position relatively closed. This recapture maintains material balance and gives Black a central pawn on d5, but it also allows us to potentially build a strong pawn center with e4. The pawn on d5 can become either a strength (controlling key central squares) or a weakness (a target for our pieces) depending on how the game develops. Black's pawn structure now resembles a hedgehog formation, which can be solid defensively but requires precise play to avoid being slowly squeezed by our space advantage and piece coordination."
-    },
-    {
-      "san": "cxd5",
-      "annotation": "We're recapturing with our c-pawn to maintain material balance while opening the c-file for our rook and queen, giving us excellent piece activity on the queenside. This recapture also maintains our central presence and prepares the advance e4, which will give us a powerful pawn duo in the center. The open c-file will become a key strategic asset, allowing us to pressure Black's queenside and potentially target weaknesses like the c7 square or an undefended rook on a8. Our pawn structure is now more dynamic than Black's, with better central control and more active piece possibilities, though Black will seek counterplay through piece activity and potential pawn breaks."
-    },
-    {
-      "san": "d6",
-      "annotation": "Black develops the pawn to d6, solidifying the position while preparing to complete kingside development with moves like g6 and Bg7. This move controls important central squares like e5 and c5, preventing us from immediately advancing our pawns to dominate the center. The d6 pawn also opens a retreat square for Black's knight on f6 if we attack it, while supporting the eventual development of Black's light-squared bishop. However, this move does create a slightly cramped position for Black, and we should look to exploit our space advantage by developing actively and maintaining pressure on Black's somewhat passive setup."
-    },
-    {
-      "san": "e4",
-      "annotation": "We're establishing a powerful pawn duo in the center with e4-d5, gaining significant space advantage and restricting Black's pieces while preparing to launch a kingside attack. This advance controls key squares like f5 and d5, limiting Black's piece mobility and giving us excellent central control. The e4 pawn also opens lines for our light-squared bishop and supports potential advances like f4-f5, which could lead to a devastating kingside assault. Black's position is now quite cramped, and we must continue developing actively while maintaining the initiative - typical plans include Nf3, Be2, and castling, followed by aggressive piece deployment toward Black's kingside."
-    },
-    {
-      "san": "g6",
-      "annotation": "Black fianchettoes the king's bishop, preparing to develop it to g7 where it will control the long diagonal and provide key defensive support for the kingside. This move is almost mandatory in Benoni structures, as the bishop on g7 becomes Black's most important piece, defending against our potential kingside attacks while pressuring our center. The g6 advance also prepares kingside castling and gives the king an escape square, though it does slightly weaken the dark squares around Black's king. We should be aware that once Black completes this setup with Bg7 and castles, breaking through on the kingside will require careful preparation and precise tactical execution."
-    },
-    {
-      "san": "f4",
-      "annotation": "We're launching the Pawn Storm Variation with this aggressive advance, immediately signaling our intention to attack Black's kingside with moves like f5, h4-h5, and potentially g4-g5. This move controls the crucial e5 square, prevents Black's pieces from occupying it, and prepares a devastating pawn avalanche that can overwhelm Black's defenses if not handled precisely. The f4 advance also opens attacking lines for our pieces and creates immediate threats that Black must address carefully - a passive response could lead to a quick defeat. However, this aggressive approach does come with risks, as advancing pawns in front of our own king can create weaknesses, so we must be prepared to follow up with precise piece coordination and tactical awareness to make our attack succeed."
+      "annotation": "We're capturing the pawn to eliminate Black's central pressure while opening the d-file for our pieces, though this does surrender our powerful space-gaining d5 pawn. This exchange is typical in Benoni structures - we trade our space advantage for more immediate piece activity and the opening of lines. The recapture will determine the pawn structure: if Black takes with the pawn, we get a more open position with piece play, while if Black recaptures with a piece, the position remains more closed. Our decision to capture immediately rather than maintaining the tension shows we're ready to transition from the opening phase into early middlegame maneuvering.",
+      "arrows": [
+        {
+          "from": "d5",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     }
   ]
 }

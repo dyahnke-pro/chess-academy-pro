@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, which immediately stakes a claim to the central e5 square and opens lines for both our queen and dark-squared bishop. This move offers us excellent flexibility - we can transpose into numerous opening systems depending on how our opponent responds, from the Queen's Gambit to various Indian defenses. The d4 opening tends to lead to more positional, strategic games compared to 1.e4, giving us excellent control over the center while keeping our options open. Our main plan revolves around building a strong pawn center and developing our pieces harmoniously to support our central control."
+      "annotation": "We're opening with the queen's pawn, which immediately stakes a claim to the central e5 square and opens lines for both our queen and dark-squared bishop. This move offers us excellent flexibility - we can transpose into numerous opening systems depending on how our opponent responds, from the Queen's Gambit to various Indian defenses. The d4 opening tends to lead to more positional, strategic games compared to 1.e4, giving us excellent control over the center while keeping our options open. Our main plan revolves around building a strong pawn center and developing our pieces harmoniously to support our central control.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g6",
-      "annotation": "Our opponent chooses the Modern Defense, a hypermodern approach that allows us to occupy the center while they prepare to challenge it from the flanks with their pieces. By playing g6, Black is preparing to fianchetto their dark-squared bishop on g7, from where it will eye the long diagonal and put pressure on our central pawns. This setup is quite flexible for Black - they can often transpose into various defenses like the King's Indian or Pirc depending on how we continue. We should be aware that while this looks passive, Black is setting up a solid, resilient structure that can become quite dynamic once their pieces are coordinated, so we need to make the most of our early central advantage."
+      "annotation": "Our opponent chooses the Modern Defense, a hypermodern approach that allows us to occupy the center while they prepare to challenge it from the flanks with their pieces. By playing g6, Black is preparing to fianchetto their dark-squared bishop on g7, from where it will eye the long diagonal and put pressure on our central pawns. This setup is quite flexible for Black - they can often transpose into various defenses like the King's Indian or Pirc depending on how we continue. We should be aware that while this looks passive, Black is setting up a solid, resilient structure that can become quite dynamic once their pieces are coordinated, so we need to make the most of our early central advantage.",
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

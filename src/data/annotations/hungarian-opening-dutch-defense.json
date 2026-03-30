@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "g3",
-      "annotation": "We start with the Hungarian Opening, a hypermodern setup where we'll fianchetto our kingside bishop to control the center from afar rather than occupying it immediately. By playing g3, we prepare to place our bishop on g2, where it will dominate the long diagonal (a1-h8) and exert subtle pressure on Black's center. This flexible approach gives us space for maneuvering while keeping our options open—we can support a later e4 push or maintain central tension depending on Black's response."
+      "annotation": "We start with the Hungarian Opening, a hypermodern setup where we'll fianchetto our kingside bishop to control the center from afar rather than occupying it immediately. By playing g3, we prepare to place our bishop on g2, where it will dominate the long diagonal (a1-h8) and exert subtle pressure on Black's center. This flexible approach gives us space for maneuvering while keeping our options open—we can support a later e4 push or maintain central tension depending on Black's response.",
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f5",
-      "annotation": "Black responds with the Dutch Defense, immediately staking a claim to the e4 square and preparing to support the advance with pieces. By playing f5, Black seizes space on the kingside and signals an intention to create an imbalanced, dynamic position where pawn tension will define the game. This move fits the Dutch's philosophy: rather than meeting your hypermodern strategy with our own fianchetto, Black challenges you directly in the center and prepares to potentially launch kingside counterplay with moves like e6 or g6."
+      "annotation": "Black responds with the Dutch Defense, immediately staking a claim to the e4 square and preparing to support the advance with pieces. By playing f5, Black seizes space on the kingside and signals an intention to create an imbalanced, dynamic position where pawn tension will define the game. This move fits the Dutch's philosophy: rather than meeting your hypermodern strategy with our own fianchetto, Black challenges you directly in the center and prepares to potentially launch kingside counterplay with moves like e6 or g6.",
+      "arrows": [
+        {
+          "from": "f7",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

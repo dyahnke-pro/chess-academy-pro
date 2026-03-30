@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn advance, staking our claim to the center and freeing both our bishop on f1 and our queen for future development. This classical move controls the crucial d5 and f5 squares, giving us excellent central presence from the very first move. The e4 pawn also supports a potential d4 advance later, which would give us a powerful pawn center. Most importantly, this move allows for rapid piece development and quick castling, following the fundamental opening principles of controlling the center and developing pieces efficiently."
+      "annotation": "We're opening with the king's pawn advance, staking our claim to the center and freeing both our bishop on f1 and our queen for future development. This classical move controls the crucial d5 and f5 squares, giving us excellent central presence from the very first move. The e4 pawn also supports a potential d4 advance later, which would give us a powerful pawn center. Most importantly, this move allows for rapid piece development and quick castling, following the fundamental opening principles of controlling the center and developing pieces efficiently.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "f5",
-      "annotation": "Our opponent has just played the provocative Duras Gambit, an extremely rare and risky opening that immediately challenges our central pawn with a flank attack. Black is essentially offering a gambit where they're willing to sacrifice material or positional soundness for dynamic, unbalanced play and the chance to disrupt our normal development plans. This move violates the opening principle of controlling the center with pawns, instead using a wing pawn to attack our strongpoint on e4. While this creates immediate tactical complications and can surprise unprepared opponents, it also weakens Black's kingside severely and leaves the e6 and d6 squares under our control. We should consider whether to capture on f5, advance to e5, or simply develop normally while maintaining our central advantage."
+      "annotation": "Our opponent has just played the provocative Duras Gambit, an extremely rare and risky opening that immediately challenges our central pawn with a flank attack. Black is essentially offering a gambit where they're willing to sacrifice material or positional soundness for dynamic, unbalanced play and the chance to disrupt our normal development plans. This move violates the opening principle of controlling the center with pawns, instead using a wing pawn to attack our strongpoint on e4. While this creates immediate tactical complications and can surprise unprepared opponents, it also weakens Black's kingside severely and leaves the e6 and d6 squares under our control. We should consider whether to capture on f5, advance to e5, or simply develop normally while maintaining our central advantage.",
+      "arrows": [
+        {
+          "from": "f7",
+          "to": "f5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

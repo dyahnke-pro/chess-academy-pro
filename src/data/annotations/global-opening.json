@@ -3,15 +3,54 @@
   "moveAnnotations": [
     {
       "san": "h3",
-      "annotation": "We open with this unusual move, which defines the Global Opening—a hypermodern system that avoids immediate central confrontation. By playing h3, we prepare to fianchetto our kingside bishop (with g2 and Bg2) and gain flexibility in how we handle Black's setup, while also preventing any Black knight jumps to g4. This move exemplifies the idea of controlling the center from afar rather than occupying it immediately, giving us a solid, patient position that's particularly effective against aggressive opponents who expect traditional openings."
+      "annotation": "We open with this unusual move, which defines the Global Opening—a hypermodern system that avoids immediate central confrontation. By playing h3, we prepare to fianchetto our kingside bishop (with g2 and Bg2) and gain flexibility in how we handle Black's setup, while also preventing any Black knight jumps to g4. This move exemplifies the idea of controlling the center from afar rather than occupying it immediately, giving us a solid, patient position that's particularly effective against aggressive opponents who expect traditional openings.",
+      "arrows": [
+        {
+          "from": "h2",
+          "to": "h3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black seizes space in the center, which is the natural response to our quiet setup—taking the initiative before we can fully develop our hypermodern plan. This move stakes a claim on the d4 and f4 squares, but it also commits Black's pawn structure and can sometimes become a target later in the game if we maneuver correctly."
+      "annotation": "Black seizes space in the center, which is the natural response to our quiet setup—taking the initiative before we can fully develop our hypermodern plan. This move stakes a claim on the d4 and f4 squares, but it also commits Black's pawn structure and can sometimes become a target later in the game if we maneuver correctly.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a3",
-      "annotation": "We continue with our characteristic quiet, flexible approach, preventing Black from playing ...b5 and gaining queenside space. This move also prepares a potential fianchetto on the queenside (with Ra2 and b4) or simply keeps our options open—we can develop naturally with moves like Bg2, c4, or Nf3 depending on how Black continues. The Global Opening's philosophy is to seize control gradually and flexibly, and a3 exemplifies this patient, prophylactic style."
+      "annotation": "We continue with our characteristic quiet, flexible approach, preventing Black from playing ...b5 and gaining queenside space. This move also prepares a potential fianchetto on the queenside (with Ra2 and b4) or simply keeps our options open—we can develop naturally with moves like Bg2, c4, or Nf3 depending on how Black continues. The Global Opening's philosophy is to seize control gradually and flexibly, and a3 exemplifies this patient, prophylactic style.",
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "a3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

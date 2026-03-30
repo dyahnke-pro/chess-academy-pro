@@ -3,11 +3,37 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We start with Nf3, the Zukertort Opening, named after the great 19th-century master Wilhelm Zukertort. This flexible move develops a piece while controlling the critical central squares d4 and e5, giving us maximum flexibility to build our center later. Unlike 1.e4 or 1.d4, we're not immediately staking a claim to the center, but rather preparing to do so from a flexible setup—this approach appeals to players who prefer maneuvering positions over sharp theoretical lines."
+      "annotation": "We start with Nf3, the Zukertort Opening, named after the great 19th-century master Wilhelm Zukertort. This flexible move develops a piece while controlling the critical central squares d4 and e5, giving us maximum flexibility to build our center later. Unlike 1.e4 or 1.d4, we're not immediately staking a claim to the center, but rather preparing to do so from a flexible setup—this approach appeals to players who prefer maneuvering positions over sharp theoretical lines.",
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a5",
-      "annotation": "Black plays the Ware Defense, a rare and somewhat peculiar response that immediately attacks the queenside with a flank move. Rather than developing or fighting for the center directly, Black tries to create immediate imbalance and counterplay on the rim. This move is unusual at higher levels because it ignores center development and can leave Black's queenside structure vulnerable—you should not be intimidated and can focus on building a strong center with moves like d4 and e4, maintaining your superior piece coordination and central control."
+      "annotation": "Black plays the Ware Defense, a rare and somewhat peculiar response that immediately attacks the queenside with a flank move. Rather than developing or fighting for the center directly, Black tries to create immediate imbalance and counterplay on the rim. This move is unusual at higher levels because it ignores center development and can leave Black's queenside structure vulnerable—you should not be intimidated and can focus on building a strong center with moves like d4 and e4, maintaining your superior piece coordination and central control.",
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }

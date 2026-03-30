@@ -3,39 +3,156 @@
   "moveAnnotations": [
     {
       "san": "Na3",
-      "annotation": "This unusual opening move defines the Sodium Attack—we immediately develop our knight to an offbeat square to avoid standard mainline theory. While Na3 looks unconventional, it sidesteps well-prepared opposition and gives us flexibility to control the center later. The knight on a3 isn't ideally placed yet, but the move keeps Black guessing and allows us to reposition it once we understand Black's setup."
+      "annotation": "This unusual opening move defines the Sodium Attack—we immediately develop our knight to an offbeat square to avoid standard mainline theory. While Na3 looks unconventional, it sidesteps well-prepared opposition and gives us flexibility to control the center later. The knight on a3 isn't ideally placed yet, but the move keeps Black guessing and allows us to reposition it once we understand Black's setup.",
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "a3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
-      "annotation": "Black naturally claims space in the center, which is the correct response to our off-beat opening. By playing e5, Black controls key squares (d4 and f4) and prevents us from easily establishing a strong pawn center. This move gives Black a solid position and forces us to show our plan rather than relying on established theory."
+      "annotation": "Black naturally claims space in the center, which is the correct response to our off-beat opening. By playing e5, Black controls key squares (d4 and f4) and prevents us from easily establishing a strong pawn center. This move gives Black a solid position and forces us to show our plan rather than relying on established theory.",
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d3",
-      "annotation": "We support the eventual f4 break and prepare to develop our light-squared bishop to e3 or g5. The d3 pawn gives us flexibility—we're not committing to a fixed pawn structure yet, and this move protects our center while keeping our options open for a kingside attack. Notice we're being patient, letting Black's center advance while we prepare a methodical setup."
+      "annotation": "We support the eventual f4 break and prepare to develop our light-squared bishop to e3 or g5. The d3 pawn gives us flexibility—we're not committing to a fixed pawn structure yet, and this move protects our center while keeping our options open for a kingside attack. Notice we're being patient, letting Black's center advance while we prepare a methodical setup.",
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bxa3",
-      "annotation": "Black captures our knight, which might seem like a concession, but we get compensation: our light-squared bishop was going to be awkward on the long diagonal anyway. By allowing this trade, Black has used time to capture on a3, and we now have a clear plan to continue developing and create imbalance in the position."
+      "annotation": "Black captures our knight, which might seem like a concession, but we get compensation: our light-squared bishop was going to be awkward on the long diagonal anyway. By allowing this trade, Black has used time to capture on a3, and we now have a clear plan to continue developing and create imbalance in the position.",
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "a3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "bxa3",
-      "annotation": "We recapture with the b-pawn, which doubles our a-pawns but opens the b-file for our rook to become active later. This pawn structure looks unusual but gives us tactical possibilities—notice the rook on b1 will soon have access to the b-file, and our a-pawns, while doubled, aren't a serious weakness because they control important light squares. We're trading structural beauty for practical piece activity."
+      "annotation": "We recapture with the b-pawn, which doubles our a-pawns but opens the b-file for our rook to become active later. This pawn structure looks unusual but gives us tactical possibilities—notice the rook on b1 will soon have access to the b-file, and our a-pawns, while doubled, aren't a serious weakness because they control important light squares. We're trading structural beauty for practical piece activity.",
+      "arrows": [
+        {
+          "from": "b2",
+          "to": "a3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "d5",
-      "annotation": "Black expands the center aggressively, controlling the entire middle of the board and gaining space. This natural move challenges our setup and prevents us from easily maneuvering; Black is building a strong pawn presence that we'll need to respect or challenge directly. The move commits Black's center, which will be important if we can generate an attack later."
+      "annotation": "Black expands the center aggressively, controlling the entire middle of the board and gaining space. This natural move challenges our setup and prevents us from easily maneuvering; Black is building a strong pawn presence that we'll need to respect or challenge directly. The move commits Black's center, which will be important if we can generate an attack later.",
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e3",
-      "annotation": "We solidify our setup by reinforcing the d4 square and preparing to develop our dark-squared bishop (likely to d2 or e2). The e3 pawn also opens lines for our queen and supports eventual f4 breaks or other tactical ideas. This quiet move shows patience—we're not rushing to attack, but steadily improving our piece placement and control."
+      "annotation": "We solidify our setup by reinforcing the d4 square and preparing to develop our dark-squared bishop (likely to d2 or e2). The e3 pawn also opens lines for our queen and supports eventual f4 breaks or other tactical ideas. This quiet move shows patience—we're not rushing to attack, but steadily improving our piece placement and control.",
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at our center, gaining more space and preparing to challenge our d-pawn if we advance it. This move increases Black's spatial advantage and creates tension in the middle—Black is maintaining the advantage we gave up by playing an unconventional opening, so we need to act decisively now or risk a cramped position."
+      "annotation": "Black strikes at our center, gaining more space and preparing to challenge our d-pawn if we advance it. This move increases Black's spatial advantage and creates tension in the middle—Black is maintaining the advantage we gave up by playing an unconventional opening, so we need to act decisively now or risk a cramped position.",
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rb1",
-      "annotation": "Our rook finally justifies the earlier bxa3 recapture by activating on the b-file, where it puts pressure on Black's queenside and prepares potential tactics along the long diagonal. This move shows the point of our doubled a-pawns: we gain piece activity and threaten ideas like a4 to advance our pawns. The rook on b1 is far more useful than passively sitting on a1, giving us concrete counterplay against Black's central space advantage."
+      "annotation": "Our rook finally justifies the earlier bxa3 recapture by activating on the b-file, where it puts pressure on Black's queenside and prepares potential tactics along the long diagonal. This move shows the point of our doubled a-pawns: we gain piece activity and threaten ideas like a4 to advance our pawns. The rook on b1 is far more useful than passively sitting on a1, giving us concrete counterplay against Black's central space advantage.",
+      "arrows": [
+        {
+          "from": "a1",
+          "to": "b1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     }
   ]
 }
