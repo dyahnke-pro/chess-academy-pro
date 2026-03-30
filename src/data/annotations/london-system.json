@@ -10,14 +10,30 @@
         "Build a solid pawn triangle with d4-e3-c3",
         "Castle kingside and develop pieces to natural squares"
       ],
-      "alternatives": ["Nf3 — a flexible move that can also lead to the London after Bf4"],
+      "alternatives": [
+        "Nf3 — a flexible move that can also lead to the London after Bf4"
+      ],
       "arrows": [
-        { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c1", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c1",
+          "to": "f4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "c5", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -29,12 +45,26 @@
         "Develop the bishop to f4 before locking it in with e3"
       ],
       "arrows": [
-        { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "d5", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "c4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -46,13 +76,26 @@
         "After e3-Bd3, aim the bishop battery at Black's kingside",
         "If Black plays ...Bd6, exchange on d6 to damage their pawn structure or retreat to g3"
       ],
-      "alternatives": ["Nf3 — also good, but risks Black playing ...Bf5 to contest the diagonal"],
+      "alternatives": [
+        "Nf3 — also good, but risks Black playing ...Bf5 to contest the diagonal"
+      ],
       "arrows": [
-        { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f4", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+        {
+          "from": "c1",
+          "to": "f4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f4",
+          "to": "e5",
+          "color": "rgba(255, 50, 50, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -64,11 +107,22 @@
         "Potentially break with ...c5 to challenge White's center"
       ],
       "arrows": [
-        { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f6", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -81,12 +135,26 @@
         "Castle kingside for safety"
       ],
       "arrows": [
-        { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "d3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "e3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -98,11 +166,22 @@
         "Challenge White's center with ...c5"
       ],
       "arrows": [
-        { "from": "e7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "e6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e6",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "c8", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "c8",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -114,14 +193,30 @@
         "Develop Bd3 and Nbd2 to complete the London setup",
         "Look for a future e4 break when well-prepared"
       ],
-      "alternatives": ["Nd2 — less common but avoids blocking the f-pawn; however, Nf3 is more natural"],
+      "alternatives": [
+        "Nd2 — less common but avoids blocking the f-pawn; however, Nf3 is more natural"
+      ],
       "arrows": [
-        { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f3", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(255, 50, 50, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -133,11 +228,22 @@
         "Develop pieces actively and target White's center"
       ],
       "arrows": [
-        { "from": "c7", "to": "c5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(255, 50, 50, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -149,14 +255,30 @@
         "After full development, prepare e3-e4 to seize more space",
         "If Black exchanges on d4, recapture with exd4 or cxd4 depending on the position"
       ],
-      "alternatives": ["dxc5 — captures but gives up the center; not in the London spirit"],
+      "alternatives": [
+        "dxc5 — captures but gives up the center; not in the London spirit"
+      ],
       "arrows": [
-        { "from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "c2",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -168,11 +290,22 @@
         "Prepare ...e5 to strike in the center"
       ],
       "arrows": [
-        { "from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c6",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -184,14 +317,31 @@
         "Reroute Nd2 to e5 if the square is available",
         "Support a future e3-e4 pawn break"
       ],
-      "alternatives": ["Bd3 — also excellent; developing order between Nbd2 and Bd3 is flexible"],
+      "alternatives": [
+        "Bd3 — also excellent; developing order between Nbd2 and Bd3 is flexible"
+      ],
       "arrows": [
-        { "from": "b1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "d2", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "f1", "to": "d3", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "b1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d2",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "f1",
+          "to": "d3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d2", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -203,11 +353,22 @@
         "Use Bd6 to support central expansion with ...e5"
       ],
       "arrows": [
-        { "from": "f8", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "d6", "to": "f4", "color": "rgba(255, 50, 50, 0.8)" }
+        {
+          "from": "f8",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d6",
+          "to": "f4",
+          "color": "rgba(255, 50, 50, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "f4", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "f4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -219,14 +380,31 @@
         "The Bg3 supports e5 control and a potential h4-h5 kingside pawn storm",
         "If Black plays ...Bxg3, recapture hxg3 opens the h-file for attack"
       ],
-      "alternatives": ["Bxd6 — trading is simpler but gives Black easy development; Bg3 keeps more tension"],
+      "alternatives": [
+        "Bxd6 — trading is simpler but gives Black easy development; Bg3 keeps more tension"
+      ],
       "arrows": [
-        { "from": "f4", "to": "g3", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "g3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "h2", "to": "h4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "f4",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g3",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "h2",
+          "to": "h4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -238,11 +416,22 @@
         "Play ...e5 to challenge the center"
       ],
       "arrows": [
-        { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f8", "to": "e8", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f8",
+          "to": "e8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -255,12 +444,27 @@
         "Consider Qe2, Re1, and e4 as a coordinated central break"
       ],
       "arrows": [
-        { "from": "f1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "d3", "to": "h7", "color": "rgba(255, 50, 50, 0.8)" },
-        { "from": "e3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "f1",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d3",
+          "to": "h7",
+          "color": "rgba(255, 50, 50, 0.8)"
+        },
+        {
+          "from": "e3",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "h7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -271,14 +475,30 @@
         "Develop the bishop to b7 for central pressure",
         "Play ...Bb7 followed by ...Qe7 and ...Rc8 or ...e5"
       ],
-      "alternatives": ["...Qe7 — preparing ...e5 directly without spending time on the fianchetto"],
+      "alternatives": [
+        "...Qe7 — preparing ...e5 directly without spending time on the fianchetto"
+      ],
       "arrows": [
-        { "from": "b7", "to": "b6", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c8", "to": "b7", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "b7",
+          "to": "b6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c8",
+          "to": "b7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "b7", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "c6", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "b7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     }
   ],
@@ -295,11 +515,22 @@
             "Build a solid center and develop systematically"
           ],
           "arrows": [
-            { "from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "c1", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c1",
+              "to": "f4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -307,11 +538,22 @@
           "annotation": "Black develops the knight first, keeping maximum flexibility. This is the most common move order in the King's Indian, as Black delays ...d6 and ...g6 to see how White continues. The knight on f6 controls e4 and prepares the fianchetto setup.",
           "pawnStructure": "No pawns changed. Black keeps options open.",
           "arrows": [
-            { "from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f6", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -323,11 +565,22 @@
             "If Black plays ...e5, we can retreat Bg3 or exchange favorably"
           ],
           "arrows": [
-            { "from": "c1", "to": "f4", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f4", "to": "e5", "color": "rgba(255, 50, 50, 0.8)" }
+            {
+              "from": "c1",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
           ],
           "highlights": [
-            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -339,12 +592,26 @@
             "Prepare ...d6 and ...e5 to challenge the center"
           ],
           "arrows": [
-            { "from": "g7", "to": "g6", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f8", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "h6", "color": "rgba(255, 80, 80, 0.3)" },
-            { "square": "f6", "color": "rgba(255, 80, 80, 0.3)" }
+            {
+              "square": "h6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
           ]
         },
         {
@@ -356,12 +623,26 @@
             "Castle kingside and maintain the solid center"
           ],
           "arrows": [
-            { "from": "e2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f1", "to": "e2", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f1",
+              "to": "e2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
-            { "square": "e3", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -373,11 +654,22 @@
             "Use Bg7 to support central and kingside play"
           ],
           "arrows": [
-            { "from": "f8", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "g7", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" }
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g7",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
           ],
           "highlights": [
-            { "square": "d4", "color": "rgba(255, 80, 80, 0.3)" }
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
           ]
         },
         {
@@ -389,11 +681,22 @@
             "Develop Be2 to complete minor piece development"
           ],
           "arrows": [
-            { "from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -405,11 +708,22 @@
             "Develop Nbd7 to support ...e5"
           ],
           "arrows": [
-            { "from": "d7", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "d6", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -420,13 +734,26 @@
             "Castle kingside immediately",
             "After castling, decide between c3-Qb3 queenside play or h3-Bh2-e4 central play"
           ],
-          "alternatives": ["Bd3 — more aggressive but the bishop can become a target after ...e5, ...Nh5"],
+          "alternatives": [
+            "Bd3 — more aggressive but the bishop can become a target after ...e5, ...Nh5"
+          ],
           "arrows": [
-            { "from": "f1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "e1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "f1",
+              "to": "e2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e2", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -434,11 +761,22 @@
           "annotation": "Black castles kingside, placing the king on its safest square and activating the rook. In the King's Indian, castling early is essential because Black needs the f8-rook to support the ...e5 break and potential ...f5 pawn storm later. The king is relatively safe behind the fianchettoed bishop on g7, though White may target this area in the long term.",
           "pawnStructure": "No change. Black's king is now behind the g6-f7-h7 pawn shelter.",
           "arrows": [
-            { "from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f8", "to": "e8", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -451,11 +789,22 @@
             "Alternatively, play c3 and Qb3 for queenside pressure"
           ],
           "arrows": [
-            { "from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "h2", "to": "h3", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "h2",
+              "to": "h3",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -467,12 +816,27 @@
             "After ...e5, reroute pieces to support the attack"
           ],
           "arrows": [
-            { "from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "d7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
-            { "from": "d7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -484,11 +848,22 @@
             "The h3 pawn also supports a potential g4 advance in some lines"
           ],
           "arrows": [
-            { "from": "h2", "to": "h3", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f4", "to": "h2", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "h2",
+              "to": "h3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f4",
+              "to": "h2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "g4", "color": "rgba(255, 80, 80, 0.3)" }
+            {
+              "square": "g4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
           ]
         },
         {
@@ -500,11 +875,22 @@
             "After ...e5, use the e-file for rook activity"
           ],
           "arrows": [
-            { "from": "f8", "to": "e8", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "e7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -517,12 +903,26 @@
             "Consider Qc2 or Qb3 for queenside piece coordination"
           ],
           "arrows": [
-            { "from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "c3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "c2",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "d4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
-            { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -534,12 +934,27 @@
             "Use the e5 pawn as a springboard for kingside attacks"
           ],
           "arrows": [
-            { "from": "e7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "e5", "to": "d4", "color": "rgba(255, 50, 50, 0.8)" },
-            { "from": "e5", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -552,12 +967,27 @@
             "Play Qc2 or Nd2-f1-e3 to build up before the e4 break"
           ],
           "arrows": [
-            { "from": "f4", "to": "h2", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "h2", "to": "e5", "color": "rgba(0, 100, 255, 0.7)" },
-            { "from": "e3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "f4",
+              "to": "h2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "h2",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "e3",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "h2", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "h2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -569,13 +999,459 @@
             "Reroute Nh5-f4 to occupy the powerful f4 outpost"
           ],
           "arrows": [
-            { "from": "f6", "to": "h5", "color": "rgba(0, 180, 80, 0.8)" },
-            { "from": "f7", "to": "f5", "color": "rgba(0, 100, 255, 0.7)" },
-            { "from": "h5", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+            {
+              "from": "f6",
+              "to": "h5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f7",
+              "to": "f5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "h5",
+              "to": "f4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
           ],
           "highlights": [
-            { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" },
-            { "square": "f4", "color": "rgba(255, 255, 0, 0.4)" }
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "Nh5 Misplacement",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the London System, the Nh5 Misplacement is a tactical pattern you should know. Black trades the bishop with ...Nh5, but White gets the h-file and attacking chances. The half-open h-file combined with Qh5 ideas gives White a dangerous kingside initiative. Let's walk through how it works."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White plays Bf4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays e3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black continues with e6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black plays Bd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bg3",
+          "annotation": "White plays Bg3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nh5",
+          "annotation": "Black continues with Nh5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bd3",
+          "annotation": "Bd3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nxg3",
+          "annotation": "Black captures with Nxg3. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "hxg3",
+          "annotation": "White captures with hxg3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "g3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black continues with Nd7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black plays Qe7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White plays Nbd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black continues with e5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "White captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bxe5",
+          "annotation": "Black captures with Bxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qh5",
+          "annotation": "Qh5. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qh4",
+          "annotation": "Qh4! The trap is sprung. White has a winning position. This is the key takeaway from the Nh5 Misplacement."
+        }
+      ]
+    },
+    {
+      "name": "c5 Qb6 Handling",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the London System, the c5 Qb6 Handling is a tactical pattern you should know. Black tries to exploit the b2 weakness with ...Qb6, but after Qb3 exchanging queens or Qc2, Black's queen is just displaced. White continues with normal development and a solid position. Let's walk through how it works."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White plays Bf4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays e3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black continues with c5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qb6",
+          "annotation": "Black plays Qb6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qb3",
+          "annotation": "White plays Qb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "c4",
+          "annotation": "Black continues with c4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qc2",
+          "annotation": "Qc2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black plays Bf5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qc1",
+          "annotation": "White plays Qc1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black continues with e6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black plays Nbd7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White plays Nbd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Be2",
+          "annotation": "Be2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rac8",
+          "annotation": "Rac8! The trap is sprung. Black has a winning position. This is the key takeaway from the c5 Qb6 Handling."
+        }
+      ]
+    },
+    {
+      "name": "Early Bf5 Counter",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the London System, the Early Bf5 Counter is a dangerous line you must be aware of. If Black plays ...Bf5 early, trading bishops with Bxb1 gives Black an easy game. White should consider c4 quickly or adjust the move order to avoid this simplification. Let's see why."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White plays Bf4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Bf5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays e3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bxb1",
+          "annotation": "Bxb1 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Rxb1",
+          "annotation": "Rxb1 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bb4+",
+          "annotation": "Bb4+! Check forces a response. This is where the danger begins."
+        },
+        {
+          "san": "Ke2",
+          "annotation": "White plays Ke2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "dxc4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a3",
+          "annotation": "White continues with a3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "Nd2. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "King's Indian Counterattack",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the London System, the King's Indian Counterattack is a dangerous line you must be aware of. Against the King's Indian, if White isn't careful, ...e5 followed by ...Nh5 gives Black active piece play. The dark-squared bishop retreats and Black can take over the center. Let's see why."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White plays Bf4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "e3",
+          "annotation": "White continues with e3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Be2",
+          "annotation": "White plays Be2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "h3",
+          "annotation": "White plays h3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Qe8",
+          "annotation": "Qe8 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "c3",
+          "annotation": "White continues with c3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bh2",
+          "annotation": "White plays Bh2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nh5",
+          "annotation": "Nh5. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5! This is the move that causes all the trouble.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
           ]
         }
       ]

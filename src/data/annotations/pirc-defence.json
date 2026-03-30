@@ -1076,7 +1076,8 @@
           ],
           "highlights": []
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Classical System",
@@ -1575,7 +1576,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "150 Attack",
@@ -1999,7 +2001,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Byrne Variation",
@@ -2407,7 +2410,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Lion Variation",
@@ -2822,6 +2826,387 @@
             {
               "square": "a4",
               "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "Austrian Attack e5 Trick",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Pirc Defence, the Austrian Attack e5 Trick is a tactical pattern you should know. If White pushes e5 too early without sufficient preparation, Black captures twice and picks up the e5 pawn with check. White's center collapses and Black has a great position. Let's walk through how it works."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black continues with g6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "f4",
+          "annotation": "f4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black plays Bg7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e5",
+          "annotation": "White plays e5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "fxe5",
+          "annotation": "White captures with fxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Black plays Nd5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "White captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxd5",
+          "annotation": "Qxd5. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "c3",
+          "annotation": "c3! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe5+",
+          "annotation": "Qxe5+! And this is the final blow. Black delivers check and wins material. This is why the Austrian Attack e5 Trick is so dangerous — memorize this pattern!"
+        }
+      ]
+    },
+    {
+      "name": "Classical Qa5 Pin",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Pirc Defence, the Classical Qa5 Pin is a tactical pattern you should know. Black plays ...d5 at the right moment, opening the center. The bishop goes to g4 pinning the f3 knight, and if White is careless, the d4 pawn falls. Let's walk through how it works."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black continues with g6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black plays Bg7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black plays c6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "a4",
+          "annotation": "White plays a4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black continues with d5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "cxd5. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb3",
+          "annotation": "Bb3! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Bg4! The trap is sprung. Black has a winning position. This is the key takeaway from the Classical Qa5 Pin."
+        }
+      ]
+    },
+    {
+      "name": "Austrian Attack Crush",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Pirc Defence, the Austrian Attack Crush is a dangerous line you must be aware of. If you don't react precisely to the e5-e6 push, White's attack crashes through. The e6 sacrifice rips open the position and the bishop on g7 becomes a spectator. Let's see why."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "f4",
+          "annotation": "White continues with f4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "e5",
+          "annotation": "White continues with e5. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nfd7",
+          "annotation": "Nfd7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e6",
+          "annotation": "White plays e6. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "fxe6",
+          "annotation": "fxe6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "e6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ng5",
+          "annotation": "White continues with Ng5. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5! This is the move that causes all the trouble."
+        },
+        {
+          "san": "Bxd5",
+          "annotation": "Bxd5. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line."
+        }
+      ]
+    },
+    {
+      "name": "150 Attack Kingside Storm",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Pirc Defence, the 150 Attack Kingside Storm is a dangerous line you must be aware of. After the dark-squared bishops are traded, Black's king is permanently weakened. If you don't generate queenside counterplay fast with ...a5 and ...b5, White's h4-h5 attack is devastating. Let's see why."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Be3",
+          "annotation": "White continues with Be3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Qd2",
+          "annotation": "White plays Qd2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "Bh6",
+          "annotation": "White continues with Bh6. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bxh6",
+          "annotation": "Bxh6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxh6",
+          "annotation": "Qxh6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "d5",
+          "annotation": "White continues with d5. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Nc5",
+          "annotation": "Nc5. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "f3",
+          "annotation": "f3. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "arrows": [
+            {
+              "from": "f2",
+              "to": "f3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a5",
+          "annotation": "a5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(230, 170, 30, 0.8)"
             }
           ]
         }

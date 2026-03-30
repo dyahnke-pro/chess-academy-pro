@@ -949,6 +949,416 @@
             }
           ]
         }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "e4 Break Unleashed",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "In the King's Indian Attack, the e4 Break Unleashed is a tactical pattern you should know. After the e4 break opens the position, White's pieces spring to life. The g2 bishop fires down the diagonal and the knight maneuver Nh4-f5 creates a devastating attack. Let's walk through how it works."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White plays Bg2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black continues with c6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black plays Bg4, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black continues with Nbd7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "Nbd2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black captures with dxe4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "White captures with dxe4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black plays Bc5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qe1",
+          "annotation": "White plays Qe1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "h3",
+          "annotation": "h3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bh5",
+          "annotation": "Bh5. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Nh4",
+          "annotation": "Nh4! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Re8",
+          "annotation": "Re8! The trap is sprung. Black has a winning position. This is the key takeaway from the e4 Break Unleashed."
+        }
+      ]
+    },
+    {
+      "name": "French Structure Squeeze",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Indian Attack, the French Structure Squeeze is a tactical pattern you should know. Against the French structure, e5 creates a vice grip. Black struggles to find counterplay while White slowly builds up on the kingside. The f1 knight heads to g3-f5. Let's walk through how it works."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black continues with Nf6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Ngf3",
+          "annotation": "Ngf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "Bg2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "b6",
+          "annotation": "Black continues with b6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black plays Bb7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e5",
+          "annotation": "White plays e5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Nf1",
+          "annotation": "Nf1! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "f6",
+          "annotation": "f6! The trap is sprung. Black has a winning position. This is the key takeaway from the French Structure Squeeze.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "f6",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Premature e4 Rush",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "In the King's Indian Attack, the Premature e4 Rush is a dangerous line you must be aware of. Rushing e4 without proper preparation can leave White overextended. Make sure Nbd2 is in place to support the break, and have a follow-up plan ready. Let's see why."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White plays Bg2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "c6",
+          "annotation": "c6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Bg4. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White continues with Nbd2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxe4",
+          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Bc5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "h3",
+          "annotation": "White plays h3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bh5",
+          "annotation": "Bh5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Qe1",
+          "annotation": "White continues with Qe1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nh4",
+          "annotation": "Nh4. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Re8",
+          "annotation": "Re8. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    },
+    {
+      "name": "Queenside Collapse",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Indian Attack, the Queenside Collapse is a dangerous line you must be aware of. If White focuses only on the kingside and ignores Black's queenside expansion, ...b5-b4-a5-a4 can create serious problems. Balance your attack with defensive awareness. Let's see why."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ngf3",
+          "annotation": "White continues with Ngf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White continues with Bg2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White continues with Re1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e5",
+          "annotation": "White plays e5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Nf1",
+          "annotation": "Nf1. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "a5",
+          "annotation": "a5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
       ]
     }
   ]

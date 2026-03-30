@@ -947,7 +947,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "King's Gambit: Fischer Defense",
@@ -1387,7 +1388,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Muzio Gambit",
@@ -1895,7 +1897,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Falkbeer Counter-Gambit",
@@ -2311,7 +2314,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "King's Gambit Declined",
@@ -2682,6 +2686,412 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ]
+        }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "Kieseritzky Gambit Attack",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Gambit, the Kieseritzky Gambit Attack is a tactical pattern you should know. In the Kieseritzky, White plays Ne5 after g4 and gets a powerful central knight. The key idea is d4 followed by Nd3, recapturing the f4 pawn while maintaining development. White's attacking chances along the f-file are excellent. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "exf4",
+          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g5",
+          "annotation": "Black continues with g5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "h4",
+          "annotation": "h4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "g4",
+          "annotation": "Black plays g4, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Ne5",
+          "annotation": "White plays Ne5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black continues with Nf6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nd3",
+          "annotation": "White plays Nd3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black captures with Nxe4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "White captures with Bxf4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black plays Bg7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nxd2",
+          "annotation": "Nxd2. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Bxd2",
+          "annotation": "Bxd2! Now the trap is revealed. White wins material with this capture."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O! The trap is sprung. Black has a winning position. This is the key takeaway from the Kieseritzky Gambit Attack.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Allgaier Gambit",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Gambit, the Allgaier Gambit is a tactical pattern you should know. White sacrifices the knight on f7 for a direct king attack. After Kxf7, the Black king is exposed and White's pieces flood in. This is a speculative but extremely dangerous gambit at the club level. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "exf4",
+          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g5",
+          "annotation": "Black continues with g5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "h4",
+          "annotation": "h4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "g4",
+          "annotation": "Black plays g4, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Ng5",
+          "annotation": "White plays Ng5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "h6",
+          "annotation": "Black continues with h6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nxf7",
+          "annotation": "White captures with Nxf7. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Kxf7",
+          "annotation": "Black captures with Kxf7. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black continues with d5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "White captures with Bxf4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxe4",
+          "annotation": "dxe4. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc4+",
+          "annotation": "Bc4+! Check! The trap is sprung — there's no good defense here."
+        },
+        {
+          "san": "Kg7",
+          "annotation": "Kg7! The trap is sprung. Black has a winning position. This is the key takeaway from the Allgaier Gambit.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "g7",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Falkbeer's Strong Center",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Gambit, the Falkbeer's Strong Center is a dangerous line you must be aware of. If you don't know the Falkbeer Counter-Gambit, Black's e4 pawn can become a monster. After ...exd3, Black opens lines and develops rapidly. White must play precisely to neutralize the initiative — don't panic, just develop solidly. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "exd5",
+          "annotation": "exd5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "e4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "d3",
+          "annotation": "White continues with d3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Bb4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bd2",
+          "annotation": "White continues with Bd2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "exd3",
+          "annotation": "exd3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxd3",
+          "annotation": "Bxd3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "bxc3",
+          "annotation": "bxc3! This is the move that causes all the trouble.",
+          "arrows": [
+            {
+              "from": "b2",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Bd6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    },
+    {
+      "name": "Black Holds the Pawn",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Gambit, the Black Holds the Pawn is a dangerous line you must be aware of. If Black holds the f4 pawn with ...g5, the position becomes very sharp. White must not be passive — h4 is critical to undermine the pawn chain. If Black consolidates the extra pawn, White's weakened kingside becomes a liability. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "exf4",
+          "annotation": "exf4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "g5",
+          "annotation": "g5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "h4",
+          "annotation": "White continues with h4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "g4",
+          "annotation": "g4. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Ne5",
+          "annotation": "White plays Ne5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nxg4",
+          "annotation": "Nxg4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nxf6+",
+          "annotation": "Nxf6+ — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxf6",
+          "annotation": "Qxf6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White continues with Nc3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Qg6",
+          "annotation": "Qg6. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
     }
