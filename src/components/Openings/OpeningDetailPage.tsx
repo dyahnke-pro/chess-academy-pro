@@ -575,7 +575,7 @@ export function OpeningDetailPage(): JSX.Element {
         <CheckpointQuiz
           quiz={currentQuiz}
           boardOrientation={opening.color}
-          onComplete={(correct) => {
+          onComplete={() => {
             if (quizIndex < quizzes.length - 1) {
               setQuizIndex((prev) => prev + 1);
             } else {

@@ -55,10 +55,11 @@ export function CommonMistakesSection({
                   <div className="flex justify-center">
                     <div className="w-48 h-48">
                       <Chessboard
-                        position={mistake.fen}
-                        boardOrientation={boardOrientation}
-                        boardWidth={192}
-                        arePiecesDraggable={false}
+                        options={{
+                          position: mistake.fen,
+                          boardOrientation: boardOrientation,
+                          allowDragging: false,
+                        }}
                       />
                     </div>
                   </div>

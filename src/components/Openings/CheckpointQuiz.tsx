@@ -21,8 +21,8 @@ export function CheckpointQuiz({
   const [showHint, setShowHint] = useState(false);
 
   const handleDrop = useCallback(
-    (sourceSquare: string, targetSquare: string): boolean => {
-      if (state !== 'waiting') return false;
+    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
+      if (state !== 'waiting' || !targetSquare) return false;
 
       const chess = new Chess(quiz.fen);
       const move = chess.move({ from: sourceSquare, to: targetSquare, promotion: 'q' });
@@ -56,11 +56,12 @@ export function CheckpointQuiz({
       <div className="flex justify-center mb-3">
         <div className="w-64 h-64">
           <Chessboard
-            position={quiz.fen}
-            onPieceDrop={handleDrop}
-            boardOrientation={boardOrientation}
-            boardWidth={256}
-            arePiecesDraggable={state === 'waiting'}
+            options={{
+              position: quiz.fen,
+              onPieceDrop: handleDrop,
+              boardOrientation: boardOrientation,
+              allowDragging: state === 'waiting',
+            }}
           />
         </div>
       </div>

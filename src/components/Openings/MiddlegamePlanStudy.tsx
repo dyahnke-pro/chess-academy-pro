@@ -34,9 +34,9 @@ const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'endgames', label: 'Endgames', icon: Flag },
 ];
 
-function arrowsToBoard(arrows: AnnotationArrow[] | undefined): [string, string, string][] {
+function arrowsToBoard(arrows: AnnotationArrow[] | undefined): Array<{ startSquare: string; endSquare: string; color: string }> {
   if (!arrows) return [];
-  return arrows.map((a) => [a.from, a.to, a.color ?? 'rgba(0, 128, 0, 0.8)'] as [string, string, string]);
+  return arrows.map((a) => ({ startSquare: a.from, endSquare: a.to, color: a.color ?? 'rgba(0, 128, 0, 0.8)' }));
 }
 
 function highlightsToSquareStyles(highlights: AnnotationHighlight[] | undefined): Record<string, { backgroundColor: string }> {
@@ -140,14 +140,16 @@ export function MiddlegamePlanStudy({
       <div className="flex-1 flex flex-col items-center justify-center p-4 gap-3">
         <div className="w-full max-w-[400px] aspect-square">
           <Chessboard
-            position={displayFen}
-            boardOrientation={boardOrientation}
-            arePiecesDraggable={false}
-            customArrows={displayArrows}
-            customSquareStyles={displayHighlights}
-            animationDuration={200}
-            customDarkSquareStyle={{ backgroundColor: '#779952' }}
-            customLightSquareStyle={{ backgroundColor: '#edeed1' }}
+            options={{
+              position: displayFen,
+              boardOrientation: boardOrientation,
+              allowDragging: false,
+              arrows: displayArrows,
+              squareStyles: displayHighlights,
+              animationDurationInMs: 200,
+              darkSquareStyle: { backgroundColor: '#779952' },
+              lightSquareStyle: { backgroundColor: '#edeed1' },
+            }}
           />
         </div>
       </div>
