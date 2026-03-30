@@ -367,5 +367,408 @@
     ],
     "middlegameTheme": "Kingside Pawn Storm & Piece Sacrifice",
     "lessonSummary": "In the Sicilian Najdorf, White often attacks on the kingside while Black plays on the queenside. Kasparov demonstrated that a well-timed g4-g5 push combined with a knight sacrifice on f5 can tear open the kingside before Black's counterplay arrives."
+  },
+  {
+    "id": "mg-kasparov-scotch-game",
+    "openingId": "scotch-game",
+    "white": "Garry Kasparov",
+    "black": "Anatoly Karpov",
+    "whiteElo": 2800,
+    "blackElo": 2730,
+    "result": "1-0",
+    "year": 1990,
+    "event": "World Championship, Lyon/New York",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 Ba3 Bg7 Nd2 O-O Qe4 Nb4 Bb2 d5 cxd5 cxd5 Qe2 Rfe8 O-O-O Bb7 f3 c5 Nc4 Nd3+ Rxd3 Bxe5",
+    "overview": "Kasparov employed the Scotch Game to steer the World Championship match into sharp, unbalanced territory against Karpov. White seized space with e5, activated pieces aggressively, and converted the initiative into a decisive attack on the queenside.",
+    "criticalMoments": [
+      {
+        "moveNumber": 6,
+        "color": "white",
+        "fen": "r1b1kb1r/ppppqppp/2n2n2/4P3/3N4/8/PPP1QPPP/RNB1KB1R w KQkq - 0 6",
+        "annotation": "After e5, White gains central space and displaces the Black knight from f6. This pawn thrust defines the character of the Scotch, forcing Black into a passive defensive posture.",
+        "concept": "Central space advantage"
+      },
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r3r1k1/pb2ppbp/6p1/2p5/2n5/1P3P2/PB2Q1PP/2KR1B1R w - - 0 16",
+        "annotation": "Kasparov castled queenside to launch a direct attack, placing the rook on the open d-file. The asymmetric castling created sharp mutual chances, but White's piece coordination proved superior.",
+        "concept": "Opposite-side castling initiative"
+      }
+    ],
+    "middlegameTheme": "Queenside pressure with central space",
+    "lessonSummary": "The Scotch Game allows White to open the center early and dictate the pawn structure. Kasparov demonstrated how to convert a space advantage into piece activity, using opposite-side castling to generate a powerful initiative. This game illustrates the importance of seizing the center and keeping the opponent reactive."
+  },
+  {
+    "id": "mg-spielmann-vienna-game",
+    "openingId": "vienna-game",
+    "white": "Rudolf Spielmann",
+    "black": "Savielly Tartakower",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1923,
+    "event": "Karlsbad",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bg4 Qe2 Nc5 d4 Ne6 Be3 Be7 O-O-O O-O h3 Bh5 g4 Bg6 Qd3 f5 gxf5 Bxf5 Qb5 b6 Bd3 Bxd3 Qxd3 Nc6 Rhg1 Kh8 Rg3",
+    "overview": "Spielmann unleashed his trademark aggressive style in the Vienna Gambit, sacrificing pawns for rapid development and a kingside attack. Tartakower struggled to neutralize White's mounting pressure on the g-file and light squares.",
+    "criticalMoments": [
+      {
+        "moveNumber": 11,
+        "color": "white",
+        "fen": "r2q1rk1/ppp1bppp/1n2n1b1/3pP3/3P2P1/2N1BN1P/PPP1Q3/2KR1B1R w - - 0 11",
+        "annotation": "The pawn advance g4 signals White's intention to rip open the kingside. This aggressive push gains space and prepares to dislodge Black's bishop while opening lines for the rooks.",
+        "concept": "Kingside pawn storm"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r2q1r1k/p1p1b1pp/1pn1n3/3p4/3P4/2NQBN1R/PPP5/2KR4 w - - 0 17",
+        "annotation": "Spielmann doubled rooks on the g-file with Rg3, creating immense pressure against the Black king. The open g-file became the highway for White's decisive attack, leaving Black with no adequate defense.",
+        "concept": "Rook lift and file domination"
+      }
+    ],
+    "middlegameTheme": "Kingside attack with open files",
+    "lessonSummary": "The Vienna Gambit with f4 leads to sharp positions where White sacrifices material for rapid piece activity. Spielmann showed how to combine a pawn storm with piece coordination to crack open the kingside. The key lesson is that in gambit play, speed of attack matters more than material count."
+  },
+  {
+    "id": "mg-rubinstein-four-knights-game",
+    "openingId": "four-knights-game",
+    "white": "Akiba Rubinstein",
+    "black": "Emanuel Lasker",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1909,
+    "event": "St Petersburg",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bc1 Rd8 Bf1 c5 g3 Nf8 Bg2 Ng6 Nd2 Be6 f4 exf4 gxf4",
+    "overview": "Rubinstein patiently built a powerful pawn center against Lasker in the Four Knights Game, demonstrating deep positional understanding. White gradually expanded in the center and on the kingside, converting structural advantages into a winning attack.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bn1rk1/ppp1qppp/3p1n2/1B2p3/4P3/2PB1N2/P1P2PPP/R2QR1K1 w - - 0 10",
+        "annotation": "With d4, Rubinstein challenges the center and prepares to establish a broad pawn duo on e4 and d4. This advance exploits Black's earlier exchange on c3, which gave White the bishop pair and central pawn majority.",
+        "concept": "Central pawn majority"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r2r2k1/pp2qppp/3pbnb1/2p5/4PP2/2P5/P1PN2BP/R1BQR1K1 w - - 0 17",
+        "annotation": "The f4 advance creates a powerful pawn center and opens the f-file for White's rook. Rubinstein's patient buildup now transitions into a direct kingside assault with the central pawns providing a space advantage.",
+        "concept": "Pawn center as attacking platform"
+      }
+    ],
+    "middlegameTheme": "Positional pawn center buildup",
+    "lessonSummary": "The Four Knights Game can lead to rich positional play when one side achieves a central pawn majority. Rubinstein demonstrated the classic strategy of building a broad center, restraining counterplay, and then advancing to create attacking chances. This game teaches that patience and structural advantages can overcome even world-class defenders like Lasker."
+  },
+  {
+    "id": "mg-adams-sicilian-alapin",
+    "openingId": "sicilian-alapin",
+    "white": "Michael Adams",
+    "black": "Garry Kasparov",
+    "whiteElo": 2741,
+    "blackElo": 2804,
+    "result": "0-1",
+    "year": 2005,
+    "event": "Linares",
+    "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Nc6 Be3 cxd4 cxd4 Bb4 a3 Ba5 Nc3 Qd6 Nb5 Qe7 Rc1 O-O d5 exd5 Nxa5 Nxa5 Nd4 Rfe8 Bg5 h6 Bh4",
+    "overview": "Kasparov demonstrated masterful handling of the Black side of the Alapin Sicilian, neutralizing Adams' central play and seizing the initiative. Black exploited the isolated d-pawn weakness and generated powerful piece activity to win the game.",
+    "criticalMoments": [
+      {
+        "moveNumber": 14,
+        "color": "black",
+        "fen": "r3r1k1/pp2qppp/2n2n2/bN1p4/3P4/P3B3/1P2BPPP/R1QR2K1 b - - 0 14",
+        "annotation": "Kasparov castled and prepared to target the isolated d4 pawn, a structural weakness inherent in the Alapin. Black's pieces coordinate naturally against the isolated pawn, creating long-term pressure.",
+        "concept": "Exploiting an isolated pawn"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r3r1k1/pp2qppp/2n2n2/n2P4/3N4/P3B3/1P2BPPP/2RQ1RK1 b - - 0 15",
+        "annotation": "Adams pushed d5 to resolve the tension, but this advance allowed Black to establish a strong outpost and activate the pieces. The resulting position gave Black targets and superior minor piece coordination.",
+        "concept": "Premature pawn advance"
+      }
+    ],
+    "middlegameTheme": "Isolated pawn exploitation",
+    "lessonSummary": "The Alapin Sicilian gives White a straightforward development scheme but often creates an isolated d-pawn that Black can target. Kasparov showed how to methodically pressure structural weaknesses while maintaining active piece play. This game is a textbook example of converting a positional advantage against a strong opponent."
+  },
+  {
+    "id": "mg-kramnik-pirc-defence",
+    "openingId": "pirc-defence",
+    "white": "Vladimir Kramnik",
+    "black": "Veselin Topalov",
+    "whiteElo": 2751,
+    "blackElo": 2700,
+    "result": "1-0",
+    "year": 1999,
+    "event": "Linares",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O Bg4 Be3 Nc6 Qd2 e5 d5 Ne7 Rad1 Bd7 Ne1 f5 f3 f4 Bf2 g5 Nd3 Ng6 c4 Rf7 Nb4 Nf8 Nc6 bxc6 dxc6 Be6 Nb5",
+    "overview": "Kramnik demonstrated masterful positional play against Topalov's Pirc Defence, steadily restricting Black's counterplay on the kingside. White's knight maneuvers to b5 and c6 created decisive pressure on the queenside, leaving Black's pieces passively placed.",
+    "criticalMoments": [
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r2q1rk1/pppbn1b1/3p1np1/4p3/3PP1p1/2N1BP2/PPQ1B1PP/3R1RK1 w - - 0 15",
+        "annotation": "Kramnik plays Bf2, a subtle retreat that solidifies White's center and prepares to exploit Black's overextended kingside pawns. This prophylactic move highlights the positional imbalance where White's structure is sound while Black's g5-f4 advance creates long-term weaknesses.",
+        "concept": "prophylaxis"
+      },
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "r2q1rnk/p1p2rb1/2Pp3p/4p3/2P2p2/3N1P2/PP1QB1PP/3R1RK1 w - - 0 19",
+        "annotation": "The knight arrives on c6 after a beautiful maneuver via b4, establishing a dominant outpost deep in Black's position. This knight cannot be dislodged and paralyzes Black's queenside, demonstrating the power of a well-placed piece over material considerations.",
+        "concept": "knight outpost"
+      }
+    ],
+    "middlegameTheme": "Positional squeeze with knight outposts",
+    "lessonSummary": "Against the Pirc Defence, White can build a powerful center and use it as a springboard for piece activity. Kramnik showed that patient maneuvering and exploiting weak squares is more effective than direct attacks when the opponent's pawn structure is compromised. The key lesson is that knight outposts on c6 and b5 can be devastating when Black's queenside is weakened."
+  },
+  {
+    "id": "mg-tiviakov-scandinavian-defence",
+    "openingId": "scandinavian-defence",
+    "white": "Sergei Tiviakov",
+    "black": "Keith Arkell",
+    "whiteElo": 2663,
+    "blackElo": 2456,
+    "result": "1-0",
+    "year": 2004,
+    "event": "European Club Cup",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 a3 Bxc3 Bxc3 Qc7 O-O-O Nbd7 Kb1 O-O d5 cxd5 Bxd5 Nxd5 Rxd5 Nf6 Rd2 Rfd8",
+    "overview": "Tiviakov exploited the early queen development in the Scandinavian to seize the initiative with active piece play and a well-timed d5 pawn break. White's pressure along the d-file and superior minor piece coordination proved decisive against Black's slightly passive setup.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "white",
+        "fen": "rn3rk1/pp1q1ppp/2p1pn2/5b2/3P4/P1B2N2/1P2QPPP/2KR1B1R w - - 0 13",
+        "annotation": "Tiviakov strikes with d5, opening the center at the perfect moment when Black's pieces are not ideally coordinated. This thematic break tears apart Black's pawn structure and activates the bishop on c3 along the long diagonal.",
+        "concept": "central pawn break"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r2r2k1/pp1q1ppp/4pn2/3B1b2/8/P1B2N2/1P2QPPP/1K1R3R w - - 0 15",
+        "annotation": "After capturing on d5 with the bishop, White establishes a powerful centralized piece that eyes multiple targets. The combination of the active bishop and open d-file gives White a lasting initiative that Black struggles to neutralize.",
+        "concept": "piece centralization"
+      }
+    ],
+    "middlegameTheme": "Central pawn break and d-file domination",
+    "lessonSummary": "In the Scandinavian Defence, White can exploit the tempo gained from chasing Black's queen to build a strong center. The d5 break is a recurring theme that opens lines for White's pieces while exposing weaknesses in Black's camp. This game illustrates why rapid development and central control are critical when facing the Scandinavian."
+  },
+  {
+    "id": "mg-kramnik-catalan-opening",
+    "openingId": "catalan-opening",
+    "white": "Vladimir Kramnik",
+    "black": "Viswanathan Anand",
+    "whiteElo": 2772,
+    "blackElo": 2783,
+    "result": "1-0",
+    "year": 2008,
+    "event": "World Chess Championship",
+    "pgn": "d4 d5 c4 e6 Nf3 Nf6 g3 dxc4 Bg2 Bb4+ Bd2 a5 Qc2 Bxd2+ Qxd2 c6 a4 b5 Na3 Bd7 Ne5 Nd5 e4 Nb4 O-O O-O Rfd1 Be8 d5 Qd6 Ng4 Qc5 Ne3 N8a6 dxc6 bxa4",
+    "overview": "Kramnik employed the Catalan Opening to gradually build pressure against Anand's solid but passive setup in a critical World Championship game. The powerful Bg2 bishop and central pawn advances eventually overwhelmed Black's defenses, demonstrating the Catalan's long-term positional venom.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "rn1q1rk1/1p1bnppp/2p1p3/p3N3/P1pPP3/N5P1/1P1Q1PBP/R4RK1 w - - 0 12",
+        "annotation": "Kramnik plays e4, seizing the full center and activating the g2 bishop along the long diagonal. This advance puts Black in a strategic bind, as the fianchettoed bishop now exerts tremendous pressure on the queenside and center simultaneously.",
+        "concept": "central expansion"
+      },
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r3brk1/5ppp/n1Pq4/p7/Ppn1P3/4N1P1/1P1Q1PBP/R2R2K1 w - - 0 16",
+        "annotation": "The d5-d6 advance followed by Ng4-e3 creates a passed pawn on c6 that becomes a permanent thorn in Black's position. White's pieces coordinate beautifully around this advanced pawn, forcing Black into a defensive posture with no active counterplay.",
+        "concept": "passed pawn creation"
+      }
+    ],
+    "middlegameTheme": "Fianchetto bishop pressure and advanced passed pawn",
+    "lessonSummary": "The Catalan Opening allows White to combine fianchetto pressure with central control, creating a slow but relentless positional squeeze. Kramnik demonstrated how the g2 bishop becomes a monster once the center opens, especially when combined with a passed pawn. This game is a textbook example of how the Catalan can dismantle even world-class defenses through patient maneuvering."
+  },
+  {
+    "id": "mg-alekhine-slav-defence",
+    "openingId": "slav-defence",
+    "white": "Alexander Alekhine",
+    "black": "Max Euwe",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1937,
+    "event": "World Chess Championship",
+    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 Ne5 Nbd7 Nxc4 Qc7 g3 e5 dxe5 Nxe5 Bf4 Nfd7 Bg2 f6 O-O Rd8 Qc1 Be6 Ne3 Bc5 b3 Bxe3 Qxe3",
+    "overview": "Alekhine reclaimed the World Championship title with precise handling of the Slav Defence, converting White's superior piece activity into a winning advantage. His treatment of the opening neutralized Black's early bishop development and left Euwe struggling with a passive position.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "r3kb1r/ppqn1ppp/2p1p3/4Nb2/P1NP4/8/1P2PPPP/R1BQKB1R w KQkq - 0 8",
+        "annotation": "Alekhine plays g3, preparing the fianchetto while maintaining flexible central control after the pawn exchange on e5. This quiet move signals White's intention to develop harmoniously rather than rush into tactical complications, a hallmark of Alekhine's mature style.",
+        "concept": "flexible development"
+      },
+      {
+        "moveNumber": 14,
+        "color": "white",
+        "fen": "3rk2r/ppqn2pp/2p1bp2/4n3/P4B2/1P2N1P1/4PPBP/R1Q2RK1 w k - 0 14",
+        "annotation": "The knight maneuver to e3 targets critical central squares and prepares to exploit Black's weakened dark squares after the bishop exchange. Alekhine's piece placement demonstrates how coordinated minor pieces can dominate a position even without immediate tactical threats.",
+        "concept": "piece coordination"
+      }
+    ],
+    "middlegameTheme": "Superior piece activity against passive defense",
+    "lessonSummary": "In the Slav Defence, White can exploit the early capture on c4 by developing pieces to active squares and controlling the center. Alekhine showed that recovering the pawn with tempo and maintaining harmonious piece coordination creates lasting pressure. The game highlights the importance of not allowing the opponent to equalize after an early pawn grab in the Slav."
+  },
+  {
+    "id": "mg-shirov-semi-slav",
+    "openingId": "semi-slav",
+    "white": "Alexei Shirov",
+    "black": "Vladimir Kramnik",
+    "whiteElo": 2710,
+    "blackElo": 2770,
+    "result": "0-1",
+    "year": 1998,
+    "event": "Linares",
+    "pgn": "d4 d5 c4 c6 Nc3 Nf6 e3 e6 Nf3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 Bb7 O-O a6 e4 c5 d5 Qc7 dxe6 fxe6 Bc2 c4 Ng5 Nc5 Qh5+ g6 Qh6 Rg8 e5 Ncd7 f4 O-O-O Nge4 Nxe4 Nxe4 Bc5+ Kh1 Nxe5 fxe5 Qxe5",
+    "overview": "Shirov launched a fierce kingside attack in the Semi-Slav, but Kramnik coolly castled queenside and neutralized the threats. Black's counterplay in the center proved decisive as Kramnik converted his material and positional advantages.",
+    "criticalMoments": [
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r1b1k2r/2qn1ppp/p3p3/2p1P3/2p2P2/2N5/PPB3PP/R1BQ1RK1 b kq - 0 15",
+        "annotation": "Shirov plays Ng5 aiming for a kingside attack, but this allows Black to consolidate with a timely queenside castling. The knight maneuver looks aggressive but ultimately costs White valuable tempo.",
+        "concept": "Premature attack"
+      },
+      {
+        "moveNumber": 20,
+        "color": "black",
+        "fen": "2kr3r/2qn3p/p3p1pQ/2b1P3/2p1NP2/8/PPB3PP/R1B2R1K b - - 0 20",
+        "annotation": "Kramnik finds the key move Nxe5, breaking open the center and exploiting White's overextended pieces. This tactical blow transforms Black's defensive position into a winning one.",
+        "concept": "Central counterattack"
+      }
+    ],
+    "middlegameTheme": "Kingside attack vs central counterplay",
+    "lessonSummary": "This game demonstrates that launching a premature kingside attack in the Semi-Slav can backfire if Black finds the right moment to strike in the center. Kramnik's calm queenside castling and precise counterplay turned Shirov's aggression against him. The lesson is that central control often trumps a flank attack when the center is not locked."
+  },
+  {
+    "id": "mg-kramnik-nimzo-indian",
+    "openingId": "nimzo-indian",
+    "white": "Vladimir Kramnik",
+    "black": "Garry Kasparov",
+    "whiteElo": 2770,
+    "blackElo": 2849,
+    "result": "1-0",
+    "year": 2000,
+    "event": "World Chess Championship, London",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O cxd4 exd4 dxc4 Bxc4 b6 Bg5 Bb7 Re1 Nbd7 Rc1 Rc8 Qb3 Be7 Bxf6 Nxf6 Bxe6 fxe6 Qxe6+ Kh8 Qxb6 Rxc3 bxc3 Qd5",
+    "overview": "In a pivotal game of the 2000 World Championship match, Kramnik sacrificed a bishop on e6 to shatter Kasparov's pawn structure and win material. Kasparov fought back with activity but Kramnik's precise technique secured the full point.",
+    "criticalMoments": [
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "2r3k1/pb1nbppp/1p2p3/8/2BP4/1QN2N2/PP3PPP/2R1R1K1 w - - 0 15",
+        "annotation": "Kramnik plays Bxf6 followed by the powerful Bxe6 sacrifice, exploiting the weakness of Black's e6 pawn. This combination wins a pawn and leaves Black's king exposed with a shattered structure.",
+        "concept": "Positional sacrifice"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "2r4k/pb2b1pp/1Q2pn2/8/3P4/2P2N2/P4PPP/2R1R1K1 b - - 0 17",
+        "annotation": "After Qxb6, Kramnik has won two pawns and maintains pressure along the open lines. Kasparov's desperate exchange sacrifice on c3 is not enough to generate sufficient counterplay.",
+        "concept": "Material conversion"
+      }
+    ],
+    "middlegameTheme": "Piece sacrifice for structural damage",
+    "lessonSummary": "Kramnik demonstrated the power of exploiting weak pawn structures in the Nimzo-Indian, using a bishop sacrifice to demolish Kasparov's center. The game shows how a well-timed tactical blow can convert a slight positional edge into a winning material advantage. Even against the greatest player of all time, precise calculation and calm technique proved decisive."
+  },
+  {
+    "id": "mg-karpov-grunfeld-defence",
+    "openingId": "grunfeld-defence",
+    "white": "Anatoly Karpov",
+    "black": "Garry Kasparov",
+    "whiteElo": 2700,
+    "blackElo": 2735,
+    "result": "0-1",
+    "year": 1987,
+    "event": "World Chess Championship, Seville",
+    "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 Qb3 dxc4 Qxc4 O-O e4 Bg4 Be3 Nfd7 Qb3 Nb6 Rd1 Nc6 d5 Ne5 Be2 Bxf3 gxf3 Ned7 Qc2 Nc4 Bxc4 Nf6 f4 a5 e5 Nd7 f5 Nxe5",
+    "overview": "Kasparov employed the Grunfeld Defence to challenge Karpov's central pawn mass, and the strategy paid off brilliantly. After provoking White into overextending with e5 and f5, Kasparov struck back with the thematic Nxe5, demolishing the center.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r2q1rk1/ppp1ppbp/1nn3p1/3P4/4P3/1QN1BN2/PP3PPP/R2KB2R w KQ - 0 12",
+        "annotation": "Karpov pushes d5 to gain space, but this allows Kasparov's pieces to find active squares on e5 and c4. The pawn advance looks imposing but creates targets that Black can attack.",
+        "concept": "Overextended center"
+      },
+      {
+        "moveNumber": 19,
+        "color": "black",
+        "fen": "r2q1rk1/1pp1npbp/6p1/p2PP3/2B2P2/2N1B3/PPQ4P/3R1RK1 b - - 0 19",
+        "annotation": "Kasparov plays Nxe5, capturing the advanced pawn and shattering White's center completely. This move highlights the classic Grunfeld theme of destroying an imposing but fragile pawn center.",
+        "concept": "Central pawn destruction"
+      }
+    ],
+    "middlegameTheme": "Challenging and destroying the pawn center",
+    "lessonSummary": "This World Championship game is a textbook example of the Grunfeld Defence's strategic idea: allowing White to build a big center, then tearing it apart. Kasparov's patient maneuvering provoked Karpov into advancing too aggressively, and the thematic central counterattack was devastating. The game illustrates why a large pawn center can be a liability if it lacks adequate piece support."
+  },
+  {
+    "id": "mg-short-dutch-defence",
+    "openingId": "dutch-defence",
+    "white": "Nigel Short",
+    "black": "Jan Timman",
+    "whiteElo": 2660,
+    "blackElo": 2630,
+    "result": "1-0",
+    "year": 1991,
+    "event": "Tilburg",
+    "pgn": "d4 f5 g3 Nf6 Bg2 e6 Nf3 Be7 O-O O-O c4 d6 Nc3 Qe8 Re1 Qg6 e4 fxe4 Nxe4 Nxe4 Rxe4 Nc6 Qe2 Bf6 Bd2 e5 Bc3 Bg4 Rae1 Bxf3 Bxf3 Nd4 Qd1 Nxf3+ Qxf3 exd4 Rxd4 Rae8",
+    "overview": "Short handled the Dutch Defence masterfully, opening the position with e4 to exploit the weakened light squares around Black's king. Timman's kingside was left exposed after the pawn exchanges, and Short's rooks dominated the open files.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rnb2rk1/ppp1b1pp/3ppnq1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQR1K1 w - - 0 9",
+        "annotation": "Short strikes with e4, the thematic break against the Dutch, opening the position while Black's pieces are awkwardly placed. This move exploits the chronic weakness of the e6 square and the light-squared holes in Black's camp.",
+        "concept": "Thematic pawn break"
+      },
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "4rrk1/ppp3pp/3p1bq1/4p3/3RP3/2B2QP1/PP4BP/4R1K1 w - - 0 16",
+        "annotation": "With Rae1, Short doubles rooks on the e-file with tremendous pressure against Black's position. The combination of open lines and Black's structural weaknesses makes the position nearly impossible to defend.",
+        "concept": "Rook domination on open files"
+      }
+    ],
+    "middlegameTheme": "Exploiting light-square weaknesses",
+    "lessonSummary": "Short's game against Timman is a model example of how to play against the Dutch Defence by targeting the light-square weaknesses created by f5. The e4 break opened the position at just the right moment, and White's pieces flooded in through the gaps. This game teaches that the Dutch can become very dangerous for Black if White times the central break correctly."
+  },
+  {
+    "id": "mg-fischer-kings-indian-attack",
+    "openingId": "kings-indian-attack",
+    "white": "Bobby Fischer",
+    "black": "Lhamsuren Myagmarsuren",
+    "whiteElo": null,
+    "blackElo": null,
+    "result": "1-0",
+    "year": 1967,
+    "event": "Sousse Interzonal",
+    "pgn": "e4 e6 d3 d5 Nd2 Nf6 g3 c5 Bg2 Nc6 Ngf3 Be7 O-O O-O e5 Nd7 Re1 b5 Nf1 b4 h4 a5 Bf4 a4 a3 bxa3 bxa3 Na5 Ne3 Ba6 Bh3 d4 Nf1 Nb6 Ng5 Nd5 Bd2 Bxg5 Bxg5 Qxg5 hxg5 Nb3 Nf5 Nxa1 Nxe7+ Kh8 Qh5 Rxa3 Nxg6+ hxg6 Qxg6",
+    "overview": "Fischer unleashed a devastating kingside attack from the King's Indian Attack setup, sacrificing an exchange and a queen to create an unstoppable mating net. This game is widely regarded as one of Fischer's most brilliant attacking masterpieces.",
+    "criticalMoments": [
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "r4rk1/3n1ppp/b3p3/p1p1P3/p2p1B1P/P2P1NP1/2P2PB1/R2QR1K1 w - - 0 19",
+        "annotation": "Fischer repositions with Ne3-f1-g5, beginning a deep regrouping that targets Black's kingside. The knight's journey to f5 will prove to be the cornerstone of a spectacular sacrificial attack.",
+        "concept": "Piece regrouping for attack"
+      },
+      {
+        "moveNumber": 25,
+        "color": "white",
+        "fen": "r4r1k/4Npp1/6p1/4P1P1/3p4/pn1P4/2P2P2/3Q2K1 w - - 0 25",
+        "annotation": "Fischer plays Qh5, threatening devastating discoveries with the knight on e7. The combination of Nxg6+ and Qxg6 creates an inescapable mating attack despite Black's extra material.",
+        "concept": "Sacrificial mating attack"
+      }
+    ],
+    "middlegameTheme": "Kingside sacrificial attack",
+    "lessonSummary": "Fischer's immortal King's Indian Attack game shows the explosive potential hidden in this quiet opening system. By patiently building up on the kingside while Black expanded on the queenside, Fischer created the conditions for a brilliant sacrificial combination. The game teaches that in the KIA, White's kingside attack can arrive with devastating speed once the pieces are optimally placed."
   }
 ]
