@@ -15,6 +15,7 @@ import {
   X,
   MessageCircle,
   ChevronLeft,
+  AlertTriangle,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
@@ -38,6 +39,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/play', label: 'Play', icon: Swords },
   { to: '/analysis', label: 'Analysis', icon: Search },
   { to: '/games', label: 'Games', icon: Database },
+  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/stats', label: 'Stats', icon: BarChart3 },
   { to: '/settings', label: 'Settings', icon: Settings },
   { to: '/kid', label: 'Kids Mode', icon: Baby },
