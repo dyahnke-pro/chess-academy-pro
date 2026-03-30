@@ -770,7 +770,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Budapest Gambit: Fajarowicz Variation",
@@ -1348,7 +1349,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Budapest Gambit: Rubinstein Variation",
@@ -1945,7 +1947,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Budapest Gambit: Main Line with Bf4",
@@ -2571,6 +2574,406 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ]
+        }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "Pin Exploitation",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Budapest Gambit, the Pin Exploitation is a tactical pattern you should know. The Bb4+ pin is the key tactical idea. After the exchanges, Black has recovered the pawn, castled safely, and has active piece play. White's slightly awkward development gives Black easy equality. Let's walk through how it works."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "White captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ng4",
+          "annotation": "Black continues with Ng4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bb4+",
+          "annotation": "Black gives check with Bb4+! This is a critical moment in the trap."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "Nbd2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black plays Qe7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "a3",
+          "annotation": "White plays a3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Ngxe5",
+          "annotation": "Black captures with Ngxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays e3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bxd2+",
+          "annotation": "Bxd2+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Qxd2",
+          "annotation": "Qxd2! Now the trap is revealed. White wins material with this capture."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O! The trap is sprung. Black has a winning position. This is the key takeaway from the Pin Exploitation.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fajarowicz Trick",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Budapest Gambit, the Fajarowicz Trick is a tactical pattern you should know. In the Fajarowicz, Black develops rapidly and creates pressure along the e-file. If White isn't careful, the knight on e4 combined with ...Bf5 and ...Re8 generates dangerous threats. Let's walk through how it works."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "White captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ne4",
+          "annotation": "Black continues with Ne4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "a3",
+          "annotation": "a3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qc2",
+          "annotation": "Qc2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black plays Bf5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "exd6",
+          "annotation": "White captures with exd6. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "d6",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxd6",
+          "annotation": "Black captures with Bxd6. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "Bg2! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Re8",
+          "annotation": "Re8! The trap is sprung. Black has a winning position. This is the key takeaway from the Fajarowicz Trick."
+        }
+      ]
+    },
+    {
+      "name": "Don't Allow Nd2-f3 Consolidation",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Budapest Gambit, the Don't Allow Nd2-f3 Consolidation is a dangerous line you must be aware of. If Black delays challenging the center, White consolidates with Nd2 and e3. Black must act quickly to recover the pawn before White's position becomes too solid. Let's see why."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ng4",
+          "annotation": "Ng4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White continues with Bf4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bb4+",
+          "annotation": "Bb4+! Check forces a response. This is where the danger begins."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ngf3",
+          "annotation": "White continues with Ngf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Qe7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "a3",
+          "annotation": "White plays a3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Ngxe5",
+          "annotation": "Ngxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays e3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bxd2+",
+          "annotation": "Bxd2+. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Qxd2",
+          "annotation": "Qxd2! This is the move that causes all the trouble."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Overextension Warning",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Budapest Gambit, the Overextension Warning is a dangerous line you must be aware of. In quieter lines, Black must not overextend. Keep the position balanced with natural development. The Budapest gives equality but not an advantage — don't push too hard for a win. Let's see why."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ng4",
+          "annotation": "Ng4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Bc5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays e3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Be2",
+          "annotation": "White continues with Be2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Ngxe5",
+          "annotation": "Ngxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "b3",
+          "annotation": "White plays b3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb2",
+          "annotation": "Bb2. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Bf5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
     }

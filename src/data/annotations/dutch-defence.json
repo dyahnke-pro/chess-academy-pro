@@ -1003,7 +1003,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Stonewall Variation",
@@ -1552,7 +1553,8 @@
           ],
           "highlights": []
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Classical Dutch",
@@ -2143,7 +2145,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Anti-Dutch (2.Bg5)",
@@ -2732,7 +2735,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Fianchetto with e4 Break",
@@ -3482,6 +3486,544 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ]
+        }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "Kingside Attack Qh5",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Dutch Defence, the Kingside Attack Qh5 is a tactical pattern you should know. After ...Qe8 heading to h5, White tries to break with e4. If Black recaptures well, the open f-file and active pieces give Black a strong kingside initiative. The queen on f7 supports both the kingside and central play. Let's walk through how it works."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White plays Bg2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black continues with g6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black plays Bg7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qe8",
+          "annotation": "Black continues with Qe8. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qf7",
+          "annotation": "Black plays Qf7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "fxe4",
+          "annotation": "Black captures with fxe4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "e4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "White captures with Nxe4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black captures with Nxe4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe4",
+          "annotation": "White captures with Rxe4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black continues with Nc6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nd4",
+          "annotation": "Black plays Nd4, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "White captures with Nxd4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bxd4",
+          "annotation": "Black captures with Bxd4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Be3",
+          "annotation": "Be3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bxe3",
+          "annotation": "Bxe3. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Rxe3",
+          "annotation": "Rxe3! Now the trap is revealed. White wins material with this capture."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Bf5! The trap is sprung. Black has a winning position. This is the key takeaway from the Kingside Attack Qh5."
+        }
+      ]
+    },
+    {
+      "name": "Stonewall Bind",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Dutch Defence, the Stonewall Bind is a tactical pattern you should know. The Stonewall setup with ...d5, ...c6, ...Bd6 gives Black a rock-solid center. The knight on e4 is a powerful outpost and the dark-squared bishop eyes the kingside. White's Bg2 bites on the d5 pawn chain. Let's walk through how it works."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White plays Bg2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black continues with e6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black continues with Bd6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black plays c6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "b3",
+          "annotation": "White plays b3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black continues with Qe7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bb2",
+          "annotation": "Bb2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White plays Nbd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black continues with Nbd7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Ne5",
+          "annotation": "Ne5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "White captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black continues with Bc5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Ne4",
+          "annotation": "Ne4. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Nd4",
+          "annotation": "Nd4! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Bd7",
+          "annotation": "Bd7! The trap is sprung. Black has a winning position. This is the key takeaway from the Stonewall Bind."
+        }
+      ]
+    },
+    {
+      "name": "Weak e5 Square",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Dutch Defence, the Weak e5 Square is a dangerous line you must be aware of. If Black plays ...e5 without proper preparation, the d6 and e5 squares become weak. White can plant a knight on d5 or e5 and dominate the position. Always prepare ...e5 with proper piece coordination. Let's see why."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White plays Bg2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "c4",
+          "annotation": "White continues with c4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Qe8",
+          "annotation": "Qe8 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "b3",
+          "annotation": "White continues with b3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ba3",
+          "annotation": "White continues with Ba3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Rf7",
+          "annotation": "Rf7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "White plays Nd5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "cxd5",
+          "annotation": "cxd5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "c6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "dxc6",
+          "annotation": "dxc6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc6",
+          "annotation": "Nxc6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Rac1",
+          "annotation": "Rac1. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Be6",
+          "annotation": "Be6. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "Nd2. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    },
+    {
+      "name": "Neglecting Development",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Dutch Defence, the Neglecting Development is a dangerous line you must be aware of. Playing too many pawn moves without developing pieces lets White seize the initiative with e4. Black's position becomes cramped and the king is exposed. Develop pieces first, then push pawns. Let's see why."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "g3",
+          "annotation": "White plays g3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White plays Bg2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "c4",
+          "annotation": "White continues with c4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "c6",
+          "annotation": "c6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White continues with Qc2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Kh8",
+          "annotation": "Kh8. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "fxe4",
+          "annotation": "fxe4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "e4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxe4",
+          "annotation": "Qxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Bf5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White continues with Qe2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "c5",
+          "annotation": "White plays c5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White continues with Bf4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Qe8",
+          "annotation": "Qe8. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Rfe1",
+          "annotation": "Rfe1. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Qf7",
+          "annotation": "Qf7. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "Nd2. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
     }

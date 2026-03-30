@@ -954,7 +954,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Giuoco Pianissimo",
@@ -1337,7 +1338,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Evans Gambit",
@@ -1730,7 +1732,8 @@
           ],
           "highlights": []
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Italian: Hungarian Defense",
@@ -2090,7 +2093,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Two Knights Defense",
@@ -2524,6 +2528,368 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ]
+        }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "Blackburne Shilling Gambit Refutation",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Italian Game, the Blackburne Shilling Gambit Refutation is a tactical pattern you should know. Black tries the tricky 3...Nd4 hoping for Nxe5 Qg5 and tricks. But after Nxf7! White wins the rook on h8. If Qxg2 Rf1, White is up massive material. Don't fall for Bxf7+ which lets Black equalize. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nd4",
+          "annotation": "Black continues with Nd4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qg5",
+          "annotation": "Black plays Qg5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nxf7",
+          "annotation": "White captures with Nxf7. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxg2",
+          "annotation": "Black captures with Qxg2. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rf1",
+          "annotation": "Rf1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qxe4+",
+          "annotation": "Qxe4+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Be2",
+          "annotation": "Be2! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3! The trap is sprung. Black has a winning position. This is the key takeaway from the Blackburne Shilling Gambit Refutation."
+        }
+      ]
+    },
+    {
+      "name": "Fried Liver Attack",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Italian Game, the Fried Liver Attack is a tactical pattern you should know. The legendary Fried Liver Attack — White sacrifices a knight on f7 to drag the Black king into the center. After Qf3+ Ke6, the king is in mortal danger. At the amateur level this is absolutely devastating and wins the vast majority of games. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black continues with Nf6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Ng5",
+          "annotation": "Ng5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxf7",
+          "annotation": "White captures with Nxf7. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Kxf7",
+          "annotation": "Black captures with Kxf7. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qf3+",
+          "annotation": "White gives check with Qf3+! This is a critical moment in the trap."
+        },
+        {
+          "san": "Ke6",
+          "annotation": "Black continues with Ke6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nb4",
+          "annotation": "Black plays Nb4, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "c6! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "d4! The trap is sprung. White has a winning position. This is the key takeaway from the Fried Liver Attack.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Traxler Counterattack",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Italian Game, the Traxler Counterattack is a dangerous line you must be aware of. Instead of 4...d5, Black plays the shocking 4...Bc5! sacrificing f7 to launch a ferocious counterattack. After Bxf2+ and Nxe4+, Black gets a raging attack. If you play the Fried Liver, you MUST know this line — otherwise avoid Ng5 entirely. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ng5",
+          "annotation": "White continues with Ng5. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Bc5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nxf7",
+          "annotation": "Nxf7 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxf2+",
+          "annotation": "Bxf2+ — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Kxf2",
+          "annotation": "Kxf2 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "f2",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4+",
+          "annotation": "Nxe4+. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Kg1",
+          "annotation": "Kg1. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "arrows": [
+            {
+              "from": "f2",
+              "to": "g1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qh4",
+          "annotation": "Qh4. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    },
+    {
+      "name": "Max Lange Attack Gone Wrong",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Italian Game, the Max Lange Attack Gone Wrong is a dangerous line you must be aware of. The Max Lange Attack is sharp but double-edged. If Black knows the theory with ...d5 and ...dxc4, the position becomes extremely complicated. Black's counterplay with ...Rg8 and ...Be6 can be very dangerous if White doesn't play precisely. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "d4",
+          "annotation": "White continues with d4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "exd4",
+          "annotation": "exd4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Bc5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "e5",
+          "annotation": "White continues with e5. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "exf6",
+          "annotation": "exf6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "dxc4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "fxg7",
+          "annotation": "fxg7 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "g7",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rg8",
+          "annotation": "Rg8. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Re1+",
+          "annotation": "Re1+! Check — and the position is very dangerous for the defending side."
+        },
+        {
+          "san": "Be6",
+          "annotation": "Be6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
     }

@@ -29,11 +29,23 @@ export async function loadSubLineAnnotations(
   if (!data?.subLines || data.subLines.length === 0) return null;
 
   // subLineKey format: 'variation-N', 'trap-N', 'warning-N'
-  const match = /^(?:variation|trap|warning)-(\d+)$/.exec(subLineKey);
+  const match = /^(variation|trap|warning)-(\d+)$/.exec(subLineKey);
   if (!match) return null;
 
-  const idx = parseInt(match[1], 10);
-  return data.subLines[idx]?.moveAnnotations ?? null;
+  const type = match[1] as 'variation' | 'trap' | 'warning';
+  const localIdx = parseInt(match[2], 10);
+
+  // If subLines have type fields, do type-aware lookup
+  const hasTypes = data.subLines.some((sl) => sl.type != null);
+  if (hasTypes) {
+    const matching = data.subLines.filter((sl) => sl.type === type);
+    return matching[localIdx]?.moveAnnotations ?? null;
+  }
+
+  // Legacy fallback: subLines are ordered [variations...] only, no type field.
+  // variation-N → direct index. trap/warning → not available.
+  if (type !== 'variation') return null;
+  return data.subLines[localIdx]?.moveAnnotations ?? null;
 }
 
 export function clearAnnotationCache(): void {

@@ -94,6 +94,7 @@ export interface OpeningMoveAnnotation {
 
 export interface OpeningSubLine {
   name: string;
+  type?: 'variation' | 'trap' | 'warning';
   moveAnnotations: OpeningMoveAnnotation[];
 }
 

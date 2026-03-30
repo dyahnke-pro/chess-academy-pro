@@ -4,334 +4,2520 @@
     {
       "san": "e4",
       "annotation": "White opens with the king's pawn, controlling the center and opening lines for the bishop and queen. This is the most popular first move in chess, leading to open tactical positions.",
-      "plans": ["Control the center and develop pieces rapidly", "Prepare for an open game with tactical chances"],
-      "arrows": [{"from": "e2", "to": "e4", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Control the center and develop pieces rapidly",
+        "Prepare for an open game with tactical chances"
+      ],
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e5",
       "annotation": "Black mirrors White's central advance, establishing equal control of the center. This is the classical response, leading to open games where both sides have active piece play.",
-      "plans": ["Maintain central equality", "Develop knights to f6 and c6 for active piece play"],
-      "arrows": [{"from": "e7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Maintain central equality",
+        "Develop knights to f6 and c6 for active piece play"
+      ],
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops the knight to attack the e5 pawn while controlling the center. This is the most natural developing move, preparing for the Ruy Lopez, Italian Game, or Scotch Game depending on White's next moves.",
-      "plans": ["Attack e5 and prepare Bb5 for the Ruy Lopez", "Develop pieces with tempo"],
-      "arrows": [{"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f3", "to": "e5", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "f3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Attack e5 and prepare Bb5 for the Ruy Lopez",
+        "Develop pieces with tempo"
+      ],
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc6",
       "annotation": "Black defends the e5 pawn with the knight, developing a piece to its most natural square. The knight on c6 controls important central squares and prepares for various defense systems.",
-      "plans": ["Defend e5 and develop harmoniously", "Prepare ...a6 and ...b5 for the Marshall Attack setup"],
-      "arrows": [{"from": "b8", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c6", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "c6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Defend e5 and develop harmoniously",
+        "Prepare ...a6 and ...b5 for the Marshall Attack setup"
+      ],
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c6",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb5",
       "annotation": "The Ruy Lopez! White pins the knight that defends e5, creating long-term pressure. This is one of the oldest and most respected openings in chess. The bishop on b5 threatens to capture on c6, doubling Black's pawns and undermining the defense of e5.",
       "pawnStructure": "The center remains symmetrical with pawns on e4 and e5. The Ruy Lopez aims to exert slow pressure and maintain a slight initiative.",
-      "plans": ["Maintain pressure on the c6 knight and e5 pawn", "Build a strong center and prepare d4"],
-      "arrows": [{"from": "f1", "to": "b5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b5", "to": "c6", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Maintain pressure on the c6 knight and e5 pawn",
+        "Build a strong center and prepare d4"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b5",
+          "to": "c6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a6",
       "annotation": "The Morphy Defense — Black asks the bishop an important question: retreat or capture? This move gains tempo and prepares ...b5 to push the bishop further back. Almost every top-level Ruy Lopez game features this move.",
-      "plans": ["Force the bishop to decide its future", "Prepare ...b5 and ...Bb7 for queenside expansion"],
-      "arrows": [{"from": "a7", "to": "a6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a6", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "a6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Force the bishop to decide its future",
+        "Prepare ...b5 and ...Bb7 for queenside expansion"
+      ],
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a6",
+          "to": "b5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ba4",
       "annotation": "White retreats the bishop, maintaining the pin on the c6 knight. The bishop on a4 still puts pressure on the queenside and can later retreat to b3 where it eyes the f7 pawn. White preserves the bishop pair and keeps the tension.",
-      "plans": ["Maintain the pin and pressure on c6", "Retreat to b3 after ...b5 to target f7"],
-      "arrows": [{"from": "b5", "to": "a4", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a4", "to": "c6", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "a4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Maintain the pin and pressure on c6",
+        "Retreat to b3 after ...b5 to target f7"
+      ],
+      "arrows": [
+        {
+          "from": "b5",
+          "to": "a4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a4",
+          "to": "c6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the kingside knight, attacking the e4 pawn and preparing to castle. This is the most flexible response, delaying the decision of where to put the dark-squared bishop. The knight on f6 is Black's most active minor piece.",
-      "plans": ["Attack e4 and prepare kingside castling", "Set up the Marshall Attack with ...b5 and ...d5"],
-      "arrows": [{"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f6", "to": "e4", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "f6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Attack e4 and prepare kingside castling",
+        "Set up the Marshall Attack with ...b5 and ...d5"
+      ],
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "White castles, securing the king and connecting the rooks. Castling early is essential in the Ruy Lopez to prepare Re1 supporting the e4 pawn. The king is safe on g1 and the rook will soon join the central battle.",
-      "plans": ["Play Re1 to support the e4 pawn", "Prepare d3 or d4 to maintain the center"],
-      "arrows": [{"from": "e1", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "h1", "to": "e1", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "g1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play Re1 to support the e4 pawn",
+        "Prepare d3 or d4 to maintain the center"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "h1",
+          "to": "e1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Be7",
       "annotation": "Black develops the bishop to e7, a solid square that prepares castling. In the Marshall Attack, Black deliberately plays this modest bishop move rather than the more ambitious ...Bc5, saving the dynamic ideas for after castling and ...d5.",
-      "plans": ["Castle kingside next move", "Prepare the Marshall pawn sacrifice with ...b5 and ...d5"],
-      "arrows": [{"from": "f8", "to": "e7", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e7", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Castle kingside next move",
+        "Prepare the Marshall pawn sacrifice with ...b5 and ...d5"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "e7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Re1",
       "annotation": "White places the rook behind the e4 pawn, the most natural square. The rook defends e4 and prepares for the eventual opening of the e-file. This is a standard Ruy Lopez move that strengthens White's central control.",
-      "plans": ["Support e4 and prepare d4 central advance", "Keep the center stable while completing development"],
-      "arrows": [{"from": "f1", "to": "e1", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e1", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "e1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Support e4 and prepare d4 central advance",
+        "Keep the center stable while completing development"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "e1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e1",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b5",
       "annotation": "Black pushes the queenside pawns, forcing the bishop back and gaining space. This move is essential to the Marshall Attack — it prepares the d5 pawn break by first securing the queenside. The b5 advance also opens future possibilities for the light-squared bishop.",
-      "plans": ["Force Bb3 and then play ...d5 for the Marshall sacrifice", "Gain queenside space and open the diagonal for the bishop"],
-      "arrows": [{"from": "b7", "to": "b5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b5", "to": "a4", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Force Bb3 and then play ...d5 for the Marshall sacrifice",
+        "Gain queenside space and open the diagonal for the bishop"
+      ],
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b5",
+          "to": "a4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bb3",
       "annotation": "White retreats the bishop to b3, a strong diagonal where it targets the f7 pawn. The bishop is well-placed here, though it will eventually become a target after Black's ...d5 advance. This is the standard retreat in the Ruy Lopez.",
-      "plans": ["Target the f7 pawn from the a2-g8 diagonal", "Prepare c3 and d4 for a central pawn push"],
-      "arrows": [{"from": "a4", "to": "b3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b3", "to": "f7", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "b3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Target the f7 pawn from the a2-g8 diagonal",
+        "Prepare c3 and d4 for a central pawn push"
+      ],
+      "arrows": [
+        {
+          "from": "a4",
+          "to": "b3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b3",
+          "to": "f7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Black castles, completing kingside development and setting the stage for the Marshall Attack. With the king safe, Black can now launch the aggressive ...d5 pawn sacrifice. The king on g8 will be surprisingly safe despite Black's coming kingside attack plans — it's White's king that will be in danger.",
-      "plans": ["Launch the Marshall Attack with ...d5 on the next move", "Sacrifice the e-pawn for a ferocious kingside attack"],
-      "arrows": [{"from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "g8", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Launch the Marshall Attack with ...d5 on the next move",
+        "Sacrifice the e-pawn for a ferocious kingside attack"
+      ],
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c3",
       "annotation": "White prepares d4 to build an ideal pawn center. The c3 pawn supports the d4 advance and prevents any knight incursions to d4 or b4. This is standard Ruy Lopez technique — solidifying the center before launching any action.",
       "pawnStructure": "White prepares the c3-d4 pawn duo, aiming for maximum central control. This structure is the backbone of White's Ruy Lopez strategy.",
-      "plans": ["Play d4 to open the center with advantage", "Build a strong pawn center and develop the queenside"],
-      "arrows": [{"from": "c2", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c3", "to": "d4", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "c3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play d4 to open the center with advantage",
+        "Build a strong pawn center and develop the queenside"
+      ],
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
       "annotation": "The Marshall Attack begins! Black sacrifices a pawn with this bold central thrust, breaking open the position before White can consolidate with d4. Frank Marshall kept this move secret for years, saving it for a crucial game against Capablanca in 1918. The idea is to open lines toward White's king and generate a ferocious attack.",
       "pawnStructure": "Black opens the center at the cost of a pawn. The resulting open lines and diagonals favor Black's pieces, which are aimed at White's king.",
-      "plans": ["Sacrifice the e5 pawn for open lines and piece activity", "Launch a kingside attack with ...Bd6, ...Qh4, and ...Bg4", "Use the open e-file and diagonals for the attack"],
-      "alternatives": ["d6 — the solid Chigorin variation, avoiding the gambit"],
-      "arrows": [{"from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d5", "to": "e4", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e5", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Sacrifice the e5 pawn for open lines and piece activity",
+        "Launch a kingside attack with ...Bd6, ...Qh4, and ...Bg4",
+        "Use the open e-file and diagonals for the attack"
+      ],
+      "alternatives": [
+        "d6 — the solid Chigorin variation, avoiding the gambit"
+      ],
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "exd5",
       "annotation": "White captures, the most principled response. Declining with d3 or d4 gives Black easy equality. By accepting the pawn, White takes on the challenge of defending with an extra pawn but facing a powerful attack.",
-      "plans": ["Win a pawn and try to defend accurately", "Prepare to weather Black's coming initiative"],
-      "arrows": [{"from": "e4", "to": "d5", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Win a pawn and try to defend accurately",
+        "Prepare to weather Black's coming initiative"
+      ],
+      "arrows": [
+        {
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nxd5",
       "annotation": "Black recaptures with the knight, centralizing it powerfully on d5. The knight on d5 is a monster — it controls key squares and can reroute to f4 or f6 depending on the position. More importantly, the e5 pawn is now hanging, and Black is happy to sacrifice it.",
-      "plans": ["Allow Nxe5, then launch the attack after ...Nxe5 Rxe5 c6", "Centralize pieces and aim for the kingside"],
-      "arrows": [{"from": "f6", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e5", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Allow Nxe5, then launch the attack after ...Nxe5 Rxe5 c6",
+        "Centralize pieces and aim for the kingside"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nxe5",
       "annotation": "White captures the e5 pawn, winning material. However, this is exactly what Black wants — the open e-file and active piece play will generate a powerful attack against White's king. White has an extra pawn but must survive the coming storm.",
-      "plans": ["Hold the extra pawn and defend accurately", "Try to simplify and reach a safe endgame"],
-      "arrows": [{"from": "f3", "to": "e5", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Hold the extra pawn and defend accurately",
+        "Try to simplify and reach a safe endgame"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nxe5",
       "annotation": "Black recaptures, exchanging knights and opening the e-file completely. The e-file is now a highway for Black's rook, and the knight on e5 is temporarily powerful before White chases it away. Black's compensation for the pawn is becoming clear.",
-      "plans": ["Use the open e-file for the rook", "Prepare ...c6, ...Bd6, and ...Qh4 for the kingside attack"],
-      "arrows": [{"from": "c6", "to": "e5", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "e5", "to": "f3", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Use the open e-file for the rook",
+        "Prepare ...c6, ...Bd6, and ...Qh4 for the kingside attack"
+      ],
+      "arrows": [
+        {
+          "from": "c6",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "e5",
+          "to": "f3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rxe5",
       "annotation": "White captures the knight, clearing the e-file but placing the rook on an exposed square. The rook on e5 will become a target for Black's pieces, particularly after ...Bd6 and ...c6. White has won two pawns but Black's attack is gathering steam.",
       "pawnStructure": "Black is down two pawns but has massive compensation. The open center and Black's superior piece activity create dangerous attacking chances.",
-      "plans": ["Use the active rook while defending the king", "Try to return material at the right moment to defuse the attack"],
-      "arrows": [{"from": "e1", "to": "e5", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Use the active rook while defending the king",
+        "Try to return material at the right moment to defuse the attack"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c6",
       "annotation": "Black supports the d5 knight and prepares to drive the knight to more active squares. The c6 pawn also opens the diagonal for the queen to reach the kingside via d6-h2 or via h4. This quiet move is the key to the Marshall — it solidifies the position before the storm.",
-      "plans": ["Support the knight and prepare ...Bd6 to attack the rook", "Clear the d8-h4 diagonal for the queen", "Build the kingside attack step by step"],
-      "arrows": [{"from": "c7", "to": "c6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "c6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Support the knight and prepare ...Bd6 to attack the rook",
+        "Clear the d8-h4 diagonal for the queen",
+        "Build the kingside attack step by step"
+      ],
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c6",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d4",
       "annotation": "White advances the d-pawn, gaining central space and opening lines for the bishop. This is the most common continuation, building a strong center and trying to make the extra pawns count. However, it also opens the position for Black's pieces.",
-      "plans": ["Establish a strong center and develop the queenside", "Use the extra pawns to gain a long-term advantage"],
-      "alternatives": ["d3 — a more cautious approach, keeping things closed"],
-      "arrows": [{"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Establish a strong center and develop the queenside",
+        "Use the extra pawns to gain a long-term advantage"
+      ],
+      "alternatives": [
+        "d3 — a more cautious approach, keeping things closed"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bd6",
       "annotation": "The bishop attacks the rook on e5, forcing it to make a decision. From d6, the bishop also eyes the kingside, particularly the h2 pawn. This is a critical developing move that both attacks and prepares the kingside assault.",
-      "plans": ["Drive the rook from e5", "Set up ...Qh4 for a direct attack on the kingside", "Use the bishop's diagonal toward h2 for mating threats"],
-      "arrows": [{"from": "e7", "to": "d6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d6", "to": "e5", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "d6", "to": "h2", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d6", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "h2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Drive the rook from e5",
+        "Set up ...Qh4 for a direct attack on the kingside",
+        "Use the bishop's diagonal toward h2 for mating threats"
+      ],
+      "arrows": [
+        {
+          "from": "e7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d6",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "d6",
+          "to": "h2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "h2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Re1",
       "annotation": "White retreats the rook to the safe e1 square, maintaining the open e-file. The rook on e1 defends the first rank and keeps an eye on Black's pieces. Other retreats like Re2 are possible but block the second rank.",
-      "plans": ["Keep the e-file under control", "Develop the queenside pieces and consolidate"],
-      "alternatives": ["Re2 — keeping the rook active but blocking the second rank"],
-      "arrows": [{"from": "e5", "to": "e1", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Keep the e-file under control",
+        "Develop the queenside pieces and consolidate"
+      ],
+      "alternatives": [
+        "Re2 — keeping the rook active but blocking the second rank"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "e1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qh4",
       "annotation": "The queen swoops to h4, launching the direct kingside attack. This is the signature move of the Marshall Attack — the queen threatens Qxh2 mate and coordinates with the bishop on d6. White must defend carefully to survive the onslaught.",
-      "plans": ["Threaten Qxh2 checkmate", "Coordinate with ...Bg4 to add more attackers", "Build a devastating kingside assault"],
-      "arrows": [{"from": "d8", "to": "h4", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "h4", "to": "h2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "h4", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "h2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Threaten Qxh2 checkmate",
+        "Coordinate with ...Bg4 to add more attackers",
+        "Build a devastating kingside assault"
+      ],
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "h4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "h4",
+          "to": "h2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "h2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "g3",
       "annotation": "White is forced to weaken the kingside to stop Qxh2 mate. The g3 move creates dark-square weaknesses around the king but is necessary. Now Black shifts the queen and brings more pieces into the attack.",
       "pawnStructure": "White's kingside is permanently weakened by g3. The dark squares f2, g3, and h2 become potential targets for Black's pieces.",
-      "plans": ["Block the mate threat on h2", "Try to develop and use the extra pawns"],
-      "arrows": [{"from": "g2", "to": "g3", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "g3", "color": "rgba(255, 80, 80, 0.3)"}, {"square": "f2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Block the mate threat on h2",
+        "Try to develop and use the extra pawns"
+      ],
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Qh3",
       "annotation": "The queen repositions to h3, maintaining the kingside pressure while targeting g2 and preparing to coordinate with ...Bg4. From h3, the queen also keeps an eye on the d3 and e3 squares, supporting future pawn advances.",
-      "plans": ["Prepare ...Bg4 to add another attacker", "Maintain pressure on g2 and the kingside", "Set up tactical ideas with the bishop pair"],
-      "arrows": [{"from": "h4", "to": "h3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "h3", "to": "g2", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "h3", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "h3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Prepare ...Bg4 to add another attacker",
+        "Maintain pressure on g2 and the kingside",
+        "Set up tactical ideas with the bishop pair"
+      ],
+      "arrows": [
+        {
+          "from": "h4",
+          "to": "h3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "h3",
+          "to": "g2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "h3",
+          "to": "d3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd2",
       "annotation": "White develops the knight to protect the kingside and prepare to reroute it to f1 or f3 for defensive purposes. The knight on d2 is a key defender, covering f1 and e4, though it temporarily blocks the dark-squared bishop.",
-      "plans": ["Reroute the knight to f1 or f3 for king defense", "Try to untangle and activate the queenside pieces"],
-      "arrows": [{"from": "b1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d2", "to": "f1", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Reroute the knight to f1 or f3 for king defense",
+        "Try to untangle and activate the queenside pieces"
+      ],
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d2",
+          "to": "f1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg4",
       "annotation": "The bishop enters the attack, targeting the f3 square and cutting off potential knight retreats. This is a key attacking idea in the Marshall — the bishop on g4 pins nothing but creates tactical threats and supports the queen's kingside assault.",
-      "plans": ["Add another piece to the kingside attack", "Threaten ...Bf3 to weaken White's king shelter", "Coordinate bishop and queen against g2"],
-      "arrows": [{"from": "c8", "to": "g4", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "g4", "to": "f3", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "g4", "to": "e2", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "g4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Add another piece to the kingside attack",
+        "Threaten ...Bf3 to weaken White's king shelter",
+        "Coordinate bishop and queen against g2"
+      ],
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "g4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g4",
+          "to": "f3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "g4",
+          "to": "e2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qf1",
       "annotation": "White retreats the queen to f1 to defend the kingside. This is a common defensive resource — the queen on f1 covers f2 and helps shield the king. However, the queen is passive here and White's pieces lack coordination.",
-      "plans": ["Defend the kingside with the queen", "Try to reroute pieces for active defense"],
-      "arrows": [{"from": "d1", "to": "f1", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "f1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Defend the kingside with the queen",
+        "Try to reroute pieces for active defense"
+      ],
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "f1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rae8",
       "annotation": "Black brings the last rook into the attack via the open e-file. Both rooks are now aimed at White's position, and the combined force of queen, two bishops, and two rooks creates enormous pressure. This is the full Marshall Attack in its glory.",
       "pawnStructure": "Black remains down a pawn but has total control of the open e-file and superior piece coordination. The attack is worth far more than the material deficit.",
-      "plans": ["Double rooks on the e-file for maximum pressure", "Threaten ...Re2 to invade the second rank", "Keep building the attack until White collapses"],
-      "arrows": [{"from": "a8", "to": "e8", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e8", "to": "e1", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "e8", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e1", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Double rooks on the e-file for maximum pressure",
+        "Threaten ...Re2 to invade the second rank",
+        "Keep building the attack until White collapses"
+      ],
+      "arrows": [
+        {
+          "from": "a8",
+          "to": "e8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e8",
+          "to": "e1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops the knight to f3, trying to block the e-file and defend. The knight on f3 is a key defensive piece, covering h2, e1, and d4. White is trying to consolidate but Black's attacking force is formidable.",
-      "plans": ["Block the e-file with the knight", "Defend the kingside and try to simplify"],
-      "arrows": [{"from": "d2", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "f3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Block the e-file with the knight",
+        "Defend the kingside and try to simplify"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Re6",
       "annotation": "Black lifts the rook to e6, a multipurpose move. The rook can swing to f6 or h6 to join the kingside attack, or stay on e6 to support the other rook. This rook lift is a typical attacking technique that adds tremendous firepower.",
-      "plans": ["Swing the rook to f6 or h6 for a kingside attack", "Double rooks on the e-file with ...Rae8", "Create tactical threats involving the rook and queen"],
-      "arrows": [{"from": "e8", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e6", "to": "h6", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "e6", "to": "f6", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "e6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Swing the rook to f6 or h6 for a kingside attack",
+        "Double rooks on the e-file with ...Rae8",
+        "Create tactical threats involving the rook and queen"
+      ],
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e6",
+          "to": "h6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e6",
+          "to": "f6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rxe6",
       "annotation": "White captures the rook, trying to simplify and reduce the attacking force. Trading a pair of rooks is usually good for the defender, but Black recaptures with threats and maintains the initiative.",
-      "plans": ["Simplify the position to ease the defense", "Use the open file for counter-pressure after the exchange"],
-      "arrows": [{"from": "e1", "to": "e6", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "e6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Simplify the position to ease the defense",
+        "Use the open file for counter-pressure after the exchange"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "e6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "fxe6",
       "annotation": "Black recaptures with the f-pawn, opening the f-file for the remaining rook. The f-file is now a deadly highway aimed directly at White's king. The pawn on e6 also supports a potential ...d5-d4-d3 advance and keeps the center fluid.",
       "pawnStructure": "The f-file is now open, giving Black's rook direct access to White's king. The e6 pawn supports future central advances.",
-      "plans": ["Use the open f-file to attack White's king", "Prepare ...Rf8 to swing the rook into the attack", "Advance ...e5-e4 to open more lines"],
-      "arrows": [{"from": "f7", "to": "e6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f8", "to": "f1", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "e6", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "f8", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Use the open f-file to attack White's king",
+        "Prepare ...Rf8 to swing the rook into the attack",
+        "Advance ...e5-e4 to open more lines"
+      ],
+      "arrows": [
+        {
+          "from": "f7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f8",
+          "to": "f1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bd2",
       "annotation": "White develops the bishop to d2, trying to complete development and connect the rooks. The bishop is somewhat passive here but covers some important squares. White is still struggling to find a safe setup against Black's continuing initiative.",
-      "plans": ["Complete development and try to consolidate", "Prepare Bc1 or Be3 for better placement"],
-      "arrows": [{"from": "c1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "d2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Complete development and try to consolidate",
+        "Prepare Bc1 or Be3 for better placement"
+      ],
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bxf3",
       "annotation": "Black exchanges the bishop for the knight, removing a key defender and opening lines toward the king. After this capture, White's kingside is severely weakened and the queen on h3 eyes the g2 square with renewed menace.",
-      "plans": ["Remove a key defender of the kingside", "Open lines for the queen and rook to attack g2"],
-      "arrows": [{"from": "g4", "to": "f3", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "f3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Remove a key defender of the kingside",
+        "Open lines for the queen and rook to attack g2"
+      ],
+      "arrows": [
+        {
+          "from": "g4",
+          "to": "f3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qxf3",
       "annotation": "White recaptures with the queen, the only reasonable option. The queen on f3 defends g2 and guards against immediate threats. But now Black's rook enters the attack on the f-file with devastating effect.",
-      "plans": ["Defend g2 and try to hold the position", "Seek piece trades to ease the pressure"],
-      "arrows": [{"from": "f1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f3", "to": "g2", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "f3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Defend g2 and try to hold the position",
+        "Seek piece trades to ease the pressure"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "g2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qh1+",
       "annotation": "The queen delivers check from h1, forcing White's king to the corner. This check is not just flashy — it forces the king to an inferior square and sets up further tactical ideas. Black's attack is relentless.",
-      "plans": ["Force the king to an awkward square", "Follow up with ...Rf8 to bring the rook into the attack"],
-      "arrows": [{"from": "h3", "to": "h1", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "h1", "to": "g1", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "h1", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "g1", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Force the king to an awkward square",
+        "Follow up with ...Rf8 to bring the rook into the attack"
+      ],
+      "arrows": [
+        {
+          "from": "h3",
+          "to": "h1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "h1",
+          "to": "g1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "h1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Kf2",
       "annotation": "The king steps to f2, the only escape square. The king is exposed on f2 and vulnerable to checks and tactical ideas along the open files. White's extra pawns mean nothing if the king cannot find safety.",
-      "plans": ["Try to escape the checks and consolidate", "Regroup the pieces for defense"],
-      "arrows": [{"from": "g1", "to": "f2", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "f2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Try to escape the checks and consolidate",
+        "Regroup the pieces for defense"
+      ],
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bxg3+",
       "annotation": "A stunning bishop sacrifice! Black tears open the king's shelter, destroying the g3 pawn and exposing the king to a raging attack. After the recapture, the queen and rook will have devastating access to the king. This is the kind of brilliant tactical shot that makes the Marshall Attack legendary.",
-      "plans": ["Destroy the king's pawn shelter", "Create mating threats with the queen and rook", "Force the king into the open"],
-      "arrows": [{"from": "d6", "to": "g3", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "g3", "to": "f2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "g3", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "f2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Destroy the king's pawn shelter",
+        "Create mating threats with the queen and rook",
+        "Force the king into the open"
+      ],
+      "arrows": [
+        {
+          "from": "d6",
+          "to": "g3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "g3",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "hxg3",
       "annotation": "White must capture the bishop. The kingside is now completely shattered with the open h-file and weakened g3 pawn. Black's attack is reaching its climax with the queen and rook ready to deliver the final blow.",
-      "plans": ["Recapture and try to defend the exposed king", "Hope Black's attack runs out of steam"],
-      "arrows": [{"from": "h2", "to": "g3", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "g3", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Recapture and try to defend the exposed king",
+        "Hope Black's attack runs out of steam"
+      ],
+      "arrows": [
+        {
+          "from": "h2",
+          "to": "g3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Qg2+",
       "annotation": "The queen checks on g2, forcing the king to retreat further. Black's attack flows naturally — every move comes with a threat. The king is being driven into the open where it will face a mating attack from the queen and rook.",
-      "plans": ["Force the king into the open", "Set up a mating net with the rook on the f-file"],
-      "arrows": [{"from": "h1", "to": "g2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "g2", "to": "f2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "g2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Force the king into the open",
+        "Set up a mating net with the rook on the f-file"
+      ],
+      "arrows": [
+        {
+          "from": "h1",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g2",
+          "to": "f2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Ke3",
       "annotation": "The king stumbles to e3, the only square available. The king is completely exposed in the center of the board, a hopeless situation. White's extra pawns are meaningless when the king is caught in a mating net.",
-      "plans": ["Try to survive the immediate threats", "The position is objectively lost for White"],
-      "arrows": [{"from": "f2", "to": "e3", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e3", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Try to survive the immediate threats",
+        "The position is objectively lost for White"
+      ],
+      "arrows": [
+        {
+          "from": "f2",
+          "to": "e3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Qg1+",
       "annotation": "The queen continues the relentless checks, giving check from g1 and cutting off the king's escape. The king is being herded into a mating net. This is the Marshall Attack at its most beautiful — Black's attack flows move after move with irresistible force.",
-      "plans": ["Continue checking the king toward the center", "Set up a decisive combination with the rook"],
-      "arrows": [{"from": "g2", "to": "g1", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "g1", "to": "e3", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "g1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Continue checking the king toward the center",
+        "Set up a decisive combination with the rook"
+      ],
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g1",
+          "to": "e3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    }
+  ],
+  "subLines": [
+    {
+      "name": "Back Rank Devastation",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Marshall Attack, the Back Rank Devastation is a tactical pattern you should know. A classic Marshall trick exploiting the back rank. After Re1+, White's king is forced to g2 and Black's bishop slides to d3 cutting off escape routes. The combination of rook on e1, bishop on d3, and queen on h3 creates a mating net that's nearly impossible to break. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "White plays Bb5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black continues with a6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "Ba4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black plays b5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe5",
+          "annotation": "White captures with Rxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black continues with c6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "d3",
+          "annotation": "d3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black plays Bd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qh4",
+          "annotation": "Black continues with Qh4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qh3",
+          "annotation": "Black plays Qh3, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Re4",
+          "annotation": "White plays Re4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black continues with Bf5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black plays Bg4, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qd2",
+          "annotation": "White plays Qd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Rae8",
+          "annotation": "Black continues with Rae8. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Rxe8",
+          "annotation": "White captures with Rxe8. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe8",
+          "annotation": "Black captures with Rxe8. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "f3",
+          "annotation": "White plays f3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Re1+",
+          "annotation": "Black gives check with Re1+! This is a critical moment in the trap."
+        },
+        {
+          "san": "Qxe1",
+          "annotation": "White captures with Qxe1. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxh2+",
+          "annotation": "Qxh2+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Kxh2",
+          "annotation": "Kxh2! Now the trap is revealed. White wins material with this capture.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "h2",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxg3+",
+          "annotation": "Bxg3+! And this is the final blow. Black delivers check and wins material. This is why the Back Rank Devastation is so dangerous — memorize this pattern!"
+        }
+      ]
+    },
+    {
+      "name": "Qh4-g3 Attack Pattern",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Marshall Attack, the Qh4-g3 Attack Pattern is a tactical pattern you should know. The Qh4 to h3 maneuver is the Marshall's trademark. After g3 Qh3, White's kingside is weakened. The f5-f4 push tears open the position. After gxf4 Bxf4, the dark-squared bishop dominates and the queen on g3+ leads to a winning exchange. The Bishop ending after Bxf3 is decisive. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "White plays Bb5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black continues with a6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "Ba4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black plays b5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe5",
+          "annotation": "White captures with Rxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black continues with c6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black plays Bd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qh4",
+          "annotation": "Black continues with Qh4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qh3",
+          "annotation": "Black plays Qh3, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Be3",
+          "annotation": "White plays Be3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black continues with Bg4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qd3",
+          "annotation": "Qd3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Rae8",
+          "annotation": "Black continues with Rae8. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "f3",
+          "annotation": "f3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "f4",
+          "annotation": "Black plays f4, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "gxf4",
+          "annotation": "White captures with gxf4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "f4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "Black captures with Bxf4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "White captures with Bxf4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe1+",
+          "annotation": "Black captures with Rxe1+. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe1",
+          "annotation": "White captures with Rxe1. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qg3+",
+          "annotation": "Qg3+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Bxg3",
+          "annotation": "Bxg3! Now the trap is revealed. White wins material with this capture."
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Bxf3! Black wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+        }
+      ]
+    },
+    {
+      "name": "Re8 Sacrifice Line",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Marshall Attack, the Re8 Sacrifice Line is a tactical pattern you should know. The Re8-Re6 rook lift is a classic Marshall motif. The rook swings to the kingside where it joins the attack. After f5-f4, the position rips open and the sacrificial sequence with fxe3 and Rf2 creates unstoppable threats. White's kingside pawns are shattered beyond repair. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "White plays Bb5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black continues with a6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "Ba4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black plays b5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe5",
+          "annotation": "White captures with Rxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black continues with c6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black plays Bd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qh4",
+          "annotation": "Black continues with Qh4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qh3",
+          "annotation": "Black plays Qh3, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Be3",
+          "annotation": "White plays Be3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black continues with Bg4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qd3",
+          "annotation": "Qd3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Rae8",
+          "annotation": "Black plays Rae8, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Re6",
+          "annotation": "Black continues with Re6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "a4",
+          "annotation": "a4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "f3",
+          "annotation": "White plays f3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "f4",
+          "annotation": "Black continues with f4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "fxg4",
+          "annotation": "White captures with fxg4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "g4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "fxe3",
+          "annotation": "Black captures with fxe3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qxg3+",
+          "annotation": "Qxg3+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "hxg3",
+          "annotation": "hxg3! Now the trap is revealed. White wins material with this capture.",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "g3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rxf3",
+          "annotation": "Rxf3! Black wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+        }
+      ]
+    },
+    {
+      "name": "d5-d4 Pawn Wedge",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Marshall Attack, the d5-d4 Pawn Wedge is a tactical pattern you should know. The g5-f5-f4 pawn storm is devastating when White plays Re4 to block. After the pawns advance, the Black pieces flood in. The sequence Rf2+ Kd3 Qf3+ leads to a mating attack that cannot be stopped. The king is chased all the way across the board. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "White plays Bb5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black continues with a6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "Ba4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black plays b5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxe5",
+          "annotation": "White captures with Rxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black continues with c6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black plays Bd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qh4",
+          "annotation": "Black continues with Qh4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qh3",
+          "annotation": "Black plays Qh3, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Re4",
+          "annotation": "White plays Re4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g5",
+          "annotation": "Black continues with g5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "Nd2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "f4",
+          "annotation": "Black continues with f4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black plays Bf5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nh4",
+          "annotation": "White plays Nh4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "fxg3",
+          "annotation": "Black captures with fxg3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "g3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxf5",
+          "annotation": "White captures with Nxf5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "gxf2+",
+          "annotation": "Black captures with gxf2+. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "f2",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Kxf2",
+          "annotation": "White captures with Kxf2. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f2",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxf5+",
+          "annotation": "Black captures with Qxf5+. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Ke2",
+          "annotation": "Ke2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qf2+",
+          "annotation": "Qf2+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Kd3",
+          "annotation": "Kd3! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "d3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qf3+",
+          "annotation": "Qf3+! And this is the final blow. Black delivers check and wins material. This is why the d5-d4 Pawn Wedge is so dangerous — memorize this pattern!"
+        }
+      ]
+    },
+    {
+      "name": "Anti-Marshall 8.a4",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Marshall Attack, the Anti-Marshall 8.a4 is a dangerous line you must be aware of. White sidesteps the Marshall entirely with 8.a4 before Black can play d5. This is the most popular choice at the top level. Black must be prepared with a different setup — typically d6, Na5, and c5 for a slower Chigorin-style game. Without the Marshall attack, the game is more positional. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "White plays Bb5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "White continues with Ba4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White continues with Re1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "a4",
+          "annotation": "White continues with a4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "b4",
+          "annotation": "b4. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White continues with Nbd2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Na5",
+          "annotation": "Na5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Ba2",
+          "annotation": "White plays Ba2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "c3",
+          "annotation": "White continues with c3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "bxc3",
+          "annotation": "bxc3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "bxc3",
+          "annotation": "bxc3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "b2",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rb8",
+          "annotation": "Rb8 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nf1",
+          "annotation": "White continues with Nf1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Be6",
+          "annotation": "Be6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Ng3",
+          "annotation": "White plays Ng3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bxa2",
+          "annotation": "Bxa2 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Rxa2",
+          "annotation": "Rxa2. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Nh5",
+          "annotation": "Nh5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    },
+    {
+      "name": "White's Fortress: Qf3-d3-Nd2 Setup",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Marshall Attack, the White's Fortress: Qf3-d3-Nd2 Setup is a dangerous line you must be aware of. The correct defensive setup with Be3, Qd3, f3, and Nd2 allows White to contain the attack. All entry points are blocked and White slowly consolidates the extra pawn. This is the nightmare scenario for Marshall players — a well-prepared defender who knows every defensive resource. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "White plays Bb5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "White continues with Ba4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White continues with Re1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "c3",
+          "annotation": "White continues with c3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "exd5",
+          "annotation": "exd5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Rxe5",
+          "annotation": "Rxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "c6",
+          "annotation": "c6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "d4",
+          "annotation": "White continues with d4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Bd6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White plays Re1. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Qh4",
+          "annotation": "Qh4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "g3",
+          "annotation": "White continues with g3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Qh3",
+          "annotation": "Qh3. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Be3",
+          "annotation": "White plays Be3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Bg4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Qd3",
+          "annotation": "White continues with Qd3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "f5",
+          "annotation": "f5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "f3",
+          "annotation": "White plays f3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bh5",
+          "annotation": "Bh5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White continues with Nd2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Rae8",
+          "annotation": "Rae8. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bxd5+",
+          "annotation": "Bxd5+ — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "cxd5",
+          "annotation": "cxd5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxf5",
+          "annotation": "Qxf5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxh2+",
+          "annotation": "Qxh2+ — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Kxh2",
+          "annotation": "Kxh2. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "h2",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxg3+",
+          "annotation": "Bxg3+! This is the move that causes all the trouble."
+        },
+        {
+          "san": "Kxg3",
+          "annotation": "Kxg3. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line.",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "g3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "8.h3 Anti-Marshall Sideline",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Marshall Attack, the 8.h3 Anti-Marshall Sideline is a dangerous line you must be aware of. The 8.h3 sideline prevents Bg4 ideas and takes the game into quieter territory. Black cannot play the Marshall attack and must settle for a normal Ruy Lopez middlegame. This is another way White avoids the sharp Marshall theory entirely. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "White plays Bb5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "White continues with Ba4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White continues with Re1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "h3",
+          "annotation": "White continues with h3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Na5",
+          "annotation": "Na5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bc2",
+          "annotation": "White continues with Bc2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Qc7",
+          "annotation": "Qc7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White continues with Nbd2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d5",
+          "annotation": "White plays d5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nd8",
+          "annotation": "Nd8 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nf1",
+          "annotation": "White continues with Nf1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Ne8",
+          "annotation": "Ne8. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "g4",
+          "annotation": "White plays g4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ng3",
+          "annotation": "White continues with Ng3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Ng7",
+          "annotation": "Ng7. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Kh2",
+          "annotation": "Kh2. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "h2",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f5",
+          "annotation": "f5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "f5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -12,12 +12,26 @@
         "d4 — Queen's Pawn, completely different character"
       ],
       "arrows": [
-        { "from": "e2", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "b1", "to": "c3", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "f5", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -28,10 +42,17 @@
         "Prepare to meet White's plans"
       ],
       "arrows": [
-        { "from": "e7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "e7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -45,12 +66,26 @@
         "Nf3 — normal development toward Italian or Scotch"
       ],
       "arrows": [
-        { "from": "c3", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f2", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f2",
+          "to": "f4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -65,10 +100,17 @@
         "Bc5 — develops the bishop early"
       ],
       "arrows": [
-        { "from": "f6", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "f6",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -84,12 +126,26 @@
         "Bc4 — the Vienna Game without the gambit, quieter"
       ],
       "arrows": [
-        { "from": "f4", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f1", "to": "f8", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "f4",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "f8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "f4", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -106,12 +162,26 @@
         "d6 — solid but passive, giving White a free hand"
       ],
       "arrows": [
-        { "from": "d7", "to": "d5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "d5", "to": "e4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d7",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d5",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d5", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -127,12 +197,26 @@
         "exd5 — simpler, leading to open positions"
       ],
       "arrows": [
-        { "from": "f4", "to": "e5", "color": "rgba(220, 50, 50, 0.7)" },
-        { "from": "e5", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "f4",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "e5",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "e5", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "f6", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -147,12 +231,26 @@
         "Ng4 — heading for e3 or f2, also very sharp"
       ],
       "arrows": [
-        { "from": "e4", "to": "c3", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "e4", "to": "d2", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "e4",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e4",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "e4", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "c3", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -165,11 +263,22 @@
         "Activate the rook on the f-file"
       ],
       "arrows": [
-        { "from": "f3", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f1", "to": "e2", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "e2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "f3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -185,11 +294,22 @@
         "Bb4 — pinning the knight, the Frankenstein-Dracula line"
       ],
       "arrows": [
-        { "from": "e7", "to": "f6", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "e8", "to": "g8", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e7",
+          "to": "f6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e7", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -201,12 +321,26 @@
         "Prepare to castle and activate the rooks"
       ],
       "arrows": [
-        { "from": "d3", "to": "e4", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c1", "to": "f4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d3",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c1",
+          "to": "f4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d3", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "e4", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e4",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -219,10 +353,17 @@
         "Use the extra piece activity"
       ],
       "arrows": [
-        { "from": "e4", "to": "c3", "color": "rgba(220, 50, 50, 0.7)" }
+        {
+          "from": "e4",
+          "to": "c3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -235,11 +376,21 @@
         "Maintain e5 and build kingside pressure"
       ],
       "arrows": [
-        { "from": "a1", "to": "b1", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "a1",
+          "to": "b1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "b2", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -251,10 +402,17 @@
         "Develop the queenside pieces"
       ],
       "arrows": [
-        { "from": "e8", "to": "g8", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "g8", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -266,11 +424,22 @@
         "Maintain the e5 pawn as a positional anchor"
       ],
       "arrows": [
-        { "from": "e2", "to": "h5", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "e1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e2",
+          "to": "h5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e1",
+          "to": "g1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e2", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -282,12 +451,26 @@
         "Coordinate pieces for central counterplay"
       ],
       "arrows": [
-        { "from": "c6", "to": "e5", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "c6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "c6",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c6",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "c6", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "e5", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -300,12 +483,26 @@
         "Maintain e5 as a positional anchor"
       ],
       "arrows": [
-        { "from": "f1", "to": "f7", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "d1", "to": "e1", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "f1",
+          "to": "f7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d1",
+          "to": "e1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "f1", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -322,12 +519,26 @@
         "Bf5 — developing the bishop actively"
       ],
       "arrows": [
-        { "from": "f7", "to": "f6", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f6", "to": "e5", "color": "rgba(220, 50, 50, 0.7)" }
+        {
+          "from": "f7",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f6",
+          "to": "e5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "e6", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -339,10 +550,17 @@
         "Build up with Qe1 and Ng5 ideas"
       ],
       "arrows": [
-        { "from": "e5", "to": "f6", "color": "rgba(220, 50, 50, 0.7)" }
+        {
+          "from": "e5",
+          "to": "f6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -355,11 +573,22 @@
         "Develop the queenside and coordinate pieces"
       ],
       "arrows": [
-        { "from": "f6", "to": "c3", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "f8", "to": "f1", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "f6",
+          "to": "c3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "f8",
+          "to": "f1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -371,11 +600,22 @@
         "Coordinate with the bishop and knight"
       ],
       "arrows": [
-        { "from": "e1", "to": "h4", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "e1", "to": "e3", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e1",
+          "to": "h4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e1",
+          "to": "e3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e1", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -387,11 +627,21 @@
         "Exchange the bishop for the knight to weaken White's kingside"
       ],
       "arrows": [
-        { "from": "g4", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "g4",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "g4", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "f3", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "g4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f3",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -404,12 +654,26 @@
         "Keep the pressure on Black's kingside"
       ],
       "arrows": [
-        { "from": "h4", "to": "h7", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f3", "to": "g5", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "h4",
+          "to": "h7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "g5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "h4", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "h7", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "h4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "h7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -425,10 +689,17 @@
         "Be6 — redirecting to defend"
       ],
       "arrows": [
-        { "from": "g4", "to": "f3", "color": "rgba(220, 50, 50, 0.7)" }
+        {
+          "from": "g4",
+          "to": "f3",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "f3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -441,12 +712,26 @@
         "Use the f3 pawn to support future pawn breaks"
       ],
       "arrows": [
-        { "from": "f1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "g1", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "f1",
+          "to": "g1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "g1",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "g2", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -462,10 +747,17 @@
         "Bg5 — offering a bishop trade"
       ],
       "arrows": [
-        { "from": "d6", "to": "g6", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d6",
+          "to": "g6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d6", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -477,11 +769,22 @@
         "Launch the decisive kingside attack"
       ],
       "arrows": [
-        { "from": "g1", "to": "h1", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "f1", "to": "g1", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "g1",
+          "to": "h1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "f1",
+          "to": "g1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "h1", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "h1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -493,11 +796,22 @@
         "Coordinate the rooks for maximum pressure"
       ],
       "arrows": [
-        { "from": "e8", "to": "e2", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "e8", "to": "e1", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "e8",
+          "to": "e2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e8",
+          "to": "e1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "e8", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -509,11 +823,22 @@
         "Prepare Rg1 for the decisive attack"
       ],
       "arrows": [
-        { "from": "f4", "to": "d6", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "f4", "to": "c7", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "f4",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f4",
+          "to": "c7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "f4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "f4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -525,10 +850,17 @@
         "Look for any break to create counterplay"
       ],
       "arrows": [
-        { "from": "d7", "to": "c7", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d7",
+          "to": "c7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d7", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -541,11 +873,21 @@
         "Create unstoppable threats on the kingside"
       ],
       "arrows": [
-        { "from": "g1", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "g1",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "g1", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "g7", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "g1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -557,11 +899,22 @@
         "Prepare c6 to challenge White's center"
       ],
       "arrows": [
-        { "from": "d8", "to": "e6", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "d8", "to": "f7", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d8",
+          "to": "e6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d8",
+          "to": "f7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d8", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -573,11 +926,22 @@
         "Maintain the pressure while improving piece placement"
       ],
       "arrows": [
-        { "from": "d1", "to": "b3", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "d1", "to": "c2", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d1",
+          "to": "b3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d1",
+          "to": "c2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d1", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -589,11 +953,22 @@
         "Support d4 ideas for counterplay"
       ],
       "arrows": [
-        { "from": "e6", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "e6", "to": "d4", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e6",
+          "to": "g7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e6",
+          "to": "d4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e6", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -605,11 +980,22 @@
         "Keep options open for Bg5 or Bh6 later"
       ],
       "arrows": [
-        { "from": "e3", "to": "a7", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "e3", "to": "h6", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "e3",
+          "to": "a7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e3",
+          "to": "h6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "e3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -622,10 +1008,17 @@
         "Create counterplay to distract White from the kingside"
       ],
       "arrows": [
-        { "from": "d5", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "d5",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -637,10 +1030,17 @@
         "Continue the kingside attack with improved piece coordination"
       ],
       "arrows": [
-        { "from": "c3", "to": "d4", "color": "rgba(220, 50, 50, 0.7)" }
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -652,11 +1052,22 @@
         "Coordinate pieces for defense and counterplay"
       ],
       "arrows": [
-        { "from": "d4", "to": "c2", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "d4", "to": "f3", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "d4",
+          "to": "c2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -668,12 +1079,26 @@
         "Maintain the attacking setup with queen and rook"
       ],
       "arrows": [
-        { "from": "d4", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "d4", "to": "a7", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d4",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "a7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "g7", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -685,11 +1110,22 @@
         "Defend against White's kingside pressure"
       ],
       "arrows": [
-        { "from": "d4", "to": "a1", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "d4", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "d4",
+          "to": "a1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d4",
+          "to": "g7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "d4", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -702,10 +1138,17 @@
         "Continue the kingside attack"
       ],
       "arrows": [
-        { "from": "c3", "to": "d4", "color": "rgba(0, 180, 80, 0.8)" }
+        {
+          "from": "c3",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
       ],
       "highlights": [
-        { "square": "c3", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -717,11 +1160,22 @@
         "Look for counterplay opportunities"
       ],
       "arrows": [
-        { "from": "f6", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" },
-        { "from": "f6", "to": "c3", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "f6",
+          "to": "g7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "f6",
+          "to": "c3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "f6", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -733,12 +1187,26 @@
         "Force Black into a completely passive defense"
       ],
       "arrows": [
-        { "from": "g3", "to": "g7", "color": "rgba(0, 180, 80, 0.8)" },
-        { "from": "g1", "to": "g7", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "g3",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g1",
+          "to": "g7",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "g3", "color": "rgba(255, 255, 0, 0.4)" },
-        { "square": "g7", "color": "rgba(255, 80, 80, 0.3)" }
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "g7",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
       ]
     },
     {
@@ -750,10 +1218,1031 @@
         "Try to survive into a more manageable endgame"
       ],
       "arrows": [
-        { "from": "g8", "to": "h8", "color": "rgba(0, 100, 255, 0.7)" }
+        {
+          "from": "g8",
+          "to": "h8",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
       ],
       "highlights": [
-        { "square": "h8", "color": "rgba(255, 255, 0, 0.4)" }
+        {
+          "square": "h8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
+    }
+  ],
+  "subLines": [
+    {
+      "name": "Knight Retreat Punishment",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Gambit, the Knight Retreat Punishment is a tactical pattern you should know. When Black's knight retreats to g8, White plays d4 and Bxf4 recovering the pawn while maintaining a massive development lead. Black has wasted three tempi on knight moves while White has a powerful center and active pieces. The Nd5 jump followed by Nxc7 wins the exchange. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "exf4",
+          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Ng8",
+          "annotation": "Black plays Ng8, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "White captures with Bxf4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "White captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxd1+",
+          "annotation": "Black captures with Qxd1+. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Kxd1",
+          "annotation": "White captures with Kxd1. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "d1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black continues with Bg4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "Bb5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "O-O-O+",
+          "annotation": "Black gives check with O-O-O+! This is a critical moment in the trap.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "c1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ke1",
+          "annotation": "White plays Ke1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nge7",
+          "annotation": "Black continues with Nge7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bxc6",
+          "annotation": "White captures with Bxc6. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxc6",
+          "annotation": "Black captures with Nxc6. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Be6",
+          "annotation": "Be6! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Nxc7",
+          "annotation": "Nxc7! White wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+        }
+      ]
+    },
+    {
+      "name": "Greek Gift Sacrifice",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Gambit, the Greek Gift Sacrifice is a tactical pattern you should know. If Black places the knight on d5 and castles kingside, the classic Greek Gift sacrifice Bxh7+ followed by Ng5+ tears open the kingside. After Kg6 Qd3+ f5 Qg3, the king is caught in a deadly mating net. This pattern wins countless games at the club level. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "exf4",
+          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Black plays Nd5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Black captures with Nxc3. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "White captures with dxc3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "c3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black plays Be7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "White captures with Bxf4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Bd3",
+          "annotation": "Bd3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White plays Qe2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxh7+",
+          "annotation": "White captures with Bxh7+. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Kxh7",
+          "annotation": "Black captures with Kxh7. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "h7",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ng5+",
+          "annotation": "White gives check with Ng5+! This is a critical moment in the trap."
+        },
+        {
+          "san": "Kg6",
+          "annotation": "Black continues with Kg6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qd3+",
+          "annotation": "White gives check with Qd3+! This is a critical moment in the trap."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qg3",
+          "annotation": "Qg3. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Qd5",
+          "annotation": "Qd5! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Ne4+",
+          "annotation": "Ne4+! And this is the final blow. White delivers check and wins material. This is why the Greek Gift Sacrifice is so dangerous — memorize this pattern!"
+        }
+      ]
+    },
+    {
+      "name": "Frankenstein-Dracula: Qxf7 Mate Threat",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Gambit, the Frankenstein-Dracula: Qxf7 Mate Threat is a tactical pattern you should know. In the Frankenstein-Dracula, after Qh5, if Black plays Be7 instead of the critical Nc6, the knight lands on g5 with devastating effect. Qf3 threatens Qf7 mate, and after f5, Qd5 creates multiple threats. The Nf7-Nd5 combination tears Black's position apart. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black captures with Nxe4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qh5",
+          "annotation": "Qh5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nd6",
+          "annotation": "Black plays Nd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Ng5",
+          "annotation": "White plays Ng5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black continues with g6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qf3",
+          "annotation": "Qf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays f5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qd5",
+          "annotation": "White plays Qd5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "e4",
+          "annotation": "Black continues with e4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Bxg5",
+          "annotation": "Black captures with Bxg5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxe4+",
+          "annotation": "White captures with Qxe4+. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "fxe4",
+          "annotation": "Black captures with fxe4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "e4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bf7+",
+          "annotation": "Bf7+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Kxf7",
+          "annotation": "Kxf7! Now the trap is revealed. Black wins material with this capture.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4! White wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+        }
+      ]
+    },
+    {
+      "name": "f5 Push Trap",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Gambit, the f5 Push Trap is a tactical pattern you should know. After Black retreats Ng8 and plays dxe5, White recaptures with Nxe5 maintaining the initiative. If Black trades on c4, the resulting position has White with active rooks on the open e-file and f-file. The Bxf4 recapture restores material equality while keeping all the positional advantages. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "exf4",
+          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Ng8",
+          "annotation": "Black plays Ng8, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black continues with Be6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "Black captures with Bxc4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxc4",
+          "annotation": "White captures with Nxc4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxd4",
+          "annotation": "Black captures with Qxd4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxd4",
+          "annotation": "White captures with Qxd4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Be3",
+          "annotation": "White plays Be3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Black continues with Bb4. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Bxc3",
+          "annotation": "Black captures with Bxc3. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "bxc3",
+          "annotation": "White captures with bxc3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "b2",
+              "to": "c3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nge7",
+          "annotation": "Black continues with Nge7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "Bxf4. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rfe1",
+          "annotation": "Rfe1! The trap is sprung. White has a winning position. This is the key takeaway from the f5 Push Trap."
+        }
+      ]
+    },
+    {
+      "name": "Black Plays d5 Early: Best Defense",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Gambit, the Black Plays d5 Early: Best Defense is a dangerous line you must be aware of. If Black plays the strong 3...d5, the center opens up and Black gets active piece play immediately. After fxe5 Nxe4, Black's knight is powerfully centralized. White must play carefully through a series of exchanges to avoid ending up in an inferior position. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "fxe5",
+          "annotation": "fxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Bc5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "d4",
+          "annotation": "White continues with d4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Bb4. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bd2",
+          "annotation": "White plays Bd2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nxd2",
+          "annotation": "Nxd2 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxd2",
+          "annotation": "Qxd2 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxc3",
+          "annotation": "Bxc3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxc3",
+          "annotation": "Qxc3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White continues with Bd3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "f6",
+          "annotation": "f6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "exf6",
+          "annotation": "exf6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rxf6",
+          "annotation": "Rxf6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Rae1",
+          "annotation": "White plays Rae1. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Bg4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "h3",
+          "annotation": "White continues with h3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Bxf3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Rxf3",
+          "annotation": "Rxf3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Rxf3",
+          "annotation": "Rxf3! This is the move that causes all the trouble."
+        },
+        {
+          "san": "gxf3",
+          "annotation": "gxf3. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "f3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hamppe-Allgaier: Black Gets Counterplay",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Gambit, the Hamppe-Allgaier: Black Gets Counterplay is a dangerous line you must be aware of. When Black plays Qe7 and develops solidly, the resulting position offers Black real counterplay. After O-O-O opposite-side castling, both players attack each other's kings. Black's centralized pieces and open f-file provide adequate compensation for the pawn. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "exf4",
+          "annotation": "exf4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "White continues with e5. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Qe7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White plays Qe2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Ng8",
+          "annotation": "Ng8 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "Bxf4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Bg4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Qxe5",
+          "annotation": "Qxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxe5+",
+          "annotation": "Qxe5+ — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bb5+",
+          "annotation": "Bb5+! Check forces a response. This is where the danger begins."
+        },
+        {
+          "san": "c6",
+          "annotation": "c6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bxc6+",
+          "annotation": "Bxc6+ — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "bxc6",
+          "annotation": "bxc6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "c6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe5",
+          "annotation": "Bxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Bxf3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Rd8+",
+          "annotation": "Rd8+! Check — and the position is very dangerous for the defending side."
+        },
+        {
+          "san": "Rxd8",
+          "annotation": "Rxd8. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line."
+        }
+      ]
+    },
+    {
+      "name": "Vienna Game: Black Avoids f4 with d5",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Gambit, the Vienna Game: Black Avoids f4 with d5 is a dangerous line you must be aware of. The immediate 3...d5 counter strike is one of Black's most dangerous options. After exd5 e4, the pawn on e4 cramps White's position and disrupts development. If White is not careful, Black's initiative in the center can become overwhelming. This line requires specific preparation. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "exd5",
+          "annotation": "exd5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "e4. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Bb4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "dxe4",
+          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bd2",
+          "annotation": "White plays Bd2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Qh4+",
+          "annotation": "Qh4+! Check forces a response. This is where the danger begins."
+        },
+        {
+          "san": "g3",
+          "annotation": "White continues with g3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nxg3",
+          "annotation": "Nxg3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Qh5",
+          "annotation": "Qh5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "hxg3",
+          "annotation": "hxg3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "g3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Bg4. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Be2",
+          "annotation": "White plays Be2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Bxf3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Bxf3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxf3",
+          "annotation": "Qxf3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qxf3",
+          "annotation": "Qxf3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxc3",
+          "annotation": "Bxc3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Bxc3",
+          "annotation": "Bxc3! This is the move that causes all the trouble."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
       ]
     }
   ]

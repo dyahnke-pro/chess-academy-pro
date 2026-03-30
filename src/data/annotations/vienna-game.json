@@ -947,7 +947,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Vienna: Falkbeer Variation",
@@ -1419,7 +1420,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Vienna: Stanley Variation (3.Bc4)",
@@ -1868,7 +1870,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Vienna Game vs 2...Nc6",
@@ -2232,7 +2235,8 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "variation"
     },
     {
       "name": "Vienna: Copycat Variation (2...Nc3 mirror)",
@@ -2657,6 +2661,345 @@
             }
           ],
           "highlights": []
+        }
+      ],
+      "type": "variation"
+    },
+    {
+      "name": "Vienna Trap (Qh5 Attack)",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Game, the Vienna Trap (Qh5 Attack) is a tactical pattern you should know. After Black takes on e4, Qh5 threatens both f7 and the knight on e4. If Black plays Nd6, the knight is awkwardly placed and White gets Nb5 with devastating threats on c7 and d6. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black captures with Nxe4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qh5",
+          "annotation": "Qh5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nd6",
+          "annotation": "Black plays Nd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black continues with Nc6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nb5",
+          "annotation": "Nb5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black plays g6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qf3",
+          "annotation": "White plays Qf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black continues with f5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qd5",
+          "annotation": "Qd5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black plays Qe7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nxc7+",
+          "annotation": "Nxc7+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Kd8",
+          "annotation": "Kd8! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "d8",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxa8",
+          "annotation": "Nxa8! White wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+        }
+      ]
+    },
+    {
+      "name": "Frankenstein-Dracula Attack",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Game, the Frankenstein-Dracula Attack is a tactical pattern you should know. The Frankenstein-Dracula variation leads to wild tactics. White sacrifices material for a dangerous attack against Black's king. Black must navigate carefully to survive. Let's walk through how it works."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black captures with Nxe4. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qh5",
+          "annotation": "Qh5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nd6",
+          "annotation": "Black plays Nd6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black continues with g6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5! Now the trap is revealed. Black wins material with this capture."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4! The trap is sprung. White has a winning position. This is the key takeaway from the Frankenstein-Dracula Attack.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Black's ...d5 Counterstrike",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Game, the Black's ...d5 Counterstrike is a dangerous line you must be aware of. After f4, Black can strike back with ...d5 immediately. This is the strongest response and equalizes if White isn't careful. The resulting positions are roughly level — Black gets good piece activity for the pawn. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "f4",
+          "annotation": "White plays f4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "fxe5",
+          "annotation": "fxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Bg4 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Be2",
+          "annotation": "White continues with Be2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "bxc3",
+          "annotation": "bxc3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "b2",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Bxf3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Bxf3! This is the move that causes all the trouble."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line."
+        }
+      ]
+    },
+    {
+      "name": "Premature Aggression Backfires",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Vienna Game, the Premature Aggression Backfires is a dangerous line you must be aware of. Going for Bxf7+ too early is a common mistake. After Kxf7, White doesn't have enough follow-up and Black's center pawns become very strong. Don't capture on f7 without a concrete attacking plan. Let's see why."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White plays Bc4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxf7+",
+          "annotation": "Bxf7+ — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Kxf7",
+          "annotation": "Kxf7 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "f7",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Ng3",
+          "annotation": "White continues with Ng3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "e4",
+          "annotation": "e4. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "e4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "N1e2",
+          "annotation": "N1e2. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Bc5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
     }
