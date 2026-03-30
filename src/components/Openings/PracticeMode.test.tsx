@@ -173,7 +173,7 @@ describe('PracticeMode', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('wrong-flash')).toBeInTheDocument();
-      expect(screen.getByText('Incorrect move. Try again.')).toBeInTheDocument();
+      expect(screen.getByTestId('explanation-card')).toBeInTheDocument();
       expect(screen.getByTestId('undo-btn')).toBeInTheDocument();
     });
   });
@@ -201,7 +201,7 @@ describe('PracticeMode', () => {
     });
 
     // Wrong error card should be gone
-    expect(screen.queryByText('Incorrect move. Try again.')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('explanation-card')).not.toBeInTheDocument();
   });
 
   it('back button calls onExit', () => {

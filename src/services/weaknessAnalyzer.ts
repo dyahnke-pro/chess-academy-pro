@@ -11,6 +11,7 @@ import type {
   OpeningRecord,
   FlashcardRecord,
   MistakePuzzle,
+  OpeningWeakSpot,
 } from '../types';
 import type { ThemeSkill } from './puzzleService';
 
@@ -655,6 +656,65 @@ function computeSkillRadar(
 
 // ─── Main API ───────────────────────────────────────────────────────────────
 
+// ─── Opening Weak Spot Analysis ─────────────────────────────────────────────
+
+function analyzeOpeningWeakSpots(weakSpots: OpeningWeakSpot[]): {
+  weaknesses: WeaknessItem[];
+  strengths: string[];
+} {
+  const weaknesses: WeaknessItem[] = [];
+  const strengths: string[] = [];
+
+  if (weakSpots.length === 0) return { weaknesses, strengths };
+
+  // Group by opening
+  const byOpening = new Map<string, OpeningWeakSpot[]>();
+  for (const spot of weakSpots) {
+    const existing = byOpening.get(spot.openingId) ?? [];
+    existing.push(spot);
+    byOpening.set(spot.openingId, existing);
+  }
+
+  for (const [openingId, spots] of byOpening) {
+    const totalFails = spots.reduce((sum, s) => sum + s.failCount, 0);
+    const worstSpot = spots[0]; // already sorted by failCount desc
+    const openingName = worstSpot.openingName;
+
+    if (totalFails >= 5) {
+      const severity = Math.min(90, 30 + totalFails * 3);
+      weaknesses.push({
+        category: 'opening_weakspots',
+        label: `Recurring mistakes in ${openingName}`,
+        metric: `${totalFails} total failures across ${spots.length} positions`,
+        severity,
+        detail: `You consistently struggle with ${spots.length} position${spots.length > 1 ? 's' : ''} in the ${openingName}. The hardest spot (${worstSpot.correctMoveSan}) has been missed ${worstSpot.failCount} time${worstSpot.failCount > 1 ? 's' : ''}.`,
+        trainingAction: {
+          route: `/openings/${openingId}`,
+          buttonLabel: `Drill ${openingName} Weak Spots`,
+        },
+      });
+    } else if (totalFails >= 3) {
+      weaknesses.push({
+        category: 'opening_weakspots',
+        label: `Shaky positions in ${openingName}`,
+        metric: `${totalFails} failures in ${spots.length} positions`,
+        severity: 25 + totalFails * 2,
+        detail: `You've stumbled on ${spots.length} position${spots.length > 1 ? 's' : ''} in the ${openingName}. Practice these specific moves.`,
+        trainingAction: {
+          route: `/openings/${openingId}`,
+          buttonLabel: `Practice ${openingName}`,
+        },
+      });
+    }
+  }
+
+  if (weakSpots.length > 0 && weaknesses.length === 0) {
+    strengths.push('Only occasional opening mistakes — keep drilling!');
+  }
+
+  return { weaknesses, strengths };
+}
+
 /**
  * Computes a full WeaknessProfile from all available data.
  * Reads puzzles, games, sessions, openings, and flashcards from Dexie.
@@ -664,13 +724,14 @@ export async function computeWeaknessProfile(
   profile: UserProfile,
 ): Promise<WeaknessProfile> {
   // Gather all data in parallel
-  const [themeSkills, repertoire, recentGames, recentSessions, flashcards, mistakePuzzles] = await Promise.all([
+  const [themeSkills, repertoire, recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots] = await Promise.all([
     getThemeSkills(),
     getRepertoireOpenings(),
     db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
     db.sessions.orderBy('date').reverse().limit(RECENT_SESSIONS_LIMIT).toArray(),
     db.flashcards.toArray(),
     db.mistakePuzzles.toArray(),
+    db.openingWeakSpots.toArray(),
   ]);
 
   // Run each analyzer
@@ -681,11 +742,13 @@ export async function computeWeaknessProfile(
   const flashcardAnalysis = analyzeFlashcards(flashcards);
   const endgame = analyzeEndgame(themeSkills);
   const mistakes = analyzeMistakePuzzles(mistakePuzzles);
+  const openingWeakSpots = analyzeOpeningWeakSpots(weakSpots);
 
   // Merge all items and strengths
   const allItems: WeaknessItem[] = [
     ...tactics.weaknesses,
     ...openings.weaknesses,
+    ...openingWeakSpots.weaknesses,
     ...gameAnalysis.weaknesses,
     ...sessions.weaknesses,
     ...flashcardAnalysis.weaknesses,
@@ -696,6 +759,7 @@ export async function computeWeaknessProfile(
   const allStrengths: string[] = [
     ...tactics.strengths,
     ...openings.strengths,
+    ...openingWeakSpots.strengths,
     ...gameAnalysis.strengths,
     ...sessions.strengths,
     ...flashcardAnalysis.strengths,
@@ -755,6 +819,7 @@ export function filterWeaknessesByCategory(
 export const _testing = {
   analyzeTactics,
   analyzeOpenings,
+  analyzeOpeningWeakSpots,
   analyzeGames,
   analyzeSessionConsistency,
   analyzeFlashcards,

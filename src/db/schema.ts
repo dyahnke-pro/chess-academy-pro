@@ -11,6 +11,7 @@ import type {
   ModelGame,
   MiddlegamePlan,
   GeneratedContent,
+  OpeningWeakSpot,
 } from '../types';
 
 class ChessAcademyDB extends Dexie {
@@ -25,6 +26,7 @@ class ChessAcademyDB extends Dexie {
   modelGames!: EntityTable<ModelGame, 'id'>;
   middlegamePlans!: EntityTable<MiddlegamePlan, 'id'>;
   generatedContent!: EntityTable<GeneratedContent, 'id'>;
+  openingWeakSpots!: EntityTable<OpeningWeakSpot, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -319,6 +321,21 @@ class ChessAcademyDB extends Dexie {
       modelGames: 'id, openingId',
       middlegamePlans: 'id, openingId',
       generatedContent: 'id, openingId, type, generatedAt',
+    });
+
+    this.version(17).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
     });
   }
 }

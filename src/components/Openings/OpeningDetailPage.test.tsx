@@ -444,12 +444,12 @@ describe('OpeningDetailPage', () => {
       });
     });
 
-    it('MiniBoard uses 52 as size', async () => {
+    it('MiniBoard uses 48 as size', async () => {
       renderWithRoute();
       await waitFor(() => {
         const miniBoards = screen.getAllByTestId('mini-board');
         for (const board of miniBoards) {
-          expect(board.getAttribute('data-size')).toBe('52');
+          expect(board.getAttribute('data-size')).toBe('48');
         }
       });
     });

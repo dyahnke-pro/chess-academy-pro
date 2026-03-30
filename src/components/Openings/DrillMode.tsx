@@ -17,7 +17,9 @@ import {
 import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
-import type { OpeningRecord, OpeningVariation, AnalysisLine, LichessCloudEval } from '../../types';
+import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
+import { recordWeakSpot } from '../../services/weakSpotService';
+import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
 import {
@@ -94,6 +96,42 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
   const [lichessOverride, setLichessOverride] = useState<boolean | null>(null);
   const showLichessEffective = lichessOverride ?? false;
   const [cloudEval, setCloudEval] = useState<LichessCloudEval | null>(null);
+
+  // Annotations for mistake explanations
+  const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const subKey = customLine
+        ? undefined
+        : isVariation
+          ? `variation-${variationIndex}`
+          : undefined;
+      const data = subKey
+        ? await loadSubLineAnnotations(opening.id, subKey)
+        : await loadAnnotations(opening.id);
+      if (!cancelled) setAnnotations(data);
+    })();
+    return () => { cancelled = true; };
+  }, [opening.id, customLine, isVariation, variationIndex]);
+
+  // Build mistake explanation from annotation data
+  const mistakeExplanation = useMemo((): string => {
+    if (!showWrongMove || currentMoveIndex >= expectedMoves.length) {
+      return 'Incorrect move. Try again.';
+    }
+    const ann: OpeningMoveAnnotation | undefined = annotations?.[currentMoveIndex];
+    if (!ann) {
+      return `Incorrect. The correct move is ${expectedMoves[currentMoveIndex].san}.`;
+    }
+    const parts: string[] = [`The correct move is ${ann.san}.`];
+    if (ann.annotation) parts.push(ann.annotation);
+    if (ann.alternatives && ann.alternatives.length > 0) {
+      parts.push(`Other options: ${ann.alternatives[0]}`);
+    }
+    return parts.join(' ');
+  }, [showWrongMove, currentMoveIndex, expectedMoves, annotations]);
 
   const isPlayerTurn = useCallback(
     (idx: number): boolean => {
@@ -268,9 +306,17 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
         setShowWrongMove(true);
         playEncouragement();
         setBoardKey((k) => k + 1);
+        // Record weak spot for this position
+        void recordWeakSpot(
+          opening.id,
+          opening.name,
+          currentFen,
+          currentMoveIndex,
+          expectedMoves[currentMoveIndex].san,
+        );
       }
     },
-    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement],
+    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, opening.id, opening.name, currentFen],
   );
 
   const handleUndo = useCallback((): void => {
@@ -480,7 +526,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
         {showWrongMove ? (
           <div className="flex flex-col gap-2">
             <ExplanationCard
-              text="Incorrect move. Try again."
+              text={mistakeExplanation}
               visible={true}
               variant="error"
             />
