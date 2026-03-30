@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '../../test/utils';
+import { render as rtlRender } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { fireEvent } from '@testing-library/react';
 import { MyMistakesPage } from './MyMistakesPage';
 import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
@@ -264,5 +267,76 @@ describe('MyMistakesPage', () => {
     });
 
     expect(screen.queryByTestId('narration-preview')).not.toBeInTheDocument();
+  });
+
+  it('applies initial filters from location state', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', classification: 'blunder', openingName: 'Sicilian Defense', moveNumber: 5 }),
+      buildMistakePuzzle({ id: 'p2', classification: 'mistake', openingName: 'Italian Game', moveNumber: 8 }),
+      buildMistakePuzzle({ id: 'p3', classification: 'blunder', openingName: 'Sicilian Defense', moveNumber: 12 }),
+    ]);
+
+    rtlRender(
+      <MemoryRouter initialEntries={[{ pathname: '/puzzles/mistakes', state: { initialOpeningName: 'Sicilian Defense' } }]}>
+        <MotionConfig transition={{ duration: 0 }}>
+          <MyMistakesPage />
+        </MotionConfig>
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
+    });
+
+    // Opening filter badge should be visible
+    expect(screen.getByTestId('opening-filter-badge')).toHaveTextContent('Sicilian Defense');
+  });
+
+  it('clears opening filter when badge is clicked', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', openingName: 'Sicilian Defense', moveNumber: 5 }),
+      buildMistakePuzzle({ id: 'p2', openingName: 'Italian Game', moveNumber: 8 }),
+    ]);
+
+    rtlRender(
+      <MemoryRouter initialEntries={[{ pathname: '/puzzles/mistakes', state: { initialOpeningName: 'Sicilian Defense' } }]}>
+        <MotionConfig transition={{ duration: 0 }}>
+          <MyMistakesPage />
+        </MotionConfig>
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(1);
+    });
+
+    fireEvent.click(screen.getByTestId('opening-filter-badge'));
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
+    });
+
+    expect(screen.queryByTestId('opening-filter-badge')).not.toBeInTheDocument();
+  });
+
+  it('applies initialClassification from location state', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', classification: 'blunder', moveNumber: 5 }),
+      buildMistakePuzzle({ id: 'p2', classification: 'inaccuracy', moveNumber: 8 }),
+    ]);
+
+    rtlRender(
+      <MemoryRouter initialEntries={[{ pathname: '/puzzles/mistakes', state: { initialClassification: 'blunder' } }]}>
+        <MotionConfig transition={{ duration: 0 }}>
+          <MyMistakesPage />
+        </MotionConfig>
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(1);
+    });
+
+    expect(screen.getByText('Move 5 — d4')).toBeInTheDocument();
   });
 });

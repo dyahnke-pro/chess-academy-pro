@@ -5,7 +5,6 @@ import type {
   WeaknessProfile,
   WeaknessItem,
   WeaknessCategory,
-  WeaknessTrainingAction,
   UserProfile,
   GameRecord,
   SessionRecord,
@@ -170,7 +169,8 @@ function analyzeGames(games: GameRecord[]): {
       detail: `You're averaging ${(errorRate * 100).toFixed(1)}% error rate per move. That's ${((totalBlunders + totalMistakes) / gamesWithAnnotations).toFixed(1)} serious errors per game. Practice calculation exercises with increasing complexity.`,
       trainingAction: {
         route: '/puzzles/mistakes',
-        buttonLabel: 'Review My Mistakes',
+        buttonLabel: 'Drill my calculation errors',
+        state: { initialStatus: 'unsolved' },
       },
     });
   } else if (errorRate < 0.03 && gamesWithAnnotations >= MIN_GAMES_FOR_TIME_ANALYSIS) {
@@ -187,9 +187,9 @@ function analyzeGames(games: GameRecord[]): {
       severity: Math.min(85, Math.round(collapseRate * 200)),
       detail: `In ${Math.round(collapseRate * 100)}% of your recent games, you made multiple blunders or mistakes in the final moves. This often indicates time pressure or fatigue. Try playing with increment or practicing endgame speed drills.`,
       trainingAction: {
-        route: '/puzzles',
-        buttonLabel: 'Endgame Speed Drills',
-        state: { forcedWeakThemes: ['endgame'] },
+        route: '/puzzles/mistakes',
+        buttonLabel: 'Drill late-game positions',
+        state: { initialPhase: 'endgame', initialStatus: 'unsolved' },
       },
     });
   }
@@ -204,7 +204,8 @@ function analyzeGames(games: GameRecord[]): {
       detail: `Averaging ${(totalBlunders / gamesWithAnnotations).toFixed(1)} blunders per game. Before each move, do a "blunder check" — ask yourself: does my move leave anything hanging or allow a tactic?`,
       trainingAction: {
         route: '/puzzles/mistakes',
-        buttonLabel: 'Fix My Blunders',
+        buttonLabel: 'Fix my blunders',
+        state: { initialClassification: 'blunder', initialStatus: 'unsolved' },
       },
     });
   }
@@ -364,6 +365,9 @@ function analyzeEndgame(themeSkills: ThemeSkill[]): {
 
 // ─── Mistake Puzzle Analysis ─────────────────────────────────────────────
 
+const MIN_OPENING_MISTAKES_FOR_WEAKNESS = 2;
+const OPENING_MISTAKE_SEVERITY_BASE = 55;
+
 function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
   weaknesses: WeaknessItem[];
   strengths: string[];
@@ -373,13 +377,71 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
 
   if (mistakePuzzles.length < 3) return { weaknesses, strengths };
 
-  // Phase breakdown: which game phase has the most mistakes?
+  const total = mistakePuzzles.length;
+
+  // ── Opening-specific mistake clusters ────────────────────────────────
+  // Group mistakes by the opening they occurred in and surface the worst ones.
+  const byOpening = new Map<string, MistakePuzzle[]>();
+  for (const p of mistakePuzzles) {
+    if (!p.openingName) continue;
+    const existing = byOpening.get(p.openingName);
+    if (existing) {
+      existing.push(p);
+    } else {
+      byOpening.set(p.openingName, [p]);
+    }
+  }
+
+  const openingEntries = [...byOpening.entries()]
+    .filter(([, puzzles]) => puzzles.length >= MIN_OPENING_MISTAKES_FOR_WEAKNESS)
+    .sort((a, b) => {
+      // Sort by total cpLoss descending to surface the most damaging openings first
+      const aCpTotal = a[1].reduce((sum, p) => sum + p.cpLoss, 0);
+      const bCpTotal = b[1].reduce((sum, p) => sum + p.cpLoss, 0);
+      return bCpTotal - aCpTotal;
+    });
+
+  for (const [openingName, puzzles] of openingEntries.slice(0, 3)) {
+    const blunderCount = puzzles.filter((p) => p.classification === 'blunder').length;
+    const unsolvedCount = puzzles.filter((p) => p.status === 'unsolved').length;
+    const avgCpLoss = Math.round(puzzles.reduce((sum, p) => sum + p.cpLoss, 0) / puzzles.length);
+    const severity = Math.min(90, OPENING_MISTAKE_SEVERITY_BASE + puzzles.length * 5 + blunderCount * 8);
+
+    const phaseCounts: Record<string, number> = { opening: 0, middlegame: 0, endgame: 0 };
+    for (const p of puzzles) phaseCounts[p.gamePhase]++;
+    const worstPhase = Object.entries(phaseCounts).sort((a, b) => b[1] - a[1])[0][0];
+
+    const detailParts: string[] = [
+      `${puzzles.length} mistakes found in the ${openingName} (avg ${avgCpLoss} cp loss).`,
+    ];
+    if (blunderCount > 0) {
+      detailParts.push(`${blunderCount} were blunders.`);
+    }
+    if (unsolvedCount > 0) {
+      detailParts.push(`${unsolvedCount} still unsolved.`);
+    }
+    detailParts.push(`Most errors happen in the ${worstPhase}. Drill these specific positions from your games.`);
+
+    weaknesses.push({
+      category: worstPhase === 'opening' ? 'openings' : worstPhase === 'endgame' ? 'endgame' : 'calculation',
+      label: `Mistakes in ${openingName}`,
+      metric: `${puzzles.length} errors, ${blunderCount} blunders, avg ${avgCpLoss} cp loss`,
+      severity,
+      detail: detailParts.join(' '),
+      trainingAction: {
+        route: '/puzzles/mistakes',
+        buttonLabel: `Drill ${openingName} mistakes`,
+        state: { initialOpeningName: openingName, initialStatus: 'unsolved' },
+      },
+    });
+  }
+
+  // ── Phase breakdown (only if no opening-specific items dominate) ──────
   const byPhase: Record<string, number> = { opening: 0, middlegame: 0, endgame: 0 };
   for (const p of mistakePuzzles) {
     byPhase[p.gamePhase]++;
   }
 
-  const total = mistakePuzzles.length;
   const phaseLabels: Record<string, string> = {
     opening: 'the opening',
     middlegame: 'the middlegame',
@@ -389,61 +451,102 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
   for (const [phase, count] of Object.entries(byPhase)) {
     const ratio = count / total;
     if (count >= 3 && ratio > 0.5) {
-      const phaseAction: WeaknessTrainingAction = phase === 'opening'
-        ? { route: '/openings', buttonLabel: 'Drill Openings' }
-        : phase === 'endgame'
-          ? { route: '/puzzles', buttonLabel: 'Train Endgames', state: { forcedWeakThemes: ['endgame'] } }
-          : { route: '/puzzles/mistakes', buttonLabel: 'Review Mistakes' };
       weaknesses.push({
         category: phase === 'endgame' ? 'endgame' : phase === 'opening' ? 'openings' : 'calculation',
         label: `Most mistakes in ${phaseLabels[phase]}`,
         metric: `${count} of ${total} mistakes (${Math.round(ratio * 100)}%)`,
         severity: Math.round(ratio * 70),
         detail: `Over half your mistakes from real games happen in ${phaseLabels[phase]}. Focus your practice on ${phaseLabels[phase]} patterns and positions.`,
-        trainingAction: phaseAction,
+        trainingAction: {
+          route: '/puzzles/mistakes',
+          buttonLabel: `Drill ${phase} mistakes`,
+          state: { initialPhase: phase, initialStatus: 'unsolved' },
+        },
       });
     }
   }
 
-  // Blunder ratio: how many mistakes are blunders?
-  const blunders = mistakePuzzles.filter((p) => p.classification === 'blunder').length;
-  if (blunders >= 3) {
-    const blunderRatio = blunders / total;
+  // ── Blunder ratio ────────────────────────────────────────────────────
+  const blunders = mistakePuzzles.filter((p) => p.classification === 'blunder');
+  if (blunders.length >= 3) {
+    const blunderRatio = blunders.length / total;
     if (blunderRatio > 0.4) {
+      const unsolvedBlunders = blunders.filter((p) => p.status === 'unsolved').length;
+      const recentBlunder = blunders.sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+      const blunderContext = recentBlunder.openingName
+        ? ` Most recent: move ${recentBlunder.moveNumber} in the ${recentBlunder.openingName}.`
+        : ` Most recent: move ${recentBlunder.moveNumber} (${recentBlunder.playerMoveSan} instead of ${recentBlunder.bestMoveSan}).`;
+
       weaknesses.push({
         category: 'calculation',
         label: 'Frequent blunders in games',
-        metric: `${blunders} blunders out of ${total} mistakes (${Math.round(blunderRatio * 100)}%)`,
+        metric: `${blunders.length} blunders out of ${total} mistakes (${Math.round(blunderRatio * 100)}%)`,
         severity: Math.min(85, Math.round(blunderRatio * 120)),
-        detail: `${Math.round(blunderRatio * 100)}% of your game mistakes are blunders (300+ centipawn loss). Before each move, do a quick blunder check — ask if anything is hanging or if your opponent has a tactic.`,
+        detail: `${Math.round(blunderRatio * 100)}% of your game mistakes are blunders (300+ centipawn loss).${blunderContext}${unsolvedBlunders > 0 ? ` ${unsolvedBlunders} blunder positions still unsolved.` : ''} Before each move, do a quick blunder check.`,
         trainingAction: {
           route: '/puzzles/mistakes',
-          buttonLabel: 'Fix My Blunders',
+          buttonLabel: `Fix ${unsolvedBlunders > 0 ? unsolvedBlunders : blunders.length} blunders`,
+          state: { initialClassification: 'blunder', initialStatus: unsolvedBlunders > 0 ? 'unsolved' : undefined },
         },
       });
     }
   }
 
-  // Unsolved ratio: are they actually working on their mistakes?
-  const unsolved = mistakePuzzles.filter((p) => p.status === 'unsolved').length;
-  if (unsolved >= 5) {
-    const unsolvedRatio = unsolved / total;
+  // ── Due / unsolved mistake puzzles ───────────────────────────────────
+  const today = new Date().toISOString().split('T')[0];
+  const dueMistakes = mistakePuzzles.filter(
+    (p) => p.status !== 'mastered' && p.srsDueDate <= today,
+  );
+
+  if (dueMistakes.length >= 3) {
+    const dueBlunders = dueMistakes.filter((p) => p.classification === 'blunder').length;
+    const dueSeverity = Math.min(80, 30 + dueMistakes.length * 3 + dueBlunders * 5);
+
+    weaknesses.push({
+      category: 'tactics',
+      label: `${dueMistakes.length} game mistakes due for review`,
+      metric: `${dueMistakes.length} positions from your games need practice${dueBlunders > 0 ? ` (${dueBlunders} blunders)` : ''}`,
+      severity: dueSeverity,
+      detail: `You have ${dueMistakes.length} mistake positions from your own games that are due for spaced repetition review. These are the exact positions where you went wrong — solving them builds pattern recognition for your real weaknesses.`,
+      trainingAction: {
+        route: '/puzzles/mistakes',
+        buttonLabel: `Review ${dueMistakes.length} due mistakes`,
+        state: { initialStatus: 'unsolved' },
+      },
+    });
+  }
+
+  // ── Unsolved backlog (separate from due — covers all unsolved) ───────
+  const unsolved = mistakePuzzles.filter((p) => p.status === 'unsolved');
+  if (unsolved.length >= 5) {
+    const unsolvedRatio = unsolved.length / total;
     if (unsolvedRatio > 0.6) {
+      // Find the most common opening among unsolved
+      const unsolvedByOpening = new Map<string, number>();
+      for (const p of unsolved) {
+        if (p.openingName) {
+          unsolvedByOpening.set(p.openingName, (unsolvedByOpening.get(p.openingName) ?? 0) + 1);
+        }
+      }
+      const sortedUnsolvedOpenings = [...unsolvedByOpening.entries()].sort((a, b) => b[1] - a[1]);
+      const topUnsolvedOpening = sortedUnsolvedOpenings.length > 0 ? sortedUnsolvedOpenings[0] : undefined;
+
       weaknesses.push({
         category: 'tactics',
         label: 'Unresolved game mistakes',
-        metric: `${unsolved} of ${total} mistake puzzles still unsolved`,
+        metric: `${unsolved.length} of ${total} mistake puzzles still unsolved`,
         severity: Math.round(unsolvedRatio * 50),
-        detail: `You have ${unsolved} mistake puzzles from your own games that haven't been solved yet. Reviewing your mistakes is one of the most effective ways to improve. Head to My Mistakes to work through them.`,
+        detail: `You have ${unsolved.length} mistake puzzles from your own games that haven't been solved yet.${topUnsolvedOpening ? ` ${topUnsolvedOpening[1]} are from the ${topUnsolvedOpening[0]}.` : ''} Reviewing your actual mistakes is the fastest way to improve.`,
         trainingAction: {
           route: '/puzzles/mistakes',
-          buttonLabel: 'Solve My Mistakes',
+          buttonLabel: 'Solve my mistakes',
+          state: { initialStatus: 'unsolved' },
         },
       });
     }
   }
 
-  // Strength: high mastery rate
+  // ── Strength: high mastery rate ──────────────────────────────────────
   const mastered = mistakePuzzles.filter((p) => p.status === 'mastered').length;
   if (mastered >= 5 && mastered / total > 0.4) {
     strengths.push(`Mastered ${mastered} of ${total} mistake puzzles from your games`);
