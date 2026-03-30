@@ -6,7 +6,6 @@ import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
-import { SkillBar } from '../ui/SkillBar';
 import { MiniBoard } from '../Board/MiniBoard';
 import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X, Upload } from 'lucide-react';
 import { DailyPuzzleCard } from './DailyPuzzleCard';
@@ -73,7 +72,7 @@ export function DashboardPage(): JSX.Element {
 
   if (!activeProfile) return <></>;
 
-  const { currentStreak, xp, level, puzzleRating, skillRadar } = activeProfile;
+  const { currentStreak, xp, level, puzzleRating } = activeProfile;
   const xpProgress = getXpToNextLevel(xp);
 
   return (
@@ -218,19 +217,6 @@ export function DashboardPage(): JSX.Element {
           </div>
         </div>
       )}
-
-      {/* Skill radar */}
-      <div
-        className="rounded-xl p-5 border"
-        style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-      >
-        <h2 className="font-semibold text-lg mb-4">Skill Overview</h2>
-        <div className="space-y-2">
-          {(Object.entries(skillRadar) as Array<[string, number]>).map(([skill, value]) => (
-            <SkillBar key={skill} label={skill} value={value} />
-          ))}
-        </div>
-      </div>
 
       {/* Recent sessions */}
       {recentSessions.length > 0 && (
