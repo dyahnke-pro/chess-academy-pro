@@ -9,10 +9,17 @@ import type { WeaknessProfile } from '../../types';
 
 const mockGetStoredWeaknessProfile = vi.fn();
 const mockComputeWeaknessProfile = vi.fn();
+const mockAnalyzeAllGames = vi.fn();
+const mockCountGamesNeedingAnalysis = vi.fn();
 
 vi.mock('../../services/weaknessAnalyzer', () => ({
   getStoredWeaknessProfile: (...args: unknown[]): unknown => mockGetStoredWeaknessProfile(...args),
   computeWeaknessProfile: (...args: unknown[]): unknown => mockComputeWeaknessProfile(...args),
+}));
+
+vi.mock('../../services/gameAnalysisService', () => ({
+  analyzeAllGames: (...args: unknown[]): unknown => mockAnalyzeAllGames(...args),
+  countGamesNeedingAnalysis: (): unknown => mockCountGamesNeedingAnalysis(),
 }));
 
 vi.mock('../ui/SkillBar', () => ({
@@ -63,6 +70,8 @@ describe('CoachWeaknessReport', () => {
     useAppStore.getState().reset();
     mockGetStoredWeaknessProfile.mockResolvedValue(null);
     mockComputeWeaknessProfile.mockResolvedValue(mockProfile);
+    mockAnalyzeAllGames.mockResolvedValue(0);
+    mockCountGamesNeedingAnalysis.mockResolvedValue(0);
   });
 
   function setupProfile(): void {
@@ -229,6 +238,11 @@ describe('CoachWeaknessReport', () => {
       expect(screen.getByTestId('refresh-btn')).toBeInTheDocument();
     });
 
+    // Wait for auto-recompute to finish
+    await waitFor(() => {
+      expect(mockComputeWeaknessProfile).toHaveBeenCalled();
+    });
+
     const updatedProfile: WeaknessProfile = {
       ...mockProfile,
       overallAssessment: 'Updated assessment after recompute.',
@@ -238,7 +252,8 @@ describe('CoachWeaknessReport', () => {
     fireEvent.click(screen.getByTestId('refresh-btn'));
 
     await waitFor(() => {
-      expect(mockComputeWeaknessProfile).toHaveBeenCalledTimes(1);
+      // Called at least twice: once for auto-recompute, once for manual refresh
+      expect(mockComputeWeaknessProfile).toHaveBeenCalledTimes(2);
     });
 
     await waitFor(() => {
@@ -246,9 +261,17 @@ describe('CoachWeaknessReport', () => {
     });
   });
 
-  it('shows empty state when no stored profile', async () => {
+  it('shows empty state when no stored profile and recompute returns empty', async () => {
     mockGetStoredWeaknessProfile.mockResolvedValue(null);
-    setupProfile();
+    // Auto-recompute also returns null-like (no items)
+    const emptyProfile: WeaknessProfile = {
+      computedAt: new Date().toISOString(),
+      items: [],
+      strengths: [],
+      overallAssessment: '',
+    };
+    mockComputeWeaknessProfile.mockResolvedValue(emptyProfile);
+    // No active profile means no auto-recompute
     render(<CoachWeaknessReport />);
 
     await waitFor(() => {
@@ -267,6 +290,7 @@ describe('CoachWeaknessReport', () => {
       ],
     };
     mockGetStoredWeaknessProfile.mockResolvedValue(noActionProfile);
+    mockComputeWeaknessProfile.mockResolvedValue(noActionProfile);
     setupProfile();
     render(<CoachWeaknessReport />);
 
@@ -277,12 +301,57 @@ describe('CoachWeaknessReport', () => {
     expect(screen.queryByTestId('training-plan')).not.toBeInTheDocument();
   });
 
+  it('shows Analyze My Games button when unanalyzed games exist', async () => {
+    mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
+    mockCountGamesNeedingAnalysis.mockResolvedValue(5);
+    setupProfile();
+    render(<CoachWeaknessReport />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('analyze-games-btn')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Analyze My Games/)).toBeInTheDocument();
+    expect(screen.getByText(/5 unanalyzed/)).toBeInTheDocument();
+  });
+
+  it('does not show Analyze My Games button when all games are analyzed', async () => {
+    mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
+    mockCountGamesNeedingAnalysis.mockResolvedValue(0);
+    setupProfile();
+    render(<CoachWeaknessReport />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weakness-report')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('analyze-games-btn')).not.toBeInTheDocument();
+  });
+
+  it('clicking Analyze My Games calls analyzeAllGames', async () => {
+    mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
+    mockCountGamesNeedingAnalysis.mockResolvedValue(3);
+    setupProfile();
+    render(<CoachWeaknessReport />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('analyze-games-btn')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('analyze-games-btn'));
+
+    await waitFor(() => {
+      expect(mockAnalyzeAllGames).toHaveBeenCalledTimes(1);
+    });
+  });
+
   it('does not show strengths card when no strengths exist', async () => {
     const noStrengthsProfile: WeaknessProfile = {
       ...mockProfile,
       strengths: [],
     };
     mockGetStoredWeaknessProfile.mockResolvedValue(noStrengthsProfile);
+    mockComputeWeaknessProfile.mockResolvedValue(noStrengthsProfile);
     setupProfile();
     render(<CoachWeaknessReport />);
 

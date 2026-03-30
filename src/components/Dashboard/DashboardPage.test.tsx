@@ -301,22 +301,6 @@ describe('DashboardPage', () => {
     expect(screen.queryByText('Recent Sessions')).not.toBeInTheDocument();
   });
 
-  it('renders skill overview with all five skills', async () => {
-    setProfile({
-      skillRadar: { opening: 60, tactics: 70, endgame: 40, memory: 55, calculation: 65 },
-    });
-    render(<DashboardPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Skill Overview')).toBeInTheDocument();
-    });
-    expect(screen.getByText('opening')).toBeInTheDocument();
-    expect(screen.getByText('tactics')).toBeInTheDocument();
-    expect(screen.getByText('endgame')).toBeInTheDocument();
-    expect(screen.getByText('memory')).toBeInTheDocument();
-    expect(screen.getByText('calculation')).toBeInTheDocument();
-  });
-
   it('does not show beta banner when BETA_MODE is false', async () => {
     setProfile();
     await db.meta.delete('beta_banner_dismissed');

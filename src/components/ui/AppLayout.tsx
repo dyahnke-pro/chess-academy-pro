@@ -36,16 +36,16 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/openings', label: 'Openings', icon: BookOpen },
   { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
+  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/play', label: 'Play', icon: Swords },
   { to: '/analysis', label: 'Analysis', icon: Search },
   { to: '/games', label: 'Games', icon: Database },
-  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/stats', label: 'Stats', icon: BarChart3 },
   { to: '/settings', label: 'Settings', icon: Settings },
   { to: '/kid', label: 'Kids Mode', icon: Baby },
 ];
 
-// Bottom tab bar shows the 5 most-used destinations
+// Bottom tab bar: Dashboard, Openings, Coach, Puzzles, Weaknesses
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
 
 export function AppLayout(): JSX.Element {

@@ -1,9 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, RefreshCw, ChevronDown, ChevronUp, Zap, Target } from 'lucide-react';
+import { RefreshCw, ChevronDown, ChevronUp, Zap, Target, BarChart3 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { getStoredWeaknessProfile, computeWeaknessProfile } from '../../services/weaknessAnalyzer';
+import { analyzeAllGames, countGamesNeedingAnalysis } from '../../services/gameAnalysisService';
+import type { BatchAnalysisProgress } from '../../services/gameAnalysisService';
 import { SkillBar } from '../ui/SkillBar';
 import type { WeaknessProfile, WeaknessItem, WeaknessCategory } from '../../types';
 
@@ -40,13 +42,40 @@ export function CoachWeaknessReport(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showStrengths, setShowStrengths] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysisProgress, setAnalysisProgress] = useState<BatchAnalysisProgress | null>(null);
+  const [unanalyzedCount, setUnanalyzedCount] = useState(0);
+  const hasAutoRefreshed = useRef(false);
 
+  // Load stored profile, then auto-recompute if data exists
   useEffect(() => {
-    void getStoredWeaknessProfile().then((stored) => {
+    void (async () => {
+      const stored = await getStoredWeaknessProfile();
       setProfile(stored);
       setLoading(false);
-    });
-  }, []);
+
+      // Check how many games need analysis
+      const count = await countGamesNeedingAnalysis();
+      setUnanalyzedCount(count);
+
+      // Auto-recompute once per visit (if profile + data exist)
+      if (activeProfile && !hasAutoRefreshed.current) {
+        hasAutoRefreshed.current = true;
+        try {
+          const fresh = await computeWeaknessProfile(activeProfile);
+          setProfile(fresh);
+          // Reload profile to get updated skillRadar
+          const { db } = await import('../../db/schema');
+          const updated = await db.profiles.get(activeProfile.id);
+          if (updated) {
+            useAppStore.getState().setActiveProfile(updated);
+          }
+        } catch {
+          // Use stored profile
+        }
+      }
+    })();
+  }, [activeProfile]);
 
   const handleRefresh = useCallback(async () => {
     if (!activeProfile || refreshing) return;
@@ -54,12 +83,37 @@ export function CoachWeaknessReport(): JSX.Element {
     try {
       const fresh = await computeWeaknessProfile(activeProfile);
       setProfile(fresh);
+      // Reload profile to get updated skillRadar
+      const { db } = await import('../../db/schema');
+      const updated = await db.profiles.get(activeProfile.id);
+      if (updated) {
+        useAppStore.getState().setActiveProfile(updated);
+      }
     } catch {
       // Silently fail
     } finally {
       setRefreshing(false);
     }
   }, [activeProfile, refreshing]);
+
+  const handleAnalyzeGames = useCallback(async () => {
+    if (analyzing) return;
+    setAnalyzing(true);
+    try {
+      await analyzeAllGames((progress) => {
+        setAnalysisProgress(progress);
+      });
+      // Refresh the weakness profile after analysis
+      const fresh = useAppStore.getState().weaknessProfile;
+      if (fresh) setProfile(fresh);
+      setUnanalyzedCount(0);
+    } catch {
+      // Silently fail
+    } finally {
+      setAnalyzing(false);
+      setAnalysisProgress(null);
+    }
+  }, [analyzing]);
 
   if (loading) {
     return (
@@ -71,11 +125,8 @@ export function CoachWeaknessReport(): JSX.Element {
 
   if (!profile) {
     return (
-      <div className="max-w-2xl mx-auto w-full p-6" data-testid="weakness-report">
-        <div className="flex items-center gap-3 mb-6">
-          <button onClick={() => void navigate('/coach')} className="p-1.5 rounded-lg hover:opacity-80">
-            <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-          </button>
+      <div className="max-w-2xl mx-auto w-full p-6 pb-20 md:pb-6" data-testid="weakness-report">
+        <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Weakness Report</h2>
         </div>
         <div
@@ -84,15 +135,29 @@ export function CoachWeaknessReport(): JSX.Element {
           data-testid="report-empty"
         >
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            No data yet. Play some games and solve puzzles, then come back.
+            No data yet. Import or play some games, then analyze them.
           </p>
-          <button
-            onClick={() => void handleRefresh()}
-            className="mt-4 px-4 py-2 rounded-lg text-sm font-medium"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-          >
-            Compute Now
-          </button>
+          <div className="flex flex-col gap-3 mt-4 items-center">
+            {unanalyzedCount > 0 && (
+              <button
+                onClick={() => void handleAnalyzeGames()}
+                disabled={analyzing}
+                className="px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2"
+                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                data-testid="analyze-games-btn"
+              >
+                <BarChart3 size={16} />
+                {analyzing ? 'Analyzing...' : `Analyze My Games (${unanalyzedCount})`}
+              </button>
+            )}
+            <button
+              onClick={() => void handleRefresh()}
+              className="px-4 py-2 rounded-lg text-sm font-medium"
+              style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+            >
+              Compute Now
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -112,16 +177,11 @@ export function CoachWeaknessReport(): JSX.Element {
     >
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={() => void navigate('/coach')} className="p-1.5 rounded-lg hover:opacity-80">
-            <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-          </button>
-          <div>
-            <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Weakness Report</h2>
-            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              Last updated: {formatTimestamp(profile.computedAt)}
-            </span>
-          </div>
+        <div>
+          <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Weakness Report</h2>
+          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            Last updated: {formatTimestamp(profile.computedAt)}
+          </span>
         </div>
         <button
           onClick={() => void handleRefresh()}
@@ -132,6 +192,47 @@ export function CoachWeaknessReport(): JSX.Element {
           <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} style={{ color: 'var(--color-text-muted)' }} />
         </button>
       </div>
+
+      {/* Analyze My Games — prominent CTA */}
+      {unanalyzedCount > 0 && (
+        <button
+          onClick={() => void handleAnalyzeGames()}
+          disabled={analyzing}
+          className="w-full py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-opacity disabled:opacity-60"
+          style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          data-testid="analyze-games-btn"
+        >
+          <BarChart3 size={18} />
+          {analyzing
+            ? analysisProgress
+              ? `Analyzing game ${analysisProgress.currentGame}/${analysisProgress.totalGames}...`
+              : 'Analyzing...'
+            : `Analyze My Games (${unanalyzedCount} unanalyzed)`}
+        </button>
+      )}
+
+      {/* Analysis progress bar */}
+      {analyzing && analysisProgress && (
+        <div className="rounded-xl p-4 border" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }} data-testid="analysis-progress">
+          <div className="flex items-center justify-between text-xs mb-2" style={{ color: 'var(--color-text-muted)' }}>
+            <span>
+              {analysisProgress.phase === 'computing_weaknesses'
+                ? 'Computing weakness profile...'
+                : analysisProgress.currentGameName}
+            </span>
+            <span>{analysisProgress.currentGame}/{analysisProgress.totalGames}</span>
+          </div>
+          <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-300"
+              style={{
+                background: 'var(--color-accent)',
+                width: `${Math.round((analysisProgress.currentGame / analysisProgress.totalGames) * 100)}%`,
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Training Plan — top priority actions */}
       {topTrainingActions.length > 0 && (
