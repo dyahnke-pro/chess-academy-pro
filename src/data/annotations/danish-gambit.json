@@ -521,7 +521,7 @@
         "Continue the kingside attack"
       ],
       "arrows": [
-        { "from": "g5", "to": "f7", "color": "rgba(0, 180, 80, 0.8)" },
+        { "from": "a2", "to": "b3", "color": "rgba(0, 180, 80, 0.8)" },
         { "from": "a1", "to": "a8", "color": "rgba(0, 100, 255, 0.7)" }
       ],
       "highlights": [
