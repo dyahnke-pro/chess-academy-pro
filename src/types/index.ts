@@ -563,12 +563,19 @@ export type WeaknessCategory =
   | 'positional'
   | 'calculation';
 
+export interface WeaknessTrainingAction {
+  route: string;
+  buttonLabel: string;
+  state?: Record<string, unknown>;
+}
+
 export interface WeaknessItem {
   category: WeaknessCategory;
   label: string;
   metric: string;
   severity: number; // 0-100, higher = worse
   detail: string;
+  trainingAction?: WeaknessTrainingAction;
 }
 
 export interface WeaknessProfile {

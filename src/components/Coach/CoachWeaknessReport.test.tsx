@@ -26,9 +26,30 @@ vi.mock('../ui/SkillBar', () => ({
 const mockProfile: WeaknessProfile = {
   computedAt: '2026-03-07T10:00:00.000Z',
   items: [
-    { category: 'tactics', label: 'Fork Recognition', metric: '32% accuracy', severity: 75, detail: 'Struggles with knight forks' },
-    { category: 'openings', label: 'Italian Game', metric: '40% win rate', severity: 55, detail: 'Below average results' },
-    { category: 'endgame', label: 'Pawn Endings', metric: '60% accuracy', severity: 30, detail: 'Doing okay' },
+    {
+      category: 'tactics',
+      label: 'Fork Recognition',
+      metric: '32% accuracy',
+      severity: 75,
+      detail: 'Struggles with knight forks',
+      trainingAction: { route: '/puzzles', buttonLabel: 'Train fork', state: { forcedWeakThemes: ['fork'] } },
+    },
+    {
+      category: 'openings',
+      label: 'Italian Game',
+      metric: '40% drill accuracy',
+      severity: 55,
+      detail: 'Below average results',
+      trainingAction: { route: '/openings/italian', buttonLabel: 'Drill Italian Game' },
+    },
+    {
+      category: 'endgame',
+      label: 'Pawn Endings',
+      metric: '60% accuracy',
+      severity: 30,
+      detail: 'Doing okay',
+      trainingAction: { route: '/puzzles', buttonLabel: 'Train Endgames', state: { forcedWeakThemes: ['endgame'] } },
+    },
   ],
   strengths: ['Strong pin tactics', 'Good calculation speed'],
   overallAssessment: 'Focus on tactical patterns and opening preparation.',
@@ -81,7 +102,24 @@ describe('CoachWeaknessReport', () => {
     expect(screen.getByText('Pawn Endings')).toBeInTheDocument();
   });
 
-  it('shows strengths card when strengths exist', async () => {
+  it('shows training plan with top 3 actionable weaknesses', async () => {
+    mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
+    setupProfile();
+    render(<CoachWeaknessReport />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('training-plan')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Your Training Plan')).toBeInTheDocument();
+    const actions = screen.getAllByTestId('training-action');
+    expect(actions).toHaveLength(3);
+    expect(screen.getByText('Train fork')).toBeInTheDocument();
+    expect(screen.getByText('Drill Italian Game')).toBeInTheDocument();
+    expect(screen.getByText('Train Endgames')).toBeInTheDocument();
+  });
+
+  it('strengths card is collapsed by default', async () => {
     mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
     setupProfile();
     render(<CoachWeaknessReport />);
@@ -90,8 +128,25 @@ describe('CoachWeaknessReport', () => {
       expect(screen.getByTestId('strengths-card')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Strengths')).toBeInTheDocument();
-    expect(screen.getByText('Strong pin tactics')).toBeInTheDocument();
+    // Strengths header shows count but content is hidden
+    expect(screen.getByText('Strengths (2)')).toBeInTheDocument();
+    expect(screen.queryByText('Strong pin tactics')).not.toBeInTheDocument();
+  });
+
+  it('expanding strengths card shows strength items', async () => {
+    mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
+    setupProfile();
+    render(<CoachWeaknessReport />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('strengths-card')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Strengths (2)'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Strong pin tactics')).toBeInTheDocument();
+    });
     expect(screen.getByText('Good calculation speed')).toBeInTheDocument();
   });
 
@@ -110,7 +165,7 @@ describe('CoachWeaknessReport', () => {
     expect(badges[2]).toHaveTextContent('Minor');
   });
 
-  it('expanding a weakness item shows detail text and Practice button', async () => {
+  it('expanding a weakness item shows detail text and specific Practice button label', async () => {
     mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
     setupProfile();
     render(<CoachWeaknessReport />);
@@ -130,7 +185,9 @@ describe('CoachWeaknessReport', () => {
       expect(screen.getByText('Struggles with knight forks')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('practice-btn')).toBeInTheDocument();
+    const practiceBtn = screen.getByTestId('practice-btn');
+    expect(practiceBtn).toBeInTheDocument();
+    expect(practiceBtn).toHaveTextContent('Train fork');
   });
 
   it('shows skill radar section with skill bars', async () => {
@@ -200,5 +257,39 @@ describe('CoachWeaknessReport', () => {
 
     expect(screen.getByText(/No data yet/)).toBeInTheDocument();
     expect(screen.getByText('Compute Now')).toBeInTheDocument();
+  });
+
+  it('does not show training plan when no weaknesses have training actions', async () => {
+    const noActionProfile: WeaknessProfile = {
+      ...mockProfile,
+      items: [
+        { category: 'tactics', label: 'Generic weakness', metric: '50%', severity: 50, detail: 'Detail' },
+      ],
+    };
+    mockGetStoredWeaknessProfile.mockResolvedValue(noActionProfile);
+    setupProfile();
+    render(<CoachWeaknessReport />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weakness-report')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('training-plan')).not.toBeInTheDocument();
+  });
+
+  it('does not show strengths card when no strengths exist', async () => {
+    const noStrengthsProfile: WeaknessProfile = {
+      ...mockProfile,
+      strengths: [],
+    };
+    mockGetStoredWeaknessProfile.mockResolvedValue(noStrengthsProfile);
+    setupProfile();
+    render(<CoachWeaknessReport />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weakness-report')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('strengths-card')).not.toBeInTheDocument();
   });
 });
