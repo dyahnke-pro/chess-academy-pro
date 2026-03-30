@@ -32,6 +32,7 @@ import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
+import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
@@ -428,7 +429,7 @@ export function CoachGamePage(): JSX.Element {
     gameChatRef.current?.injectAssistantMessage(text);
   }, []);
 
-  // Check for game over
+  // Check for game over — transition to 'gameover' first to show final position
   useEffect(() => {
     if (game.isGameOver && gameState.status === 'playing') {
       const result: 'win' | 'loss' | 'draw' = game.isCheckmate
@@ -437,9 +438,10 @@ export function CoachGamePage(): JSX.Element {
 
       const keyMoments = findKeyMoments(gameState.moves);
 
+      // Show the final board position with game-over overlay before transitioning
       setGameState((prev) => ({
         ...prev,
-        status: 'postgame',
+        status: 'gameover',
         result,
         keyMoments,
       }));
@@ -480,8 +482,11 @@ export function CoachGamePage(): JSX.Element {
         // Detect bad habits from game moves
         void detectBadHabitsFromGame(gameState.moves, activeProfile);
 
-        // Generate mistake puzzles from the completed game
-        void generateMistakePuzzlesFromGame(gameRecord.id);
+        // Generate mistake puzzles and refresh weakness profile
+        void generateMistakePuzzlesFromGame(gameRecord.id).then(() => {
+          // Refresh weakness profile with new game data and generated puzzles
+          void computeWeaknessProfile(activeProfile);
+        });
 
         void checkAndAwardAchievements(activeProfile).then((earned) => {
           if (earned.length > 0) {
@@ -498,6 +503,15 @@ export function CoachGamePage(): JSX.Element {
       });
     }
   }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, gameState.moves, playerColor, difficulty, gameState.hintsUsed, gameState.gameId, game.history, activeProfile, playerRating, targetStrength, setPendingAchievement, setActiveProfile, detectedOpening]);
+
+  // Auto-transition from gameover overlay to postgame review after showing final position
+  useEffect(() => {
+    if (gameState.status !== 'gameover') return;
+    const timer = setTimeout(() => {
+      setGameState((prev) => ({ ...prev, status: 'postgame' }));
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, [gameState.status]);
 
   // Coach makes a move when it's their turn.
   // Uses an AbortController (not a ref guard) to handle React strict-mode
@@ -841,6 +855,104 @@ export function CoachGamePage(): JSX.Element {
           isGuidedLesson
           pgn={reviewGame.pgn}
         />
+      </div>
+    );
+  }
+
+  // Game-over overlay — show final position with checkmate/result before review
+  if (gameState.status === 'gameover') {
+    const resultLabel = gameState.result === 'win' ? 'Victory!' : gameState.result === 'loss' ? 'Defeat' : 'Draw';
+    const resultColor = gameState.result === 'win' ? 'var(--color-success)' : gameState.result === 'loss' ? 'var(--color-error)' : 'var(--color-warning)';
+    const resultDetail = game.isCheckmate
+      ? 'Checkmate'
+      : game.isStalemate
+        ? 'Stalemate'
+        : game.isDraw
+          ? 'Draw'
+          : 'Game Over';
+
+    return (
+      <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
+        <div className="flex flex-col flex-1 items-center justify-center min-h-0 relative">
+          {/* Opponent info */}
+          <div className="px-2 pt-1 w-full md:max-w-[460px]">
+            <PlayerInfoBar
+              name={opponentName}
+              rating={targetStrength}
+              isBot
+              capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
+              materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
+              isActive={false}
+            />
+          </div>
+
+          {/* Board with overlay */}
+          <div className="px-2 py-1 flex justify-center relative w-full">
+            <div className="w-full md:max-w-[420px] relative">
+              <ChessBoard
+                initialFen={game.fen}
+                orientation={playerColor}
+                interactive={false}
+                showEvalBar={showEvalBarEffective}
+                evaluation={latestEval}
+                isMate={latestIsMate}
+                mateIn={latestMateIn}
+                showFlipButton={false}
+                highlightSquares={coachLastMove}
+              />
+              {/* Result overlay */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+              >
+                <div
+                  className="rounded-2xl px-8 py-5 flex flex-col items-center gap-1 shadow-2xl"
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.75)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                >
+                  <span className="text-3xl font-black tracking-tight" style={{ color: resultColor }}>
+                    {resultLabel}
+                  </span>
+                  <span className="text-sm font-medium text-white/80">
+                    {resultDetail}
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Player info */}
+          <div className="px-2 w-full md:max-w-[460px]">
+            <PlayerInfoBar
+              name={playerName}
+              rating={playerRating}
+              capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
+              materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
+              isActive={false}
+            />
+          </div>
+
+          {/* Skip to review button */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            className="mt-4"
+          >
+            <button
+              onClick={() => setGameState((prev) => ({ ...prev, status: 'postgame' }))}
+              className="px-4 py-2 rounded-lg text-sm font-medium hover:opacity-80 transition-opacity"
+              style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+              data-testid="skip-to-review-btn"
+            >
+              Review Game &rarr;
+            </button>
+          </motion.div>
+        </div>
       </div>
     );
   }
