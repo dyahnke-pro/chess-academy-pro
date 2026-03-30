@@ -587,7 +587,7 @@ export interface ChatMessage {
   };
 }
 
-export type CoachGameStatus = 'pregame' | 'playing' | 'postgame';
+export type CoachGameStatus = 'pregame' | 'playing' | 'gameover' | 'postgame';
 export type CoachGameResult = 'win' | 'loss' | 'draw' | 'ongoing';
 
 export interface CoachGameMove {
