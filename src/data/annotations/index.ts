@@ -51,10 +51,10 @@ const ANNOTATION_MODULES: Record<string, AnnotationLoader> = {
   'danish-gambit': () => import('./danish-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
   'marshall-attack': () => import('./marshall-attack.json') as unknown as Promise<{ default: OpeningAnnotations }>,
   'albin-countergambit': () => import('./albin-countergambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
-  'gambit-kings-gambit': () => import('./kings-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
-  'gambit-evans-gambit': () => import('./evans-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
-  'gambit-budapest-gambit': () => import('./budapest-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
-  'gambit-benko-gambit': () => import('./benko-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-kings-gambit': () => import('./gambit-kings-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-evans-gambit': () => import('./gambit-evans-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-budapest-gambit': () => import('./gambit-budapest-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'gambit-benko-gambit': () => import('./gambit-benko-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
 };
 
 export { ANNOTATION_MODULES };

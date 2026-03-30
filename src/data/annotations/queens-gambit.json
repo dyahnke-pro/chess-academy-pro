@@ -1143,6 +1143,624 @@
       "type": "variation"
     },
     {
+      "name": "Classical Mainline",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Classical Mainline is an important variation of the Queen's Gambit. The tabiya of the QGD. White develops harmoniously and Black defends solidly. After ...dxc4 Bxc4, White has a slight initiative with better piece placement. Let's walk through the key ideas."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds with d5, contesting the center. This is the move that defines the Classical Mainline."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "Bg5 brings the bishop into the game. Development with purpose — the bishop on g5 eyes important squares."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 brings the bishop into the game. Development with purpose — the bishop on e7 eyes important squares."
+        },
+        {
+          "san": "e3",
+          "annotation": "e3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7 brings the knight into the game. Development with purpose — the knight on d7 eyes important squares."
+        },
+        {
+          "san": "Rc1",
+          "annotation": "Rc1 improves the rook's placement. The rook was less effective on a1 and moves to c1 where it serves the plan better."
+        },
+        {
+          "san": "c6",
+          "annotation": "c6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Bd3",
+          "annotation": "Bd3 brings the bishop into the game. Development with purpose — the bishop on d3 eyes important squares."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "dxc4 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "Bxc4 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 increases Black's influence over the center. Controlling the center is the foundation of a strong position. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "Bxe7 captures the bishop. This exchange is thematic in the Classical Mainline — it defines the resulting pawn structure and piece activity.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "e7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Qxe7 completes the variation. The resulting position after this capture offers Black clear targets and plans. Study this structure — you'll see it often.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "e7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tartakower Variation",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Tartakower Variation is an important variation of the Queen's Gambit. Black plays ...h6 and ...b6 to develop the light-squared bishop to b7. A solid system where Black avoids the most theoretical lines. White should aim for the Exchange setup. Let's walk through the key ideas."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds with d5, contesting the center. This is the move that defines the Tartakower Variation."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "Bg5 brings the bishop into the game. Development with purpose — the bishop on g5 eyes important squares."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 brings the bishop into the game. Development with purpose — the bishop on e7 eyes important squares."
+        },
+        {
+          "san": "e3",
+          "annotation": "e3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "h6",
+          "annotation": "h6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Bh4",
+          "annotation": "Bh4 improves the bishop's placement. The bishop was less effective on g5 and moves to h4 where it serves the plan better."
+        },
+        {
+          "san": "b6",
+          "annotation": "b6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "cxd5",
+          "annotation": "cxd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "Bxe7 captures the bishop. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "h4",
+              "to": "e7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Qxe7 brings the queen into the game. Development with purpose — the queen on e7 eyes important squares.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "e7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 captures the knight. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "exd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rc1",
+          "annotation": "Rc1 improves the rook's placement. The rook was less effective on a1 and moves to c1 where it serves the plan better. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "c1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Be6. This is the typical position arising from the Tartakower Variation. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Queen's Gambit Accepted",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Queen's Gambit Accepted is an important variation of the Queen's Gambit. Black takes the pawn with ...dxc4. White easily regains it with e3 and Bxc4. The resulting positions give White a central majority and open lines, but Black has active piece play. Let's walk through the key ideas."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds with d5, contesting the center. This is the move that defines the Queen's Gambit Accepted."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "dxc4 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "e3",
+          "annotation": "e3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "Bxc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 brings the queen into the game. Development with purpose — the queen on e2 eyes important squares."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "Bb3 improves the bishop's placement. The bishop was less effective on c4 and moves to b3 where it serves the plan better."
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Bb7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rd1",
+          "annotation": "Rd1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7. This is the typical position arising from the Queen's Gambit Accepted. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Slav Defence Response",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Slav Defence Response is an important variation of the Queen's Gambit. Against the Slav (...c6), White plays for a4 to prevent ...b5 and recapture the pawn. The positions are rich and strategic with many plans for both sides. Let's walk through the key ideas."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds with d5, contesting the center. This is the move that defines the Slav Defence Response."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "c6",
+          "annotation": "c6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "dxc4 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "a4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Bf5 brings the bishop into the game. Development with purpose — the bishop on f5 eyes important squares."
+        },
+        {
+          "san": "e3",
+          "annotation": "e3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "Bxc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Bb4 brings the bishop into the game. Development with purpose — the bishop on b4 eyes important squares."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 brings the queen into the game. Development with purpose — the queen on e2 eyes important squares. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "e2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7. This is the typical position arising from the Slav Defence Response. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Semi-Slav Response",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Semi-Slav Response is an important variation of the Queen's Gambit. The Semi-Slav with ...e6 and ...c6 is one of the richest openings in chess. White should aim for e4 to seize the center, leading to sharp tactical play. Let's walk through the key ideas."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds with d5, contesting the center. This is the move that defines the Semi-Slav Response."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "c6",
+          "annotation": "c6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "e3",
+          "annotation": "e3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7 brings the knight into the game. Development with purpose — the knight on d7 eyes important squares."
+        },
+        {
+          "san": "Bd3",
+          "annotation": "Bd3 brings the bishop into the game. Development with purpose — the bishop on d3 eyes important squares."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "dxc4 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "Bxc4 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Bd3",
+          "annotation": "Bd3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Bb7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "c5. This is the typical position arising from the Semi-Slav Response. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "QGA e4 Thrust",
       "type": "trap",
       "moveAnnotations": [
