@@ -3,6 +3,7 @@ import { db } from '../db/schema';
 import { countGamesNeedingAnalysis, analyzeAllGames } from './gameAnalysisService';
 import { buildGameRecord, buildUserProfile } from '../test/factories';
 import { useAppStore } from '../stores/appStore';
+import type { StockfishAnalysis } from '../types';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
@@ -23,6 +24,10 @@ import { computeWeaknessProfile } from './weaknessAnalyzer';
 const mockAnalyzePosition = vi.mocked(stockfishEngine).analyzePosition;
 const mockInitialize = vi.mocked(stockfishEngine).initialize;
 const mockComputeWeaknessProfile = vi.mocked(computeWeaknessProfile);
+
+function mockAnalysis(evaluation: number, bestMove: string): StockfishAnalysis {
+  return { evaluation, bestMove, isMate: false, mateIn: null, depth: 12, topLines: [], nodesPerSecond: 100000 };
+}
 
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
@@ -92,11 +97,11 @@ describe('gameAnalysisService', () => {
 
       // Mock Stockfish to return evals for each position (5 positions for 4 half-moves + start)
       mockAnalyzePosition
-        .mockResolvedValueOnce({ evaluation: 30, bestMove: 'e2e4', topLines: [] })  // start
-        .mockResolvedValueOnce({ evaluation: 25, bestMove: 'e7e5', topLines: [] })  // after e4
-        .mockResolvedValueOnce({ evaluation: 30, bestMove: 'g1f3', topLines: [] })  // after e5
-        .mockResolvedValueOnce({ evaluation: 20, bestMove: 'b8c6', topLines: [] })  // after Nf3
-        .mockResolvedValueOnce({ evaluation: 25, bestMove: 'd2d4', topLines: [] }); // after Nc6
+        .mockResolvedValueOnce(mockAnalysis(30, 'e2e4'))   // start
+        .mockResolvedValueOnce(mockAnalysis(25, 'e7e5'))   // after e4
+        .mockResolvedValueOnce(mockAnalysis(30, 'g1f3'))   // after e5
+        .mockResolvedValueOnce(mockAnalysis(20, 'b8c6'))   // after Nf3
+        .mockResolvedValueOnce(mockAnalysis(25, 'd2d4'));  // after Nc6
 
       const result = await analyzeAllGames();
       expect(result).toBe(1);
@@ -116,7 +121,7 @@ describe('gameAnalysisService', () => {
       });
       await db.games.add(game);
 
-      mockAnalyzePosition.mockResolvedValue({ evaluation: 30, bestMove: 'e2e4', topLines: [] });
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(30, 'e2e4'));
 
       const progressUpdates: Array<{ phase: string }> = [];
       await analyzeAllGames((progress) => {
