@@ -105,7 +105,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
     void (async () => {
       const subKey = customLine
         ? undefined
@@ -115,9 +115,9 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       const data = subKey
         ? await loadSubLineAnnotations(opening.id, subKey)
         : await loadAnnotations(opening.id);
-      if (!cancelled) setAnnotations(data);
+      if (!guard.cancelled) setAnnotations(data);
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [opening.id, customLine, isVariation, variationIndex]);
 
   const mistakeExplanation = useMemo((): string => {

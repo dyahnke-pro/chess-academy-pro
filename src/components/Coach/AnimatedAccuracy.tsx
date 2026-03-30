@@ -29,7 +29,7 @@ export function AnimatedAccuracy({
 
   useEffect(() => {
     const unsubscribe = displayValue.on('change', (v) => {
-      setDisplayNum(v as number);
+      setDisplayNum(v);
     });
     return unsubscribe;
   }, [displayValue]);

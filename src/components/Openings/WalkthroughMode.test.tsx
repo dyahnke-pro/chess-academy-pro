@@ -198,7 +198,7 @@ describe('WalkthroughMode', () => {
     await user.click(screen.getByTestId('nav-next'));
 
     await waitFor(() => {
-      expect(mockSpeak).toHaveBeenCalledWith('White opens with the king pawn.', expect.objectContaining({ rate: expect.any(Number) }));
+      expect(mockSpeak).toHaveBeenCalledWith('White opens with the king pawn.', expect.objectContaining({ rate: expect.any(Number) as unknown }));
     });
   });
 

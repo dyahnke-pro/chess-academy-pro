@@ -17,6 +17,8 @@ export default tseslint.config(
       'vitest.config.ts',
       'e2e',
       'playwright.config.ts',
+      'api',
+      'scripts',
     ],
   },
   {
@@ -38,6 +40,7 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       // Only require return types on named function declarations, not every expression/callback
       '@typescript-eslint/explicit-function-return-type': ['warn', {
         allowExpressions: true,
@@ -62,6 +65,13 @@ export default tseslint.config(
     files: ['src/test/**/*.{ts,tsx}'],
     rules: {
       'react-refresh/only-export-components': 'off',
+    },
+  },
+  // Test files — relax rules that are impractical in testing contexts
+  {
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
     },
   },
 );

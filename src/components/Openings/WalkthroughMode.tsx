@@ -151,36 +151,36 @@ export function WalkthroughMode({
 
   // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
     void (async () => {
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
       const data = effectiveKey
         ? await loadSubLineAnnotations(opening.id, effectiveKey)
         : await loadAnnotations(opening.id);
-      if (!cancelled) {
+      if (!guard.cancelled) {
         setAnnotations(data);
       }
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [opening.id, subLineKey, isVariation, variationIndex]);
 
   // Analyze position when it changes
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
     void (async () => {
       try {
         const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
-        if (!cancelled) {
+        if (!guard.cancelled) {
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
-          setLatestTopLines(analysis.topLines ?? []);
+          setLatestTopLines(analysis.topLines);
         }
       } catch {
         // Stockfish not ready yet
       }
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [currentFen]);
 
   // Lichess cloud eval on position change
@@ -400,7 +400,7 @@ export function WalkthroughMode({
       ttsFinishedRef.current = advanceToNext;
 
       // Fallback timer in case TTS doesn't fire onEnd (voice disabled, no annotation, etc.)
-      const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
+      const ann = annotations?.[prev];
       const spokenText = ann?.annotation;
 
       if (voiceEnabled && spokenText) {

@@ -437,7 +437,7 @@ export function OpeningDetailPage(): JSX.Element {
   // Data lookups for new features
   const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
   const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
-  const currentQuiz = quizzes[quizIndex] ?? null;
+  const currentQuiz: CheckpointQuizItem | null = quizzes[quizIndex] as CheckpointQuizItem | undefined ?? null;
   const hasCompletedMainLine = opening.drillAttempts > 0;
   const isAdvancedUnlocked = hasCompletedMainLine || mastery > 0;
 

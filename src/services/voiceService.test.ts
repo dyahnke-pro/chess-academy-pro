@@ -28,7 +28,6 @@ describe('voiceService', () => {
       // No profile in DB at all
       await voiceService.speak('Hello world');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Hello world',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -45,7 +44,6 @@ describe('voiceService', () => {
       await voiceService.speak('Test speech');
 
       // When voiceEnabled is false, the service returns early without speaking
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).not.toHaveBeenCalled();
     });
 
@@ -61,7 +59,6 @@ describe('voiceService', () => {
 
       await voiceService.speak('Fallback test');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Fallback test',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -86,7 +83,6 @@ describe('voiceService', () => {
 
       await voiceService.speak('Error fallback');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Error fallback',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -107,7 +103,6 @@ describe('voiceService', () => {
 
       await voiceService.speak('Network fail');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Network fail',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -127,9 +122,7 @@ describe('voiceService', () => {
 
       await voiceService.speak('Custom voice');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.setVoice).toHaveBeenCalledWith('Microsoft Aria Online (Natural)');
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalled();
     });
   });
@@ -174,7 +167,6 @@ describe('voiceService', () => {
 
     it('calls speechService.stop on stop', () => {
       voiceService.stop();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.stop).toHaveBeenCalled();
     });
 
@@ -183,7 +175,6 @@ describe('voiceService', () => {
       voiceService.stop();
       voiceService.stop();
       expect(voiceService.isPlaying()).toBe(false);
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.stop).toHaveBeenCalledTimes(3);
     });
   });

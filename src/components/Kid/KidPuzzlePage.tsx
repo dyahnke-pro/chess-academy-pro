@@ -126,14 +126,12 @@ export function KidPuzzlePage(): JSX.Element {
     // Record the attempt
     if (activeProfile) {
       const puzzle = puzzles[currentIndex];
-      if (puzzle) {
-        void recordAttempt(
-          puzzle.id,
-          correct,
-          activeProfile.puzzleRating,
-          correct ? 'good' : 'again',
-        );
-      }
+      void recordAttempt(
+        puzzle.id,
+        correct,
+        activeProfile.puzzleRating,
+        correct ? 'good' : 'again',
+      );
     }
 
     const messages = correct ? CORRECT_MESSAGES : INCORRECT_MESSAGES;

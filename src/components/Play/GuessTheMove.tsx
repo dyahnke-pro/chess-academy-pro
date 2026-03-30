@@ -173,7 +173,6 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
   }, [currentIdx, positions.length, playCelebration]);
 
   const handleBoardAnnotation = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (_commands: BoardAnnotationCommand[]): void => { /* no-op */ },
     [],
   );

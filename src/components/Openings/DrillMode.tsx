@@ -101,7 +101,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
     void (async () => {
       const subKey = customLine
         ? undefined
@@ -111,9 +111,9 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
       const data = subKey
         ? await loadSubLineAnnotations(opening.id, subKey)
         : await loadAnnotations(opening.id);
-      if (!cancelled) setAnnotations(data);
+      if (!guard.cancelled) setAnnotations(data);
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [opening.id, customLine, isVariation, variationIndex]);
 
   // Build mistake explanation from annotation data
@@ -164,11 +164,11 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   // Analyze position when it changes
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
     void (async () => {
       try {
         const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
-        if (!cancelled) {
+        if (!guard.cancelled) {
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
@@ -178,7 +178,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
         // Stockfish not ready yet
       }
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [currentFen]);
 
   // Lichess cloud eval on position change

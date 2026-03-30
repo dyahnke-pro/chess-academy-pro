@@ -54,7 +54,6 @@ function sanToSquares(san: string, fen: string): { from: string; to: string } | 
   try {
     const chess = new Chess(fen);
     const move = chess.move(san);
-    if (!move) return null;
     return { from: move.from, to: move.to };
   } catch {
     return null;
@@ -1104,7 +1103,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 {bestLineSans.map((san, i) => (
                   <span
                     key={i}
-                    className={`${i < bestLineIndex ? 'opacity-40' : i === bestLineIndex ? 'font-bold' : 'opacity-60'}`}
+                    className={i < bestLineIndex ? 'opacity-40' : i === bestLineIndex ? 'font-bold' : 'opacity-60'}
                     style={i === bestLineIndex ? { color: 'var(--color-accent)' } : undefined}
                   >
                     {san}{i < bestLineSans.length - 1 ? ' ' : ''}

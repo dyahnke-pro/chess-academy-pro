@@ -46,14 +46,14 @@ const PRO_SUFFIX_TO_BASE: Record<string, string> = {
 };
 
 function resolveAnnotationId(openingId: string): string {
-  if (ANNOTATION_MODULES[openingId]) return openingId;
+  if (Object.hasOwn(ANNOTATION_MODULES, openingId)) return openingId;
 
   // Strip pro-<player>- prefix and try mapping
   const match = /^pro-[a-z]+-(.+)$/.exec(openingId);
   if (match) {
     const suffix = match[1];
     const baseId = PRO_SUFFIX_TO_BASE[suffix];
-    if (baseId && ANNOTATION_MODULES[baseId]) return baseId;
+    if (baseId && Object.hasOwn(ANNOTATION_MODULES, baseId)) return baseId;
   }
 
   return openingId;
