@@ -533,6 +533,12 @@
               "to": "d4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -553,6 +559,12 @@
               "from": "c8",
               "to": "e6",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -597,6 +609,12 @@
               "to": "d5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -617,6 +635,12 @@
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -636,6 +660,12 @@
               "from": "d7",
               "to": "c5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -683,6 +713,12 @@
               "to": "g8",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -703,6 +739,12 @@
               "to": "h1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -722,6 +764,12 @@
               "from": "h8",
               "to": "f8",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -770,6 +818,12 @@
               "to": "b5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -790,6 +844,12 @@
               "to": "a5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -809,6 +869,12 @@
               "from": "c6",
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a5",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -915,6 +981,12 @@
               "to": "f4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -938,6 +1010,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -958,6 +1036,12 @@
               "from": "c8",
               "to": "e6",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1009,6 +1093,12 @@
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1028,6 +1118,12 @@
               "from": "c3",
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1051,6 +1147,12 @@
               "from": "d7",
               "to": "f8",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1098,6 +1200,12 @@
               "to": "g8",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1118,6 +1226,12 @@
               "to": "f1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1133,6 +1247,12 @@
               "from": "h8",
               "to": "f8",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1157,6 +1277,12 @@
               "to": "d8",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1177,6 +1303,12 @@
               "from": "b7",
               "to": "c6",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1224,6 +1356,12 @@
               "to": "c2",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1244,6 +1382,12 @@
               "to": "a5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1263,6 +1407,12 @@
               "from": "b7",
               "to": "g2",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1285,6 +1435,16 @@
               "to": "e5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
           ]
         },
         {
@@ -1305,6 +1465,16 @@
               "from": "d8",
               "to": "d1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         }
@@ -1395,7 +1565,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d6",
@@ -1420,7 +1595,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d4",
@@ -1470,7 +1650,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxd4",
@@ -1528,7 +1717,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -1552,7 +1746,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Be7",
@@ -1571,7 +1770,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Be2",
@@ -1590,7 +1794,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -1609,7 +1818,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -1628,7 +1842,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nbd7",
@@ -1652,7 +1871,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "f4",
@@ -1677,7 +1901,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc5",
@@ -1730,7 +1959,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Re8",
@@ -1754,7 +1988,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         }
       ]
     },
@@ -2120,7 +2359,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Bxd2",
@@ -2145,7 +2393,16 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nd7",
@@ -2230,7 +2487,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "c4",
@@ -2374,7 +2636,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d6",
@@ -2447,7 +2714,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -2468,7 +2740,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nbd7",
@@ -2492,7 +2769,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bc4",
@@ -2690,7 +2972,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Ba2",
@@ -2714,7 +3001,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "a2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bb7",
@@ -2749,55 +3041,194 @@
       "type": "trap",
       "moveAnnotations": [
         {
-          "san": "e4"
+          "san": "e4",
+          "annotation": "White opens with the king's pawn, staking a claim in the center.",
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "e5"
+          "san": "e5",
+          "annotation": "Black responds with e5, creating a classical pawn center.",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nf3"
+          "san": "Nf3",
+          "annotation": "The knight develops to its most natural square, attacking e5.",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "d6"
+          "san": "d6",
+          "annotation": "Black plays the Philidor Defence with d6, solidly defending e5.",
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bc4"
+          "san": "Bc4",
+          "annotation": "White develops the bishop to c4, targeting the f7 square early.",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bg4"
+          "san": "Bg4",
+          "annotation": "Black pins the knight with Bg4 — this is the move that sets up the Legal's Mate pattern.",
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "annotation": "White develops the second knight, building pressure in the center.",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "annotation": "Black develops the kingside knight, preparing to castle.",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "h3"
+          "san": "h3",
+          "annotation": "White nudges the bishop with h3, asking it to declare its intentions.",
+          "highlights": [
+            {
+              "square": "h3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bh5"
+          "san": "Bh5",
+          "annotation": "Black retreats to h5, maintaining the pin on the f3 knight.",
+          "highlights": [
+            {
+              "square": "h5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nxe5"
+          "san": "Nxe5",
+          "annotation": "White sacrifices the knight on e5! This is the start of the Legal's Mate trap.",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Bxd1"
+          "san": "Bxd1",
+          "annotation": "Black takes the bait and captures the queen on d1.",
+          "highlights": [
+            {
+              "square": "d1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Bxf7+"
+          "san": "Bxf7+",
+          "annotation": "White plays Bxf7+ — the bishop sacrifice opens up the king.",
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Ke7"
+          "san": "Ke7",
+          "annotation": "The king is forced to e7, the only legal move.",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nd5+"
+          "san": "Nd5+",
+          "annotation": "Nd5+ delivers a powerful double check from the knight.",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nxd5"
+          "san": "Nxd5",
+          "annotation": "Black captures the knight, surviving the tactical storm.",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Kxd1"
+          "san": "Kxd1",
+          "annotation": "White recaptures on d1, but Black has won the exchange of queen for two minor pieces.",
+          "highlights": [
+            {
+              "square": "d1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Kf6",
@@ -2832,61 +3263,210 @@
       "type": "trap",
       "moveAnnotations": [
         {
-          "san": "e4"
+          "san": "e4",
+          "annotation": "White opens with e4, controlling the center.",
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "e5"
+          "san": "e5",
+          "annotation": "Black answers with e5, fighting for central space.",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nf3"
+          "san": "Nf3",
+          "annotation": "The knight comes to f3, developing with tempo against e5.",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "d6"
+          "san": "d6",
+          "annotation": "Black plays d6, the solid Philidor Defence.",
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "d4"
+          "san": "d4",
+          "annotation": "White pushes d4, challenging Black's center directly.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, adding pressure to e4.",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "annotation": "White brings out the queenside knight, reinforcing the center.",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nbd7"
+          "san": "Nbd7",
+          "annotation": "Black develops the other knight to d7, supporting the e5 point.",
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bc4"
+          "san": "Bc4",
+          "annotation": "The bishop goes to c4, an aggressive post aimed at f7.",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Be7"
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, preparing to castle.",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Ng5"
+          "san": "Ng5",
+          "annotation": "White lashes out with Ng5, targeting the f7 weakness.",
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "annotation": "Black castles, getting the king to safety just in time.",
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bxf7+"
+          "san": "Bxf7+",
+          "annotation": "White sacrifices with Bxf7+, trying to rip open Black's king position.",
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Rxf7"
+          "san": "Rxf7",
+          "annotation": "Black calmly recaptures with the rook, keeping material balance for now.",
+          "highlights": [
+            {
+              "square": "f7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Ne6"
+          "san": "Ne6",
+          "annotation": "The knight lands on e6, forking the queen and threatening the rook.",
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Qe8"
+          "san": "Qe8",
+          "annotation": "Black retreats the queen to e8, sidestepping the fork.",
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nxc7"
+          "san": "Nxc7",
+          "annotation": "White grabs the c7 pawn with the knight, chasing more material.",
+          "highlights": [
+            {
+              "square": "c7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Qd8"
+          "san": "Qd8",
+          "annotation": "Black returns the queen to d8, keeping things under control.",
+          "highlights": [
+            {
+              "square": "d8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nxa8"
+          "san": "Nxa8",
+          "annotation": "White captures the rook on a8, but the knight is now trapped in the corner.",
+          "highlights": [
+            {
+              "square": "a8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "b6",
@@ -2926,61 +3506,202 @@
       "type": "warning",
       "moveAnnotations": [
         {
-          "san": "e4"
+          "san": "e4",
+          "annotation": "White opens with e4, grabbing central space.",
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "e5"
+          "san": "e5",
+          "annotation": "Black responds e5, matching White in the center.",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nf3"
+          "san": "Nf3",
+          "annotation": "The knight develops to f3, pressuring Black's e5 pawn.",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "d6"
+          "san": "d6",
+          "annotation": "Black plays d6, entering the Philidor Defence.",
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "d4"
+          "san": "d4",
+          "annotation": "White pushes d4, challenging Black's central foothold.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "exd4"
+          "san": "exd4",
+          "annotation": "Black captures with exd4 — this early exchange is the mistake we're examining.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Nxd4"
+          "san": "Nxd4",
+          "annotation": "White recaptures with the knight, which now sits powerfully in the center.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, eyeing e4.",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "annotation": "White brings out the queenside knight, building a strong central formation.",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Be7"
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, a passive but solid choice.",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bf4"
+          "san": "Bf4",
+          "annotation": "White places the bishop on f4, controlling key dark squares.",
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "annotation": "Black castles, tucking the king away.",
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Qd2"
+          "san": "Qd2",
+          "annotation": "White plays Qd2, connecting the rooks and preparing to castle long.",
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Re8"
+          "san": "Re8",
+          "annotation": "Black puts the rook on e8, trying to activate along the e-file.",
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "O-O-O"
+          "san": "O-O-O",
+          "annotation": "White castles queenside, setting up for an aggressive kingside attack.",
+          "highlights": [
+            {
+              "square": "c1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bf8"
+          "san": "Bf8",
+          "annotation": "Black retreats the bishop to f8, a sign of the cramped position.",
+          "highlights": [
+            {
+              "square": "f8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "f3"
+          "san": "f3",
+          "annotation": "White plays f3, solidifying the center and preparing g4.",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "a6"
+          "san": "a6",
+          "annotation": "Black plays a6, making a slow move with no clear plan.",
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "g4"
+          "san": "g4",
+          "annotation": "White pushes g4, beginning the kingside pawn storm.",
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "b5",
@@ -3015,61 +3736,194 @@
       "type": "warning",
       "moveAnnotations": [
         {
-          "san": "e4"
+          "san": "e4",
+          "annotation": "White opens with e4, claiming central territory.",
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "e5"
+          "san": "e5",
+          "annotation": "Black replies e5, contesting the center.",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nf3"
+          "san": "Nf3",
+          "annotation": "The knight goes to f3, developing naturally.",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "d6"
+          "san": "d6",
+          "annotation": "Black plays d6, the hallmark of the Philidor Defence.",
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "d4"
+          "san": "d4",
+          "annotation": "White plays d4, establishing a strong pawn center.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6 instead of exchanging on d4.",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "annotation": "White develops Nc3, adding support to the center.",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Nbd7"
+          "san": "Nbd7",
+          "annotation": "Black plays Nbd7, a typical Philidor setup reinforcing e5.",
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bc4"
+          "san": "Bc4",
+          "annotation": "The bishop comes to c4, an active diagonal aimed at the kingside.",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Be7"
+          "san": "Be7",
+          "annotation": "Black develops Be7, preparing to castle.",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "annotation": "White castles, completing development.",
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "annotation": "Black castles as well — both sides are now fully developed.",
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Re1"
+          "san": "Re1",
+          "annotation": "White plays Re1, putting the rook on the open file behind the e4 pawn.",
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "c6"
+          "san": "c6",
+          "annotation": "Black plays c6 — this is the passive choice that leads to a cramped game.",
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "a4"
+          "san": "a4",
+          "annotation": "White plays a4, grabbing queenside space and preventing b5.",
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "h6"
+          "san": "h6",
+          "annotation": "Black plays h6, a waiting move that doesn't address the space problem.",
+          "highlights": [
+            {
+              "square": "h6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "b3"
+          "san": "b3",
+          "annotation": "White plays b3, preparing to develop the bishop to b2.",
+          "highlights": [
+            {
+              "square": "b3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Re8"
+          "san": "Re8",
+          "annotation": "Black plays Re8, placing the rook opposite White's queen.",
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
-          "san": "Bb2"
+          "san": "Bb2",
+          "annotation": "White fianchettoes with Bb2, aiming the bishop at the long diagonal.",
+          "highlights": [
+            {
+              "square": "b2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bf8",

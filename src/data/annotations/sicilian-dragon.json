@@ -73,6 +73,12 @@
           "to": "e5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -211,6 +217,12 @@
           "to": "d5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -236,6 +248,12 @@
           "from": "g7",
           "to": "a1",
           "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g6",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -266,6 +284,12 @@
           "from": "h2",
           "to": "h4",
           "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e3",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -367,6 +391,12 @@
           "to": "h6",
           "color": "rgba(220, 50, 50, 0.7)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -452,6 +482,12 @@
           "from": "d7",
           "to": "c6",
           "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -603,7 +639,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d6",
@@ -624,7 +665,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d4",
@@ -670,7 +716,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxd4",
@@ -723,7 +778,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -742,7 +802,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "g6",
@@ -763,7 +828,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "g6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Be3",
@@ -844,7 +914,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -892,7 +967,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc6",
@@ -912,7 +992,12 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bc4",
@@ -961,7 +1046,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O-O",
@@ -1033,7 +1123,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "b3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Ne5",
@@ -1198,6 +1293,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1220,6 +1321,12 @@
               "from": "d6",
               "to": "e5",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1268,6 +1375,16 @@
               "from": "a8",
               "to": "c8",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -1323,6 +1440,12 @@
               "to": "d4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1342,6 +1465,12 @@
               "from": "c3",
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1363,6 +1492,12 @@
               "from": "f8",
               "to": "g7",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1386,6 +1521,12 @@
               "from": "e1",
               "to": "g1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1434,6 +1575,12 @@
               "to": "h1",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1448,6 +1595,12 @@
               "from": "h8",
               "to": "f8",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1469,6 +1622,12 @@
               "to": "d4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1488,6 +1647,12 @@
               "from": "c6",
               "to": "a5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1512,6 +1677,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "b3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1531,6 +1702,12 @@
               "from": "e6",
               "to": "d5",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1553,6 +1730,12 @@
               "to": "e5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1572,6 +1755,12 @@
               "from": "c8",
               "to": "a6",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1593,6 +1782,12 @@
               "to": "f5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "h1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1612,6 +1807,12 @@
               "from": "d8",
               "to": "d1",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         }
@@ -2263,7 +2464,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc6",
@@ -2337,7 +2543,16 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxd4",
@@ -2396,7 +2611,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "g6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -2420,7 +2640,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bg7",
@@ -2473,7 +2698,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nf6",
@@ -2497,7 +2727,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bc4",
@@ -2569,7 +2804,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "b3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d6",
@@ -2594,7 +2834,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "f3",
@@ -2623,7 +2868,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bd7",
@@ -2647,7 +2897,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Qd2",
@@ -2676,7 +2931,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Qa5",
@@ -2799,7 +3059,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d6",
@@ -2823,7 +3088,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d4",
@@ -2875,7 +3145,16 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxd4",
@@ -2931,7 +3210,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -2953,7 +3237,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "g6",
@@ -3007,7 +3296,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bg7",
@@ -3059,7 +3353,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -3083,7 +3382,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Qd2",
@@ -3105,7 +3409,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc6",
@@ -3129,7 +3438,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bc4",
@@ -3182,7 +3496,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O-O",
@@ -3204,7 +3523,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Rc8",
@@ -3257,7 +3581,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "b3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Ne5",
@@ -3315,7 +3644,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "h4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "h5",

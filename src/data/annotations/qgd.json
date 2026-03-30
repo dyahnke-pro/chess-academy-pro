@@ -652,7 +652,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -763,7 +768,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "e3",
@@ -841,7 +851,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nbd7",
@@ -865,7 +880,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Rc1",
@@ -979,7 +999,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Bxc4",
@@ -1788,7 +1817,12 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "e6",
@@ -1808,7 +1842,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -1832,7 +1871,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nf6",
@@ -1856,7 +1900,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bg5",
@@ -1880,7 +1929,12 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Be7",
@@ -1900,7 +1954,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "e3",
@@ -1925,7 +1984,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -1944,7 +2008,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nf3",
@@ -1968,7 +2037,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "h6",
@@ -1987,7 +2061,12 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "h6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bh4",
@@ -2011,7 +2090,12 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "h4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Ne4",
@@ -2059,7 +2143,16 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Qxe7",
@@ -2078,7 +2171,16 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "cxd5",
@@ -2098,7 +2200,16 @@
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxc3",
@@ -2167,7 +2278,16 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Bd3",
@@ -2186,7 +2306,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "c5",
@@ -2268,7 +2393,12 @@
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "c4",
@@ -2324,7 +2454,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
@@ -2371,7 +2506,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "cxd5",
@@ -2397,7 +2537,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "exd5",
@@ -2419,7 +2568,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Bg5",
@@ -2470,7 +2628,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "e3",
@@ -2491,7 +2654,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
@@ -2564,7 +2732,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nf3",
@@ -2585,7 +2758,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Re8",
@@ -2632,7 +2810,12 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "c6",
@@ -3028,7 +3211,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "e4",
@@ -3149,7 +3341,16 @@
               "color": "rgba(0, 120, 255, 0.8)"
             }
           ],
-          "highlights": []
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxd4",
@@ -3346,55 +3547,202 @@
       "type": "trap",
       "moveAnnotations": [
         {
-          "san": "d4"
+          "san": "d4",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White opens with the queen's pawn, heading for the Queen's Gambit."
         },
         {
-          "san": "d5"
+          "san": "d5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black stakes a claim in the center, preparing for the QGD."
         },
         {
-          "san": "c4"
+          "san": "c4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "The Queen's Gambit. White challenges Black's central pawn."
         },
         {
-          "san": "e6"
+          "san": "e6",
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black declines the gambit, solidifying the d5 pawn with e6."
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White develops the knight to its best square, increasing pressure on d5."
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black develops the king's knight, defending d5 and preparing to castle."
         },
         {
-          "san": "Bg5"
+          "san": "Bg5",
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White pins the knight to the queen. This is the main line of the QGD."
         },
         {
-          "san": "Nbd7"
+          "san": "Nbd7",
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black develops the second knight, keeping the position flexible and setting the Elephant Trap."
         },
         {
-          "san": "cxd5"
+          "san": "cxd5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White exchanges in the center. This is where the trap begins if White gets greedy."
         },
         {
-          "san": "exd5"
+          "san": "exd5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black recaptures, opening the e-file and the diagonal for the bishop."
         },
         {
-          "san": "Nxd5"
+          "san": "Nxd5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White takes the d5 pawn, thinking they've won material. This is the critical mistake that falls into the trap."
         },
         {
-          "san": "Nxd5"
+          "san": "Nxd5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black recaptures the knight. White now sees the queen hanging on d8 and grabs it."
         },
         {
-          "san": "Bxd8"
+          "san": "Bxd8",
+          "highlights": [
+            {
+              "square": "d8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White captures the queen, feeling confident. But a devastating surprise is coming."
         },
         {
-          "san": "Bb4+"
+          "san": "Bb4+",
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "The key move! Bishop check from b4 forces White to interpose the queen."
         },
         {
-          "san": "Qd2"
+          "san": "Qd2",
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White's only legal move to block the check. The queen is now doomed."
         },
         {
-          "san": "Bxd2+"
+          "san": "Bxd2+",
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black takes the queen with check. White must recapture with the king."
         },
         {
-          "san": "Kxd2"
+          "san": "Kxd2",
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White recaptures, but the king is now exposed in the center."
         },
         {
           "san": "Kxd8",
@@ -3429,85 +3777,310 @@
       "type": "trap",
       "moveAnnotations": [
         {
-          "san": "d4"
+          "san": "d4",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White opens with 1.d4, heading into the Queen's Gambit."
         },
         {
-          "san": "d5"
+          "san": "d5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black responds symmetrically, establishing central presence."
         },
         {
-          "san": "c4"
+          "san": "c4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "The Queen's Gambit, challenging Black's d5 pawn."
         },
         {
-          "san": "e6"
+          "san": "e6",
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black declines, reinforcing d5. The QGD Orthodox is on the board."
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White develops toward the center, adding pressure on d5."
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black develops the king's knight naturally."
         },
         {
-          "san": "Bg5"
+          "san": "Bg5",
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White pins the knight, a hallmark of the Orthodox QGD."
         },
         {
-          "san": "Be7"
+          "san": "Be7",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black unpins the knight and prepares to castle kingside."
         },
         {
-          "san": "e3"
+          "san": "e3",
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White supports the d4 pawn and opens the diagonal for the bishop."
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black castles to safety. Solid and principled."
         },
         {
-          "san": "Nf3"
+          "san": "Nf3",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White develops the second knight, preparing to castle."
         },
         {
-          "san": "Nbd7"
+          "san": "Nbd7",
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black develops the queenside knight, a typical QGD setup."
         },
         {
-          "san": "Rc1"
+          "san": "Rc1",
+          "highlights": [
+            {
+              "square": "c1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White places the rook on the half-open c-file, anticipating ...dxc4."
         },
         {
-          "san": "c6"
+          "san": "c6",
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black reinforces d5 and prepares for the Lasker maneuver."
         },
         {
-          "san": "Bd3"
+          "san": "Bd3",
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White develops the bishop to a strong diagonal, eyeing the kingside."
         },
         {
-          "san": "dxc4"
+          "san": "dxc4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black captures on c4 at the right moment, luring the bishop away."
         },
         {
-          "san": "Bxc4"
+          "san": "Bxc4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White recaptures, but the bishop is now less actively placed."
         },
         {
-          "san": "Nd5"
+          "san": "Nd5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "The Lasker maneuver! The knight jumps to d5, challenging the Bg5."
         },
         {
-          "san": "Bxe7"
+          "san": "Bxe7",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White trades the bishop, as retreating would lose tempo."
         },
         {
-          "san": "Qxe7"
+          "san": "Qxe7",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black recaptures, centralizing the queen."
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White castles, completing development."
         },
         {
-          "san": "Nxc3"
+          "san": "Nxc3",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black captures the knight, disrupting White's pawn structure."
         },
         {
-          "san": "Rxc3"
+          "san": "Rxc3",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White recaptures with the rook, keeping it active on the third rank."
         },
         {
-          "san": "e5"
+          "san": "e5",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "The key break! Black strikes in the center, activating all the pieces."
         },
         {
-          "san": "dxe5"
+          "san": "dxe5",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White captures, but this opens lines for Black's pieces."
         },
         {
-          "san": "Nxe5"
+          "san": "Nxe5",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black recaptures with the knight, centralizing it powerfully."
         },
         {
-          "san": "Nxe5"
+          "san": "Nxe5",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White is forced to exchange, but Black's queen takes over."
         },
         {
           "san": "Qxe5",
@@ -3547,79 +4120,270 @@
       "type": "warning",
       "moveAnnotations": [
         {
-          "san": "d4"
+          "san": "d4",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White opens with d4, aiming for the Queen's Gambit."
         },
         {
-          "san": "d5"
+          "san": "d5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black responds classically in the center."
         },
         {
-          "san": "c4"
+          "san": "c4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "The Queen's Gambit. White pressures d5 immediately."
         },
         {
-          "san": "e6"
+          "san": "e6",
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black declines, entering the QGD."
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White develops, increasing the pressure on d5."
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black develops the knight to defend d5."
         },
         {
-          "san": "Bg5"
+          "san": "Bg5",
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White pins the knight, a standard QGD continuation."
         },
         {
-          "san": "Be7"
+          "san": "Be7",
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black breaks the pin and prepares castling."
         },
         {
-          "san": "e3"
+          "san": "e3",
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White solidifies the center and opens the bishop diagonal."
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black castles to safety."
         },
         {
-          "san": "Nf3"
+          "san": "Nf3",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White completes knight development."
         },
         {
-          "san": "Nbd7"
+          "san": "Nbd7",
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black develops the second knight. So far a normal QGD."
         },
         {
-          "san": "Bd3"
+          "san": "Bd3",
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White places the bishop aggressively, eyeing h7."
         },
         {
-          "san": "b6"
+          "san": "b6",
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "This is the passive approach. Black fianchettoes instead of playing the active ...c5 or ...dxc4."
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White castles, with a comfortable position and easy plans."
         },
         {
-          "san": "Bb7"
+          "san": "Bb7",
+          "highlights": [
+            {
+              "square": "b7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black completes the fianchetto, but the bishop is somewhat passive behind the pawn chain."
         },
         {
-          "san": "cxd5"
+          "san": "cxd5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White exchanges, fixing the pawn structure in a way that favors White."
         },
         {
-          "san": "exd5"
+          "san": "exd5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black recaptures, but now has an isolated d-pawn that needs constant protection."
         },
         {
-          "san": "Ne5"
+          "san": "Ne5",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White plants the knight on e5, a dominating outpost in the center."
         },
         {
-          "san": "Nxe5"
+          "san": "Nxe5",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black feels compelled to exchange, but this helps White's pawn structure."
         },
         {
-          "san": "dxe5"
+          "san": "dxe5",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White recaptures, gaining central space and opening the d-file."
         },
         {
-          "san": "Ne8"
+          "san": "Ne8",
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black retreats the knight. This is a sign of the passive position — pieces are going backward."
         },
         {
-          "san": "Bf4"
+          "san": "Bf4",
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White repositions the bishop to an excellent diagonal, supporting e5 and eyeing the kingside."
         },
         {
-          "san": "c5"
+          "san": "c5",
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black tries to counter belatedly, but it's too late to equalize."
         },
         {
-          "san": "Qg4"
+          "san": "Qg4",
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White launches a kingside attack. The queen on g4 creates immediate threats."
         },
         {
           "san": "g6",
@@ -3654,67 +4418,234 @@
       "type": "warning",
       "moveAnnotations": [
         {
-          "san": "d4"
+          "san": "d4",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White opens with 1.d4."
         },
         {
-          "san": "d5"
+          "san": "d5",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black responds symmetrically."
         },
         {
-          "san": "c4"
+          "san": "c4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "The Queen's Gambit."
         },
         {
-          "san": "e6"
+          "san": "e6",
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black declines with e6."
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White develops, pressuring d5."
         },
         {
-          "san": "Nf6"
+          "san": "Nf6",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black develops the knight."
         },
         {
-          "san": "Bg5"
+          "san": "Bg5",
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White pins the f6 knight."
         },
         {
-          "san": "dxc4"
+          "san": "dxc4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black takes the gambit pawn prematurely, without first completing development. This is risky."
         },
         {
-          "san": "e3"
+          "san": "e3",
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White doesn't rush to recapture. The c4 pawn isn't going anywhere."
         },
         {
-          "san": "b5"
+          "san": "b5",
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black tries to hold onto the extra pawn with ...b5. This weakens the queenside severely."
         },
         {
-          "san": "a4"
+          "san": "a4",
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White immediately challenges the overextended b5 pawn. This is the key undermining move."
         },
         {
-          "san": "c6"
+          "san": "c6",
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black tries to support b5, but the structure is fragile."
         },
         {
-          "san": "axb5"
+          "san": "axb5",
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White captures, tearing open the queenside."
         },
         {
-          "san": "cxb5"
+          "san": "cxb5",
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "Black recaptures, but the b-pawn is now a target."
         },
         {
-          "san": "Nxb5"
+          "san": "Nxb5",
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White wins a pawn and attacks the queen's position simultaneously."
         },
         {
-          "san": "Qa5+"
+          "san": "Qa5+",
+          "highlights": [
+            {
+              "square": "a5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black checks, trying to win back material with tactical tricks."
         },
         {
-          "san": "Nc3"
+          "san": "Nc3",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White retreats the knight, blocking the check and keeping the extra pawn."
         },
         {
-          "san": "Bb4"
+          "san": "Bb4",
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black pins the knight, creating pressure but still down material."
         },
         {
-          "san": "Bxc4"
+          "san": "Bxc4",
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ],
+          "annotation": "White recovers the gambit pawn, now up in development and structure."
         },
         {
-          "san": "O-O"
+          "san": "O-O",
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "Black castles, trying to catch up in development."
         },
         {
-          "san": "Nf3"
+          "san": "Nf3",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "annotation": "White develops the last minor piece, preparing to castle."
         },
         {
           "san": "Ba6",

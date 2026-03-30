@@ -19,6 +19,12 @@
           "to": "f5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -61,6 +67,12 @@
           "to": "e5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -85,6 +97,12 @@
           "to": "e5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "c6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -99,6 +117,12 @@
           "from": "d4",
           "to": "c5",
           "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -334,6 +358,12 @@
           "to": "b5",
           "color": "rgba(0, 100, 255, 0.7)"
         }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
       ]
     },
     {
@@ -356,6 +386,12 @@
           "from": "a3",
           "to": "c4",
           "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -433,6 +469,12 @@
           "from": "f6",
           "to": "a1",
           "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e7",
+          "color": "rgba(255, 255, 0, 0.4)"
         }
       ]
     },
@@ -624,6 +666,12 @@
               "to": "e5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -643,6 +691,12 @@
               "from": "c6",
               "to": "e5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -686,6 +740,16 @@
               "from": "c8",
               "to": "c1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -738,6 +802,12 @@
               "to": "e5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -757,6 +827,12 @@
               "from": "c3",
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -830,6 +906,12 @@
               "to": "e5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -876,6 +958,12 @@
               "to": "b5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -895,6 +983,12 @@
               "from": "c2",
               "to": "e3",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -969,6 +1063,12 @@
               "to": "f6",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -983,6 +1083,16 @@
               "from": "g5",
               "to": "f6",
               "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -1035,6 +1145,12 @@
               "to": "c2",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1049,6 +1165,12 @@
               "from": "f8",
               "to": "f7",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1070,6 +1192,12 @@
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1090,6 +1218,12 @@
               "to": "b4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "b8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1104,6 +1238,12 @@
               "from": "e1",
               "to": "g1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1205,6 +1345,12 @@
               "to": "e5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1224,6 +1370,12 @@
               "from": "c6",
               "to": "b4",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1246,6 +1398,12 @@
               "to": "e5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1261,6 +1419,16 @@
               "from": "c8",
               "to": "c1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -1313,6 +1481,12 @@
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1332,6 +1506,12 @@
               "from": "c3",
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1402,6 +1582,12 @@
               "to": "h3",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1422,6 +1608,12 @@
               "to": "d8",
               "color": "rgba(255, 50, 50, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1436,6 +1628,12 @@
               "from": "a6",
               "to": "b5",
               "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1455,6 +1653,12 @@
               "from": "a3",
               "to": "c2",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1477,6 +1681,12 @@
               "to": "c4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1494,6 +1704,16 @@
               "from": "g5",
               "to": "f6",
               "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -1515,6 +1735,16 @@
               "from": "g8",
               "to": "g1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -1593,6 +1823,12 @@
               "to": "b4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1613,6 +1849,12 @@
               "to": "f1",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1627,6 +1869,16 @@
               "from": "e1",
               "to": "e8",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -1674,6 +1926,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1693,6 +1951,12 @@
               "from": "a8",
               "to": "c8",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         }
@@ -1773,6 +2037,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1820,6 +2090,12 @@
               "to": "e5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1834,6 +2110,16 @@
               "from": "c8",
               "to": "c1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -1886,6 +2172,12 @@
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -1905,6 +2197,12 @@
               "from": "c3",
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -1988,6 +2286,12 @@
               "to": "e6",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2008,6 +2312,12 @@
               "to": "d8",
               "color": "rgba(255, 50, 50, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2027,6 +2337,12 @@
               "from": "b7",
               "to": "b5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2051,6 +2367,12 @@
               "to": "b5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "a3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2071,6 +2393,12 @@
               "from": "c8",
               "to": "b7",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2123,6 +2451,12 @@
               "to": "h6",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2144,6 +2478,16 @@
               "to": "g2",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
           ]
         },
         {
@@ -2163,6 +2507,16 @@
               "from": "g8",
               "to": "g2",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -2211,6 +2565,12 @@
               "to": "b3",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2234,6 +2594,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2253,6 +2619,12 @@
               "from": "a6",
               "to": "b6",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a5",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2274,6 +2646,12 @@
               "to": "f3",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2293,6 +2671,12 @@
               "from": "a8",
               "to": "c8",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2395,6 +2779,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2409,6 +2799,12 @@
               "from": "c6",
               "to": "d4",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2426,6 +2822,12 @@
               "to": "c5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2441,6 +2843,16 @@
               "from": "c8",
               "to": "c1",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
             }
           ]
         },
@@ -2488,6 +2900,12 @@
               "to": "e5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2507,6 +2925,12 @@
               "from": "c3",
               "to": "d5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2553,6 +2977,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2568,6 +2998,12 @@
               "from": "d6",
               "to": "e5",
               "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2589,6 +3025,12 @@
               "to": "d8",
               "color": "rgba(255, 50, 50, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2608,6 +3050,12 @@
               "from": "b7",
               "to": "b5",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2632,6 +3080,12 @@
               "to": "c2",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "a3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2652,6 +3106,12 @@
               "from": "b7",
               "to": "g2",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2693,6 +3153,12 @@
               "from": "e8",
               "to": "g8",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2736,6 +3202,16 @@
               "to": "g5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
           ]
         },
         {
@@ -2750,6 +3226,12 @@
               "from": "f1",
               "to": "e2",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2774,6 +3256,12 @@
               "to": "f5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2794,6 +3282,12 @@
               "to": "d4",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2808,6 +3302,12 @@
               "from": "f8",
               "to": "f4",
               "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2824,6 +3324,12 @@
               "to": "g1",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2839,6 +3345,12 @@
               "to": "b2",
               "color": "rgba(255, 50, 50, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "b8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         },
         {
@@ -2853,6 +3365,12 @@
               "from": "f1",
               "to": "f6",
               "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
@@ -2874,6 +3392,12 @@
               "to": "f5",
               "color": "rgba(0, 120, 255, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
           ]
         }
       ]
@@ -2883,91 +3407,247 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White opens with the king's pawn, seizing central space and preparing to develop pieces harmoniously. This move controls the important d5 and f5 squares, denying Black certain outposts while opening lines for the bishop and queen. The e4 pawn will become a key battleground in the coming Sicilian struggle."
+          "annotation": "White opens with the king's pawn, seizing central space and preparing to develop pieces harmoniously. This move controls the important d5 and f5 squares, denying Black certain outposts while opening lines for the bishop and queen. The e4 pawn will become a key battleground in the coming Sicilian struggle.",
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "c5",
-          "annotation": "The Sicilian Defense - Black immediately challenges White's central control from the side rather than meeting it head-on with e5. This move prepares to develop the queenside pieces while keeping the center flexible, aiming for counterplay on the c-file and potentially the d5 square. Black accepts a slight lag in development for dynamic piece play."
+          "annotation": "The Sicilian Defense - Black immediately challenges White's central control from the side rather than meeting it head-on with e5. This move prepares to develop the queenside pieces while keeping the center flexible, aiming for counterplay on the c-file and potentially the d5 square. Black accepts a slight lag in development for dynamic piece play.",
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the kingside knight to its most natural square, attacking the e5 square and preparing kingside castling. This move supports the e4 pawn while maintaining flexibility - the knight can later jump to d4 or support various pawn advances. It's a principled developing move that doesn't commit to any particular pawn structure yet."
+          "annotation": "White develops the kingside knight to its most natural square, attacking the e5 square and preparing kingside castling. This move supports the e4 pawn while maintaining flexibility - the knight can later jump to d4 or support various pawn advances. It's a principled developing move that doesn't commit to any particular pawn structure yet.",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc6",
-          "annotation": "Black develops the queenside knight, following the classical principle of knights before bishops. This move prepares to challenge White's central control, particularly if White advances d4, and supports potential ...d6 and ...f5 advances. The knight also eyes the important d4 and e5 squares while preparing harmonious piece development."
+          "annotation": "Black develops the queenside knight, following the classical principle of knights before bishops. This move prepares to challenge White's central control, particularly if White advances d4, and supports potential ...d6 and ...f5 advances. The knight also eyes the important d4 and e5 squares while preparing harmonious piece development.",
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d4",
-          "annotation": "The Open Sicilian begins! White advances the queen's pawn to challenge Black's c5 pawn directly, aiming to open the center and gain space. This move leads to forcing play where Black must capture, after which White will have superior central control and faster development. It's the most principled continuation against the Sicilian."
+          "annotation": "The Open Sicilian begins! White advances the queen's pawn to challenge Black's c5 pawn directly, aiming to open the center and gain space. This move leads to forcing play where Black must capture, after which White will have superior central control and faster development. It's the most principled continuation against the Sicilian.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "cxd4",
-          "annotation": "Black has no choice but to capture, as allowing dxc5 would surrender the center completely. This exchange opens the c-file for Black's future rook activity but also allows White to recapture with the knight, gaining central influence. The position now enters typical Open Sicilian territory where Black seeks dynamic compensation for White's space advantage."
+          "annotation": "Black has no choice but to capture, as allowing dxc5 would surrender the center completely. This exchange opens the c-file for Black's future rook activity but also allows White to recapture with the knight, gaining central influence. The position now enters typical Open Sicilian territory where Black seeks dynamic compensation for White's space advantage.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxd4",
-          "annotation": "White recaptures with the knight, establishing a strong central piece that controls key squares like b5, c6, e6, and f5. The knight is excellently placed on d4, supporting White's spatial advantage while preparing various attacking ideas. This is the fundamental idea of the Open Sicilian - superior central control through active piece placement."
+          "annotation": "White recaptures with the knight, establishing a strong central piece that controls key squares like b5, c6, e6, and f5. The knight is excellently placed on d4, supporting White's spatial advantage while preparing various attacking ideas. This is the fundamental idea of the Open Sicilian - superior central control through active piece placement.",
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the kingside knight with tempo, attacking the e4 pawn and forcing White to make a decision about its defense. This move also prepares kingside castling and potentially ...e5 advances to challenge White's central knight. It's a natural developing move that combines defense with counterattack."
+          "annotation": "Black develops the kingside knight with tempo, attacking the e4 pawn and forcing White to make a decision about its defense. This move also prepares kingside castling and potentially ...e5 advances to challenge White's central knight. It's a natural developing move that combines defense with counterattack.",
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nc3",
-          "annotation": "White defends the e4 pawn while developing another piece toward the center. The knight on c3 supports potential d4-knight maneuvers and prepares various attacking formations. This move maintains White's central control while avoiding passive pawn moves, keeping the initiative through active piece development."
+          "annotation": "White defends the e4 pawn while developing another piece toward the center. The knight on c3 supports potential d4-knight maneuvers and prepares various attacking formations. This move maintains White's central control while avoiding passive pawn moves, keeping the initiative through active piece development.",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "e5",
-          "annotation": "The Najdorf setup begins to take shape! Black advances the king's pawn, challenging White's centralized knight and gaining space in the center. This move prepares ...Be7 and kingside castling while potentially supporting ...d6-d5 advances later. It's a principled central advance that seeks to equalize through active piece play."
+          "annotation": "The Najdorf setup begins to take shape! Black advances the king's pawn, challenging White's centralized knight and gaining space in the center. This move prepares ...Be7 and kingside castling while potentially supporting ...d6-d5 advances later. It's a principled central advance that seeks to equalize through active piece play.",
+          "highlights": [
+            {
+              "square": "e5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nf3",
-          "annotation": "The Anti-Sveshnikov retreat! Instead of the critical Ndb5, White voluntarily retreats the knight to avoid the theoretical complications of the main Sveshnikov lines. This move keeps the position more manageable and less forcing, though it surrenders some of White's opening advantage. The knight still controls important squares and maintains development."
+          "annotation": "The Anti-Sveshnikov retreat! Instead of the critical Ndb5, White voluntarily retreats the knight to avoid the theoretical complications of the main Sveshnikov lines. This move keeps the position more manageable and less forcing, though it surrenders some of White's opening advantage. The knight still controls important squares and maintains development.",
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bb4",
-          "annotation": "Excellent! Black pins the c3 knight, creating immediate tactical pressure and preparing to exchange on c3 to damage White's pawn structure. This bishop move also prepares ...d5, striking at the heart of White's position. The pin is particularly effective here since White's knight retreat has made the position less forcing, allowing Black to seize the initiative."
+          "annotation": "Excellent! Black pins the c3 knight, creating immediate tactical pressure and preparing to exchange on c3 to damage White's pawn structure. This bishop move also prepares ...d5, striking at the heart of White's position. The pin is particularly effective here since White's knight retreat has made the position less forcing, allowing Black to seize the initiative.",
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Bd3",
-          "annotation": "White develops the light-squared bishop to an active square, eyeing the kingside and particularly the h7 weakness. This move also prepares kingside castling while maintaining pressure on Black's position. The bishop supports potential attacking ideas while defending against Black's central pressure, though it doesn't address the pin on the c3 knight immediately."
+          "annotation": "White develops the light-squared bishop to an active square, eyeing the kingside and particularly the h7 weakness. This move also prepares kingside castling while maintaining pressure on Black's position. The bishop supports potential attacking ideas while defending against Black's central pressure, though it doesn't address the pin on the c3 knight immediately.",
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "d5",
-          "annotation": "The thematic central break! Black strikes at White's e4 pawn, opening lines and seeking to equalize through tactical means. This move activates Black's pieces and challenges White's central control directly. Combined with the bishop pin on c3, this creates complex tactical possibilities that favor Black's dynamic piece coordination."
+          "annotation": "The thematic central break! Black strikes at White's e4 pawn, opening lines and seeking to equalize through tactical means. This move activates Black's pieces and challenges White's central control directly. Combined with the bishop pin on c3, this creates complex tactical possibilities that favor Black's dynamic piece coordination.",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "exd5",
-          "annotation": "White accepts the pawn sacrifice, opening the center and trying to maintain material balance. This capture opens the e-file and allows White's pieces better coordination, though it also activates Black's pieces significantly. The central tension has been resolved in Black's favor, as the resulting positions offer excellent piece activity."
+          "annotation": "White accepts the pawn sacrifice, opening the center and trying to maintain material balance. This capture opens the e-file and allows White's pieces better coordination, though it also activates Black's pieces significantly. The central tension has been resolved in Black's favor, as the resulting positions offer excellent piece activity.",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nxd5",
-          "annotation": "Black recaptures with the knight, centralizing it beautifully on d5 where it cannot be easily dislodged. The knight controls crucial squares like c3, e3, f6, and b6, while also eyeing potential tactical shots. This centralization, combined with the bishop pin, gives Black excellent compensation for any structural concessions."
+          "annotation": "Black recaptures with the knight, centralizing it beautifully on d5 where it cannot be easily dislodged. The knight controls crucial squares like c3, e3, f6, and b6, while also eyeing potential tactical shots. This centralization, combined with the bishop pin, gives Black excellent compensation for any structural concessions.",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Bd2",
-          "annotation": "White finally addresses the pin by developing the bishop, though this move is somewhat passive and defensive. The bishop on d2 supports the c3 knight but doesn't contribute much to White's attacking chances. This retreat indicates that White is already struggling to maintain the opening advantage, as Black's active pieces dominate the center."
+          "annotation": "White finally addresses the pin by developing the bishop, though this move is somewhat passive and defensive. The bishop on d2 supports the c3 knight but doesn't contribute much to White's attacking chances. This retreat indicates that White is already struggling to maintain the opening advantage, as Black's active pieces dominate the center.",
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "Nxc3",
-          "annotation": "Black exchanges the centralized knight for White's pinned knight, damaging White's pawn structure while maintaining excellent piece coordination. This exchange removes White's key defensive piece while keeping Black's dark-squared bishop active. The resulting doubled pawns will provide Black with long-term structural advantages and open files for attack."
+          "annotation": "Black exchanges the centralized knight for White's pinned knight, damaging White's pawn structure while maintaining excellent piece coordination. This exchange removes White's key defensive piece while keeping Black's dark-squared bishop active. The resulting doubled pawns will provide Black with long-term structural advantages and open files for attack.",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "bxc3",
-          "annotation": "White recaptures with the b-pawn, creating doubled c-pawns but opening the b-file for the rook. This pawn structure is compromised - the doubled pawns are weak and the kingside lacks pawn support. However, White does gain some compensation through the open b-file and potential central pawn advances with c4."
+          "annotation": "White recaptures with the b-pawn, creating doubled c-pawns but opening the b-file for the rook. This pawn structure is compromised - the doubled pawns are weak and the kingside lacks pawn support. However, White does gain some compensation through the open b-file and potential central pawn advances with c4.",
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 80, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Bd6",
-          "annotation": "Black repositions the bishop to an excellent square, eyeing both the kingside (potential ...Bxh2+ tactics) and supporting central control. The bishop on d6 is actively placed, controlling key light squares while preparing potential attacking chances. This move also prepares kingside castling while maintaining pressure on White's compromised position."
+          "annotation": "Black repositions the bishop to an excellent square, eyeing both the kingside (potential ...Bxh2+ tactics) and supporting central control. The bishop on d6 is actively placed, controlling key light squares while preparing potential attacking chances. This move also prepares kingside castling while maintaining pressure on White's compromised position.",
+          "highlights": [
+            {
+              "square": "d6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside, bringing the king to safety and connecting the rooks. This move is necessary to complete development and prepare the f1 rook for central files. However, with Black's active pieces and White's damaged pawn structure, castling doesn't fully solve White's positional difficulties."
+          "annotation": "White castles kingside, bringing the king to safety and connecting the rooks. This move is necessary to complete development and prepare the f1 rook for central files. However, with Black's active pieces and White's damaged pawn structure, castling doesn't fully solve White's positional difficulties.",
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         },
         {
           "san": "O-O",
-          "annotation": "Black completes kingside castling, securing the king while bringing the f8 rook into play. With both sides castled, the position enters a complex middlegame where Black's superior pawn structure and active pieces provide excellent practical chances. Black has successfully equalized and arguably stands better due to White's structural weaknesses."
+          "annotation": "Black completes kingside castling, securing the king while bringing the f8 rook into play. With both sides castled, the position enters a complex middlegame where Black's superior pawn structure and active pieces provide excellent practical chances. Black has successfully equalized and arguably stands better due to White's structural weaknesses.",
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         }
       ]
     }
