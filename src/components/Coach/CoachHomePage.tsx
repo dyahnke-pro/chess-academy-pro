@@ -10,6 +10,7 @@ import type { WeaknessProfile, WeaknessItem, WeaknessCategory } from '../../type
 const CATEGORY_ICONS: Record<WeaknessCategory, string> = {
   tactics: '\u2694\uFE0F',
   openings: '\uD83D\uDCD6',
+  opening_weakspots: '\uD83D\uDCD6',
   endgame: '\u2654',
   calculation: '\uD83E\uDDEE',
   time_management: '\u23F1\uFE0F',
@@ -30,6 +31,7 @@ function getTrainRoute(category: WeaknessCategory): string {
     case 'calculation':
       return '/puzzles';
     case 'openings':
+    case 'opening_weakspots':
       return '/openings';
     case 'endgame':
       return '/puzzles';

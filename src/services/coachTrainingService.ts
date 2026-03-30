@@ -31,6 +31,7 @@ const CATEGORY_TO_TRAINING: Record<WeaknessCategory, TrainingType> = {
   tactics: 'tactic_drill',
   calculation: 'tactic_drill',
   openings: 'opening_review',
+  opening_weakspots: 'opening_review',
   endgame: 'endgame_practice',
   time_management: 'tactic_drill',
   positional: 'tactic_drill',
