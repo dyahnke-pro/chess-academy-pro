@@ -106,7 +106,13 @@ export interface CommonMistake {
 
 export interface CheckpointQuizItem {
   fen: string;
-  correctMove: string;
+  type?: 'move' | 'plan';
+  // Move-type fields
+  correctMove?: string;
+  // Plan-type fields (multiple choice)
+  question?: string;
+  choices?: string[];
+  correctIndex?: number;
   hint: string;
   concept: string;
 }
@@ -663,6 +669,7 @@ export interface CoachContext {
 export type WeaknessCategory =
   | 'tactics'
   | 'openings'
+  | 'opening_weakspots'
   | 'endgame'
   | 'time_management'
   | 'positional'
@@ -691,6 +698,21 @@ export interface WeaknessProfile {
 }
 
 export type ReviewMode = 'analysis' | 'whatif' | 'practice' | 'guided_lesson';
+
+// ─── Opening Weak Spots ─────────────────────────────────────────────────────
+
+export interface OpeningWeakSpot {
+  id: string;
+  openingId: string;
+  openingName: string;
+  fen: string;
+  moveIndex: number;
+  correctMoveSan: string;
+  failCount: number;
+  lastFailedAt: string;
+  lastDrilledAt: string | null;
+}
+
 
 export interface ReviewState {
   mode: ReviewMode;

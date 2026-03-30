@@ -207,7 +207,7 @@ describe('DrillMode (Learn)', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('wrong-flash')).toBeInTheDocument();
-      expect(screen.getByText('Incorrect move. Try again.')).toBeInTheDocument();
+      expect(screen.getByTestId('explanation-card')).toBeInTheDocument();
       expect(screen.getByTestId('undo-btn')).toBeInTheDocument();
     });
   });
@@ -235,8 +235,8 @@ describe('DrillMode (Learn)', () => {
       expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'true');
     });
 
-    // Wrong error card should be gone
-    expect(screen.queryByText('Incorrect move. Try again.')).not.toBeInTheDocument();
+    // Undo button should be gone (error state dismissed)
+    expect(screen.queryByTestId('undo-btn')).not.toBeInTheDocument();
   });
 
   it('back button calls onExit when clicked', () => {

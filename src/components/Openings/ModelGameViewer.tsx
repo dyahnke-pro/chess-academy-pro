@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,7 +11,10 @@ import {
   PlayCircle,
   PauseCircle,
   Star,
+  Compass,
+  RotateCcw,
 } from 'lucide-react';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import type { ModelGame, ModelGameCriticalMoment, AnnotationArrow } from '../../types';
 
 interface ModelGameViewerProps {
@@ -77,9 +80,18 @@ export function ModelGameViewer({
   const [currentIndex, setCurrentIndex] = useState(-1); // -1 = starting position
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
-  const currentFen = currentIndex >= 0 && currentIndex < moves.length
+  // Explore mode — lets users try alternate moves
+  const [isExploring, setIsExploring] = useState(false);
+  const [exploreFen, setExploreFen] = useState<string | null>(null);
+  const [exploreEval, setExploreEval] = useState<string | null>(null);
+  const [exploreMoves, setExploreMoves] = useState<string[]>([]);
+  const exploreChess = useRef<Chess | null>(null);
+
+  const baseFen = currentIndex >= 0 && currentIndex < moves.length
     ? moves[currentIndex].fen
     : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  const currentFen = isExploring && exploreFen ? exploreFen : baseFen;
 
   const currentMove = currentIndex >= 0 && currentIndex < moves.length
     ? moves[currentIndex]
@@ -114,8 +126,74 @@ export function ModelGameViewer({
   }, [moves.length]);
 
   const toggleAutoPlay = useCallback((): void => {
+    setIsExploring(false);
+    setExploreFen(null);
+    setExploreMoves([]);
+    setExploreEval(null);
     setIsAutoPlaying((p) => !p);
   }, []);
+
+  const toggleExplore = useCallback((): void => {
+    if (isExploring) {
+      // Exit explore mode
+      setIsExploring(false);
+      setExploreFen(null);
+      setExploreMoves([]);
+      setExploreEval(null);
+    } else {
+      // Enter explore mode from current position
+      setIsAutoPlaying(false);
+      setIsExploring(true);
+      const fen = baseFen;
+      setExploreFen(fen);
+      setExploreMoves([]);
+      exploreChess.current = new Chess(fen);
+      // Get initial eval
+      void stockfishEngine.analyzePosition(fen, 12).then((analysis) => {
+        const evalStr = analysis.isMate
+          ? `Mate in ${analysis.mateIn}`
+          : `${analysis.evaluation > 0 ? '+' : ''}${analysis.evaluation.toFixed(1)}`;
+        setExploreEval(evalStr);
+      }).catch(() => { /* engine not ready */ });
+    }
+  }, [isExploring, baseFen]);
+
+  const handleExploreDrop = useCallback(
+    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
+      if (!isExploring || !targetSquare || !exploreChess.current) return false;
+
+      const move = exploreChess.current.move({
+        from: sourceSquare,
+        to: targetSquare,
+        promotion: 'q',
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js throws on truly invalid moves but may return null for edge cases
+      if (!move) return false;
+
+      const newFen = exploreChess.current.fen();
+      setExploreFen(newFen);
+      setExploreMoves((prev) => [...prev, move.san]);
+
+      // Get engine eval for new position
+      void stockfishEngine.analyzePosition(newFen, 12).then((analysis) => {
+        const evalStr = analysis.isMate
+          ? `Mate in ${analysis.mateIn}`
+          : `${analysis.evaluation > 0 ? '+' : ''}${analysis.evaluation.toFixed(1)}`;
+        setExploreEval(evalStr);
+      }).catch(() => { /* engine not ready */ });
+
+      return true;
+    },
+    [isExploring],
+  );
+
+  const undoExploreMove = useCallback((): void => {
+    if (!exploreChess.current || exploreMoves.length === 0) return;
+    exploreChess.current.undo();
+    const newFen = exploreChess.current.fen();
+    setExploreFen(newFen);
+    setExploreMoves((prev) => prev.slice(0, -1));
+  }, [exploreMoves.length]);
 
   // Auto-play
   useEffect(() => {
@@ -179,8 +257,9 @@ export function ModelGameViewer({
             options={{
               position: currentFen,
               boardOrientation: boardOrientation,
-              allowDragging: false,
-              arrows: customArrows,
+              allowDragging: isExploring,
+              onPieceDrop: isExploring ? handleExploreDrop : undefined,
+              arrows: isExploring ? [] : customArrows,
               animationDurationInMs: 200,
               darkSquareStyle: { backgroundColor: '#779952' },
               lightSquareStyle: { backgroundColor: '#edeed1' },
@@ -202,7 +281,8 @@ export function ModelGameViewer({
         <div className="flex items-center gap-2">
           <button
             onClick={goFirst}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors"
+            disabled={isExploring}
+            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
             aria-label="First move"
             data-testid="model-game-first"
           >
@@ -210,7 +290,8 @@ export function ModelGameViewer({
           </button>
           <button
             onClick={goPrev}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors"
+            disabled={isExploring}
+            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
             aria-label="Previous move"
             data-testid="model-game-prev"
           >
@@ -218,7 +299,8 @@ export function ModelGameViewer({
           </button>
           <button
             onClick={toggleAutoPlay}
-            className="p-3 rounded-xl bg-theme-accent text-white hover:opacity-90 transition-opacity"
+            disabled={isExploring}
+            className="p-3 rounded-xl bg-theme-accent text-white hover:opacity-90 transition-opacity disabled:opacity-40"
             aria-label={isAutoPlaying ? 'Pause' : 'Play'}
             data-testid="model-game-autoplay"
           >
@@ -229,7 +311,8 @@ export function ModelGameViewer({
           </button>
           <button
             onClick={goNext}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors"
+            disabled={isExploring}
+            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
             aria-label="Next move"
             data-testid="model-game-next"
           >
@@ -237,13 +320,52 @@ export function ModelGameViewer({
           </button>
           <button
             onClick={goLast}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors"
+            disabled={isExploring}
+            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
             aria-label="Last move"
             data-testid="model-game-last"
           >
             <ChevronsRight size={18} className="text-theme-text" />
           </button>
+          <div className="w-px h-6 bg-theme-border mx-1" />
+          <button
+            onClick={toggleExplore}
+            className={`p-2 rounded-lg border transition-colors ${
+              isExploring
+                ? 'bg-purple-500/20 border-purple-500/40 text-purple-400'
+                : 'hover:bg-theme-surface border-theme-border text-theme-text-muted'
+            }`}
+            aria-label={isExploring ? 'Exit explore mode' : 'Explore alternatives'}
+            title={isExploring ? 'Exit explore' : 'What if...?'}
+            data-testid="model-game-explore"
+          >
+            <Compass size={18} />
+          </button>
+          {isExploring && exploreMoves.length > 0 && (
+            <button
+              onClick={undoExploreMove}
+              className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors text-theme-text-muted"
+              aria-label="Undo explore move"
+              data-testid="model-game-explore-undo"
+            >
+              <RotateCcw size={18} />
+            </button>
+          )}
         </div>
+
+        {/* Explore mode info bar */}
+        {isExploring && (
+          <div className="flex items-center justify-center gap-3 mt-2">
+            <span className="text-xs text-purple-400 font-medium">
+              Exploring: {exploreMoves.length > 0 ? exploreMoves.join(' ') : 'Make a move to see what happens'}
+            </span>
+            {exploreEval && (
+              <span className="text-xs font-mono font-bold text-theme-text-muted bg-theme-surface px-2 py-0.5 rounded">
+                {exploreEval}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Annotation panel */}
