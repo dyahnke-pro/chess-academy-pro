@@ -12,6 +12,12 @@ import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlansSection } from './MiddlegamePlansSection';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
+import { CheckpointQuiz } from './CheckpointQuiz';
+import { CommonMistakesSection } from './CommonMistakesSection';
+import { SidelineExplainer } from './SidelineExplainer';
+import commonMistakesData from '../../data/common-mistakes.json';
+import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
+import type { CommonMistake, CheckpointQuizItem } from '../../types';
 import {
   getOpeningById,
   getMasteryPercent,
@@ -39,6 +45,7 @@ import {
   Crosshair,
   Heart,
   PlayCircle,
+  Lock,
 } from 'lucide-react';
 
 type ViewMode =
@@ -92,6 +99,8 @@ export function OpeningDetailPage(): JSX.Element {
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -425,6 +434,13 @@ export function OpeningDetailPage(): JSX.Element {
   const discovered = getLinesDiscovered(opening);
   const perfected = getLinesPerfected(opening);
 
+  // Data lookups for new features
+  const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
+  const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
+  const currentQuiz = quizzes[quizIndex] ?? null;
+  const hasCompletedMainLine = opening.drillAttempts > 0;
+  const isAdvancedUnlocked = hasCompletedMainLine || mastery > 0;
+
   const NarrationButton = ({ sectionId, text }: { sectionId: string; text: string }): JSX.Element => {
     const isNarrating = narratingSection === sectionId;
     return (
@@ -554,17 +570,60 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
-      {/* Middlegame Plans */}
-      <MiddlegamePlansSection
-        openingId={opening.id}
-        onSelectPlan={handleSelectMiddlegamePlan}
-      />
+      {/* Checkpoint Quiz — after Key Ideas */}
+      {currentQuiz && !quizCompleted && (
+        <CheckpointQuiz
+          quiz={currentQuiz}
+          boardOrientation={opening.color}
+          onComplete={(correct) => {
+            if (quizIndex < quizzes.length - 1) {
+              setQuizIndex((prev) => prev + 1);
+            } else {
+              setQuizCompleted(true);
+            }
+          }}
+        />
+      )}
 
-      {/* Model Games */}
-      <ModelGamesSection
-        openingId={opening.id}
-        onSelectGame={handleSelectModelGame}
-      />
+      {/* Middlegame Plans — gated behind first drill */}
+      {isAdvancedUnlocked ? (
+        <MiddlegamePlansSection
+          openingId={opening.id}
+          onSelectPlan={handleSelectMiddlegamePlan}
+        />
+      ) : (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="plans-locked">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-theme-text-muted" />
+            <h3 className="text-sm font-semibold text-theme-text">Middlegame Plans</h3>
+          </div>
+          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock middlegame plans.</p>
+        </div>
+      )}
+
+      {/* Model Games — gated behind first drill */}
+      {isAdvancedUnlocked ? (
+        <ModelGamesSection
+          openingId={opening.id}
+          onSelectGame={handleSelectModelGame}
+        />
+      ) : (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="games-locked">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-theme-text-muted" />
+            <h3 className="text-sm font-semibold text-theme-text">Model Games</h3>
+          </div>
+          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock model games.</p>
+        </div>
+      )}
+
+      {/* Common Mistakes */}
+      {mistakes.length > 0 && (
+        <CommonMistakesSection
+          mistakes={mistakes}
+          boardOrientation={opening.color}
+        />
+      )}
 
       {/* Traps */}
       {opening.traps && opening.traps.length > 0 && (
@@ -814,6 +873,11 @@ export function OpeningDetailPage(): JSX.Element {
                     >
                       <Swords size={20} />
                     </button>
+                    <SidelineExplainer
+                      opening={opening}
+                      variation={variation}
+                      fen={variationFens[i]}
+                    />
                   </div>
                 </div>
               );

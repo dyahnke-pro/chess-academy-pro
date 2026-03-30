@@ -114,6 +114,26 @@ describe('AnnotationCard', () => {
     });
   });
 
+  it('renders move order note when present', () => {
+    const annotationWithMoveOrder: OpeningMoveAnnotation = {
+      san: 'Nf3',
+      annotation: 'Develops the knight.',
+      moveOrderNote: 'Playing Nf3 before d4 avoids the Budapest Gambit.',
+    };
+    render(
+      <AnnotationCard annotation={annotationWithMoveOrder} moveNumber={2} isWhite={true} visible={true} />,
+    );
+    expect(screen.getByTestId('annotation-move-order')).toBeInTheDocument();
+    expect(screen.getByText(/Playing Nf3 before d4/)).toBeInTheDocument();
+  });
+
+  it('does not render move order note when absent', () => {
+    render(
+      <AnnotationCard annotation={fullAnnotation} moveNumber={1} isWhite={true} visible={true} />,
+    );
+    expect(screen.queryByTestId('annotation-move-order')).not.toBeInTheDocument();
+  });
+
   it('pawn structure and plans always visible without toggle', () => {
     render(
       <AnnotationCard

@@ -1,0 +1,36 @@
+{
+  "italian-game": [
+    {"fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4", "wrongMove": "Ng5", "correctMove": "c3", "explanation": "Ng5 looks aggressive targeting f7, but after d5! exd5 Na5, Black wins the bishop pair and has a strong center. Instead c3 prepares d4 for a sound central build-up."},
+    {"fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 7", "wrongMove": "d4", "correctMove": "Nbd2", "explanation": "Playing d4 immediately is premature — after exd4 cxd4 Bb4, Black pins the knight and puts pressure on d4. First develop with Nbd2, preparing d4 with proper support."}
+  ],
+  "sicilian-najdorf": [
+    {"fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6", "wrongMove": "e5", "correctMove": "Be2", "explanation": "e5 too early lets Black play dxe5 Nxe5 (or Fxe5) with tempo. Develop pieces first with Be2, f3, Be3, Qd2, and O-O-O before launching the pawn storm."},
+    {"fen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP1P1/2N1B3/PPP2P1P/R2QKB1R b KQkq - 0 7", "wrongMove": "Nxg4", "correctMove": "d5", "explanation": "Taking the g4 pawn is a trap! After Nxg4 Bg2, White's bishops rake across the board and Black's knight is misplaced. Play d5 for central counterplay."}
+  ],
+  "french-defence": [
+    {"fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4", "wrongMove": "Nf3", "correctMove": "Bd3", "explanation": "Nf3 blocks the f-pawn and removes the option of f4 to support e5. Bd3 develops actively, eyes h7, and keeps f2-f4 available for later."},
+    {"fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2NB4/PPP2PPP/R1BQK1NR b KQkq - 0 5", "wrongMove": "c5", "correctMove": "Nfd7", "explanation": "c5 immediately gives White a target after dxc5 Bxc5 Qg4. First retreat the knight to d7 (or e4) to reorganize, then break with c5 when better prepared."}
+  ],
+  "caro-kann": [
+    {"fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3", "wrongMove": "e6", "correctMove": "Bf5", "explanation": "e6 locks in the light-squared bishop — the Caro-Kann's main advantage is developing this bishop OUTSIDE the pawn chain first. Bf5 is the whole point of the opening."}
+  ],
+  "ruy-lopez": [
+    {"fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 3", "wrongMove": "Nf6", "correctMove": "a6", "explanation": "Nf6 allows 4. O-O Nxe4 5. d4 (the Open Ruy Lopez) which leads to very sharp tactical play favoring White. a6 forces the bishop back and gives Black more flexibility."}
+  ],
+  "qgd": [
+    {"fen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3", "wrongMove": "dxc4", "correctMove": "e6", "explanation": "Taking on c4 too early (QGA) lets White develop freely with e3+Bxc4. In the QGD, e6 maintains the central tension and keeps a solid pawn structure."},
+    {"fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4", "wrongMove": "cxd5", "correctMove": "Bg5", "explanation": "Exchanging on d5 too early relieves tension and makes Black's position easier. Bg5 maintains pressure, pins the knight, and keeps Black guessing about when you'll exchange."}
+  ],
+  "kings-indian-defence": [
+    {"fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4", "wrongMove": "e5", "correctMove": "d6", "explanation": "Playing e5 immediately runs into d5 closing the center when White is better prepared. Play d6 first to support e5, which typically comes after O-O and proper piece placement."}
+  ],
+  "london-system": [
+    {"fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3", "wrongMove": "Nh5", "correctMove": "c5", "explanation": "Nh5 tries to win the bishop but after Bg5! the bishop is safe on g5 and the knight on h5 is offside. Play c5 instead to challenge the center — this is the main way to fight the London."}
+  ],
+  "english-opening": [
+    {"fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 1", "wrongMove": "d5", "correctMove": "e5", "explanation": "d5 allows cxd5 Qxd5 Nc3, developing White's knight with tempo on the queen. Playing e5 grabs central space and avoids the tempo loss. If White plays d3, you keep a symmetrical but comfortable position."}
+  ],
+  "sicilian-dragon": [
+    {"fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R b KQkq - 0 7", "wrongMove": "Ng4", "correctMove": "O-O", "explanation": "Ng4 tries to win the bishop pair but after Bxg4 Bxg4 f3 Bd7, White has gained a tempo and Black hasn't castled yet. Castle first — king safety is paramount before starting queenside counterplay."}
+  ]
+}

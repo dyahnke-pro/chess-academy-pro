@@ -17,6 +17,8 @@ import type {
   ModelGame,
   MiddlegamePlan,
   GeneratedContent,
+  CommonMistake,
+  CheckpointQuizItem,
 } from '../types';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -425,6 +427,30 @@ export function buildGeneratedContent(overrides?: Partial<GeneratedContent>): Ge
     content: 'The Italian Game middlegame revolves around central control...',
     groundingData: '{"topMoves": "d4: 5000 games"}',
     generatedAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
+// ─── Common Mistakes ────────────────────────────────────────────────────────
+
+export function buildCommonMistake(overrides?: Partial<CommonMistake>): CommonMistake {
+  return {
+    fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+    wrongMove: 'f6',
+    correctMove: 'e5',
+    explanation: 'f6 weakens the kingside. Play e5 instead.',
+    ...overrides,
+  };
+}
+
+// ─── Checkpoint Quiz ────────────────────────────────────────────────────────
+
+export function buildCheckpointQuiz(overrides?: Partial<CheckpointQuizItem>): CheckpointQuizItem {
+  return {
+    fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+    correctMove: 'e5',
+    hint: 'Mirror the center pawn.',
+    concept: 'Symmetrical Response',
     ...overrides,
   };
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Layers, Target, HelpCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Layers, Target, HelpCircle, ArrowDownUp } from 'lucide-react';
 import type { OpeningMoveAnnotation } from '../../types';
 
 export interface AnnotationCardProps {
@@ -53,6 +53,17 @@ export function AnnotationCard({
           <p className="text-sm text-theme-text leading-relaxed" data-testid="annotation-text">
             {annotation.annotation}
           </p>
+
+          {/* Move Order Note — why this move order matters */}
+          {annotation.moveOrderNote && (
+            <div className="mt-2 flex items-start gap-1.5 bg-violet-500/10 rounded-lg px-2.5 py-1.5" data-testid="annotation-move-order">
+              <ArrowDownUp size={12} className="text-violet-400 mt-0.5 shrink-0" />
+              <p className="text-xs text-violet-300 leading-relaxed">
+                <span className="font-semibold">Move order: </span>
+                {annotation.moveOrderNote}
+              </p>
+            </div>
+          )}
 
           {/* Pawn Structure — always visible when present, with icon */}
           {hasPawnStructure && (

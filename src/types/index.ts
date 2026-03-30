@@ -88,8 +88,27 @@ export interface OpeningMoveAnnotation {
   pawnStructure?: string;
   plans?: string[];
   alternatives?: string[];
+  moveOrderNote?: string;
   arrows?: AnnotationArrow[];
   highlights?: AnnotationHighlight[];
+}
+
+// ─── Common Mistakes ──────────────────────────────────────────────────────
+
+export interface CommonMistake {
+  fen: string;
+  wrongMove: string;
+  correctMove: string;
+  explanation: string;
+}
+
+// ─── Checkpoint Quiz ──────────────────────────────────────────────────────
+
+export interface CheckpointQuizItem {
+  fen: string;
+  correctMove: string;
+  hint: string;
+  concept: string;
 }
 
 export interface OpeningSubLine {
