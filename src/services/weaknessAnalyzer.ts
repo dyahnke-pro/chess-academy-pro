@@ -603,56 +603,104 @@ function computeSkillRadar(
   flashcards: FlashcardRecord[],
   games: GameRecord[],
 ): UserProfile['skillRadar'] {
-  // Tactics: based on puzzle theme accuracy
+  const annotatedGames = games.filter((g) => g.annotations && g.annotations.length > 0);
+
+  // ── Collect per-phase error rates from annotated games ──────────────
+  let openingMoves = 0;
+  let openingErrors = 0;
+  let midgameMoves = 0;
+  let midgameErrors = 0;
+  let endgameMoves = 0;
+  let endgameErrors = 0;
+  let totalMoves = 0;
+  let totalErrors = 0;
+
+  for (const game of annotatedGames) {
+    if (!game.annotations) continue;
+    const len = game.annotations.length;
+    totalMoves += len;
+
+    for (let i = 0; i < len; i++) {
+      const a = game.annotations[i];
+      const isError = a.classification === 'blunder' || a.classification === 'mistake';
+      if (isError) totalErrors++;
+
+      // Phase thresholds: opening = first 15 half-moves, endgame = last 20, rest = middlegame
+      if (i < 15) {
+        openingMoves++;
+        if (isError) openingErrors++;
+      } else if (i >= len - 20) {
+        endgameMoves++;
+        if (isError) endgameErrors++;
+      } else {
+        midgameMoves++;
+        if (isError) midgameErrors++;
+      }
+    }
+  }
+
+  const hasGameData = annotatedGames.length > 0 && totalMoves > 0;
+
+  // ── Tactics: puzzle accuracy blended with middlegame error rate ─────
   const tacticsSkills = themeSkills.filter((s) => s.attempts >= 3);
-  const tacticsScore = tacticsSkills.length > 0
+  const puzzleTacticsScore = tacticsSkills.length > 0
     ? Math.round((tacticsSkills.reduce((sum, s) => sum + s.accuracy, 0) / tacticsSkills.length) * 100)
-    : 50;
+    : null;
+  const gameTacticsScore = hasGameData && midgameMoves > 0
+    ? Math.round(Math.max(10, (1 - (midgameErrors / midgameMoves) * 6) * 100))
+    : null;
+  const tacticsScore = blendScores(puzzleTacticsScore, gameTacticsScore, 50);
 
-  // Opening: based on drill accuracy
+  // ── Opening: drill accuracy blended with early-game error rate ─────
   const drilledOpenings = repertoire.filter((o) => o.drillAttempts > 0);
-  const openingScore = drilledOpenings.length > 0
+  const drillOpeningScore = drilledOpenings.length > 0
     ? Math.round((drilledOpenings.reduce((sum, o) => sum + o.drillAccuracy, 0) / drilledOpenings.length) * 100)
-    : 50;
+    : null;
+  const gameOpeningScore = hasGameData && openingMoves > 0
+    ? Math.round(Math.max(10, (1 - (openingErrors / openingMoves) * 8) * 100))
+    : null;
+  const openingScore = blendScores(drillOpeningScore, gameOpeningScore, 50);
 
-  // Memory: based on flashcard retention
+  // ── Memory: flashcard retention (no game component) ────────────────
   const reviewedCards = flashcards.filter((f) => f.srsLastReview !== null);
   const memoryScore = reviewedCards.length > 0
     ? Math.round(Math.min(100, (reviewedCards.reduce((sum, f) => sum + f.srsEaseFactor, 0) / reviewedCards.length) * 40))
     : 50;
 
-  // Endgame: based on endgame puzzle accuracy
+  // ── Endgame: puzzle accuracy blended with late-game error rate ─────
   const endgameSkill = themeSkills.find((s) => s.theme === 'endgame');
-  const endgameScore = endgameSkill && endgameSkill.attempts >= 3
+  const puzzleEndgameScore = endgameSkill && endgameSkill.attempts >= 3
     ? Math.round(endgameSkill.accuracy * 100)
+    : null;
+  const gameEndgameScore = hasGameData && endgameMoves > 0
+    ? Math.round(Math.max(10, (1 - (endgameErrors / endgameMoves) * 6) * 100))
+    : null;
+  const endgameScore = blendScores(puzzleEndgameScore, gameEndgameScore, 50);
+
+  // ── Calculation: overall game error rate ───────────────────────────
+  const calcScore = hasGameData
+    ? Math.round(Math.max(10, Math.min(100, (1 - (totalErrors / totalMoves) * 5) * 100)))
     : 50;
 
-  // Calculation: based on game move quality (lower error rate = higher score)
-  let calcScore = 50;
-  const annotatedGames = games.filter((g) => g.annotations && g.annotations.length > 0);
-  if (annotatedGames.length > 0) {
-    let totalMoves = 0;
-    let totalErrors = 0;
-    for (const game of annotatedGames) {
-      if (!game.annotations) continue;
-      totalMoves += game.annotations.length;
-      totalErrors += game.annotations.filter(
-        (a) => a.classification === 'blunder' || a.classification === 'mistake',
-      ).length;
-    }
-    if (totalMoves > 0) {
-      const errorRate = totalErrors / totalMoves;
-      calcScore = Math.round(Math.max(10, Math.min(100, (1 - errorRate * 5) * 100)));
-    }
-  }
-
   return {
-    opening: Math.max(0, Math.min(100, openingScore)),
-    tactics: Math.max(0, Math.min(100, tacticsScore)),
-    endgame: Math.max(0, Math.min(100, endgameScore)),
-    memory: Math.max(0, Math.min(100, memoryScore)),
-    calculation: Math.max(0, Math.min(100, calcScore)),
+    opening: clampScore(openingScore),
+    tactics: clampScore(tacticsScore),
+    endgame: clampScore(endgameScore),
+    memory: clampScore(memoryScore),
+    calculation: clampScore(calcScore),
   };
+}
+
+/** Blend two optional score sources (60% weight on primary, 40% on game data). */
+function blendScores(primary: number | null, gameScore: number | null, fallback: number): number {
+  if (primary !== null && gameScore !== null) {
+    return Math.round(primary * 0.6 + gameScore * 0.4);
+  }
+  return primary ?? gameScore ?? fallback;
+}
+
+function clampScore(score: number): number {
+  return Math.max(0, Math.min(100, score));
 }
 
 // ─── Main API ───────────────────────────────────────────────────────────────
