@@ -24,7 +24,7 @@ vi.mock('../../services/coachFeatureService', () => ({
 
 vi.mock('../../services/weaknessAnalyzer', () => ({
   getStoredWeaknessProfile: (): unknown => mockGetStoredWeaknessProfile(),
-  computeWeaknessProfile: (...args: unknown[]): unknown => mockComputeWeaknessProfile(...args),
+  computeWeaknessProfile: (): unknown => mockComputeWeaknessProfile(),
   filterWeaknessesByCategory: (profile: WeaknessProfile, category: string) =>
     profile.items.filter((item) => item.category === category),
 }));
