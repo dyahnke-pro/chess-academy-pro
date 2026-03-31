@@ -55,114 +55,20 @@ function replayPgnToFens(pgn: string): { fens: string[]; moves: string[] } {
   return { fens, moves };
 }
 
-// ─── Lightweight Worker Pool ────────────────────────────────────────────────
-
-interface PoolWorker {
-  worker: Worker;
-  busy: boolean;
-}
-
-interface PoolAnalysisResult {
-  evaluation: number;
-  bestMove: string;
-  isMate: boolean;
-  depth: number;
-}
+// ─── Dedicated Worker ───────────────────────────────────────────────────────
 
 /**
- * A pool of Stockfish Web Workers for parallel analysis.
- * Each worker handles one position at a time; the pool distributes work.
+ * A dedicated Stockfish Web Worker that processes positions sequentially.
+ * Each worker owns one game at a time — multiple workers run games in parallel.
  */
-class StockfishPool {
-  private workers: PoolWorker[] = [];
-  private initialized = false;
+class DedicatedWorker {
+  private worker: Worker;
 
-  async initialize(size: number): Promise<void> {
-    if (this.initialized) return;
-
-    const promises: Promise<void>[] = [];
-
-    for (let i = 0; i < size; i++) {
-      promises.push(this.spawnWorker(i));
-    }
-
-    await Promise.all(promises);
-    this.initialized = true;
-    console.log(`[StockfishPool] ${this.workers.length} workers ready`);
+  constructor(worker: Worker) {
+    this.worker = worker;
   }
 
-  private spawnWorker(index: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const timeoutId = setTimeout(() => {
-        reject(new Error(`Worker ${index} init timed out`));
-      }, INIT_TIMEOUT_MS);
-
-      try {
-        const worker = new Worker('/stockfish/stockfish-18-lite-single.js');
-
-        worker.onerror = () => {
-          clearTimeout(timeoutId);
-          reject(new Error(`Worker ${index} failed to load`));
-        };
-
-        const readyHandler = (event: MessageEvent<string>): void => {
-          if (event.data === 'readyok') {
-            clearTimeout(timeoutId);
-            worker.removeEventListener('message', readyHandler);
-            // Only need 1 PV line for batch analysis (faster)
-            worker.postMessage('setoption name MultiPV value 1');
-            this.workers.push({ worker, busy: false });
-            resolve();
-          }
-        };
-
-        worker.addEventListener('message', readyHandler);
-        worker.postMessage('uci');
-        worker.postMessage('isready');
-      } catch {
-        clearTimeout(timeoutId);
-        reject(new Error(`Worker ${index} spawn failed`));
-      }
-    });
-  }
-
-  /**
-   * Analyze a single position with an available worker from the pool.
-   * Waits for a free worker if all are busy.
-   */
-  async analyzePosition(fen: string, depth: number): Promise<PoolAnalysisResult> {
-    const poolWorker = await this.acquireWorker();
-
-    try {
-      return await this.runAnalysis(poolWorker, fen, depth);
-    } finally {
-      poolWorker.busy = false;
-    }
-  }
-
-  private acquireWorker(): Promise<PoolWorker> {
-    const free = this.workers.find((w) => !w.busy);
-    if (free) {
-      free.busy = true;
-      return Promise.resolve(free);
-    }
-
-    // Poll until a worker frees up
-    return new Promise((resolve) => {
-      const check = (): void => {
-        const available = this.workers.find((w) => !w.busy);
-        if (available) {
-          available.busy = true;
-          resolve(available);
-        } else {
-          setTimeout(check, 5);
-        }
-      };
-      setTimeout(check, 5);
-    });
-  }
-
-  private runAnalysis(poolWorker: PoolWorker, fen: string, depth: number): Promise<PoolAnalysisResult> {
+  analyzePosition(fen: string, depth: number): Promise<{ evaluation: number; bestMove: string }> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error('Analysis timed out'));
@@ -170,124 +76,106 @@ class StockfishPool {
 
       const blackToMove = fen.split(' ')[1] === 'b';
       let lastEval = 0;
-      let isMate = false;
-      let lastDepth = 0;
-      let bestMove = '';
 
       const handler = (event: MessageEvent<string>): void => {
         const data = event.data;
 
-        // Parse info lines for eval
         if (data.startsWith('info ')) {
-          const depthMatch = /depth (\d+)/.exec(data);
           const scoreMatch = /score (cp|mate) (-?\d+)/.exec(data);
-          if (depthMatch && scoreMatch) {
-            lastDepth = parseInt(depthMatch[1]);
+          if (scoreMatch) {
             const scoreType = scoreMatch[1];
             const scoreValue = parseInt(scoreMatch[2]);
-            if (scoreType === 'mate') {
-              isMate = true;
-              lastEval = scoreValue > 0 ? 30000 : -30000;
-            } else {
-              isMate = false;
-              lastEval = scoreValue;
-            }
+            lastEval = scoreType === 'mate'
+              ? (scoreValue > 0 ? 30000 : -30000)
+              : scoreValue;
           }
         }
 
-        // bestmove signals completion
         const bmMatch = /^bestmove (\S+)/.exec(data);
         if (bmMatch) {
           clearTimeout(timeoutId);
-          poolWorker.worker.removeEventListener('message', handler);
-          bestMove = bmMatch[1];
-
-          // Normalize to white's perspective
+          this.worker.removeEventListener('message', handler);
           const flip = blackToMove ? -1 : 1;
-
-          resolve({
-            evaluation: lastEval * flip,
-            bestMove,
-            isMate,
-            depth: lastDepth,
-          });
+          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1] });
         }
       };
 
-      poolWorker.worker.addEventListener('message', handler);
-      poolWorker.worker.postMessage('ucinewgame');
-      poolWorker.worker.postMessage(`position fen ${fen}`);
-      poolWorker.worker.postMessage(`go depth ${depth}`);
+      this.worker.addEventListener('message', handler);
+      this.worker.postMessage('ucinewgame');
+      this.worker.postMessage(`position fen ${fen}`);
+      this.worker.postMessage(`go depth ${depth}`);
     });
   }
 
   destroy(): void {
-    for (const pw of this.workers) {
-      pw.worker.postMessage('stop');
-      pw.worker.terminate();
-    }
-    this.workers = [];
-    this.initialized = false;
+    this.worker.postMessage('stop');
+    this.worker.terminate();
   }
+}
+
+/**
+ * Spawn a dedicated Stockfish worker, wait for it to be ready.
+ */
+function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      reject(new Error(`Worker ${index} init timed out`));
+    }, INIT_TIMEOUT_MS);
+
+    try {
+      const worker = new Worker('/stockfish/stockfish-18-lite-single.js');
+
+      worker.onerror = () => {
+        clearTimeout(timeoutId);
+        reject(new Error(`Worker ${index} failed to load`));
+      };
+
+      const readyHandler = (event: MessageEvent<string>): void => {
+        if (event.data === 'readyok') {
+          clearTimeout(timeoutId);
+          worker.removeEventListener('message', readyHandler);
+          worker.postMessage('setoption name MultiPV value 1');
+          resolve(new DedicatedWorker(worker));
+        }
+      };
+
+      worker.addEventListener('message', readyHandler);
+      worker.postMessage('uci');
+      worker.postMessage('isready');
+    } catch {
+      clearTimeout(timeoutId);
+      reject(new Error(`Worker ${index} spawn failed`));
+    }
+  });
 }
 
 // ─── Core Analysis ──────────────────────────────────────────────────────────
 
 /**
- * Analyze a single game: evaluate every position, then classify each move.
- * Uses a worker pool for parallel position evaluation.
+ * Analyze a single game with a dedicated worker.
+ * Evaluates every position sequentially on this worker, then classifies each move.
  */
-async function analyzeGameWithPool(
+async function analyzeGameOnWorker(
   game: GameRecord,
-  pool: StockfishPool,
+  worker: DedicatedWorker,
 ): Promise<MoveAnnotation[] | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
 
-  // Evaluate all positions in parallel via the pool
-  const evalPromises = fens.map((fen) =>
-    pool.analyzePosition(fen, ANALYSIS_DEPTH)
-      .then((r) => r.evaluation)
-      .catch(() => null as number | null),
-  );
-  const evals = await Promise.all(evalPromises);
-
-  // Generate annotations for every move
-  const annotations: MoveAnnotation[] = [];
-  const bestMovePromises: Array<{
-    moveIdx: number;
-    promise: Promise<string | null>;
-  }> = [];
-
-  for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
-    const evalBefore = evals[moveIdx];
-    const evalAfter = evals[moveIdx + 1];
-
-    if (evalBefore !== null && evalAfter !== null) {
-      const isWhiteMove = moveIdx % 2 === 0;
-      const cpLoss = isWhiteMove
-        ? evalBefore - evalAfter
-        : evalAfter - evalBefore;
-
-      if (cpLoss >= INACCURACY_CP) {
-        bestMovePromises.push({
-          moveIdx,
-          promise: pool.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH)
-            .then((r) => r.bestMove)
-            .catch(() => null),
-        });
-      }
+  // Build eval curve: evaluate every position sequentially on this worker
+  const evals: (number | null)[] = [];
+  for (const fen of fens) {
+    try {
+      const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH);
+      evals.push(result.evaluation);
+    } catch {
+      evals.push(null);
     }
   }
 
-  // Resolve all best-move lookups in parallel
-  const bestMoveResults = await Promise.all(
-    bestMovePromises.map(async (entry) => ({
-      moveIdx: entry.moveIdx,
-      bestMove: await entry.promise,
-    })),
-  );
-  const bestMoveMap = new Map(bestMoveResults.map((r) => [r.moveIdx, r.bestMove]));
+  // Build annotations + collect best-move lookups for mistakes
+  const annotations: MoveAnnotation[] = [];
+  const mistakeIndices: number[] = [];
 
   for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
     const isWhiteMove = moveIdx % 2 === 0;
@@ -298,15 +186,15 @@ async function analyzeGameWithPool(
     const evalAfter = evals[moveIdx + 1];
 
     let classification: MoveClassification = 'good';
-    let bestMove: string | null = null;
 
     if (evalBefore !== null && evalAfter !== null) {
       const cpLoss = isWhiteMove
         ? evalBefore - evalAfter
         : evalAfter - evalBefore;
-
       classification = classifyCpLoss(cpLoss);
-      bestMove = bestMoveMap.get(moveIdx) ?? null;
+      if (cpLoss >= INACCURACY_CP) {
+        mistakeIndices.push(moveIdx);
+      }
     }
 
     annotations.push({
@@ -314,10 +202,20 @@ async function analyzeGameWithPool(
       color,
       san: moves[moveIdx],
       evaluation: evalAfter !== null ? evalAfter / 100 : null,
-      bestMove,
+      bestMove: null,
       classification,
       comment: null,
     });
+  }
+
+  // Get best moves for mistakes (deeper analysis)
+  for (const moveIdx of mistakeIndices) {
+    try {
+      const result = await worker.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
+      annotations[moveIdx].bestMove = result.bestMove;
+    } catch {
+      // Leave bestMove null
+    }
   }
 
   return annotations;
@@ -392,26 +290,44 @@ async function analyzeGamePositions(game: GameRecord): Promise<MoveAnnotation[] 
 // ─── Public API ─────────────────────────────────────────────────────────────
 
 /**
- * Count games that are missing annotations and could be analyzed.
+ * Check if a game needs (re-)analysis.
+ * Games with no annotations or only partial annotations (from detectBlunders,
+ * which only records mistakes, not every move) need full Stockfish analysis.
+ */
+function gameNeedsAnalysis(game: GameRecord): boolean {
+  if (game.isMasterGame) return false;
+  if (!game.annotations || game.annotations.length === 0) return true;
+
+  // detectBlunders() creates sparse annotations (only mistakes/blunders).
+  // A fully analyzed game has one annotation per half-move.
+  // If annotations cover less than half the game's moves, it's partial.
+  const { moves } = replayPgnToFens(game.pgn);
+  if (moves.length === 0) return false;
+  return game.annotations.length < moves.length / 2;
+}
+
+/**
+ * Count games that are missing or have incomplete annotations.
  */
 export async function countGamesNeedingAnalysis(): Promise<number> {
   const games = await db.games
-    .filter((g) => !g.isMasterGame && (g.annotations === null || g.annotations.length === 0))
+    .filter((g) => gameNeedsAnalysis(g))
     .count();
   return games;
 }
 
 /**
  * Batch-analyze all imported/played games that lack annotations.
- * Spins up a pool of WORKER_POOL_SIZE Stockfish workers for parallel analysis.
- * Falls back to the singleton engine if pool creation fails.
+ * Spins up WORKER_POOL_SIZE dedicated Stockfish workers, each analyzing
+ * a different game simultaneously for true parallel throughput.
+ * Falls back to the singleton engine if worker creation fails.
  * After all games are analyzed, recomputes the weakness profile.
  */
 export async function analyzeAllGames(
   onProgress?: (progress: BatchAnalysisProgress) => void,
 ): Promise<number> {
   const games = await db.games
-    .filter((g) => !g.isMasterGame && (g.annotations === null || g.annotations.length === 0))
+    .filter((g) => gameNeedsAnalysis(g))
     .toArray();
 
   if (games.length === 0) {
@@ -419,42 +335,71 @@ export async function analyzeAllGames(
     return 0;
   }
 
-  // Try to create a parallel worker pool
-  let pool: StockfishPool | null = null;
+  // Try to spawn dedicated workers
+  const workers: DedicatedWorker[] = [];
   try {
-    pool = new StockfishPool();
-    await pool.initialize(WORKER_POOL_SIZE);
+    const spawnPromises: Promise<DedicatedWorker>[] = [];
+    for (let i = 0; i < WORKER_POOL_SIZE; i++) {
+      spawnPromises.push(spawnDedicatedWorker(i));
+    }
+    workers.push(...await Promise.all(spawnPromises));
+    console.log(`[GameAnalysis] ${workers.length} workers ready — analyzing ${games.length} games`);
   } catch {
     console.warn('[GameAnalysis] Worker pool failed, falling back to single engine');
-    pool?.destroy();
-    pool = null;
+    workers.forEach((w) => w.destroy());
+    workers.length = 0;
   }
 
   let analyzed = 0;
+  let completed = 0;
 
   try {
-    for (let i = 0; i < games.length; i++) {
-      const game = games[i];
-      const gameName = `${game.white} vs ${game.black}`;
+    if (workers.length > 0) {
+      // Parallel: each worker grabs the next game from the queue
+      let nextGameIdx = 0;
 
-      onProgress?.({
-        currentGame: i + 1,
-        totalGames: games.length,
-        currentGameName: gameName,
-        phase: 'analyzing',
-      });
+      const processNextGame = async (worker: DedicatedWorker): Promise<void> => {
+        while (nextGameIdx < games.length) {
+          const idx = nextGameIdx++;
+          const game = games[idx];
 
-      const annotations = pool
-        ? await analyzeGameWithPool(game, pool)
-        : await analyzeGamePositions(game);
+          onProgress?.({
+            currentGame: completed + 1,
+            totalGames: games.length,
+            currentGameName: `${game.white} vs ${game.black}`,
+            phase: 'analyzing',
+          });
 
-      if (annotations && annotations.length > 0) {
-        await db.games.update(game.id, { annotations });
-        analyzed++;
+          const annotations = await analyzeGameOnWorker(game, worker);
+          if (annotations && annotations.length > 0) {
+            await db.games.update(game.id, { annotations });
+            analyzed++;
+          }
+          completed++;
+        }
+      };
+
+      await Promise.all(workers.map((w) => processNextGame(w)));
+    } else {
+      // Fallback: single engine, sequential
+      for (let i = 0; i < games.length; i++) {
+        const game = games[i];
+        onProgress?.({
+          currentGame: i + 1,
+          totalGames: games.length,
+          currentGameName: `${game.white} vs ${game.black}`,
+          phase: 'analyzing',
+        });
+
+        const annotations = await analyzeGamePositions(game);
+        if (annotations && annotations.length > 0) {
+          await db.games.update(game.id, { annotations });
+          analyzed++;
+        }
       }
     }
   } finally {
-    pool?.destroy();
+    workers.forEach((w) => w.destroy());
   }
 
   onProgress?.({
