@@ -237,6 +237,7 @@ describe('MyMistakesPage', () => {
           intro: 'You played Ng5, but d4 was significantly better.',
           moveNarrations: [],
           outro: 'Always develop pieces first.',
+          conceptHint: '',
         },
       }),
     ]);
@@ -256,7 +257,7 @@ describe('MyMistakesPage', () => {
     setMockData([
       buildMistakePuzzle({
         id: 'p1',
-        narration: { intro: '', moveNarrations: [], outro: '' },
+        narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
       }),
     ]);
 
