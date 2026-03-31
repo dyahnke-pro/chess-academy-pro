@@ -461,7 +461,6 @@ describe('weaknessAnalyzer', () => {
       const result = generateOverallAssessment(profile, items, strengths);
 
       expect(result).toContain('1500');
-      expect(result).toContain('Level 5');
       expect(result).toContain('forks');
       expect(result).toContain('pins');
     });

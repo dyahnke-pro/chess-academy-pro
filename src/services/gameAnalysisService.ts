@@ -3,8 +3,9 @@ import { db } from '../db/schema';
 import { stockfishEngine } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
+import { detectBadHabitsFromGame } from './coachFeatureService';
 import { useAppStore } from '../stores/appStore';
-import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis } from '../types';
+import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -451,7 +452,8 @@ export async function analyzeAllGames(
     phase: 'computing_weaknesses',
   });
 
-  // Generate mistake puzzles from newly-analyzed games
+  // Generate mistake puzzles and detect bad habits from newly-analyzed games
+  const profile = useAppStore.getState().activeProfile;
   for (const gameId of analyzedGameIds) {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
     if (_abortAnalysis) break;
@@ -459,6 +461,18 @@ export async function analyzeAllGames(
       await generateMistakePuzzlesFromGame(gameId);
     } catch {
       // Continue with remaining games
+    }
+
+    // Detect bad habits from each analyzed game's annotations
+    if (profile) {
+      try {
+        const game = await db.games.get(gameId);
+        if (game?.annotations && game.annotations.length > 0) {
+          await detectBadHabitsFromGame(game.annotations, profile);
+        }
+      } catch {
+        // Continue with remaining games
+      }
     }
   }
 
@@ -476,10 +490,14 @@ export async function analyzeAllGames(
 
 /**
  * Recompute the weakness profile and update the Zustand store.
+ * Also updates Game ELO from the most recent imported game.
  */
 async function recomputeWeaknessFromGames(): Promise<void> {
   const profile = useAppStore.getState().activeProfile;
   if (!profile) return;
+
+  // Update Game ELO from the most recent imported game with rating data
+  await updateEloFromImportedGames(profile);
 
   const weaknessProfile = await computeWeaknessProfile(profile);
   useAppStore.getState().setWeaknessProfile(weaknessProfile);
@@ -487,6 +505,35 @@ async function recomputeWeaknessFromGames(): Promise<void> {
   const updatedProfile = await db.profiles.get(profile.id);
   if (updatedProfile) {
     useAppStore.getState().setActiveProfile(updatedProfile);
+  }
+}
+
+/**
+ * Updates the player's Game ELO from their most recent imported game.
+ * Looks at Lichess/Chess.com games to find the player's rating.
+ */
+async function updateEloFromImportedGames(profile: UserProfile): Promise<void> {
+  const recentGames = await db.games
+    .orderBy('date')
+    .reverse()
+    .limit(20)
+    .toArray();
+
+  const playerName = profile.name.toLowerCase();
+  for (const game of recentGames) {
+    if (game.source !== 'lichess' && game.source !== 'chesscom') continue;
+
+    // Determine which side the player is on by matching name
+    const isWhite = game.white.toLowerCase().includes(playerName)
+      || playerName.includes(game.white.toLowerCase());
+    const isBlack = game.black.toLowerCase().includes(playerName)
+      || playerName.includes(game.black.toLowerCase());
+
+    const playerElo = isWhite ? game.whiteElo : isBlack ? game.blackElo : null;
+    if (playerElo && playerElo !== profile.currentRating) {
+      await db.profiles.update(profile.id, { currentRating: playerElo });
+      return;
+    }
   }
 }
 

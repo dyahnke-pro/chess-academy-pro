@@ -22,11 +22,6 @@ vi.mock('../../services/puzzleService', () => ({
   }),
 }));
 
-vi.mock('../../services/levelService', () => ({
-  getLevelTitle: vi.fn().mockReturnValue('Apprentice'),
-  getXpToNextLevel: vi.fn().mockReturnValue({ current: 250, needed: 500, percent: 50 }),
-}));
-
 vi.mock('../../services/openingService', () => ({
   getFavoriteOpenings: vi.fn().mockResolvedValue([]),
 }));
@@ -101,8 +96,7 @@ describe('DashboardPage a11y', () => {
     render(<DashboardPage />);
     await waitFor(() => {
       expect(screen.getByText('Puzzle Rating')).toBeInTheDocument();
-      expect(screen.getByText('ELO')).toBeInTheDocument();
-      expect(screen.getByText('XP')).toBeInTheDocument();
+      expect(screen.getByText('Game ELO')).toBeInTheDocument();
     });
   });
 

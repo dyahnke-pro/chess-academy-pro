@@ -571,7 +571,7 @@ function generateOverallAssessment(
     return `Not enough data yet to generate a meaningful assessment. Play some games, solve puzzles, and drill your openings — then check back for personalised insights.`;
   }
 
-  lines.push(`Rating: ~${profile.currentRating} ELO, Level ${profile.level}.`);
+  lines.push(`Rating: ~${profile.currentRating} ELO.`);
 
   if (strengthsList.length > 0) {
     lines.push(`Strengths: ${strengthsList.slice(0, 3).join('; ')}.`);

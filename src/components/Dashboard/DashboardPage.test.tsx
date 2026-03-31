@@ -122,32 +122,6 @@ describe('DashboardPage', () => {
     });
   });
 
-  it('shows level card with level value', async () => {
-    setProfile({ level: 3 });
-    render(<DashboardPage />);
-    await waitFor(() => {
-      expect(screen.getByText('Lv 3')).toBeInTheDocument();
-      expect(screen.getByText('Knight')).toBeInTheDocument();
-    });
-  });
-
-  it('shows XP progress bar and XP values', async () => {
-    setProfile({ xp: 250 });
-    render(<DashboardPage />);
-    await waitFor(() => {
-      expect(screen.getByTestId('xp-progress-bar')).toBeInTheDocument();
-      expect(screen.getByText('250/500 XP')).toBeInTheDocument();
-    });
-  });
-
-  it('shows XP stat card', async () => {
-    setProfile({ xp: 1200 });
-    render(<DashboardPage />);
-    await waitFor(() => {
-      expect(screen.getByText('1,200')).toBeInTheDocument();
-    });
-  });
-
   it('shows puzzle rating stat card', async () => {
     setProfile({ puzzleRating: 1600 });
     render(<DashboardPage />);
@@ -157,13 +131,24 @@ describe('DashboardPage', () => {
     });
   });
 
-  it('shows ELO rating stat card', async () => {
+  it('shows Game ELO stat card', async () => {
     setProfile({ currentRating: 1500 });
     render(<DashboardPage />);
     await waitFor(() => {
       expect(screen.getByText('1500')).toBeInTheDocument();
-      expect(screen.getByText('ELO')).toBeInTheDocument();
+      expect(screen.getByText('Game ELO')).toBeInTheDocument();
     });
+  });
+
+  it('does not show XP or Level cards', async () => {
+    setProfile({ xp: 999, level: 5 });
+    render(<DashboardPage />);
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard')).toBeInTheDocument();
+    });
+    expect(screen.queryByText('Total XP')).not.toBeInTheDocument();
+    expect(screen.queryByText('Lv 5')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('xp-progress-bar')).not.toBeInTheDocument();
   });
 
   it('renders Start Session button', async () => {
@@ -274,7 +259,6 @@ describe('DashboardPage', () => {
     });
     expect(screen.getByText('2026-03-01')).toBeInTheDocument();
     expect(screen.getByText('5 puzzles')).toBeInTheDocument();
-    expect(screen.getByText('100 XP')).toBeInTheDocument();
     expect(screen.getByText('Done')).toBeInTheDocument();
   });
 
