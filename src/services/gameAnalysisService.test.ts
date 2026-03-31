@@ -18,6 +18,10 @@ vi.mock('./weaknessAnalyzer', () => ({
   computeWeaknessProfile: vi.fn(),
 }));
 
+vi.mock('./mistakePuzzleService', () => ({
+  generateMistakePuzzlesFromGame: vi.fn().mockResolvedValue(0),
+}));
+
 import { stockfishEngine } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 
@@ -41,6 +45,7 @@ describe('gameAnalysisService', () => {
       computedAt: new Date().toISOString(),
       items: [],
       strengths: [],
+      strengthItems: [],
       overallAssessment: '',
     });
 

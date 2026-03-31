@@ -588,6 +588,7 @@ describe('weaknessAnalyzer', () => {
         computedAt: '2024-01-01T00:00:00Z',
         items: [],
         strengths: ['Good at forks'],
+        strengthItems: [],
         overallAssessment: 'Solid player',
       };
       await db.meta.put({ key: 'weakness_profile', value: JSON.stringify(wp) });
@@ -753,6 +754,7 @@ describe('weaknessAnalyzer', () => {
           { category: 'tactics', label: 'Weak pins', metric: '35%', severity: 65, detail: '' },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: '',
       };
 

@@ -22,6 +22,14 @@ vi.mock('../../services/gameAnalysisService', () => ({
   countGamesNeedingAnalysis: (): unknown => mockCountGamesNeedingAnalysis(),
 }));
 
+vi.mock('../../db/schema', () => ({
+  db: {
+    profiles: {
+      get: vi.fn().mockResolvedValue(null),
+    },
+  },
+}));
+
 vi.mock('../ui/SkillBar', () => ({
   SkillBar: ({ label, value }: { label: string; value: number }): JSX.Element => (
     <div data-testid={`skill-bar-${label.toLowerCase()}`}>{label}: {value}</div>
@@ -59,6 +67,7 @@ const mockProfile: WeaknessProfile = {
     },
   ],
   strengths: ['Strong pin tactics', 'Good calculation speed'],
+  strengthItems: [],
   overallAssessment: 'Focus on tactical patterns and opening preparation.',
 };
 
@@ -138,7 +147,7 @@ describe('CoachWeaknessReport', () => {
     });
 
     // Strengths header shows count but content is hidden
-    expect(screen.getByText('Strengths (2)')).toBeInTheDocument();
+    expect(screen.getByText('Your Strengths (2)')).toBeInTheDocument();
     expect(screen.queryByText('Strong pin tactics')).not.toBeInTheDocument();
   });
 
@@ -151,7 +160,7 @@ describe('CoachWeaknessReport', () => {
       expect(screen.getByTestId('strengths-card')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Strengths (2)'));
+    fireEvent.click(screen.getByText('Your Strengths (2)'));
 
     await waitFor(() => {
       expect(screen.getByText('Strong pin tactics')).toBeInTheDocument();
@@ -268,6 +277,7 @@ describe('CoachWeaknessReport', () => {
       computedAt: new Date().toISOString(),
       items: [],
       strengths: [],
+      strengthItems: [],
       overallAssessment: '',
     };
     mockComputeWeaknessProfile.mockResolvedValue(emptyProfile);

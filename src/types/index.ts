@@ -690,10 +690,18 @@ export interface WeaknessItem {
   trainingAction?: WeaknessTrainingAction;
 }
 
+export interface StrengthItem {
+  title: string;
+  detail: string;
+  category: WeaknessCategory;
+  metric: string;
+}
+
 export interface WeaknessProfile {
   computedAt: string;
   items: WeaknessItem[];
   strengths: string[];
+  strengthItems: StrengthItem[];
   overallAssessment: string;
 }
 

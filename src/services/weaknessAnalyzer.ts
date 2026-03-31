@@ -5,6 +5,7 @@ import type {
   WeaknessProfile,
   WeaknessItem,
   WeaknessCategory,
+  StrengthItem,
   UserProfile,
   GameRecord,
   SessionRecord,
@@ -715,6 +716,143 @@ function analyzeOpeningWeakSpots(weakSpots: OpeningWeakSpot[]): {
   return { weaknesses, strengths };
 }
 
+// ─── Strength Item Builder ──────────────────────────────────────────────────
+
+function buildStrengthItems(
+  themeSkills: ThemeSkill[],
+  repertoire: OpeningRecord[],
+  games: GameRecord[],
+  sessions: SessionRecord[],
+  flashcards: FlashcardRecord[],
+  mistakePuzzles: MistakePuzzle[],
+): StrengthItem[] {
+  const items: StrengthItem[] = [];
+
+  // Tactics: find best themes (>= 70% accuracy, >= 5 attempts)
+  const strongThemes = themeSkills
+    .filter((s) => s.attempts >= 5 && s.accuracy >= 0.7)
+    .sort((a, b) => b.accuracy - a.accuracy);
+  for (const theme of strongThemes.slice(0, 3)) {
+    const pct = Math.round(theme.accuracy * 100);
+    items.push({
+      title: `${theme.theme.charAt(0).toUpperCase()}${theme.theme.slice(1)} Mastery`,
+      detail: `You solve ${theme.theme} puzzles at ${pct}% accuracy across ${theme.attempts} attempts. This is well above average and shows strong pattern recognition for this motif.`,
+      category: 'tactics',
+      metric: `${pct}% accuracy, ${theme.attempts} attempts`,
+    });
+  }
+
+  // Openings: find best drilled openings (>= 80% accuracy)
+  const strongOpenings = repertoire
+    .filter((o) => o.drillAttempts >= 5 && o.drillAccuracy >= 0.8)
+    .sort((a, b) => b.drillAccuracy - a.drillAccuracy);
+  for (const opening of strongOpenings.slice(0, 3)) {
+    const pct = Math.round(opening.drillAccuracy * 100);
+    items.push({
+      title: opening.name,
+      detail: `You recall the main line and key variations at ${pct}% accuracy over ${opening.drillAttempts} drills. This opening is well-prepared and ready for tournament play.`,
+      category: 'openings',
+      metric: `${pct}% drill accuracy`,
+    });
+  }
+
+  // Calculation: from game annotation data
+  const annotatedGames = games.filter((g) => g.annotations && g.annotations.length > 0);
+  if (annotatedGames.length >= 3) {
+    let totalMoves = 0;
+    let totalErrors = 0;
+    let brilliantCount = 0;
+    let greatCount = 0;
+    for (const game of annotatedGames) {
+      if (!game.annotations) continue;
+      totalMoves += game.annotations.length;
+      totalErrors += game.annotations.filter(
+        (a) => a.classification === 'blunder' || a.classification === 'mistake',
+      ).length;
+      brilliantCount += game.annotations.filter((a) => a.classification === 'brilliant').length;
+      greatCount += game.annotations.filter((a) => a.classification === 'great').length;
+    }
+    if (totalMoves > 0) {
+      const errorRate = totalErrors / totalMoves;
+      if (errorRate < 0.05) {
+        items.push({
+          title: 'Precise Calculation',
+          detail: `Only ${totalErrors} mistakes/blunders across ${totalMoves} moves in ${annotatedGames.length} recent games (${(errorRate * 100).toFixed(1)}% error rate). Your move selection is consistently accurate.`,
+          category: 'calculation',
+          metric: `${(errorRate * 100).toFixed(1)}% error rate`,
+        });
+      }
+      if (brilliantCount + greatCount >= 3) {
+        items.push({
+          title: 'Creative Play',
+          detail: `${brilliantCount} brilliant and ${greatCount} great moves found in your recent games. You regularly find moves that are better than the obvious choice.`,
+          category: 'calculation',
+          metric: `${brilliantCount + greatCount} strong moves`,
+        });
+      }
+    }
+  }
+
+  // Endgame: from endgame puzzle theme
+  const endgameSkill = themeSkills.find((s) => s.theme === 'endgame');
+  if (endgameSkill && endgameSkill.attempts >= 5 && endgameSkill.accuracy >= 0.7) {
+    const pct = Math.round(endgameSkill.accuracy * 100);
+    items.push({
+      title: 'Endgame Technique',
+      detail: `${pct}% accuracy on endgame puzzles across ${endgameSkill.attempts} positions. You reliably convert advantages and know key endgame patterns.`,
+      category: 'endgame',
+      metric: `${pct}% accuracy`,
+    });
+  }
+
+  // Session consistency
+  if (sessions.length >= 5) {
+    const dates = sessions.map((s) => new Date(s.date).getTime()).sort((a, b) => a - b);
+    let totalGap = 0;
+    for (let i = 1; i < dates.length; i++) {
+      totalGap += (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+    }
+    const avgGap = totalGap / (dates.length - 1);
+    if (avgGap <= 3) {
+      items.push({
+        title: 'Training Consistency',
+        detail: `You train every ${avgGap.toFixed(1)} days on average across ${sessions.length} sessions. Consistent practice is the single biggest predictor of improvement.`,
+        category: 'time_management',
+        metric: `${avgGap.toFixed(1)} day avg gap`,
+      });
+    }
+  }
+
+  // Mistake puzzle mastery
+  const mastered = mistakePuzzles.filter((p) => p.status === 'mastered').length;
+  const total = mistakePuzzles.length;
+  if (mastered >= 5 && total > 0) {
+    const pct = Math.round((mastered / total) * 100);
+    items.push({
+      title: 'Learning From Mistakes',
+      detail: `You've mastered ${mastered} of ${total} mistake puzzles (${pct}%). This means you've corrected these patterns and are unlikely to repeat them in games.`,
+      category: 'positional',
+      metric: `${mastered}/${total} mastered`,
+    });
+  }
+
+  // Flashcard retention
+  const reviewedCards = flashcards.filter((f) => f.srsLastReview !== null);
+  if (reviewedCards.length >= 10) {
+    const avgEase = reviewedCards.reduce((sum, f) => sum + f.srsEaseFactor, 0) / reviewedCards.length;
+    if (avgEase >= 2.3) {
+      items.push({
+        title: 'Strong Opening Memory',
+        detail: `${reviewedCards.length} flashcards reviewed with a high retention factor (${avgEase.toFixed(1)}). Your spaced repetition is working — key positions are sticking in long-term memory.`,
+        category: 'openings',
+        metric: `${reviewedCards.length} cards, ${avgEase.toFixed(1)} ease`,
+      });
+    }
+  }
+
+  return items;
+}
+
 /**
  * Computes a full WeaknessProfile from all available data.
  * Reads puzzles, games, sessions, openings, and flashcards from Dexie.
@@ -767,6 +905,9 @@ export async function computeWeaknessProfile(
     ...mistakes.strengths,
   ];
 
+  // Build detailed strength items from raw data
+  const strengthItems = buildStrengthItems(themeSkills, repertoire, recentGames, recentSessions, flashcards, mistakePuzzles);
+
   // Cap at top 10 weaknesses
   const topItems = allItems.slice(0, 10);
 
@@ -774,6 +915,7 @@ export async function computeWeaknessProfile(
     computedAt: new Date().toISOString(),
     items: topItems,
     strengths: allStrengths,
+    strengthItems,
     overallAssessment: generateOverallAssessment(profile, topItems, allStrengths),
   };
 
@@ -799,7 +941,8 @@ export async function getStoredWeaknessProfile(): Promise<WeaknessProfile | null
   if (!meta) return null;
 
   try {
-    return JSON.parse(meta.value) as WeaknessProfile;
+    const parsed = JSON.parse(meta.value) as Omit<WeaknessProfile, 'strengthItems'> & { strengthItems?: StrengthItem[] };
+    return { ...parsed, strengthItems: parsed.strengthItems ?? [] };
   } catch {
     return null;
   }

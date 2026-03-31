@@ -58,6 +58,7 @@ const mockWeaknessProfile: WeaknessProfile = {
     },
   ],
   strengths: ['Strong pin tactics', 'Good calculation speed'],
+  strengthItems: [],
   overallAssessment: 'Focus on tactical patterns.',
 };
 
