@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { POLLY_VOICES, getTtsUrl } from '../../services/voiceService';
+import { POLLY_VOICES, getTtsUrl, voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Play, Mic, Sparkles, AlertCircle } from 'lucide-react';
@@ -74,6 +74,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     const updatedPrefs = { ...activeProfile.preferences, voiceSpeed: speed };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+    voiceService.clearCache();
   };
 
   const handlePollyToggle = async (enabled: boolean): Promise<void> => {
@@ -82,6 +83,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     const updatedPrefs = { ...activeProfile.preferences, pollyEnabled: enabled };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+    voiceService.clearCache();
   };
 
   const handlePollyVoiceChange = async (voice: string): Promise<void> => {
@@ -90,6 +92,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     const updatedPrefs = { ...activeProfile.preferences, pollyVoice: voice };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+    voiceService.clearCache();
   };
 
   const handlePollyPreview = (): void => {
@@ -127,6 +130,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     const updatedPrefs = { ...activeProfile.preferences, systemVoiceURI: uri };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+    voiceService.clearCache();
   };
 
   const handleSystemPreview = (): void => {

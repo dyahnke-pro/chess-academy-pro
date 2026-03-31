@@ -106,6 +106,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
   useEffect(() => {
     const guard = { cancelled: false };
+    void voiceService.warmup();
     void (async () => {
       const subKey = customLine
         ? undefined

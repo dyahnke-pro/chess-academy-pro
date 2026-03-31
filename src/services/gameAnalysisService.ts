@@ -407,6 +407,7 @@ export async function analyzeAllGames(
       await Promise.all(workers.map((w) => processNextGame(w)));
     } else {
       // Fallback: single engine, sequential
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
       for (let i = 0; i < games.length && !_abortAnalysis; i++) {
         const game = games[i];
         onProgress?.({
@@ -438,6 +439,7 @@ export async function analyzeAllGames(
 
   // Generate mistake puzzles from newly-analyzed games
   for (const gameId of analyzedGameIds) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
     if (_abortAnalysis) break;
     try {
       await generateMistakePuzzlesFromGame(gameId);

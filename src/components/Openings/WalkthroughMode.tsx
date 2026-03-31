@@ -152,6 +152,8 @@ export function WalkthroughMode({
   // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
     const guard = { cancelled: false };
+    // Pre-warm voice service (caches DB prefs + primes AudioContext)
+    void voiceService.warmup();
     void (async () => {
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
       const data = effectiveKey
