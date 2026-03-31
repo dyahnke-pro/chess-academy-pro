@@ -95,6 +95,16 @@ export function MyMistakesPage(): JSX.Element {
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
     if (openingFilter !== null && p.openingName !== openingFilter) return false;
     return true;
+  }).sort((a, b) => {
+    // Newest games first; games older than 1 year sink to the bottom
+    const now = Date.now();
+    const oneYear = 365 * 24 * 60 * 60 * 1000;
+    const dateA = a.gameDate ? new Date(a.gameDate).getTime() : new Date(a.createdAt).getTime();
+    const dateB = b.gameDate ? new Date(b.gameDate).getTime() : new Date(b.createdAt).getTime();
+    const oldA = (now - dateA) > oneYear;
+    const oldB = (now - dateB) > oneYear;
+    if (oldA !== oldB) return oldA ? 1 : -1;
+    return dateB - dateA;
   });
 
   const handleDelete = useCallback(async (id: string) => {
