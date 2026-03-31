@@ -6,6 +6,10 @@ vi.mock('./mistakePuzzleService', () => ({
   generateMistakePuzzlesForBatch: vi.fn().mockResolvedValue(0),
 }));
 
+vi.mock('./gameAnalysisService', () => ({
+  runBackgroundAnalysis: vi.fn(),
+}));
+
 const MOCK_NDJSON = [
   JSON.stringify({
     id: 'abc123',
