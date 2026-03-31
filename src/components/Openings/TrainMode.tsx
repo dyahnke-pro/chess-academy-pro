@@ -96,6 +96,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
 
   useEffect(() => {
+    void voiceService.warmup();
     const guard = { cancelled: false };
     void (async () => {
       // Train mode uses trap/warning lines — try sub-line annotations first

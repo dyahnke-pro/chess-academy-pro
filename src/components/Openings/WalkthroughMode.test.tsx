@@ -47,6 +47,16 @@ vi.mock('../../services/speechService', () => ({
   },
 }));
 
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    speak: vi.fn().mockImplementation(async (text: string) => { mockSpeak(text, { rate: 1 }); }),
+    stop: vi.fn().mockImplementation(() => { mockStop(); }),
+    isPlaying: vi.fn().mockReturnValue(false),
+    warmup: vi.fn().mockResolvedValue(undefined),
+    clearCache: vi.fn(),
+  },
+}));
+
 vi.mock('../../hooks/useIsMobile', () => ({
   useIsMobile: () => false,
 }));

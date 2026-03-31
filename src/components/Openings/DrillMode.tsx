@@ -102,6 +102,8 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   useEffect(() => {
     const guard = { cancelled: false };
+    // Pre-warm voice service (caches DB prefs + primes AudioContext)
+    void voiceService.warmup();
     void (async () => {
       const subKey = customLine
         ? undefined

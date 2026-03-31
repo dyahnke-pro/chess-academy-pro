@@ -21,6 +21,7 @@ describe('voiceService', () => {
     // Re-import to get the singleton (it persists state between tests)
     const mod = await import('./voiceService');
     voiceService = mod.voiceService;
+    voiceService.clearCache();
   });
 
   describe('fallback to speechService', () => {
