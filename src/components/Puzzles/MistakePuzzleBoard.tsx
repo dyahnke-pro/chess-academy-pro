@@ -5,12 +5,74 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
-import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen } from 'lucide-react';
+import { db } from '../../db/schema';
+import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
 
-type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
+type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect';
+
+/** Number of half-moves (plies) before the mistake to replay */
+const REPLAY_CONTEXT_PLIES = 8;
+/** Delay between auto-played replay moves (ms) */
+const REPLAY_MOVE_DELAY = 900;
+
+interface ReplayStep {
+  fen: string;
+  san: string;
+  from: string;
+  to: string;
+  moveLabel: string; // e.g. "1. e4" or "1... e5"
+}
+
+/** Extract the last N moves before the mistake from the game PGN */
+function extractReplayMoves(pgn: string, mistakeFen: string, playerColor: 'white' | 'black', moveNumber: number): ReplayStep[] {
+  const chess = new Chess();
+  try {
+    chess.loadPgn(pgn);
+  } catch {
+    return [];
+  }
+  const history = chess.history({ verbose: true });
+  chess.reset();
+
+  // Find the ply index of the mistake position
+  // mistakeFen is the position BEFORE the wrong move, so it's the position after (moveNumber-1) full moves for white,
+  // or after moveNumber moves for black
+  const mistakePly = (moveNumber - 1) * 2 + (playerColor === 'black' ? 1 : 0);
+
+  if (mistakePly <= 0 || mistakePly > history.length) return [];
+
+  // Determine range to replay: last REPLAY_CONTEXT_PLIES plies before the mistake
+  const startPly = Math.max(0, mistakePly - REPLAY_CONTEXT_PLIES);
+  const endPly = mistakePly; // exclusive — stop right before the mistake
+
+  // Advance chess to startPly position
+  const replayChess = new Chess();
+  for (let i = 0; i < startPly; i++) {
+    replayChess.move(history[i].san);
+  }
+
+  const steps: ReplayStep[] = [];
+  for (let i = startPly; i < endPly && i < history.length; i++) {
+    const move = history[i];
+    const fullMoveNum = Math.floor(i / 2) + 1;
+    const isWhite = i % 2 === 0;
+    const moveLabel = isWhite ? `${fullMoveNum}. ${move.san}` : `${fullMoveNum}... ${move.san}`;
+
+    replayChess.move(move.san);
+    steps.push({
+      fen: replayChess.fen(),
+      san: move.san,
+      from: move.from,
+      to: move.to,
+      moveLabel,
+    });
+  }
+
+  return steps;
+}
 
 interface MistakePuzzleBoardProps {
   puzzle: MistakePuzzle;
@@ -68,6 +130,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
   const { settings } = useSettings();
 
+  // Replay state
+  const [replaySteps, setReplaySteps] = useState<ReplayStep[]>([]);
+  const [replayIndex, setReplayIndex] = useState(-1);
+  const replayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const badge = CLASSIFICATION_BADGE[puzzle.classification];
   const totalMoves = movesRef.current.length;
   const isMultiMove = totalMoves > 1;
@@ -96,7 +163,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     puzzleThemes: [],
   });
 
-  // Reset when puzzle changes
+  // Reset when puzzle changes — fetch source game and start replay
   useEffect(() => {
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
@@ -104,29 +171,178 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     playerMoveCountRef.current = 0;
     setMoveIndex(0);
     setMoveCount(0);
-    setFen(puzzle.fen);
     setLastMoveHighlight(null);
     setSubtitle('');
-    setBoardKey((k) => k + 1);
     hasMadeMistakeRef.current = false;
-    setState('loading');
+    setReplayIndex(-1);
+
     resetHints();
     voiceService.stop();
 
-    // Brief loading state then ready to play — speak intro narration
-    const timer = setTimeout(() => {
-      setState('playing');
-      if (puzzle.narration.intro) {
-        setSubtitle(puzzle.narration.intro);
-        void voiceService.speak(puzzle.narration.intro);
+    void voiceService.warmup();
+
+    // Try to load the source game for replay context
+    const cancelledRef = { value: false };
+    void (async () => {
+      let steps: ReplayStep[] = [];
+      try {
+        const game = await db.games.get(puzzle.sourceGameId);
+        if (game.pgn && !cancelledRef.value) {
+          steps = extractReplayMoves(game.pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
+        }
+      } catch {
+        // No game found — skip replay
       }
-    }, 400);
+
+      if (cancelledRef.value) return;
+
+      if (steps.length > 0) {
+        // The starting FEN is the position before the first replay move
+        const preReplayFen = (() => {
+          // The first step's fen is AFTER the first replay move was played.
+          // We need the FEN BEFORE that move. We can reconstruct it from the first step.
+          const c = new Chess(steps[0].fen);
+          c.undo();
+          return c.fen();
+        })();
+
+        setFen(preReplayFen);
+        setBoardKey((k) => k + 1);
+        setReplaySteps(steps);
+        setState('replay');
+
+        // Narrate the replay intro
+        const contextMsg = puzzle.openingName
+          ? `Let's replay the ${puzzle.openingName}. Here's how the game reached this position.`
+          : `Let's see how the game reached this position.`;
+        setSubtitle(contextMsg);
+        void voiceService.speak(contextMsg);
+      } else {
+        // No replay available — go straight to puzzle
+        setFen(puzzle.fen);
+        setBoardKey((k) => k + 1);
+        setReplaySteps([]);
+        setState('loading');
+        const timer = setTimeout(() => {
+          setState('playing');
+          if (puzzle.narration.intro) {
+            setSubtitle(puzzle.narration.intro);
+            void voiceService.speak(puzzle.narration.intro);
+          }
+        }, 400);
+        replayTimerRef.current = timer;
+      }
+    })();
 
     return () => {
-      clearTimeout(timer);
+      cancelledRef.value = true;
+      if (replayTimerRef.current) {
+        clearTimeout(replayTimerRef.current);
+        replayTimerRef.current = null;
+      }
       voiceService.stop();
     };
   }, [puzzle, resetHints]);
+
+  // Auto-play replay moves one at a time
+  useEffect(() => {
+    if (state !== 'replay' || replaySteps.length === 0) return;
+
+    // Start the first move after a brief pause for the intro narration
+    const initialDelay = replayIndex === -1 ? 1800 : REPLAY_MOVE_DELAY;
+
+    const timer = setTimeout(() => {
+      const nextIdx = replayIndex + 1;
+
+      if (nextIdx >= replaySteps.length) {
+        // Replay done — show the player's mistake, then transition to puzzle
+        const step = replaySteps[replaySteps.length - 1];
+        setFen(step.fen);
+        setBoardKey((k) => k + 1);
+
+        // Brief pause then show the wrong move narration and start puzzle
+        const mistakeMsg = `You played ${puzzle.playerMoveSan} here — ${puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}. Let's find the best move.`;
+        setSubtitle(mistakeMsg);
+        void voiceService.speak(mistakeMsg);
+
+        replayTimerRef.current = setTimeout(() => {
+          // Set up puzzle position
+          chessRef.current = new Chess(puzzle.fen);
+          setFen(puzzle.fen);
+          setBoardKey((k) => k + 1);
+          setState('playing');
+          if (puzzle.narration.intro) {
+            setSubtitle(puzzle.narration.intro);
+            void voiceService.speak(puzzle.narration.intro);
+          }
+        }, 2500);
+        return;
+      }
+
+      const step = replaySteps[nextIdx];
+      playMoveSound(step.san);
+      setFen(step.fen);
+      setLastMoveHighlight({ from: step.from, to: step.to });
+      setBoardKey((k) => k + 1);
+
+      // Narrate the move
+      const isPlayerMove = (puzzle.playerColor === 'white' && nextIdx % 2 === 0)
+        || (puzzle.playerColor === 'black' && nextIdx % 2 === 1);
+      // Adjust: replay steps may not start at ply 0, so use the step's moveLabel
+      const whoPlayed = isPlayerMove ? 'You' : 'Opponent';
+      // Only narrate every other move to keep pace — narrate player's moves
+      if (isPlayerMove || nextIdx === replaySteps.length - 1) {
+        setSubtitle(`${whoPlayed}: ${step.moveLabel}`);
+      }
+
+      setReplayIndex(nextIdx);
+    }, initialDelay);
+
+    replayTimerRef.current = timer;
+
+    return () => {
+      if (replayTimerRef.current) {
+        clearTimeout(replayTimerRef.current);
+        replayTimerRef.current = null;
+      }
+    };
+  }, [state, replayIndex, replaySteps, puzzle, playMoveSound]);
+
+  // Skip replay handler
+  const skipReplay = useCallback(() => {
+    if (state !== 'replay') return;
+    if (replayTimerRef.current) {
+      clearTimeout(replayTimerRef.current);
+      replayTimerRef.current = null;
+    }
+    voiceService.stop();
+
+    chessRef.current = new Chess(puzzle.fen);
+    setFen(puzzle.fen);
+    setLastMoveHighlight(null);
+    setBoardKey((k) => k + 1);
+    setState('playing');
+    if (puzzle.narration.intro) {
+      setSubtitle(puzzle.narration.intro);
+      void voiceService.speak(puzzle.narration.intro);
+    }
+  }, [state, puzzle]);
+
+  // "Why?" button — explain the concept behind the best move
+  const handleWhy = useCallback(() => {
+    if (state !== 'playing' && state !== 'correct') return;
+    voiceService.stop();
+    const hint = puzzle.narration.conceptHint;
+    if (hint) {
+      setSubtitle(hint);
+      void voiceService.speak(hint);
+    } else {
+      // Fallback for old puzzles without conceptHint
+      const fallback = `The best move here is ${puzzle.bestMoveSan}. It improves your position.`;
+      setSubtitle(fallback);
+      void voiceService.speak(fallback);
+    }
+  }, [state, puzzle]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
@@ -202,13 +418,19 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       voiceService.stop();
       playEncouragement();
 
+      // Speak the conceptual hint instead of just "incorrect"
+      if (puzzle.narration.conceptHint) {
+        setSubtitle(puzzle.narration.conceptHint);
+        void voiceService.speak(puzzle.narration.conceptHint);
+      }
+
       setFen(prevFen);
       setBoardKey((k) => k + 1);
 
       // Brief feedback then back to playing
       setTimeout(() => {
         setState('playing');
-      }, 1000);
+      }, 1500);
     }
   }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration]);
 
@@ -263,18 +485,42 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
         )}
       </div>
 
+      {/* Replay context header */}
+      {state === 'replay' && (
+        <div className="flex items-center justify-between" data-testid="replay-header">
+          <div className="flex items-center gap-2 text-sm text-theme-text-secondary">
+            <Play size={14} className="text-theme-accent" />
+            <span>Replaying game context...</span>
+            {replaySteps.length > 0 && (
+              <span className="text-xs text-theme-text-muted">
+                {Math.max(0, replayIndex + 1)}/{replaySteps.length}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={skipReplay}
+            className="text-xs px-3 py-1 rounded bg-theme-surface border border-theme-border text-theme-text-muted hover:text-theme-text-primary transition-colors"
+            data-testid="skip-replay"
+          >
+            Skip
+          </button>
+        </div>
+      )}
+
       {/* Show the wrong move before asking for the correct one */}
-      <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
-        <p>
-          You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}.
-          {' '}Find the best move.
-          {isMultiMove && (
-            <span className="text-theme-text-muted ml-1">
-              ({Math.ceil(totalMoves / 2)} move{Math.ceil(totalMoves / 2) > 1 ? 's' : ''} to find)
-            </span>
-          )}
-        </p>
-      </div>
+      {state !== 'replay' && (
+        <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
+          <p>
+            You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}.
+            {' '}Find the best move.
+            {isMultiMove && (
+              <span className="text-theme-text-muted ml-1">
+                ({Math.ceil(totalMoves / 2)} move{Math.ceil(totalMoves / 2) > 1 ? 's' : ''} to find)
+              </span>
+            )}
+          </p>
+        </div>
+      )}
 
       {/* Board */}
       <div className="w-full md:max-w-[420px] mx-auto">
@@ -292,6 +538,20 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
           ghostMove={hintState.ghostMove}
         />
       </div>
+
+      {/* Why button — explains the concept behind the best move */}
+      {(state === 'playing' || state === 'correct') && (
+        <div className="flex justify-end">
+          <button
+            onClick={handleWhy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-accent text-sm transition-colors border border-theme-border"
+            data-testid="why-button"
+          >
+            <HelpCircle size={14} />
+            <span>Why?</span>
+          </button>
+        </div>
+      )}
 
       {/* Hint controls */}
       {state === 'playing' && settings.showHints && (

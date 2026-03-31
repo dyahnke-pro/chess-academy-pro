@@ -10,6 +10,9 @@ vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: (...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>,
     stop: (): void => { mockStop(); },
+    warmup: vi.fn().mockResolvedValue(undefined),
+    clearCache: vi.fn(),
+    isPlaying: vi.fn().mockReturnValue(false),
   },
 }));
 
