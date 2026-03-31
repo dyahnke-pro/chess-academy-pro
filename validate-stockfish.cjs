@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 
 const STOCKFISH_DIR = path.join(__dirname, 'public', 'stockfish');
-const STOCKFISH_SRC = path.join(__dirname, 'node_modules', 'stockfish', 'bin');
+const STOCKFISH_SRC = path.join(__dirname, 'node_modules', 'stockfish');
 const REQUIRED_FILES = [
   { name: 'stockfish-18-lite-single.js', minSize: 10_000 },
   { name: 'stockfish-18-lite-single.wasm', minSize: 1_000_000 },
