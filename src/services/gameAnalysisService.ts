@@ -4,6 +4,7 @@ import { stockfishEngine } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
 import { detectBadHabitsFromGame } from './coachFeatureService';
+import { classifyTacticsFromGame } from './tacticClassifierService';
 import { useAppStore } from '../stores/appStore';
 import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
 
@@ -459,6 +460,13 @@ export async function analyzeAllGames(
     if (_abortAnalysis) break;
     try {
       await generateMistakePuzzlesFromGame(gameId);
+    } catch {
+      // Continue with remaining games
+    }
+
+    // Classify missed tactics by motif type
+    try {
+      await classifyTacticsFromGame(gameId);
     } catch {
       // Continue with remaining games
     }

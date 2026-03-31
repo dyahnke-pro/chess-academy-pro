@@ -763,6 +763,12 @@ export type TacticType =
   | 'promotion'
   | 'deflection'
   | 'overloaded_piece'
+  | 'trapped_piece'
+  | 'clearance'
+  | 'interference'
+  | 'zwischenzug'
+  | 'x_ray'
+  | 'double_check'
   | 'tactical_sequence';
 
 export interface MissedTactic {
@@ -773,6 +779,39 @@ export interface MissedTactic {
   evalSwing: number;
   tacticType: TacticType;
   explanation: string;
+}
+
+// ─── Classified Tactics (persisted) ─────────────────────────────────────────
+
+export interface ClassifiedTactic {
+  id: string;
+  sourceGameId: string;
+  moveIndex: number;
+  fen: string;
+  bestMoveUci: string;
+  bestMoveSan: string;
+  playerMoveUci: string;
+  playerMoveSan: string;
+  playerColor: 'white' | 'black';
+  tacticType: TacticType;
+  evalSwing: number;
+  explanation: string;
+  // Game context
+  opponentName: string | null;
+  gameDate: string | null;
+  openingName: string | null;
+  // Training tracking
+  puzzleAttempts: number;
+  puzzleSuccesses: number;
+  createdAt: string;
+}
+
+export interface TacticMotifStats {
+  tacticType: TacticType;
+  missedInGames: number;
+  puzzleAttempts: number;
+  puzzleAccuracy: number;
+  gameAwareness: number;
 }
 
 // ─── Theme ───────────────────────────────────────────────────────────────────

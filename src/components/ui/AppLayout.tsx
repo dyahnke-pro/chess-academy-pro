@@ -16,6 +16,7 @@ import {
   MessageCircle,
   ChevronLeft,
   AlertTriangle,
+  Target,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
@@ -35,6 +36,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/openings', label: 'Openings', icon: BookOpen },
   { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
+  { to: '/tactics', label: 'Tactics', icon: Target },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/play', label: 'Play', icon: Swords },
   { to: '/analysis', label: 'Analysis', icon: Search },
@@ -44,7 +46,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/kid', label: 'Kids Mode', icon: Baby },
 ];
 
-// Bottom tab bar: Dashboard, Openings, Coach, Puzzles, Weaknesses
+// Bottom tab bar: Dashboard, Openings, Coach, Puzzles, Tactics
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
 
 export function AppLayout(): JSX.Element {
