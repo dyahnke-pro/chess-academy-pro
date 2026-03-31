@@ -713,7 +713,7 @@ describe('weaknessAnalyzer', () => {
       const result = analyzeMistakePuzzles(puzzles);
       const frenchWeakness = result.weaknesses.find((w) => w.label.includes('French Defense'));
       expect(frenchWeakness).toBeDefined();
-      expect(frenchWeakness?.trainingAction?.route).toBe('/puzzles/mistakes');
+      expect(frenchWeakness?.trainingAction?.route).toBe('/weaknesses/mistakes');
       expect(frenchWeakness?.trainingAction?.buttonLabel).toContain('French Defense');
       expect(frenchWeakness?.trainingAction?.state).toEqual({
         initialOpeningName: 'French Defense',

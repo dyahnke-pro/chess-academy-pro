@@ -68,7 +68,7 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
         void navigate(`/openings/${action.id}`);
         break;
       case 'puzzle_theme':
-        void navigate('/puzzles');
+        void navigate('/weaknesses/adaptive');
         break;
       case 'review_game':
         void navigate('/games');

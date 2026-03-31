@@ -154,7 +154,7 @@ export function CoachSessionPlanPage(): JSX.Element {
           void navigate(firstBlock.openingId ? `/openings/${firstBlock.openingId}` : '/openings');
           break;
         case 'puzzle_drill':
-          void navigate('/puzzles');
+          void navigate('/weaknesses/adaptive');
           break;
         case 'flashcards':
           void navigate('/play');

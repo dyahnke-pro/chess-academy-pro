@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RefreshCw, ChevronDown, ChevronUp, Zap, Target, BarChart3 } from 'lucide-react';
+import { RefreshCw, ChevronDown, ChevronUp, Zap, Target, BarChart3, Brain } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { getStoredWeaknessProfile, computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { analyzeAllGames, countGamesNeedingAnalysis, runBackgroundAnalysis } from '../../services/gameAnalysisService';
@@ -427,6 +427,37 @@ export function CoachWeaknessReport(): JSX.Element {
         </div>
       )}
 
+      {/* Puzzle Training */}
+      <div className="flex flex-col gap-3" data-testid="puzzle-entry">
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Puzzle Training</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => void navigate('/weaknesses/puzzles')}
+            className="rounded-xl border p-4 text-left transition-colors hover:opacity-90"
+            style={{ borderColor: 'color-mix(in srgb, var(--color-error) 30%, var(--color-border))', background: 'color-mix(in srgb, var(--color-error) 4%, var(--color-surface))' }}
+            data-testid="weakness-puzzles-btn"
+          >
+            <Target size={20} style={{ color: 'var(--color-error)' }} className="mb-2" />
+            <h4 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Weakness Puzzles</h4>
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+              Your game mistakes + weak tactical themes
+            </p>
+          </button>
+          <button
+            onClick={() => void navigate('/weaknesses/adaptive')}
+            className="rounded-xl border p-4 text-left transition-colors hover:opacity-90"
+            style={{ borderColor: 'color-mix(in srgb, var(--color-accent) 30%, var(--color-border))', background: 'color-mix(in srgb, var(--color-accent) 4%, var(--color-surface))' }}
+            data-testid="adaptive-puzzles-btn"
+          >
+            <Brain size={20} style={{ color: 'var(--color-accent)' }} className="mb-2" />
+            <h4 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Adaptive Puzzles</h4>
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+              General training at your skill level
+            </p>
+          </button>
+        </div>
+      </div>
+
       {/* Strength Puzzles — practice what you're good at */}
       {strengthThemes.length > 0 && (
         <div
@@ -445,7 +476,7 @@ export function CoachWeaknessReport(): JSX.Element {
             {strengthThemes.map((theme) => (
               <button
                 key={theme}
-                onClick={() => void navigate('/puzzles', { state: { theme, mode: 'standard' } })}
+                onClick={() => void navigate('/weaknesses/adaptive', { state: { theme, mode: 'standard' } })}
                 className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors hover:opacity-90"
                 style={{ background: 'color-mix(in srgb, var(--color-success) 15%, transparent)', color: 'var(--color-success)' }}
               >
