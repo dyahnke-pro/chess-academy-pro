@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import type { GameRecord, PlatformStats, TimeControlStats } from '../types';
 import { detectOpening, detectBlunders } from './gameImportUtils';
 import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
+import { runBackgroundAnalysis } from './gameAnalysisService';
 
 // ─── Chess.com API types ────────────────────────────────────────────────────
 
@@ -147,9 +148,10 @@ export async function importChessComGames(
     }
   }
 
-  // Generate mistake puzzles from imported games in background
+  // Generate mistake puzzles and run Stockfish analysis in background
   if (importedGameIds.length > 0) {
     void generateMistakePuzzlesForBatch(importedGameIds, username);
+    runBackgroundAnalysis();
   }
 
   return imported;

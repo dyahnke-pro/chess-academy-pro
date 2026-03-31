@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import type { GameRecord, PlatformStats } from '../types';
 import { detectOpening, detectBlunders } from './gameImportUtils';
 import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
+import { runBackgroundAnalysis } from './gameAnalysisService';
 
 // ─── Lichess API types ──────────────────────────────────────────────────────
 
@@ -112,9 +113,10 @@ export async function importLichessGames(
     }
   }
 
-  // Generate mistake puzzles from imported games in background
+  // Generate mistake puzzles and run Stockfish analysis in background
   if (importedGameIds.length > 0) {
     void generateMistakePuzzlesForBatch(importedGameIds, username);
+    runBackgroundAnalysis();
   }
 
   return imported;
