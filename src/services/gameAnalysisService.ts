@@ -24,6 +24,9 @@ const INACCURACY_CP = 50;
 const WORKER_POOL_SIZE = 6;
 const INIT_TIMEOUT_MS = 45_000;
 
+// Abort signal for background suspension
+let _abortAnalysis = false;
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function classifyCpLoss(cpLoss: number): MoveClassification {
@@ -165,6 +168,7 @@ async function analyzeGameOnWorker(
   // Build eval curve: evaluate every position sequentially on this worker
   const evals: (number | null)[] = [];
   for (const fen of fens) {
+    if (_abortAnalysis) return null;
     try {
       const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH);
       evals.push(result.evaluation);
@@ -210,6 +214,7 @@ async function analyzeGameOnWorker(
 
   // Get best moves for mistakes (deeper analysis)
   for (const moveIdx of mistakeIndices) {
+    if (_abortAnalysis) return null;
     try {
       const result = await worker.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
       annotations[moveIdx].bestMove = result.bestMove;
@@ -326,14 +331,31 @@ export async function countGamesNeedingAnalysis(): Promise<number> {
 export async function analyzeAllGames(
   onProgress?: (progress: BatchAnalysisProgress) => void,
 ): Promise<number> {
-  const games = await db.games
+  const allGames = await db.games
     .filter((g) => gameNeedsAnalysis(g))
     .toArray();
+
+  // Analyze newest games first (reverse chronological)
+  const games = allGames.sort((a, b) => {
+    const dateA = a.date ? new Date(a.date).getTime() : 0;
+    const dateB = b.date ? new Date(b.date).getTime() : 0;
+    return dateB - dateA;
+  });
 
   if (games.length === 0) {
     await recomputeWeaknessFromGames();
     return 0;
   }
+
+  // Listen for app going to background — iOS suspends workers, causing hangs
+  _abortAnalysis = false;
+  const handleVisibilityChange = (): void => {
+    if (document.visibilityState === 'hidden') {
+      _abortAnalysis = true;
+      console.log('[GameAnalysis] App backgrounded — aborting analysis');
+    }
+  };
+  document.addEventListener('visibilitychange', handleVisibilityChange);
 
   // Try to spawn dedicated workers
   const workers: DedicatedWorker[] = [];
@@ -359,7 +381,7 @@ export async function analyzeAllGames(
       let nextGameIdx = 0;
 
       const processNextGame = async (worker: DedicatedWorker): Promise<void> => {
-        while (nextGameIdx < games.length) {
+        while (nextGameIdx < games.length && !_abortAnalysis) {
           const idx = nextGameIdx++;
           const game = games[idx];
 
@@ -382,7 +404,7 @@ export async function analyzeAllGames(
       await Promise.all(workers.map((w) => processNextGame(w)));
     } else {
       // Fallback: single engine, sequential
-      for (let i = 0; i < games.length; i++) {
+      for (let i = 0; i < games.length && !_abortAnalysis; i++) {
         const game = games[i];
         onProgress?.({
           currentGame: i + 1,
@@ -399,6 +421,7 @@ export async function analyzeAllGames(
       }
     }
   } finally {
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
     workers.forEach((w) => w.destroy());
   }
 
@@ -467,5 +490,17 @@ export function runBackgroundAnalysis(): void {
     .finally(() => {
       _backgroundRunning = false;
       useAppStore.getState().setBackgroundAnalysis(false, null);
+
+      // If aborted due to backgrounding, auto-restart when app returns
+      if (_abortAnalysis) {
+        const resumeHandler = (): void => {
+          if (document.visibilityState === 'visible') {
+            document.removeEventListener('visibilitychange', resumeHandler);
+            _abortAnalysis = false;
+            runBackgroundAnalysis();
+          }
+        };
+        document.addEventListener('visibilitychange', resumeHandler);
+      }
     });
 }
