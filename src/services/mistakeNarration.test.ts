@@ -136,6 +136,12 @@ describe('generateMistakeNarration', () => {
     expect(result.intro).toMatch(/roughly equal/i);
   });
 
+  it('generates a conceptHint for wrong-move feedback', () => {
+    const result = generateMistakeNarration(buildParams());
+    expect(result.conceptHint).toBeTruthy();
+    expect(result.conceptHint.length).toBeGreaterThan(10);
+  });
+
   it('omits context sentence when no context fields are provided', () => {
     const result = generateMistakeNarration(buildParams({
       opponentName: null,

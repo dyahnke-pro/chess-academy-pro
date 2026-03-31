@@ -340,6 +340,7 @@ export function buildMistakePuzzle(overrides?: Partial<MistakePuzzle>): MistakeP
       intro: 'You played Ng5, but d4 was significantly better — that cost you around 1.5 pawns.',
       moveNarrations: ['Good — d4 is the right move here.', 'Nice, Bb5. Keep going.'],
       outro: 'In the opening, piece development and center control are everything.',
+      conceptHint: 'Consider reinforcing your control of the center.',
     },
     createdAt: new Date().toISOString(),
     opponentName: 'Stockfish Bot',
