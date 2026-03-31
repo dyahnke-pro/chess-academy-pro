@@ -698,11 +698,24 @@ export async function getMistakePuzzlesDue(
   limit: number = 20,
 ): Promise<MistakePuzzle[]> {
   const today = new Date().toISOString().split('T')[0];
-  return db.mistakePuzzles
+  const due = await db.mistakePuzzles
     .where('srsDueDate')
     .belowOrEqual(today)
-    .limit(limit)
     .toArray();
+
+  // Prioritize newest games first; games older than 1 year are lowest priority
+  const now = Date.now();
+  const oneYear = 365 * 24 * 60 * 60 * 1000;
+  due.sort((a, b) => {
+    const dateA = a.gameDate ? new Date(a.gameDate).getTime() : new Date(a.createdAt).getTime();
+    const dateB = b.gameDate ? new Date(b.gameDate).getTime() : new Date(b.createdAt).getTime();
+    const oldA = (now - dateA) > oneYear;
+    const oldB = (now - dateB) > oneYear;
+    if (oldA !== oldB) return oldA ? 1 : -1;
+    return dateB - dateA;
+  });
+
+  return due.slice(0, limit);
 }
 
 export async function getMistakePuzzlesByGame(
@@ -724,7 +737,21 @@ export async function getMistakePuzzlesByClassification(
 }
 
 export async function getAllMistakePuzzles(): Promise<MistakePuzzle[]> {
-  return db.mistakePuzzles.toArray();
+  const all = await db.mistakePuzzles.toArray();
+
+  // Newest games first; games older than 1 year are lowest priority
+  const now = Date.now();
+  const oneYear = 365 * 24 * 60 * 60 * 1000;
+  all.sort((a, b) => {
+    const dateA = a.gameDate ? new Date(a.gameDate).getTime() : new Date(a.createdAt).getTime();
+    const dateB = b.gameDate ? new Date(b.gameDate).getTime() : new Date(b.createdAt).getTime();
+    const oldA = (now - dateA) > oneYear;
+    const oldB = (now - dateB) > oneYear;
+    if (oldA !== oldB) return oldA ? 1 : -1;
+    return dateB - dateA;
+  });
+
+  return all;
 }
 
 export async function getMistakePuzzlesByPhase(
