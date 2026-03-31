@@ -185,6 +185,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Needs work on tactics.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -217,6 +218,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Work needed.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -249,6 +251,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Work needed.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -313,6 +316,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Work needed.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -360,6 +364,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Openings need work.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -403,6 +408,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Multiple weaknesses.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -440,6 +446,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'OK.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -469,6 +476,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Openings.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -492,6 +500,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Positional.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -515,6 +524,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Endgames.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);

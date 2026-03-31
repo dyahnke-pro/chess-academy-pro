@@ -2,6 +2,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { stockfishEngine } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
+import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
 import { useAppStore } from '../stores/appStore';
 import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis } from '../types';
 
@@ -374,6 +375,7 @@ export async function analyzeAllGames(
 
   let analyzed = 0;
   let completed = 0;
+  const analyzedGameIds: string[] = [];
 
   try {
     if (workers.length > 0) {
@@ -395,6 +397,7 @@ export async function analyzeAllGames(
           const annotations = await analyzeGameOnWorker(game, worker);
           if (annotations && annotations.length > 0) {
             await db.games.update(game.id, { annotations });
+            analyzedGameIds.push(game.id);
             analyzed++;
           }
           completed++;
@@ -416,6 +419,7 @@ export async function analyzeAllGames(
         const annotations = await analyzeGamePositions(game);
         if (annotations && annotations.length > 0) {
           await db.games.update(game.id, { annotations });
+          analyzedGameIds.push(game.id);
           analyzed++;
         }
       }
@@ -431,6 +435,16 @@ export async function analyzeAllGames(
     currentGameName: '',
     phase: 'computing_weaknesses',
   });
+
+  // Generate mistake puzzles from newly-analyzed games
+  for (const gameId of analyzedGameIds) {
+    if (_abortAnalysis) break;
+    try {
+      await generateMistakePuzzlesFromGame(gameId);
+    } catch {
+      // Continue with remaining games
+    }
+  }
 
   await recomputeWeaknessFromGames();
 

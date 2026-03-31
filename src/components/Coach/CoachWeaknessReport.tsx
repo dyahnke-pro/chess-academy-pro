@@ -5,6 +5,7 @@ import { RefreshCw, ChevronDown, ChevronUp, Zap, Target, BarChart3 } from 'lucid
 import { useAppStore } from '../../stores/appStore';
 import { getStoredWeaknessProfile, computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { analyzeAllGames, countGamesNeedingAnalysis } from '../../services/gameAnalysisService';
+import { db } from '../../db/schema';
 import type { BatchAnalysisProgress } from '../../services/gameAnalysisService';
 import { SkillBar } from '../ui/SkillBar';
 import type { WeaknessProfile, WeaknessItem, WeaknessCategory } from '../../types';
@@ -65,7 +66,6 @@ export function CoachWeaknessReport(): JSX.Element {
           const fresh = await computeWeaknessProfile(activeProfile);
           setProfile(fresh);
           // Reload profile to get updated skillRadar
-          const { db } = await import('../../db/schema');
           const updated = await db.profiles.get(activeProfile.id);
           if (updated) {
             useAppStore.getState().setActiveProfile(updated);
@@ -97,15 +97,20 @@ export function CoachWeaknessReport(): JSX.Element {
   }, [activeProfile, refreshing]);
 
   const handleAnalyzeGames = useCallback(async () => {
-    if (analyzing) return;
+    if (analyzing || !activeProfile) return;
     setAnalyzing(true);
     try {
       await analyzeAllGames((progress) => {
         setAnalysisProgress(progress);
       });
-      // Refresh the weakness profile after analysis
-      const fresh = useAppStore.getState().weaknessProfile;
-      if (fresh) setProfile(fresh);
+      // Recompute weakness profile with fresh annotations
+      const fresh = await computeWeaknessProfile(activeProfile);
+      setProfile(fresh);
+      // Reload profile to pick up updated skillRadar
+      const updatedProfile = await db.profiles.get(activeProfile.id);
+      if (updatedProfile) {
+        useAppStore.getState().setActiveProfile(updatedProfile);
+      }
       setUnanalyzedCount(0);
     } catch {
       // Silently fail
@@ -113,7 +118,7 @@ export function CoachWeaknessReport(): JSX.Element {
       setAnalyzing(false);
       setAnalysisProgress(null);
     }
-  }, [analyzing]);
+  }, [analyzing, activeProfile]);
 
   if (loading) {
     return (
@@ -167,6 +172,11 @@ export function CoachWeaknessReport(): JSX.Element {
   const topTrainingActions = profile.items
     .filter((item): item is typeof item & { trainingAction: NonNullable<typeof item.trainingAction> } => item.trainingAction !== undefined)
     .slice(0, 3);
+
+  // Extract strongest tactical themes for "Strength Puzzles"
+  const strengthThemes = profile.strengthItems
+    .filter((s) => s.category === 'tactics')
+    .map((s) => s.title.replace(' Mastery', '').toLowerCase());
 
   return (
     <motion.div
@@ -325,8 +335,8 @@ export function CoachWeaknessReport(): JSX.Element {
         </div>
       )}
 
-      {/* Strengths — collapsed at the bottom */}
-      {profile.strengths.length > 0 && (
+      {/* Strengths — expanded with detail */}
+      {(profile.strengthItems.length > 0 || profile.strengths.length > 0) && (
         <div
           className="rounded-xl border overflow-hidden"
           style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
@@ -337,7 +347,7 @@ export function CoachWeaknessReport(): JSX.Element {
             className="w-full flex items-center justify-between p-4 text-left"
           >
             <h3 className="text-sm font-semibold" style={{ color: 'var(--color-success)' }}>
-              Strengths ({profile.strengths.length})
+              Your Strengths ({profile.strengthItems.length || profile.strengths.length})
             </h3>
             {showStrengths ? (
               <ChevronUp size={16} style={{ color: 'var(--color-text-muted)' }} />
@@ -354,17 +364,67 @@ export function CoachWeaknessReport(): JSX.Element {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <ul className="px-4 pb-4 space-y-1">
-                  {profile.strengths.map((strength, i) => (
-                    <li key={i} className="text-sm flex items-start gap-2" style={{ color: 'var(--color-text)' }}>
-                      <span style={{ color: 'var(--color-success)' }}>{'\u2713'}</span>
-                      {strength}
-                    </li>
-                  ))}
-                </ul>
+                <div className="px-4 pb-4 space-y-3">
+                  {profile.strengthItems.length > 0 ? (
+                    profile.strengthItems.map((item, i) => (
+                      <div
+                        key={i}
+                        className="rounded-lg p-3 border"
+                        style={{ borderColor: 'color-mix(in srgb, var(--color-success) 20%, var(--color-border))', background: 'color-mix(in srgb, var(--color-success) 4%, var(--color-bg))' }}
+                      >
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm" style={{ color: 'var(--color-success)' }}>{CATEGORY_ICONS[item.category] || '\u2713'}</span>
+                          <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{item.title}</span>
+                          <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--color-success) 15%, transparent)', color: 'var(--color-success)' }}>
+                            {item.metric}
+                          </span>
+                        </div>
+                        <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                          {item.detail}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    profile.strengths.map((strength, i) => (
+                      <div key={i} className="text-sm flex items-start gap-2" style={{ color: 'var(--color-text)' }}>
+                        <span style={{ color: 'var(--color-success)' }}>{'\u2713'}</span>
+                        {strength}
+                      </div>
+                    ))
+                  )}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+      )}
+
+      {/* Strength Puzzles — practice what you're good at */}
+      {strengthThemes.length > 0 && (
+        <div
+          className="rounded-xl border p-4"
+          style={{ borderColor: 'color-mix(in srgb, var(--color-success) 30%, var(--color-border))', background: 'color-mix(in srgb, var(--color-success) 4%, var(--color-surface))' }}
+          data-testid="strength-puzzles"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Zap size={16} style={{ color: 'var(--color-success)' }} />
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-success)' }}>My Strength Puzzles</h3>
+          </div>
+          <p className="text-xs mb-3" style={{ color: 'var(--color-text-muted)' }}>
+            Keep your best skills sharp with puzzles in your strongest areas.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {strengthThemes.map((theme) => (
+              <button
+                key={theme}
+                onClick={() => void navigate('/puzzles', { state: { theme, mode: 'standard' } })}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors hover:opacity-90"
+                style={{ background: 'color-mix(in srgb, var(--color-success) 15%, transparent)', color: 'var(--color-success)' }}
+              >
+                {theme.charAt(0).toUpperCase()}{theme.slice(1)} Puzzles
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </motion.div>

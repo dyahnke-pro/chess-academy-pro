@@ -387,6 +387,7 @@ describe('coachChatService', () => {
         },
       ],
       strengths: ['Strong at pins (85% accuracy)', 'Good opening knowledge retention'],
+      strengthItems: [],
       overallAssessment: 'Rating: ~1235 ELO. Primary focus: calculation errors.',
     };
 
