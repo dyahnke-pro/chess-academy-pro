@@ -15,6 +15,7 @@ vi.mock('../../services/tacticClassifierService', () => ({
   getTacticMotifStats: (): unknown => mockGetTacticMotifStats(),
   getRecentClassifiedTactics: (): unknown => mockGetRecentClassifiedTactics(),
   getClassifiedTacticCount: (): unknown => mockGetClassifiedTacticCount(),
+  backfillClassifiedTactics: (): Promise<number> => Promise.resolve(0),
   TACTIC_LABELS: {
     fork: 'Fork',
     pin: 'Pin',

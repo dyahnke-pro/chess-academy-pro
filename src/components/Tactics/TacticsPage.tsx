@@ -4,6 +4,7 @@ import {
   getTacticMotifStats,
   getRecentClassifiedTactics,
   getClassifiedTacticCount,
+  backfillClassifiedTactics,
   TACTIC_LABELS,
 } from '../../services/tacticClassifierService';
 import { SkillBar } from '../ui/SkillBar';
@@ -52,6 +53,9 @@ export function TacticsPage(): JSX.Element {
   const loadData = useCallback(async (): Promise<void> => {
     setLoading(true);
     try {
+      // Backfill: classify tactics from any previously analyzed games
+      await backfillClassifiedTactics();
+
       const [stats, recent, count] = await Promise.all([
         getTacticMotifStats(),
         getRecentClassifiedTactics(15),

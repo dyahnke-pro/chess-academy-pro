@@ -120,6 +120,27 @@ export async function classifyTacticsFromGame(gameId: string): Promise<number> {
   return tactics.length;
 }
 
+/**
+ * Backfill: classify tactics from all previously analyzed games that haven't been classified yet.
+ * Returns the total number of new tactics found.
+ */
+export async function backfillClassifiedTactics(): Promise<number> {
+  const allGames = await db.games.toArray();
+  let total = 0;
+
+  for (const game of allGames) {
+    if (!game.annotations || game.annotations.length === 0) continue;
+    try {
+      const count = await classifyTacticsFromGame(game.id);
+      total += count;
+    } catch {
+      // Continue with remaining games
+    }
+  }
+
+  return total;
+}
+
 // ─── Stats & Queries ────────────────────────────────────────────────────────
 
 /**
