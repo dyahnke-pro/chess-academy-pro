@@ -113,7 +113,6 @@ export function buildUserProfile(overrides?: UserProfileOverrides): UserProfile 
     longestStreak: 0,
     streakFreezes: 0,
     lastActiveDate: today(),
-    achievements: [],
     badHabits: rest.badHabits ?? [],
     preferences: buildDefaultPreferences(preferences),
     ...rest,

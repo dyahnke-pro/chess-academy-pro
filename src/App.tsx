@@ -30,6 +30,7 @@ import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { CoachWeaknessReport } from './components/Coach/CoachWeaknessReport';
 import { CoachTrainPage } from './components/Coach/CoachTrainPage';
 import { StatsPage } from './components/Stats/StatsPage';
+import { TacticsPage } from './components/Tactics/TacticsPage';
 import { KidLayout } from './components/Kid/KidLayout';
 import { KidModePage } from './components/Kid/KidModePage';
 import { KidPiecePage } from './components/Kid/KidPiecePage';
@@ -138,6 +139,7 @@ export function App(): JSX.Element {
           <Route path="/games" element={<ErrorBoundary><GameDatabasePage /></ErrorBoundary>} />
           <Route path="/games/import" element={<ErrorBoundary><ImportPage /></ErrorBoundary>} />
           <Route path="/analysis" element={<ErrorBoundary><AnalysisBoardPage /></ErrorBoundary>} />
+          <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
           <Route path="/stats" element={<ErrorBoundary><StatsPage /></ErrorBoundary>} />
           <Route
             path="/settings"

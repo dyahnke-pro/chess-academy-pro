@@ -6,7 +6,7 @@ import {
   buildCoachGameState,
   buildChatMessage,
 } from '../test/factories';
-import type { Achievement } from '../types';
+
 
 beforeEach(() => {
   useAppStore.getState().reset();
@@ -95,19 +95,6 @@ describe('Setters', () => {
     ];
     useAppStore.getState().setChatMessages(messages);
     expect(useAppStore.getState().chatMessages).toEqual(messages);
-  });
-
-  it('setPendingAchievement sets achievement', () => {
-    const achievement: Achievement = {
-      id: 'first_puzzle',
-      name: 'First Puzzle',
-      description: 'Solve your first puzzle',
-      icon: 'trophy',
-      condition: () => true,
-      xpReward: 50,
-    };
-    useAppStore.getState().setPendingAchievement(achievement);
-    expect(useAppStore.getState().pendingAchievement).toEqual(achievement);
   });
 
   it('setSidebarOpen sets sidebar state', () => {

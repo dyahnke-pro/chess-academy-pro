@@ -16,10 +16,10 @@ import {
   MessageCircle,
   ChevronLeft,
   AlertTriangle,
+  Target,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
-import { AchievementToast } from './AchievementToast';
 import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
 import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
@@ -34,9 +34,10 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
-  { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
+  { to: '/tactics', label: 'Tactics', icon: Target },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
+  { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/play', label: 'Play', icon: Swords },
   { to: '/analysis', label: 'Analysis', icon: Search },
   { to: '/games', label: 'Games', icon: Database },
@@ -45,7 +46,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/kid', label: 'Kids Mode', icon: Baby },
 ];
 
-// Bottom tab bar: Dashboard, Openings, Coach, Puzzles, Weaknesses
+// Bottom tab bar: Dashboard, Openings, Puzzles, Tactics, Weaknesses
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
 
 export function AppLayout(): JSX.Element {
@@ -252,7 +253,6 @@ export function AppLayout(): JSX.Element {
         </main>
       </div>
 
-      <AchievementToast />
       <InstallPrompt />
 
       {/* Mobile bottom nav */}

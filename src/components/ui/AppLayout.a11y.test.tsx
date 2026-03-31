@@ -4,10 +4,6 @@ import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 
 // Mock child components that hit APIs/DB
-vi.mock('./AchievementToast', () => ({
-  AchievementToast: () => <div data-testid="achievement-toast" />,
-}));
-
 vi.mock('./InstallPrompt', () => ({
   InstallPrompt: () => <div data-testid="install-prompt" />,
 }));

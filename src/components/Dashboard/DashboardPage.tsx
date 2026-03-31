@@ -5,19 +5,17 @@ import { createSession, updateStreak, getRecentSessions } from '../../services/s
 import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
-import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
 import { MiniBoard } from '../Board/MiniBoard';
-import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X, Upload } from 'lucide-react';
+import { Flame, Brain, Swords, Play, Target, BookOpen, Heart, X, Upload } from 'lucide-react';
 import { DailyPuzzleCard } from './DailyPuzzleCard';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
-import type { SessionRecord, Achievement, OpeningRecord } from '../../types';
+import type { SessionRecord, OpeningRecord } from '../../types';
 import type { PuzzleStats } from '../../services/puzzleService';
 
 export function DashboardPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  const setPendingAchievement = useAppStore((s) => s.setPendingAchievement);
   const navigate = useNavigate();
   const [puzzleStats, setPuzzleStats] = useState<PuzzleStats | null>(null);
   const [recentSessions, setRecentSessions] = useState<SessionRecord[]>([]);
@@ -44,23 +42,8 @@ export function DashboardPage(): JSX.Element {
         }
       });
 
-      // Check for new achievements
-      void checkAndAwardAchievements(activeProfile).then((newAchievements) => {
-        if (newAchievements.length > 0) {
-          queueAchievementToasts(newAchievements, setPendingAchievement);
-          const totalXp = newAchievements.reduce((sum, a) => sum + a.xpReward, 0);
-          const updatedXp = activeProfile.xp + totalXp;
-          const updatedLevel = Math.floor(updatedXp / 500) + 1;
-          setActiveProfile({
-            ...activeProfile,
-            achievements: [...activeProfile.achievements, ...newAchievements.map((a) => a.id)],
-            xp: updatedXp,
-            level: updatedLevel,
-          });
-        }
-      });
     }
-  }, [activeProfile, setActiveProfile, setPendingAchievement]);
+  }, [activeProfile, setActiveProfile]);
 
   const handleStartSession = useCallback(async (): Promise<void> => {
     if (!activeProfile) return;
@@ -72,8 +55,7 @@ export function DashboardPage(): JSX.Element {
 
   if (!activeProfile) return <></>;
 
-  const { currentStreak, xp, level, puzzleRating } = activeProfile;
-  const xpProgress = getXpToNextLevel(xp);
+  const { currentStreak, puzzleRating } = activeProfile;
 
   return (
     <div
@@ -123,11 +105,9 @@ export function DashboardPage(): JSX.Element {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <StatCard label={getLevelTitle(level)} value={`Lv ${level}`} icon={<Star size={18} />} xpProgress={xpProgress} />
-        <StatCard label="XP" value={xp.toLocaleString()} icon={<Star size={18} />} />
+      <div className="grid grid-cols-2 gap-3">
         <StatCard label="Puzzle Rating" value={`${puzzleRating}`} icon={<Brain size={18} />} />
-        <StatCard label="ELO" value={`${activeProfile.currentRating}`} icon={<Clock size={18} />} />
+        <StatCard label="Game ELO" value={`${activeProfile.currentRating}`} icon={<Swords size={18} />} />
       </div>
 
       {/* Today's session card */}
@@ -231,7 +211,6 @@ export function DashboardPage(): JSX.Element {
                 <span style={{ color: 'var(--color-text-muted)' }}>{s.date}</span>
                 <div className="flex gap-3">
                   <span>{s.puzzlesSolved} puzzles</span>
-                  <span>{s.xpEarned} XP</span>
                   {s.completed && <span style={{ color: 'var(--color-success)' }}>Done</span>}
                 </div>
               </div>
@@ -243,25 +222,14 @@ export function DashboardPage(): JSX.Element {
   );
 }
 
-function queueAchievementToasts(
-  achievements: Achievement[],
-  setPending: (a: Achievement | null) => void,
-): void {
-  achievements.forEach((achievement, i) => {
-    setTimeout(() => setPending(achievement), i * 3500);
-  });
-}
-
 function StatCard({
   label,
   value,
   icon,
-  xpProgress,
 }: {
   label: string;
   value: string;
   icon: React.ReactNode;
-  xpProgress?: { current: number; needed: number; percent: number };
 }): JSX.Element {
   return (
     <div
@@ -273,20 +241,6 @@ function StatCard({
       <div className="text-xs capitalize" style={{ color: 'var(--color-text-muted)' }}>
         {label}
       </div>
-      {xpProgress && (
-        <div className="mt-1">
-          <div className="h-1.5 rounded-full" style={{ background: 'var(--color-border)' }}>
-            <div
-              className="h-1.5 rounded-full transition-all"
-              style={{ width: `${xpProgress.percent}%`, background: 'var(--color-accent)' }}
-              data-testid="xp-progress-bar"
-            />
-          </div>
-          <div className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
-            {xpProgress.current}/{xpProgress.needed} XP
-          </div>
-        </div>
-      )}
     </div>
   );
 }

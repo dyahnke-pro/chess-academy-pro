@@ -26,7 +26,6 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { db } from '../../db/schema';
-import { checkAndAwardAchievements } from '../../services/gamificationService';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -174,7 +173,6 @@ export function CoachGamePage(): JSX.Element {
 
   const coachVoiceOn = useAppStore((s) => s.coachVoiceOn);
   const toggleCoachVoice = useAppStore((s) => s.toggleCoachVoice);
-  const setPendingAchievement = useAppStore((s) => s.setPendingAchievement);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
 
   // Ref to inject messages into GameChatPanel (hints, takeback msgs)
@@ -446,7 +444,7 @@ export function CoachGamePage(): JSX.Element {
         keyMoments,
       }));
 
-      // Save game to DB and check achievements
+      // Save game to DB
       const playerWon = result === 'win';
       const playerLost = result === 'loss';
       const pgnResult: GameResult = playerColor === 'white'
@@ -488,21 +486,9 @@ export function CoachGamePage(): JSX.Element {
           void computeWeaknessProfile(activeProfile);
         });
 
-        void checkAndAwardAchievements(activeProfile).then((earned) => {
-          if (earned.length > 0) {
-            // Queue achievement toasts
-            earned.forEach((achievement, i) => {
-              setTimeout(() => setPendingAchievement(achievement), i * 3500);
-            });
-            // Refresh profile from DB
-            void db.profiles.get(activeProfile.id).then((updated) => {
-              if (updated) setActiveProfile(updated);
-            });
-          }
-        });
       });
     }
-  }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, gameState.moves, playerColor, difficulty, gameState.hintsUsed, gameState.gameId, game.history, activeProfile, playerRating, targetStrength, setPendingAchievement, setActiveProfile, detectedOpening]);
+  }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, gameState.moves, playerColor, difficulty, gameState.hintsUsed, gameState.gameId, game.history, activeProfile, playerRating, targetStrength, setActiveProfile, detectedOpening]);
 
   // Auto-transition from gameover overlay to postgame review after showing final position
   useEffect(() => {

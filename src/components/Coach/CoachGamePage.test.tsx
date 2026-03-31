@@ -94,10 +94,6 @@ vi.mock('../../services/coachFeatureService', () => ({
   detectBadHabitsFromGame: vi.fn().mockResolvedValue([]),
 }));
 
-vi.mock('../../services/gamificationService', () => ({
-  checkAndAwardAchievements: vi.fn().mockResolvedValue([]),
-}));
-
 vi.mock('../../hooks/useIsMobile', () => ({
   useIsMobile: () => false,
 }));

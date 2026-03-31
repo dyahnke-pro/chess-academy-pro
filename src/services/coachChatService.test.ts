@@ -15,7 +15,6 @@ const mockProfile: UserProfile = {
   longestStreak: 10,
   streakFreezes: 1,
   lastActiveDate: '2026-03-05',
-  achievements: [],
   skillRadar: { opening: 60, tactics: 70, endgame: 40, memory: 50, calculation: 55 },
   badHabits: [
     { id: 'weak-fork', description: 'Struggling with fork puzzles', occurrences: 3, lastSeen: '2026-03-04', isResolved: false },

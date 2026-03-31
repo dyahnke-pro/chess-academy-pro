@@ -21,7 +21,6 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
     longestStreak: 0,
     streakFreezes: 1,
     lastActiveDate: new Date().toISOString().split('T')[0],
-    achievements: [],
     skillRadar: {
       opening: 50,
       tactics: 50,
