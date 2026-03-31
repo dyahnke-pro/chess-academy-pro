@@ -76,7 +76,7 @@ class DedicatedWorker {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error('Analysis timed out'));
-      }, 30_000);
+      }, 10_000);
 
       const blackToMove = fen.split(' ')[1] === 'b';
       let lastEval = 0;
@@ -104,16 +104,30 @@ class DedicatedWorker {
         }
       };
 
-      this.worker.addEventListener('message', handler);
-      this.worker.postMessage('ucinewgame');
-      this.worker.postMessage(`position fen ${fen}`);
-      this.worker.postMessage(`go depth ${depth}`);
+      try {
+        this.worker.addEventListener('message', handler);
+        this.worker.postMessage('ucinewgame');
+        this.worker.postMessage(`position fen ${fen}`);
+        this.worker.postMessage(`go depth ${depth}`);
+      } catch {
+        clearTimeout(timeoutId);
+        this.worker.removeEventListener('message', handler);
+        reject(new Error('Worker is dead'));
+      }
     });
   }
 
   destroy(): void {
-    this.worker.postMessage('stop');
-    this.worker.terminate();
+    try {
+      this.worker.postMessage('stop');
+    } catch {
+      // Worker already terminated (e.g. iOS killed it while backgrounded)
+    }
+    try {
+      this.worker.terminate();
+    } catch {
+      // Already dead
+    }
   }
 }
 
@@ -509,14 +523,21 @@ export function runBackgroundAnalysis(): void {
 
       // If aborted due to backgrounding, auto-restart when app returns
       if (_abortAnalysis) {
-        const resumeHandler = (): void => {
-          if (document.visibilityState === 'visible') {
-            document.removeEventListener('visibilitychange', resumeHandler);
-            _abortAnalysis = false;
-            runBackgroundAnalysis();
-          }
-        };
-        document.addEventListener('visibilitychange', resumeHandler);
+        // App may already be visible again by the time we reach .finally()
+        if (document.visibilityState === 'visible') {
+          _abortAnalysis = false;
+          // Defer to avoid synchronous re-entry
+          setTimeout(() => runBackgroundAnalysis(), 500);
+        } else {
+          const resumeHandler = (): void => {
+            if (document.visibilityState === 'visible') {
+              document.removeEventListener('visibilitychange', resumeHandler);
+              _abortAnalysis = false;
+              runBackgroundAnalysis();
+            }
+          };
+          document.addEventListener('visibilitychange', resumeHandler);
+        }
       }
     });
 }

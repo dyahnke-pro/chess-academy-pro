@@ -4,9 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw, ChevronDown, ChevronUp, Zap, Target, BarChart3 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { getStoredWeaknessProfile, computeWeaknessProfile } from '../../services/weaknessAnalyzer';
-import { analyzeAllGames, countGamesNeedingAnalysis } from '../../services/gameAnalysisService';
+import { analyzeAllGames, countGamesNeedingAnalysis, runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { db } from '../../db/schema';
 import type { BatchAnalysisProgress } from '../../services/gameAnalysisService';
+import { GameImportCard } from './GameImportCard';
 import { SkillBar } from '../ui/SkillBar';
 import type { WeaknessProfile, WeaknessItem, WeaknessCategory } from '../../types';
 
@@ -77,6 +78,29 @@ export function CoachWeaknessReport(): JSX.Element {
     })();
   }, [activeProfile]);
 
+  const handleImportComplete = useCallback(async (count: number) => {
+    if (count > 0) {
+      // Refresh unanalyzed count and kick off background analysis
+      const newCount = await countGamesNeedingAnalysis();
+      setUnanalyzedCount(newCount);
+      runBackgroundAnalysis();
+
+      // Recompute weakness profile with new data
+      if (activeProfile) {
+        try {
+          const fresh = await computeWeaknessProfile(activeProfile);
+          setProfile(fresh);
+          const updated = await db.profiles.get(activeProfile.id);
+          if (updated) {
+            useAppStore.getState().setActiveProfile(updated);
+          }
+        } catch {
+          // Use existing profile
+        }
+      }
+    }
+  }, [activeProfile]);
+
   const handleRefresh = useCallback(async () => {
     if (!activeProfile || refreshing) return;
     setRefreshing(true);
@@ -142,7 +166,8 @@ export function CoachWeaknessReport(): JSX.Element {
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
             No data yet. Import or play some games, then analyze them.
           </p>
-          <div className="flex flex-col gap-3 mt-4 items-center">
+          <GameImportCard onImportComplete={(count) => void handleImportComplete(count)} />
+        <div className="flex flex-col gap-3 mt-4 items-center">
             {unanalyzedCount > 0 && (
               <button
                 onClick={() => void handleAnalyzeGames()}
@@ -202,6 +227,9 @@ export function CoachWeaknessReport(): JSX.Element {
           <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} style={{ color: 'var(--color-text-muted)' }} />
         </button>
       </div>
+
+      {/* Import Games */}
+      <GameImportCard onImportComplete={(count) => void handleImportComplete(count)} />
 
       {/* Analyze My Games — prominent CTA */}
       {unanalyzedCount > 0 && (
