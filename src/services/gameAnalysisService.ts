@@ -21,7 +21,7 @@ const BEST_MOVE_DEPTH = 18;
 const BLUNDER_CP = 300;
 const MISTAKE_CP = 100;
 const INACCURACY_CP = 50;
-const WORKER_POOL_SIZE = 4;
+const WORKER_POOL_SIZE = 8;
 const INIT_TIMEOUT_MS = 45_000;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -450,11 +450,22 @@ export function runBackgroundAnalysis(): void {
   if (_backgroundRunning) return;
   _backgroundRunning = true;
 
-  void analyzeAllGames()
+  const store = useAppStore.getState();
+  store.setBackgroundAnalysis(true, 'Starting analysis...');
+
+  void analyzeAllGames((progress) => {
+    const label = progress.phase === 'computing_weaknesses'
+      ? 'Computing weaknesses...'
+      : progress.phase === 'done'
+        ? null
+        : `${progress.currentGame}/${progress.totalGames} — ${progress.currentGameName}`;
+    useAppStore.getState().setBackgroundAnalysis(true, label);
+  })
     .catch((err: unknown) => {
       console.warn('[GameAnalysis] Background analysis failed:', err);
     })
     .finally(() => {
       _backgroundRunning = false;
+      useAppStore.getState().setBackgroundAnalysis(false, null);
     });
 }

@@ -56,6 +56,8 @@ export function AppLayout(): JSX.Element {
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const coachEdgeTabPercent = useAppStore((s) => s.coachEdgeTabPercent);
   const setCoachEdgeTabPercent = useAppStore((s) => s.setCoachEdgeTabPercent);
+  const bgAnalysisRunning = useAppStore((s) => s.backgroundAnalysisRunning);
+  const bgAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
   const location = useLocation();
 
   // Draggable edge tab
@@ -97,6 +99,17 @@ export function AppLayout(): JSX.Element {
   return (
     <div className="flex flex-col min-h-dvh" style={{ background: 'var(--color-bg)' }}>
       <OfflineBanner />
+
+      {bgAnalysisRunning && (
+        <div
+          className="flex items-center gap-2 px-4 py-1.5 text-xs font-medium"
+          style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          data-testid="bg-analysis-banner"
+        >
+          <span className="animate-spin inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
+          <span>Analyzing games{bgAnalysisProgress ? ` — ${bgAnalysisProgress}` : '...'}</span>
+        </div>
+      )}
 
       {/* Mobile header */}
       <header
