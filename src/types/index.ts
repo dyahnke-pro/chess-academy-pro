@@ -468,7 +468,6 @@ export interface UserProfile {
   longestStreak: number;
   streakFreezes: number;
   lastActiveDate: string;
-  achievements: string[];
   skillRadar: SkillRadar;
   badHabits: BadHabit[];
   preferences: UserPreferences;
@@ -794,17 +793,6 @@ export interface AppTheme {
     error: string;
     warning: string;
   };
-}
-
-// ─── Achievement ──────────────────────────────────────────────────────────────
-
-export interface Achievement {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  condition: (profile: UserProfile) => boolean;
-  xpReward: number;
 }
 
 // ─── Kid Mode ────────────────────────────────────────────────────────────────

@@ -98,7 +98,6 @@ describe('Profiles CRUD', () => {
       longestStreak: 0,
       streakFreezes: 1,
       lastActiveDate: new Date().toISOString().split('T')[0],
-      achievements: [],
       skillRadar: { opening: 0, tactics: 0, endgame: 0, memory: 0, calculation: 0 },
       badHabits: [],
       preferences: {

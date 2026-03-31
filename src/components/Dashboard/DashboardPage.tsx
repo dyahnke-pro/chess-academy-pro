@@ -5,19 +5,18 @@ import { createSession, updateStreak, getRecentSessions } from '../../services/s
 import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
-import { checkAndAwardAchievements, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
+import { getLevelTitle, getXpToNextLevel } from '../../services/levelService';
 import { MiniBoard } from '../Board/MiniBoard';
 import { Flame, Star, Brain, Clock, Play, Target, BookOpen, Heart, X, Upload } from 'lucide-react';
 import { DailyPuzzleCard } from './DailyPuzzleCard';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
-import type { SessionRecord, Achievement, OpeningRecord } from '../../types';
+import type { SessionRecord, OpeningRecord } from '../../types';
 import type { PuzzleStats } from '../../services/puzzleService';
 
 export function DashboardPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  const setPendingAchievement = useAppStore((s) => s.setPendingAchievement);
   const navigate = useNavigate();
   const [puzzleStats, setPuzzleStats] = useState<PuzzleStats | null>(null);
   const [recentSessions, setRecentSessions] = useState<SessionRecord[]>([]);
@@ -44,23 +43,8 @@ export function DashboardPage(): JSX.Element {
         }
       });
 
-      // Check for new achievements
-      void checkAndAwardAchievements(activeProfile).then((newAchievements) => {
-        if (newAchievements.length > 0) {
-          queueAchievementToasts(newAchievements, setPendingAchievement);
-          const totalXp = newAchievements.reduce((sum, a) => sum + a.xpReward, 0);
-          const updatedXp = activeProfile.xp + totalXp;
-          const updatedLevel = Math.floor(updatedXp / 500) + 1;
-          setActiveProfile({
-            ...activeProfile,
-            achievements: [...activeProfile.achievements, ...newAchievements.map((a) => a.id)],
-            xp: updatedXp,
-            level: updatedLevel,
-          });
-        }
-      });
     }
-  }, [activeProfile, setActiveProfile, setPendingAchievement]);
+  }, [activeProfile, setActiveProfile]);
 
   const handleStartSession = useCallback(async (): Promise<void> => {
     if (!activeProfile) return;
@@ -241,15 +225,6 @@ export function DashboardPage(): JSX.Element {
       )}
     </div>
   );
-}
-
-function queueAchievementToasts(
-  achievements: Achievement[],
-  setPending: (a: Achievement | null) => void,
-): void {
-  achievements.forEach((achievement, i) => {
-    setTimeout(() => setPending(achievement), i * 3500);
-  });
 }
 
 function StatCard({

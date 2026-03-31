@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
-import { AchievementToast } from './AchievementToast';
 import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
 import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
@@ -252,7 +251,6 @@ export function AppLayout(): JSX.Element {
         </main>
       </div>
 
-      <AchievementToast />
       <InstallPrompt />
 
       {/* Mobile bottom nav */}

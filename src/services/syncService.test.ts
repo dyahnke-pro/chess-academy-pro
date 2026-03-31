@@ -16,7 +16,6 @@ function createProfile(): UserProfile {
     longestStreak: 0,
     streakFreezes: 0,
     lastActiveDate: '2026-03-04',
-    achievements: [],
     skillRadar: { opening: 50, tactics: 50, endgame: 50, memory: 50, calculation: 50 },
     badHabits: [],
     preferences: {

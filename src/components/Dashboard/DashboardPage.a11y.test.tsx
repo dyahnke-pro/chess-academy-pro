@@ -22,8 +22,7 @@ vi.mock('../../services/puzzleService', () => ({
   }),
 }));
 
-vi.mock('../../services/gamificationService', () => ({
-  checkAndAwardAchievements: vi.fn().mockResolvedValue([]),
+vi.mock('../../services/levelService', () => ({
   getLevelTitle: vi.fn().mockReturnValue('Apprentice'),
   getXpToNextLevel: vi.fn().mockReturnValue({ current: 250, needed: 500, percent: 50 }),
 }));

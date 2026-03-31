@@ -47,7 +47,6 @@ function createProfile(overrides: Partial<UserProfile> = {}): UserProfile {
     longestStreak: 10,
     streakFreezes: 0,
     lastActiveDate: new Date().toISOString().split('T')[0],
-    achievements: ['first_puzzle', 'streak_3'],
     skillRadar: { opening: 60, tactics: 70, endgame: 40, memory: 55, calculation: 65 },
     badHabits: [],
     preferences: {
@@ -159,19 +158,6 @@ describe('StatsPage', () => {
     await waitFor(() => {
       expect(screen.getByText('opening')).toBeInTheDocument();
       expect(screen.getByText('tactics')).toBeInTheDocument();
-    });
-  });
-
-  it('shows achievements grid with earned and locked', async () => {
-    const profile = createProfile({ achievements: ['first_puzzle'] });
-    useAppStore.getState().setActiveProfile(profile);
-
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('achievements-grid')).toBeInTheDocument();
-      expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
-      expect(screen.getByTestId('achievement-streak_3')).toBeInTheDocument();
     });
   });
 
@@ -489,45 +475,6 @@ describe('StatsPage', () => {
       expect(screen.getByTestId('stats-page')).toBeInTheDocument();
     });
     expect(screen.queryByText('Bad Habits')).not.toBeInTheDocument();
-  });
-
-  // ─── New tests: Achievements grid detail ──────────────────────────────────
-
-  it('earned achievements show XP reward text', async () => {
-    setProfile({ achievements: ['first_puzzle'] });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
-    });
-    // first_puzzle has xpReward of 50
-    expect(screen.getByText('+50 XP')).toBeInTheDocument();
-  });
-
-  it('locked achievements show description text', async () => {
-    setProfile({ achievements: [] });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
-    });
-    // first_puzzle description is "Attempt your first puzzle"
-    expect(screen.getByText('Attempt your first puzzle')).toBeInTheDocument();
-  });
-
-  it('achievements grid renders all defined achievements', async () => {
-    setProfile({ achievements: [] });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('achievements-grid')).toBeInTheDocument();
-    });
-    // Check a few specific achievement test IDs
-    expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-ten_puzzles')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-streak_3')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-streak_7')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-reach_1500')).toBeInTheDocument();
   });
 
   // ─── New tests: Level titles ──────────────────────────────────────────────

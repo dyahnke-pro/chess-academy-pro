@@ -13,7 +13,6 @@ const mockGetPuzzleStats = vi.fn<() => Promise<PuzzleStats | null>>();
 const mockGetRecentSessions = vi.fn();
 const mockUpdateStreak = vi.fn();
 const mockCreateSession = vi.fn();
-const mockCheckAndAwardAchievements = vi.fn();
 const mockGetFavoriteOpenings = vi.fn();
 const mockNavigate = vi.fn();
 
@@ -26,16 +25,6 @@ vi.mock('../../services/sessionGenerator', () => ({
   updateStreak: (...args: unknown[]): unknown => mockUpdateStreak(...args),
   createSession: (...args: unknown[]): unknown => mockCreateSession(...args),
 }));
-
-vi.mock('../../services/gamificationService', async () => {
-  const actual = await vi.importActual<typeof import('../../services/gamificationService')>(
-    '../../services/gamificationService',
-  );
-  return {
-    ...actual,
-    checkAndAwardAchievements: (...args: unknown[]): unknown => mockCheckAndAwardAchievements(...args),
-  };
-});
 
 vi.mock('../../services/openingService', () => ({
   getFavoriteOpenings: (...args: unknown[]): unknown => mockGetFavoriteOpenings(...args),
@@ -93,7 +82,6 @@ describe('DashboardPage', () => {
     mockGetRecentSessions.mockResolvedValue([]);
     mockGetFavoriteOpenings.mockResolvedValue([]);
     mockUpdateStreak.mockResolvedValue({ currentStreak: 0, longestStreak: 0 });
-    mockCheckAndAwardAchievements.mockResolvedValue([]);
     mockCreateSession.mockResolvedValue(buildSessionRecord());
   });
 

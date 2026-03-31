@@ -45,7 +45,6 @@ function createProfile(): UserProfile {
     longestStreak: 5,
     streakFreezes: 0,
     lastActiveDate: new Date().toISOString().split('T')[0],
-    achievements: [],
     skillRadar: { opening: 30, tactics: 40, endgame: 20, memory: 35, calculation: 25 },
     badHabits: [],
     preferences: {

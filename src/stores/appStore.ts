@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type {
-  UserProfile, SessionRecord, AppTheme, Achievement,
+  UserProfile, SessionRecord, AppTheme,
   CoachGameState, ChatMessage, WeaknessProfile,
 } from '../types';
 
@@ -18,9 +18,6 @@ interface AppState {
   // UI state
   activeTheme: AppTheme | null;
   sidebarOpen: boolean;
-
-  // Gamification
-  pendingAchievement: Achievement | null;
 
   // Engine
   engineEnabled: boolean;
@@ -62,7 +59,6 @@ interface AppActions {
   tickSessionTimer: () => void;
   setActiveTheme: (theme: AppTheme) => void;
   setSidebarOpen: (open: boolean) => void;
-  setPendingAchievement: (achievement: Achievement | null) => void;
   toggleEngine: () => void;
   toggleEvalBar: () => void;
   setCoachGameState: (state: CoachGameState | null) => void;
@@ -88,7 +84,6 @@ const DEFAULT_STATE: AppState = {
   sessionTimerActive: false,
   sessionElapsedSeconds: 0,
   activeTheme: null,
-  pendingAchievement: null,
   sidebarOpen: false,
   engineEnabled: true,
   evalBarVisible: true,
@@ -130,8 +125,6 @@ export const useAppStore = create<AppState & AppActions>()(
     setActiveTheme: (theme) => set({ activeTheme: theme }),
 
     setSidebarOpen: (open) => set({ sidebarOpen: open }),
-
-    setPendingAchievement: (achievement) => set({ pendingAchievement: achievement }),
 
     toggleEngine: () => set((state) => ({ engineEnabled: !state.engineEnabled })),
 

@@ -3,9 +3,9 @@ import { useAppStore } from '../../stores/appStore';
 import { getPuzzleStats, getThemeSkills } from '../../services/puzzleService';
 import { getRecentSessions } from '../../services/sessionGenerator';
 import { detectBadHabits } from '../../services/coachFeatureService';
-import { ACHIEVEMENTS, getLevelTitle, getXpToNextLevel } from '../../services/gamificationService';
+import { getLevelTitle, getXpToNextLevel } from '../../services/levelService';
 import { SkillBar } from '../ui/SkillBar';
-import { Star, Lock } from 'lucide-react';
+import { Star } from 'lucide-react';
 import type { SessionRecord, BadHabit } from '../../types';
 import type { PuzzleStats, ThemeSkill } from '../../services/puzzleService';
 
@@ -196,39 +196,6 @@ export function StatsPage(): JSX.Element {
         </div>
       )}
 
-      {/* Achievements grid */}
-      <div
-        className="rounded-xl p-5 border"
-        style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-      >
-        <h2 className="font-semibold text-lg mb-3">Achievements</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3" data-testid="achievements-grid">
-          {ACHIEVEMENTS.map((a) => {
-            const earned = activeProfile.achievements.includes(a.id);
-            return (
-              <div
-                key={a.id}
-                className="flex items-center gap-3 p-3 rounded-lg border"
-                style={{
-                  background: earned ? 'var(--color-surface)' : 'var(--color-bg)',
-                  borderColor: earned ? 'var(--color-accent)' : 'var(--color-border)',
-                  opacity: earned ? 1 : 0.5,
-                }}
-                data-testid={`achievement-${a.id}`}
-              >
-                <span className="text-xl">{earned ? a.icon : ''}</span>
-                {!earned && <Lock size={16} style={{ color: 'var(--color-text-muted)' }} />}
-                <div>
-                  <div className="text-sm font-medium">{a.name}</div>
-                  <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                    {earned ? `+${a.xpReward} XP` : a.description}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }
