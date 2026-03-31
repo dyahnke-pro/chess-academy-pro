@@ -21,7 +21,7 @@ const BEST_MOVE_DEPTH = 18;
 const BLUNDER_CP = 300;
 const MISTAKE_CP = 100;
 const INACCURACY_CP = 50;
-const WORKER_POOL_SIZE = 8;
+const WORKER_POOL_SIZE = 6;
 const INIT_TIMEOUT_MS = 45_000;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
