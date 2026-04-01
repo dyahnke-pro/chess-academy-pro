@@ -5,9 +5,10 @@ import { voiceInputService } from '../../services/voiceInputService';
 import { voiceService } from '../../services/voiceService';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import type { ChatMessage } from '../../types';
 
-interface EngineSnapshot {
+export interface EngineSnapshot {
   bestMove: string;
   evaluation: number;
   isMate: boolean;
@@ -21,10 +22,12 @@ interface VoiceChatMicProps {
   turn?: 'w' | 'b';
   /** Called when the user asks the coach to play a specific opening (e.g. "French Defense"). */
   onOpeningRequest?: (openingName: string) => void;
+  /** Pre-computed engine snapshot (avoids running Stockfish again). */
+  engineSnapshot?: EngineSnapshot | null;
 }
 
 const MAX_HISTORY_PAIRS = 6;
-const VOICE_ENGINE_DEPTH = 14;
+const VOICE_ENGINE_DEPTH = 10;
 
 function buildSystemAddition(
   fen: string,
@@ -103,7 +106,7 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -159,23 +162,25 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest }: VoiceChatMicP
     setIsStreaming(true);
     speechBufferRef.current = '';
 
-    // Run Stockfish analysis so the LLM has engine-backed data
-    let engineData: EngineSnapshot | null = null;
-    try {
-      const analysis = await stockfishEngine.analyzePosition(fen, VOICE_ENGINE_DEPTH);
-      engineData = {
-        bestMove: analysis.bestMove,
-        evaluation: analysis.evaluation,
-        isMate: analysis.isMate,
-        mateIn: analysis.mateIn,
-        topLines: analysis.topLines.map((l) => ({
-          moves: l.moves,
-          evaluation: l.evaluation,
-          mate: l.mate,
-        })),
-      };
-    } catch {
-      // Continue without engine data if Stockfish fails
+    // Use pre-computed engine data if available (fast path), otherwise run Stockfish
+    let engineData: EngineSnapshot | null = engineSnapshot ?? null;
+    if (!engineData) {
+      try {
+        const analysis = await stockfishEngine.analyzePosition(fen, VOICE_ENGINE_DEPTH);
+        engineData = {
+          bestMove: uciMoveToSan(analysis.bestMove, fen),
+          evaluation: analysis.evaluation,
+          isMate: analysis.isMate,
+          mateIn: analysis.mateIn,
+          topLines: analysis.topLines.map((l) => ({
+            moves: [uciLinesToSan(l.moves, fen, 5)],
+            evaluation: l.evaluation,
+            mate: l.mate,
+          })),
+        };
+      } catch {
+        // Continue without engine data if Stockfish fails
+      }
     }
 
     const recent = currentMessages.slice(-(MAX_HISTORY_PAIRS * 2));
@@ -194,6 +199,7 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest }: VoiceChatMicP
           void voiceService.speakForced(sentence.trim());
         }
       },
+      'hint', // Use Haiku for speed — voice responses must be fast
     );
 
     if (speechBufferRef.current.trim()) {

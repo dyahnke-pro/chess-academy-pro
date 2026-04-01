@@ -7,6 +7,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useCoachTips } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
+import type { EngineSnapshot } from '../Board/VoiceChatMic';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -26,6 +27,7 @@ import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/c
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
+import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
@@ -275,6 +277,24 @@ export function CoachGamePage(): JSX.Element {
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
   const [latestTopLines, setLatestTopLines] = useState<AnalysisLine[]>([]);
+
+  // Pre-computed engine snapshot for voice chat (avoids re-running Stockfish)
+  const voiceEngineSnapshot: EngineSnapshot | null = useMemo(() => {
+    if (latestTopLines.length === 0) return null;
+    const bestLine = latestTopLines[0];
+    const bestMoveUci = bestLine.moves.length > 0 ? bestLine.moves[0] : '';
+    return {
+      bestMove: bestMoveUci ? uciMoveToSan(bestMoveUci, game.fen) : '',
+      evaluation: latestEval,
+      isMate: latestIsMate,
+      mateIn: latestMateIn,
+      topLines: latestTopLines.slice(0, 3).map((l) => ({
+        moves: [uciLinesToSan(l.moves, game.fen, 5)],
+        evaluation: l.evaluation,
+        mate: l.mate,
+      })),
+    };
+  }, [latestTopLines, latestEval, latestIsMate, latestMateIn, game.fen]);
 
   // 3-tier visual hint system (Stockfish-powered, no knownMove)
   const isPlayersTurn =
@@ -1207,6 +1227,7 @@ export function CoachGamePage(): JSX.Element {
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
               ghostMove={hintState.ghostMove}
               onOpeningRequest={handleOpeningRequest}
+              voiceEngineSnapshot={voiceEngineSnapshot}
             />
           </div>
           {showEngineLinesEffective && latestTopLines.length > 0 && (
