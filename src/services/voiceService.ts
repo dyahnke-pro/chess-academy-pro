@@ -129,7 +129,8 @@ class VoiceService {
 
     const prefs = await this.loadPrefs();
     if (!prefs) {
-      this.speakFallback(text, options?.rate);
+      this.speed = options?.rate ?? 0.95;
+      this.speakFallback(text);
       return;
     }
 
@@ -149,7 +150,7 @@ class VoiceService {
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }
-    this.speakFallback(text, options?.rate);
+    this.speakFallback(text);
   }
 
   stop(): void {
@@ -200,8 +201,8 @@ class VoiceService {
     }
   }
 
-  private speakFallback(text: string, rate?: number): void {
-    speechService.speak(text, { ...WEB_SPEECH_FALLBACK, ...(rate !== undefined ? { rate } : {}) });
+  private speakFallback(text: string): void {
+    speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
   }
 
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {
