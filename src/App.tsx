@@ -7,6 +7,7 @@ import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
 import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
+import { voiceService } from './services/voiceService';
 import { db } from './db/schema';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -89,6 +90,9 @@ export function App(): JSX.Element {
         if (profile.preferences.voiceSpeed) {
           speechService.setRate(profile.preferences.voiceSpeed);
         }
+
+        // Warm up the voice pipeline early so the first narration has no cold-start delay
+        void voiceService.warmup();
 
         const skippedMeta = await db.meta.get('onboarding_skipped');
         if (skippedMeta?.value !== 'true') {
