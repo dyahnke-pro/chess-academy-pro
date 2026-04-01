@@ -53,53 +53,82 @@ function buildSystemAddition(
   engineData: EngineSnapshot | null,
   lastMove: LastMoveContext | null | undefined,
 ): string {
-  const turnLabel = turn === 'b' ? 'Black' : 'White';
   const opponentColor = playerColor === 'white' ? 'Black' : 'White';
   const playerLabel = playerColor === 'white' ? 'White' : 'Black';
+  const isStudentTurn = (turn === 'w' && playerColor === 'white') || (turn === 'b' && playerColor === 'black');
+  const sideToMove = turn === 'b' ? 'Black' : 'White';
+  const sideToMoveRole = isStudentTurn ? 'STUDENT' : 'COACH';
 
-  const engineBlock = engineData
-    ? [
-        '\n[Engine Analysis — TRUST THIS DATA]',
-        `Best move: ${engineData.bestMove}`,
-        `Eval: ${engineData.isMate ? `Mate in ${engineData.mateIn}` : `${(engineData.evaluation / 100).toFixed(1)} pawns`}`,
-        ...engineData.topLines.slice(0, 3).map(
-          (l, i) => `Line ${i + 1}: ${l.moves.join(' ')} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
-        ),
-      ].join('\n')
-    : '';
+  // Engine block — label every move with whose move it is
+  let engineBlock = '';
+  if (engineData) {
+    const bestMoveLabel = isStudentTurn
+      ? `Best move for the STUDENT (${playerLabel}): ${engineData.bestMove}`
+      : `Best move for the COACH (${opponentColor}): ${engineData.bestMove} ← THIS IS YOUR MOVE, NOT THE STUDENT'S`;
 
+    const evalNum = engineData.isMate
+      ? `Mate in ${engineData.mateIn}`
+      : `${(engineData.evaluation / 100).toFixed(1)} pawns`;
+    const evalExplain = engineData.evaluation > 0 ? '(White is better)' : engineData.evaluation < 0 ? '(Black is better)' : '(equal)';
+
+    const lines = engineData.topLines.slice(0, 3).map(
+      (l, i) => `Line ${i + 1}: ${l.moves.join(' ')} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
+    );
+
+    engineBlock = `
+[Engine Analysis — TRUST THIS DATA, DO NOT GUESS]
+It is currently ${sideToMove}'s turn (the ${sideToMoveRole}).
+${bestMoveLabel}
+Evaluation: ${evalNum} ${evalExplain}
+${lines.join('\n')}`;
+  }
+
+  // Last move block — label whose move and what color piece moved
   let lastMoveBlock = '';
   if (lastMove) {
     const evalShift = lastMove.evalBefore !== null && lastMove.evalAfter !== null
       ? ((lastMove.evalAfter - lastMove.evalBefore) / 100).toFixed(1)
       : null;
-    // Use explicit labels: "student" and "you (coach)" so the LLM knows whose move it was
-    const whoPlayed = lastMove.player === 'you' ? `the student (${playerLabel})` : `you, the coach (${opponentColor})`;
-    lastMoveBlock = `\n[Last Move Played]
-Move: ${lastMove.san} (played by ${whoPlayed})
+    const isStudentMove = lastMove.player === 'you';
+    const whoPlayed = isStudentMove
+      ? `the STUDENT (${playerLabel} pieces)`
+      : `the COACH, which is you (${opponentColor} pieces)`;
+    const colorMoved = isStudentMove ? playerLabel : opponentColor;
+
+    lastMoveBlock = `
+[Last Move Played]
+Move: ${lastMove.san} — a ${colorMoved} move played by ${whoPlayed}
 ${lastMove.classification ? `Classification: ${lastMove.classification}` : ''}
 ${evalShift !== null ? `Eval change: ${Number(evalShift) >= 0 ? '+' : ''}${evalShift} pawns` : ''}
-${lastMove.bestMove ? `Engine's best was: ${lastMove.bestMove}` : ''}`;
+${lastMove.bestMove ? `Engine's best move was: ${lastMove.bestMove} (for ${colorMoved})` : ''}`;
   }
 
   return `VOICE CHAT — You are a chess coach playing a live game against a student.
-YOU are playing as ${opponentColor}. The student is playing as ${playerLabel}.
-You are both the opponent AND the coach — you make the ${opponentColor} moves, and you also answer the student's questions about the game.
 
-The student is speaking via microphone. Your responses are spoken aloud, so:
-1. NEVER start with filler like "Great question!", "Excellent!", "Good thinking!", etc. Jump straight to the answer.
-2. When the student asks what to play: ALWAYS name the specific move from the engine analysis in plain English ("move your knight to f3"). No vague advice.
-3. When the student asks about a move (yours or theirs): use the [Last Move Played] data. Say if it was good/inaccuracy/mistake and why.
-4. Keep responses to 1-2 sentences. Be direct. Start with the move or the assessment.
-5. Say "knight to f3" not "Nf3", "castle kingside" not "O-O".
-6. Base advice ONLY on the engine analysis below — never guess about positions.
-7. You know this game — you played the ${opponentColor} pieces. Own your moves when asked about them ("I played queen to d6 because...").
+[ROLES — READ CAREFULLY]
+- YOU (the coach/AI) are playing the ${opponentColor} pieces.
+- The STUDENT is playing the ${playerLabel} pieces.
+- The student's pieces are on the BOTTOM of the board. Your pieces are on the TOP.
+- You are both the opponent AND the coach — you make ${opponentColor} moves AND answer questions.
+
+[RULES FOR RESPONDING — YOUR RESPONSES ARE SPOKEN ALOUD]
+1. NEVER start with "Great question!", "Excellent!", "Good thinking!" — jump straight to the answer.
+2. When the student asks what THEY should play: ONLY suggest ${playerLabel} moves. ${isStudentTurn
+    ? `It IS the student's turn — tell them the best move from [Engine Analysis].`
+    : `It is NOT the student's turn right now (it's your turn as ${opponentColor}). Talk about the position or their last move instead.`}
+3. CRITICAL: The student plays ${playerLabel}. NEVER suggest a ${opponentColor} move as the student's move. ${opponentColor} moves are YOUR moves.
+4. When the student asks about a move: use [Last Move Played]. Say if it was good/inaccuracy/mistake and why.
+5. Keep responses to 1-2 sentences. Be direct.
+6. Say "knight to f3" not "Nf3", "castle kingside" not "O-O".
+7. Base advice ONLY on the engine data below — never guess.
+8. Own your moves: "I played queen to d6 because..." (you are ${opponentColor}).
 
 [Current Position]
 FEN: ${fen}
-${pgn ? `PGN: ${pgn}` : ''}
-You play: ${opponentColor} | Student plays: ${playerLabel}
-Turn: ${turnLabel} to move
+${pgn ? `PGN so far: ${pgn}` : 'Game just started — no moves yet.'}
+STUDENT color: ${playerLabel} (bottom of board)
+COACH color: ${opponentColor} (top of board, that's you)
+Current turn: ${sideToMove} to move (the ${sideToMoveRole})
 ${engineBlock}
 ${lastMoveBlock}`;
 }
