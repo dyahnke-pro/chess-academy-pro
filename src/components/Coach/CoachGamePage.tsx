@@ -250,8 +250,9 @@ export function CoachGamePage(): JSX.Element {
     isDraggingRef.current = false;
   }, []);
 
-  // Board annotation state (controlled by chat)
+  // Board annotation state (controlled by chat and voice)
   const [annotationArrows, setAnnotationArrows] = useState<BoardArrow[]>([]);
+  const [voiceArrows, setVoiceArrows] = useState<BoardArrow[]>([]);
   const [annotationHighlights, setAnnotationHighlights] = useState<BoardHighlight[]>([]);
   const [temporaryFen, setTemporaryFen] = useState<string | null>(null);
   const [temporaryLabel, setTemporaryLabel] = useState<string | null>(null);
@@ -363,9 +364,14 @@ export function CoachGamePage(): JSX.Element {
     setTemporaryFen(null);
     setTemporaryLabel(null);
     setAnnotationArrows([]);
+    setVoiceArrows([]);
     setAnnotationHighlights([]);
     exitPractice();
   }, [exitPractice]);
+
+  const handleVoiceArrows = useCallback((arrows: BoardArrow[]) => {
+    setVoiceArrows(arrows);
+  }, []);
 
   const handleBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
     // Collect all arrows and highlights from the full response so they accumulate
@@ -1255,7 +1261,7 @@ export function CoachGamePage(): JSX.Element {
               mateIn={latestMateIn}
               showFlipButton={false}
               highlightSquares={coachLastMove}
-              arrows={[...hintState.arrows, ...annotationArrows].length > 0 ? [...hintState.arrows, ...annotationArrows] : undefined}
+              arrows={[...hintState.arrows, ...annotationArrows, ...voiceArrows].length > 0 ? [...hintState.arrows, ...annotationArrows, ...voiceArrows] : undefined}
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
               ghostMove={hintState.ghostMove}
               pgnForChat={game.history.join(' ')}
@@ -1264,6 +1270,7 @@ export function CoachGamePage(): JSX.Element {
               voiceLastMoveContext={voiceLastMoveContext}
               voicePlayerColor={playerColor}
               onVoiceActiveChange={setVoiceActive}
+              onVoiceArrows={handleVoiceArrows}
             />
           </div>
           {showEngineLinesEffective && latestTopLines.length > 0 && (
