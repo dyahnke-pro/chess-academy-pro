@@ -187,7 +187,7 @@ export function TacticDrillPage(): JSX.Element {
       setCurrentIndex(nextIndex);
       await prepareContext(queue[nextIndex], newStreak);
     }
-  }, [queue, currentIndex, activeProfile, setActiveProfile]);
+  }, [queue, currentIndex, activeProfile, setActiveProfile, consecutiveSolves]);
 
   const currentItem = queue.at(currentIndex);
   const total = solved + failed;

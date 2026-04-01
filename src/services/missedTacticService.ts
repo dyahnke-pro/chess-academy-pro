@@ -15,7 +15,7 @@ const PIECE_VALUE: Record<string, number> = {
 /**
  * Detect what type of tactic the best move represents by analyzing the resulting position.
  */
-function detectTacticType(fen: string, bestMoveUci: string): TacticType {
+export function detectTacticType(fen: string, bestMoveUci: string): TacticType {
   try {
     const chess = new Chess(fen);
     const from = bestMoveUci.slice(0, 2) as Square;

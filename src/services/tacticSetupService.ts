@@ -7,7 +7,6 @@ import type {
   SetupPuzzle,
   SetupPuzzleDifficulty,
   SetupPuzzleStatus,
-  TacticType,
   MistakePuzzle,
   SrsGrade,
 } from '../types';

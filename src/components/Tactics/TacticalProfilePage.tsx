@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw, Play, Eye } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Play, Eye, ChevronRight } from 'lucide-react';
 import {
   computeTacticalProfile,
   getStoredTacticalProfile,
   tacticTypeLabel,
   tacticTypeIcon,
 } from '../../services/tacticalProfileService';
-import type { TacticalProfile, TacticTypeStats } from '../../types';
+import type { TacticalProfile, TacticTypeStats, TacticType } from '../../types';
 
 export function TacticalProfilePage(): JSX.Element {
   const navigate = useNavigate();
@@ -132,9 +132,17 @@ export function TacticalProfilePage(): JSX.Element {
 
       {/* Tactic Type Breakdown */}
       <div className="flex flex-col gap-3">
-        <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Tactic Breakdown</h3>
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+          Tactic Breakdown
+          <span className="font-normal ml-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>tap to drill</span>
+        </h3>
         {profile.stats.map((stat) => (
-          <TacticTypeRow key={stat.tacticType} stat={stat} maxMissCount={maxMissCount} />
+          <TacticTypeRow
+            key={stat.tacticType}
+            stat={stat}
+            maxMissCount={maxMissCount}
+            onTrain={(type) => void navigate('/tactics/drill', { state: { filterTypes: [type] } })}
+          />
         ))}
       </div>
 
@@ -149,14 +157,15 @@ export function TacticalProfilePage(): JSX.Element {
 
 // ─── Sub-components ─────────────────────────────────────────────────────────
 
-function TacticTypeRow({ stat, maxMissCount }: { stat: TacticTypeStats; maxMissCount: number }): JSX.Element {
+function TacticTypeRow({ stat, maxMissCount, onTrain }: { stat: TacticTypeStats; maxMissCount: number; onTrain: (type: TacticType) => void }): JSX.Element {
   const barWidth = maxMissCount > 0 ? Math.round((stat.gameMissCount / maxMissCount) * 100) : 0;
   const puzzlePct = stat.puzzleAttempts > 0 ? Math.round(stat.puzzleAccuracy * 100) : -1;
   const gapDisplay = stat.gap > 0 ? `${Math.round(stat.gap * 100)}%` : null;
 
   return (
-    <div
-      className="rounded-lg border p-3"
+    <button
+      onClick={() => onTrain(stat.tacticType)}
+      className="w-full rounded-lg border p-3 text-left transition-all hover:opacity-90"
       style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
       data-testid="tactic-type-row"
     >
@@ -168,6 +177,7 @@ function TacticTypeRow({ stat, maxMissCount }: { stat: TacticTypeStats; maxMissC
         <span className="text-xs font-medium" style={{ color: 'var(--color-error)' }}>
           {stat.gameMissCount} missed
         </span>
+        <ChevronRight size={14} style={{ color: 'var(--color-text-muted)' }} />
       </div>
 
       {/* Miss count bar */}
@@ -190,7 +200,7 @@ function TacticTypeRow({ stat, maxMissCount }: { stat: TacticTypeStats; maxMissC
           <span>{stat.puzzleAttempts} puzzle attempts</span>
         )}
       </div>
-    </div>
+    </button>
   );
 }
 

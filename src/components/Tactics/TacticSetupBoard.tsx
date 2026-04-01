@@ -31,7 +31,6 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
 
   const solutionMoves = puzzle.solutionMoves.split(' ').filter(Boolean);
   const tacticMoves = puzzle.tacticMoves.split(' ').filter(Boolean);
-  const allMoves = [...solutionMoves, ...tacticMoves];
   const isPlayerTurn = moveIndex % 2 === 0; // Player moves on even indices
 
   // Determine board orientation
@@ -102,7 +101,8 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     if (!expectedMove) return false;
 
     const expected = parseUciMove(expectedMove);
-    const promotion = piece[1]?.toLowerCase() === 'p' &&
+    const pieceChar = piece.length > 1 ? piece[1].toLowerCase() : '';
+    const promotion = pieceChar === 'p' &&
       (targetSquare[1] === '8' || targetSquare[1] === '1')
       ? 'q'
       : undefined;
@@ -166,7 +166,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
         <Chessboard
           position={fen}
           boardOrientation={orientation}
-          onPieceDrop={(s, t, p) => handleDrop(s, t, p)}
+          onPieceDrop={(s: string, t: string, p: string) => handleDrop(s, t, p)}
           arePiecesDraggable={boardState === 'thinking' && isPlayerTurn}
           animationDuration={300}
           customDarkSquareStyle={{ backgroundColor: '#779952' }}
