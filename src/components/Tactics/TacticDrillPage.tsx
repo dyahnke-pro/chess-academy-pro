@@ -134,16 +134,40 @@ export function TacticDrillPage(): JSX.Element {
   const playContextSequence = useCallback(async (moves: ContextMove[], item: TacticDrillItem): Promise<void> => {
     contextCancelledRef.current = false;
 
-    // Accelerating replay: zip through the opening, decelerate into the critical zone
-    // Last 4 moves before the tactic get progressively slower
-    const FAST = 150;
-    const APPROACH = [310, 440, 625, 875]; // last 4 moves decelerate
+    // Three-zone pacing based on cognitive science:
+    // - Opening (first 12 moves): 800ms — familiar patterns, fast chunking
+    // - Standard play: 1200ms — default for 1200-1500 rated players
+    // - Critical zone (last 5): 2000ms — builds tactical pattern in working memory
+    // +200ms on captures (board texture change needs extra processing)
+    // Sources: De Groot chunking, Chase & Simon, Reingold eye-tracking
+    const OPENING_ZONE = 12;
+    const CRITICAL_ZONE = 5;
+    const OPENING_SPEED = 800;
+    const STANDARD_SPEED = 1200;
+    const CRITICAL_SPEED = 2000;
+    const CAPTURE_BONUS = 200;
 
     for (let i = 0; i < moves.length; i++) {
       if (isCancelled()) return;
       setContextStep(i + 1);
+
       const remaining = moves.length - 1 - i;
-      const delay = remaining < APPROACH.length ? APPROACH[APPROACH.length - 1 - remaining] : FAST;
+      const isCapture = moves[i].san.includes('x');
+      let delay: number;
+
+      if (remaining < CRITICAL_ZONE) {
+        // Last 5 moves — slow, deliberate
+        delay = CRITICAL_SPEED;
+      } else if (i < OPENING_ZONE) {
+        // Opening theory — brisk but readable
+        delay = OPENING_SPEED;
+      } else {
+        // Standard middlegame
+        delay = STANDARD_SPEED;
+      }
+
+      if (isCapture) delay += CAPTURE_BONUS;
+
       await new Promise<void>((r) => { setTimeout(r, delay); });
       if (isCancelled()) return;
     }
