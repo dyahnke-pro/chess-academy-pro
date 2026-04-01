@@ -80,21 +80,22 @@ ${evalShift !== null ? `Eval change: ${Number(evalShift) >= 0 ? '+' : ''}${evalS
 ${lastMove.bestMove ? `Engine's best was: ${lastMove.bestMove}` : ''}`;
   }
 
-  return `VOICE CHAT — The student is speaking to you via microphone.
-The student is playing ${playerLabel}. The opponent (computer) is ${opponentColor}.
-Your responses will be spoken aloud, so follow these rules strictly:
+  return `VOICE CHAT — You are a chess coach playing a live game against a student.
+YOU are playing as ${opponentColor}. The student is playing as ${playerLabel}.
+You are both the opponent AND the coach — you make the ${opponentColor} moves, and you also answer the student's questions about the game.
 
-1. When the student asks what to play: ALWAYS name the specific move from the engine analysis. Say it in plain English like "move your knight to f3". NEVER give vague advice without naming a concrete move.
-2. When the student asks about a move that was played: use the [Last Move Played] data below. Say whether it was good, an inaccuracy, or a mistake, and cite the eval change. Remember: "you" = the student (${playerLabel}), "opponent" = the computer (${opponentColor}).
+The student is speaking via microphone. Your responses are spoken aloud, so:
+1. When the student asks what to play: ALWAYS name the specific move from the engine analysis in plain English ("move your knight to f3"). No vague advice.
+2. When the student asks about a move (yours or theirs): use the [Last Move Played] data. Say if it was good/inaccuracy/mistake and why.
 3. Keep responses to 1-2 sentences. Be direct.
-4. Use spoken-friendly language: say "knight to f3" not "Nf3", "queen to d7" not "Qd7", "castle kingside" not "O-O".
-5. ALWAYS base your advice on the engine analysis below. NEVER suggest moves from your own chess knowledge — LLMs are unreliable at chess tactics.
-6. The engine analysis shows the best moves for the side to move. Do NOT confuse the student's pieces with the opponent's pieces.
+4. Say "knight to f3" not "Nf3", "castle kingside" not "O-O".
+5. Base advice ONLY on the engine analysis below — never guess about positions.
+6. You know this game — you played the ${opponentColor} pieces. Own your moves when asked about them ("I played queen to d6 because...").
 
 [Current Position]
 FEN: ${fen}
 ${pgn ? `PGN: ${pgn}` : ''}
-Student plays: ${playerLabel}
+You play: ${opponentColor} | Student plays: ${playerLabel}
 Turn: ${turnLabel} to move
 ${engineBlock}
 ${lastMoveBlock}`;
@@ -207,32 +208,29 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
     const systemAddition = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
 
-    // Stream small word groups to speech as tokens arrive.
-    // First chunk calls speakForced (cancels previous), rest queue naturally.
-    const WORDS_PER_CHUNK = 4;
-    let wordBuffer: string[] = [];
-    let isFirstChunk = true;
+    // Stream sentences to speech as they arrive — speak starts on first sentence,
+    // subsequent sentences queue without canceling, so speech finishes ~when tokens do.
+    let sentenceBuffer = '';
+    let isFirstSentence = true;
 
-    const flushWords = (): void => {
-      if (wordBuffer.length === 0) return;
-      const text = wordBuffer.join(' ');
-      wordBuffer = [];
-      if (isFirstChunk) {
-        void voiceService.speakForced(text);
-        isFirstChunk = false;
+    const flushSentence = (sentence: string): void => {
+      const trimmed = sentence.trim();
+      if (!trimmed) return;
+      if (isFirstSentence) {
+        void voiceService.speakForced(trimmed);
+        isFirstSentence = false;
       } else {
-        voiceService.speakQueuedForced(text);
+        voiceService.speakQueuedForced(trimmed);
       }
     };
 
     const onChunk = (chunk: string): void => {
-      // Tokens may contain partial words or multiple words
-      const words = chunk.split(/\s+/).filter(Boolean);
-      for (const word of words) {
-        wordBuffer.push(word);
-        if (wordBuffer.length >= WORDS_PER_CHUNK) {
-          flushWords();
-        }
+      sentenceBuffer += chunk;
+      // Split on sentence-ending punctuation followed by a space or end
+      const match = sentenceBuffer.match(/^(.*?[.!?])\s+(.*)$/s);
+      if (match) {
+        flushSentence(match[1]);
+        sentenceBuffer = match[2];
       }
     };
 
@@ -244,8 +242,8 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       150, // Low token limit — voice needs 1-2 sentences, not paragraphs
     );
 
-    // Flush any remaining words
-    flushWords();
+    // Flush any remaining text
+    flushSentence(sentenceBuffer);
 
     const assistantMsg: ChatMessage = {
       id: `voice-${Date.now()}-resp`,
