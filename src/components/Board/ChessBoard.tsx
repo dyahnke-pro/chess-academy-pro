@@ -234,7 +234,7 @@ export function ChessBoard({
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
-  const hasControls = showFlipButton || showUndoButton || showResetButton;
+  const hasControls = showFlipButton || showUndoButton || showResetButton || showVoiceMic;
 
   return (
     <div
@@ -308,13 +308,6 @@ export function ChessBoard({
             />
           )}
           {/* Voice chat mic — bottom-right of the board */}
-          {showVoiceMic && (
-            <VoiceChatMic
-              fen={game.position}
-              pgn={pgnForChat}
-              turn={game.turn}
-            />
-          )}
         </div>
       </div>
 
@@ -356,6 +349,13 @@ export function ChessBoard({
               <RotateCcw size={14} />
               <span>Flip</span>
             </button>
+          )}
+          {showVoiceMic && (
+            <VoiceChatMic
+              fen={game.position}
+              pgn={pgnForChat}
+              turn={game.turn}
+            />
           )}
         </div>
       )}

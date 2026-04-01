@@ -26,16 +26,18 @@ function positionToFen(pos: BoardPosition): string {
 }
 
 /**
- * Wraps any board element and overlays the VoiceChatMic at the bottom-right.
+ * Wraps any board element and places the VoiceChatMic below it.
  * Use this around raw `<Chessboard>` components that don't go through the
  * custom `ChessBoard` wrapper (which has the mic built in).
  */
 export function BoardVoiceOverlay({ children, fen, pgn, turn, className, ...rest }: BoardVoiceOverlayProps): JSX.Element {
   const fenStr = positionToFen(fen);
   return (
-    <div className={`relative ${className ?? ''}`} {...rest}>
+    <div className={`flex flex-col ${className ?? ''}`} {...rest}>
       {children}
-      <VoiceChatMic fen={fenStr} pgn={pgn} turn={turn} />
+      <div className="flex justify-end mt-2">
+        <VoiceChatMic fen={fenStr} pgn={pgn} turn={turn} />
+      </div>
     </div>
   );
 }

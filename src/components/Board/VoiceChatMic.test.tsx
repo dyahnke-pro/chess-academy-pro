@@ -20,9 +20,10 @@ vi.mock('../../services/coachApi', () => ({
 }));
 
 // Mock voiceService
+const mockSpeak = vi.fn();
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
-    speak: vi.fn(),
+    speak: (text: string): void => { mockSpeak(text); },
   },
 }));
 
@@ -30,29 +31,17 @@ vi.mock('../../services/voiceService', () => ({
 const mockOnResult = vi.fn();
 const mockStartListening = vi.fn(() => true);
 const mockStopListening = vi.fn();
-const mockIsListening = vi.fn(() => false);
 
 vi.mock('../../services/voiceInputService', () => ({
   voiceInputService: {
     isSupported: () => true,
     startListening: (): boolean => mockStartListening(),
     stopListening: (): void => { mockStopListening(); },
-    isListening: (): boolean => mockIsListening(),
+    isListening: (): boolean => false,
     onResult: (handler: (text: string) => void) => {
       mockOnResult(handler);
     },
   },
-}));
-
-// Mock appStore
-vi.mock('../../stores/appStore', () => ({
-  useAppStore: Object.assign(
-    (selector: (state: Record<string, unknown>) => unknown) =>
-      selector({ coachVoiceOn: false }),
-    {
-      getState: () => ({ coachVoiceOn: false }),
-    },
-  ),
 }));
 
 const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
@@ -62,14 +51,11 @@ describe('VoiceChatMic', () => {
     vi.clearAllMocks();
   });
 
-  it('renders the mic button', () => {
+  it('renders the mic button with Ask label', () => {
     render(<VoiceChatMic fen={DEFAULT_FEN} />);
-    expect(screen.getByTestId('voice-chat-mic-btn')).toBeInTheDocument();
-  });
-
-  it('renders the speak toggle button', () => {
-    render(<VoiceChatMic fen={DEFAULT_FEN} />);
-    expect(screen.getByTestId('voice-chat-speak-toggle')).toBeInTheDocument();
+    const btn = screen.getByTestId('voice-chat-mic-btn');
+    expect(btn).toBeInTheDocument();
+    expect(btn).toHaveTextContent('Ask');
   });
 
   it('starts listening when mic button is clicked', () => {
@@ -85,7 +71,7 @@ describe('VoiceChatMic', () => {
     fireEvent.click(screen.getByTestId('voice-chat-mic-btn'));
     expect(mockStartListening).toHaveBeenCalled();
 
-    // Stop listening
+    // Stop listening (button now shows "Stop")
     fireEvent.click(screen.getByTestId('voice-chat-mic-btn'));
     expect(mockStopListening).toHaveBeenCalled();
   });
@@ -93,10 +79,7 @@ describe('VoiceChatMic', () => {
   it('sends transcript to coach and shows response bubble', async () => {
     render(<VoiceChatMic fen={DEFAULT_FEN} />);
 
-    // Get the registered handler
     const handler = mockOnResult.mock.calls[0][0] as (text: string) => void;
-
-    // Simulate a voice result
     handler('What should I play here?');
 
     await waitFor(() => {
@@ -106,6 +89,19 @@ describe('VoiceChatMic', () => {
     await waitFor(() => {
       expect(screen.getByText(/solid opening move/)).toBeInTheDocument();
     });
+  });
+
+  it('always speaks the LLM response aloud', async () => {
+    render(<VoiceChatMic fen={DEFAULT_FEN} />);
+
+    const handler = mockOnResult.mock.calls[0][0] as (text: string) => void;
+    handler('What should I play here?');
+
+    await waitFor(() => {
+      expect(screen.getByText(/solid opening move/)).toBeInTheDocument();
+    });
+
+    expect(mockSpeak).toHaveBeenCalled();
   });
 
   it('closes the response bubble when close button is clicked', async () => {
@@ -123,21 +119,5 @@ describe('VoiceChatMic', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('voice-chat-bubble')).not.toBeInTheDocument();
     });
-  });
-
-  it('toggles speak enabled state', () => {
-    render(<VoiceChatMic fen={DEFAULT_FEN} />);
-    const toggleBtn = screen.getByTestId('voice-chat-speak-toggle');
-
-    // Initially muted (coachVoiceOn is false in mock)
-    expect(toggleBtn).toHaveAttribute('aria-label', 'Enable coach voice');
-
-    // Toggle on
-    fireEvent.click(toggleBtn);
-    expect(toggleBtn).toHaveAttribute('aria-label', 'Mute coach voice');
-
-    // Toggle off
-    fireEvent.click(toggleBtn);
-    expect(toggleBtn).toHaveAttribute('aria-label', 'Enable coach voice');
   });
 });

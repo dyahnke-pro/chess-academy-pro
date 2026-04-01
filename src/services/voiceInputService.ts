@@ -52,7 +52,8 @@ class VoiceInputService {
   }
 
   startListening(): boolean {
-    if (!this.isSupported() || this.listening) return false;
+    if (!this.isSupported()) return false;
+    if (this.listening) return true;
 
     const win = window as unknown as Record<string, unknown>;
     const SpeechRecognitionClass = (
