@@ -6,6 +6,96 @@ import { SYSTEM_PROMPT, buildChessContextMessage } from './coachPrompts';
 import { recordApiUsage } from './coachCostService';
 import type { CoachTask, CoachContext, AiProvider } from '../types';
 
+// ─── Proxy Mode ─────────────────────────────────────────────────────────────
+//
+// When the user has a Pro subscription and no BYOK keys, coach requests go
+// through a Supabase Edge Function that holds the API keys server-side.
+// The proxy URL is configured via VITE_COACH_PROXY_URL env var.
+
+const COACH_PROXY_URL = import.meta.env.VITE_COACH_PROXY_URL as string | undefined;
+
+type CoachApiMode = 'byok' | 'proxy';
+
+function getCoachApiMode(): CoachApiMode {
+  // Proxy mode when a proxy URL is configured and we'll check for BYOK keys
+  // in getProviderConfig — if no keys, we fall through to proxy
+  return COACH_PROXY_URL ? 'proxy' : 'byok';
+}
+
+async function callProxyStream(
+  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
+  maxTokens: number,
+  onStream: (chunk: string) => void,
+): Promise<string> {
+  if (!COACH_PROXY_URL) {
+    throw new Error('Coach proxy URL not configured');
+  }
+
+  const response = await fetch(`${COACH_PROXY_URL}/coach`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages,
+      max_tokens: maxTokens,
+      // TODO: Add receipt and device_id when StoreKit is integrated
+      receipt: '',
+      device_id: '',
+    }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`Proxy error (${response.status}): ${errorBody}`);
+  }
+
+  if (!response.body) {
+    const text = await response.text();
+    onStream(text);
+    return text;
+  }
+
+  let fullText = '';
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const chunk = decoder.decode(value, { stream: true });
+    fullText += chunk;
+    onStream(chunk);
+  }
+
+  return fullText;
+}
+
+async function callProxy(
+  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
+  maxTokens: number,
+): Promise<string> {
+  if (!COACH_PROXY_URL) {
+    throw new Error('Coach proxy URL not configured');
+  }
+
+  const response = await fetch(`${COACH_PROXY_URL}/coach`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages,
+      max_tokens: maxTokens,
+      receipt: '',
+      device_id: '',
+    }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`Proxy error (${response.status}): ${errorBody}`);
+  }
+
+  return await response.text();
+}
+
 const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   move_commentary:         'deepseek-chat',
   hint:                    'deepseek-chat',
@@ -298,27 +388,47 @@ export async function getCoachChatResponse(
   onStream?: (chunk: string) => void,
 ): Promise<string> {
   const config = await getProviderConfig();
-  if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
-
   const systemPrompt = SYSTEM_PROMPT + '\n\n' + systemPromptAddition;
 
-  try {
-    return await callChatWithConfig(config, messages, systemPrompt, onStream);
-  } catch (error) {
-    console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
-    const fallback = getFallbackConfig(config.provider);
-    if (fallback) {
-      try {
-        return await callChatWithConfig(fallback, messages, systemPrompt, onStream);
-      } catch (fallbackError) {
-        console.error('[CoachAPI] Fallback also failed:', fallbackError);
-        const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
-        return `⚠️ Coach error: ${errMsg}`;
+  // BYOK path — user has their own API keys
+  if (config) {
+    try {
+      return await callChatWithConfig(config, messages, systemPrompt, onStream);
+    } catch (error) {
+      console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
+      const fallback = getFallbackConfig(config.provider);
+      if (fallback) {
+        try {
+          return await callChatWithConfig(fallback, messages, systemPrompt, onStream);
+        } catch (fallbackError) {
+          console.error('[CoachAPI] Fallback also failed:', fallbackError);
+          const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
+          return `⚠️ Coach error: ${errMsg}`;
+        }
       }
+      const errMsg = error instanceof Error ? error.message : String(error);
+      return `⚠️ Coach error: ${errMsg}`;
     }
-    const errMsg = error instanceof Error ? error.message : String(error);
-    return `⚠️ Coach error: ${errMsg}`;
   }
+
+  // Proxy path — Pro subscription, server-side API keys
+  if (getCoachApiMode() === 'proxy') {
+    try {
+      const proxyMessages = [
+        { role: 'system' as const, content: systemPrompt },
+        ...messages,
+      ];
+      if (onStream) {
+        return await callProxyStream(proxyMessages, 1024, onStream);
+      }
+      return await callProxy(proxyMessages, 1024);
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      return `⚠️ Coach error: ${errMsg}`;
+    }
+  }
+
+  return '⚠️ No API key configured. Go to Settings to add your API key, or upgrade to Pro.';
 }
 
 async function callCommentaryWithConfig(
@@ -354,23 +464,42 @@ export async function getCoachCommentary(
   onStream?: (chunk: string) => void,
 ): Promise<string> {
   const config = await getProviderConfig();
-  if (!config) return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
-
   const userMessage = buildChessContextMessage(context);
 
-  try {
-    return await callCommentaryWithConfig(config, task, userMessage, onStream);
-  } catch (error) {
-    console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
-    const fallback = getFallbackConfig(config.provider);
-    if (fallback) {
-      try {
-        return await callCommentaryWithConfig(fallback, task, userMessage, onStream);
-      } catch (fallbackError) {
-        console.error('[CoachAPI] Fallback also failed:', fallbackError);
-        return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
+  // BYOK path
+  if (config) {
+    try {
+      return await callCommentaryWithConfig(config, task, userMessage, onStream);
+    } catch (error) {
+      console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
+      const fallback = getFallbackConfig(config.provider);
+      if (fallback) {
+        try {
+          return await callCommentaryWithConfig(fallback, task, userMessage, onStream);
+        } catch (fallbackError) {
+          console.error('[CoachAPI] Fallback also failed:', fallbackError);
+          return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
+        }
       }
+      return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
     }
-    return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
   }
+
+  // Proxy path
+  if (getCoachApiMode() === 'proxy') {
+    try {
+      const proxyMessages = [
+        { role: 'system' as const, content: SYSTEM_PROMPT },
+        { role: 'user' as const, content: userMessage },
+      ];
+      if (onStream) {
+        return await callProxyStream(proxyMessages, 1024, onStream);
+      }
+      return await callProxy(proxyMessages, 1024);
+    } catch {
+      return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
+    }
+  }
+
+  return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
 }

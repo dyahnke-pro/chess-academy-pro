@@ -62,6 +62,8 @@ import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
 import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
 import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
 import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
+import { PaywallPage } from './components/Subscription/PaywallPage';
+import { ProRoute } from './components/Subscription/ProRoute';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -146,13 +148,14 @@ export function App(): JSX.Element {
           <Route path="/tactics/setup" element={<ErrorBoundary><TacticSetupPage /></ErrorBoundary>} />
           <Route path="/tactics/create" element={<ErrorBoundary><TacticCreatePage /></ErrorBoundary>} />
           <Route path="/play" element={<ErrorBoundary><GamesPage /></ErrorBoundary>} />
-          <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
-          <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
-          <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
-          <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
-          <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
-          <Route path="/weaknesses" element={<ErrorBoundary><CoachWeaknessReport /></ErrorBoundary>} />
-          <Route path="/coach/report" element={<ErrorBoundary><CoachWeaknessReport /></ErrorBoundary>} />
+          <Route path="/coach" element={<ErrorBoundary><ProRoute pathname="/coach"><CoachPage /></ProRoute></ErrorBoundary>} />
+          <Route path="/coach/play" element={<ErrorBoundary><ProRoute pathname="/coach/play"><CoachGamePage /></ProRoute></ErrorBoundary>} />
+          <Route path="/coach/chat" element={<ErrorBoundary><ProRoute pathname="/coach/chat"><CoachChatPage /></ProRoute></ErrorBoundary>} />
+          <Route path="/coach/analyse" element={<ErrorBoundary><ProRoute pathname="/coach/analyse"><CoachAnalysePage /></ProRoute></ErrorBoundary>} />
+          <Route path="/coach/plan" element={<ErrorBoundary><ProRoute pathname="/coach/plan"><CoachSessionPlanPage /></ProRoute></ErrorBoundary>} />
+          <Route path="/weaknesses" element={<ErrorBoundary><ProRoute pathname="/weaknesses"><CoachWeaknessReport /></ProRoute></ErrorBoundary>} />
+          <Route path="/coach/report" element={<ErrorBoundary><ProRoute pathname="/weaknesses"><CoachWeaknessReport /></ProRoute></ErrorBoundary>} />
+          <Route path="/upgrade" element={<ErrorBoundary><PaywallPage /></ErrorBoundary>} />
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           <Route path="/games" element={<ErrorBoundary><GameDatabasePage /></ErrorBoundary>} />
           <Route path="/games/import" element={<ErrorBoundary><ImportPage /></ErrorBoundary>} />
