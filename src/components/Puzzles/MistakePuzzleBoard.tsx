@@ -140,6 +140,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const [replayIndex, setReplayIndex] = useState(-1);
   const replayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const badge = CLASSIFICATION_BADGE[puzzle.classification];
   const totalMoves = movesRef.current.length;
@@ -251,6 +252,10 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       if (outroTimerRef.current) {
         clearTimeout(outroTimerRef.current);
         outroTimerRef.current = null;
+      }
+      if (completionTimerRef.current) {
+        clearTimeout(completionTimerRef.current);
+        completionTimerRef.current = null;
       }
       voiceService.stop();
     };
@@ -389,14 +394,20 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
-        // Speak outro after a brief delay so celebration sound plays first
+        // Speak outro after celebration sound, then signal completion.
+        // Delay onComplete so the parent doesn't advance to the next
+        // puzzle while the outro is still playing.
         if (puzzle.narration.outro) {
           outroTimerRef.current = setTimeout(() => {
             setSubtitle(puzzle.narration.outro);
             void voiceService.speak(puzzle.narration.outro);
           }, 800);
+          completionTimerRef.current = setTimeout(() => {
+            onComplete(solvedCleanly);
+          }, 4000);
+        } else {
+          onComplete(solvedCleanly);
         }
-        onComplete(solvedCleanly);
         return;
       }
 

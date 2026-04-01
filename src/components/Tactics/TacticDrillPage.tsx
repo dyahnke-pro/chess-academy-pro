@@ -240,9 +240,21 @@ export function TacticDrillPage(): JSX.Element {
     setPhase('solving');
   }, []);
 
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cleanup advance timer on unmount
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
+    };
+  }, []);
+
   const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
     const item = queue.at(currentIndex);
     if (!item) return;
+
+    // Stop any lingering speech from the puzzle board
+    voiceService.stop();
 
     // Narrate result
     if (correct) {
@@ -267,14 +279,17 @@ export function TacticDrillPage(): JSX.Element {
       setActiveProfile({ ...activeProfile, puzzleRating: newRating });
     }
 
-    // Next puzzle or summary
-    const nextIndex = currentIndex + 1;
-    if (nextIndex >= queue.length) {
-      setPhase('summary');
-    } else {
-      setCurrentIndex(nextIndex);
-      await prepareContext(queue[nextIndex]);
-    }
+    // Wait for the result narration to finish before advancing
+    // so the next puzzle's intro doesn't overlap
+    advanceTimerRef.current = setTimeout(async () => {
+      const nextIndex = currentIndex + 1;
+      if (nextIndex >= queue.length) {
+        setPhase('summary');
+      } else {
+        setCurrentIndex(nextIndex);
+        await prepareContext(queue[nextIndex]);
+      }
+    }, 3000);
   }, [queue, currentIndex, activeProfile, setActiveProfile]);
 
   const currentItem = queue.at(currentIndex);

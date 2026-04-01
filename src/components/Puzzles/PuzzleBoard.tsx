@@ -36,6 +36,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   const [boardKey, setBoardKey] = useState(0);
   const hasMadeMistakeRef = useRef(false);
   const wrongAttemptsRef = useRef(0);
+  const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
@@ -110,6 +111,10 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
 
     return () => {
       clearTimeout(timer);
+      if (completionTimerRef.current) {
+        clearTimeout(completionTimerRef.current);
+        completionTimerRef.current = null;
+      }
       voiceService.stop();
     };
   }, [puzzle, playMoveSound, resetHints]);
@@ -141,7 +146,11 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
-        onComplete(solvedCleanly);
+        // Delay onComplete so the "Puzzle solved!" voice feedback
+        // finishes before the parent advances to the next puzzle
+        completionTimerRef.current = setTimeout(() => {
+          onComplete(solvedCleanly);
+        }, 2500);
         return;
       }
 
