@@ -9,7 +9,7 @@ import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { EvalBar } from './EvalBar';
 import { VoiceChatMic } from './VoiceChatMic';
-import type { EngineSnapshot } from './VoiceChatMic';
+import type { EngineSnapshot, LastMoveContext } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
@@ -64,6 +64,8 @@ export interface ChessBoardProps {
   onOpeningRequest?: (openingName: string) => void;
   /** Pre-computed engine snapshot passed to voice chat (avoids re-running Stockfish). */
   voiceEngineSnapshot?: EngineSnapshot | null;
+  /** Context about the last move played, for voice chat move quality questions. */
+  voiceLastMoveContext?: LastMoveContext | null;
   /** Called when voice mic listening/streaming state changes. */
   onVoiceActiveChange?: (active: boolean) => void;
 }
@@ -101,6 +103,7 @@ export function ChessBoard({
   pgnForChat,
   onOpeningRequest,
   voiceEngineSnapshot,
+  voiceLastMoveContext,
   onVoiceActiveChange,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
@@ -367,6 +370,7 @@ export function ChessBoard({
               turn={game.turn}
               onOpeningRequest={onOpeningRequest}
               engineSnapshot={voiceEngineSnapshot}
+              lastMoveContext={voiceLastMoveContext}
               onListeningChange={onVoiceActiveChange}
             />
           )}

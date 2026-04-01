@@ -17,6 +17,15 @@ export interface EngineSnapshot {
   topLines: { moves: string[]; evaluation: number; mate: number | null }[];
 }
 
+export interface LastMoveContext {
+  san: string;
+  player: 'you' | 'opponent';
+  classification: string | null;
+  evalBefore: number | null;
+  evalAfter: number | null;
+  bestMove: string | null;
+}
+
 interface VoiceChatMicProps {
   fen: string;
   pgn?: string;
@@ -25,6 +34,8 @@ interface VoiceChatMicProps {
   onOpeningRequest?: (openingName: string) => void;
   /** Pre-computed engine snapshot (avoids running Stockfish again). */
   engineSnapshot?: EngineSnapshot | null;
+  /** Context about the last move played (for "was that an inaccuracy?" questions). */
+  lastMoveContext?: LastMoveContext | null;
   /** Called when listening state changes (true = mic active). */
   onListeningChange?: (listening: boolean) => void;
 }
@@ -37,6 +48,7 @@ function buildSystemAddition(
   pgn: string | undefined,
   turn: string | undefined,
   engineData: EngineSnapshot | null,
+  lastMove: LastMoveContext | null | undefined,
 ): string {
   const turnLabel = turn === 'b' ? 'Black' : 'White';
 
@@ -51,23 +63,33 @@ function buildSystemAddition(
       ].join('\n')
     : '';
 
+  let lastMoveBlock = '';
+  if (lastMove) {
+    const evalShift = lastMove.evalBefore !== null && lastMove.evalAfter !== null
+      ? ((lastMove.evalAfter - lastMove.evalBefore) / 100).toFixed(1)
+      : null;
+    lastMoveBlock = `\n[Last Move Played]
+Move: ${lastMove.san} (by ${lastMove.player})
+${lastMove.classification ? `Classification: ${lastMove.classification}` : ''}
+${evalShift !== null ? `Eval change: ${Number(evalShift) >= 0 ? '+' : ''}${evalShift} pawns` : ''}
+${lastMove.bestMove ? `Engine's best was: ${lastMove.bestMove}` : ''}`;
+  }
+
   return `VOICE CHAT — The student is speaking to you via microphone.
 Your responses will be spoken aloud, so follow these rules strictly:
 
-1. ALWAYS name the specific move the student should play. Say it in plain English like "move your knight to f3" or "push your pawn to e4". NEVER give vague advice like "develop your pieces" without naming a concrete move.
-2. Keep responses to 1-2 sentences. Be direct — say the move first, then a brief reason.
-3. Use spoken-friendly language: say "knight to f3" not "Nf3", "queen to d7" not "Qd7", "castle kingside" not "O-O".
-4. ALWAYS base your advice on the engine analysis below. NEVER suggest moves from your own chess knowledge — LLMs are unreliable at chess tactics.
-5. If the student asks about a specific move, compare it to the engine's best move.
+1. When the student asks what to play: ALWAYS name the specific move. Say it in plain English like "move your knight to f3" or "push your pawn to e4". NEVER give vague advice without naming a concrete move.
+2. When the student asks about a move that was played (theirs or the opponent's): use the Last Move data below to say whether it was good, an inaccuracy, or a mistake, citing the eval change and what the engine preferred.
+3. Keep responses to 1-2 sentences. Be direct.
+4. Use spoken-friendly language: say "knight to f3" not "Nf3", "queen to d7" not "Qd7", "castle kingside" not "O-O".
+5. ALWAYS base your advice on the engine analysis below. NEVER suggest moves from your own chess knowledge — LLMs are unreliable at chess tactics.
 
 [Current Position]
 FEN: ${fen}
 ${pgn ? `PGN: ${pgn}` : ''}
 Turn: ${turnLabel} to move
 ${engineBlock}
-
-Example good response: "Your best move is knight to f3, attacking the center and preparing to castle."
-Example bad response: "You should focus on developing your pieces and controlling the center."`;
+${lastMoveBlock}`;
 }
 
 /**
@@ -113,7 +135,7 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot, onListeningChange }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -195,7 +217,7 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot,
 
     const recent = currentMessages.slice(-(MAX_HISTORY_PAIRS * 2));
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
-    const systemAddition = buildSystemAddition(fen, pgn, turn, engineData);
+    const systemAddition = buildSystemAddition(fen, pgn, turn, engineData, lastMoveContext);
 
     // Collect full response, then speak once (avoids speech cancellation from rapid calls)
     const response = await getCoachChatResponse(
@@ -217,7 +239,7 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot,
     };
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
-  }, [fen, pgn, turn, engineSnapshot, onOpeningRequest]);
+  }, [fen, pgn, turn, engineSnapshot, lastMoveContext, onOpeningRequest]);
 
   const handleMicToggle = useCallback(() => {
     if (!voiceInputService.isSupported()) {

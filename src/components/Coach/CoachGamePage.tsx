@@ -7,7 +7,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useCoachTips } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
-import type { EngineSnapshot } from '../Board/VoiceChatMic';
+import type { EngineSnapshot, LastMoveContext } from '../Board/VoiceChatMic';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -298,6 +298,29 @@ export function CoachGamePage(): JSX.Element {
       })),
     };
   }, [latestTopLines, latestEval, latestIsMate, latestMateIn, game.fen]);
+
+  // Last move context for voice chat (so users can ask "was that an inaccuracy?")
+  const voiceLastMoveContext: LastMoveContext | null = useMemo(() => {
+    if (gameState.moves.length === 0) return null;
+    const last = gameState.moves[gameState.moves.length - 1];
+    // bestMove is UCI from Stockfish for the pre-move position
+    // Use previous move's FEN (= pre-move FEN) for conversion
+    const preFen = gameState.moves.length >= 2
+      ? gameState.moves[gameState.moves.length - 2].fen
+      : undefined;
+    let bestMoveSan: string | null = null;
+    if (last.bestMove && preFen) {
+      try { bestMoveSan = uciMoveToSan(last.bestMove, preFen); } catch { /* skip */ }
+    }
+    return {
+      san: last.san,
+      player: last.isCoachMove ? 'opponent' : 'you',
+      classification: last.classification,
+      evalBefore: last.preMoveEval,
+      evalAfter: last.evaluation,
+      bestMove: bestMoveSan,
+    };
+  }, [gameState.moves]);
 
   // 3-tier visual hint system (Stockfish-powered, no knownMove)
   const isPlayersTurn =
@@ -1231,6 +1254,7 @@ export function CoachGamePage(): JSX.Element {
               ghostMove={hintState.ghostMove}
               onOpeningRequest={handleOpeningRequest}
               voiceEngineSnapshot={voiceEngineSnapshot}
+              voiceLastMoveContext={voiceLastMoveContext}
               onVoiceActiveChange={setVoiceActive}
             />
           </div>
