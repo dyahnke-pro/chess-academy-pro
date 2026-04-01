@@ -8,6 +8,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { EvalBar } from './EvalBar';
+import { VoiceChatMic } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
@@ -54,6 +55,10 @@ export interface ChessBoardProps {
   ghostMove?: GhostMoveData | null;
   /** Classification icon overlay on a square (Chess.com-style badge). */
   classificationOverlay?: { square: string; symbol: string; color: string } | null;
+  /** Show the voice-chat microphone button below the board. Defaults to true. */
+  showVoiceMic?: boolean;
+  /** PGN string passed to voice chat for context. */
+  pgnForChat?: string;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -85,6 +90,8 @@ export function ChessBoard({
   annotationHighlights,
   ghostMove,
   classificationOverlay = null,
+  showVoiceMic = true,
+  pgnForChat,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -342,6 +349,17 @@ export function ChessBoard({
               <span>Flip</span>
             </button>
           )}
+        </div>
+      )}
+
+      {/* Voice chat mic — below the board */}
+      {showVoiceMic && (
+        <div className={`flex justify-center ${hasControls ? 'mt-1' : 'mt-2'}`}>
+          <VoiceChatMic
+            fen={game.position}
+            pgn={pgnForChat}
+            turn={game.turn}
+          />
         </div>
       )}
     </div>
