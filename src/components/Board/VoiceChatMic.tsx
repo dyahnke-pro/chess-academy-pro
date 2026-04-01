@@ -57,11 +57,15 @@ function buildSystemAddition(
   const opponentColor = playerColor === 'white' ? 'Black' : 'White';
   const playerLabel = playerColor === 'white' ? 'White' : 'Black';
 
+  const isStudentTurn = (turn === 'w' && playerColor === 'white') || (turn === 'b' && playerColor === 'black');
+  const sideToMove = turn === 'b' ? 'Black' : 'White';
+
   const engineBlock = engineData
     ? [
         '\n[Engine Analysis — TRUST THIS DATA]',
-        `Best move: ${engineData.bestMove}`,
-        `Eval: ${engineData.isMate ? `Mate in ${engineData.mateIn}` : `${(engineData.evaluation / 100).toFixed(1)} pawns`}`,
+        `Side to move: ${sideToMove} (${isStudentTurn ? 'the STUDENT' : 'you, the COACH'})`,
+        `Best move for ${sideToMove}: ${engineData.bestMove}${!isStudentTurn ? ' ← this is YOUR move as coach, NOT the student\'s' : ''}`,
+        `Eval: ${engineData.isMate ? `Mate in ${engineData.mateIn}` : `${(engineData.evaluation / 100).toFixed(1)} pawns (positive = White advantage)`}`,
         ...engineData.topLines.slice(0, 3).map(
           (l, i) => `Line ${i + 1}: ${l.moves.join(' ')} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
         ),
@@ -88,12 +92,13 @@ You are both the opponent AND the coach — you make the ${opponentColor} moves,
 
 The student is speaking via microphone. Your responses are spoken aloud, so:
 1. NEVER start with filler like "Great question!", "Excellent!", "Good thinking!", etc. Jump straight to the answer.
-2. When the student asks what to play: ALWAYS name the specific move from the engine analysis in plain English ("move your knight to f3"). No vague advice.
-3. When the student asks about a move (yours or theirs): use the [Last Move Played] data. Say if it was good/inaccuracy/mistake and why.
-4. Keep responses to 1-2 sentences. Be direct. Start with the move or the assessment.
-5. Say "knight to f3" not "Nf3", "castle kingside" not "O-O".
-6. Base advice ONLY on the engine analysis below — never guess about positions.
-7. You know this game — you played the ${opponentColor} pieces. Own your moves when asked about them ("I played queen to d6 because...").
+2. When the student asks what to play: give them a move for THEIR color (${playerLabel}). Check [Engine Analysis] — if the "Side to move" is the student, use the best move directly. If the side to move is YOU (the coach), do NOT tell the student to play the engine's best move — that's YOUR next move, not theirs. Instead discuss the position or their last move.
+3. CRITICAL: Never suggest a ${opponentColor} move as the student's move. The student plays ${playerLabel} ONLY.
+4. When the student asks about a move (yours or theirs): use the [Last Move Played] data. Say if it was good/inaccuracy/mistake and why.
+5. Keep responses to 1-2 sentences. Be direct. Start with the move or the assessment.
+6. Say "knight to f3" not "Nf3", "castle kingside" not "O-O".
+7. Base advice ONLY on the engine analysis below — never guess about positions.
+8. You know this game — you played the ${opponentColor} pieces. Own your moves when asked about them ("I played queen to d6 because...").
 
 [Current Position]
 FEN: ${fen}
