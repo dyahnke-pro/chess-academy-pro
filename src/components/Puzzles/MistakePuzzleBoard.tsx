@@ -77,6 +77,8 @@ function extractReplayMoves(pgn: string, _mistakeFen: string, playerColor: 'whit
 interface MistakePuzzleBoardProps {
   puzzle: MistakePuzzle;
   onComplete: (correct: boolean) => void;
+  /** Skip the internal game replay — use when the caller already showed context */
+  skipReplayContext?: boolean;
 }
 
 const CLASSIFICATION_BADGE: Record<MistakeClassification, { label: string; symbol: string; color: string }> = {
@@ -124,7 +126,7 @@ function parseUciMoves(uci: string): { from: string; to: string; promotion?: str
   }));
 }
 
-export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardProps): JSX.Element {
+export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = false }: MistakePuzzleBoardProps): JSX.Element {
   const [state, setState] = useState<PuzzleState>('loading');
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
@@ -192,17 +194,19 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
 
     void voiceService.warmup();
 
-    // Try to load the source game for replay context
+    // Try to load the source game for replay context (skip if caller already showed it)
     const cancelledRef = { value: false };
     void (async () => {
       let steps: ReplayStep[] = [];
-      try {
-        const game = await db.games.get(puzzle.sourceGameId);
-        if (game?.pgn && !cancelledRef.value) {
-          steps = extractReplayMoves(game.pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
+      if (!skipReplayContext) {
+        try {
+          const game = await db.games.get(puzzle.sourceGameId);
+          if (game?.pgn && !cancelledRef.value) {
+            steps = extractReplayMoves(game.pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
+          }
+        } catch {
+          // No game found — skip replay
         }
-      } catch {
-        // No game found — skip replay
       }
 
       if (cancelledRef.value) return;
@@ -253,7 +257,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       }
       voiceService.stop();
     };
-  }, [puzzle, resetHints]);
+  }, [puzzle, resetHints, skipReplayContext]);
 
   // Auto-play replay moves one at a time
   useEffect(() => {

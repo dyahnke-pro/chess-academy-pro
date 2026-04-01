@@ -416,6 +416,7 @@ export function TacticDrillPage(): JSX.Element {
             <MistakePuzzleBoard
               puzzle={currentItem.originalMistake}
               onComplete={(correct) => void handleComplete(correct)}
+              skipReplayContext
             />
 
             {/* Session stats */}
