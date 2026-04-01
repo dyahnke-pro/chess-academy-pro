@@ -122,6 +122,16 @@ class VoiceService {
   }
 
   async speak(text: string): Promise<void> {
+    return this.speakInternal(text, false);
+  }
+
+  /** Speak regardless of the voiceEnabled preference.
+   *  Used by the voice-chat mic where the user explicitly opted into voice. */
+  async speakForced(text: string): Promise<void> {
+    return this.speakInternal(text, true);
+  }
+
+  private async speakInternal(text: string, force: boolean): Promise<void> {
     this.stop();
 
     const prefs = await this.loadPrefs();
@@ -131,12 +141,11 @@ class VoiceService {
       return;
     }
 
-    if (!prefs.voiceEnabled) return;
+    if (!force && !prefs.voiceEnabled) return;
 
     this.speed = prefs.voiceSpeed;
 
     // Tier 1: Amazon Polly (server-side, no API key needed in browser)
-    // Skip if Polly was already found unreachable during warmup/previous calls
     if (prefs.pollyEnabled && this.pollyAvailable) {
       const success = await this.speakPolly(text, prefs.pollyVoice);
       if (success) return;

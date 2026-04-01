@@ -22,6 +22,7 @@ const mockSpeak = vi.fn();
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: (text: string): void => { mockSpeak(text); },
+    speakForced: (text: string): void => { mockSpeak(text); },
   },
 }));
 

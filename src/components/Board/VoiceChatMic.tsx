@@ -96,13 +96,13 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
         if (sentenceEnd) {
           const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
           speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-          void voiceService.speak(sentence.trim());
+          void voiceService.speakForced(sentence.trim());
         }
       },
     );
 
     if (speechBufferRef.current.trim()) {
-      void voiceService.speak(speechBufferRef.current.trim());
+      void voiceService.speakForced(speechBufferRef.current.trim());
       speechBufferRef.current = '';
     }
 
