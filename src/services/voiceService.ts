@@ -124,18 +124,19 @@ class VoiceService {
     this.prefsCacheTime = 0;
   }
 
-  async speak(text: string): Promise<void> {
+  async speak(text: string, options?: { rate?: number }): Promise<void> {
     this.stop();
 
     const prefs = await this.loadPrefs();
     if (!prefs) {
-      this.speakFallback(text);
+      this.speakFallback(text, options?.rate);
       return;
     }
 
     if (!prefs.voiceEnabled) return;
 
-    this.speed = prefs.voiceSpeed;
+    // Use explicit rate override if provided, otherwise fall back to stored preference
+    this.speed = options?.rate ?? prefs.voiceSpeed;
 
     // Tier 1: Amazon Polly (server-side, no API key needed in browser)
     // Skip if Polly was already found unreachable during warmup/previous calls
@@ -148,7 +149,7 @@ class VoiceService {
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }
-    this.speakFallback(text);
+    this.speakFallback(text, options?.rate);
   }
 
   stop(): void {
@@ -199,8 +200,8 @@ class VoiceService {
     }
   }
 
-  private speakFallback(text: string): void {
-    speechService.speak(text, WEB_SPEECH_FALLBACK);
+  private speakFallback(text: string, rate?: number): void {
+    speechService.speak(text, { ...WEB_SPEECH_FALLBACK, ...(rate !== undefined ? { rate } : {}) });
   }
 
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {
@@ -213,6 +214,7 @@ class VoiceService {
     const audioBuffer = await ctx.decodeAudioData(buffer);
     const source = ctx.createBufferSource();
     source.buffer = audioBuffer;
+    source.playbackRate.value = this.speed;
     source.connect(ctx.destination);
 
     this.currentSource = source;

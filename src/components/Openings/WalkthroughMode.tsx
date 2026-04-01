@@ -451,6 +451,9 @@ export function WalkthroughMode({
     fast: 1.4,
   }), []);
 
+  // Current TTS rate derived from speed selection
+  const currentTtsRate = TTS_RATE[autoPlaySpeed];
+
   // Track when TTS finishes speaking — used to advance auto-play immediately
   const ttsFinishedRef = useRef<(() => void) | null>(null);
 
@@ -464,7 +467,7 @@ export function WalkthroughMode({
 
     let cancelled = false;
 
-    void voiceService.speak(ann.annotation).then(() => {
+    void voiceService.speak(ann.annotation, { rate: currentTtsRate }).then(() => {
       if (!cancelled) {
         ttsFinishedRef.current?.();
       }
@@ -474,7 +477,7 @@ export function WalkthroughMode({
       cancelled = true;
       voiceService.stop();
     };
-  }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
+  }, [voiceEnabled, currentMoveIndex, annotations, currentTtsRate]);
 
   // Clean up speech on unmount
   useEffect(() => {
@@ -531,13 +534,11 @@ export function WalkthroughMode({
     });
   }, [currentMoveIndex, expectedMoves.length]);
 
-  const cycleSpeed = useCallback(() => {
-    setAutoPlaySpeed((prev) => {
-      if (prev === 'slow') return 'normal';
-      if (prev === 'normal') return 'fast';
-      return 'slow';
-    });
-  }, []);
+  const SPEED_OPTIONS: { value: AutoPlaySpeed; label: string }[] = useMemo(() => [
+    { value: 'slow', label: '0.5x' },
+    { value: 'normal', label: '1x' },
+    { value: 'fast', label: '2x' },
+  ], []);
 
   const progress = expectedMoves.length > 0
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
@@ -638,15 +639,31 @@ export function WalkthroughMode({
             </button>
           }
           extraRight={
-            <button
-              onClick={cycleSpeed}
-              className="px-2 py-1.5 rounded-lg border text-xs font-medium text-theme-text-muted hover:bg-theme-surface transition-colors"
+            <div
+              className="flex rounded-lg border overflow-hidden"
               style={{ borderColor: 'var(--color-border)' }}
-              aria-label="Change speed"
-              data-testid="walkthrough-speed"
+              role="radiogroup"
+              aria-label="Narration speed"
+              data-testid="walkthrough-speed-toggle"
             >
-              {autoPlaySpeed === 'slow' ? '0.5x' : autoPlaySpeed === 'normal' ? '1x' : '2x'}
-            </button>
+              {SPEED_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setAutoPlaySpeed(opt.value)}
+                  className="px-2 py-1.5 text-xs font-medium transition-colors"
+                  style={{
+                    background: autoPlaySpeed === opt.value ? 'var(--color-accent)' : 'transparent',
+                    color: autoPlaySpeed === opt.value ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                  }}
+                  role="radio"
+                  aria-checked={autoPlaySpeed === opt.value}
+                  aria-label={`Speed ${opt.label}`}
+                  data-testid={`speed-${opt.value}`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           }
         />
       </div>

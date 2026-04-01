@@ -123,7 +123,7 @@ describe('WalkthroughMode', () => {
     expect(screen.getByTestId('walkthrough-mode')).toBeInTheDocument();
     expect(screen.getByText('Walkthrough: Test Opening')).toBeInTheDocument();
     expect(screen.getByTestId('walkthrough-play-pause')).toBeInTheDocument();
-    expect(screen.getByTestId('walkthrough-speed')).toBeInTheDocument();
+    expect(screen.getByTestId('walkthrough-speed-toggle')).toBeInTheDocument();
   });
 
   it('shows overview at move 0', async () => {
@@ -212,21 +212,27 @@ describe('WalkthroughMode', () => {
     });
   });
 
-  it('cycles speed on speed button click', async () => {
+  it('selects speed via toggle bar', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<WalkthroughMode opening={testOpening} onExit={onExit} />);
 
-    const speedBtn = screen.getByTestId('walkthrough-speed');
-    expect(speedBtn).toHaveTextContent('1x');
+    const toggle = screen.getByTestId('walkthrough-speed-toggle');
+    expect(toggle).toBeInTheDocument();
 
-    await user.click(speedBtn);
-    expect(speedBtn).toHaveTextContent('2x');
+    // Default is normal (1x) — check aria-checked
+    expect(screen.getByTestId('speed-normal')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('speed-slow')).toHaveAttribute('aria-checked', 'false');
+    expect(screen.getByTestId('speed-fast')).toHaveAttribute('aria-checked', 'false');
 
-    await user.click(speedBtn);
-    expect(speedBtn).toHaveTextContent('0.5x');
+    // Click fast
+    await user.click(screen.getByTestId('speed-fast'));
+    expect(screen.getByTestId('speed-fast')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('speed-normal')).toHaveAttribute('aria-checked', 'false');
 
-    await user.click(speedBtn);
-    expect(speedBtn).toHaveTextContent('1x');
+    // Click slow
+    await user.click(screen.getByTestId('speed-slow'));
+    expect(screen.getByTestId('speed-slow')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('speed-fast')).toHaveAttribute('aria-checked', 'false');
   });
 
   it('uses first/last buttons to jump to start/end', async () => {
