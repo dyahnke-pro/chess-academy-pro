@@ -9,8 +9,22 @@ function evalToWinProb(evalCp: number): number {
 }
 
 /**
+ * Convert a win-probability delta (0–1) into a per-move accuracy score (0–100).
+ * Uses an exponential decay model: small losses score high, large losses drop fast.
+ * Calibrated so that a perfect move ≈ 100 and a full collapse ≈ 0.
+ */
+function wpDeltaToAccuracy(wpDelta: number): number {
+  // 103.1668 * e^(-0.04354 * delta_pct) - 3.1668
+  // where delta_pct = wpDelta * 100 (convert 0-1 scale to 0-100 scale)
+  const raw = 103.1668 * Math.exp(-0.04354 * wpDelta * 100) - 3.1668;
+  return Math.max(0, Math.min(100, raw));
+}
+
+/**
  * Calculate accuracy scores for both players.
- * Uses a win-probability delta approach similar to chess.com's CAPS2.
+ * Uses a win-probability delta approach similar to chess.com's CAPS.
+ * The delta model penalizes centipawn losses proportionally regardless
+ * of the absolute evaluation, fixing inflated scores in winning positions.
  */
 export function calculateAccuracy(moves: CoachGameMove[]): GameAccuracy {
   let whiteAccuracySum = 0;
@@ -19,31 +33,24 @@ export function calculateAccuracy(moves: CoachGameMove[]): GameAccuracy {
   let blackCount = 0;
 
   for (const move of moves) {
-    // Skip coach moves for the opponent side, skip book moves, skip missing data
+    // Skip book moves and moves with missing eval data
     if (move.classification === 'book') continue;
     if (move.evaluation === null || move.bestMoveEval === null) continue;
     if (move.preMoveEval === null) continue;
 
     // Determine which color this move is
-    // Even moveNumber = white's move (1-indexed: 1=white, 2=black, 3=white...)
+    // Odd moveNumber = white's move (1=white, 2=black, 3=white...)
     const isWhiteMove = move.moveNumber % 2 === 1;
 
     // Win probability before and after the move, from the moving side's perspective
     const signForSide = isWhiteMove ? 1 : -1;
-    const winProbBest = evalToWinProb(move.bestMoveEval * signForSide);
+    const winProbBefore = evalToWinProb(move.preMoveEval * signForSide);
     const winProbAfter = evalToWinProb(move.evaluation * signForSide);
 
-    // Per-move accuracy: ratio of win probability retained vs best move
-    // If the player played the best move, accuracy = 100%
-    // If the player's move is much worse, accuracy drops toward 0%
-    let moveAccuracy: number;
-    if (winProbBest <= 0.01) {
-      // Position was already lost — any move is "accurate" since there's nothing to lose
-      moveAccuracy = 100;
-    } else {
-      // How much win probability did the player retain compared to the best move?
-      moveAccuracy = Math.max(0, Math.min(100, (winProbAfter / winProbBest) * 100));
-    }
+    // How much win probability was lost by this move?
+    const wpDelta = Math.max(0, winProbBefore - winProbAfter);
+
+    const moveAccuracy = wpDeltaToAccuracy(wpDelta);
 
     if (isWhiteMove) {
       whiteAccuracySum += moveAccuracy;
