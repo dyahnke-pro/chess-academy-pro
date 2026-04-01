@@ -14,8 +14,6 @@ import {
   drillTransition,
   drillCorrect,
   drillIncorrect,
-  describeMove,
-  isNotableMove,
 } from '../../services/tacticNarrationService';
 import { useAppStore } from '../../stores/appStore';
 import { MistakePuzzleBoard } from '../Puzzles/MistakePuzzleBoard';
@@ -135,31 +133,17 @@ export function TacticDrillPage(): JSX.Element {
 
   const playContextSequence = useCallback(async (moves: ContextMove[], item: TacticDrillItem): Promise<void> => {
     contextCancelledRef.current = false;
-    const QUIET_DELAY = 350;   // fast for non-narrated moves (board animation only)
-    const NARRATED_MIN = 400;  // minimum delay when narrating (speech will usually be longer)
+    const MOVE_DELAY = 350;
 
+    // Silent replay — just play the moves quickly
     for (let i = 0; i < moves.length; i++) {
       if (isCancelled()) return;
-
-      const move = moves[i];
       setContextStep(i + 1);
-
-      // Narrate notable moves; speed through quiet ones
-      const notable = isNotableMove(move.san, i, moves.length);
-      if (notable) {
-        const narration = describeMove(move.san, move.isWhite);
-        setSubtitle(narration);
-        const speechDone = voiceService.speak(narration);
-        const minDelay = new Promise<void>((r) => { setTimeout(r, NARRATED_MIN); });
-        await Promise.all([speechDone, minDelay]);
-      } else {
-        await new Promise<void>((r) => { setTimeout(r, QUIET_DELAY); });
-      }
-
+      await new Promise<void>((r) => { setTimeout(r, MOVE_DELAY); });
       if (isCancelled()) return;
     }
 
-    // All context moves done — narrate the transition
+    // Only speak at the transition — "Now find the fork"
     if (isCancelled()) return;
     const transition = drillTransition(item.tacticType);
     setSubtitle(transition);
