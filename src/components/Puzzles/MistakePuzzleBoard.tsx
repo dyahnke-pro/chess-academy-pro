@@ -5,6 +5,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
+import { describePositionIdea } from '../../services/mistakeNarration';
 import { db } from '../../db/schema';
 import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
@@ -343,7 +344,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     }
   }, [state, puzzle]);
 
-  // "Why?" button — explain the concept behind the best move
+  // "Why?" button — explain the concept without revealing the move
   const handleWhy = useCallback(() => {
     if (state !== 'playing' && state !== 'correct') return;
     voiceService.stop();
@@ -352,10 +353,10 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       setSubtitle(hint);
       void voiceService.speak(hint);
     } else {
-      // Fallback for old puzzles without conceptHint
-      const fallback = `The best move here is ${puzzle.bestMoveSan}. It improves your position.`;
-      setSubtitle(fallback);
-      void voiceService.speak(fallback);
+      // Generate a spoiler-free positional explanation
+      const explanation = describePositionIdea(puzzle.fen, puzzle.bestMoveSan, puzzle.gamePhase);
+      setSubtitle(explanation);
+      void voiceService.speak(explanation);
     }
   }, [state, puzzle]);
 

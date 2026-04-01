@@ -201,6 +201,24 @@ function analyzeMoveIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGam
   return idea;
 }
 
+/** Build a spoiler-free explanation of the position's key idea (no move name) */
+export function describePositionIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGamePhase): string {
+  const idea = analyzeMoveIdea(fen, bestMoveSan, gamePhase);
+
+  if (idea.isCastle) return 'King safety is critical here — think about tucking the king away and connecting the rooks.';
+  if (idea.isCheck && idea.isCapture) return 'There\'s a way to win material with a forcing move that also attacks the king.';
+  if (idea.isPromotion) return 'A pawn is ready to promote. Look for the path to get it across.';
+  if (idea.isCheck) return 'There\'s a check available that creates serious problems for your opponent.';
+  if (idea.isCapture) return 'Something is hanging — look for the material you can win.';
+  if (idea.developsPiece && idea.movesToCenter) return `Your ${idea.pieceMoved} wants a more active square — think about centralizing it with tempo.`;
+  if (idea.developsPiece) return `Think about which piece isn't in the game yet. Your ${idea.pieceMoved} needs a better square.`;
+  if (idea.movesToCenter) return 'The center is the key to this position — look for ways to strengthen your grip.';
+
+  if (gamePhase === 'endgame') return 'In this endgame, king activity and pawn advancement are everything.';
+  if (gamePhase === 'opening') return 'Focus on development, center control, and king safety.';
+  return 'Look for the move that creates the most problems for your opponent.';
+}
+
 /** Build a natural-sounding description of what the best move accomplishes */
 function describeMoveIdea(idea: MoveIdea, bestMoveSan: string): string {
   const parts: string[] = [];
@@ -237,24 +255,24 @@ function describeMoveIdea(idea: MoveIdea, bestMoveSan: string): string {
 
 const INTRO_TEMPLATES: Record<MistakeClassification, string[]> = {
   blunder: [
-    'You played {playerMove} here, but that was a blunder costing {cpText}. {ideaText}',
-    '{playerMove} was a serious mistake — you lost {cpText}. {ideaText}',
-    'Uh oh — {playerMove} dropped {cpText}. {ideaText}',
+    'You played {playerMove} here, but that was a blunder costing {cpText}. Can you find the better move?',
+    '{playerMove} was a serious mistake — you lost {cpText}. What should you have played?',
+    'Uh oh — {playerMove} dropped {cpText}. Find the right move.',
   ],
   mistake: [
-    'You played {playerMove}, but there was something significantly better — that cost {cpText}. {ideaText}',
-    '{playerMove} wasn\'t the best here, costing {cpText}. {ideaText}',
-    'With {playerMove} you gave up {cpText}. {ideaText}',
+    'You played {playerMove}, but there was something significantly better — that cost {cpText}. What was it?',
+    '{playerMove} wasn\'t the best here, costing {cpText}. Can you spot the improvement?',
+    'With {playerMove} you gave up {cpText}. Find the stronger option.',
   ],
   inaccuracy: [
-    '{playerMove} was okay, but there\'s a more precise option. {ideaText}',
-    'Slight slip with {playerMove}. {ideaText}',
-    'Not a bad move with {playerMove}, but the engine found something sharper. {ideaText}',
+    '{playerMove} was okay, but there\'s a more precise option. Can you find it?',
+    'Slight slip with {playerMove}. What\'s the sharper move?',
+    'Not a bad move with {playerMove}, but the engine found something better. What is it?',
   ],
   miss: [
-    'Your opponent slipped here and you missed it! {ideaText}',
-    'There was a chance to capitalize here, but you played {playerMove} instead. {ideaText}',
-    '{playerMove} let your opponent off the hook. {ideaText}',
+    'Your opponent slipped here and you missed it! What was the best response?',
+    'There was a chance to capitalize here, but you played {playerMove} instead. Find the winning move.',
+    '{playerMove} let your opponent off the hook. What should you have played?',
   ],
 };
 
@@ -390,8 +408,7 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   const mistakeExplanation = introTemplate
     .replace(/\{playerMove\}/g, playerMoveSan)
     .replace(/\{bestMove\}/g, bestMoveSan)
-    .replace(/\{cpText\}/g, cpText)
-    .replace(/\{ideaText\}/g, ideaText);
+    .replace(/\{cpText\}/g, cpText);
   const intro = contextSentence
     ? contextSentence + ' ' + mistakeExplanation + ' ' + phaseContext
     : mistakeExplanation + ' ' + phaseContext;
