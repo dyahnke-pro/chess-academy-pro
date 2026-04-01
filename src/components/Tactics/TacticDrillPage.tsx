@@ -454,10 +454,10 @@ export function TacticDrillPage(): JSX.Element {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentItem.puzzle.id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="flex flex-col gap-4"
           >
             {/* Progress */}
