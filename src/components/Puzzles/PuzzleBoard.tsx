@@ -105,7 +105,10 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
       setState('playing');
     }, 600);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      voiceService.stop();
+    };
   }, [puzzle, playMoveSound, resetHints]);
 
   // Voice feedback when puzzle state changes (respects user voice setting)

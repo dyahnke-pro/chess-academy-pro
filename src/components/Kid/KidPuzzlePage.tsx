@@ -64,10 +64,11 @@ export function KidPuzzlePage(): JSX.Element {
     kidSpeak('Welcome to Puzzle Quest! Pick your level and start solving!');
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Cleanup auto-advance timer on unmount
+  // Cleanup auto-advance timer and voice on unmount
   useEffect(() => {
     return () => {
       if (autoAdvanceTimerRef.current) clearTimeout(autoAdvanceTimerRef.current);
+      voiceService.stop();
     };
   }, []);
 
@@ -101,6 +102,7 @@ export function KidPuzzlePage(): JSX.Element {
   }, [difficulty, kidSpeak, fetchMorePuzzles]);
 
   const advanceToNext = useCallback((): void => {
+    voiceService.stop();
     setResultOverlay(null);
     setCurrentIndex((prev) => prev + 1);
   }, []);

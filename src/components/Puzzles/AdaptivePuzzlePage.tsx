@@ -16,6 +16,7 @@ import type {
   AdaptiveSessionSummary as SummaryData,
 } from '../../services/adaptivePuzzleService';
 import type { PuzzleRecord } from '../../types';
+import { voiceService } from '../../services/voiceService';
 import { DifficultySelector } from './DifficultySelector';
 import { PuzzleBoard } from './PuzzleBoard';
 import { AdaptiveSessionPanel } from './AdaptiveSessionPanel';
@@ -51,10 +52,12 @@ export function AdaptivePuzzlePage(): JSX.Element {
     const puzzle = await getNextAdaptivePuzzle(sess, seenIdsRef.current);
     if (!puzzle) {
       // No more puzzles available — end session
+      voiceService.stop();
       setSummary(getAdaptiveSessionSummary(sess));
       setPhase('summary');
       return;
     }
+    voiceService.stop();
     seenIdsRef.current.add(puzzle.id);
     setCurrentPuzzle(puzzle);
     setPhase('solving');

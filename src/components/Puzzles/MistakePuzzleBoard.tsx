@@ -148,6 +148,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const [replaySteps, setReplaySteps] = useState<ReplayStep[]>([]);
   const [replayIndex, setReplayIndex] = useState(-1);
   const replayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const badge = CLASSIFICATION_BADGE[puzzle.classification];
   const totalMoves = movesRef.current.length;
@@ -255,6 +256,10 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       if (replayTimerRef.current) {
         clearTimeout(replayTimerRef.current);
         replayTimerRef.current = null;
+      }
+      if (outroTimerRef.current) {
+        clearTimeout(outroTimerRef.current);
+        outroTimerRef.current = null;
       }
       voiceService.stop();
     };
@@ -395,7 +400,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         playCelebration();
         // Speak outro after a brief delay so celebration sound plays first
         if (puzzle.narration.outro) {
-          setTimeout(() => {
+          outroTimerRef.current = setTimeout(() => {
             setSubtitle(puzzle.narration.outro);
             void voiceService.speak(puzzle.narration.outro);
           }, 800);
