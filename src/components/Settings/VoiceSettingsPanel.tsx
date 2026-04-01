@@ -145,8 +145,43 @@ export function VoiceSettingsPanel(): JSX.Element {
     setTimeout(() => setSystemPreviewPlaying(false), 3000);
   };
 
+  const coachVoiceOn = useAppStore((s) => s.coachVoiceOn);
+  const toggleCoachVoice = useAppStore((s) => s.toggleCoachVoice);
+
   return (
     <div className="space-y-6" data-testid="voice-settings-panel">
+      {/* ── Coach Voice Master Toggle ─────────────────────────── */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-sm flex items-center gap-2">
+            <Volume2 size={16} />
+            Coach Voice
+          </h3>
+          <label className="flex items-center gap-2 cursor-pointer" data-testid="coach-voice-toggle">
+            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              {coachVoiceOn ? 'On' : 'Off'}
+            </span>
+            <div
+              role="switch"
+              aria-checked={coachVoiceOn}
+              tabIndex={0}
+              onClick={toggleCoachVoice}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCoachVoice(); } }}
+              className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+              style={{ background: coachVoiceOn ? 'var(--color-accent)' : 'var(--color-border)' }}
+            >
+              <span
+                className="inline-block h-4 w-4 rounded-full bg-white transition-transform"
+                style={{ transform: coachVoiceOn ? 'translateX(24px)' : 'translateX(4px)' }}
+              />
+            </div>
+          </label>
+        </div>
+        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          When enabled, the coach reads messages and commentary aloud during games and chat.
+        </p>
+      </div>
+
       {/* ── Amazon Polly (Cloud Voice) ──────────────────────────── */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">

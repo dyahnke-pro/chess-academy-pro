@@ -32,6 +32,7 @@ interface AppState {
   coachBubbleVisible: boolean;
   coachBubbleText: string;
   coachVoiceOn: boolean;
+  coachTipsOn: boolean;
 
   // Background analysis
   backgroundAnalysisRunning: boolean;
@@ -69,6 +70,7 @@ interface AppActions {
   toggleCoachBubble: () => void;
   setCoachBubbleText: (text: string) => void;
   toggleCoachVoice: () => void;
+  toggleCoachTips: () => void;
   setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
   setCoachEdgeTabPercent: (percent: number) => void;
@@ -93,6 +95,7 @@ const DEFAULT_STATE: AppState = {
   coachBubbleVisible: true,
   coachBubbleText: '',
   coachVoiceOn: false,
+  coachTipsOn: true,
   backgroundAnalysisRunning: false,
   backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
@@ -146,6 +149,8 @@ export const useAppStore = create<AppState & AppActions>()(
     setCoachBubbleText: (text) => set({ coachBubbleText: text }),
 
     toggleCoachVoice: () => set((state) => ({ coachVoiceOn: !state.coachVoiceOn })),
+
+    toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
 
     setBackgroundAnalysis: (running, progress) =>
       set({ backgroundAnalysisRunning: running, backgroundAnalysisProgress: progress ?? null }),

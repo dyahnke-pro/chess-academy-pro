@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Volume2, VolumeX, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useCoachTips } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
@@ -171,8 +172,8 @@ export function CoachGamePage(): JSX.Element {
     });
   }, [reviewGameId]);
 
-  const coachVoiceOn = useAppStore((s) => s.coachVoiceOn);
-  const toggleCoachVoice = useAppStore((s) => s.toggleCoachVoice);
+  const coachTipsOn = useAppStore((s) => s.coachTipsOn);
+  const toggleCoachTips = useAppStore((s) => s.toggleCoachTips);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
 
   // Ref to inject messages into GameChatPanel (hints, takeback msgs)
@@ -280,6 +281,20 @@ export function CoachGamePage(): JSX.Element {
       gameChatRef.current?.injectAssistantMessage(hintState.nudgeText);
     }
   }, [hintState.nudgeText]);
+
+  // Proactive coach tips (positional awareness, tactics, key moments)
+  const handleCoachTip = useCallback((tip: string) => {
+    gameChatRef.current?.injectAssistantMessage(tip);
+  }, []);
+
+  useCoachTips({
+    fen: game.fen,
+    playerColor,
+    isPlayerTurn: isPlayersTurn,
+    enabled: coachTipsOn && gameState.status === 'playing' && !game.isGameOver,
+    moves: gameState.moves,
+    onTip: handleCoachTip,
+  });
 
   // Move navigation — null means live position
   const [viewedMoveIndex, setViewedMoveIndex] = useState<number | null>(null);
@@ -989,70 +1004,78 @@ export function CoachGamePage(): JSX.Element {
     <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
       {/* Left column: board + controls */}
       <div className="flex flex-col flex-1 md:flex-none md:w-3/5 min-h-0 overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between px-3 py-2 md:p-4 border-b border-theme-border">
-          <div className="flex items-center gap-2 md:gap-3">
-            <button onClick={() => void navigate('/coach')} className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center">
-              <ArrowLeft size={20} className="text-theme-text" />
-            </button>
-            <div>
-              <h2 className="text-sm font-semibold text-theme-text">
-                vs Stockfish Bot
-              </h2>
-              <p className="text-xs text-theme-text-muted">
-                ~{targetStrength} ELO
-              </p>
+        {/* Header — two rows for compact mobile layout */}
+        <div className="px-3 py-2 md:p-4 border-b border-theme-border space-y-1.5">
+          {/* Row 1: Back + title + color selector + analysis toggles */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 md:gap-3">
+              <button onClick={() => void navigate('/coach')} className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center">
+                <ArrowLeft size={20} className="text-theme-text" />
+              </button>
+              <div>
+                <h2 className="text-sm font-semibold text-theme-text">
+                  vs Stockfish Bot
+                </h2>
+                <p className="text-xs text-theme-text-muted">
+                  ~{targetStrength} ELO
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 md:gap-2">
+              {/* Color selector */}
+              <div className="flex items-center gap-0.5 rounded-lg border border-theme-border p-0.5" data-testid="color-selector">
+                <button
+                  onClick={() => handleColorChange('white')}
+                  disabled={gameState.moves.length > 0}
+                  className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+                    playerColor === 'white' ? 'ring-2 ring-theme-accent ring-inset' : ''
+                  }`}
+                  aria-label="Play as white"
+                  data-testid="color-white-btn"
+                >
+                  <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-white border border-neutral-300" />
+                </button>
+                <button
+                  onClick={() => handleColorChange('black')}
+                  disabled={gameState.moves.length > 0}
+                  className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+                    playerColor === 'black' ? 'ring-2 ring-theme-accent ring-inset' : ''
+                  }`}
+                  aria-label="Play as black"
+                  data-testid="color-black-btn"
+                >
+                  <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-neutral-800 border border-neutral-600" />
+                </button>
+              </div>
+              <AnalysisToggles
+                showEvalBar={showEvalBarEffective}
+                onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+                showEngineLines={showEngineLinesEffective}
+                onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+              />
             </div>
           </div>
-          <div className="flex items-center gap-1 md:gap-2">
-            {/* Color selector */}
-            <div className="flex items-center gap-0.5 rounded-lg border border-theme-border p-0.5" data-testid="color-selector">
-              <button
-                onClick={() => handleColorChange('white')}
-                disabled={gameState.moves.length > 0}
-                className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
-                  playerColor === 'white' ? 'ring-2 ring-theme-accent ring-inset' : ''
-                }`}
-                aria-label="Play as white"
-                data-testid="color-white-btn"
-              >
-                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-white border border-neutral-300" />
-              </button>
-              <button
-                onClick={() => handleColorChange('black')}
-                disabled={gameState.moves.length > 0}
-                className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
-                  playerColor === 'black' ? 'ring-2 ring-theme-accent ring-inset' : ''
-                }`}
-                aria-label="Play as black"
-                data-testid="color-black-btn"
-              >
-                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-neutral-800 border border-neutral-600" />
-              </button>
-            </div>
-            <AnalysisToggles
-              showEvalBar={showEvalBarEffective}
-              onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
-              showEngineLines={showEngineLinesEffective}
-              onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
-            />
+          {/* Row 2: Difficulty toggle + Coach Tips button */}
+          <div className="flex items-center justify-between pl-12 md:pl-14">
             <DifficultyToggle
               value={difficulty}
               onChange={setDifficulty}
               disabled={gameState.moves.length > 0}
             />
             <button
-              onClick={toggleCoachVoice}
-              className="flex-shrink-0 p-1.5 md:p-2 rounded-lg border transition-colors"
+              onClick={toggleCoachTips}
+              className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-sm font-medium transition-colors"
               style={{
-                background: coachVoiceOn ? 'var(--color-accent)' : 'var(--color-surface)',
+                background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
                 borderColor: 'var(--color-border)',
-                color: coachVoiceOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                color: coachTipsOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
               }}
-              aria-label={coachVoiceOn ? 'Mute voice' : 'Unmute voice'}
-              data-testid="coach-speaker-toggle"
+              aria-label={coachTipsOn ? 'Disable coach tips' : 'Enable coach tips'}
+              aria-pressed={coachTipsOn}
+              data-testid="coach-tips-toggle"
             >
-              {coachVoiceOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+              <Lightbulb size={16} />
+              <span className="hidden sm:inline">Tips</span>
             </button>
           </div>
         </div>
