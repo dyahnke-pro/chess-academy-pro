@@ -133,17 +133,24 @@ export function TacticDrillPage(): JSX.Element {
 
   const playContextSequence = useCallback(async (moves: ContextMove[], item: TacticDrillItem): Promise<void> => {
     contextCancelledRef.current = false;
-    const MOVE_DELAY = 350;
 
-    // Silent replay — just play the moves quickly
+    // Accelerating replay: zip through the opening, decelerate into the critical zone
+    // Last 4 moves before the tactic get progressively slower
+    const FAST = 120;
+    const APPROACH = [250, 350, 500, 700]; // last 4 moves decelerate
+
     for (let i = 0; i < moves.length; i++) {
       if (isCancelled()) return;
       setContextStep(i + 1);
-      await new Promise<void>((r) => { setTimeout(r, MOVE_DELAY); });
+      const remaining = moves.length - 1 - i;
+      const delay = remaining < APPROACH.length ? APPROACH[APPROACH.length - 1 - remaining] : FAST;
+      await new Promise<void>((r) => { setTimeout(r, delay); });
       if (isCancelled()) return;
     }
 
-    // Only speak at the transition — "Now find the fork"
+    // Brief pause to let the position sink in, then speak the transition
+    if (isCancelled()) return;
+    await new Promise<void>((r) => { setTimeout(r, 800); });
     if (isCancelled()) return;
     const transition = drillTransition(item.tacticType);
     setSubtitle(transition);

@@ -92,9 +92,48 @@ export function drillIntro(
   return parts.join(' ');
 }
 
+/** Position setup phrases by tactic type — gives a sense of why the tactic exists here */
+const POSITION_SETUPS: Partial<Record<TacticType, string[]>> = {
+  fork: [
+    'Pieces are loosely coordinated here.',
+    'Notice how the pieces are spread out.',
+    'Multiple pieces are undefended.',
+  ],
+  pin: [
+    'There\'s a vulnerable alignment on the board.',
+    'A piece is stuck shielding something valuable.',
+    'Look at how the pieces line up.',
+  ],
+  skewer: [
+    'A valuable piece is exposed on an open line.',
+    'The piece alignment creates a vulnerability.',
+  ],
+  discovered_attack: [
+    'A piece is blocking a powerful line of attack.',
+    'There\'s hidden energy behind one of the pieces.',
+  ],
+  back_rank: [
+    'The king is boxed in on the back rank.',
+    'The back rank is dangerously weak.',
+  ],
+  hanging_piece: [
+    'Something is left undefended.',
+    'Not everything is protected here.',
+  ],
+  promotion: [
+    'A pawn is close to the finish line.',
+    'The pawn structure creates an opportunity.',
+  ],
+};
+
 export function drillTransition(tacticType: TacticType): string {
   const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  return `Now find the ${tacticLabel}.`;
+  const setups = POSITION_SETUPS[tacticType];
+  if (setups && setups.length > 0) {
+    const setup = setups[Math.floor(Math.random() * setups.length)];
+    return `${setup} Now find the ${tacticLabel}.`;
+  }
+  return `Study the position carefully. Now find the ${tacticLabel}.`;
 }
 
 export function drillCorrect(tacticType: TacticType): string {
