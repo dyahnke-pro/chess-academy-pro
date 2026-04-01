@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
+import { getNextOpeningBookMove } from './openingDetectionService';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 
 const COACH_MOVE_TIMEOUT_MS = 3000;
@@ -48,6 +49,31 @@ function makeTimeoutPromise(ms: number): Promise<never> {
   return new Promise<never>((_, reject) => {
     setTimeout(() => reject(new Error(`Stockfish timeout after ${ms}ms`)), ms);
   });
+}
+
+/**
+ * Try to play the next opening book move if a requested opening is active.
+ * Returns the UCI move string (e.g. "e7e6") or null if not applicable.
+ */
+export function tryOpeningBookMove(
+  fen: string,
+  gameHistory: string[],
+  openingMoves: string[] | null,
+  aiColor: 'white' | 'black',
+): string | null {
+  if (!openingMoves || openingMoves.length === 0) return null;
+
+  const bookSan = getNextOpeningBookMove(openingMoves, gameHistory, aiColor);
+  if (!bookSan) return null;
+
+  // Convert SAN to UCI
+  try {
+    const chess = new Chess(fen);
+    const move = chess.move(bookSan);
+    return `${move.from}${move.to}${move.promotion ?? ''}`;
+  } catch {
+    return null;
+  }
 }
 
 export async function getAdaptiveMove(

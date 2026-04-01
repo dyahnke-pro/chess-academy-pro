@@ -20,10 +20,10 @@ import { ResignButton } from './ResignButton';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
 import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { detectOpening } from '../../services/openingDetectionService';
+import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { db } from '../../db/schema';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
@@ -207,6 +207,19 @@ export function CoachGamePage(): JSX.Element {
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
 
+  // Requested opening — set via voice chat when user says "play the French Defense", etc.
+  const [requestedOpeningMoves, setRequestedOpeningMoves] = useState<string[] | null>(null);
+
+  const handleOpeningRequest = useCallback((openingName: string) => {
+    const moves = getOpeningMoves(openingName);
+    if (moves) {
+      console.log('[CoachGame] Opening requested:', openingName, '— book moves:', moves.join(' '));
+      setRequestedOpeningMoves(moves);
+    } else {
+      console.warn('[CoachGame] Opening not found in book:', openingName);
+    }
+  }, []);
+
   // Resizable split between move list and chat panel (percentage for chat)
   const [chatPercent, setChatPercent] = useState(80);
   const rightColumnRef = useRef<HTMLDivElement>(null);
@@ -352,6 +365,7 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
+    setRequestedOpeningMoves(null);
     resetHints();
     prevNudgeRef.current = null;
     handleBackToGame();
@@ -554,15 +568,41 @@ export function CoachGamePage(): JSX.Element {
 
       try {
         console.log('[CoachGame] Coach thinking... FEN:', game.fen);
-        const { move, analysis } = await getAdaptiveMove(game.fen, targetStrength);
+
+        // Try opening book move first if a specific opening was requested
+        const aiColor = playerColor === 'white' ? 'black' : 'white';
+        const bookMove = tryOpeningBookMove(game.fen, game.history, requestedOpeningMoves, aiColor);
+
+        let move: string;
+        let analysis: StockfishAnalysis;
+
+        if (bookMove) {
+          console.log('[CoachGame] Playing opening book move:', bookMove);
+          move = bookMove;
+          // Still run a quick analysis for eval bar / commentary
+          try {
+            analysis = await stockfishEngine.analyzePosition(game.fen, 10);
+          } catch {
+            analysis = { bestMove: bookMove, evaluation: 0, isMate: false, mateIn: null, depth: 0, topLines: [], nodesPerSecond: 0 };
+          }
+        } else {
+          const adaptive = await getAdaptiveMove(game.fen, targetStrength);
+          move = adaptive.move;
+          analysis = adaptive.analysis;
+          // Clear requested opening if we've left the book
+          if (requestedOpeningMoves) {
+            console.log('[CoachGame] Left opening book, clearing requested opening');
+            setRequestedOpeningMoves(null);
+          }
+        }
 
         if (isCancelled()) return;
 
         let result = tryMakeMove(move);
 
-        // If Stockfish's move was invalid, fall back to a random legal move
+        // If move was invalid, fall back to a random legal move
         if (!result) {
-          console.warn('[CoachGame] Stockfish move invalid:', move, '— trying random fallback');
+          console.warn('[CoachGame] Move invalid:', move, '— trying random fallback');
           const randomMove = getRandomLegalMove(game.fen);
           if (randomMove) {
             result = tryMakeMove(randomMove);
@@ -628,7 +668,7 @@ export function CoachGamePage(): JSX.Element {
       setIsCoachThinking(false);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depend on specific game properties, not the whole object
-  }, [game.turn, game.fen, game.isGameOver, gameState.status, playerColor, targetStrength, game.makeMove]);
+  }, [game.turn, game.fen, game.isGameOver, gameState.status, playerColor, targetStrength, game.makeMove, requestedOpeningMoves]);
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
@@ -754,6 +794,7 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
+    setRequestedOpeningMoves(null);
     setPendingChatPrompt(prompt);
   }, [game, playerColor, targetStrength]);
 
@@ -975,6 +1016,7 @@ export function CoachGamePage(): JSX.Element {
             setLatestIsMate(false);
             setLatestMateIn(null);
             setViewedMoveIndex(null);
+            setRequestedOpeningMoves(null);
             resetHints();
             prevNudgeRef.current = null;
           }}
@@ -1141,6 +1183,7 @@ export function CoachGamePage(): JSX.Element {
               arrows={[...hintState.arrows, ...annotationArrows].length > 0 ? [...hintState.arrows, ...annotationArrows] : undefined}
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
               ghostMove={hintState.ghostMove}
+              onOpeningRequest={handleOpeningRequest}
             />
           </div>
           {showEngineLinesEffective && latestTopLines.length > 0 && (
