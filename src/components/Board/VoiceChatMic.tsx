@@ -73,8 +73,10 @@ function buildSystemAddition(
     const evalShift = lastMove.evalBefore !== null && lastMove.evalAfter !== null
       ? ((lastMove.evalAfter - lastMove.evalBefore) / 100).toFixed(1)
       : null;
+    // Use explicit labels: "student" and "you (coach)" so the LLM knows whose move it was
+    const whoPlayed = lastMove.player === 'you' ? `the student (${playerLabel})` : `you, the coach (${opponentColor})`;
     lastMoveBlock = `\n[Last Move Played]
-Move: ${lastMove.san} (by ${lastMove.player})
+Move: ${lastMove.san} (played by ${whoPlayed})
 ${lastMove.classification ? `Classification: ${lastMove.classification}` : ''}
 ${evalShift !== null ? `Eval change: ${Number(evalShift) >= 0 ? '+' : ''}${evalShift} pawns` : ''}
 ${lastMove.bestMove ? `Engine's best was: ${lastMove.bestMove}` : ''}`;
