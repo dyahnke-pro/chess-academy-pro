@@ -136,6 +136,7 @@ export function KidPuzzlePage(): JSX.Element {
       );
     }
 
+    voiceService.stop();
     const messages = correct ? CORRECT_MESSAGES : INCORRECT_MESSAGES;
     const msg = messages[Math.floor(Math.random() * messages.length)];
     kidSpeak(msg);
