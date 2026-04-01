@@ -59,11 +59,30 @@ class VoiceService {
     return this.speed;
   }
 
-  /** Pre-load voice preferences and warm up audio. Call early (e.g. on page mount). */
+  /** Pre-load voice preferences and warm up audio. Call early (e.g. on page mount).
+   *  When Polly is enabled, fires a silent prefetch to warm the TLS connection
+   *  and serverless function so the first real speak() has no cold-start lag. */
   async warmup(): Promise<void> {
-    await this.loadPrefs();
+    const prefs = await this.loadPrefs();
     // Prime the AudioContext so first decode isn't cold
     getSharedAudioContext();
+
+    // Prefetch a tiny Polly clip to warm the network path + serverless function
+    if (prefs?.pollyEnabled && prefs.voiceEnabled) {
+      try {
+        const url = getTtsUrl(' ', prefs.pollyVoice);
+        void fetch(url).then(async (res) => {
+          if (res.ok) {
+            // Decode the audio buffer to also prime the AudioContext decoder
+            const buf = await res.arrayBuffer();
+            const ctx = getSharedAudioContext();
+            try { await ctx.decodeAudioData(buf); } catch { /* empty clip may fail decode — ok */ }
+          }
+        });
+      } catch {
+        // Best-effort — don't block startup
+      }
+    }
   }
 
   private async loadPrefs(): Promise<typeof this.cachedPrefs> {
