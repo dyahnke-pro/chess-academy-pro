@@ -16,18 +16,12 @@ import type { TacticType } from '../../types';
 
 type Phase = 'loading' | 'context' | 'solving' | 'summary';
 
-// ─── Adaptive Context ──────────────────────────────────────────────────────
-// Context depth scales with success: solve easily → see more buildup next time.
-// Eventually you replay an entire opening before the tactic appears.
+// ─── Fixed Context ────────────────────────────────────────────────────────
+// Layer 2 shows a short, fixed 3-5 move buildup before the tactic position.
+// Just enough to break "puzzle mode" without turning it into a game replay.
+// Adaptive scaling lives in Layer 4 (Create).
 
-const MIN_CONTEXT = 3;
-const MAX_CONTEXT = 999; // unlimited = full game up to the mistake
-const CONTEXT_STEP = 3;  // add 3 moves per consecutive solve
-
-function computeContextDepth(consecutiveSolves: number): number {
-  const depth = MIN_CONTEXT + (consecutiveSolves * CONTEXT_STEP);
-  return Math.min(depth, MAX_CONTEXT);
-}
+const CONTEXT_DEPTH = 5;
 
 interface ContextMove {
   san: string;
@@ -36,7 +30,7 @@ interface ContextMove {
   isWhite: boolean;
 }
 
-function buildContextMoves(gamePgn: string | undefined, mistakeFen: string, maxMoves: number): ContextMove[] {
+function buildContextMoves(gamePgn: string | undefined, mistakeFen: string): ContextMove[] {
   if (!gamePgn) return [];
 
   try {
@@ -57,8 +51,8 @@ function buildContextMoves(gamePgn: string | undefined, mistakeFen: string, maxM
       if (chess.fen() === mistakeFen) break;
     }
 
-    // Adaptive: show up to maxMoves of buildup before the mistake
-    return positions.slice(-maxMoves);
+    // Fixed: always show last CONTEXT_DEPTH moves before the mistake
+    return positions.slice(-CONTEXT_DEPTH);
   } catch {
     return [];
   }
@@ -77,7 +71,6 @@ export function TacticDrillPage(): JSX.Element {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solved, setSolved] = useState(0);
   const [failed, setFailed] = useState(0);
-  const [consecutiveSolves, setConsecutiveSolves] = useState(0);
   const [contextMoves, setContextMoves] = useState<ContextMove[]>([]);
   const [contextStep, setContextStep] = useState(0);
   const [contextPlaying, setContextPlaying] = useState(false);
@@ -97,11 +90,10 @@ export function TacticDrillPage(): JSX.Element {
     setCurrentIndex(0);
     setSolved(0);
     setFailed(0);
-    setConsecutiveSolves(0);
-    await prepareContext(items[0], 0);
+    await prepareContext(items[0]);
   }
 
-  async function prepareContext(item: TacticDrillItem | undefined, streak: number): Promise<void> {
+  async function prepareContext(item: TacticDrillItem | undefined): Promise<void> {
     if (!item) {
       setPhase('solving');
       return;
@@ -112,8 +104,7 @@ export function TacticDrillPage(): JSX.Element {
       ? await db.games.get(item.originalMistake.sourceGameId)
       : null;
 
-    const contextDepth = computeContextDepth(streak);
-    const moves = buildContextMoves(game?.pgn, item.originalMistake.fen, contextDepth);
+    const moves = buildContextMoves(game?.pgn, item.originalMistake.fen);
 
     if (moves.length > 0) {
       setContextMoves(moves);
@@ -159,10 +150,6 @@ export function TacticDrillPage(): JSX.Element {
     const item = queue.at(currentIndex);
     if (!item) return;
 
-    // Track adaptive context streak
-    const newStreak = correct ? consecutiveSolves + 1 : 0;
-    setConsecutiveSolves(newStreak);
-
     if (correct) {
       setSolved((s) => s + 1);
     } else {
@@ -185,9 +172,9 @@ export function TacticDrillPage(): JSX.Element {
       setPhase('summary');
     } else {
       setCurrentIndex(nextIndex);
-      await prepareContext(queue[nextIndex], newStreak);
+      await prepareContext(queue[nextIndex]);
     }
-  }, [queue, currentIndex, activeProfile, setActiveProfile, consecutiveSolves]);
+  }, [queue, currentIndex, activeProfile, setActiveProfile]);
 
   const currentItem = queue.at(currentIndex);
   const total = solved + failed;
@@ -251,13 +238,8 @@ export function TacticDrillPage(): JSX.Element {
           {/* Context header */}
           <div className="text-center">
             <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-              {contextPlaying ? 'Watch the buildup...' : 'The position leading to your missed tactic'}
+              {contextPlaying ? 'Watch the buildup...' : 'The moves leading to your missed tactic'}
             </p>
-            {contextMoves.length > 6 && (
-              <p className="text-xs mt-1" style={{ color: 'var(--color-accent)' }}>
-                Extended context — {contextMoves.length} moves of buildup
-              </p>
-            )}
             {currentItem.originalMistake.opponentName && (
               <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
                 vs {currentItem.originalMistake.opponentName}

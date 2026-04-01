@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Crosshair, Eye, Swords, Wrench, Lightbulb, ChevronRight, Lock } from 'lucide-react';
+import { Crosshair, Eye, Swords, Wrench, Lightbulb, ChevronRight } from 'lucide-react';
 import { getStoredTacticalProfile } from '../../services/tacticalProfileService';
 import { getTacticDrillCounts } from '../../services/tacticDrillService';
+import { getContextDepth } from '../../services/tacticCreateService';
 import { db } from '../../db/schema';
 import type { TacticalProfile } from '../../types';
 
@@ -36,11 +37,7 @@ function LayerCard({ number, title, subtitle, description, icon: Icon, color, st
           className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
           style={{ background: `color-mix(in srgb, ${color} 15%, transparent)` }}
         >
-          {locked ? (
-            <Lock size={20} style={{ color: 'var(--color-text-muted)' }} />
-          ) : (
-            <Icon size={20} style={{ color }} />
-          )}
+          <Icon size={20} style={{ color: locked ? 'var(--color-text-muted)' : color }} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
@@ -78,6 +75,7 @@ export function TacticsPage(): JSX.Element {
   const [profile, setProfile] = useState<TacticalProfile | null>(null);
   const [drillCount, setDrillCount] = useState(0);
   const [setupCount, setSetupCount] = useState(0);
+  const [createDepth, setCreateDepth] = useState(8);
 
   useEffect(() => {
     void loadData();
@@ -96,6 +94,9 @@ export function TacticsPage(): JSX.Element {
       .filter((sp) => sp.status !== 'mastered')
       .count();
     setSetupCount(setups);
+
+    const depth = await getContextDepth();
+    setCreateDepth(depth);
   }
 
   const weakestLabel = profile?.weakestTypes
@@ -158,12 +159,12 @@ export function TacticsPage(): JSX.Element {
         <LayerCard
           number={4}
           title="Create"
-          subtitle="Tactic Creation"
-          description="Given a position with no obvious tactic, identify the latent potential and invent the tactical plan. Pattern recognition meets creative vision."
+          subtitle="Full Game Replay"
+          description="Replay your actual games from the opening. Stay alert through quiet positions and find the tactic when it appears. Context depth grows as you succeed."
           icon={Lightbulb}
           color="#a78bfa"
-          locked
-          onClick={() => {/* Layer 4 coming soon */}}
+          stat={profile ? `Context: ${createDepth} moves` : undefined}
+          onClick={() => void navigate('/tactics/create')}
         />
       </div>
 

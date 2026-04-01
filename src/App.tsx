@@ -61,6 +61,7 @@ import { TacticsPage } from './components/Tactics/TacticsPage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
 import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
 import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
+import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -143,6 +144,7 @@ export function App(): JSX.Element {
           <Route path="/tactics/profile" element={<ErrorBoundary><TacticalProfilePage /></ErrorBoundary>} />
           <Route path="/tactics/drill" element={<ErrorBoundary><TacticDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/setup" element={<ErrorBoundary><TacticSetupPage /></ErrorBoundary>} />
+          <Route path="/tactics/create" element={<ErrorBoundary><TacticCreatePage /></ErrorBoundary>} />
           <Route path="/play" element={<ErrorBoundary><GamesPage /></ErrorBoundary>} />
           <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
