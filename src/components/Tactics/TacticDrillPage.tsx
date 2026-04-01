@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Swords, Play, SkipForward } from 'lucide-react';
@@ -131,57 +131,64 @@ export function TacticDrillPage(): JSX.Element {
     }
   }
 
-  // Auto-play context moves with move narration
-  useEffect(() => {
-    if (phase !== 'context' || !contextPlaying || contextStep >= contextMoves.length) return;
+  // Async context playback — waits for each narration to finish before advancing
+  const contextCancelledRef = useRef(false);
+  const isCancelled = useCallback((): boolean => contextCancelledRef.current, []);
 
-    const timer = setTimeout(() => {
-      const nextStep = contextStep + 1;
-      setContextStep(nextStep);
+  const playContextSequence = useCallback(async (moves: ContextMove[], item: TacticDrillItem): Promise<void> => {
+    contextCancelledRef.current = false;
+    const MIN_MOVE_DELAY = 400; // minimum ms between moves (for board animation)
 
-      // Narrate each move during the short buildup (only 5 moves, so narrate all)
-      const move = contextMoves[contextStep];
+    for (let i = 0; i < moves.length; i++) {
+      if (isCancelled()) return;
+
+      const move = moves[i];
       const narration = describeMove(move.san, move.isWhite);
       setSubtitle(narration);
-      void voiceService.speak(narration);
-    }, 1200);
+      setContextStep(i + 1);
 
-    return () => clearTimeout(timer);
-  }, [phase, contextPlaying, contextStep, contextMoves]);
+      // Speak and wait for it to finish, with a minimum delay for the board animation
+      const speechDone = voiceService.speak(narration);
+      const minDelay = new Promise<void>((r) => { setTimeout(r, MIN_MOVE_DELAY); });
+      await Promise.all([speechDone, minDelay]);
 
-  // When context finishes playing, narrate transition then solve
-  useEffect(() => {
-    if (phase === 'context' && contextPlaying && contextStep >= contextMoves.length) {
-      const item = queue.at(currentIndex);
-      if (item) {
-        const transition = drillTransition(item.tacticType);
-        setSubtitle(transition);
-        void voiceService.speak(transition);
-      }
-      const timer = setTimeout(() => {
-        setPhase('solving');
-      }, 1500);
-      return () => clearTimeout(timer);
+      if (isCancelled()) return;
     }
-    return undefined;
-  }, [phase, contextPlaying, contextStep, contextMoves.length, queue, currentIndex]);
+
+    // All context moves done — narrate the transition
+    if (isCancelled()) return;
+    const transition = drillTransition(item.tacticType);
+    setSubtitle(transition);
+    await voiceService.speak(transition);
+
+    if (!isCancelled()) {
+      setPhase('solving');
+    }
+  }, [isCancelled]);
 
   const handleStartContext = useCallback((): void => {
     setContextPlaying(true);
-    // Narrate intro
     const item = queue.at(currentIndex);
-    if (item) {
-      const intro = drillIntro(
-        item.tacticType,
-        item.originalMistake.opponentName,
-        item.originalMistake.openingName,
-      );
-      setSubtitle(intro);
-      void voiceService.speak(intro);
-    }
-  }, [queue, currentIndex]);
+    if (!item) return;
+
+    // Narrate intro, then play context sequence
+    const intro = drillIntro(
+      item.tacticType,
+      item.originalMistake.opponentName,
+      item.originalMistake.openingName,
+    );
+    setSubtitle(intro);
+
+    void (async (): Promise<void> => {
+      await voiceService.speak(intro);
+      if (!isCancelled()) {
+        await playContextSequence(contextMoves, item);
+      }
+    })();
+  }, [queue, currentIndex, contextMoves, playContextSequence, isCancelled]);
 
   const handleSkipContext = useCallback((): void => {
+    contextCancelledRef.current = true;
     voiceService.stop();
     setSubtitle('');
     setPhase('solving');

@@ -105,6 +105,16 @@ function formatTimeAgo(dateStr: string): string {
   return `${Math.floor(diffDays / 365)}y ago`;
 }
 
+const PIECE_NAMES: Record<string, string> = {
+  k: 'king', q: 'queen', r: 'rook', b: 'bishop', n: 'knight', p: 'pawn',
+};
+
+function getPieceNameOnSquare(chess: Chess, square: string): string | null {
+  const piece = chess.get(square as Parameters<Chess['get']>[0]);
+  if (!piece) return null;
+  return PIECE_NAMES[piece.type] ?? null;
+}
+
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
   if (!uci || uci.trim().length === 0) return [];
   return uci.trim().split(/\s+/).map((m) => ({
@@ -124,6 +134,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
   // boardKey increments to force ChessBoard remount only on resets
   const [boardKey, setBoardKey] = useState(0);
   const hasMadeMistakeRef = useRef(false);
+  const wrongAttemptsRef = useRef(0);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const playerMoveCountRef = useRef(0);
@@ -356,6 +367,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     if (isCorrect) {
       playMoveSound(move.san);
       resetHints();
+      wrongAttemptsRef.current = 0;
       setLastMoveHighlight({ from: move.from, to: move.to });
       setMoveCount((c) => c + 1);
 
@@ -412,17 +424,35 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
     } else {
       // Wrong move — undo and let them try again from the same position
       hasMadeMistakeRef.current = true;
+      wrongAttemptsRef.current += 1;
       chessRef.current.undo();
       const prevFen = chessRef.current.fen();
       setState('incorrect');
       voiceService.stop();
       playEncouragement();
 
-      // Speak the conceptual hint instead of just "incorrect"
-      if (puzzle.narration.conceptHint) {
-        setSubtitle(puzzle.narration.conceptHint);
-        void voiceService.speak(puzzle.narration.conceptHint);
+      // Progressive verbal hints based on consecutive wrong attempts
+      const attempts = wrongAttemptsRef.current;
+      const expectedMove = movesRef.current[moveIndex];
+      let hint = '';
+
+      if (attempts === 1 && puzzle.narration.conceptHint) {
+        hint = puzzle.narration.conceptHint;
+      } else if (attempts === 2) {
+        // Piece hint — tell them which piece to look at
+        const pieceName = getPieceNameOnSquare(chessRef.current, expectedMove.from);
+        hint = pieceName
+          ? `Look at what your ${pieceName} can do.`
+          : 'Look more carefully at the position.';
+      } else if (attempts >= 3) {
+        // Square hint — reveal the target square
+        hint = `The key square is ${expectedMove.to}. What can reach it?`;
+      } else {
+        hint = 'Try again — think about the position.';
       }
+
+      setSubtitle(hint);
+      void voiceService.speak(hint);
 
       setFen(prevFen);
       setBoardKey((k) => k + 1);
