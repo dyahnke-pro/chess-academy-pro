@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Chess, type Square } from 'chess.js';
-import { Chessboard } from 'react-chessboard';
-import type { PieceDropHandlerArgs } from 'react-chessboard';
+import { Chess } from 'chess.js';
+import { ChessBoard } from '../Board/ChessBoard';
 import { motion } from 'framer-motion';
+import type { MoveResult } from '../../hooks/useChessGame';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import { voiceService } from '../../services/voiceService';
 import { setupIntro, setupCorrectPrep, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
@@ -24,12 +24,13 @@ function parseUciMove(uci: string): { from: string; to: string; promotion?: stri
 }
 
 export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps): JSX.Element {
-  const [chess] = useState(() => new Chess(puzzle.setupFen));
+  const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
   const [boardState, setBoardState] = useState<BoardState>('thinking');
   const [moveIndex, setMoveIndex] = useState(0);
   const [message, setMessage] = useState('Find the preparatory move');
   const [revealStep, setRevealStep] = useState(0);
+  const [boardKey, setBoardKey] = useState(0);
   const hasCompleted = useRef(false);
 
   // Narrate intro on mount
@@ -55,8 +56,9 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       if (!move) return;
       const parsed = parseUciMove(move);
       try {
-        chess.move({ from: parsed.from, to: parsed.to, promotion: parsed.promotion });
-        setFen(chess.fen());
+        chessRef.current.move({ from: parsed.from, to: parsed.to, promotion: parsed.promotion });
+        setFen(chessRef.current.fen());
+        setBoardKey((k) => k + 1);
         setMoveIndex((i) => i + 1);
 
         if (moveIndex + 1 >= solutionMoves.length) {
@@ -71,7 +73,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     }, 800);
 
     return () => clearTimeout(timer);
-  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, chess, puzzle.tacticType]);
+  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType]);
 
   // Reveal the tactic finish move by move
   useEffect(() => {
@@ -95,8 +97,9 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       if (!move) return;
       const parsed = parseUciMove(move);
       try {
-        chess.move({ from: parsed.from, to: parsed.to, promotion: parsed.promotion });
-        setFen(chess.fen());
+        chessRef.current.move({ from: parsed.from, to: parsed.to, promotion: parsed.promotion });
+        setFen(chessRef.current.fen());
+        setBoardKey((k) => k + 1);
         setRevealStep((s) => s + 1);
       } catch {
         setRevealStep((s) => s + 1);
@@ -104,61 +107,58 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [boardState, revealStep, tacticMoves, chess, puzzle.tacticType, onComplete]);
+  }, [boardState, revealStep, tacticMoves, puzzle.tacticType, onComplete]);
 
-  const handleDrop = useCallback(({ sourceSquare, targetSquare, piece }: PieceDropHandlerArgs): boolean => {
-    if (boardState !== 'thinking' || !isPlayerTurn || !targetSquare) return false;
+  const handleMove = useCallback((move: MoveResult): void => {
+    if (boardState !== 'thinking' || !isPlayerTurn) return;
 
     const expectedMove = solutionMoves[moveIndex];
-    if (!expectedMove) return false;
+    if (!expectedMove) return;
 
     const expected = parseUciMove(expectedMove);
-    const pieceType = piece.pieceType.toLowerCase();
-    const isPawn = pieceType.endsWith('p');
-    const promotion = isPawn &&
-      (targetSquare[1] === '8' || targetSquare[1] === '1')
-      ? 'q'
-      : undefined;
 
     // Check if the move matches the expected solution
-    if (sourceSquare === expected.from && targetSquare === expected.to) {
+    if (move.from === expected.from && move.to === expected.to) {
+      // Apply to our chess instance to stay in sync
       try {
-        chess.move({
-          from: sourceSquare as Square,
-          to: targetSquare as Square,
-          promotion: promotion ?? expected.promotion,
-        });
-        setFen(chess.fen());
-        setMoveIndex((i) => i + 1);
-
-        if (moveIndex + 1 >= solutionMoves.length) {
-          setBoardState('reveal');
-          const revealMsg = `Setup complete! Now watch the ${tacticTypeLabel(puzzle.tacticType).toLowerCase()}...`;
-          setMessage(revealMsg);
-          void voiceService.speak(revealMsg);
-        } else {
-          const remaining = Math.ceil((solutionMoves.length - moveIndex - 1) / 2);
-          const prepMsg = setupCorrectPrep(remaining);
-          setMessage(prepMsg);
-          void voiceService.speak(prepMsg);
-        }
-        return true;
+        chessRef.current.move({ from: move.from, to: move.to, promotion: move.promotion });
       } catch {
-        return false;
+        // Already applied or promotion mismatch — sync from expected
+        chessRef.current.move({ from: expected.from, to: expected.to, promotion: expected.promotion });
       }
+      setFen(chessRef.current.fen());
+      setMoveIndex((i) => i + 1);
+
+      if (moveIndex + 1 >= solutionMoves.length) {
+        setBoardState('reveal');
+        const revealMsg = `Setup complete! Now watch the ${tacticTypeLabel(puzzle.tacticType).toLowerCase()}...`;
+        setMessage(revealMsg);
+        void voiceService.speak(revealMsg);
+      } else {
+        const remaining = Math.ceil((solutionMoves.length - moveIndex - 1) / 2);
+        const prepMsg = setupCorrectPrep(remaining);
+        setMessage(prepMsg);
+        void voiceService.speak(prepMsg);
+      }
+      return;
     }
 
-    // Wrong move
+    // Wrong move — reset the board to current position
     setBoardState('incorrect');
     const wrongMsg = setupIncorrect();
     setMessage(wrongMsg);
     void voiceService.speak(wrongMsg);
+
+    // Remount board at the correct position (ChessBoard applied the wrong
+    // move internally, so we force-reset it via key change)
+    setFen(chessRef.current.fen());
+    setBoardKey((k) => k + 1);
+
     if (!hasCompleted.current) {
       hasCompleted.current = true;
       setTimeout(() => onComplete(false), 2000);
     }
-    return false;
-  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, chess, puzzle.tacticType, onComplete]);
+  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType, onComplete]);
 
   const statusColor = boardState === 'correct'
     ? 'var(--color-success)'
@@ -182,17 +182,16 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       </motion.div>
 
       {/* Board */}
-      <div className="aspect-square max-w-md mx-auto w-full" data-testid="setup-board">
-        <Chessboard
-          options={{
-            position: fen,
-            boardOrientation: orientation,
-            onPieceDrop: handleDrop,
-            allowDragging: boardState === 'thinking' && isPlayerTurn,
-            animationDurationInMs: 300,
-            darkSquareStyle: { backgroundColor: '#779952' },
-            lightSquareStyle: { backgroundColor: '#edeed1' },
-          }}
+      <div className="w-full md:max-w-[420px] mx-auto" data-testid="setup-board">
+        <ChessBoard
+          key={boardKey}
+          initialFen={fen}
+          orientation={orientation}
+          interactive={boardState === 'thinking' && isPlayerTurn}
+          showFlipButton
+          showUndoButton={false}
+          showResetButton={false}
+          onMove={handleMove}
         />
       </div>
 

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Lightbulb, Play, SkipForward, Pause } from 'lucide-react';
 import { Chess } from 'chess.js';
-import { Chessboard } from 'react-chessboard';
+import { ChessBoard } from '../Board/ChessBoard';
 import {
   buildTacticCreateQueue,
   updateContextDepth,
@@ -321,16 +321,15 @@ export function TacticCreatePage(): JSX.Element {
           </div>
 
           {/* Board */}
-          <div className="aspect-square max-w-md mx-auto w-full">
-            <Chessboard
-              options={{
-                position: replayFen,
-                boardOrientation: currentOrientation,
-                allowDragging: false,
-                animationDurationInMs: 350,
-                darkSquareStyle: { backgroundColor: '#779952' },
-                lightSquareStyle: { backgroundColor: '#edeed1' },
-              }}
+          <div className="w-full md:max-w-[420px] mx-auto">
+            <ChessBoard
+              key={`replay-${currentIndex}-${replayStep}`}
+              initialFen={replayFen}
+              orientation={currentOrientation}
+              interactive={false}
+              showFlipButton
+              showUndoButton={false}
+              showResetButton={false}
             />
           </div>
 
