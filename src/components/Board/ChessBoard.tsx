@@ -66,6 +66,8 @@ export interface ChessBoardProps {
   voiceEngineSnapshot?: EngineSnapshot | null;
   /** Context about the last move played, for voice chat move quality questions. */
   voiceLastMoveContext?: LastMoveContext | null;
+  /** Which color the student is playing, for voice chat context. */
+  voicePlayerColor?: 'white' | 'black';
   /** Called when voice mic listening/streaming state changes. */
   onVoiceActiveChange?: (active: boolean) => void;
 }
@@ -104,6 +106,7 @@ export function ChessBoard({
   onOpeningRequest,
   voiceEngineSnapshot,
   voiceLastMoveContext,
+  voicePlayerColor,
   onVoiceActiveChange,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
@@ -371,6 +374,7 @@ export function ChessBoard({
               onOpeningRequest={onOpeningRequest}
               engineSnapshot={voiceEngineSnapshot}
               lastMoveContext={voiceLastMoveContext}
+              playerColor={voicePlayerColor}
               onListeningChange={onVoiceActiveChange}
             />
           )}

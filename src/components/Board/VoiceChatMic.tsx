@@ -30,6 +30,8 @@ interface VoiceChatMicProps {
   fen: string;
   pgn?: string;
   turn?: 'w' | 'b';
+  /** Which color the student is playing ('white' or 'black'). */
+  playerColor?: 'white' | 'black';
   /** Called when the user asks the coach to play a specific opening (e.g. "French Defense"). */
   onOpeningRequest?: (openingName: string) => void;
   /** Pre-computed engine snapshot (avoids running Stockfish again). */
@@ -47,10 +49,13 @@ function buildSystemAddition(
   fen: string,
   pgn: string | undefined,
   turn: string | undefined,
+  playerColor: 'white' | 'black',
   engineData: EngineSnapshot | null,
   lastMove: LastMoveContext | null | undefined,
 ): string {
   const turnLabel = turn === 'b' ? 'Black' : 'White';
+  const opponentColor = playerColor === 'white' ? 'Black' : 'White';
+  const playerLabel = playerColor === 'white' ? 'White' : 'Black';
 
   const engineBlock = engineData
     ? [
@@ -76,17 +81,20 @@ ${lastMove.bestMove ? `Engine's best was: ${lastMove.bestMove}` : ''}`;
   }
 
   return `VOICE CHAT — The student is speaking to you via microphone.
+The student is playing ${playerLabel}. The opponent (computer) is ${opponentColor}.
 Your responses will be spoken aloud, so follow these rules strictly:
 
-1. When the student asks what to play: ALWAYS name the specific move. Say it in plain English like "move your knight to f3" or "push your pawn to e4". NEVER give vague advice without naming a concrete move.
-2. When the student asks about a move that was played (theirs or the opponent's): use the Last Move data below to say whether it was good, an inaccuracy, or a mistake, citing the eval change and what the engine preferred.
+1. When the student asks what to play: ALWAYS name the specific move from the engine analysis. Say it in plain English like "move your knight to f3". NEVER give vague advice without naming a concrete move.
+2. When the student asks about a move that was played: use the [Last Move Played] data below. Say whether it was good, an inaccuracy, or a mistake, and cite the eval change. Remember: "you" = the student (${playerLabel}), "opponent" = the computer (${opponentColor}).
 3. Keep responses to 1-2 sentences. Be direct.
 4. Use spoken-friendly language: say "knight to f3" not "Nf3", "queen to d7" not "Qd7", "castle kingside" not "O-O".
 5. ALWAYS base your advice on the engine analysis below. NEVER suggest moves from your own chess knowledge — LLMs are unreliable at chess tactics.
+6. The engine analysis shows the best moves for the side to move. Do NOT confuse the student's pieces with the opponent's pieces.
 
 [Current Position]
 FEN: ${fen}
 ${pgn ? `PGN: ${pgn}` : ''}
+Student plays: ${playerLabel}
 Turn: ${turnLabel} to move
 ${engineBlock}
 ${lastMoveBlock}`;
@@ -135,7 +143,7 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -197,7 +205,7 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot,
 
     const recent = currentMessages.slice(-(MAX_HISTORY_PAIRS * 2));
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
-    const systemAddition = buildSystemAddition(fen, pgn, turn, engineData, lastMoveContext);
+    const systemAddition = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
 
     // Collect full response, then speak once (avoids speech cancellation from rapid calls)
     const response = await getCoachChatResponse(
@@ -219,7 +227,7 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot,
     };
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
-  }, [fen, pgn, turn, engineSnapshot, lastMoveContext, onOpeningRequest]);
+  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest]);
 
   // Keep a ref to handleUserMessage so the onResult callback always uses the latest
   const handleUserMessageRef = useRef(handleUserMessage);
