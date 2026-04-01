@@ -13,7 +13,7 @@ import { ChatInput } from './ChatInput';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
 import { getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { getCoachCommentary, getCoachChatResponse } from '../../services/coachApi';
-import { buildChessContextMessage, POSITION_ANALYSIS_ADDITION } from '../../services/coachPrompts';
+import { buildChessContextMessage, POSITION_ANALYSIS_ADDITION, INTERACTIVE_REVIEW_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
@@ -113,6 +113,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [practiceResult, setPracticeResult] = useState<'pending' | 'correct' | 'incorrect' | null>(null);
   const [practiceAttempts, setPracticeAttempts] = useState(0);
 
+  // ─── Show Best Move Arrow State ─────────────────────────────────────────────
+  const [bestMoveRevealed, setBestMoveRevealed] = useState(false);
+
   // ─── Best Line Explorer State ──────────────────────────────────────────────
   const [bestLineActive, setBestLineActive] = useState(false);
   const [bestLineMoves, setBestLineMoves] = useState<string[]>([]); // UCI moves
@@ -194,7 +197,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const materialAdv = useMemo(() => getMaterialAdvantage(displayFen), [displayFen]);
   const isPlayerWhite = playerColor === 'white';
 
-  // Best-move arrow: show for suboptimal player moves
+  // Best-move arrow: show for suboptimal player moves (only when revealed)
   const arrows = useMemo(() => {
     if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return [];
     if (!currentMove) return [];
@@ -204,7 +207,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (cls === 'brilliant' || cls === 'great' || cls === 'good' || cls === 'book') return [];
     const result: Array<{ startSquare: string; endSquare: string; color: string }> = [];
 
-    // Played move arrow (red/orange) — show what was actually played
+    // Played move arrow (red/orange) — always show what was actually played
     const playedMoveColor = cls ? PLAYED_MOVE_ARROW_COLORS[cls] : null;
     if (playedMoveColor) {
       const prevMoveIdx = reviewState.currentMoveIndex - 1;
@@ -215,12 +218,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
 
-    // Best move arrow (green) — show what should have been played
-    const bestArrow = uciToArrow(currentMove.bestMove, 'rgba(34, 197, 94, 0.8)');
-    if (bestArrow) result.push(bestArrow);
+    // Best move arrow (green) — only show when revealed via button or in guided lesson
+    if (bestMoveRevealed || reviewState.mode === 'guided_lesson') {
+      const bestArrow = uciToArrow(currentMove.bestMove, 'rgba(34, 197, 94, 0.8)');
+      if (bestArrow) result.push(bestArrow);
+    }
 
     return result;
-  }, [reviewState.mode, reviewState.currentMoveIndex, currentMove, moves]);
+  }, [reviewState.mode, reviewState.currentMoveIndex, currentMove, moves, bestMoveRevealed]);
 
   // Board highlights: classification-colored square for played move (mistakes/blunders)
   const classificationHighlights = useMemo(() => {
@@ -299,7 +304,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     return () => window.removeEventListener('keydown', handleKeyDown);
   });
 
-  // ─── AI Commentary: lazy-load for key moments ───────────────────────────────
+  // ─── AI Commentary: lazy-load for key moments and significant positions ─────
   useEffect(() => {
     if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
     if (!currentMove) {
@@ -307,10 +312,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return;
     }
 
-    // Only fetch AI commentary for key moments (blunders, mistakes, brilliancies)
+    // Fetch AI commentary for key moments AND significant player moves
+    // Skip coach (opponent) moves — narrate only on the player's moves
+    if (currentMove.isCoachMove) {
+      setAiCommentary(null);
+      return;
+    }
+
     const cls = currentMove.classification;
     const isKeyMoment = cls === 'blunder' || cls === 'mistake' || cls === 'brilliant';
-    if (!isKeyMoment || currentMove.isCoachMove) {
+    const isNotable = cls === 'inaccuracy' || cls === 'great' || cls === 'miss';
+    // Also narrate on significant eval swings (even for "good" moves)
+    const hasEvalSwing = currentMove.preMoveEval !== null && currentMove.evaluation !== null
+      && Math.abs(currentMove.evaluation - currentMove.preMoveEval) > 50;
+
+    if (!isKeyMoment && !isNotable && !hasEvalSwing) {
       setAiCommentary(null);
       return;
     }
@@ -324,7 +340,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return;
     }
 
-    // Build context and fetch from Claude
+    // Build context and fetch from Claude with positional narration prompt
     let cancelled = false;
     setIsLoadingAiCommentary(true);
     setAiCommentary(null);
@@ -348,6 +364,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       playerMove: currentMove.san,
       moveClassification: currentMove.classification,
       playerProfile: { rating: playerRating, weaknesses: [] },
+      additionalContext: INTERACTIVE_REVIEW_ADDITION,
     };
 
     void getCoachCommentary('interactive_review', ctx, (chunk) => {
@@ -421,11 +438,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     });
   }, [isAskStreaming, reviewState.currentMoveIndex, moves, openingName, playerRating]);
 
-  // Reset ask state when navigating to a different move
+  // Reset ask state and best-move reveal when navigating to a different move
   useEffect(() => {
     setAskExpanded(false);
     setAskResponse(null);
     setIsAskStreaming(false);
+    setBestMoveRevealed(false);
     if (askAbortRef.current) askAbortRef.current.abort();
   }, [reviewState.currentMoveIndex]);
 
@@ -456,7 +474,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Handle player move on the board — enter what-if mode
   const handleBoardMove = useCallback(async (moveResult: MoveResult) => {
-    const startFen = reviewState.whatIfStartFen ?? currentMove?.fen ?? null;
+    // If we were in best line mode, exit it and use the best line FEN as the start
+    const startFen = bestLineActive && bestLineFen
+      ? bestLineBaseFen ?? bestLineFen
+      : reviewState.whatIfStartFen ?? currentMove?.fen ?? null;
+
+    if (bestLineActive) {
+      setBestLineActive(false);
+      setBestLineMoves([]);
+      setBestLineSans([]);
+      setBestLineIndex(0);
+      setBestLineFen(null);
+      setBestLineBaseFen(null);
+    }
 
     setReviewState((prev) => ({
       ...prev,
@@ -479,33 +509,39 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWhatIfCommentary(null);
     }
 
-    // Stockfish responds
-    setIsThinking(true);
-    try {
-      if (abortRef.current) abortRef.current.abort();
-      abortRef.current = new AbortController();
+    // Check whose turn it is after the player's move
+    const turnFromFen = moveResult.fen.split(' ')[1]; // 'w' or 'b'
+    const isOpponentTurn = (playerColor === 'white' && turnFromFen === 'b')
+                        || (playerColor === 'black' && turnFromFen === 'w');
 
-      const { move } = await getAdaptiveMove(moveResult.fen, 2500);
-      if (abortRef.current.signal.aborted) return;
+    // Auto-respond as the opponent; if the player moved the opponent's pieces, skip
+    if (isOpponentTurn) {
+      setIsThinking(true);
+      try {
+        if (abortRef.current) abortRef.current.abort();
+        abortRef.current = new AbortController();
 
-      const { Chess } = await import('chess.js');
-      const chess = new Chess(moveResult.fen);
-      const from = move.slice(0, 2);
-      const to = move.slice(2, 4);
-      const promotion = move.length > 4 ? move[4] : undefined;
-      const sfResult = chess.move({ from, to, promotion });
+        const { move } = await getAdaptiveMove(moveResult.fen, 2500);
+        if (abortRef.current.signal.aborted) return;
 
-      setReviewState((prev) => ({
-        ...prev,
-        whatIfMoves: [...prev.whatIfMoves, sfResult.san],
-      }));
-      setWhatIfFen(chess.fen());
-    } catch {
-      // Stockfish failed — stay on current position
-    } finally {
-      setIsThinking(false);
+        const chess = new Chess(moveResult.fen);
+        const from = move.slice(0, 2);
+        const to = move.slice(2, 4);
+        const promotion = move.length > 4 ? move[4] : undefined;
+        const sfResult = chess.move({ from, to, promotion });
+
+        setReviewState((prev) => ({
+          ...prev,
+          whatIfMoves: [...prev.whatIfMoves, sfResult.san],
+        }));
+        setWhatIfFen(chess.fen());
+      } catch {
+        // Stockfish failed — stay on current position, player can move manually
+      } finally {
+        setIsThinking(false);
+      }
     }
-  }, [reviewState.whatIfStartFen, currentMove?.fen]);
+  }, [reviewState.whatIfStartFen, currentMove?.fen, playerColor, bestLineActive, bestLineFen, bestLineBaseFen]);
 
   const handleBackToReview = useCallback(() => {
     if (abortRef.current) abortRef.current.abort();
@@ -1053,7 +1089,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <MoveActionButtons
                   currentMove={currentMove}
                   onShowBestMove={() => {
-                    // Toggle best-move arrow visibility
+                    setBestMoveRevealed((prev) => !prev);
                   }}
                   onRetryPosition={() => {
                     if (!currentMove || !currentMove.bestMove) return;
