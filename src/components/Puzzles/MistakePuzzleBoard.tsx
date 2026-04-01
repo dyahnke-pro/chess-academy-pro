@@ -6,6 +6,8 @@ import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import { describePositionIdea } from '../../services/mistakeNarration';
+import { getCoachCommentary } from '../../services/coachApi';
+import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
 import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle } from 'lucide-react';
@@ -134,6 +136,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const playerMoveCountRef = useRef(0);
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
   const { settings } = useSettings();
+  const activeProfile = useAppStore((s) => s.activeProfile);
+  const [whyLoading, setWhyLoading] = useState(false);
 
   // Replay state
   const [replaySteps, setReplaySteps] = useState<ReplayStep[]>([]);
@@ -180,6 +184,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setMoveCount(0);
     setLastMoveHighlight(null);
     setSubtitle('');
+    setWhyLoading(false);
     hasMadeMistakeRef.current = false;
     setReplayIndex(-1);
 
@@ -360,17 +365,66 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const handleWhy = useCallback(() => {
     if (state !== 'playing' && state !== 'correct') return;
     voiceService.stop();
-    const hint = puzzle.narration.conceptHint;
-    if (hint) {
-      setSubtitle(hint);
-      void voiceService.speak(hint);
-    } else {
-      // Generate a spoiler-free positional explanation
+
+    if (state === 'playing') {
+      // Spoiler-free hint during play
+      const hint = puzzle.narration.conceptHint;
+      if (hint) {
+        setSubtitle(hint);
+        void voiceService.speak(hint);
+      } else {
+        const explanation = describePositionIdea(puzzle.fen, puzzle.bestMoveSan, puzzle.gamePhase);
+        setSubtitle(explanation);
+        void voiceService.speak(explanation);
+      }
+      return;
+    }
+
+    // state === 'correct' — give a thorough coach explanation of why the move was best
+    setWhyLoading(true);
+    setSubtitle('Analyzing why this was the best move...');
+
+    const rating = activeProfile?.currentRating ?? 1200;
+    void getCoachCommentary('puzzle_feedback', {
+      fen: puzzle.fen,
+      lastMoveSan: puzzle.bestMoveSan,
+      moveNumber: puzzle.moveNumber,
+      pgn: '',
+      openingName: puzzle.openingName,
+      stockfishAnalysis: null,
+      playerMove: puzzle.playerMoveSan,
+      moveClassification: null,
+      playerProfile: {
+        rating,
+        weaknesses: [],
+      },
+      additionalContext: [
+        `The student just solved a tactic puzzle from one of their own games.`,
+        `Position before: FEN ${puzzle.fen}`,
+        `Their original (wrong) move was: ${puzzle.playerMoveSan} (${puzzle.classification}, lost ${puzzle.cpLoss} centipawns)`,
+        `The best move was: ${puzzle.bestMoveSan}`,
+        `Solution line (UCI): ${puzzle.moves}`,
+        `Game phase: ${puzzle.gamePhase}`,
+        puzzle.opponentName ? `Opponent: ${puzzle.opponentName}` : '',
+        puzzle.openingName ? `Opening: ${puzzle.openingName}` : '',
+        ``,
+        `Give a thorough explanation (3-5 sentences) of WHY ${puzzle.bestMoveSan} is the best move.`,
+        `Explain what it accomplishes tactically/strategically, why their original move ${puzzle.playerMoveSan} was worse,`,
+        `and what principle or pattern they should remember for next time.`,
+        `Be specific about the position — reference pieces, squares, and threats.`,
+      ].filter(Boolean).join('\n'),
+    }).then((response) => {
+      setWhyLoading(false);
+      setSubtitle(response);
+      void voiceService.speak(response);
+    }).catch(() => {
+      setWhyLoading(false);
+      // Fallback to local explanation
       const explanation = describePositionIdea(puzzle.fen, puzzle.bestMoveSan, puzzle.gamePhase);
       setSubtitle(explanation);
       void voiceService.speak(explanation);
-    }
-  }, [state, puzzle]);
+    });
+  }, [state, puzzle, activeProfile?.currentRating]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
@@ -606,11 +660,12 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         <div className="flex justify-end">
           <button
             onClick={handleWhy}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-accent text-sm transition-colors border border-theme-border"
+            disabled={whyLoading}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-accent text-sm transition-colors border border-theme-border disabled:opacity-50 disabled:cursor-wait"
             data-testid="why-button"
           >
             <HelpCircle size={14} />
-            <span>Why?</span>
+            <span>{whyLoading ? 'Thinking...' : state === 'correct' ? 'Explain why' : 'Why?'}</span>
           </button>
         </div>
       )}
