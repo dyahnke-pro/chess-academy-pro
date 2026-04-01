@@ -131,6 +131,15 @@ class VoiceService {
     return this.speakInternal(text, true);
   }
 
+  /** Queue a sentence without stopping current speech. For streaming voice responses. */
+  speakQueuedForced(text: string): void {
+    if (this.cachedPrefs?.systemVoiceURI) {
+      speechService.setVoice(this.cachedPrefs.systemVoiceURI);
+    }
+    const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
+    speechService.queue(text, { rate: speed, pitch: 0.78 });
+  }
+
   private async speakInternal(text: string, force: boolean): Promise<void> {
     this.stop();
 

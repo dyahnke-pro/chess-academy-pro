@@ -207,18 +207,42 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
     const systemAddition = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
 
-    // Collect full response, then speak once (avoids speech cancellation from rapid calls)
+    // Stream sentences to speech as they arrive — speak starts on first sentence,
+    // subsequent sentences queue without canceling, so speech finishes ~when tokens do.
+    let sentenceBuffer = '';
+    let isFirstSentence = true;
+
+    const flushSentence = (sentence: string): void => {
+      const trimmed = sentence.trim();
+      if (!trimmed) return;
+      if (isFirstSentence) {
+        void voiceService.speakForced(trimmed);
+        isFirstSentence = false;
+      } else {
+        voiceService.speakQueuedForced(trimmed);
+      }
+    };
+
+    const onChunk = (chunk: string): void => {
+      sentenceBuffer += chunk;
+      // Split on sentence-ending punctuation followed by a space or end
+      const match = sentenceBuffer.match(/^(.*?[.!?])\s+(.*)$/s);
+      if (match) {
+        flushSentence(match[1]);
+        sentenceBuffer = match[2];
+      }
+    };
+
     const response = await getCoachChatResponse(
       formatted,
       systemAddition,
-      undefined,
+      onChunk,
       'hint', // Use Haiku for speed — voice responses must be fast
       150, // Low token limit — voice needs 1-2 sentences, not paragraphs
     );
 
-    if (response.trim()) {
-      void voiceService.speakForced(response.trim());
-    }
+    // Flush any remaining text
+    flushSentence(sentenceBuffer);
 
     const assistantMsg: ChatMessage = {
       id: `voice-${Date.now()}-resp`,

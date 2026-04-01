@@ -184,6 +184,24 @@ class SpeechService {
     setTimeout(() => { synthesis.speak(utterance); }, 0);
   }
 
+  /** Queue an utterance without canceling current speech. Used for streaming sentence-by-sentence. */
+  queue(text: string, options: SpeechOptions = {}): void {
+    if (!this.synthesis || !this.enabled) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = options.rate ?? this.rate;
+    utterance.pitch = options.pitch ?? 0.78;
+    utterance.volume = options.volume ?? 1.0;
+    utterance.voice = options.voice ?? this.preferredVoice;
+
+    if (options.onEnd) {
+      const endHandler = options.onEnd;
+      utterance.addEventListener('end', () => endHandler());
+    }
+
+    this.synthesis.speak(utterance);
+  }
+
   stop(): void {
     this.synthesis?.cancel();
   }
