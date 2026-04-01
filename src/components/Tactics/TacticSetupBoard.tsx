@@ -4,6 +4,8 @@ import { Chessboard } from 'react-chessboard';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { motion } from 'framer-motion';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
+import { voiceService } from '../../services/voiceService';
+import { setupIntro, setupCorrectPrep, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
 import type { SetupPuzzle } from '../../types';
 
 type BoardState = 'thinking' | 'correct' | 'incorrect' | 'reveal';
@@ -29,6 +31,13 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const [message, setMessage] = useState('Find the preparatory move');
   const [revealStep, setRevealStep] = useState(0);
   const hasCompleted = useRef(false);
+
+  // Narrate intro on mount
+  useEffect(() => {
+    const intro = setupIntro(puzzle.tacticType, puzzle.difficulty);
+    void voiceService.speak(intro);
+    return () => { voiceService.stop(); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const solutionMoves = puzzle.solutionMoves.split(' ').filter(Boolean);
   const tacticMoves = puzzle.tacticMoves.split(' ').filter(Boolean);
@@ -71,8 +80,10 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
         hasCompleted.current = true;
         const timer = setTimeout(() => {
           setBoardState('correct');
-          setMessage(`You engineered the ${tacticTypeLabel(puzzle.tacticType).toLowerCase()}!`);
-          setTimeout(() => onComplete(true), 1500);
+          const completeMsg = setupRevealComplete(puzzle.tacticType);
+          setMessage(completeMsg);
+          void voiceService.speak(completeMsg);
+          setTimeout(() => onComplete(true), 2000);
         }, 800);
         return () => clearTimeout(timer);
       }
@@ -122,9 +133,14 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
 
         if (moveIndex + 1 >= solutionMoves.length) {
           setBoardState('reveal');
-          setMessage(`Setup complete! Now watch the ${tacticTypeLabel(puzzle.tacticType).toLowerCase()}...`);
+          const revealMsg = `Setup complete! Now watch the ${tacticTypeLabel(puzzle.tacticType).toLowerCase()}...`;
+          setMessage(revealMsg);
+          void voiceService.speak(revealMsg);
         } else {
-          setMessage('Correct! Now the opponent responds...');
+          const remaining = Math.ceil((solutionMoves.length - moveIndex - 1) / 2);
+          const prepMsg = setupCorrectPrep(remaining);
+          setMessage(prepMsg);
+          void voiceService.speak(prepMsg);
         }
         return true;
       } catch {
@@ -134,7 +150,9 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
 
     // Wrong move
     setBoardState('incorrect');
-    setMessage('Not quite — that doesn\'t set up the tactic.');
+    const wrongMsg = setupIncorrect();
+    setMessage(wrongMsg);
+    void voiceService.speak(wrongMsg);
     if (!hasCompleted.current) {
       hasCompleted.current = true;
       setTimeout(() => onComplete(false), 2000);

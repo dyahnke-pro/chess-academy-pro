@@ -13,6 +13,15 @@ import {
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { updatePuzzleRating } from '../../services/puzzleService';
 import { tacticTypeLabel, tacticTypeIcon } from '../../services/tacticalProfileService';
+import { voiceService } from '../../services/voiceService';
+import {
+  createIntro,
+  createReplayNarration,
+  createTransition,
+  createCorrect,
+  createIncorrect,
+  createDepthIncrease,
+} from '../../services/tacticNarrationService';
 import { useAppStore } from '../../stores/appStore';
 import { MistakePuzzleBoard } from '../Puzzles/MistakePuzzleBoard';
 import type { TacticCreateItem, ReplayMove } from '../../services/tacticCreateService';
@@ -49,8 +58,15 @@ export function TacticCreatePage(): JSX.Element {
 
   // Feedback after solve — shows whether depth will increase
   const [feedbackCorrect, setFeedbackCorrect] = useState(false);
+  const [subtitle, setSubtitle] = useState('');
 
   const replayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Warmup voice on mount, stop on unmount
+  useEffect(() => {
+    void voiceService.warmup();
+    return () => { voiceService.stop(); };
+  }, []);
 
   useEffect(() => {
     void loadQueue();
@@ -85,28 +101,41 @@ export function TacticCreatePage(): JSX.Element {
     setReplayStep(0);
     setReplayPlaying(false);
     setReplayPaused(false);
+    setSubtitle('');
     setPhase('replay');
   }
 
-  // Auto-play replay moves
+  // Auto-play replay moves with narration
   useEffect(() => {
     if (phase !== 'replay' || !replayPlaying || replayPaused || replayStep >= replayMoves.length) return;
 
     const speed = replayStep > SPEED_THRESHOLD ? FAST_REPLAY_SPEED : BASE_REPLAY_SPEED;
     const timer = setTimeout(() => {
-      setReplayStep((s) => s + 1);
+      const nextStep = replayStep + 1;
+      setReplayStep(nextStep);
+
+      // Narrate notable moves during replay
+      const move = replayMoves[replayStep];
+      const narration = createReplayNarration(move.san, move.isWhite, replayStep, replayMoves.length);
+      if (narration) {
+        setSubtitle(narration);
+        void voiceService.speak(narration);
+      }
     }, speed);
     replayTimerRef.current = timer;
 
     return () => clearTimeout(timer);
-  }, [phase, replayPlaying, replayPaused, replayStep, replayMoves.length]);
+  }, [phase, replayPlaying, replayPaused, replayStep, replayMoves]);
 
-  // When replay finishes, brief pause then transition to solving
+  // When replay finishes, narrate transition then move to solving
   useEffect(() => {
     if (phase === 'replay' && replayPlaying && !replayPaused && replayStep >= replayMoves.length) {
+      const transition = createTransition();
+      setSubtitle(transition);
+      void voiceService.speak(transition);
       const timer = setTimeout(() => {
         setPhase('solving');
-      }, 1200);
+      }, 2000);
       return () => clearTimeout(timer);
     }
     return undefined;
@@ -114,7 +143,19 @@ export function TacticCreatePage(): JSX.Element {
 
   const handleStartReplay = useCallback((): void => {
     setReplayPlaying(true);
-  }, []);
+    // Narrate intro
+    const item = queue.at(currentIndex);
+    if (item) {
+      const intro = createIntro(
+        item.originalMistake.opponentName,
+        item.originalMistake.openingName,
+        item.contextDepth,
+        item.replayMoves.length,
+      );
+      setSubtitle(intro);
+      void voiceService.speak(intro);
+    }
+  }, [queue, currentIndex]);
 
   const handleTogglePause = useCallback((): void => {
     setReplayPaused((p) => !p);
@@ -122,6 +163,8 @@ export function TacticCreatePage(): JSX.Element {
 
   const handleSkipReplay = useCallback((): void => {
     if (replayTimerRef.current) clearTimeout(replayTimerRef.current);
+    voiceService.stop();
+    setSubtitle('');
     setPhase('solving');
   }, []);
 
@@ -138,6 +181,11 @@ export function TacticCreatePage(): JSX.Element {
       // Scale up context depth for next time
       const newDepth = await updateContextDepth(newStreak);
       setCurrentDepth(newDepth);
+      // Narrate success + depth increase
+      const msg = createCorrect(item.tacticType, newStreak);
+      const depthMsg = newStreak > 1 ? ' ' + createDepthIncrease(newDepth) : '';
+      setSubtitle(msg);
+      void voiceService.speak(msg + depthMsg);
     } else {
       setFailed((f) => f + 1);
       // Reset context depth on failure — back to basics
@@ -145,6 +193,10 @@ export function TacticCreatePage(): JSX.Element {
         await resetContextDepth();
         setCurrentDepth(8);
       }
+      // Narrate miss
+      const msg = createIncorrect(item.tacticType);
+      setSubtitle(msg);
+      void voiceService.speak(msg);
     }
 
     // Grade the puzzle
@@ -281,6 +333,24 @@ export function TacticCreatePage(): JSX.Element {
               }}
             />
           </div>
+
+          {/* Voice subtitle */}
+          {subtitle && (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={subtitle}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-center text-xs py-1.5 px-3 rounded-lg"
+                style={{ color: '#a78bfa', background: 'color-mix(in srgb, #a78bfa 8%, transparent)' }}
+                data-testid="narration-subtitle"
+              >
+                {subtitle}
+              </motion.div>
+            </AnimatePresence>
+          )}
 
           {/* Replay move counter */}
           {replayPlaying && (

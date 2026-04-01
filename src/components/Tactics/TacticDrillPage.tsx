@@ -8,6 +8,14 @@ import { buildTacticDrillQueue } from '../../services/tacticDrillService';
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { updatePuzzleRating } from '../../services/puzzleService';
 import { tacticTypeLabel, tacticTypeIcon } from '../../services/tacticalProfileService';
+import { voiceService } from '../../services/voiceService';
+import {
+  drillIntro,
+  drillTransition,
+  drillCorrect,
+  drillIncorrect,
+  describeMove,
+} from '../../services/tacticNarrationService';
 import { useAppStore } from '../../stores/appStore';
 import { MistakePuzzleBoard } from '../Puzzles/MistakePuzzleBoard';
 import { db } from '../../db/schema';
@@ -74,6 +82,13 @@ export function TacticDrillPage(): JSX.Element {
   const [contextMoves, setContextMoves] = useState<ContextMove[]>([]);
   const [contextStep, setContextStep] = useState(0);
   const [contextPlaying, setContextPlaying] = useState(false);
+  const [subtitle, setSubtitle] = useState('');
+
+  // Warmup voice on mount, stop on unmount
+  useEffect(() => {
+    void voiceService.warmup();
+    return () => { voiceService.stop(); };
+  }, []);
 
   useEffect(() => {
     void loadQueue();
@@ -116,33 +131,59 @@ export function TacticDrillPage(): JSX.Element {
     }
   }
 
-  // Auto-play context moves
+  // Auto-play context moves with move narration
   useEffect(() => {
     if (phase !== 'context' || !contextPlaying || contextStep >= contextMoves.length) return;
 
     const timer = setTimeout(() => {
-      setContextStep((s) => s + 1);
+      const nextStep = contextStep + 1;
+      setContextStep(nextStep);
+
+      // Narrate each move during the short buildup (only 5 moves, so narrate all)
+      const move = contextMoves[contextStep];
+      const narration = describeMove(move.san, move.isWhite);
+      setSubtitle(narration);
+      void voiceService.speak(narration);
     }, 1200);
 
     return () => clearTimeout(timer);
-  }, [phase, contextPlaying, contextStep, contextMoves.length]);
+  }, [phase, contextPlaying, contextStep, contextMoves]);
 
-  // When context finishes playing, transition to solving
+  // When context finishes playing, narrate transition then solve
   useEffect(() => {
     if (phase === 'context' && contextPlaying && contextStep >= contextMoves.length) {
+      const item = queue.at(currentIndex);
+      if (item) {
+        const transition = drillTransition(item.tacticType);
+        setSubtitle(transition);
+        void voiceService.speak(transition);
+      }
       const timer = setTimeout(() => {
         setPhase('solving');
-      }, 800);
+      }, 1500);
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [phase, contextPlaying, contextStep, contextMoves.length]);
+  }, [phase, contextPlaying, contextStep, contextMoves.length, queue, currentIndex]);
 
   const handleStartContext = useCallback((): void => {
     setContextPlaying(true);
-  }, []);
+    // Narrate intro
+    const item = queue.at(currentIndex);
+    if (item) {
+      const intro = drillIntro(
+        item.tacticType,
+        item.originalMistake.opponentName,
+        item.originalMistake.openingName,
+      );
+      setSubtitle(intro);
+      void voiceService.speak(intro);
+    }
+  }, [queue, currentIndex]);
 
   const handleSkipContext = useCallback((): void => {
+    voiceService.stop();
+    setSubtitle('');
     setPhase('solving');
   }, []);
 
@@ -150,10 +191,17 @@ export function TacticDrillPage(): JSX.Element {
     const item = queue.at(currentIndex);
     if (!item) return;
 
+    // Narrate result
     if (correct) {
       setSolved((s) => s + 1);
+      const msg = drillCorrect(item.tacticType);
+      setSubtitle(msg);
+      void voiceService.speak(msg);
     } else {
       setFailed((f) => f + 1);
+      const msg = drillIncorrect(item.tacticType);
+      setSubtitle(msg);
+      void voiceService.speak(msg);
     }
 
     // Grade
@@ -261,6 +309,20 @@ export function TacticDrillPage(): JSX.Element {
               }}
             />
           </div>
+
+          {/* Voice subtitle */}
+          {subtitle && (
+            <motion.div
+              key={subtitle}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center text-xs py-1.5 px-3 rounded-lg"
+              style={{ color: 'var(--color-warning)', background: 'color-mix(in srgb, var(--color-warning) 8%, transparent)' }}
+              data-testid="narration-subtitle"
+            >
+              {subtitle}
+            </motion.div>
+          )}
 
           {/* Context move list */}
           {contextPlaying && contextStep > 0 && (
