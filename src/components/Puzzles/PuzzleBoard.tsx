@@ -9,6 +9,7 @@ import { CheckCircle, XCircle } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
+import { getWrongMoveHint } from '../../utils/puzzleHints';
 import type { PuzzleRecord } from '../../types';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
@@ -34,6 +35,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
   const [boardKey, setBoardKey] = useState(0);
   const hasMadeMistakeRef = useRef(false);
+  const wrongAttemptsRef = useRef(0);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
@@ -83,6 +85,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     setLastMoveHighlight(null);
     setBoardKey((k) => k + 1);
     hasMadeMistakeRef.current = false;
+    wrongAttemptsRef.current = 0;
     setState('loading');
     resetHints();
 
@@ -111,11 +114,10 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     };
   }, [puzzle, playMoveSound, resetHints]);
 
-  // Voice feedback when puzzle state changes (respects user voice setting)
+  // Voice feedback on correct solve (respects user voice setting)
   useEffect(() => {
     if (!settings.voiceEnabled) return;
     if (state === 'correct') void voiceService.speak('Excellent! Puzzle solved!');
-    else if (state === 'incorrect') void voiceService.speak('Not quite, try again.');
   }, [state, settings.voiceEnabled]);
 
   const handleMove = useCallback((move: MoveResult): void => {
@@ -130,6 +132,7 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     if (isCorrect) {
       playMoveSound(move.san);
       resetHints();
+      wrongAttemptsRef.current = 0;
       setLastMoveHighlight({ from: move.from, to: move.to });
       const nextIndex = moveIndex + 1;
 
@@ -165,18 +168,32 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     } else {
       // Wrong move — undo and let them try again from the same position
       hasMadeMistakeRef.current = true;
+      wrongAttemptsRef.current += 1;
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setBoardKey((k) => k + 1);
       setState('incorrect');
+      voiceService.stop();
       playEncouragement();
+
+      // Progressive voice hint based on attempt count and puzzle themes
+      if (settings.voiceEnabled) {
+        const hint = getWrongMoveHint(
+          wrongAttemptsRef.current,
+          puzzle.themes,
+          expected.from,
+          expected.to,
+          chessRef.current,
+        );
+        void voiceService.speak(hint);
+      }
 
       // Brief feedback then back to playing
       setTimeout(() => {
         setState('playing');
       }, 1000);
     }
-  }, [state, disabled, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints]);
+  }, [state, disabled, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, settings.voiceEnabled, puzzle.themes]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     // ChessBoard's internal chess.js has already applied the move.

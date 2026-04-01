@@ -7,6 +7,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import { describePositionIdea } from '../../services/mistakeNarration';
 import { db } from '../../db/schema';
+import { getPieceNameOnSquare } from '../../utils/puzzleHints';
 import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -106,16 +107,6 @@ function formatTimeAgo(dateStr: string): string {
   if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
   if (diffDays < 365) return `${Math.floor(diffDays / 30)}mo ago`;
   return `${Math.floor(diffDays / 365)}y ago`;
-}
-
-const PIECE_NAMES: Record<string, string> = {
-  k: 'king', q: 'queen', r: 'rook', b: 'bishop', n: 'knight', p: 'pawn',
-};
-
-function getPieceNameOnSquare(chess: Chess, square: string): string | null {
-  const piece = chess.get(square as Parameters<Chess['get']>[0]);
-  if (!piece) return null;
-  return PIECE_NAMES[piece.type] ?? null;
 }
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
@@ -446,19 +437,28 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       const expectedMove = movesRef.current[moveIndex];
       let hint = '';
 
-      if (attempts === 1 && puzzle.narration.conceptHint) {
-        hint = puzzle.narration.conceptHint;
+      if (attempts === 1) {
+        if (puzzle.narration.conceptHint) {
+          hint = puzzle.narration.conceptHint;
+        } else {
+          // Classification-aware nudge when no concept hint exists
+          const classificationHints: Record<string, string> = {
+            blunder: 'You gave away material here — find the move that wins it back.',
+            mistake: 'This move weakened your position — look for the stronger alternative.',
+            inaccuracy: 'There was a more precise move available.',
+            miss: 'You missed an opportunity — look for a forcing move.',
+          };
+          hint = classificationHints[puzzle.classification] ?? 'Look for the most forcing move.';
+        }
       } else if (attempts === 2) {
         // Piece hint — tell them which piece to look at
         const pieceName = getPieceNameOnSquare(chessRef.current, expectedMove.from);
         hint = pieceName
           ? `Look at what your ${pieceName} can do.`
-          : 'Look more carefully at the position.';
-      } else if (attempts >= 3) {
+          : 'One of your pieces has a strong move available.';
+      } else {
         // Square hint — reveal the target square
         hint = `The key square is ${expectedMove.to}. What can reach it?`;
-      } else {
-        hint = 'Try again — think about the position.';
       }
 
       setSubtitle(hint);
