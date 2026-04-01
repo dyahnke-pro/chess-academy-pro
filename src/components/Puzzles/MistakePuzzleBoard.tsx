@@ -229,17 +229,28 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       } else {
         // No replay available — go straight to puzzle
         setFen(puzzle.fen);
-        setBoardKey((k) => k + 1);
         setReplaySteps([]);
-        setState('loading');
-        const timer = setTimeout(() => {
+
+        if (skipReplayContext) {
+          // Caller already showed context — start immediately without
+          // remounting the board so the position stays visually stable.
           setState('playing');
           if (puzzle.narration.intro) {
             setSubtitle(puzzle.narration.intro);
             void voiceService.speak(puzzle.narration.intro);
           }
-        }, 400);
-        replayTimerRef.current = timer;
+        } else {
+          setBoardKey((k) => k + 1);
+          setState('loading');
+          const timer = setTimeout(() => {
+            setState('playing');
+            if (puzzle.narration.intro) {
+              setSubtitle(puzzle.narration.intro);
+              void voiceService.speak(puzzle.narration.intro);
+            }
+          }, 400);
+          replayTimerRef.current = timer;
+        }
       }
     })();
 
