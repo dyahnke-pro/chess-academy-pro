@@ -2,13 +2,13 @@
 
 **Status:** Planning  
 **Date:** 2026-04-01  
-**Model:** Freemium — Free (Lite) + Pro ($3.99/mo or $29.99/yr)
+**Model:** Paid App (Lite $3.99 one-time) + Pro Subscription ($4.99/mo or $34.99/yr)
 
 ---
 
 ## Tier Breakdown
 
-### Free (Lite)
+### Lite ($3.99 one-time purchase)
 
 | Feature | Included |
 |---------|----------|
@@ -20,7 +20,9 @@
 | Session tracking & stats | Yes |
 | Offline mode | Yes |
 
-### Pro ($3.99/mo · $29.99/yr)
+No API calls, no backend costs — pure profit on every Lite sale.
+
+### Pro ($4.99/mo · $34.99/yr — auto-renewable subscription)
 
 | Feature | Included |
 |---------|----------|
@@ -139,7 +141,7 @@ Quick subscription check (cached).
 ```typescript
 interface SubscriptionStatus {
   active: boolean;
-  tier: 'free' | 'pro';
+  tier: 'lite' | 'pro';
   expires_at: string | null;
   trial: boolean;
   usage: {
@@ -157,7 +159,7 @@ interface SubscriptionStatus {
 CREATE TABLE subscriptions (
   device_id TEXT PRIMARY KEY,
   receipt_hash TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'free',  -- 'free', 'pro', 'trial'
+  status TEXT NOT NULL DEFAULT 'lite',  -- 'lite', 'pro', 'trial'
   validated_at TIMESTAMPTZ NOT NULL,
   expires_at TIMESTAMPTZ,
   original_transaction_id TEXT
@@ -205,7 +207,7 @@ serve(async (req: Request) => {
 
   // 2. Validate subscription
   const sub = await validateReceipt(receipt, device_id);
-  if (sub.status === 'free') {
+  if (sub.status === 'lite') {
     return new Response(JSON.stringify({ error: 'Pro subscription required' }), {
       status: 403,
     });
@@ -262,7 +264,7 @@ serve(async (req: Request) => {
 // src/stores/subscriptionStore.ts
 
 interface SubscriptionState {
-  tier: 'free' | 'pro';
+  tier: 'lite' | 'pro';
   trialActive: boolean;
   expiresAt: Date | null;
   usage: {
@@ -298,6 +300,10 @@ export function ProFeature({ children, fallback }: ProFeatureProps): React.React
 
   return <>{fallback ?? <UpgradePrompt />}</>;
 }
+
+// Note: All users are Lite (paid $3.99 upfront). The gate only
+// distinguishes Lite vs Pro subscription, not free vs paid.
+// There are no free users.
 ```
 
 ### Gated Features Map
@@ -314,7 +320,7 @@ const PRO_FEATURES = {
   gameAnalysisAI: true,    // AI-powered game review (Stockfish stays free)
 } as const;
 
-export function isFeatureAvailable(feature: keyof typeof PRO_FEATURES, tier: 'free' | 'pro'): boolean {
+export function isFeatureAvailable(feature: keyof typeof PRO_FEATURES, tier: 'lite' | 'pro'): boolean {
   if (tier === 'pro') return true;
   return !PRO_FEATURES[feature];
 }
@@ -342,8 +348,9 @@ export function isFeatureAvailable(feature: keyof typeof PRO_FEATURES, tier: 'fr
 ### Product IDs
 
 ```
-com.chessacademy.pro.monthly    — $3.99/month
-com.chessacademy.pro.annual     — $29.99/year
+App price: $3.99 (paid app — set in App Store Connect pricing)
+com.chessacademy.pro.monthly    — $4.99/month (auto-renewable subscription)
+com.chessacademy.pro.annual     — $34.99/year (auto-renewable subscription)
 ```
 
 ### Capacitor Plugin
@@ -362,7 +369,7 @@ Use `@capawesome/capacitor-in-app-purchases` or RevenueCat's Capacitor SDK.
 1. App launch → check cached subscription status
 2. If expired/unknown → call RevenueCat SDK → get entitlements
 3. If Pro entitlement active → set tier='pro' in Zustand
-4. If not → set tier='free', show upgrade prompts on gated features
+4. If not → set tier='lite', show upgrade prompts on gated features
 5. On purchase tap → present StoreKit payment sheet
 6. On successful purchase → RevenueCat webhook → update Supabase
 7. On each coach API call → send receipt/customer ID for server validation
@@ -455,7 +462,7 @@ function getCoachEndpoint(): { url: string; headers: Record<string, string> } {
 - [ ] Keywords (max 100 chars): chess,training,puzzles,openings,coach,stockfish,tactics,strategy
 - [ ] Category: Education (primary), Games > Board (secondary)
 - [ ] Age rating: 4+ (no objectionable content)
-- [ ] Price: Free (with IAP)
+- [ ] Price: $3.99 (paid app with auto-renewable subscription IAP)
 
 ### Legal
 - [ ] Privacy policy URL (hosted publicly)
@@ -521,16 +528,28 @@ function getCoachEndpoint(): { url: string; headers: Record<string, string> } {
 
 ## Cost Projections
 
-| Users | Monthly Revenue (after Apple) | Est. API Cost | Net |
-|-------|-------------------------------|---------------|-----|
-| 10    | $27.90                        | ~$5           | ~$23 |
-| 50    | $139.50                       | ~$25          | ~$115 |
-| 100   | $279.00                       | ~$50          | ~$229 |
-| 500   | $1,395.00                     | ~$200         | ~$1,195 |
-| 1000  | $2,790.00                     | ~$400         | ~$2,390 |
+### Revenue from Lite (one-time $3.99, Apple keeps 30%)
+
+| Lite Sales | Revenue (after Apple) |
+|------------|----------------------|
+| 100        | $279                 |
+| 500        | $1,397               |
+| 1,000      | $2,793               |
+
+*Pure profit — no ongoing costs per Lite user.*
+
+### Revenue from Pro Subscribers ($4.99/mo, Apple keeps 30% yr1 / 15% yr2+)
+
+| Pro Subs | Monthly Revenue (yr1) | Est. API Cost | Net/mo |
+|----------|-----------------------|---------------|--------|
+| 10       | $34.93                | ~$5           | ~$30   |
+| 50       | $174.65               | ~$25          | ~$150  |
+| 100      | $349.30               | ~$50          | ~$299  |
+| 500      | $1,746.50             | ~$200         | ~$1,547 |
+| 1000     | $3,493.00             | ~$400         | ~$3,093 |
 
 *Assumes DeepSeek as primary model, moderate usage (~30 messages/user/day).*
-*After year 1 with Small Business Program, Apple cut drops to 15%.*
+*Year 2+ with Small Business Program: Apple cut drops to 15%, boosting net ~18%.*
 
 ---
 
