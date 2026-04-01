@@ -217,7 +217,7 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot,
     };
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
-  }, [fen, pgn, turn]);
+  }, [fen, pgn, turn, engineSnapshot, onOpeningRequest]);
 
   const handleMicToggle = useCallback(() => {
     if (!voiceInputService.isSupported()) {
