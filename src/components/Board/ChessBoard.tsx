@@ -64,6 +64,8 @@ export interface ChessBoardProps {
   onOpeningRequest?: (openingName: string) => void;
   /** Pre-computed engine snapshot passed to voice chat (avoids re-running Stockfish). */
   voiceEngineSnapshot?: EngineSnapshot | null;
+  /** Called when voice mic listening/streaming state changes. */
+  onVoiceActiveChange?: (active: boolean) => void;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -99,6 +101,7 @@ export function ChessBoard({
   pgnForChat,
   onOpeningRequest,
   voiceEngineSnapshot,
+  onVoiceActiveChange,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -364,6 +367,7 @@ export function ChessBoard({
               turn={game.turn}
               onOpeningRequest={onOpeningRequest}
               engineSnapshot={voiceEngineSnapshot}
+              onListeningChange={onVoiceActiveChange}
             />
           )}
         </div>
