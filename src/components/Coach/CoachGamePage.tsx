@@ -1258,6 +1258,7 @@ export function CoachGamePage(): JSX.Element {
               arrows={[...hintState.arrows, ...annotationArrows].length > 0 ? [...hintState.arrows, ...annotationArrows] : undefined}
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
               ghostMove={hintState.ghostMove}
+              pgnForChat={game.history.join(' ')}
               onOpeningRequest={handleOpeningRequest}
               voiceEngineSnapshot={voiceEngineSnapshot}
               voiceLastMoveContext={voiceLastMoveContext}
