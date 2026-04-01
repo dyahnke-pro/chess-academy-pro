@@ -9,6 +9,7 @@ import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { EvalBar } from './EvalBar';
 import { VoiceChatMic } from './VoiceChatMic';
+import type { EngineSnapshot } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
@@ -61,6 +62,8 @@ export interface ChessBoardProps {
   pgnForChat?: string;
   /** Called when the user asks the coach to play a specific opening via voice. */
   onOpeningRequest?: (openingName: string) => void;
+  /** Pre-computed engine snapshot passed to voice chat (avoids re-running Stockfish). */
+  voiceEngineSnapshot?: EngineSnapshot | null;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -95,6 +98,7 @@ export function ChessBoard({
   showVoiceMic = true,
   pgnForChat,
   onOpeningRequest,
+  voiceEngineSnapshot,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -359,6 +363,7 @@ export function ChessBoard({
               pgn={pgnForChat}
               turn={game.turn}
               onOpeningRequest={onOpeningRequest}
+              engineSnapshot={voiceEngineSnapshot}
             />
           )}
         </div>

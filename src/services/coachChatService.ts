@@ -2,6 +2,7 @@ import { GAME_NARRATION_ADDITION } from './coachPrompts';
 import { db } from '../db/schema';
 import { getStoredWeaknessProfile } from './weaknessAnalyzer';
 import { parseBoardTags } from './boardAnnotationService';
+import { uciMoveToSan, uciLinesToSan } from '../utils/uciToSan';
 import type { ChatMessage, UserProfile, WeaknessProfile, BoardAnnotationCommand } from '../types';
 
 const MAX_HISTORY_PAIRS = 10;
@@ -337,10 +338,10 @@ export function buildGameChatMessages(
   const engineBlock = gameContext.engineData
     ? [
         '[Engine Analysis — TRUST THIS DATA]',
-        `Best move: ${gameContext.engineData.bestMove}`,
+        `Best move: ${uciMoveToSan(gameContext.engineData.bestMove, gameContext.fen)}`,
         `Eval: ${gameContext.engineData.isMate ? `Mate in ${gameContext.engineData.mateIn}` : `${(gameContext.engineData.evaluation / 100).toFixed(1)} pawns`}`,
         ...gameContext.engineData.topLines.slice(0, 3).map(
-          (l, i) => `Line ${i + 1}: ${l.moves.join(' ')} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
+          (l, i) => `Line ${i + 1}: ${uciLinesToSan(l.moves, gameContext.fen, 6)} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
         ),
       ].join('\n')
     : '';
