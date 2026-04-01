@@ -15,6 +15,7 @@ import {
   drillCorrect,
   drillIncorrect,
   describeMove,
+  isNotableMove,
 } from '../../services/tacticNarrationService';
 import { useAppStore } from '../../stores/appStore';
 import { MistakePuzzleBoard } from '../Puzzles/MistakePuzzleBoard';
@@ -24,12 +25,10 @@ import type { TacticType } from '../../types';
 
 type Phase = 'loading' | 'context' | 'solving' | 'summary';
 
-// ─── Fixed Context ────────────────────────────────────────────────────────
-// Layer 2 shows a short, fixed 3-5 move buildup before the tactic position.
-// Just enough to break "puzzle mode" without turning it into a game replay.
-// Adaptive scaling lives in Layer 4 (Create).
-
-const CONTEXT_DEPTH = 5;
+// ─── Full Game Context ────────────────────────────────────────────────────
+// Layer 2 replays the entire game from move 1 up to the tactic position.
+// This preserves the opening narrative and builds real context.
+// Narration is selective (notable moves only) to keep pace brisk.
 
 interface ContextMove {
   san: string;
@@ -59,8 +58,7 @@ function buildContextMoves(gamePgn: string | undefined, mistakeFen: string): Con
       if (chess.fen() === mistakeFen) break;
     }
 
-    // Fixed: always show last CONTEXT_DEPTH moves before the mistake
-    return positions.slice(-CONTEXT_DEPTH);
+    return positions;
   } catch {
     return [];
   }
@@ -137,20 +135,26 @@ export function TacticDrillPage(): JSX.Element {
 
   const playContextSequence = useCallback(async (moves: ContextMove[], item: TacticDrillItem): Promise<void> => {
     contextCancelledRef.current = false;
-    const MIN_MOVE_DELAY = 400; // minimum ms between moves (for board animation)
+    const QUIET_DELAY = 350;   // fast for non-narrated moves (board animation only)
+    const NARRATED_MIN = 400;  // minimum delay when narrating (speech will usually be longer)
 
     for (let i = 0; i < moves.length; i++) {
       if (isCancelled()) return;
 
       const move = moves[i];
-      const narration = describeMove(move.san, move.isWhite);
-      setSubtitle(narration);
       setContextStep(i + 1);
 
-      // Speak and wait for it to finish, with a minimum delay for the board animation
-      const speechDone = voiceService.speak(narration);
-      const minDelay = new Promise<void>((r) => { setTimeout(r, MIN_MOVE_DELAY); });
-      await Promise.all([speechDone, minDelay]);
+      // Narrate notable moves; speed through quiet ones
+      const notable = isNotableMove(move.san, i, moves.length);
+      if (notable) {
+        const narration = describeMove(move.san, move.isWhite);
+        setSubtitle(narration);
+        const speechDone = voiceService.speak(narration);
+        const minDelay = new Promise<void>((r) => { setTimeout(r, NARRATED_MIN); });
+        await Promise.all([speechDone, minDelay]);
+      } else {
+        await new Promise<void>((r) => { setTimeout(r, QUIET_DELAY); });
+      }
 
       if (isCancelled()) return;
     }
