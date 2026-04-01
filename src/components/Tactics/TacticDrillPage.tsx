@@ -134,18 +134,27 @@ export function TacticDrillPage(): JSX.Element {
   const playContextSequence = useCallback(async (moves: ContextMove[], item: TacticDrillItem): Promise<void> => {
     contextCancelledRef.current = false;
 
-    // Three-zone pacing based on cognitive science:
-    // - Opening (first 12 moves): 800ms — familiar patterns, fast chunking
-    // - Standard play: 1200ms — default for 1200-1500 rated players
-    // - Critical zone (last 5): 2000ms — builds tactical pattern in working memory
+    // Adaptive three-zone pacing based on cognitive science:
+    // Speeds scale with player rating (chunking ability improves with skill).
+    // De Groot: masters chunk in ~500ms, intermediates ~800-1200ms, beginners ~1500-2000ms
+    // Chase & Simon: chunk size grows with rating → faster board model updates
+    //
+    // Rating bands:        <1000    1200     1500     1800+
+    // Opening zone:        1000ms   800ms    600ms    500ms
+    // Standard play:       1500ms   1200ms   900ms    700ms
+    // Critical zone:       2500ms   2000ms   1600ms   1200ms
+    //
     // +200ms on captures (board texture change needs extra processing)
-    // Sources: De Groot chunking, Chase & Simon, Reingold eye-tracking
+    const rating = activeProfile?.currentRating ?? 1200;
+
+    // Linear interpolation: clamp rating to [800, 2000] then scale
+    const t = Math.min(1, Math.max(0, (rating - 800) / 1200)); // 0 at 800, 1 at 2000
+    const OPENING_SPEED = Math.round(1100 - t * 600);   // 1100→500
+    const STANDARD_SPEED = Math.round(1600 - t * 900);  // 1600→700
+    const CRITICAL_SPEED = Math.round(2700 - t * 1500); // 2700→1200
+    const CAPTURE_BONUS = 200;
     const OPENING_ZONE = 12;
     const CRITICAL_ZONE = 5;
-    const OPENING_SPEED = 800;
-    const STANDARD_SPEED = 1200;
-    const CRITICAL_SPEED = 2000;
-    const CAPTURE_BONUS = 200;
 
     for (let i = 0; i < moves.length; i++) {
       if (isCancelled()) return;
@@ -156,13 +165,10 @@ export function TacticDrillPage(): JSX.Element {
       let delay: number;
 
       if (remaining < CRITICAL_ZONE) {
-        // Last 5 moves — slow, deliberate
         delay = CRITICAL_SPEED;
       } else if (i < OPENING_ZONE) {
-        // Opening theory — brisk but readable
         delay = OPENING_SPEED;
       } else {
-        // Standard middlegame
         delay = STANDARD_SPEED;
       }
 
@@ -183,7 +189,7 @@ export function TacticDrillPage(): JSX.Element {
     if (!isCancelled()) {
       setPhase('solving');
     }
-  }, [isCancelled]);
+  }, [isCancelled, activeProfile?.currentRating]);
 
   const handleStartContext = useCallback((): void => {
     setContextPlaying(true);
