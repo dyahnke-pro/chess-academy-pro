@@ -13,7 +13,7 @@ interface LayerCardProps {
   title: string;
   subtitle: string;
   description: string;
-  icon: React.ComponentType<{ size?: number }>;
+  icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>;
   color: string;
   stat?: string;
   locked?: boolean;

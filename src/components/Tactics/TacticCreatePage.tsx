@@ -271,12 +271,14 @@ export function TacticCreatePage(): JSX.Element {
           {/* Board */}
           <div className="aspect-square max-w-md mx-auto w-full">
             <Chessboard
-              position={replayFen}
-              boardOrientation={currentOrientation}
-              arePiecesDraggable={false}
-              animationDuration={350}
-              customDarkSquareStyle={{ backgroundColor: '#779952' }}
-              customLightSquareStyle={{ backgroundColor: '#edeed1' }}
+              options={{
+                position: replayFen,
+                boardOrientation: currentOrientation,
+                allowDragging: false,
+                animationDurationInMs: 350,
+                darkSquareStyle: { backgroundColor: '#779952' },
+                lightSquareStyle: { backgroundColor: '#edeed1' },
+              }}
             />
           </div>
 

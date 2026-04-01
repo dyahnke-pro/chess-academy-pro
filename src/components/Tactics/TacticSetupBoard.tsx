@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Chess, type Square } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
+import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { motion } from 'framer-motion';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import type { SetupPuzzle } from '../../types';
@@ -94,15 +95,16 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     return () => clearTimeout(timer);
   }, [boardState, revealStep, tacticMoves, chess, puzzle.tacticType, onComplete]);
 
-  const handleDrop = useCallback((sourceSquare: string, targetSquare: string, piece: string): boolean => {
-    if (boardState !== 'thinking' || !isPlayerTurn) return false;
+  const handleDrop = useCallback(({ sourceSquare, targetSquare, piece }: PieceDropHandlerArgs): boolean => {
+    if (boardState !== 'thinking' || !isPlayerTurn || !targetSquare) return false;
 
     const expectedMove = solutionMoves[moveIndex];
     if (!expectedMove) return false;
 
     const expected = parseUciMove(expectedMove);
-    const pieceChar = piece.length > 1 ? piece[1].toLowerCase() : '';
-    const promotion = pieceChar === 'p' &&
+    const pieceType = piece.pieceType.toLowerCase();
+    const isPawn = pieceType.endsWith('p');
+    const promotion = isPawn &&
       (targetSquare[1] === '8' || targetSquare[1] === '1')
       ? 'q'
       : undefined;
@@ -164,13 +166,15 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       {/* Board */}
       <div className="aspect-square max-w-md mx-auto w-full" data-testid="setup-board">
         <Chessboard
-          position={fen}
-          boardOrientation={orientation}
-          onPieceDrop={(s: string, t: string, p: string) => handleDrop(s, t, p)}
-          arePiecesDraggable={boardState === 'thinking' && isPlayerTurn}
-          animationDuration={300}
-          customDarkSquareStyle={{ backgroundColor: '#779952' }}
-          customLightSquareStyle={{ backgroundColor: '#edeed1' }}
+          options={{
+            position: fen,
+            boardOrientation: orientation,
+            onPieceDrop: handleDrop,
+            allowDragging: boardState === 'thinking' && isPlayerTurn,
+            animationDurationInMs: 300,
+            darkSquareStyle: { backgroundColor: '#779952' },
+            lightSquareStyle: { backgroundColor: '#edeed1' },
+          }}
         />
       </div>
 

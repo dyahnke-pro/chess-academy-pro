@@ -68,7 +68,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
     if (item.source === 'mistake' && item.originalMistake) {
       await gradeMistakePuzzle(item.originalMistake.id, grade, correct);
     } else {
-      await recordAttempt(item.puzzle.id, grade);
+      await recordAttempt(item.puzzle.id, correct, activeProfile?.puzzleRating ?? 1200, grade);
     }
 
     // Update puzzle rating

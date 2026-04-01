@@ -251,12 +251,14 @@ export function TacticDrillPage(): JSX.Element {
           {/* Board showing context */}
           <div className="aspect-square max-w-md mx-auto w-full">
             <Chessboard
-              position={contextFen}
-              boardOrientation={currentItem.originalMistake.playerColor === 'black' ? 'black' : 'white'}
-              arePiecesDraggable={false}
-              animationDuration={300}
-              customDarkSquareStyle={{ backgroundColor: '#779952' }}
-              customLightSquareStyle={{ backgroundColor: '#edeed1' }}
+              options={{
+                position: contextFen,
+                boardOrientation: currentItem.originalMistake.playerColor === 'black' ? 'black' : 'white',
+                allowDragging: false,
+                animationDurationInMs: 300,
+                darkSquareStyle: { backgroundColor: '#779952' },
+                lightSquareStyle: { backgroundColor: '#edeed1' },
+              }}
             />
           </div>
 
