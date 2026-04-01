@@ -1,24 +1,54 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, waitFor } from '../../test/utils';
+import { render, screen, waitFor, fireEvent } from '../../test/utils';
 import { TacticsPage } from './TacticsPage';
+import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
+import type { UserProfile, TacticMotifStats, ClassifiedTactic } from '../../types';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-const mockGetStoredTacticalProfile = vi.fn();
-const mockGetTacticDrillCounts = vi.fn();
-const mockGetContextDepth = vi.fn();
+const mockGetTacticMotifStats = vi.fn<() => Promise<TacticMotifStats[]>>();
+const mockGetRecentClassifiedTactics = vi.fn<() => Promise<ClassifiedTactic[]>>();
+const mockGetClassifiedTacticCount = vi.fn<() => Promise<number>>();
 
+vi.mock('../../services/tacticClassifierService', () => ({
+  getTacticMotifStats: (): unknown => mockGetTacticMotifStats(),
+  getRecentClassifiedTactics: (): unknown => mockGetRecentClassifiedTactics(),
+  getClassifiedTacticCount: (): unknown => mockGetClassifiedTacticCount(),
+  backfillClassifiedTactics: (): Promise<number> => Promise.resolve(0),
+  TACTIC_LABELS: {
+    fork: 'Fork',
+    pin: 'Pin',
+    skewer: 'Skewer',
+    discovered_attack: 'Discovered Attack',
+    back_rank: 'Back Rank',
+    hanging_piece: 'Hanging Piece',
+    promotion: 'Promotion',
+    deflection: 'Deflection',
+    overloaded_piece: 'Overloaded Piece',
+    trapped_piece: 'Trapped Piece',
+    clearance: 'Clearance',
+    interference: 'Interference',
+    zwischenzug: 'Zwischenzug',
+    x_ray: 'X-Ray',
+    double_check: 'Double Check',
+    tactical_sequence: 'Tactical Sequence',
+  },
+}));
+
+const mockGetStoredTacticalProfile = vi.fn();
 vi.mock('../../services/tacticalProfileService', () => ({
   getStoredTacticalProfile: (): unknown => mockGetStoredTacticalProfile(),
   tacticTypeLabel: (t: string): string => t.replace(/_/g, ' '),
-  tacticTypeIcon: (): string => '⚔️',
+  tacticTypeIcon: (): string => '',
 }));
 
+const mockGetTacticDrillCounts = vi.fn();
 vi.mock('../../services/tacticDrillService', () => ({
   getTacticDrillCounts: (): unknown => mockGetTacticDrillCounts(),
 }));
 
+const mockGetContextDepth = vi.fn();
 vi.mock('../../services/tacticCreateService', () => ({
   getContextDepth: (): unknown => mockGetContextDepth(),
 }));
@@ -28,103 +58,305 @@ vi.mock('../../services/themeService', async () => {
   return { ...actual, applyTheme: vi.fn() };
 });
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function setProfile(overrides: Partial<UserProfile> = {}): UserProfile {
+  const profile: UserProfile = {
+    id: 'main',
+    name: 'Tester',
+    isKidMode: false,
+    currentRating: 1500,
+    puzzleRating: 1600,
+    xp: 250,
+    level: 1,
+    currentStreak: 5,
+    longestStreak: 10,
+    streakFreezes: 0,
+    lastActiveDate: new Date().toISOString().split('T')[0],
+    skillRadar: { opening: 60, tactics: 70, endgame: 40, memory: 55, calculation: 65 },
+    badHabits: [],
+    preferences: {
+      theme: 'dark-premium',
+      boardColor: 'classic',
+      pieceSet: 'staunton',
+      showEvalBar: true,
+      showEngineLines: false,
+      soundEnabled: true,
+      voiceEnabled: true,
+      dailySessionMinutes: 45,
+      aiProvider: 'deepseek',
+      apiKeyEncrypted: null,
+      apiKeyIv: null,
+      anthropicApiKeyEncrypted: null,
+      anthropicApiKeyIv: null,
+      preferredModel: { commentary: 'haiku', analysis: 'sonnet', reports: 'opus' },
+      monthlyBudgetCap: null,
+      estimatedSpend: 0,
+      elevenlabsKeyEncrypted: null,
+      elevenlabsKeyIv: null,
+      elevenlabsVoiceId: null,
+      voiceSpeed: 1.0,
+      kokoroEnabled: true,
+      kokoroVoiceId: 'af_bella',
+      systemVoiceURI: null,
+      highlightLastMove: true,
+      showLegalMoves: true,
+      showCoordinates: true,
+      pieceAnimationSpeed: 'medium',
+      boardOrientation: true,
+      moveQualityFlash: true,
+      showHints: true,
+      moveMethod: 'both',
+      moveConfirmation: false,
+      autoPromoteQueen: true,
+      pollyEnabled: false,
+      pollyVoice: 'ruth',
+      masterAllOff: false,
+    },
+    ...overrides,
+  };
+  useAppStore.getState().setActiveProfile(profile);
+  return profile;
+}
+
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
 describe('TacticsPage', () => {
   beforeEach(async () => {
     await db.delete();
     await db.open();
+    useAppStore.getState().reset();
     vi.clearAllMocks();
 
+    mockGetTacticMotifStats.mockResolvedValue([]);
+    mockGetRecentClassifiedTactics.mockResolvedValue([]);
+    mockGetClassifiedTacticCount.mockResolvedValue(0);
     mockGetStoredTacticalProfile.mockResolvedValue(null);
     mockGetTacticDrillCounts.mockResolvedValue(new Map());
     mockGetContextDepth.mockResolvedValue(8);
   });
 
-  it('renders the 4-layer training hub', async () => {
+  it('renders empty fragment when no profile', () => {
+    render(<TacticsPage />);
+    expect(screen.queryByTestId('tactics-page')).not.toBeInTheDocument();
+  });
+
+  it('renders the tactics page with profile', async () => {
+    setProfile();
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Tactics Training')).toBeInTheDocument();
+      expect(screen.getByTestId('tactics-page')).toBeInTheDocument();
     });
-
-    expect(screen.getByText('4-layer program built from your games')).toBeInTheDocument();
+    expect(screen.getByText('Tactical Training')).toBeInTheDocument();
   });
 
-  it('renders all 4 layer cards', async () => {
+  it('shows Profile and Training tabs', async () => {
+    setProfile();
     render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tab-profile')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('tab-training')).toBeInTheDocument();
+  });
+
+  it('defaults to Profile tab', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(0);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tactics-empty')).toBeInTheDocument();
+    });
+  });
+
+  it('switches to Training tab and shows layer cards', async () => {
+    setProfile();
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tab-training')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('tab-training'));
 
     await waitFor(() => {
       expect(screen.getByTestId('layer-1-card')).toBeInTheDocument();
     });
-
     expect(screen.getByTestId('layer-2-card')).toBeInTheDocument();
     expect(screen.getByTestId('layer-3-card')).toBeInTheDocument();
     expect(screen.getByTestId('layer-4-card')).toBeInTheDocument();
-  });
-
-  it('shows layer titles', async () => {
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Spot')).toBeInTheDocument();
-    });
-
+    expect(screen.getByText('Spot')).toBeInTheDocument();
     expect(screen.getByText('Drill')).toBeInTheDocument();
     expect(screen.getByText('Setup')).toBeInTheDocument();
     expect(screen.getByText('Create')).toBeInTheDocument();
   });
 
-  it('shows drill count stat when drills available', async () => {
+  it('shows empty state when no tactics classified', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(0);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tactics-empty')).toBeInTheDocument();
+    });
+    expect(screen.getByText('No Tactics Yet')).toBeInTheDocument();
+  });
+
+  it('shows tactic motif breakdown when data exists', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(15);
+    mockGetTacticMotifStats.mockResolvedValue([
+      { tacticType: 'fork', missedInGames: 8, puzzleAttempts: 20, puzzleAccuracy: 75, gameAwareness: 50 },
+      { tacticType: 'pin', missedInGames: 5, puzzleAttempts: 10, puzzleAccuracy: 60, gameAwareness: 65 },
+    ]);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('motif-breakdown')).toBeInTheDocument();
+    });
+    expect(screen.getAllByText('Fork').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('Pin')).toBeInTheDocument();
+    expect(screen.getByText('8x missed')).toBeInTheDocument();
+    expect(screen.getByText('5x missed')).toBeInTheDocument();
+  });
+
+  it('expands motif detail on chevron click', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(5);
+    mockGetTacticMotifStats.mockResolvedValue([
+      { tacticType: 'fork', missedInGames: 3, puzzleAttempts: 10, puzzleAccuracy: 80, gameAwareness: 40 },
+    ]);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('motif-toggle-fork')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('motif-toggle-fork'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('motif-detail-fork')).toBeInTheDocument();
+    });
+  });
+
+  it('collapses motif detail on second chevron click', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(5);
+    mockGetTacticMotifStats.mockResolvedValue([
+      { tacticType: 'fork', missedInGames: 3, puzzleAttempts: 10, puzzleAccuracy: 80, gameAwareness: 40 },
+    ]);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('motif-toggle-fork')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('motif-toggle-fork'));
+    await waitFor(() => {
+      expect(screen.getByTestId('motif-detail-fork')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('motif-toggle-fork'));
+    await waitFor(() => {
+      expect(screen.queryByTestId('motif-detail-fork')).not.toBeInTheDocument();
+    });
+  });
+
+  it('shows recent missed tactics', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(3);
+    mockGetRecentClassifiedTactics.mockResolvedValue([
+      {
+        id: 'ct-1',
+        sourceGameId: 'g1',
+        moveIndex: 5,
+        fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+        bestMoveUci: 'e2e4',
+        bestMoveSan: 'e4',
+        playerMoveUci: 'h2h3',
+        playerMoveSan: 'h3',
+        playerColor: 'white',
+        tacticType: 'fork',
+        evalSwing: 250,
+        explanation: 'Missed fork with e4 (2.5 pawns lost)',
+        opponentName: 'Magnus',
+        gameDate: '2026-03-15',
+        openingName: null,
+        puzzleAttempts: 0,
+        puzzleSuccesses: 0,
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recent-tactics')).toBeInTheDocument();
+    });
+    expect(screen.getByText('Recent Missed Tactics')).toBeInTheDocument();
+    expect(screen.getByText('Fork')).toBeInTheDocument();
+    expect(screen.getByText(/vs Magnus/)).toBeInTheDocument();
+  });
+
+  it('shows summary cards with data', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(15);
+    mockGetTacticMotifStats.mockResolvedValue([
+      { tacticType: 'fork', missedInGames: 8, puzzleAttempts: 20, puzzleAccuracy: 75, gameAwareness: 50 },
+      { tacticType: 'pin', missedInGames: 5, puzzleAttempts: 10, puzzleAccuracy: 60, gameAwareness: 65 },
+    ]);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('15')).toBeInTheDocument();
+    });
+    expect(screen.getByText('Tactics Found')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getAllByText('Fork').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('refresh button is rendered and clickable', async () => {
+    setProfile();
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tactics-refresh-btn')).toBeInTheDocument();
+    });
+
+    expect(mockGetTacticMotifStats).toHaveBeenCalled();
+
+    fireEvent.click(screen.getByTestId('tactics-refresh-btn'));
+
+    await waitFor(() => {
+      expect(mockGetTacticMotifStats.mock.calls.length).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  it('shows description text when tactics exist', async () => {
+    setProfile();
+    mockGetClassifiedTacticCount.mockResolvedValue(10);
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('10 missed tactics classified from your games')).toBeInTheDocument();
+    });
+  });
+
+  it('shows drill count on training tab', async () => {
+    setProfile();
     const counts = new Map([['fork', 5], ['pin', 3]]);
     mockGetTacticDrillCounts.mockResolvedValue(counts);
     render(<TacticsPage />);
 
     await waitFor(() => {
+      expect(screen.getByTestId('tab-training')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('tab-training'));
+
+    await waitFor(() => {
       expect(screen.getByText('8 tactic drills available')).toBeInTheDocument();
     });
-  });
-
-  it('shows context depth when profile exists', async () => {
-    mockGetStoredTacticalProfile.mockResolvedValue({
-      computedAt: new Date().toISOString(),
-      stats: [{ tacticType: 'fork', puzzleAccuracy: 80, puzzleAttempts: 10, gameMissCount: 5, gameSpotCount: 2, gameTotalOccurrences: 7, gameSpotRate: 0.28, gap: 52, byPhase: {}, byOpening: {} }],
-      totalGamesMissed: 5,
-      totalGamesAnalyzed: 10,
-      weakestTypes: ['fork', 'pin'],
-    });
-    mockGetContextDepth.mockResolvedValue(12);
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Context: 12 moves')).toBeInTheDocument();
-    });
-  });
-
-  it('shows profile summary when profile exists', async () => {
-    mockGetStoredTacticalProfile.mockResolvedValue({
-      computedAt: new Date().toISOString(),
-      stats: [{ tacticType: 'fork', puzzleAccuracy: 80, puzzleAttempts: 10, gameMissCount: 5, gameSpotCount: 2, gameTotalOccurrences: 7, gameSpotRate: 0.28, gap: 52, byPhase: {}, byOpening: {} }],
-      totalGamesMissed: 5,
-      totalGamesAnalyzed: 10,
-      weakestTypes: ['fork', 'pin'],
-    });
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText(/10 games analyzed/)).toBeInTheDocument();
-    });
-    expect(screen.getByText(/5 tactical positions found/)).toBeInTheDocument();
-  });
-
-  it('does not show summary when no profile', async () => {
-    mockGetStoredTacticalProfile.mockResolvedValue(null);
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Tactics Training')).toBeInTheDocument();
-    });
-
-    expect(screen.queryByText(/games analyzed/)).not.toBeInTheDocument();
   });
 });
