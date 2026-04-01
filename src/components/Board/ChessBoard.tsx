@@ -70,6 +70,8 @@ export interface ChessBoardProps {
   voicePlayerColor?: 'white' | 'black';
   /** Called when voice mic listening/streaming state changes. */
   onVoiceActiveChange?: (active: boolean) => void;
+  /** Called when the voice chat LLM response includes arrow annotations. */
+  onVoiceArrows?: (arrows: Array<{ startSquare: string; endSquare: string; color: string }>) => void;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -108,6 +110,7 @@ export function ChessBoard({
   voiceLastMoveContext,
   voicePlayerColor,
   onVoiceActiveChange,
+  onVoiceArrows,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -376,6 +379,7 @@ export function ChessBoard({
               lastMoveContext={voiceLastMoveContext}
               playerColor={voicePlayerColor}
               onListeningChange={onVoiceActiveChange}
+              onArrows={onVoiceArrows}
             />
           )}
         </div>

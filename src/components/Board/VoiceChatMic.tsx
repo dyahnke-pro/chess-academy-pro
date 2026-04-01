@@ -7,7 +7,23 @@ import { speechService } from '../../services/speechService';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
-import type { ChatMessage } from '../../types';
+import type { ChatMessage, BoardArrow } from '../../types';
+
+/** Parse [ARROW:from:to] tags from LLM response. Returns arrows and cleaned text. */
+function extractArrows(text: string): { arrows: BoardArrow[]; cleanText: string } {
+  const ARROW_RE = /\[ARROW:([a-h][1-8]):([a-h][1-8])\]/gi;
+  const arrows: BoardArrow[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = ARROW_RE.exec(text)) !== null) {
+    arrows.push({
+      startSquare: match[1],
+      endSquare: match[2],
+      color: 'rgba(255, 170, 0, 0.85)',
+    });
+  }
+  const cleanText = text.replace(ARROW_RE, '').replace(/\s{2,}/g, ' ').trim();
+  return { arrows, cleanText };
+}
 
 export interface EngineSnapshot {
   bestMove: string;
@@ -40,6 +56,8 @@ interface VoiceChatMicProps {
   lastMoveContext?: LastMoveContext | null;
   /** Called when listening state changes (true = mic active). */
   onListeningChange?: (listening: boolean) => void;
+  /** Called when the LLM response includes arrow annotations for the board. */
+  onArrows?: (arrows: BoardArrow[]) => void;
 }
 
 const MAX_HISTORY_PAIRS = 3;
@@ -129,6 +147,7 @@ ${lastMove.bestMove ? `Engine's best move was: ${lastMove.bestMove} (for ${color
    Also explain WHY the move is good in plain language. For example: "Move your knight to c3 — it develops a piece and attacks their queen, forcing it to retreat."
 7. Base advice ONLY on the engine data below — never guess.
 8. Own your moves: "I played my queen to d6 because..." (you are ${opponentColor}).
+9. ARROWS: If the student asks you to "show me" a move on the board, include [ARROW:from:to] at the END of your response. Use lowercase algebraic squares (e.g. [ARROW:e2:e4]). You can include multiple arrows. Only add arrows when the student asks to see something on the board — do NOT add them by default.
 
 [Current Position]
 FEN: ${fen}
@@ -183,7 +202,7 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -276,7 +295,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       }
     };
 
-    const response = await getCoachChatResponse(
+    const rawResponse = await getCoachChatResponse(
       formatted,
       systemAddition,
       onChunk,
@@ -284,8 +303,17 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       300,
     );
 
-    // Flush any remaining text
-    flushSentence(sentenceBuffer);
+    // Extract arrow annotations before flushing remaining speech
+    const { arrows: responseArrows, cleanText: response } = extractArrows(rawResponse);
+
+    // Flush remaining text (cleaned of arrow tags)
+    const { cleanText: cleanBuffer } = extractArrows(sentenceBuffer);
+    flushSentence(cleanBuffer);
+
+    // Send arrows to the board if the LLM included any
+    if (responseArrows.length > 0 && onArrows) {
+      onArrows(responseArrows);
+    }
 
     const assistantMsg: ChatMessage = {
       id: `voice-${Date.now()}-resp`,
@@ -295,7 +323,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     };
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
-  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest]);
+  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows]);
 
   // Keep a ref to handleUserMessage so the onResult callback always uses the latest
   const handleUserMessageRef = useRef(handleUserMessage);
