@@ -2,13 +2,13 @@
 
 **Status:** Planning  
 **Date:** 2026-04-01  
-**Model:** Paid App (Lite $3.99 one-time) + Pro Subscription ($4.99/mo or $34.99/yr)
+**Model:** Free App + Pro Subscription ($4.99/mo or $34.99/yr via IAP)
 
 ---
 
 ## Tier Breakdown
 
-### Lite ($3.99 one-time purchase)
+### Free
 
 | Feature | Included |
 |---------|----------|
@@ -20,9 +20,9 @@
 | Session tracking & stats | Yes |
 | Offline mode | Yes |
 
-No API calls, no backend costs — pure profit on every Lite sale.
+No API calls, no backend costs. Maximizes downloads and App Store visibility.
 
-### Pro ($4.99/mo · $34.99/yr — auto-renewable subscription)
+### Pro ($4.99/mo · $34.99/yr — auto-renewable subscription via IAP)
 
 | Feature | Included |
 |---------|----------|
@@ -141,7 +141,7 @@ Quick subscription check (cached).
 ```typescript
 interface SubscriptionStatus {
   active: boolean;
-  tier: 'lite' | 'pro';
+  tier: 'free' | 'pro';
   expires_at: string | null;
   trial: boolean;
   usage: {
@@ -159,7 +159,7 @@ interface SubscriptionStatus {
 CREATE TABLE subscriptions (
   device_id TEXT PRIMARY KEY,
   receipt_hash TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'lite',  -- 'lite', 'pro', 'trial'
+  status TEXT NOT NULL DEFAULT 'free',  -- 'free', 'pro', 'trial'
   validated_at TIMESTAMPTZ NOT NULL,
   expires_at TIMESTAMPTZ,
   original_transaction_id TEXT
@@ -207,7 +207,7 @@ serve(async (req: Request) => {
 
   // 2. Validate subscription
   const sub = await validateReceipt(receipt, device_id);
-  if (sub.status === 'lite') {
+  if (sub.status === 'free') {
     return new Response(JSON.stringify({ error: 'Pro subscription required' }), {
       status: 403,
     });
@@ -264,7 +264,7 @@ serve(async (req: Request) => {
 // src/stores/subscriptionStore.ts
 
 interface SubscriptionState {
-  tier: 'lite' | 'pro';
+  tier: 'free' | 'pro';
   trialActive: boolean;
   expiresAt: Date | null;
   usage: {
@@ -320,7 +320,7 @@ const PRO_FEATURES = {
   gameAnalysisAI: true,    // AI-powered game review (Stockfish stays free)
 } as const;
 
-export function isFeatureAvailable(feature: keyof typeof PRO_FEATURES, tier: 'lite' | 'pro'): boolean {
+export function isFeatureAvailable(feature: keyof typeof PRO_FEATURES, tier: 'free' | 'pro'): boolean {
   if (tier === 'pro') return true;
   return !PRO_FEATURES[feature];
 }
@@ -348,9 +348,9 @@ export function isFeatureAvailable(feature: keyof typeof PRO_FEATURES, tier: 'li
 ### Product IDs
 
 ```
-App price: $3.99 (paid app — set in App Store Connect pricing)
-com.chessacademy.pro.monthly    — $4.99/month (auto-renewable subscription)
-com.chessacademy.pro.annual     — $34.99/year (auto-renewable subscription)
+App price: Free
+com.chessacademy.pro.monthly    — $4.99/month (auto-renewable subscription IAP)
+com.chessacademy.pro.annual     — $34.99/year (auto-renewable subscription IAP)
 ```
 
 ### Capacitor Plugin
@@ -369,7 +369,7 @@ Use `@capawesome/capacitor-in-app-purchases` or RevenueCat's Capacitor SDK.
 1. App launch → check cached subscription status
 2. If expired/unknown → call RevenueCat SDK → get entitlements
 3. If Pro entitlement active → set tier='pro' in Zustand
-4. If not → set tier='lite', show upgrade prompts on gated features
+4. If not → set tier='free', show upgrade prompts on gated features
 5. On purchase tap → present StoreKit payment sheet
 6. On successful purchase → RevenueCat webhook → update Supabase
 7. On each coach API call → send receipt/customer ID for server validation
@@ -462,7 +462,7 @@ function getCoachEndpoint(): { url: string; headers: Record<string, string> } {
 - [ ] Keywords (max 100 chars): chess,training,puzzles,openings,coach,stockfish,tactics,strategy
 - [ ] Category: Education (primary), Games > Board (secondary)
 - [ ] Age rating: 4+ (no objectionable content)
-- [ ] Price: $3.99 (paid app with auto-renewable subscription IAP)
+- [ ] Price: Free (with auto-renewable subscription IAP)
 
 ### Legal
 - [ ] Privacy policy URL (hosted publicly)
@@ -528,17 +528,9 @@ function getCoachEndpoint(): { url: string; headers: Record<string, string> } {
 
 ## Cost Projections
 
-### Revenue from Lite (one-time $3.99, Apple keeps 30%)
-
-| Lite Sales | Revenue (after Apple) |
-|------------|----------------------|
-| 100        | $279                 |
-| 500        | $1,397               |
-| 1,000      | $2,793               |
-
-*Pure profit — no ongoing costs per Lite user.*
-
 ### Revenue from Pro Subscribers ($4.99/mo, Apple keeps 30% yr1 / 15% yr2+)
+
+Free tier costs you nothing — pure funnel to Pro conversion.
 
 | Pro Subs | Monthly Revenue (yr1) | Est. API Cost | Net/mo |
 |----------|-----------------------|---------------|--------|
