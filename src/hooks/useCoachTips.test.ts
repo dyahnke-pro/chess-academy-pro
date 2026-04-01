@@ -39,8 +39,8 @@ function buildAnalysis(overrides: Partial<StockfishAnalysis> = {}): StockfishAna
     mateIn: null,
     depth: 10,
     topLines: [
-      { moves: ['e2e4'], evaluation: 30, depth: 10, pv: 'e2e4' },
-      { moves: ['d2d4'], evaluation: 20, depth: 10, pv: 'd2d4' },
+      { rank: 1, moves: ['e2e4'], evaluation: 30, mate: null },
+      { rank: 2, moves: ['d2d4'], evaluation: 20, mate: null },
     ],
     nodesPerSecond: 1000000,
     ...overrides,
@@ -88,8 +88,8 @@ describe('useCoachTips', () => {
     const onTip = vi.fn();
     const analysis = buildAnalysis({
       topLines: [
-        { moves: ['e2e4'], evaluation: 300, depth: 10, pv: 'e2e4' },
-        { moves: ['d2d4'], evaluation: 50, depth: 10, pv: 'd2d4' },
+        { rank: 1, moves: ['e2e4'], evaluation: 300, mate: null },
+        { rank: 2, moves: ['d2d4'], evaluation: 50, mate: null },
       ],
     });
     mockAnalyze.mockResolvedValue(analysis);
@@ -124,8 +124,8 @@ describe('useCoachTips', () => {
       isMate: true,
       mateIn: -3,
       topLines: [
-        { moves: ['e2e4'], evaluation: -3000, depth: 10, pv: 'e2e4' },
-        { moves: ['d2d4'], evaluation: -2800, depth: 10, pv: 'd2d4' },
+        { rank: 1, moves: ['e2e4'], evaluation: -3000, mate: null },
+        { rank: 2, moves: ['d2d4'], evaluation: -2800, mate: null },
       ],
     });
     mockAnalyze.mockResolvedValue(analysis);
