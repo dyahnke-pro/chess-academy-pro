@@ -156,26 +156,6 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot,
     messagesRef.current = messages;
   }, [messages]);
 
-  const restartListening = useCallback(() => {
-    if (listeningRef.current) {
-      setTimeout(() => {
-        if (listeningRef.current) {
-          voiceInputService.startListening();
-        }
-      }, 200);
-    }
-  }, []);
-
-  useEffect(() => {
-    voiceInputService.onResult((transcript: string) => {
-      if (transcript.trim()) {
-        void handleUserMessage(transcript.trim());
-      }
-      restartListening();
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleUserMessage = useCallback(async (text: string) => {
     // Detect opening requests (e.g. "play the French Defense")
     const requestedOpening = detectOpeningRequest(text);
@@ -240,6 +220,32 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot,
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
   }, [fen, pgn, turn, engineSnapshot, lastMoveContext, onOpeningRequest]);
+
+  // Keep a ref to handleUserMessage so the onResult callback always uses the latest
+  const handleUserMessageRef = useRef(handleUserMessage);
+  useEffect(() => {
+    handleUserMessageRef.current = handleUserMessage;
+  }, [handleUserMessage]);
+
+  const restartListening = useCallback(() => {
+    if (listeningRef.current) {
+      setTimeout(() => {
+        if (listeningRef.current) {
+          voiceInputService.startListening();
+        }
+      }, 200);
+    }
+  }, []);
+
+  useEffect(() => {
+    voiceInputService.onResult((transcript: string) => {
+      if (transcript.trim()) {
+        void handleUserMessageRef.current(transcript.trim());
+      }
+      restartListening();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleMicToggle = useCallback(() => {
     if (!voiceInputService.isSupported()) {
