@@ -39,8 +39,9 @@ class VoiceService {
   private abortController: AbortController | null = null;
   private playing = false;
   private speed = 1.0;
-  /** Set to false after Polly fails — skips fetch on subsequent calls so fallback is instant */
-  private pollyAvailable = true;
+  /** Set to false after Polly fails — skips fetch on subsequent calls so fallback is instant.
+   *  Starts false since the Vercel Polly endpoint is not currently deployed. */
+  private pollyAvailable = false;
 
   // Cached preferences to avoid DB read on every speak() call
   private cachedPrefs: {
@@ -62,9 +63,8 @@ class VoiceService {
   }
 
   /** Pre-load voice preferences and warm up audio. Call early (e.g. on page mount).
-   *  Probes the Polly endpoint — if unreachable, disables Polly for the session
-   *  so speak() falls through to Web Speech instantly instead of waiting for a
-   *  network timeout on every call. */
+   *  Probes the Polly endpoint — if reachable, enables Polly for the session.
+   *  Otherwise Polly stays disabled so speak() falls through to Web Speech instantly. */
   async warmup(): Promise<void> {
     const prefs = await this.loadPrefs();
     // Prime the AudioContext so first decode isn't cold
@@ -80,17 +80,14 @@ class VoiceService {
         clearTimeout(timeout);
 
         if (res.ok) {
-          // Polly is live — decode the response to also prime AudioContext
+          // Polly is live — enable it and prime AudioContext
+          this.pollyAvailable = true;
           const buf = await res.arrayBuffer();
           const ctx = getSharedAudioContext();
           try { await ctx.decodeAudioData(buf); } catch { /* tiny clip may fail — ok */ }
-        } else {
-          console.warn('[VoiceService] Polly probe returned', res.status, '— disabling for session');
-          this.pollyAvailable = false;
         }
       } catch {
-        console.warn('[VoiceService] Polly probe failed — disabling for session');
-        this.pollyAvailable = false;
+        // Polly unreachable — stays disabled
       }
     }
   }
@@ -129,6 +126,7 @@ class VoiceService {
 
     const prefs = await this.loadPrefs();
     if (!prefs) {
+      this.speed = 0.95;
       this.speakFallback(text);
       return;
     }
@@ -200,7 +198,7 @@ class VoiceService {
   }
 
   private speakFallback(text: string): void {
-    speechService.speak(text, WEB_SPEECH_FALLBACK);
+    speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
   }
 
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {
@@ -213,6 +211,7 @@ class VoiceService {
     const audioBuffer = await ctx.decodeAudioData(buffer);
     const source = ctx.createBufferSource();
     source.buffer = audioBuffer;
+    source.playbackRate.value = this.speed;
     source.connect(ctx.destination);
 
     this.currentSource = source;

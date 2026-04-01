@@ -123,7 +123,7 @@ describe('WalkthroughMode', () => {
     expect(screen.getByTestId('walkthrough-mode')).toBeInTheDocument();
     expect(screen.getByText('Walkthrough: Test Opening')).toBeInTheDocument();
     expect(screen.getByTestId('walkthrough-play-pause')).toBeInTheDocument();
-    expect(screen.getByTestId('walkthrough-speed')).toBeInTheDocument();
+    expect(screen.getByTestId('walkthrough-speed-toggle')).toBeInTheDocument();
   });
 
   it('shows overview at move 0', async () => {
@@ -212,21 +212,24 @@ describe('WalkthroughMode', () => {
     });
   });
 
-  it('cycles speed on speed button click', async () => {
+  it('cycles speed on toggle button tap', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<WalkthroughMode opening={testOpening} onExit={onExit} />);
 
-    const speedBtn = screen.getByTestId('walkthrough-speed');
-    expect(speedBtn).toHaveTextContent('1x');
+    const btn = screen.getByTestId('walkthrough-speed-toggle');
+    expect(btn).toHaveTextContent('Learn');
 
-    await user.click(speedBtn);
-    expect(speedBtn).toHaveTextContent('2x');
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Study');
 
-    await user.click(speedBtn);
-    expect(speedBtn).toHaveTextContent('0.5x');
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Review');
 
-    await user.click(speedBtn);
-    expect(speedBtn).toHaveTextContent('1x');
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Drill');
+
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Learn');
   });
 
   it('uses first/last buttons to jump to start/end', async () => {

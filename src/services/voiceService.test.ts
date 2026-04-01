@@ -62,7 +62,7 @@ describe('voiceService', () => {
 
       expect(speechService.speak).toHaveBeenCalledWith(
         'Fallback test',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
+        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
       );
     });
 
@@ -86,7 +86,7 @@ describe('voiceService', () => {
 
       expect(speechService.speak).toHaveBeenCalledWith(
         'Error fallback',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
+        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
       );
     });
 
@@ -106,7 +106,7 @@ describe('voiceService', () => {
 
       expect(speechService.speak).toHaveBeenCalledWith(
         'Network fail',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
+        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
       );
     });
 
