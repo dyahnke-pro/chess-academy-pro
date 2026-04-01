@@ -223,6 +223,9 @@ export function CoachGamePage(): JSX.Element {
     }
   }, []);
 
+  // Track whether voice mic is active (listening or streaming) to suppress tips
+  const [voiceActive, setVoiceActive] = useState(false);
+
   // Resizable split between move list and chat panel (percentage for chat)
   const [chatPercent, setChatPercent] = useState(80);
   const rightColumnRef = useRef<HTMLDivElement>(null);
@@ -324,7 +327,7 @@ export function CoachGamePage(): JSX.Element {
     fen: game.fen,
     playerColor,
     isPlayerTurn: isPlayersTurn,
-    enabled: coachTipsOn && gameState.status === 'playing' && !game.isGameOver,
+    enabled: coachTipsOn && !voiceActive && gameState.status === 'playing' && !game.isGameOver,
     moves: gameState.moves,
     onTip: handleCoachTip,
   });
@@ -1228,6 +1231,7 @@ export function CoachGamePage(): JSX.Element {
               ghostMove={hintState.ghostMove}
               onOpeningRequest={handleOpeningRequest}
               voiceEngineSnapshot={voiceEngineSnapshot}
+              onVoiceActiveChange={setVoiceActive}
             />
           </div>
           {showEngineLinesEffective && latestTopLines.length > 0 && (

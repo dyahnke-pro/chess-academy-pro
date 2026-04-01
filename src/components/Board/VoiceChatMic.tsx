@@ -3,6 +3,7 @@ import { Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
 import { voiceService } from '../../services/voiceService';
+import { speechService } from '../../services/speechService';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
@@ -24,6 +25,8 @@ interface VoiceChatMicProps {
   onOpeningRequest?: (openingName: string) => void;
   /** Pre-computed engine snapshot (avoids running Stockfish again). */
   engineSnapshot?: EngineSnapshot | null;
+  /** Called when listening state changes (true = mic active). */
+  onListeningChange?: (listening: boolean) => void;
 }
 
 const MAX_HISTORY_PAIRS = 6;
@@ -49,10 +52,13 @@ function buildSystemAddition(
     : '';
 
   return `VOICE CHAT — The student is speaking to you via microphone.
-Keep responses concise (2-3 sentences max) since they will be spoken aloud.
-Use simple language — avoid notation like "Nf3" unless the student uses it first.
-When the student asks about moves or ideas, ALWAYS base your advice on the engine analysis below. NEVER suggest moves from your own chess knowledge alone — LLMs are unreliable at chess tactics.
-If the student asks about a specific move, compare it to the engine's best move and top lines.
+Your responses will be spoken aloud, so follow these rules strictly:
+
+1. ALWAYS name the specific move the student should play. Say it in plain English like "move your knight to f3" or "push your pawn to e4". NEVER give vague advice like "develop your pieces" without naming a concrete move.
+2. Keep responses to 1-2 sentences. Be direct — say the move first, then a brief reason.
+3. Use spoken-friendly language: say "knight to f3" not "Nf3", "queen to d7" not "Qd7", "castle kingside" not "O-O".
+4. ALWAYS base your advice on the engine analysis below. NEVER suggest moves from your own chess knowledge — LLMs are unreliable at chess tactics.
+5. If the student asks about a specific move, compare it to the engine's best move.
 
 [Current Position]
 FEN: ${fen}
@@ -60,7 +66,8 @@ ${pgn ? `PGN: ${pgn}` : ''}
 Turn: ${turnLabel} to move
 ${engineBlock}
 
-Respond naturally as a chess coach reviewing the board with the student.`;
+Example good response: "Your best move is knight to f3, attacking the center and preparing to castle."
+Example bad response: "You should focus on developing your pieces and controlling the center."`;
 }
 
 /**
@@ -106,18 +113,22 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot, onListeningChange }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [unsupportedFlash, setUnsupportedFlash] = useState(false);
   const listeningRef = useRef(false);
-  const speechBufferRef = useRef('');
   const messagesRef = useRef<ChatMessage[]>([]);
 
   useEffect(() => {
     listeningRef.current = listening;
   }, [listening]);
+
+  // Notify parent when voice is active (listening or speaking response)
+  useEffect(() => {
+    onListeningChange?.(listening || isStreaming);
+  }, [listening, isStreaming, onListeningChange]);
 
   useEffect(() => {
     messagesRef.current = messages;
@@ -160,7 +171,6 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot 
     const currentMessages = [...messagesRef.current, userMsg];
     setMessages(currentMessages);
     setIsStreaming(true);
-    speechBufferRef.current = '';
 
     // Use pre-computed engine data if available (fast path), otherwise run Stockfish
     let engineData: EngineSnapshot | null = engineSnapshot ?? null;
@@ -187,24 +197,16 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot 
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
     const systemAddition = buildSystemAddition(fen, pgn, turn, engineData);
 
+    // Collect full response, then speak once (avoids speech cancellation from rapid calls)
     const response = await getCoachChatResponse(
       formatted,
       systemAddition,
-      (chunk) => {
-        speechBufferRef.current += chunk;
-        const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
-        if (sentenceEnd) {
-          const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-          speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-          void voiceService.speakForced(sentence.trim());
-        }
-      },
+      undefined, // No streaming callback — collect full response
       'hint', // Use Haiku for speed — voice responses must be fast
     );
 
-    if (speechBufferRef.current.trim()) {
-      void voiceService.speakForced(speechBufferRef.current.trim());
-      speechBufferRef.current = '';
+    if (response.trim()) {
+      void voiceService.speakForced(response.trim());
     }
 
     const assistantMsg: ChatMessage = {
@@ -223,6 +225,9 @@ export function VoiceChatMic({ fen, pgn, turn, onOpeningRequest, engineSnapshot 
       setTimeout(() => setUnsupportedFlash(false), 2000);
       return;
     }
+    // Warm up Web Speech in this gesture context so iOS doesn't block TTS later
+    speechService.warmupInGestureContext();
+
     if (listening) {
       voiceInputService.stopListening();
       setListening(false);
