@@ -86,6 +86,7 @@ export function TacticDrillPage(): JSX.Element {
   const location = useLocation();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
+  const setGlobalBoardContext = useAppStore((s) => s.setGlobalBoardContext);
 
   const filterTypes = (location.state as { filterTypes?: TacticType[] } | null)?.filterTypes;
 
@@ -100,11 +101,33 @@ export function TacticDrillPage(): JSX.Element {
   const [subtitle, setSubtitle] = useState('');
   const [contextBoardKey, setContextBoardKey] = useState(0);
 
-  // Warmup voice on mount, stop on unmount
+  // Warmup voice on mount, stop on unmount, clear board context on unmount
   useEffect(() => {
     void voiceService.warmup();
-    return () => { voiceService.stop(); };
-  }, []);
+    return () => {
+      voiceService.stop();
+      setGlobalBoardContext(null);
+    };
+  }, [setGlobalBoardContext]);
+
+  // Keep the global board context in sync with the current puzzle so
+  // the coach drawer knows which position the player is looking at
+  useEffect(() => {
+    const item = queue.at(currentIndex);
+    if (phase === 'solving' && item) {
+      const puzzle = item.originalMistake;
+      const turnFromFen = puzzle.fen.split(' ')[1] ?? 'w';
+      setGlobalBoardContext({
+        fen: puzzle.fen,
+        pgn: '',
+        moveNumber: puzzle.moveNumber,
+        playerColor: puzzle.playerColor,
+        turn: turnFromFen,
+      });
+    } else {
+      setGlobalBoardContext(null);
+    }
+  }, [phase, queue, currentIndex, setGlobalBoardContext]);
 
   useEffect(() => {
     void loadQueue();
