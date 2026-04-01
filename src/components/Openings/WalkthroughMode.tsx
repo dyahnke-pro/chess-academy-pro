@@ -689,34 +689,38 @@ export function WalkthroughMode({
               {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
             </button>
           }
-          extraRight={
-            <div
-              className="flex rounded-lg border overflow-hidden"
-              style={{ borderColor: 'var(--color-border)' }}
-              role="radiogroup"
-              aria-label="Narration speed"
-              data-testid="walkthrough-speed-toggle"
-            >
-              {SPEED_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => setAutoPlaySpeed(opt.value)}
-                  className="px-2 py-1.5 text-xs font-medium transition-colors"
-                  style={{
-                    background: autoPlaySpeed === opt.value ? 'var(--color-accent)' : 'transparent',
-                    color: autoPlaySpeed === opt.value ? 'var(--color-bg)' : 'var(--color-text-muted)',
-                  }}
-                  role="radio"
-                  aria-checked={autoPlaySpeed === opt.value}
-                  aria-label={`Speed ${opt.label}`}
-                  data-testid={`speed-${opt.value}`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          }
         />
+
+        {/* Speed toggle bar */}
+        <div className="flex items-center gap-3 mt-2" data-testid="walkthrough-speed-toggle">
+          <span className="text-xs font-medium shrink-0" style={{ color: 'var(--color-text-muted)' }}>
+            Speed
+          </span>
+          <div
+            className="flex flex-1 rounded-lg border overflow-hidden"
+            style={{ borderColor: 'var(--color-border)' }}
+            role="radiogroup"
+            aria-label="Narration speed"
+          >
+            {SPEED_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setAutoPlaySpeed(opt.value)}
+                className="flex-1 py-2 text-xs font-medium transition-colors"
+                style={{
+                  background: autoPlaySpeed === opt.value ? 'var(--color-accent)' : 'transparent',
+                  color: autoPlaySpeed === opt.value ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                }}
+                role="radio"
+                aria-checked={autoPlaySpeed === opt.value}
+                aria-label={`Speed ${opt.label}`}
+                data-testid={`speed-${opt.value}`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Annotation — hidden in Drill mode */}
