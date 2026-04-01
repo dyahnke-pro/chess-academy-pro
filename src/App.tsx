@@ -57,6 +57,10 @@ import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
 import { ImportPage } from './components/Games/ImportPage';
 import { ProPlayerPage } from './components/Openings/ProPlayerPage';
+import { TacticsPage } from './components/Tactics/TacticsPage';
+import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
+import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
+import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =

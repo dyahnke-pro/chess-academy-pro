@@ -777,6 +777,55 @@ export interface MissedTactic {
   explanation: string;
 }
 
+// ─── Tactics Training Program ────────────────────────────────────────────────
+
+export type SetupPuzzleDifficulty = 1 | 2 | 3;
+export type SetupPuzzleStatus = 'unsolved' | 'solved' | 'mastered';
+
+export interface SetupPuzzle {
+  id: string;
+  setupFen: string;
+  solutionMoves: string;
+  tacticFen: string;
+  tacticMoves: string;
+  tacticType: TacticType;
+  difficulty: SetupPuzzleDifficulty;
+  sourceGameId: string | null;
+  sourceMistakePuzzleId: string | null;
+  playerColor: 'white' | 'black';
+  openingName: string | null;
+  srsInterval: number;
+  srsEaseFactor: number;
+  srsRepetitions: number;
+  srsDueDate: string;
+  srsLastReview: string | null;
+  status: SetupPuzzleStatus;
+  attempts: number;
+  successes: number;
+  createdAt: string;
+}
+
+export interface TacticTypeStats {
+  tacticType: TacticType;
+  puzzleAccuracy: number;
+  puzzleAttempts: number;
+  gameMissCount: number;
+  gameSpotCount: number;
+  gameTotalOccurrences: number;
+  gameSpotRate: number;
+  gap: number;
+  byPhase: Record<MistakeGamePhase, number>;
+  byOpening: Record<string, number>;
+}
+
+export interface TacticalProfile {
+  computedAt: string;
+  stats: TacticTypeStats[];
+  totalGamesMissed: number;
+  totalGamesAnalyzed: number;
+  weakestTypes: TacticType[];
+}
+
 // ─── Theme ───────────────────────────────────────────────────────────────────
 
 export interface AppTheme {

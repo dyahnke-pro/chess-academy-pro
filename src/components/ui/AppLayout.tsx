@@ -10,6 +10,7 @@ import {
   Baby,
   Search,
   GraduationCap,
+  Crosshair,
   Menu,
   X,
   MessageCircle,
@@ -34,6 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
   { to: '/coach', label: 'Coach', icon: GraduationCap },
+  { to: '/tactics', label: 'Tactics', icon: Crosshair },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/play', label: 'Play', icon: Swords },
   { to: '/analysis', label: 'Analysis', icon: Search },
@@ -43,8 +45,8 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/kid', label: 'Kids Mode', icon: Baby },
 ];
 
-// Bottom tab bar: Dashboard, Openings, Coach, Weaknesses
-const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 4);
+// Bottom tab bar: Dashboard, Openings, Coach, Tactics, Weaknesses
+const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
 
 export function AppLayout(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
