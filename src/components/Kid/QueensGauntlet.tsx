@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 import { useSettings } from '../../hooks/useSettings';
@@ -144,7 +145,7 @@ export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX
       </div>
 
       {/* Board */}
-      <div className="w-full md:max-w-[420px]">
+      <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px]">
         <Chessboard
           options={{
             position,
@@ -157,7 +158,7 @@ export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX
             onPieceDrop: handleDrop,
           }}
         />
-      </div>
+      </BoardVoiceOverlay>
 
       {/* Win/Loss overlay */}
       <AnimatePresence>

@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -138,7 +139,7 @@ export function MiddlegamePlanStudy({
 
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-center p-4 gap-3">
-        <div className="w-full max-w-[400px] aspect-square">
+        <BoardVoiceOverlay fen={displayFen} className="w-full max-w-[400px] aspect-square">
           <Chessboard
             options={{
               position: displayFen,
@@ -151,7 +152,7 @@ export function MiddlegamePlanStudy({
               lightSquareStyle: { backgroundColor: '#edeed1' },
             }}
           />
-        </div>
+        </BoardVoiceOverlay>
       </div>
 
       {/* Content panel */}

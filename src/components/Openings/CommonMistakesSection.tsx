@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { Ban, ChevronDown, ChevronUp } from 'lucide-react';
 import type { CommonMistake } from '../../types';
 
@@ -53,7 +54,7 @@ export function CommonMistakesSection({
               {isExpanded && (
                 <div className="px-3 pb-3 space-y-2">
                   <div className="flex justify-center">
-                    <div className="w-48 h-48">
+                    <BoardVoiceOverlay fen={mistake.fen} className="w-48 h-48">
                       <Chessboard
                         options={{
                           position: mistake.fen,
@@ -61,7 +62,7 @@ export function CommonMistakesSection({
                           allowDragging: false,
                         }}
                       />
-                    </div>
+                    </BoardVoiceOverlay>
                   </div>
                   <p className="text-sm text-theme-text leading-relaxed">{mistake.explanation}</p>
                 </div>

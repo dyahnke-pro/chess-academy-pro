@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
 import { useSettings } from '../../hooks/useSettings';
@@ -372,7 +373,7 @@ export function KnightSweepGame(): JSX.Element {
       )}
 
       {/* Board */}
-      <div className="w-full md:max-w-[420px] mx-auto">
+      <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px] mx-auto">
         <Chessboard
           options={{
             position,
@@ -385,7 +386,7 @@ export function KnightSweepGame(): JSX.Element {
             onSquareClick: handleSquareClick,
           }}
         />
-      </div>
+      </BoardVoiceOverlay>
     </div>
   );
 }
