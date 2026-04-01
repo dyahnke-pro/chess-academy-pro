@@ -46,6 +46,26 @@ describe('accuracyService', () => {
       expect(result.white).toBeLessThan(80);
     });
 
+    it('penalizes blunders even in winning positions', () => {
+      // Player is +800 and blunders to +200 — old formula gave ~97%, should now be much lower
+      const moves: CoachGameMove[] = [
+        makeMoveData({ moveNumber: 1, evaluation: 200, bestMoveEval: 800, preMoveEval: 800, classification: 'blunder' }),
+      ];
+      const result = calculateAccuracy(moves);
+      // A 600cp blunder should not be scored as 90%+
+      expect(result.white).toBeLessThan(85);
+    });
+
+    it('gives near-perfect accuracy for optimal play', () => {
+      const moves: CoachGameMove[] = [
+        makeMoveData({ moveNumber: 1, evaluation: 30, bestMoveEval: 30, preMoveEval: 0 }),
+        makeMoveData({ moveNumber: 3, evaluation: 45, bestMoveEval: 50, preMoveEval: 30 }),
+        makeMoveData({ moveNumber: 5, evaluation: 60, bestMoveEval: 60, preMoveEval: 45 }),
+      ];
+      const result = calculateAccuracy(moves);
+      expect(result.white).toBeGreaterThan(95);
+    });
+
     it('skips book moves', () => {
       const moves: CoachGameMove[] = [
         makeMoveData({ moveNumber: 1, evaluation: 30, bestMoveEval: 30, preMoveEval: 0, classification: 'book' }),
