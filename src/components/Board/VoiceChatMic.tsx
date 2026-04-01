@@ -186,8 +186,11 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     setMessages(currentMessages);
     setIsStreaming(true);
 
-    // Use pre-computed engine data if available (fast path), otherwise run Stockfish
+    // Use pre-computed engine data if available AND valid, otherwise run Stockfish
     let engineData: EngineSnapshot | null = engineSnapshot ?? null;
+    if (engineData && (!engineData.bestMove || engineData.topLines.length === 0)) {
+      engineData = null;
+    }
     if (!engineData) {
       try {
         const analysis = await stockfishEngine.analyzePosition(fen, VOICE_ENGINE_DEPTH);
@@ -241,8 +244,8 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       formatted,
       systemAddition,
       onChunk,
-      'hint', // Use Haiku for speed — voice responses must be fast
-      250, // Low token limit — voice needs 1-3 sentences, not paragraphs
+      'chat_response', // Sonnet — Haiku is too weak to follow the engine analysis prompt
+      300,
     );
 
     // Flush any remaining text
