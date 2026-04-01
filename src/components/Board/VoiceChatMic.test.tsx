@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { VoiceChatMic } from './VoiceChatMic';
 
-// Mock coachApi
 vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn((
     _messages: unknown,
@@ -19,7 +18,6 @@ vi.mock('../../services/coachApi', () => ({
   }),
 }));
 
-// Mock voiceService
 const mockSpeak = vi.fn();
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
@@ -27,7 +25,6 @@ vi.mock('../../services/voiceService', () => ({
   },
 }));
 
-// Mock voiceInputService
 const mockOnResult = vi.fn();
 const mockStartListening = vi.fn(() => true);
 const mockStopListening = vi.fn();
@@ -66,58 +63,22 @@ describe('VoiceChatMic', () => {
 
   it('stops listening when mic button is clicked while listening', () => {
     render(<VoiceChatMic fen={DEFAULT_FEN} />);
-
-    // Start listening
     fireEvent.click(screen.getByTestId('voice-chat-mic-btn'));
-    expect(mockStartListening).toHaveBeenCalled();
-
-    // Stop listening (button now shows "Stop")
     fireEvent.click(screen.getByTestId('voice-chat-mic-btn'));
     expect(mockStopListening).toHaveBeenCalled();
   });
 
-  it('sends transcript to coach and shows response bubble', async () => {
+  it('speaks the LLM response aloud with no text bubble', async () => {
     render(<VoiceChatMic fen={DEFAULT_FEN} />);
 
     const handler = mockOnResult.mock.calls[0][0] as (text: string) => void;
     handler('What should I play here?');
 
     await waitFor(() => {
-      expect(screen.getByTestId('voice-chat-bubble')).toBeInTheDocument();
+      expect(mockSpeak).toHaveBeenCalled();
     });
 
-    await waitFor(() => {
-      expect(screen.getByText(/solid opening move/)).toBeInTheDocument();
-    });
-  });
-
-  it('always speaks the LLM response aloud', async () => {
-    render(<VoiceChatMic fen={DEFAULT_FEN} />);
-
-    const handler = mockOnResult.mock.calls[0][0] as (text: string) => void;
-    handler('What should I play here?');
-
-    await waitFor(() => {
-      expect(screen.getByText(/solid opening move/)).toBeInTheDocument();
-    });
-
-    expect(mockSpeak).toHaveBeenCalled();
-  });
-
-  it('closes the response bubble when close button is clicked', async () => {
-    render(<VoiceChatMic fen={DEFAULT_FEN} />);
-
-    const handler = mockOnResult.mock.calls[0][0] as (text: string) => void;
-    handler('What should I play here?');
-
-    await waitFor(() => {
-      expect(screen.getByTestId('voice-chat-bubble')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('voice-chat-close'));
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('voice-chat-bubble')).not.toBeInTheDocument();
-    });
+    // No text bubble should exist
+    expect(screen.queryByTestId('voice-chat-bubble')).not.toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { Mic, MicOff, X } from 'lucide-react';
+import { Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
 import { voiceService } from '../../services/voiceService';
@@ -30,21 +30,18 @@ Respond naturally as a chess coach reviewing the board with the student.`;
 
 /**
  * Inline mic button for the board controls bar.
- * Continuous listening — stays on until the user taps again.
- * LLM responses are always spoken aloud.
+ * Voice-to-voice only — no text bubble. Continuous listening stays on
+ * until the user taps again. LLM responses are spoken aloud.
  */
 export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [streamingContent, setStreamingContent] = useState('');
-  const [showBubble, setShowBubble] = useState(false);
   const [unsupportedFlash, setUnsupportedFlash] = useState(false);
   const listeningRef = useRef(false);
   const speechBufferRef = useRef('');
   const messagesRef = useRef<ChatMessage[]>([]);
 
-  // Keep refs in sync
   useEffect(() => {
     listeningRef.current = listening;
   }, [listening]);
@@ -53,7 +50,6 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
     messagesRef.current = messages;
   }, [messages]);
 
-  // Restart listening after each recognition result (continuous mode)
   const restartListening = useCallback(() => {
     if (listeningRef.current) {
       setTimeout(() => {
@@ -64,13 +60,11 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
     }
   }, []);
 
-  // Register voice result handler once
   useEffect(() => {
     voiceInputService.onResult((transcript: string) => {
       if (transcript.trim()) {
         void handleUserMessage(transcript.trim());
       }
-      // Restart recognition in continuous mode
       restartListening();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,24 +80,17 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
 
     const currentMessages = [...messagesRef.current, userMsg];
     setMessages(currentMessages);
-    setShowBubble(true);
     setIsStreaming(true);
-    setStreamingContent('');
     speechBufferRef.current = '';
 
     const recent = currentMessages.slice(-(MAX_HISTORY_PAIRS * 2));
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
     const systemAddition = buildSystemAddition(fen, pgn, turn);
 
-    let fullResponse = '';
     const response = await getCoachChatResponse(
       formatted,
       systemAddition,
       (chunk) => {
-        fullResponse += chunk;
-        setStreamingContent(fullResponse);
-
-        // Buffer speech to sentence boundaries — always speak
         speechBufferRef.current += chunk;
         const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
         if (sentenceEnd) {
@@ -114,7 +101,6 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
       },
     );
 
-    // Flush remaining speech buffer
     if (speechBufferRef.current.trim()) {
       void voiceService.speak(speechBufferRef.current.trim());
       speechBufferRef.current = '';
@@ -128,7 +114,6 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
     };
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
-    setStreamingContent('');
   }, [fen, pgn, turn]);
 
   const handleMicToggle = useCallback(() => {
@@ -138,28 +123,16 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
       return;
     }
     if (listening) {
-      // User turns mic off
       voiceInputService.stopListening();
       setListening(false);
     } else {
-      // User turns mic on — stays on until toggled off
       const started = voiceInputService.startListening();
       setListening(started);
     }
   }, [listening]);
 
-  const handleCloseBubble = useCallback(() => {
-    setShowBubble(false);
-  }, []);
-
-  const lastAssistantMsg = [...messages].reverse().find((m) => m.role === 'assistant');
-  const displayText = isStreaming
-    ? streamingContent
-    : lastAssistantMsg?.content ?? '';
-
   return (
     <div className="relative" data-testid="voice-chat-mic">
-      {/* "Not supported" flash */}
       <AnimatePresence>
         {unsupportedFlash && (
           <motion.span
@@ -174,38 +147,6 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
         )}
       </AnimatePresence>
 
-      {/* Response bubble — floats above the controls */}
-      <AnimatePresence>
-        {showBubble && displayText && (
-          <motion.div
-            className="absolute bottom-full mb-2 right-0 w-64 max-h-36 overflow-y-auto rounded-xl bg-theme-surface border border-theme-border shadow-lg p-2.5 z-20"
-            initial={{ opacity: 0, y: 6, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
-            data-testid="voice-chat-bubble"
-          >
-            <div className="flex items-start justify-between gap-1.5">
-              <p className="text-xs text-theme-text leading-relaxed flex-1">
-                {displayText}
-                {isStreaming && (
-                  <span className="inline-block ml-0.5 animate-pulse">...</span>
-                )}
-              </p>
-              <button
-                onClick={handleCloseBubble}
-                className="shrink-0 p-0.5 rounded text-theme-text-muted hover:text-theme-text"
-                aria-label="Close response"
-                data-testid="voice-chat-close"
-              >
-                <X size={10} />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Mic button — inline with other board controls */}
       <motion.button
         onClick={handleMicToggle}
         disabled={isStreaming}
