@@ -274,22 +274,23 @@ async function callChatWithConfig(
   systemPrompt: string,
   onStream?: (chunk: string) => void,
   task: CoachTask = 'chat_response',
+  maxTokens: number = 1024,
 ): Promise<string> {
   const model = getModel(task, config.provider);
   if (config.provider === 'anthropic') {
     if (onStream) {
-      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 1024, onStream);
+      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, maxTokens, onStream);
     }
-    return await callAnthropic(config.apiKey, model, systemPrompt, messages, 1024, 'chat_response');
+    return await callAnthropic(config.apiKey, model, systemPrompt, messages, maxTokens, 'chat_response');
   } else {
     const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       ...messages,
     ];
     if (onStream) {
-      return await callDeepSeekStream(config.apiKey, model, allMessages, 1024, onStream);
+      return await callDeepSeekStream(config.apiKey, model, allMessages, maxTokens, onStream);
     }
-    return await callDeepSeek(config.apiKey, model, allMessages, 1024, 'chat_response');
+    return await callDeepSeek(config.apiKey, model, allMessages, maxTokens, 'chat_response');
   }
 }
 
@@ -298,6 +299,7 @@ export async function getCoachChatResponse(
   systemPromptAddition: string,
   onStream?: (chunk: string) => void,
   task: CoachTask = 'chat_response',
+  maxTokens: number = 1024,
 ): Promise<string> {
   const config = await getProviderConfig();
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
@@ -305,13 +307,13 @@ export async function getCoachChatResponse(
   const systemPrompt = SYSTEM_PROMPT + '\n\n' + systemPromptAddition;
 
   try {
-    return await callChatWithConfig(config, messages, systemPrompt, onStream, task);
+    return await callChatWithConfig(config, messages, systemPrompt, onStream, task, maxTokens);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
     const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
-        return await callChatWithConfig(fallback, messages, systemPrompt, onStream, task);
+        return await callChatWithConfig(fallback, messages, systemPrompt, onStream, task, maxTokens);
       } catch (fallbackError) {
         console.error('[CoachAPI] Fallback also failed:', fallbackError);
         const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);

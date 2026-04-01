@@ -42,7 +42,7 @@ interface VoiceChatMicProps {
   onListeningChange?: (listening: boolean) => void;
 }
 
-const MAX_HISTORY_PAIRS = 6;
+const MAX_HISTORY_PAIRS = 3;
 const VOICE_ENGINE_DEPTH = 10;
 
 function buildSystemAddition(
@@ -211,8 +211,9 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     const response = await getCoachChatResponse(
       formatted,
       systemAddition,
-      undefined, // No streaming callback — collect full response
+      undefined,
       'hint', // Use Haiku for speed — voice responses must be fast
+      150, // Low token limit — voice needs 1-2 sentences, not paragraphs
     );
 
     if (response.trim()) {
