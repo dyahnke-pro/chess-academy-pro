@@ -200,9 +200,9 @@ describe('CoachGamePage', () => {
     expect(screen.getByTestId('panel-divider')).toBeInTheDocument();
   });
 
-  it('renders speaker toggle button', () => {
+  it('renders coach tips toggle button', () => {
     render(<CoachGamePage />);
-    expect(screen.getByTestId('coach-speaker-toggle')).toBeInTheDocument();
+    expect(screen.getByTestId('coach-tips-toggle')).toBeInTheDocument();
   });
 
   it('includes gameover in CoachGameStatus type for intermediate game-over state', () => {
