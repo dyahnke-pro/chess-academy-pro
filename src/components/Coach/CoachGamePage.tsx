@@ -1255,6 +1255,7 @@ export function CoachGamePage(): JSX.Element {
               onOpeningRequest={handleOpeningRequest}
               voiceEngineSnapshot={voiceEngineSnapshot}
               voiceLastMoveContext={voiceLastMoveContext}
+              voicePlayerColor={playerColor}
               onVoiceActiveChange={setVoiceActive}
             />
           </div>
