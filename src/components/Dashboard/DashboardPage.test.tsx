@@ -183,8 +183,8 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
     await waitFor(() => {
       expect(screen.getByTestId('quick-action-openings')).toBeInTheDocument();
-      expect(screen.getByTestId('quick-action-play')).toBeInTheDocument();
-      expect(screen.getByTestId('quick-action-coach')).toBeInTheDocument();
+      expect(screen.getByTestId('quick-action-puzzles')).toBeInTheDocument();
+      expect(screen.getByTestId('quick-action-tactics')).toBeInTheDocument();
       expect(screen.getByTestId('quick-action-import')).toBeInTheDocument();
     });
   });
@@ -200,14 +200,14 @@ describe('DashboardPage', () => {
     fireEvent.click(screen.getByTestId('quick-action-openings'));
     expect(mockNavigate).toHaveBeenCalledWith('/openings');
 
-    fireEvent.click(screen.getByTestId('quick-action-play'));
+    fireEvent.click(screen.getByTestId('quick-action-puzzles'));
     expect(mockNavigate).toHaveBeenCalledWith('/play');
 
-    fireEvent.click(screen.getByTestId('quick-action-coach'));
-    expect(mockNavigate).toHaveBeenCalledWith('/coach');
+    fireEvent.click(screen.getByTestId('quick-action-tactics'));
+    expect(mockNavigate).toHaveBeenCalledWith('/tactics');
 
     fireEvent.click(screen.getByTestId('quick-action-import'));
-    expect(mockNavigate).toHaveBeenCalledWith('/games');
+    expect(mockNavigate).toHaveBeenCalledWith('/games/import');
   });
 
   it('shows puzzle stats when data is available', async () => {

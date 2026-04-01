@@ -6,8 +6,7 @@ import { getPuzzleStats } from '../../services/puzzleService';
 import { seedDatabase } from '../../services/dataLoader';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { MiniBoard } from '../Board/MiniBoard';
-import { Flame, Brain, Swords, Play, Target, BookOpen, Heart, X, Upload } from 'lucide-react';
-import { DailyPuzzleCard } from './DailyPuzzleCard';
+import { Flame, Brain, Swords, Play, Target, BookOpen, Heart, X, Upload, MessageCircle, Search } from 'lucide-react';
 import { BETA_MODE } from '../../utils/constants';
 import { db } from '../../db/schema';
 import type { SessionRecord, OpeningRecord } from '../../types';
@@ -110,6 +109,101 @@ export function DashboardPage(): JSX.Element {
         <StatCard label="Game ELO" value={`${activeProfile.currentRating}`} icon={<Swords size={18} />} />
       </div>
 
+      {/* Play & Review — hero section */}
+      <div className="grid grid-cols-2 gap-3" data-testid="hero-actions">
+        <button
+          onClick={() => void navigate('/coach/play')}
+          className="rounded-xl p-6 border flex flex-col items-center gap-3 hover:opacity-90 transition-opacity"
+          style={{
+            background: 'var(--color-accent)',
+            color: 'var(--color-bg)',
+            borderColor: 'var(--color-accent)',
+          }}
+          data-testid="hero-play-btn"
+        >
+          <Play size={28} />
+          <span className="text-lg font-bold">Play</span>
+          <span className="text-xs opacity-80">Play a game with AI coach</span>
+        </button>
+        <button
+          onClick={() => void navigate('/games')}
+          className="rounded-xl p-6 border flex flex-col items-center gap-3 hover:opacity-90 transition-opacity"
+          style={{
+            background: 'var(--color-surface)',
+            borderColor: 'var(--color-border)',
+          }}
+          data-testid="hero-review-btn"
+        >
+          <Search size={28} style={{ color: 'var(--color-accent)' }} />
+          <span className="text-lg font-bold">Review</span>
+          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Import & review games</span>
+        </button>
+      </div>
+
+      {/* Play with Coach — featured card */}
+      <div
+        className="rounded-xl p-5 border"
+        style={{
+          background: 'linear-gradient(135deg, var(--color-surface) 0%, var(--color-accent-dim, var(--color-surface)) 100%)',
+          borderColor: 'var(--color-accent)',
+          borderWidth: '2px',
+        }}
+        data-testid="coach-card"
+      >
+        <div className="flex items-center gap-3 mb-3">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          >
+            C
+          </div>
+          <div>
+            <h2 className="font-bold text-lg">Play with Coach</h2>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Get real-time guidance while you play
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => void navigate('/coach/play')}
+            className="py-2.5 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="coach-play-btn"
+          >
+            <Play size={14} />
+            New Game
+          </button>
+          <button
+            onClick={() => void navigate('/coach/chat')}
+            className="py-2.5 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2 border"
+            style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+            data-testid="coach-chat-btn"
+          >
+            <MessageCircle size={14} />
+            Chat
+          </button>
+          <button
+            onClick={() => void navigate('/coach/analyse')}
+            className="py-2.5 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2 border"
+            style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+            data-testid="coach-analyse-btn"
+          >
+            <Brain size={14} />
+            Analyse
+          </button>
+          <button
+            onClick={() => void navigate('/coach/train')}
+            className="py-2.5 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2 border"
+            style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+            data-testid="coach-train-btn"
+          >
+            <Target size={14} />
+            Train
+          </button>
+        </div>
+      </div>
+
       {/* Today's session card */}
       <div
         className="rounded-xl p-5 border"
@@ -133,15 +227,12 @@ export function DashboardPage(): JSX.Element {
         </button>
       </div>
 
-      {/* Lichess Daily Puzzle */}
-      <DailyPuzzleCard />
-
       {/* Quick actions */}
       <div className="grid grid-cols-4 gap-3">
         <QuickAction label="Openings" icon={<BookOpen size={18} />} onClick={() => void navigate('/openings')} />
-        <QuickAction label="Play" icon={<Brain size={18} />} onClick={() => void navigate('/play')} />
-        <QuickAction label="Coach" icon={<Target size={18} />} onClick={() => void navigate('/coach')} />
-        <QuickAction label="Import" icon={<Upload size={18} />} onClick={() => void navigate('/games')} />
+        <QuickAction label="Puzzles" icon={<Brain size={18} />} onClick={() => void navigate('/play')} />
+        <QuickAction label="Tactics" icon={<Swords size={18} />} onClick={() => void navigate('/tactics')} />
+        <QuickAction label="Import" icon={<Upload size={18} />} onClick={() => void navigate('/games/import')} />
       </div>
 
       {/* Favorite openings */}
