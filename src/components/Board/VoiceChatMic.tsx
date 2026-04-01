@@ -207,29 +207,32 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
     const systemAddition = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
 
-    // Stream sentences to speech as they arrive — speak starts on first sentence,
-    // subsequent sentences queue without canceling, so speech finishes ~when tokens do.
-    let sentenceBuffer = '';
-    let isFirstSentence = true;
+    // Stream small word groups to speech as tokens arrive.
+    // First chunk calls speakForced (cancels previous), rest queue naturally.
+    const WORDS_PER_CHUNK = 4;
+    let wordBuffer: string[] = [];
+    let isFirstChunk = true;
 
-    const flushSentence = (sentence: string): void => {
-      const trimmed = sentence.trim();
-      if (!trimmed) return;
-      if (isFirstSentence) {
-        void voiceService.speakForced(trimmed);
-        isFirstSentence = false;
+    const flushWords = (): void => {
+      if (wordBuffer.length === 0) return;
+      const text = wordBuffer.join(' ');
+      wordBuffer = [];
+      if (isFirstChunk) {
+        void voiceService.speakForced(text);
+        isFirstChunk = false;
       } else {
-        voiceService.speakQueuedForced(trimmed);
+        voiceService.speakQueuedForced(text);
       }
     };
 
     const onChunk = (chunk: string): void => {
-      sentenceBuffer += chunk;
-      // Split on sentence-ending punctuation followed by a space or end
-      const match = sentenceBuffer.match(/^(.*?[.!?])\s+(.*)$/s);
-      if (match) {
-        flushSentence(match[1]);
-        sentenceBuffer = match[2];
+      // Tokens may contain partial words or multiple words
+      const words = chunk.split(/\s+/).filter(Boolean);
+      for (const word of words) {
+        wordBuffer.push(word);
+        if (wordBuffer.length >= WORDS_PER_CHUNK) {
+          flushWords();
+        }
       }
     };
 
@@ -241,8 +244,8 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       150, // Low token limit — voice needs 1-2 sentences, not paragraphs
     );
 
-    // Flush any remaining text
-    flushSentence(sentenceBuffer);
+    // Flush any remaining words
+    flushWords();
 
     const assistantMsg: ChatMessage = {
       id: `voice-${Date.now()}-resp`,
