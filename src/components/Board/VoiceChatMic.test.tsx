@@ -18,6 +18,24 @@ vi.mock('../../services/coachApi', () => ({
   }),
 }));
 
+vi.mock('../../services/stockfishEngine', () => ({
+  stockfishEngine: {
+    analyzePosition: vi.fn(() => Promise.resolve({
+      bestMove: 'e2e4',
+      evaluation: 30,
+      isMate: false,
+      mateIn: null,
+      depth: 14,
+      topLines: [
+        { rank: 1, evaluation: 30, moves: ['e2e4', 'e7e5'], mate: null },
+      ],
+      nodesPerSecond: 1000000,
+    })),
+    initialize: vi.fn(),
+    stop: vi.fn(),
+  },
+}));
+
 const mockSpeak = vi.fn();
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
@@ -81,5 +99,31 @@ describe('VoiceChatMic', () => {
 
     // No text bubble should exist
     expect(screen.queryByTestId('voice-chat-bubble')).not.toBeInTheDocument();
+  });
+
+  it('calls onOpeningRequest when user asks to play an opening', async () => {
+    const onOpeningRequest = vi.fn();
+    render(<VoiceChatMic fen={DEFAULT_FEN} onOpeningRequest={onOpeningRequest} />);
+
+    const handler = mockOnResult.mock.calls[0][0] as (text: string) => void;
+    handler('Can you play the French defense against me?');
+
+    await waitFor(() => {
+      expect(onOpeningRequest).toHaveBeenCalledWith('French Defense');
+    });
+  });
+
+  it('does not call onOpeningRequest for non-opening messages', async () => {
+    const onOpeningRequest = vi.fn();
+    render(<VoiceChatMic fen={DEFAULT_FEN} onOpeningRequest={onOpeningRequest} />);
+
+    const handler = mockOnResult.mock.calls[0][0] as (text: string) => void;
+    handler('What is the best move here?');
+
+    await waitFor(() => {
+      expect(mockSpeak).toHaveBeenCalled();
+    });
+
+    expect(onOpeningRequest).not.toHaveBeenCalled();
   });
 });

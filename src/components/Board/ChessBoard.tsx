@@ -59,6 +59,8 @@ export interface ChessBoardProps {
   showVoiceMic?: boolean;
   /** PGN string passed to voice chat for context. */
   pgnForChat?: string;
+  /** Called when the user asks the coach to play a specific opening via voice. */
+  onOpeningRequest?: (openingName: string) => void;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -92,6 +94,7 @@ export function ChessBoard({
   classificationOverlay = null,
   showVoiceMic = true,
   pgnForChat,
+  onOpeningRequest,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -355,6 +358,7 @@ export function ChessBoard({
               fen={game.position}
               pgn={pgnForChat}
               turn={game.turn}
+              onOpeningRequest={onOpeningRequest}
             />
           )}
         </div>
