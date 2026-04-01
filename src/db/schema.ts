@@ -13,6 +13,7 @@ import type {
   GeneratedContent,
   OpeningWeakSpot,
   ClassifiedTactic,
+  SetupPuzzle,
 } from '../types';
 
 class ChessAcademyDB extends Dexie {
@@ -29,6 +30,7 @@ class ChessAcademyDB extends Dexie {
   generatedContent!: EntityTable<GeneratedContent, 'id'>;
   openingWeakSpots!: EntityTable<OpeningWeakSpot, 'id'>;
   classifiedTactics!: EntityTable<ClassifiedTactic, 'id'>;
+  setupPuzzles!: EntityTable<SetupPuzzle, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -354,6 +356,7 @@ class ChessAcademyDB extends Dexie {
       generatedContent: 'id, openingId, type, generatedAt',
       openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
       classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
     });
   }
 }

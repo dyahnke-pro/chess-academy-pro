@@ -27,7 +27,7 @@ interface ReplayStep {
 }
 
 /** Extract the last N moves before the mistake from the game PGN */
-function extractReplayMoves(pgn: string, playerColor: 'white' | 'black', moveNumber: number): ReplayStep[] {
+function extractReplayMoves(pgn: string, _mistakeFen: string, playerColor: 'white' | 'black', moveNumber: number): ReplayStep[] {
   const chess = new Chess();
   try {
     chess.loadPgn(pgn);
@@ -188,7 +188,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete }: MistakePuzzleBoardPro
       try {
         const game = await db.games.get(puzzle.sourceGameId);
         if (game?.pgn && !cancelledRef.value) {
-          steps = extractReplayMoves(game.pgn, puzzle.playerColor, puzzle.moveNumber);
+          steps = extractReplayMoves(game.pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
         }
       } catch {
         // No game found — skip replay

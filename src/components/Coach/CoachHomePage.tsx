@@ -29,16 +29,16 @@ function getTrainRoute(category: WeaknessCategory): string {
   switch (category) {
     case 'tactics':
     case 'calculation':
-      return '/puzzles';
+      return '/weaknesses/adaptive';
     case 'openings':
     case 'opening_weakspots':
       return '/openings';
     case 'endgame':
-      return '/puzzles';
+      return '/weaknesses/adaptive';
     case 'time_management':
       return '/coach/plan';
     case 'positional':
-      return '/puzzles';
+      return '/weaknesses/adaptive';
   }
 }
 

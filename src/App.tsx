@@ -20,6 +20,7 @@ import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
 import { AdaptivePuzzlePage } from './components/Puzzles/AdaptivePuzzlePage';
 import { MyMistakesPage } from './components/Puzzles/MyMistakesPage';
 import { LichessDashboardPage } from './components/Puzzles/LichessDashboardPage';
+import { WeaknessPuzzlePage } from './components/Puzzles/WeaknessPuzzlePage';
 import { GamesPage } from './components/Play/GamesPage';
 import { AnalysisBoardPage } from './components/Analysis/AnalysisBoardPage';
 import { CoachPage } from './components/Coach/CoachPage';
@@ -57,6 +58,10 @@ import { OnboardingPage } from './components/Settings/OnboardingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
 import { ImportPage } from './components/Games/ImportPage';
 import { ProPlayerPage } from './components/Openings/ProPlayerPage';
+import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
+import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
+import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
+import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -119,14 +124,27 @@ export function App(): JSX.Element {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
-          <Route path="/puzzles" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
-          <Route path="/puzzles/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
-          <Route path="/puzzles/mistakes" element={<ErrorBoundary><MyMistakesPage /></ErrorBoundary>} />
-          <Route path="/puzzles/lichess-dashboard" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
+          {/* Puzzle routes — now under /weaknesses */}
+          <Route path="/weaknesses/puzzles" element={<ErrorBoundary><WeaknessPuzzlePage /></ErrorBoundary>} />
+          <Route path="/weaknesses/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
+          <Route path="/weaknesses/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
+          <Route path="/weaknesses/mistakes" element={<ErrorBoundary><MyMistakesPage /></ErrorBoundary>} />
+          <Route path="/weaknesses/lichess-dashboard" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
+          {/* Redirects for old /puzzles routes */}
+          <Route path="/puzzles" element={<Navigate to="/weaknesses" replace />} />
+          <Route path="/puzzles/classic" element={<Navigate to="/weaknesses/classic" replace />} />
+          <Route path="/puzzles/mistakes" element={<Navigate to="/weaknesses/mistakes" replace />} />
+          <Route path="/puzzles/lichess-dashboard" element={<Navigate to="/weaknesses/lichess-dashboard" replace />} />
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/pro/:playerId" element={<ErrorBoundary><ProPlayerPage /></ErrorBoundary>} />
           <Route path="/openings/pro/:playerId/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
+          {/* Tactics routes */}
+          <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
+          <Route path="/tactics/profile" element={<ErrorBoundary><TacticalProfilePage /></ErrorBoundary>} />
+          <Route path="/tactics/drill" element={<ErrorBoundary><TacticDrillPage /></ErrorBoundary>} />
+          <Route path="/tactics/setup" element={<ErrorBoundary><TacticSetupPage /></ErrorBoundary>} />
+          <Route path="/tactics/create" element={<ErrorBoundary><TacticCreatePage /></ErrorBoundary>} />
           <Route path="/play" element={<ErrorBoundary><GamesPage /></ErrorBoundary>} />
           <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
@@ -139,7 +157,6 @@ export function App(): JSX.Element {
           <Route path="/games" element={<ErrorBoundary><GameDatabasePage /></ErrorBoundary>} />
           <Route path="/games/import" element={<ErrorBoundary><ImportPage /></ErrorBoundary>} />
           <Route path="/analysis" element={<ErrorBoundary><AnalysisBoardPage /></ErrorBoundary>} />
-          <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
           <Route path="/stats" element={<ErrorBoundary><StatsPage /></ErrorBoundary>} />
           <Route
             path="/settings"

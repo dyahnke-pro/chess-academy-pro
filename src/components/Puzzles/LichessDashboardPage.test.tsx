@@ -47,7 +47,7 @@ const mockDashboard: LichessPuzzleDashboard = {
 
 function renderPage(): ReturnType<typeof render> {
   return render(
-    <MemoryRouter initialEntries={['/puzzles/lichess-dashboard']}>
+    <MemoryRouter initialEntries={['/weaknesses/lichess-dashboard']}>
       <LichessDashboardPage />
     </MemoryRouter>,
   );

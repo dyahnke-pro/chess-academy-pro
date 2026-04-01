@@ -278,7 +278,7 @@ describe('MyMistakesPage', () => {
     ]);
 
     rtlRender(
-      <MemoryRouter initialEntries={[{ pathname: '/puzzles/mistakes', state: { initialOpeningName: 'Sicilian Defense' } }]}>
+      <MemoryRouter initialEntries={[{ pathname: '/weaknesses/mistakes', state: { initialOpeningName: 'Sicilian Defense' } }]}>
         <MotionConfig transition={{ duration: 0 }}>
           <MyMistakesPage />
         </MotionConfig>
@@ -300,7 +300,7 @@ describe('MyMistakesPage', () => {
     ]);
 
     rtlRender(
-      <MemoryRouter initialEntries={[{ pathname: '/puzzles/mistakes', state: { initialOpeningName: 'Sicilian Defense' } }]}>
+      <MemoryRouter initialEntries={[{ pathname: '/weaknesses/mistakes', state: { initialOpeningName: 'Sicilian Defense' } }]}>
         <MotionConfig transition={{ duration: 0 }}>
           <MyMistakesPage />
         </MotionConfig>
@@ -327,7 +327,7 @@ describe('MyMistakesPage', () => {
     ]);
 
     rtlRender(
-      <MemoryRouter initialEntries={[{ pathname: '/puzzles/mistakes', state: { initialClassification: 'blunder' } }]}>
+      <MemoryRouter initialEntries={[{ pathname: '/weaknesses/mistakes', state: { initialClassification: 'blunder' } }]}>
         <MotionConfig transition={{ duration: 0 }}>
           <MyMistakesPage />
         </MotionConfig>

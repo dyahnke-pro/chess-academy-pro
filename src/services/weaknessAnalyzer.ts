@@ -49,7 +49,7 @@ function analyzeTactics(themeSkills: ThemeSkill[]): {
         severity,
         detail: `Your ${skill.theme} puzzle accuracy is ${Math.round(skill.accuracy * 100)}%. Focus on recognizing ${skill.theme} patterns in simpler positions first.`,
         trainingAction: {
-          route: '/puzzles',
+          route: '/weaknesses/adaptive',
           buttonLabel: `Train ${skill.theme}`,
           state: { forcedWeakThemes: [skill.theme] },
         },
@@ -170,7 +170,7 @@ function analyzeGames(games: GameRecord[]): {
       severity: Math.min(90, Math.round(errorRate * 500)),
       detail: `You're averaging ${(errorRate * 100).toFixed(1)}% error rate per move. That's ${((totalBlunders + totalMistakes) / gamesWithAnnotations).toFixed(1)} serious errors per game. Practice calculation exercises with increasing complexity.`,
       trainingAction: {
-        route: '/puzzles/mistakes',
+        route: '/weaknesses/mistakes',
         buttonLabel: 'Drill my calculation errors',
         state: { initialStatus: 'unsolved' },
       },
@@ -189,7 +189,7 @@ function analyzeGames(games: GameRecord[]): {
       severity: Math.min(85, Math.round(collapseRate * 200)),
       detail: `In ${Math.round(collapseRate * 100)}% of your recent games, you made multiple blunders or mistakes in the final moves. This often indicates time pressure or fatigue. Try playing with increment or practicing endgame speed drills.`,
       trainingAction: {
-        route: '/puzzles/mistakes',
+        route: '/weaknesses/mistakes',
         buttonLabel: 'Drill late-game positions',
         state: { initialPhase: 'endgame', initialStatus: 'unsolved' },
       },
@@ -205,7 +205,7 @@ function analyzeGames(games: GameRecord[]): {
       severity: Math.min(95, Math.round((totalBlunders / gamesWithAnnotations) * 40)),
       detail: `Averaging ${(totalBlunders / gamesWithAnnotations).toFixed(1)} blunders per game. Before each move, do a "blunder check" — ask yourself: does my move leave anything hanging or allow a tactic?`,
       trainingAction: {
-        route: '/puzzles/mistakes',
+        route: '/weaknesses/mistakes',
         buttonLabel: 'Fix my blunders',
         state: { initialClassification: 'blunder', initialStatus: 'unsolved' },
       },
@@ -247,7 +247,7 @@ function analyzeSessionConsistency(sessions: SessionRecord[]): {
         severity: Math.round((1 - avgAccuracy / 100) * 80),
         detail: `Your average puzzle accuracy in training sessions is ${Math.round(avgAccuracy)}%. Consider dropping puzzle difficulty temporarily to build pattern recognition at a comfortable level.`,
         trainingAction: {
-          route: '/puzzles',
+          route: '/weaknesses/adaptive',
           buttonLabel: 'Easy Puzzle Session',
         },
       });
@@ -352,7 +352,7 @@ function analyzeEndgame(themeSkills: ThemeSkill[]): {
         severity: Math.round((1 - endgameSkill.accuracy) * 90),
         detail: `Your endgame puzzle accuracy is ${Math.round(endgameSkill.accuracy * 100)}%. Endgames are where games are decided. Focus on king and pawn endgames, then rook endgames — they're the most common.`,
         trainingAction: {
-          route: '/puzzles',
+          route: '/weaknesses/adaptive',
           buttonLabel: 'Train Endgames',
           state: { forcedWeakThemes: ['endgame'] },
         },
@@ -431,7 +431,7 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
       severity,
       detail: detailParts.join(' '),
       trainingAction: {
-        route: '/puzzles/mistakes',
+        route: '/weaknesses/mistakes',
         buttonLabel: `Drill ${openingName} mistakes`,
         state: { initialOpeningName: openingName, initialStatus: 'unsolved' },
       },
@@ -460,7 +460,7 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
         severity: Math.round(ratio * 70),
         detail: `Over half your mistakes from real games happen in ${phaseLabels[phase]}. Focus your practice on ${phaseLabels[phase]} patterns and positions.`,
         trainingAction: {
-          route: '/puzzles/mistakes',
+          route: '/weaknesses/mistakes',
           buttonLabel: `Drill ${phase} mistakes`,
           state: { initialPhase: phase, initialStatus: 'unsolved' },
         },
@@ -486,7 +486,7 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
         severity: Math.min(85, Math.round(blunderRatio * 120)),
         detail: `${Math.round(blunderRatio * 100)}% of your game mistakes are blunders (300+ centipawn loss).${blunderContext}${unsolvedBlunders > 0 ? ` ${unsolvedBlunders} blunder positions still unsolved.` : ''} Before each move, do a quick blunder check.`,
         trainingAction: {
-          route: '/puzzles/mistakes',
+          route: '/weaknesses/mistakes',
           buttonLabel: `Fix ${unsolvedBlunders > 0 ? unsolvedBlunders : blunders.length} blunders`,
           state: { initialClassification: 'blunder', initialStatus: unsolvedBlunders > 0 ? 'unsolved' : undefined },
         },
@@ -511,7 +511,7 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
       severity: dueSeverity,
       detail: `You have ${dueMistakes.length} mistake positions from your own games that are due for spaced repetition review. These are the exact positions where you went wrong — solving them builds pattern recognition for your real weaknesses.`,
       trainingAction: {
-        route: '/puzzles/mistakes',
+        route: '/weaknesses/mistakes',
         buttonLabel: `Review ${dueMistakes.length} due mistakes`,
         state: { initialStatus: 'unsolved' },
       },
@@ -540,7 +540,7 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
         severity: Math.round(unsolvedRatio * 50),
         detail: `You have ${unsolved.length} mistake puzzles from your own games that haven't been solved yet.${topUnsolvedOpening ? ` ${topUnsolvedOpening[1]} are from the ${topUnsolvedOpening[0]}.` : ''} Reviewing your actual mistakes is the fastest way to improve.`,
         trainingAction: {
-          route: '/puzzles/mistakes',
+          route: '/weaknesses/mistakes',
           buttonLabel: 'Solve my mistakes',
           state: { initialStatus: 'unsolved' },
         },

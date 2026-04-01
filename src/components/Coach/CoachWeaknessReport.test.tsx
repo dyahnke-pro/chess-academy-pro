@@ -47,7 +47,7 @@ const mockProfile: WeaknessProfile = {
       metric: '32% accuracy',
       severity: 75,
       detail: 'Struggles with knight forks',
-      trainingAction: { route: '/puzzles', buttonLabel: 'Train fork', state: { forcedWeakThemes: ['fork'] } },
+      trainingAction: { route: '/weaknesses/adaptive', buttonLabel: 'Train fork', state: { forcedWeakThemes: ['fork'] } },
     },
     {
       category: 'openings',
@@ -63,7 +63,7 @@ const mockProfile: WeaknessProfile = {
       metric: '60% accuracy',
       severity: 30,
       detail: 'Doing okay',
-      trainingAction: { route: '/puzzles', buttonLabel: 'Train Endgames', state: { forcedWeakThemes: ['endgame'] } },
+      trainingAction: { route: '/weaknesses/adaptive', buttonLabel: 'Train Endgames', state: { forcedWeakThemes: ['endgame'] } },
     },
   ],
   strengths: ['Strong pin tactics', 'Good calculation speed'],
