@@ -1,7 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
+import { HintButton } from '../Coach/HintButton';
 import { motion } from 'framer-motion';
+import { useHintSystem } from '../../hooks/useHintSystem';
+import { useSettings } from '../../hooks/useSettings';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import { voiceService } from '../../services/voiceService';
@@ -33,19 +36,46 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const [boardKey, setBoardKey] = useState(0);
   const hasCompleted = useRef(false);
 
-  // Narrate intro on mount
-  useEffect(() => {
-    const intro = setupIntro(puzzle.tacticType, puzzle.difficulty);
-    void voiceService.speak(intro);
-    return () => { voiceService.stop(); };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   const solutionMoves = puzzle.solutionMoves.split(' ').filter(Boolean);
   const tacticMoves = puzzle.tacticMoves.split(' ').filter(Boolean);
   const isPlayerTurn = moveIndex % 2 === 0; // Player moves on even indices
 
   // Determine board orientation
   const orientation = puzzle.playerColor === 'black' ? 'black' : 'white';
+
+  const { settings } = useSettings();
+
+  // Derive the expected move for the hint system
+  const knownMove = useMemo((): { from: string; to: string; san: string } | null => {
+    if (boardState !== 'thinking' || !isPlayerTurn) return null;
+    const uci = solutionMoves[moveIndex];
+    if (!uci) return null;
+    const from = uci.slice(0, 2);
+    const to = uci.slice(2, 4);
+    const promotion = uci.length > 4 ? uci[4] : undefined;
+    try {
+      const chess = new Chess(fen);
+      const result = chess.move({ from, to, promotion });
+      return { from, to, san: result.san };
+    } catch {
+      return { from, to, san: '' };
+    }
+  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, fen]);
+
+  const { hintState, requestHint, resetHints } = useHintSystem({
+    fen,
+    playerColor: puzzle.playerColor === 'black' ? 'black' : 'white',
+    enabled: settings.showHints && boardState === 'thinking' && isPlayerTurn,
+    knownMove,
+  });
+
+  // Narrate intro on mount and reset hints
+  useEffect(() => {
+    resetHints();
+    const intro = setupIntro(puzzle.tacticType, puzzle.difficulty);
+    void voiceService.speak(intro);
+    return () => { voiceService.stop(); };
+  }, [resetHints]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-play opponent responses
   useEffect(() => {
@@ -126,6 +156,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
         // Already applied or promotion mismatch — sync from expected
         chessRef.current.move({ from: expected.from, to: expected.to, promotion: expected.promotion });
       }
+      resetHints();
       setFen(chessRef.current.fen());
       setMoveIndex((i) => i + 1);
 
@@ -158,7 +189,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       hasCompleted.current = true;
       setTimeout(() => onComplete(false), 2000);
     }
-  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType, onComplete]);
+  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType, onComplete, resetHints]);
 
   const statusColor = boardState === 'correct'
     ? 'var(--color-success)'
@@ -192,8 +223,26 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
           showUndoButton={false}
           showResetButton={false}
           onMove={handleMove}
+          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          ghostMove={hintState.ghostMove}
         />
       </div>
+
+      {/* Hint controls */}
+      {boardState === 'thinking' && isPlayerTurn && settings.showHints && (
+        <div className="flex flex-col items-start gap-2" data-testid="setup-hint-area">
+          <HintButton
+            currentLevel={hintState.level}
+            onRequestHint={requestHint}
+            disabled={hintState.isAnalyzing}
+          />
+          {hintState.nudgeText && (
+            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
+              {hintState.nudgeText}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Move indicator */}
       <div className="text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>

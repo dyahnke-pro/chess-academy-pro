@@ -19,6 +19,7 @@ import type {
   GeneratedContent,
   CommonMistake,
   CheckpointQuizItem,
+  SetupPuzzle,
 } from '../types';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -451,6 +452,35 @@ export function buildCheckpointQuiz(overrides?: Partial<CheckpointQuizItem>): Ch
     correctMove: 'e5',
     hint: 'Mirror the center pawn.',
     concept: 'Symmetrical Response',
+    ...overrides,
+  };
+}
+
+// ─── Setup Puzzle ──────────────────────────────────────────────────────────
+
+export function buildSetupPuzzle(overrides?: Partial<SetupPuzzle>): SetupPuzzle {
+  return {
+    id: nextId('setup'),
+    // Position where Nf3 is a valid prep move (white to play)
+    setupFen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1',
+    solutionMoves: 'g1f3',
+    tacticFen: 'rnbqkbnr/pppppppp/8/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 1',
+    tacticMoves: 'd2d4',
+    tacticType: 'fork',
+    difficulty: 1,
+    sourceGameId: null,
+    sourceMistakePuzzleId: null,
+    playerColor: 'white',
+    openingName: null,
+    srsInterval: 0,
+    srsEaseFactor: 2.5,
+    srsRepetitions: 0,
+    srsDueDate: today(),
+    srsLastReview: null,
+    status: 'unsolved',
+    attempts: 0,
+    successes: 0,
+    createdAt: today(),
     ...overrides,
   };
 }
