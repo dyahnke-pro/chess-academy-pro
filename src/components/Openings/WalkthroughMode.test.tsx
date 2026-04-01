@@ -219,20 +219,21 @@ describe('WalkthroughMode', () => {
     const toggle = screen.getByTestId('walkthrough-speed-toggle');
     expect(toggle).toBeInTheDocument();
 
-    // Default is normal (1x) — check aria-checked
-    expect(screen.getByTestId('speed-normal')).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByTestId('speed-slow')).toHaveAttribute('aria-checked', 'false');
-    expect(screen.getByTestId('speed-fast')).toHaveAttribute('aria-checked', 'false');
+    // Default is learn — check aria-checked
+    expect(screen.getByTestId('speed-learn')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('speed-study')).toHaveAttribute('aria-checked', 'false');
+    expect(screen.getByTestId('speed-review')).toHaveAttribute('aria-checked', 'false');
+    expect(screen.getByTestId('speed-drill')).toHaveAttribute('aria-checked', 'false');
 
-    // Click fast
-    await user.click(screen.getByTestId('speed-fast'));
-    expect(screen.getByTestId('speed-fast')).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByTestId('speed-normal')).toHaveAttribute('aria-checked', 'false');
+    // Click review
+    await user.click(screen.getByTestId('speed-review'));
+    expect(screen.getByTestId('speed-review')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('speed-learn')).toHaveAttribute('aria-checked', 'false');
 
-    // Click slow
-    await user.click(screen.getByTestId('speed-slow'));
-    expect(screen.getByTestId('speed-slow')).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByTestId('speed-fast')).toHaveAttribute('aria-checked', 'false');
+    // Click drill
+    await user.click(screen.getByTestId('speed-drill'));
+    expect(screen.getByTestId('speed-drill')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('speed-review')).toHaveAttribute('aria-checked', 'false');
   });
 
   it('uses first/last buttons to jump to start/end', async () => {
