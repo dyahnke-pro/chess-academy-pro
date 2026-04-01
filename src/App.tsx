@@ -7,7 +7,9 @@ import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
 import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
+import { voiceService } from './services/voiceService';
 import { db } from './db/schema';
+import { getRandomWelcome } from './data/welcomeMessages';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -89,6 +91,16 @@ export function App(): JSX.Element {
         if (profile.preferences.voiceSpeed) {
           speechService.setRate(profile.preferences.voiceSpeed);
         }
+
+        // Speak a welcome greeting to warm up the Polly TTS connection.
+        // This pre-establishes DNS/TCP/TLS with the TTS server so subsequent
+        // voice calls (e.g. opening trainer narration) have much less lag.
+        // On iOS the audio may not play until after first touch, but the HTTP
+        // round-trip still warms the connection.
+        const lastWelcome = sessionStorage.getItem('lastWelcome') ?? undefined;
+        const welcome = getRandomWelcome(lastWelcome);
+        sessionStorage.setItem('lastWelcome', welcome);
+        void voiceService.speak(welcome);
 
         const skippedMeta = await db.meta.get('onboarding_skipped');
         if (skippedMeta?.value !== 'true') {
