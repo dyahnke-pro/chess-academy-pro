@@ -212,28 +212,24 @@ describe('WalkthroughMode', () => {
     });
   });
 
-  it('selects speed via toggle bar', async () => {
+  it('cycles speed on toggle button tap', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<WalkthroughMode opening={testOpening} onExit={onExit} />);
 
-    const toggle = screen.getByTestId('walkthrough-speed-toggle');
-    expect(toggle).toBeInTheDocument();
+    const btn = screen.getByTestId('walkthrough-speed-toggle');
+    expect(btn).toHaveTextContent('Learn');
 
-    // Default is learn — check aria-checked
-    expect(screen.getByTestId('speed-learn')).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByTestId('speed-study')).toHaveAttribute('aria-checked', 'false');
-    expect(screen.getByTestId('speed-review')).toHaveAttribute('aria-checked', 'false');
-    expect(screen.getByTestId('speed-drill')).toHaveAttribute('aria-checked', 'false');
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Study');
 
-    // Click review
-    await user.click(screen.getByTestId('speed-review'));
-    expect(screen.getByTestId('speed-review')).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByTestId('speed-learn')).toHaveAttribute('aria-checked', 'false');
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Review');
 
-    // Click drill
-    await user.click(screen.getByTestId('speed-drill'));
-    expect(screen.getByTestId('speed-drill')).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByTestId('speed-review')).toHaveAttribute('aria-checked', 'false');
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Drill');
+
+    await user.click(btn);
+    expect(btn).toHaveTextContent('Learn');
   });
 
   it('uses first/last buttons to jump to start/end', async () => {

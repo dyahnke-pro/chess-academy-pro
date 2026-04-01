@@ -74,14 +74,6 @@ const NARRATE: Record<AutoPlaySpeed, boolean> = {
   drill: false,
 };
 
-// UI labels for speed toggle
-const SPEED_OPTIONS: { value: AutoPlaySpeed; label: string }[] = [
-  { value: 'learn', label: 'Learn' },
-  { value: 'study', label: 'Study' },
-  { value: 'review', label: 'Review' },
-  { value: 'drill', label: 'Drill' },
-];
-
 /** Trim annotation to first 1-2 sentences for Review speed. */
 function trimAnnotation(text: string): string {
   // Split on sentence boundaries (period, exclamation, question mark followed by space or end)
@@ -403,6 +395,14 @@ export function WalkthroughMode({
 
   const postNarrationDelay = POST_NARRATION_MS[autoPlaySpeed];
 
+  const cycleSpeed = useCallback(() => {
+    setAutoPlaySpeed((prev) => {
+      const order: AutoPlaySpeed[] = ['learn', 'study', 'review', 'drill'];
+      const idx = order.indexOf(prev);
+      return order[(idx + 1) % order.length];
+    });
+  }, []);
+
   // Keep ref in sync with state so closures can read current value
   useEffect(() => {
     isAutoPlayingRef.current = isAutoPlaying;
@@ -683,38 +683,21 @@ export function WalkthroughMode({
               {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
             </button>
           }
+          extraRight={
+            <button
+              onClick={cycleSpeed}
+              className="px-2.5 py-1.5 rounded-lg border text-xs font-medium hover:bg-theme-surface transition-colors"
+              style={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text-muted)',
+              }}
+              aria-label={`Speed: ${autoPlaySpeed}`}
+              data-testid="walkthrough-speed-toggle"
+            >
+              {autoPlaySpeed.charAt(0).toUpperCase() + autoPlaySpeed.slice(1)}
+            </button>
+          }
         />
-
-        {/* Speed toggle bar */}
-        <div className="flex items-center gap-3 mt-2" data-testid="walkthrough-speed-toggle">
-          <span className="text-xs font-medium shrink-0" style={{ color: 'var(--color-text-muted)' }}>
-            Speed
-          </span>
-          <div
-            className="flex flex-1 rounded-lg border overflow-hidden"
-            style={{ borderColor: 'var(--color-border)' }}
-            role="radiogroup"
-            aria-label="Narration speed"
-          >
-            {SPEED_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => setAutoPlaySpeed(opt.value)}
-                className="flex-1 py-2 text-xs font-medium transition-colors"
-                style={{
-                  background: autoPlaySpeed === opt.value ? 'var(--color-accent)' : 'transparent',
-                  color: autoPlaySpeed === opt.value ? 'var(--color-bg)' : 'var(--color-text-muted)',
-                }}
-                role="radio"
-                aria-checked={autoPlaySpeed === opt.value}
-                aria-label={`Speed ${opt.label}`}
-                data-testid={`speed-${opt.value}`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Annotation — hidden in Drill mode */}
