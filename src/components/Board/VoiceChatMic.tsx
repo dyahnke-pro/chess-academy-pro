@@ -29,6 +29,13 @@ Turn: ${turnLabel} to move
 Respond naturally as a chess coach reviewing the board with the student.`;
 }
 
+/**
+ * Compact floating mic button — meant to be placed inside a `relative`
+ * container. Renders at the bottom-right corner of the parent.
+ *
+ * Always renders (even without Web Speech API) — tapping when unsupported
+ * shows a brief "not supported" tooltip instead of hiding the button.
+ */
 export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -36,22 +43,20 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
   const [streamingContent, setStreamingContent] = useState('');
   const [showBubble, setShowBubble] = useState(false);
   const [speakEnabled, setSpeakEnabled] = useState(() => useAppStore.getState().coachVoiceOn);
+  const [unsupportedFlash, setUnsupportedFlash] = useState(false);
   const listeningRef = useRef(false);
-  const voiceSupported = voiceInputService.isSupported();
   const speechBufferRef = useRef('');
 
-  // Sync listening ref
   useEffect(() => {
     listeningRef.current = listening;
   }, [listening]);
 
-  // Register voice result handler
+  // Register voice result handler once
   useEffect(() => {
     voiceInputService.onResult((transcript: string) => {
       if (transcript.trim()) {
         void handleUserMessage(transcript.trim());
       }
-      // Don't restart — single-shot per tap
       setListening(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,11 +76,9 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
     setStreamingContent('');
     speechBufferRef.current = '';
 
-    // Build message history for context (last N pairs + new message)
     const allMessages = [...messages, userMsg];
     const recent = allMessages.slice(-(MAX_HISTORY_PAIRS * 2));
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
-
     const systemAddition = buildSystemAddition(fen, pgn, turn);
 
     let fullResponse = '';
@@ -86,7 +89,6 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
         fullResponse += chunk;
         setStreamingContent(fullResponse);
 
-        // Buffer speech to sentence boundaries
         if (speakEnabled) {
           speechBufferRef.current += chunk;
           const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
@@ -99,7 +101,6 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
       },
     );
 
-    // Flush remaining speech buffer
     if (speechBufferRef.current.trim() && speakEnabled) {
       void voiceService.speak(speechBufferRef.current.trim());
       speechBufferRef.current = '';
@@ -117,6 +118,11 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
   }, [messages, fen, pgn, turn, speakEnabled]);
 
   const handleMicToggle = useCallback(() => {
+    if (!voiceInputService.isSupported()) {
+      setUnsupportedFlash(true);
+      setTimeout(() => setUnsupportedFlash(false), 2000);
+      return;
+    }
     if (listening) {
       voiceInputService.stopListening();
       setListening(false);
@@ -134,32 +140,47 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
     setSpeakEnabled((prev) => !prev);
   }, []);
 
-  // Get last assistant message for display
   const lastAssistantMsg = [...messages].reverse().find((m) => m.role === 'assistant');
   const displayText = isStreaming
     ? streamingContent
     : lastAssistantMsg?.content ?? '';
 
-  if (!voiceSupported) return <></>;
-
   return (
-    <div className="relative flex items-center justify-center" data-testid="voice-chat-mic">
-      {/* Response bubble */}
+    <div
+      className="absolute bottom-1 right-1 z-10 flex items-center gap-1"
+      data-testid="voice-chat-mic"
+    >
+      {/* "Not supported" flash */}
+      <AnimatePresence>
+        {unsupportedFlash && (
+          <motion.span
+            className="text-[10px] text-red-400 bg-theme-surface/90 border border-theme-border rounded px-1.5 py-0.5 whitespace-nowrap"
+            initial={{ opacity: 0, x: 4 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0 }}
+            data-testid="voice-unsupported-msg"
+          >
+            Mic not supported
+          </motion.span>
+        )}
+      </AnimatePresence>
+
+      {/* Response bubble — floats above the mic */}
       <AnimatePresence>
         {showBubble && displayText && (
           <motion.div
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-72 max-h-40 overflow-y-auto rounded-xl bg-theme-surface border border-theme-border shadow-lg p-3 z-20"
-            initial={{ opacity: 0, y: 8, scale: 0.95 }}
+            className="absolute bottom-full right-0 mb-2 w-64 max-h-36 overflow-y-auto rounded-xl bg-theme-surface border border-theme-border shadow-lg p-2.5 z-20"
+            initial={{ opacity: 0, y: 6, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.95 }}
+            exit={{ opacity: 0, y: 6, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             data-testid="voice-chat-bubble"
           >
-            <div className="flex items-start justify-between gap-2">
-              <p className="text-xs text-theme-text leading-relaxed flex-1">
+            <div className="flex items-start justify-between gap-1.5">
+              <p className="text-[11px] text-theme-text leading-relaxed flex-1">
                 {displayText}
                 {isStreaming && (
-                  <span className="inline-block ml-1 animate-pulse">...</span>
+                  <span className="inline-block ml-0.5 animate-pulse">...</span>
                 )}
               </p>
               <button
@@ -168,7 +189,7 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
                 aria-label="Close response"
                 data-testid="voice-chat-close"
               >
-                <X size={12} />
+                <X size={10} />
               </button>
             </div>
           </motion.div>
@@ -178,34 +199,34 @@ export function VoiceChatMic({ fen, pgn, turn }: VoiceChatMicProps): JSX.Element
       {/* Speak toggle */}
       <button
         onClick={toggleSpeak}
-        className={`p-1.5 rounded-md transition-colors ${
+        className={`p-1 rounded-md transition-colors backdrop-blur-sm ${
           speakEnabled
-            ? 'text-theme-accent'
-            : 'text-theme-text-muted hover:text-theme-text'
+            ? 'text-theme-accent bg-theme-surface/70'
+            : 'text-theme-text-muted hover:text-theme-text bg-theme-surface/50'
         }`}
         title={speakEnabled ? 'Mute coach voice' : 'Enable coach voice'}
         aria-label={speakEnabled ? 'Mute coach voice' : 'Enable coach voice'}
         data-testid="voice-chat-speak-toggle"
       >
-        {speakEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+        {speakEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
       </button>
 
       {/* Mic button */}
       <motion.button
         onClick={handleMicToggle}
         disabled={isStreaming}
-        className={`p-2 rounded-full transition-colors ${
+        className={`p-1.5 rounded-full shadow-md transition-colors ${
           listening
-            ? 'bg-red-500/15 text-red-500 border border-red-500'
-            : 'bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text border border-theme-border'
+            ? 'bg-red-500 text-white'
+            : 'bg-theme-accent/90 text-white hover:bg-theme-accent'
         } disabled:opacity-50`}
-        animate={listening ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+        animate={listening ? { scale: [1, 1.15, 1] } : { scale: 1 }}
         transition={listening ? { duration: 1, repeat: Infinity } : {}}
         title={listening ? 'Stop listening' : 'Talk to coach'}
         aria-label={listening ? 'Stop listening' : 'Talk to coach'}
         data-testid="voice-chat-mic-btn"
       >
-        {listening ? <MicOff size={16} /> : <Mic size={16} />}
+        {listening ? <MicOff size={14} /> : <Mic size={14} />}
       </motion.button>
     </div>
   );

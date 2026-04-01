@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -252,7 +253,7 @@ export function ModelGameViewer({
 
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-center p-4 gap-3">
-        <div className="w-full max-w-[400px] aspect-square">
+        <BoardVoiceOverlay fen={currentFen} className="w-full max-w-[400px] aspect-square">
           <Chessboard
             options={{
               position: currentFen,
@@ -265,7 +266,7 @@ export function ModelGameViewer({
               lightSquareStyle: { backgroundColor: '#edeed1' },
             }}
           />
-        </div>
+        </BoardVoiceOverlay>
 
         {/* Move label */}
         <div className="flex items-center gap-2">

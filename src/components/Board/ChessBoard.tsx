@@ -307,6 +307,14 @@ export function ChessBoard({
               boardOrientation={game.boardOrientation}
             />
           )}
+          {/* Voice chat mic — bottom-right of the board */}
+          {showVoiceMic && (
+            <VoiceChatMic
+              fen={game.position}
+              pgn={pgnForChat}
+              turn={game.turn}
+            />
+          )}
         </div>
       </div>
 
@@ -352,16 +360,6 @@ export function ChessBoard({
         </div>
       )}
 
-      {/* Voice chat mic — below the board */}
-      {showVoiceMic && (
-        <div className={`flex justify-center ${hasControls ? 'mt-1' : 'mt-2'}`}>
-          <VoiceChatMic
-            fen={game.position}
-            pgn={pgnForChat}
-            turn={game.turn}
-          />
-        </div>
-      )}
     </div>
   );
 }

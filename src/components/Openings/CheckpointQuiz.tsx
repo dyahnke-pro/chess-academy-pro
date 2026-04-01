@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { CheckCircle, XCircle, HelpCircle } from 'lucide-react';
 import type { CheckpointQuizItem } from '../../types';
 
@@ -70,7 +71,7 @@ export function CheckpointQuiz({
       </p>
 
       <div className="flex justify-center mb-3">
-        <div className="w-64 h-64">
+        <BoardVoiceOverlay fen={quiz.fen} className="w-64 h-64">
           <Chessboard
             options={{
               position: quiz.fen,
@@ -79,7 +80,7 @@ export function CheckpointQuiz({
               allowDragging: state === 'waiting' && !isPlanQuiz,
             }}
           />
-        </div>
+        </BoardVoiceOverlay>
       </div>
 
       {/* Multiple choice answers for plan quizzes */}

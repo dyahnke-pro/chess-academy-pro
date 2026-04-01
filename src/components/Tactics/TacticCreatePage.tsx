@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Lightbulb, Play, SkipForward, Pause } from 'lucide-react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import {
   buildTacticCreateQueue,
   updateContextDepth,
@@ -321,7 +322,7 @@ export function TacticCreatePage(): JSX.Element {
           </div>
 
           {/* Board */}
-          <div className="aspect-square max-w-md mx-auto w-full">
+          <BoardVoiceOverlay fen={replayFen} className="aspect-square max-w-md mx-auto w-full">
             <Chessboard
               options={{
                 position: replayFen,
@@ -332,7 +333,7 @@ export function TacticCreatePage(): JSX.Element {
                 lightSquareStyle: { backgroundColor: '#edeed1' },
               }}
             />
-          </div>
+          </BoardVoiceOverlay>
 
           {/* Voice subtitle */}
           {subtitle && (

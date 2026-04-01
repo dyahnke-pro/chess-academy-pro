@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { StarDisplay } from './StarDisplay';
@@ -231,7 +232,7 @@ export function RookMazePage(): JSX.Element {
         </div>
 
         {/* Board */}
-        <div className="w-full md:max-w-[420px] mx-auto">
+        <BoardVoiceOverlay fen={fen} className="w-full md:max-w-[420px] mx-auto">
           <Chessboard
             options={{
               position: fen,
@@ -245,7 +246,7 @@ export function RookMazePage(): JSX.Element {
               onSquareClick: handleSquareClick,
             }}
           />
-        </div>
+        </BoardVoiceOverlay>
 
         {/* Controls */}
         {phase === 'playing' && (

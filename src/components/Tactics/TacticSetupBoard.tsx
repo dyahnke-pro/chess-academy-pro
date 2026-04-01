@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Chess, type Square } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { motion } from 'framer-motion';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
@@ -182,7 +183,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       </motion.div>
 
       {/* Board */}
-      <div className="aspect-square max-w-md mx-auto w-full" data-testid="setup-board">
+      <BoardVoiceOverlay fen={fen} className="aspect-square max-w-md mx-auto w-full" data-testid="setup-board">
         <Chessboard
           options={{
             position: fen,
@@ -194,7 +195,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
             lightSquareStyle: { backgroundColor: '#edeed1' },
           }}
         />
-      </div>
+      </BoardVoiceOverlay>
 
       {/* Move indicator */}
       <div className="text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
