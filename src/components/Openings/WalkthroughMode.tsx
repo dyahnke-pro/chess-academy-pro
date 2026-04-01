@@ -34,14 +34,6 @@ interface MoveInfo {
 
 type AutoPlaySpeed = 'learn' | 'study' | 'review' | 'drill';
 
-// TTS speech rate for each speed tier
-const TTS_RATE: Record<AutoPlaySpeed, number> = {
-  learn: 0.95,
-  study: 1.15,
-  review: 1.4,
-  drill: 1.0, // unused — drill has no narration
-};
-
 // Words-per-minute reading speed for auto-advance timing
 const READING_WPM: Record<AutoPlaySpeed, number> = {
   learn: 120,
@@ -502,8 +494,10 @@ export function WalkthroughMode({
     }
   }, [currentMoveIndex, expectedMoves.length]);
 
-  // Current TTS rate derived from speed selection
-  const currentTtsRate = TTS_RATE[autoPlaySpeed];
+  // Voice speed comes from the user's global preference in Settings,
+  // NOT from the walkthrough speed tier. The tier controls lesson pace
+  // (content amount, timing, arrows) while Settings controls how the
+  // voice sounds.
 
   // Track when TTS finishes speaking — used to advance auto-play immediately
   const ttsFinishedRef = useRef<(() => void) | null>(null);
@@ -524,7 +518,7 @@ export function WalkthroughMode({
       ? trimAnnotation(ann.annotation)
       : ann.annotation;
 
-    void voiceService.speak(spokenText, { rate: currentTtsRate }).then(() => {
+    void voiceService.speak(spokenText).then(() => {
       if (!cancelled) {
         ttsFinishedRef.current?.();
       }
@@ -534,7 +528,7 @@ export function WalkthroughMode({
       cancelled = true;
       voiceService.stop();
     };
-  }, [voiceEnabled, currentMoveIndex, annotations, currentTtsRate, autoPlaySpeed]);
+  }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed]);
 
   // Clean up speech on unmount
   useEffect(() => {
