@@ -350,26 +350,19 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     }
   }, [state, puzzle]);
 
-  // "Why?" button — explain the concept without revealing the move
+  // "Why?" button — calls the coach API for a thorough explanation of
+  // why the best move is best. Works in both playing and correct states.
   const handleWhy = useCallback(() => {
     if (state !== 'playing' && state !== 'correct') return;
+    if (whyLoading) return;
     voiceService.stop();
 
-    if (state === 'playing') {
-      // Spoiler-free hint during play
-      const hint = puzzle.narration.conceptHint;
-      if (hint) {
-        setSubtitle(hint);
-        void voiceService.speak(hint);
-      } else {
-        const explanation = describePositionIdea(puzzle.fen, puzzle.bestMoveSan, puzzle.gamePhase);
-        setSubtitle(explanation);
-        void voiceService.speak(explanation);
-      }
-      return;
+    // In correct state, cancel auto-advance so the user can read the explanation
+    if (state === 'correct') {
+      if (outroTimerRef.current) { clearTimeout(outroTimerRef.current); outroTimerRef.current = null; }
+      if (completionTimerRef.current) { clearTimeout(completionTimerRef.current); completionTimerRef.current = null; }
     }
 
-    // state === 'correct' — give a thorough coach explanation of why the move was best
     setWhyLoading(true);
     setSubtitle('Analyzing why this was the best move...');
 
@@ -388,10 +381,10 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         weaknesses: [],
       },
       additionalContext: [
-        `The student just solved a tactic puzzle from one of their own games.`,
-        `Position before: FEN ${puzzle.fen}`,
+        `The student is working on a tactic puzzle from one of their own games.`,
+        `Position (FEN): ${puzzle.fen}`,
         `Their original (wrong) move was: ${puzzle.playerMoveSan} (${puzzle.classification}, lost ${puzzle.cpLoss} centipawns)`,
-        `The best move was: ${puzzle.bestMoveSan}`,
+        `The best move is: ${puzzle.bestMoveSan}`,
         `Solution line (UCI): ${puzzle.moves}`,
         `Game phase: ${puzzle.gamePhase}`,
         puzzle.opponentName ? `Opponent: ${puzzle.opponentName}` : '',
@@ -406,14 +399,25 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       setWhyLoading(false);
       setSubtitle(response);
       void voiceService.speak(response);
+      // If puzzle was solved, signal completion after the explanation finishes
+      if (state === 'correct') {
+        completionTimerRef.current = setTimeout(() => {
+          onComplete(!hasMadeMistakeRef.current);
+        }, 8000);
+      }
     }).catch(() => {
       setWhyLoading(false);
       // Fallback to local explanation
       const explanation = describePositionIdea(puzzle.fen, puzzle.bestMoveSan, puzzle.gamePhase);
       setSubtitle(explanation);
       void voiceService.speak(explanation);
+      if (state === 'correct') {
+        completionTimerRef.current = setTimeout(() => {
+          onComplete(!hasMadeMistakeRef.current);
+        }, 4000);
+      }
     });
-  }, [state, puzzle, activeProfile?.currentRating]);
+  }, [state, whyLoading, puzzle, activeProfile?.currentRating, onComplete]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
@@ -654,7 +658,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
             data-testid="why-button"
           >
             <HelpCircle size={14} />
-            <span>{whyLoading ? 'Thinking...' : state === 'correct' ? 'Explain why' : 'Why?'}</span>
+            <span>{whyLoading ? 'Thinking...' : 'Explain why'}</span>
           </button>
         </div>
       )}
