@@ -39,6 +39,8 @@ class VoiceService {
   private abortController: AbortController | null = null;
   private playing = false;
   private speed = 1.0;
+  /** Set to false after Polly fails — skips fetch on subsequent calls so fallback is instant */
+  private pollyAvailable = true;
 
   // Cached preferences to avoid DB read on every speak() call
   private cachedPrefs: {
@@ -60,27 +62,35 @@ class VoiceService {
   }
 
   /** Pre-load voice preferences and warm up audio. Call early (e.g. on page mount).
-   *  When Polly is enabled, fires a silent prefetch to warm the TLS connection
-   *  and serverless function so the first real speak() has no cold-start lag. */
+   *  Probes the Polly endpoint — if unreachable, disables Polly for the session
+   *  so speak() falls through to Web Speech instantly instead of waiting for a
+   *  network timeout on every call. */
   async warmup(): Promise<void> {
     const prefs = await this.loadPrefs();
     // Prime the AudioContext so first decode isn't cold
     getSharedAudioContext();
 
-    // Prefetch a tiny Polly clip to warm the network path + serverless function
     if (prefs?.pollyEnabled && prefs.voiceEnabled) {
+      // Probe Polly availability with a short timeout
       try {
-        const url = getTtsUrl(' ', prefs.pollyVoice);
-        void fetch(url).then(async (res) => {
-          if (res.ok) {
-            // Decode the audio buffer to also prime the AudioContext decoder
-            const buf = await res.arrayBuffer();
-            const ctx = getSharedAudioContext();
-            try { await ctx.decodeAudioData(buf); } catch { /* empty clip may fail decode — ok */ }
-          }
-        });
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
+        const url = getTtsUrl('.', prefs.pollyVoice);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeout);
+
+        if (res.ok) {
+          // Polly is live — decode the response to also prime AudioContext
+          const buf = await res.arrayBuffer();
+          const ctx = getSharedAudioContext();
+          try { await ctx.decodeAudioData(buf); } catch { /* tiny clip may fail — ok */ }
+        } else {
+          console.warn('[VoiceService] Polly probe returned', res.status, '— disabling for session');
+          this.pollyAvailable = false;
+        }
       } catch {
-        // Best-effort — don't block startup
+        console.warn('[VoiceService] Polly probe failed — disabling for session');
+        this.pollyAvailable = false;
       }
     }
   }
@@ -128,7 +138,8 @@ class VoiceService {
     this.speed = prefs.voiceSpeed;
 
     // Tier 1: Amazon Polly (server-side, no API key needed in browser)
-    if (prefs.pollyEnabled) {
+    // Skip if Polly was already found unreachable during warmup/previous calls
+    if (prefs.pollyEnabled && this.pollyAvailable) {
       const success = await this.speakPolly(text, prefs.pollyVoice);
       if (success) return;
     }
@@ -168,7 +179,8 @@ class VoiceService {
       const url = getTtsUrl(text, voice);
       const response = await fetch(url, { signal: this.abortController.signal });
       if (!response.ok) {
-        console.warn('[VoiceService] Polly API error:', response.status);
+        console.warn('[VoiceService] Polly API error:', response.status, '— disabling for session');
+        this.pollyAvailable = false;
         return false;
       }
       const arrayBuffer = await response.arrayBuffer();
@@ -179,7 +191,8 @@ class VoiceService {
       if (error instanceof DOMException && error.name === 'AbortError') {
         return false;
       }
-      console.warn('[VoiceService] Polly TTS failed:', error);
+      console.warn('[VoiceService] Polly TTS failed — disabling for session:', error);
+      this.pollyAvailable = false;
       this.playing = false;
       this.currentSource = null;
       return false;

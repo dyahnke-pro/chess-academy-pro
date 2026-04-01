@@ -69,6 +69,21 @@ export function App(): JSX.Element {
     useAppStore();
   const [onboardingSkipped, setOnboardingSkipped] = useState(true);
 
+  // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
+  useEffect(() => {
+    const unlock = (): void => {
+      speechService.warmupInGestureContext();
+      document.removeEventListener('touchstart', unlock);
+      document.removeEventListener('click', unlock);
+    };
+    document.addEventListener('touchstart', unlock, { once: true });
+    document.addEventListener('click', unlock, { once: true });
+    return () => {
+      document.removeEventListener('touchstart', unlock);
+      document.removeEventListener('click', unlock);
+    };
+  }, []);
+
   useEffect(() => {
     async function init(): Promise<void> {
       // Create the shared AudioContext immediately so its touchstart unlock
