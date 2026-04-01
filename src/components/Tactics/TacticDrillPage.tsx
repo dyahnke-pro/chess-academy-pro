@@ -136,8 +136,8 @@ export function TacticDrillPage(): JSX.Element {
 
     // Accelerating replay: zip through the opening, decelerate into the critical zone
     // Last 4 moves before the tactic get progressively slower
-    const FAST = 120;
-    const APPROACH = [250, 350, 500, 700]; // last 4 moves decelerate
+    const FAST = 150;
+    const APPROACH = [310, 440, 625, 875]; // last 4 moves decelerate
 
     for (let i = 0; i < moves.length; i++) {
       if (isCancelled()) return;
