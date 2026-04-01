@@ -304,12 +304,13 @@ export function CoachGamePage(): JSX.Element {
     if (gameState.moves.length === 0) return null;
     const last = gameState.moves[gameState.moves.length - 1];
     // bestMove is UCI from Stockfish for the pre-move position
-    // Use previous move's FEN (= pre-move FEN) for conversion
+    // Use previous move's FEN as pre-move FEN; for the first move, use starting position
+    const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     const preFen = gameState.moves.length >= 2
       ? gameState.moves[gameState.moves.length - 2].fen
-      : undefined;
+      : START_FEN;
     let bestMoveSan: string | null = null;
-    if (last.bestMove && preFen) {
+    if (last.bestMove) {
       try { bestMoveSan = uciMoveToSan(last.bestMove, preFen); } catch { /* skip */ }
     }
     return {
@@ -593,6 +594,8 @@ export function CoachGamePage(): JSX.Element {
     const applyCoachMove = (
       result: MoveResult,
       evaluation: number,
+      preMoveEval: number | null = null,
+      bestMove: string | null = null,
     ): void => {
       moveCountRef.current += 1;
 
@@ -605,9 +608,9 @@ export function CoachGamePage(): JSX.Element {
         evaluation,
         classification: null,
         expanded: false,
-        bestMove: null,
+        bestMove,
         bestMoveEval: null,
-        preMoveEval: null,
+        preMoveEval,
       };
 
       setCoachLastMove({ from: result.from, to: result.to });
@@ -679,23 +682,26 @@ export function CoachGamePage(): JSX.Element {
 
         console.log('[CoachGame] Coach played:', result.san);
 
-        // Analyze the position AFTER the coach moved to get accurate
-        // preMoveEval for the player's next move classification.
-        let postCoachEval = analysis.evaluation;
+        // Analyze the position AFTER the coach moved — this gives:
+        // 1. Accurate eval/top lines for the player's upcoming turn (voice chat needs this)
+        // 2. preMoveEval for the player's next move classification
+        let postCoachAnalysis: StockfishAnalysis | null = null;
         try {
-          const postCoachAnalysis = await stockfishEngine.analyzePosition(result.fen, 10);
-          if (!isCancelled()) {
-            postCoachEval = postCoachAnalysis.evaluation;
-          }
+          postCoachAnalysis = await stockfishEngine.analyzePosition(result.fen, 10);
         } catch {
-          // Fall back to pre-coach eval if analysis fails
+          // Fall back to pre-coach analysis if post-analysis fails
         }
 
-        applyCoachMove(result, postCoachEval);
+        if (isCancelled()) return;
+
+        const postCoachEval = postCoachAnalysis?.evaluation ?? analysis.evaluation;
+        applyCoachMove(result, postCoachEval, analysis.evaluation, analysis.bestMove);
+        // Use POST-move analysis for eval bar + engine lines — these are for the
+        // player's turn, which is what voice chat needs when answering "what should I play?"
         setLatestEval(postCoachEval);
-        setLatestIsMate(analysis.isMate);
-        setLatestMateIn(analysis.mateIn);
-        setLatestTopLines(analysis.topLines);
+        setLatestIsMate(postCoachAnalysis?.isMate ?? analysis.isMate);
+        setLatestMateIn(postCoachAnalysis?.mateIn ?? analysis.mateIn);
+        setLatestTopLines(postCoachAnalysis?.topLines ?? analysis.topLines);
       } catch (error) {
         if (isCancelled()) return;
         console.error('[CoachGame] Coach move failed, attempting random fallback:', error);
