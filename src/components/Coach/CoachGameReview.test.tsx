@@ -56,6 +56,7 @@ vi.mock('../../services/coachFeatureService', () => ({
 vi.mock('../../services/coachPrompts', () => ({
   buildChessContextMessage: vi.fn().mockReturnValue('Position (FEN): test-fen'),
   POSITION_ANALYSIS_ADDITION: 'Test position analysis prompt',
+  INTERACTIVE_REVIEW_ADDITION: 'Test interactive review prompt',
 }));
 
 vi.mock('./ChatInput', () => ({
@@ -166,7 +167,7 @@ vi.mock('../../hooks/useIsMobile', () => ({
 const mockMoves: CoachGameMove[] = [
   { moveNumber: 1, san: 'e4', fen: 'fen-after-e4', isCoachMove: false, commentary: 'Good opening', evaluation: 30, classification: 'good', expanded: false, bestMove: null, bestMoveEval: null, preMoveEval: 0 },
   { moveNumber: 2, san: 'e5', fen: 'fen-after-e5', isCoachMove: true, commentary: '', evaluation: -20, classification: null, expanded: false, bestMove: null, bestMoveEval: null, preMoveEval: 30 },
-  { moveNumber: 3, san: 'Nf3', fen: 'fen-after-nf3', isCoachMove: false, commentary: 'Developing knight', evaluation: 40, classification: 'good', expanded: false, bestMove: 'g1f3', bestMoveEval: 40, preMoveEval: -20 },
+  { moveNumber: 3, san: 'Nf3', fen: 'fen-after-nf3', isCoachMove: false, commentary: 'Developing knight', evaluation: 40, classification: 'good', expanded: false, bestMove: 'g1f3', bestMoveEval: 40, preMoveEval: 20 },
   { moveNumber: 4, san: 'Nc6', fen: 'fen-after-nc6', isCoachMove: true, commentary: '', evaluation: -15, classification: null, expanded: false, bestMove: null, bestMoveEval: null, preMoveEval: 40 },
 ];
 
