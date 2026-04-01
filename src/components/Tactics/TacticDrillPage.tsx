@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Swords, Play, SkipForward } from 'lucide-react';
 import { Chess } from 'chess.js';
-import { Chessboard } from 'react-chessboard';
+import { ChessBoard } from '../Board/ChessBoard';
 import { buildTacticDrillQueue } from '../../services/tacticDrillService';
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { updatePuzzleRating } from '../../services/puzzleService';
@@ -31,27 +31,46 @@ type Phase = 'loading' | 'context' | 'solving' | 'summary';
 interface ContextMove {
   san: string;
   fen: string;
+  from: string;
+  to: string;
   moveNumber: number;
   isWhite: boolean;
+  evaluation: number | null;
 }
 
-function buildContextMoves(gamePgn: string | undefined, mistakeFen: string): ContextMove[] {
+function buildContextMoves(
+  gamePgn: string | undefined,
+  mistakeFen: string,
+  annotations: import('../../types').MoveAnnotation[] | null,
+): ContextMove[] {
   if (!gamePgn) return [];
 
   try {
     const chess = new Chess();
     chess.loadPgn(gamePgn);
-    const history = chess.history();
+    const history = chess.history({ verbose: true });
     chess.reset();
 
     const positions: ContextMove[] = [];
     for (let i = 0; i < history.length; i++) {
-      chess.move(history[i]);
+      const move = history[i];
+      chess.move(move.san);
+
+      // Look up stored evaluation from game annotations
+      const moveNum = Math.floor(i / 2) + 1;
+      const color = i % 2 === 0 ? 'white' : 'black';
+      const annotation = annotations?.find(
+        (a) => a.moveNumber === moveNum && a.color === color,
+      );
+
       positions.push({
-        san: history[i],
+        san: move.san,
         fen: chess.fen(),
-        moveNumber: Math.floor(i / 2) + 1,
+        from: move.from,
+        to: move.to,
+        moveNumber: moveNum,
         isWhite: i % 2 === 0,
+        evaluation: annotation?.evaluation ?? null,
       });
       if (chess.fen() === mistakeFen) break;
     }
@@ -79,6 +98,7 @@ export function TacticDrillPage(): JSX.Element {
   const [contextStep, setContextStep] = useState(0);
   const [contextPlaying, setContextPlaying] = useState(false);
   const [subtitle, setSubtitle] = useState('');
+  const [contextBoardKey, setContextBoardKey] = useState(0);
 
   // Warmup voice on mount, stop on unmount
   useEffect(() => {
@@ -115,7 +135,7 @@ export function TacticDrillPage(): JSX.Element {
       ? await db.games.get(item.originalMistake.sourceGameId)
       : null;
 
-    const moves = buildContextMoves(game?.pgn, item.originalMistake.fen);
+    const moves = buildContextMoves(game?.pgn, item.originalMistake.fen, game?.annotations ?? null);
 
     if (moves.length > 0) {
       setContextMoves(moves);
@@ -159,6 +179,7 @@ export function TacticDrillPage(): JSX.Element {
     for (let i = 0; i < moves.length; i++) {
       if (isCancelled()) return;
       setContextStep(i + 1);
+      setContextBoardKey((k) => k + 1);
 
       const remaining = moves.length - 1 - i;
       const isCapture = moves[i].san.includes('x');
@@ -259,12 +280,16 @@ export function TacticDrillPage(): JSX.Element {
   const currentItem = queue.at(currentIndex);
   const total = solved + failed;
 
-  // Current context FEN for the board preview
-  const contextFen = contextStep > 0 && contextStep <= contextMoves.length
-    ? contextMoves[contextStep - 1].fen
-    : contextMoves.length > 0
-      ? new Chess().fen() // starting position if not started
-      : '';
+  // Current context state for the board preview
+  const contextMove = contextStep > 0 && contextStep <= contextMoves.length
+    ? contextMoves[contextStep - 1]
+    : null;
+  const contextFen = contextMove?.fen
+    ?? (contextMoves.length > 0 ? new Chess().fen() : '');
+  const contextHighlight = contextMove
+    ? { from: contextMove.from, to: contextMove.to }
+    : null;
+  const contextEval = contextMove?.evaluation ?? null;
 
   return (
     <div className="max-w-2xl mx-auto w-full p-4 pb-20 md:pb-6 flex flex-col gap-4 min-h-[80vh]">
@@ -329,16 +354,18 @@ export function TacticDrillPage(): JSX.Element {
           </div>
 
           {/* Board showing context */}
-          <div className="aspect-square max-w-md mx-auto w-full">
-            <Chessboard
-              options={{
-                position: contextFen,
-                boardOrientation: currentItem.originalMistake.playerColor === 'black' ? 'black' : 'white',
-                allowDragging: false,
-                animationDurationInMs: 300,
-                darkSquareStyle: { backgroundColor: '#779952' },
-                lightSquareStyle: { backgroundColor: '#edeed1' },
-              }}
+          <div className="w-full md:max-w-[420px] mx-auto">
+            <ChessBoard
+              key={contextBoardKey}
+              initialFen={contextFen}
+              orientation={currentItem.originalMistake.playerColor}
+              interactive={false}
+              showFlipButton
+              showUndoButton={false}
+              showResetButton={false}
+              showEvalBar={true}
+              evaluation={contextEval}
+              highlightSquares={contextHighlight}
             />
           </div>
 

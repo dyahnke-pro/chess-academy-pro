@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Target, Gamepad2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { buildWeaknessPuzzleQueue } from '../../services/weaknessPuzzleService';
 import { recordAttempt, updatePuzzleRating } from '../../services/puzzleService';
@@ -83,6 +84,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
     }
 
     // Advance to next puzzle or summary
+    voiceService.stop();
     const nextIndex = currentIndex + 1;
     if (nextIndex >= queue.length) {
       setPhase('summary');
