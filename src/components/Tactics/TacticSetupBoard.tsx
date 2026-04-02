@@ -72,7 +72,8 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   // Narrate intro on mount and reset hints
   useEffect(() => {
     resetHints();
-    const intro = setupIntro(puzzle.tacticType, puzzle.difficulty);
+    const intro = setupIntro(puzzle.tacticType, puzzle.difficulty, puzzle.setupFen, puzzle.playerColor);
+    setMessage(intro);
     void voiceService.speak(intro);
     return () => { voiceService.stop(); };
   }, [resetHints]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -236,6 +237,11 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
             onRequestHint={requestHint}
             disabled={hintState.isAnalyzing}
           />
+          {hintState.level === 1 && hintState.arrows.length > 0 && !hintState.nudgeText && (
+            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-arrow-cue">
+              Look at the gold arrow on the board.
+            </p>
+          )}
           {hintState.nudgeText && (
             <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
               {hintState.nudgeText}

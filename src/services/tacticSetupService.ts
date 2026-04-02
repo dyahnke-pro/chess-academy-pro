@@ -38,16 +38,18 @@ export async function generateSetupPuzzle(
   // Replay the game to get FENs at each position
   const chess = new Chess();
   const fens: string[] = [chess.fen()];
-  const moves: string[] = [];
+  const uciMoves: string[] = [];
 
   try {
     chess.loadPgn(game.pgn);
-    const history = chess.history();
+    const history = chess.history({ verbose: true });
     chess.reset();
     for (const move of history) {
-      chess.move(move);
+      chess.move(move.san);
       fens.push(chess.fen());
-      moves.push(move);
+      // Store as UCI (e.g. "e2e4", "g1f3", "e7e8q")
+      const uci = `${move.from}${move.to}${move.promotion ?? ''}`;
+      uciMoves.push(uci);
     }
   } catch {
     return null;
@@ -72,13 +74,13 @@ export async function generateSetupPuzzle(
   const isValid = await verifySetupPosition(
     setupFen,
     fens.slice(setupIndex, tacticIndex + 1),
-    moves.slice(setupIndex, tacticIndex),
+    uciMoves.slice(setupIndex, tacticIndex),
   );
 
   if (!isValid) return null;
 
-  // Build the solution: moves from setup to tactic position
-  const solutionMoves = moves.slice(setupIndex, tacticIndex).join(' ');
+  // Build the solution: UCI moves from setup to tactic position
+  const solutionMoves = uciMoves.slice(setupIndex, tacticIndex).join(' ');
 
   // The tactic finish: the best move at the tactic position
   const tacticMoves = mistake.moves || mistake.bestMove;

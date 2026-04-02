@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { tacticTypeLabel } from './tacticalProfileService';
 import type { TacticType } from '../types';
 
@@ -152,12 +153,199 @@ export function drillIncorrect(tacticType: TacticType): string {
   return `The ${tacticLabel} was available here. Study the position.`;
 }
 
+// ─── Position Context Helpers ─────────────────────────────────────────────
+
+interface PositionContext {
+  openFiles: string[];
+  semiOpenFiles: string[];
+  kingExposure: 'safe' | 'somewhat exposed' | 'exposed';
+  materialBalance: string;
+  pieceTensions: string[];
+  phase: 'opening' | 'middlegame' | 'endgame';
+}
+
+const FILE_LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
+
+function analyzePositionContext(fen: string, playerColor: 'white' | 'black'): PositionContext {
+  const chess = new Chess(fen);
+  const board = chess.board();
+  const opponent = playerColor === 'white' ? 'black' : 'white';
+
+  // Count material
+  const pieceValues: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+  let playerMaterial = 0;
+  let opponentMaterial = 0;
+  let totalPieces = 0;
+  const playerPawnsOnFile: Record<string, number> = {};
+  const opponentPawnsOnFile: Record<string, number> = {};
+
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const piece = board[r][c];
+      if (!piece) continue;
+      totalPieces++;
+      const val = pieceValues[piece.type] ?? 0;
+      const file = FILE_LETTERS[c];
+      if (piece.color === playerColor[0]) {
+        playerMaterial += val;
+        if (piece.type === 'p') playerPawnsOnFile[file] = (playerPawnsOnFile[file] ?? 0) + 1;
+      } else {
+        opponentMaterial += val;
+        if (piece.type === 'p') opponentPawnsOnFile[file] = (opponentPawnsOnFile[file] ?? 0) + 1;
+      }
+    }
+  }
+
+  // Open/semi-open files
+  const openFiles: string[] = [];
+  const semiOpenFiles: string[] = [];
+  for (const f of FILE_LETTERS) {
+    const hasFriendly = (playerPawnsOnFile[f] ?? 0) > 0;
+    const hasEnemy = (opponentPawnsOnFile[f] ?? 0) > 0;
+    if (!hasFriendly && !hasEnemy) openFiles.push(f);
+    else if (!hasFriendly || !hasEnemy) semiOpenFiles.push(f);
+  }
+
+  // King exposure (simplified: count attackers around opponent king)
+  let kingExposure: 'safe' | 'somewhat exposed' | 'exposed' = 'safe';
+  const opponentKingSquare = findKingSquare(board, opponent);
+  if (opponentKingSquare) {
+    const shieldPawns = countPawnShield(board, opponentKingSquare, opponent);
+    if (shieldPawns <= 1) kingExposure = 'exposed';
+    else if (shieldPawns <= 2) kingExposure = 'somewhat exposed';
+  }
+
+  // Material balance
+  const diff = playerMaterial - opponentMaterial;
+  let materialBalance: string;
+  if (diff > 3) materialBalance = 'You have a significant material advantage.';
+  else if (diff > 0) materialBalance = 'You have a slight material edge.';
+  else if (diff < -3) materialBalance = 'You are down material.';
+  else if (diff < 0) materialBalance = 'You are slightly behind on material.';
+  else materialBalance = 'Material is roughly equal.';
+
+  // Piece tensions (pieces attacking each other)
+  const tensions: string[] = [];
+  const moves = chess.moves({ verbose: true });
+  const captures = moves.filter((m) => m.captured);
+  if (captures.length >= 4) tensions.push('Multiple pieces are in contact — the position is tense.');
+  else if (captures.length >= 2) tensions.push('There are some active piece tensions on the board.');
+
+  // Game phase
+  let phase: 'opening' | 'middlegame' | 'endgame';
+  if (totalPieces >= 28) phase = 'opening';
+  else if (totalPieces >= 16) phase = 'middlegame';
+  else phase = 'endgame';
+
+  return { openFiles, semiOpenFiles, kingExposure, materialBalance, pieceTensions: tensions, phase };
+}
+
+function findKingSquare(board: ReturnType<Chess['board']>, color: string): { row: number; col: number } | null {
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const piece = board[r][c];
+      if (piece?.type === 'k' && piece.color === color[0]) return { row: r, col: c };
+    }
+  }
+  return null;
+}
+
+function countPawnShield(board: ReturnType<Chess['board']>, kingPos: { row: number; col: number }, color: string): number {
+  const direction = color === 'white' ? -1 : 1; // pawns shield from the front
+  let count = 0;
+  const shieldRow = kingPos.row + direction;
+  if (shieldRow < 0 || shieldRow > 7) return 0;
+  for (let dc = -1; dc <= 1; dc++) {
+    const col = kingPos.col + dc;
+    if (col < 0 || col > 7) continue;
+    const piece = board[shieldRow][col];
+    if (piece?.type === 'p' && piece.color === color[0]) count++;
+  }
+  return count;
+}
+
+/** Build a position-aware intro narration for the setup trainer */
+function describeSetupContext(
+  fen: string,
+  playerColor: 'white' | 'black',
+  tacticType: TacticType,
+): string {
+  const ctx = analyzePositionContext(fen, playerColor);
+  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
+  const parts: string[] = [];
+
+  // Describe board state
+  parts.push(ctx.materialBalance);
+
+  // Tactic-specific positional cues
+  if (tacticType === 'fork' || tacticType === 'double_attack') {
+    parts.push('Look for pieces that are loosely placed or undefended.');
+  } else if (tacticType === 'pin') {
+    if (ctx.openFiles.length > 0) {
+      parts.push(`The ${ctx.openFiles.slice(0, 2).join(' and ')} file${ctx.openFiles.length > 1 ? 's are' : ' is'} open — pieces can line up along them.`);
+    } else {
+      parts.push('Look for pieces aligned on the same file, rank, or diagonal.');
+    }
+  } else if (tacticType === 'skewer') {
+    parts.push('A valuable piece might be in the line of fire.');
+  } else if (tacticType === 'discovered_attack' || tacticType === 'discovered_check') {
+    parts.push("One of your pieces is masking an attack. Moving it could unleash something powerful.");
+  } else if (tacticType === 'back_rank') {
+    if (ctx.kingExposure === 'exposed') {
+      parts.push("The opponent's king is exposed on the back rank with little pawn cover.");
+    } else {
+      parts.push('The back rank could become vulnerable with the right preparation.');
+    }
+  } else if (tacticType === 'hanging_piece') {
+    parts.push('Something on the board is unprotected. Find the move that exploits it.');
+  } else if (tacticType === 'promotion') {
+    parts.push('A passed pawn is close to promoting — clear the path.');
+  } else if (tacticType === 'overloaded_piece') {
+    parts.push('One of the opponent\'s pieces is doing too much. Add pressure to overload it.');
+  } else if (tacticType === 'deflection') {
+    parts.push('A key defender can be lured away from its post.');
+  } else if (tacticType === 'attraction') {
+    parts.push('You can force a piece to a bad square.');
+  } else {
+    if (ctx.pieceTensions.length > 0) {
+      parts.push(ctx.pieceTensions[0]);
+    } else {
+      parts.push(`Study the position for ${tacticLabel} opportunities.`);
+    }
+  }
+
+  // King exposure hint
+  if (ctx.kingExposure === 'exposed' && tacticType !== 'back_rank') {
+    parts.push("The opponent's king looks vulnerable.");
+  }
+
+  // Open file hint for rook/queen tactics
+  if (ctx.openFiles.length > 0 && (tacticType === 'pin' || tacticType === 'skewer' || tacticType === 'back_rank')) {
+    const files = ctx.openFiles.slice(0, 2).join(' and ');
+    parts.push(`The open ${files} file${ctx.openFiles.length > 1 ? 's offer' : ' offers'} attacking chances.`);
+  }
+
+  return parts.join(' ');
+}
+
 // ─── Layer 3: Setup Narration ─────────────────────────────────────────────
 
-export function setupIntro(tacticType: TacticType, difficulty: number): string {
+export function setupIntro(
+  tacticType: TacticType,
+  difficulty: number,
+  fen?: string,
+  playerColor?: 'white' | 'black',
+): string {
   const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
   const moveText = difficulty === 1 ? 'one quiet move' : `${difficulty} quiet moves`;
-  return `Find ${moveText} that make the ${tacticLabel} inevitable.`;
+  const taskLine = `Find ${moveText} that make the ${tacticLabel} inevitable.`;
+
+  if (fen && playerColor) {
+    const context = describeSetupContext(fen, playerColor, tacticType);
+    return `${context} ${taskLine}`;
+  }
+
+  return taskLine;
 }
 
 export function setupCorrectPrep(remaining: number): string {

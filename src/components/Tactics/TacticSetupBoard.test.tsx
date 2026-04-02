@@ -19,7 +19,8 @@ vi.mock('../../services/voiceService', () => ({
 }));
 
 vi.mock('../../services/tacticNarrationService', () => ({
-  setupIntro: (): string => 'Find the setup move.',
+  setupIntro: (_type: string, _diff: number, _fen?: string, _color?: string): string =>
+    _fen ? 'Material is roughly equal. Find one quiet move that make the fork inevitable.' : 'Find the setup move.',
   setupCorrectPrep: (remaining: number): string => `${remaining} more to go.`,
   setupRevealComplete: (): string => 'Tactic revealed!',
   setupIncorrect: (): string => 'Not quite right.',
@@ -43,12 +44,13 @@ describe('TacticSetupBoard', () => {
     mockSettings.showHints = true;
   });
 
-  it('renders the board with status message', () => {
+  it('renders the board with intro narration as status message', () => {
     const puzzle = buildSetupPuzzle();
     render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('setup-board')).toBeInTheDocument();
-    expect(screen.getByText('Find the preparatory move')).toBeInTheDocument();
+    // Intro narration now includes position context
+    expect(screen.getByText(/fork inevitable/)).toBeInTheDocument();
   });
 
   it('shows hint button when showHints is enabled', () => {
@@ -83,6 +85,19 @@ describe('TacticSetupBoard', () => {
     });
   });
 
+  it('shows arrow cue text at hint level 1', async () => {
+    const puzzle = buildSetupPuzzle();
+    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+
+    fireEvent.click(screen.getByTestId('hint-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
+    });
+
+    expect(screen.getByTestId('hint-arrow-cue')).toHaveTextContent('Look at the gold arrow on the board.');
+  });
+
   it('shows nudge text at hint level 2', async () => {
     const puzzle = buildSetupPuzzle();
     render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
@@ -105,11 +120,13 @@ describe('TacticSetupBoard', () => {
     expect(screen.getByTestId('hint-nudge')).toBeInTheDocument();
   });
 
-  it('speaks intro narration on mount', () => {
+  it('speaks intro narration with position context on mount', () => {
     const puzzle = buildSetupPuzzle();
     render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
-    expect(mockSpeak).toHaveBeenCalledWith('Find the setup move.');
+    expect(mockSpeak).toHaveBeenCalledWith(
+      'Material is roughly equal. Find one quiet move that make the fork inevitable.',
+    );
   });
 
   it('shows move indicator for player turn', () => {
