@@ -208,12 +208,13 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     // ChessBoard's internal chess.js has already applied the move.
     // We need to sync our ref and then validate.
     // Since ChessBoard uses its own chess instance, we apply the same move to ours.
+    // Note: we do NOT call setFen() here — handleMove will update FEN after
+    // validation, avoiding a temporary FEN change that would reset hints.
     try {
       chessRef.current.move({ from: moveResult.from, to: moveResult.to, promotion: moveResult.promotion });
     } catch {
       // Move already applied or invalid — ignore
     }
-    setFen(chessRef.current.fen());
     handleMove(moveResult);
   }, [handleMove]);
 

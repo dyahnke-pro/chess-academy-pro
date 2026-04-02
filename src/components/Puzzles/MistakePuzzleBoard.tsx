@@ -186,6 +186,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setSubtitle('');
     setWhyLoading(false);
     hasMadeMistakeRef.current = false;
+    wrongAttemptsRef.current = 0;
     setReplayIndex(-1);
 
     resetHints();
@@ -551,12 +552,14 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
+    // Apply the move to our chess ref but do NOT call setFen() here —
+    // handleMove will update FEN after validation, avoiding a temporary
+    // FEN change that would reset hint state on wrong moves.
     try {
       chessRef.current.move({ from: moveResult.from, to: moveResult.to, promotion: moveResult.promotion });
     } catch {
       // Move already applied or invalid
     }
-    setFen(chessRef.current.fen());
     handleMove(moveResult);
   }, [handleMove]);
 
