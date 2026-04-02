@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Swords, Play, SkipForward } from 'lucide-react';
+import { ArrowLeft, Swords, Play, SkipForward, ChevronRight } from 'lucide-react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { buildTacticDrillQueue } from '../../services/tacticDrillService';
@@ -100,6 +100,7 @@ export function TacticDrillPage(): JSX.Element {
   const [contextPlaying, setContextPlaying] = useState(false);
   const [subtitle, setSubtitle] = useState('');
   const [contextBoardKey, setContextBoardKey] = useState(0);
+  const [waitingForNext, setWaitingForNext] = useState(false);
 
   // Warmup voice on mount, stop on unmount, clear board context on unmount
   useEffect(() => {
@@ -144,6 +145,7 @@ export function TacticDrillPage(): JSX.Element {
     setCurrentIndex(0);
     setSolved(0);
     setFailed(0);
+    setWaitingForNext(false);
     await prepareContext(items[0]);
   }
 
@@ -263,15 +265,6 @@ export function TacticDrillPage(): JSX.Element {
     setPhase('solving');
   }, []);
 
-  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Cleanup advance timer on unmount
-  useEffect(() => {
-    return () => {
-      if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
-    };
-  }, []);
-
   const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
     const item = queue.at(currentIndex);
     if (!item) return;
@@ -302,18 +295,21 @@ export function TacticDrillPage(): JSX.Element {
       setActiveProfile({ ...activeProfile, puzzleRating: newRating });
     }
 
-    // Wait for the result narration to finish before advancing
-    // so the next puzzle's intro doesn't overlap
-    advanceTimerRef.current = setTimeout(async () => {
-      const nextIndex = currentIndex + 1;
-      if (nextIndex >= queue.length) {
-        setPhase('summary');
-      } else {
-        setCurrentIndex(nextIndex);
-        await prepareContext(queue[nextIndex]);
-      }
-    }, 3000);
+    // Show the "Next" button so the player can review and advance at their own pace
+    setWaitingForNext(true);
   }, [queue, currentIndex, activeProfile, setActiveProfile]);
+
+  const handleNext = useCallback(async (): Promise<void> => {
+    setWaitingForNext(false);
+    voiceService.stop();
+    const nextIndex = currentIndex + 1;
+    if (nextIndex >= queue.length) {
+      setPhase('summary');
+    } else {
+      setCurrentIndex(nextIndex);
+      await prepareContext(queue[nextIndex]);
+    }
+  }, [currentIndex, queue]);
 
   const currentItem = queue.at(currentIndex);
   const total = solved + failed;
@@ -508,6 +504,21 @@ export function TacticDrillPage(): JSX.Element {
               onComplete={(correct) => void handleComplete(correct)}
               skipReplayContext
             />
+
+            {/* Next button — shown after puzzle is completed */}
+            {waitingForNext && (
+              <div className="flex justify-center">
+                <button
+                  onClick={() => void handleNext()}
+                  className="px-8 py-3 rounded-xl font-semibold text-sm flex items-center gap-2"
+                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                  data-testid="next-puzzle-btn"
+                >
+                  Next
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
 
             {/* Session stats */}
             <div className="flex justify-center gap-6 text-sm" style={{ color: 'var(--color-text-muted)' }}>

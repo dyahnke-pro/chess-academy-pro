@@ -109,7 +109,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
   const analysisRef = useRef<StockfishAnalysis | null>(null);
   const fenRef = useRef(fen);
 
-  // Reset when FEN changes
+  // Reset when FEN changes (also clears any stuck isAnalyzing flag)
   useEffect(() => {
     if (fenRef.current !== fen) {
       fenRef.current = fen;
@@ -117,6 +117,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
       setHintState((prev) => ({
         ...INITIAL_STATE,
         hintsUsed: prev.hintsUsed,
+        isAnalyzing: false,
       }));
     }
   }, [fen]);
@@ -157,6 +158,9 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
                   isAnalyzing: false,
                   hintsUsed: s.hintsUsed + (s.level === 0 ? 1 : 0),
                 }));
+              } else {
+                // FEN changed during analysis — clear the analyzing flag
+                setHintState((s) => ({ ...s, isAnalyzing: false }));
               }
             } catch {
               setHintState((s) => ({ ...s, isAnalyzing: false }));
