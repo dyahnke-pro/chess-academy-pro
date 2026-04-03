@@ -39,6 +39,8 @@ interface CoachGameReviewProps {
   onPracticeInChat?: (prompt: string) => void;
   isGuidedLesson?: boolean;
   pgn?: string;
+  startMoveIndex?: number;
+  onBackToReport?: () => void;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -76,19 +78,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     moves, keyMoments, playerColor, result, openingName,
     playerName, playerRating, opponentRating,
     onPlayAgain, onBackToCoach, onPracticeInChat,
-    isGuidedLesson, pgn,
+    isGuidedLesson, pgn, startMoveIndex, onBackToReport,
   } = props;
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
-    isGuidedLesson ? 'analysis' : 'summary',
+    isGuidedLesson || startMoveIndex !== undefined ? 'analysis' : 'summary',
   );
 
-  const [reviewState, setReviewState] = useState<ReviewState>({
-    mode: isGuidedLesson ? 'guided_lesson' : 'analysis',
-    currentMoveIndex: isGuidedLesson ? -1 : (moves.length > 0 ? moves.length - 1 : -1),
-    whatIfMoves: [],
-    whatIfStartFen: null,
+  const [reviewState, setReviewState] = useState<ReviewState>(() => {
+    let initialIndex = isGuidedLesson ? -1 : (moves.length > 0 ? moves.length - 1 : -1);
+    if (startMoveIndex !== undefined && startMoveIndex >= 0 && startMoveIndex < moves.length) {
+      initialIndex = startMoveIndex;
+    }
+    return {
+      mode: isGuidedLesson ? 'guided_lesson' : 'analysis',
+      currentMoveIndex: initialIndex,
+      whatIfMoves: [],
+      whatIfStartFen: null,
+    };
   });
 
   const [whatIfFen, setWhatIfFen] = useState<string | null>(null);
@@ -960,7 +968,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         {/* Header bar */}
         <div className="flex items-center justify-between px-3 py-2 border-b border-theme-border shrink-0">
           <div className="flex items-center gap-2">
-            <button onClick={onBackToCoach} className="p-1 rounded-lg hover:bg-theme-surface">
+            <button
+              onClick={onBackToReport ?? onBackToCoach}
+              className="p-1 rounded-lg hover:bg-theme-surface"
+              data-testid={onBackToReport ? 'back-to-report' : 'back-to-coach'}
+            >
               <ArrowLeft size={18} style={{ color: 'var(--color-text)' }} />
             </button>
             <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>

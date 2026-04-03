@@ -340,4 +340,18 @@ describe('MyMistakesPage', () => {
 
     expect(screen.getByText('Move 5 — d4')).toBeInTheDocument();
   });
+
+  it('renders review game button on each puzzle card', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', moveNumber: 5, sourceGameId: 'game-1', playerColor: 'white' }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('review-game-button')).toBeInTheDocument();
+    });
+
+    expect(screen.getByLabelText('Review in game')).toBeInTheDocument();
+  });
 });

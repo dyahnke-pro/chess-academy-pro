@@ -10,7 +10,7 @@ import {
   type MistakePuzzleStats,
   type ReanalysisProgress,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown } from 'lucide-react';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown, PlayCircle } from 'lucide-react';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
@@ -379,6 +379,19 @@ export function MyMistakesPage(): JSX.Element {
                   {puzzle.narration.intro}
                 </p>
               )}
+            </button>
+
+            {/* Review in game */}
+            <button
+              onClick={() => {
+                const moveIdx = (puzzle.moveNumber - 1) * 2 + (puzzle.playerColor === 'black' ? 1 : 0);
+                void navigate(`/coach/play?review=${puzzle.sourceGameId}&move=${moveIdx}&backTo=/puzzles/mistakes`);
+              }}
+              className="p-1.5 text-theme-text-muted hover:text-theme-accent transition-colors"
+              aria-label="Review in game"
+              data-testid="review-game-button"
+            >
+              <PlayCircle size={14} />
             </button>
 
             {/* Delete */}
