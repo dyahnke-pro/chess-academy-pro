@@ -178,14 +178,14 @@ interface ClassifiedMistake {
  */
 function classifyMistakePuzzles(mistakes: MistakePuzzle[]): ClassifiedMistake[] {
   return mistakes
-    .filter((m) => m.cpLoss >= 50) // Only meaningful tactical misses
+    .filter((m) => m.cpLoss >= 50 && m.fen && m.bestMove) // Only valid, meaningful tactical misses
     .map((m) => {
       const tacticType = detectTacticType(m.fen, m.bestMove);
       return {
         id: m.id,
         tacticType,
         gamePhase: m.gamePhase,
-        openingName: m.openingName,
+        openingName: m.openingName ?? null,
         cpLoss: m.cpLoss,
       };
     });
