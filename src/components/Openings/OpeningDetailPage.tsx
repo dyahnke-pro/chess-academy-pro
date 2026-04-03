@@ -101,6 +101,8 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [showBookExplainer, setShowBookExplainer] = useState(false);
+  const bookBadgeRef = useRef<HTMLDivElement>(null);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -119,6 +121,18 @@ export function OpeningDetailPage(): JSX.Element {
       window.speechSynthesis.cancel();
     };
   }, []);
+
+  // Close book status explainer on outside click
+  useEffect(() => {
+    if (!showBookExplainer) return;
+    function handleClick(e: MouseEvent): void {
+      if (bookBadgeRef.current && !bookBadgeRef.current.contains(e.target as Node)) {
+        setShowBookExplainer(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showBookExplainer]);
 
   const handleComplete = useCallback((): void => {
     void loadOpening();
@@ -441,6 +455,10 @@ export function OpeningDetailPage(): JSX.Element {
   const hasCompletedMainLine = opening.drillAttempts > 0;
   const isAdvancedUnlocked = hasCompletedMainLine || mastery > 0;
 
+  const bookStatus = mastery >= 70 ? 'on-book' : opening.drillAttempts > 0 ? 'needs-review' : 'off-book';
+  const bookLabel = bookStatus === 'on-book' ? 'On Book' : bookStatus === 'needs-review' ? 'Needs Review' : 'Off Book';
+  const bookColor = bookStatus === 'on-book' ? 'text-green-400' : bookStatus === 'needs-review' ? 'text-yellow-400' : 'text-red-400';
+
   const NarrationButton = ({ sectionId, text }: { sectionId: string; text: string }): JSX.Element => {
     const isNarrating = narratingSection === sectionId;
     return (
@@ -492,7 +510,43 @@ export function OpeningDetailPage(): JSX.Element {
             className={opening.isFavorite ? 'text-red-500 fill-red-500' : 'text-theme-text-muted'}
           />
         </button>
-        <MasteryRing percent={mastery} size={48} />
+        <div className="relative flex items-center gap-2" ref={bookBadgeRef}>
+          <MasteryRing percent={mastery} size={48} />
+          <button
+            onClick={() => setShowBookExplainer((v) => !v)}
+            className={`text-xs font-semibold ${bookColor} hover:opacity-80 transition-opacity`}
+            data-testid="book-status-badge"
+          >
+            {bookLabel}
+          </button>
+          {showBookExplainer && (
+            <div
+              className="absolute top-full right-0 mt-2 w-64 p-3 rounded-xl bg-theme-surface border border-theme-border shadow-lg z-50"
+              data-testid="book-status-explainer"
+            >
+              <p className="text-sm font-semibold text-theme-text mb-1">{bookLabel}</p>
+              {bookStatus === 'off-book' && (
+                <p className="text-xs text-theme-text-muted leading-relaxed">
+                  You haven&apos;t drilled this opening yet. &quot;Off book&quot; means you may not
+                  recognize the key moves during a game. Start with Watch or Learn to build familiarity,
+                  then Practice to lock it in.
+                </p>
+              )}
+              {bookStatus === 'needs-review' && (
+                <p className="text-xs text-theme-text-muted leading-relaxed">
+                  Your accuracy is below 70%, so this opening needs more work. Keep practicing until
+                  the moves feel automatic — that&apos;s when you&apos;re truly &quot;on book.&quot;
+                </p>
+              )}
+              {bookStatus === 'on-book' && (
+                <p className="text-xs text-theme-text-muted leading-relaxed">
+                  You know this opening well! &quot;On book&quot; means you can play the main line and
+                  key variations confidently. Keep reviewing periodically to stay sharp.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Line stats */}

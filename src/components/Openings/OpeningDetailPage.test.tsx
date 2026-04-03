@@ -489,4 +489,54 @@ describe('OpeningDetailPage', () => {
       });
     });
   });
+
+  describe('book status badge', () => {
+    it('shows "On Book" when mastery >= 70', async () => {
+      mockGetOpeningById.mockResolvedValue({ ...testOpening, drillAccuracy: 0.8, drillAttempts: 5 });
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('book-status-badge')).toHaveTextContent('On Book');
+      });
+    });
+
+    it('shows "Off Book" when drillAttempts is 0', async () => {
+      mockGetOpeningById.mockResolvedValue({ ...testOpening, drillAccuracy: 0, drillAttempts: 0 });
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('book-status-badge')).toHaveTextContent('Off Book');
+      });
+    });
+
+    it('shows "Needs Review" when mastery < 70 and has attempts', async () => {
+      mockGetOpeningById.mockResolvedValue({ ...testOpening, drillAccuracy: 0.5, drillAttempts: 3 });
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('book-status-badge')).toHaveTextContent('Needs Review');
+      });
+    });
+
+    it('opens explainer popup on click', async () => {
+      mockGetOpeningById.mockResolvedValue({ ...testOpening, drillAccuracy: 0, drillAttempts: 0 });
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('book-status-badge')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('book-status-badge'));
+      expect(screen.getByTestId('book-status-explainer')).toBeInTheDocument();
+    });
+
+    it('closes explainer popup on second click', async () => {
+      renderWithRoute();
+      await waitFor(() => {
+        expect(screen.getByTestId('book-status-badge')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('book-status-badge'));
+      expect(screen.getByTestId('book-status-explainer')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId('book-status-badge'));
+      expect(screen.queryByTestId('book-status-explainer')).not.toBeInTheDocument();
+    });
+  });
 });

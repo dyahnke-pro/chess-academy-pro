@@ -167,11 +167,10 @@ describe('OpeningExplorerPage', () => {
     });
   });
 
-  it('shows My White Openings and My Black Openings section headings', async () => {
+  it('shows Most Common Openings section heading', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('My White Openings')).toBeInTheDocument();
-      expect(screen.getByText('My Black Openings')).toBeInTheDocument();
+      expect(screen.getByText('Most Common Openings')).toBeInTheDocument();
     });
   });
 
@@ -242,57 +241,34 @@ describe('OpeningExplorerPage', () => {
     });
   });
 
-  // ─── Favorites section tests ────────────────────────────────────────────────
+  // ─── Favorites ────────────────────────────────────────────────────────────
 
-  it('shows Favorites section when a repertoire opening is favorited', async () => {
+  it('displays favorited openings in the Most Common list', async () => {
     mockGetRepertoireOpenings.mockResolvedValue([
       { ...whiteOpening, isFavorite: true },
       blackOpening,
     ]);
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('Favorites')).toBeInTheDocument();
       expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-    });
-  });
-
-  it('does not show favorited opening under its color section', async () => {
-    mockGetRepertoireOpenings.mockResolvedValue([
-      { ...whiteOpening, isFavorite: true },
-      blackOpening,
-    ]);
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('Favorites')).toBeInTheDocument();
-      // White section should not appear since the only white opening is favorited
-      expect(screen.queryByText('My White Openings')).not.toBeInTheDocument();
-      // Black section still appears
-      expect(screen.getByText('My Black Openings')).toBeInTheDocument();
-    });
-  });
-
-  it('does not show Favorites section when no openings are favorited', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('My White Openings')).toBeInTheDocument();
-      expect(screen.queryByText('Favorites')).not.toBeInTheDocument();
+      expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
     });
   });
 
   // ─── Tab toggle tests ──────────────────────────────────────────────────────
 
-  it('shows tab toggle with "My Repertoire" and "All Openings"', async () => {
+  it('shows tab toggle with "Most Common" and "All"', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByTestId('tab-repertoire')).toBeInTheDocument();
+      expect(screen.getByTestId('tab-common')).toBeInTheDocument();
       expect(screen.getByTestId('tab-all')).toBeInTheDocument();
     });
   });
 
-  it('defaults to Repertoire tab', async () => {
+  it('defaults to Most Common tab', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('My White Openings')).toBeInTheDocument();
+      expect(screen.getByText('Most Common Openings')).toBeInTheDocument();
     });
   });
 
