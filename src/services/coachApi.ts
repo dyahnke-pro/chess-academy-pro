@@ -29,6 +29,7 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   model_game_annotation:   'deepseek-reasoner',
   middlegame_plan_generation: 'deepseek-reasoner',
   sideline_explanation:    'deepseek-chat',
+  smart_search:            'deepseek-chat',
 };
 
 const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
@@ -54,6 +55,7 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   model_game_annotation:   'claude-sonnet-4-6',
   middlegame_plan_generation: 'claude-sonnet-4-6',
   sideline_explanation:    'claude-haiku-4-5-20251001',
+  smart_search:            'claude-haiku-4-5-20251001',
 };
 
 // Offline fallback templates

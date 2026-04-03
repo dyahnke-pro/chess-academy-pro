@@ -646,7 +646,8 @@ export type CoachTask =
   | 'game_narrative_summary'
   | 'model_game_annotation'
   | 'middlegame_plan_generation'
-  | 'sideline_explanation';
+  | 'sideline_explanation'
+  | 'smart_search';
 
 export interface CoachContext {
   fen: string;
@@ -1208,4 +1209,30 @@ export interface ColorWarsLevel {
   timerSeconds: number;
   showBishopMoves: boolean;
   showEnemyGlow: boolean;
+}
+
+// ─── Smart Search ────────────────────────────────────────────────────────────
+
+export type SmartSearchCategory = 'opening' | 'game' | 'mistake' | 'puzzle';
+
+export interface SmartSearchResult {
+  category: SmartSearchCategory;
+  id: string;
+  title: string;
+  subtitle: string;
+  route: string;
+}
+
+export interface SearchIntent {
+  table: 'openings' | 'games' | 'mistakePuzzles' | 'puzzles';
+  filters: SearchFilter[];
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
+  limit?: number;
+}
+
+export interface SearchFilter {
+  field: string;
+  op: 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte';
+  value: string | number | boolean;
 }
