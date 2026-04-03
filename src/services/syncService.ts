@@ -1,6 +1,17 @@
 import { db } from '../db/schema';
 import { exportUserData } from './dbService';
-import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, FlashcardRecord } from '../types';
+import type {
+  UserProfile,
+  PuzzleRecord,
+  OpeningRecord,
+  SessionRecord,
+  FlashcardRecord,
+  GameRecord,
+  MistakePuzzle,
+  ClassifiedTactic,
+  SetupPuzzle,
+  OpeningWeakSpot,
+} from '../types';
 
 interface SyncConfig {
   supabaseUrl: string | null;
@@ -19,6 +30,11 @@ interface ImportData {
   openings?: OpeningRecord[];
   flashcards?: FlashcardRecord[];
   puzzles?: PuzzleRecord[];
+  games?: GameRecord[];
+  mistakePuzzles?: MistakePuzzle[];
+  classifiedTactics?: ClassifiedTactic[];
+  setupPuzzles?: SetupPuzzle[];
+  openingWeakSpots?: OpeningWeakSpot[];
 }
 
 export function getSyncConfig(profile: UserProfile): SyncConfig {
@@ -132,5 +148,20 @@ export async function importUserData(json: string): Promise<void> {
   }
   if (data.puzzles) {
     await db.puzzles.bulkPut(data.puzzles);
+  }
+  if (data.games) {
+    await db.games.bulkPut(data.games);
+  }
+  if (data.mistakePuzzles) {
+    await db.mistakePuzzles.bulkPut(data.mistakePuzzles);
+  }
+  if (data.classifiedTactics) {
+    await db.classifiedTactics.bulkPut(data.classifiedTactics);
+  }
+  if (data.setupPuzzles) {
+    await db.setupPuzzles.bulkPut(data.setupPuzzles);
+  }
+  if (data.openingWeakSpots) {
+    await db.openingWeakSpots.bulkPut(data.openingWeakSpots);
   }
 }
