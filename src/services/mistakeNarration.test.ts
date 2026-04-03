@@ -30,10 +30,11 @@ describe('generateMistakeNarration', () => {
     expect(Array.isArray(result.moveNarrations)).toBe(true);
   });
 
-  it('intro contains the player move and best move', () => {
+  it('intro contains the player move', () => {
     const result = generateMistakeNarration(buildParams({ playerMoveSan: 'h4', bestMoveSan: 'Nf3' }));
     expect(result.intro).toContain('h4');
-    expect(result.intro).toContain('Nf3');
+    // bestMove is intentionally NOT in the intro — it's revealed in moveNarrations
+    // so the player can try to find it themselves
   });
 
   it('intro contains centipawn loss as pawns', () => {

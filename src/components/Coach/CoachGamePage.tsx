@@ -792,7 +792,7 @@ export function CoachGamePage(): JSX.Element {
 
     setGameState((prev) => {
       const preMoveEval = prev.moves.length > 0 ? (prev.moves[prev.moves.length - 1].evaluation ?? null) : 0;
-      const classification = analysis
+      let classification = analysis
         ? classifyMove(preMoveEval, analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval)
         : 'good';
 
@@ -801,11 +801,23 @@ export function CoachGamePage(): JSX.Element {
             ? preMoveEval - analysis.evaluation
             : analysis.evaluation - preMoveEval)
         : 0;
-      // bestMove from pre-analysis = what the player SHOULD have played
-      const engineBestMove = preAnalysis?.bestMove ?? null;
+      // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)
+      const engineBestMoveUci = preAnalysis?.bestMove ?? null;
+      let engineBestMoveSan = '?';
+      if (engineBestMoveUci) {
+        try {
+          engineBestMoveSan = uciMoveToSan(engineBestMoveUci, preFen);
+        } catch {
+          engineBestMoveSan = engineBestMoveUci;
+        }
+      }
+      // If the engine's best move matches what the player played, override to 'good'
+      if (isEngineBestMove || engineBestMoveSan === moveResult.san) {
+        classification = 'good';
+      }
       const vars = {
         playerMove: moveResult.san,
-        bestMove: engineBestMove ?? '?',
+        bestMove: engineBestMoveSan,
         evalDelta: String(evalLoss),
       };
       const commentary = getMoveCommentaryTemplate(classification, vars);
@@ -819,7 +831,7 @@ export function CoachGamePage(): JSX.Element {
         evaluation: analysis?.evaluation ?? null,
         classification,
         expanded: false,
-        bestMove: engineBestMove,
+        bestMove: engineBestMoveUci,
         bestMoveEval: bestMoveEval,
         preMoveEval,
       };
