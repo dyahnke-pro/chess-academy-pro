@@ -51,16 +51,16 @@ export function PuzzlesHubPage(): JSX.Element {
       {stats && (
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-surface-secondary rounded-xl p-3 text-center">
-            <div className="text-lg font-bold text-text-primary">{stats.totalSolved}</div>
+            <div className="text-lg font-bold text-text-primary">{stats.totalAttempted}</div>
             <div className="text-xs text-text-secondary">Solved</div>
           </div>
           <div className="bg-surface-secondary rounded-xl p-3 text-center">
-            <div className="text-lg font-bold text-text-primary">{stats.currentRating}</div>
+            <div className="text-lg font-bold text-text-primary">{stats.averageRating}</div>
             <div className="text-xs text-text-secondary">Rating</div>
           </div>
           <div className="bg-surface-secondary rounded-xl p-3 text-center">
             <div className="text-lg font-bold text-text-primary">
-              {stats.totalSolved > 0 ? Math.round((stats.totalCorrect / stats.totalSolved) * 100) : 0}%
+              {stats.totalAttempted > 0 ? Math.round((stats.totalCorrect / stats.totalAttempted) * 100) : 0}%
             </div>
             <div className="text-xs text-text-secondary">Accuracy</div>
           </div>
