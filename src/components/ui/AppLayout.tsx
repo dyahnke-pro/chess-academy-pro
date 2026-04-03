@@ -3,13 +3,8 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
-  Swords,
-  Database,
-  BarChart3,
   Settings,
   Baby,
-  Search,
-  GraduationCap,
   Puzzle,
   Menu,
   X,
@@ -30,23 +25,16 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-// Primary learning features — ordered by frequency of use
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/', label: 'Home', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
   { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
   { to: '/tactics', label: 'Tactics', icon: Target },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
-  { to: '/coach', label: 'Coach', icon: GraduationCap },
-  { to: '/play', label: 'Play', icon: Swords },
-  { to: '/analysis', label: 'Analysis', icon: Search },
-  { to: '/games', label: 'Games', icon: Database },
-  { to: '/stats', label: 'Stats', icon: BarChart3 },
-  { to: '/settings', label: 'Settings', icon: Settings },
   { to: '/kid', label: 'Kids Mode', icon: Baby },
+  { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
-// Bottom tab bar: Dashboard, Openings, Puzzles, Tactics, Weaknesses
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
 
 export function AppLayout(): JSX.Element {
