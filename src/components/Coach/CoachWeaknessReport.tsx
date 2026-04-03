@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw, ChevronDown, ChevronUp, Zap, Target, BarChart3, Brain } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { getStoredWeaknessProfile, computeWeaknessProfile } from '../../services/weaknessAnalyzer';
-import { analyzeAllGames, countGamesNeedingAnalysis, runBackgroundAnalysis } from '../../services/gameAnalysisService';
+import { countGamesNeedingAnalysis, runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { db } from '../../db/schema';
-import type { BatchAnalysisProgress } from '../../services/gameAnalysisService';
 import { GameImportCard } from './GameImportCard';
 import { SkillBar } from '../ui/SkillBar';
 import type { WeaknessProfile, WeaknessItem, WeaknessCategory } from '../../types';
@@ -44,10 +43,35 @@ export function CoachWeaknessReport(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showStrengths, setShowStrengths] = useState(false);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [analysisProgress, setAnalysisProgress] = useState<BatchAnalysisProgress | null>(null);
   const [unanalyzedCount, setUnanalyzedCount] = useState(0);
   const hasAutoRefreshed = useRef(false);
+  const backgroundAnalysisRunning = useAppStore((s) => s.backgroundAnalysisRunning);
+  const backgroundAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
+  const prevBackgroundRunning = useRef(backgroundAnalysisRunning);
+
+  // When background analysis finishes, refresh profile and unanalyzed count
+  useEffect(() => {
+    if (prevBackgroundRunning.current && !backgroundAnalysisRunning) {
+      // Analysis just finished — refresh data
+      void (async () => {
+        const count = await countGamesNeedingAnalysis();
+        setUnanalyzedCount(count);
+        if (activeProfile) {
+          try {
+            const fresh = await computeWeaknessProfile(activeProfile);
+            setProfile(fresh);
+            const updated = await db.profiles.get(activeProfile.id);
+            if (updated) {
+              useAppStore.getState().setActiveProfile(updated);
+            }
+          } catch {
+            // Use existing profile
+          }
+        }
+      })();
+    }
+    prevBackgroundRunning.current = backgroundAnalysisRunning;
+  }, [backgroundAnalysisRunning, activeProfile]);
 
   // Load stored profile, then auto-recompute if data exists
   useEffect(() => {
@@ -120,29 +144,10 @@ export function CoachWeaknessReport(): JSX.Element {
     }
   }, [activeProfile, refreshing]);
 
-  const handleAnalyzeGames = useCallback(async () => {
-    if (analyzing || !activeProfile) return;
-    setAnalyzing(true);
-    try {
-      await analyzeAllGames((progress) => {
-        setAnalysisProgress(progress);
-      });
-      // Recompute weakness profile with fresh annotations
-      const fresh = await computeWeaknessProfile(activeProfile);
-      setProfile(fresh);
-      // Reload profile to pick up updated skillRadar
-      const updatedProfile = await db.profiles.get(activeProfile.id);
-      if (updatedProfile) {
-        useAppStore.getState().setActiveProfile(updatedProfile);
-      }
-      setUnanalyzedCount(0);
-    } catch {
-      // Silently fail
-    } finally {
-      setAnalyzing(false);
-      setAnalysisProgress(null);
-    }
-  }, [analyzing, activeProfile]);
+  const handleAnalyzeGames = useCallback(() => {
+    if (backgroundAnalysisRunning || !activeProfile) return;
+    runBackgroundAnalysis();
+  }, [backgroundAnalysisRunning, activeProfile]);
 
   if (loading) {
     return (
@@ -168,16 +173,18 @@ export function CoachWeaknessReport(): JSX.Element {
           </p>
           <GameImportCard onImportComplete={(count) => void handleImportComplete(count)} />
         <div className="flex flex-col gap-3 mt-4 items-center">
-            {unanalyzedCount > 0 && (
+            {(unanalyzedCount > 0 || backgroundAnalysisRunning) && (
               <button
-                onClick={() => void handleAnalyzeGames()}
-                disabled={analyzing}
+                onClick={() => handleAnalyzeGames()}
+                disabled={backgroundAnalysisRunning}
                 className="px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2"
                 style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
                 data-testid="analyze-games-btn"
               >
                 <BarChart3 size={16} />
-                {analyzing ? 'Analyzing...' : `Analyze My Games (${unanalyzedCount})`}
+                {backgroundAnalysisRunning
+                  ? backgroundAnalysisProgress ?? 'Analyzing...'
+                  : `Analyze My Games (${unanalyzedCount})`}
               </button>
             )}
             <button
@@ -232,44 +239,19 @@ export function CoachWeaknessReport(): JSX.Element {
       <GameImportCard onImportComplete={(count) => void handleImportComplete(count)} />
 
       {/* Analyze My Games — prominent CTA */}
-      {unanalyzedCount > 0 && (
+      {(unanalyzedCount > 0 || backgroundAnalysisRunning) && (
         <button
-          onClick={() => void handleAnalyzeGames()}
-          disabled={analyzing}
+          onClick={() => handleAnalyzeGames()}
+          disabled={backgroundAnalysisRunning}
           className="w-full py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-opacity disabled:opacity-60"
           style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
           data-testid="analyze-games-btn"
         >
           <BarChart3 size={18} />
-          {analyzing
-            ? analysisProgress
-              ? `Analyzing game ${analysisProgress.currentGame}/${analysisProgress.totalGames}...`
-              : 'Analyzing...'
+          {backgroundAnalysisRunning
+            ? backgroundAnalysisProgress ?? 'Analyzing...'
             : `Analyze My Games (${unanalyzedCount} unanalyzed)`}
         </button>
-      )}
-
-      {/* Analysis progress bar */}
-      {analyzing && analysisProgress && (
-        <div className="rounded-xl p-4 border" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }} data-testid="analysis-progress">
-          <div className="flex items-center justify-between text-xs mb-2" style={{ color: 'var(--color-text-muted)' }}>
-            <span>
-              {analysisProgress.phase === 'computing_weaknesses'
-                ? 'Computing weakness profile...'
-                : analysisProgress.currentGameName}
-            </span>
-            <span>{analysisProgress.currentGame}/{analysisProgress.totalGames}</span>
-          </div>
-          <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
-            <div
-              className="h-full rounded-full transition-all duration-300"
-              style={{
-                background: 'var(--color-accent)',
-                width: `${Math.round((analysisProgress.currentGame / analysisProgress.totalGames) * 100)}%`,
-              }}
-            />
-          </div>
-        </div>
       )}
 
       {/* Training Plan — top priority actions */}

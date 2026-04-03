@@ -9,7 +9,7 @@ import type { WeaknessProfile } from '../../types';
 
 const mockGetStoredWeaknessProfile = vi.fn();
 const mockComputeWeaknessProfile = vi.fn();
-const mockAnalyzeAllGames = vi.fn();
+const mockRunBackgroundAnalysis = vi.fn();
 const mockCountGamesNeedingAnalysis = vi.fn();
 
 vi.mock('../../services/weaknessAnalyzer', () => ({
@@ -18,7 +18,7 @@ vi.mock('../../services/weaknessAnalyzer', () => ({
 }));
 
 vi.mock('../../services/gameAnalysisService', () => ({
-  analyzeAllGames: (...args: unknown[]): unknown => mockAnalyzeAllGames(...args),
+  runBackgroundAnalysis: (...args: unknown[]): unknown => mockRunBackgroundAnalysis(...args),
   countGamesNeedingAnalysis: (): unknown => mockCountGamesNeedingAnalysis(),
 }));
 
@@ -79,7 +79,7 @@ describe('CoachWeaknessReport', () => {
     useAppStore.getState().reset();
     mockGetStoredWeaknessProfile.mockResolvedValue(null);
     mockComputeWeaknessProfile.mockResolvedValue(mockProfile);
-    mockAnalyzeAllGames.mockResolvedValue(0);
+    mockRunBackgroundAnalysis.mockReturnValue(undefined);
     mockCountGamesNeedingAnalysis.mockResolvedValue(0);
   });
 
@@ -338,7 +338,7 @@ describe('CoachWeaknessReport', () => {
     expect(screen.queryByTestId('analyze-games-btn')).not.toBeInTheDocument();
   });
 
-  it('clicking Analyze My Games calls analyzeAllGames', async () => {
+  it('clicking Analyze My Games calls runBackgroundAnalysis', async () => {
     mockGetStoredWeaknessProfile.mockResolvedValue(mockProfile);
     mockCountGamesNeedingAnalysis.mockResolvedValue(3);
     setupProfile();
@@ -351,7 +351,7 @@ describe('CoachWeaknessReport', () => {
     fireEvent.click(screen.getByTestId('analyze-games-btn'));
 
     await waitFor(() => {
-      expect(mockAnalyzeAllGames).toHaveBeenCalledTimes(1);
+      expect(mockRunBackgroundAnalysis).toHaveBeenCalledTimes(1);
     });
   });
 
