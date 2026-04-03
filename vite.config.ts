@@ -65,6 +65,9 @@ export default defineConfig(({ mode }) => {
       },
     }),
   ],
+  server: {
+    host: true,
+  },
   optimizeDeps: {
     exclude: ['stockfish', 'kokoro-js'],
     include: ['openai', '@anthropic-ai/sdk'],
