@@ -56,6 +56,17 @@ export class SoundService {
     if (!this.enabled) return;
     this.synth({ freq: 440, freq2: 550, dur: 0.3, dec: 15, tp: 'square', v: 0.5 });
   }
+  /** Soft error ping for wrong puzzle moves — subtle, not harsh. */
+  playErrorPing(): void {
+    if (!this.enabled) return;
+    this.synth({ freq: 220, freq2: 180, dur: 0.25, dec: 20, tp: 'sine', v: 0.4 });
+  }
+  /** Soft success chime for correct puzzle completion. */
+  playSuccessChime(): void {
+    if (!this.enabled) return;
+    [523, 659, 784].forEach((freq, i) =>
+      setTimeout(() => this.synth({ freq, dur: 0.18, dec: 18, tp: 'sine', v: 0.5 }), i * 100));
+  }
   private synth(p: SoundParams): void {
     try {
       const c = getSharedAudioContext();

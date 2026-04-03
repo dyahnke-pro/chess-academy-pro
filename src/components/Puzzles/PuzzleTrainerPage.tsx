@@ -6,6 +6,7 @@ import type { PuzzleRecord } from '../../types';
 import type { SrsGrade } from '../../types';
 import { PuzzleModeSelector } from './PuzzleModeSelector';
 import { PuzzleBoard } from './PuzzleBoard';
+import type { PuzzleOutcome } from './PuzzleBoard';
 import { SrsGradeButtons } from './SrsGradeButtons';
 import { PuzzleTimer } from './PuzzleTimer';
 import { PuzzleSessionStats } from './PuzzleSessionStats';
@@ -64,7 +65,7 @@ export function PuzzleTrainerPage(): JSX.Element {
     resetTimer();
   }, [userRating, resetTimer]);
 
-  const handlePuzzleComplete = useCallback((correct: boolean): void => {
+  const handlePuzzleComplete = useCallback(({ correct }: PuzzleOutcome): void => {
     if (!session) return;
     setTimerRunning(false);
 
@@ -89,7 +90,7 @@ export function PuzzleTrainerPage(): JSX.Element {
   }, [session]);
 
   const handleTimeout = useCallback((): void => {
-    handlePuzzleComplete(false);
+    handlePuzzleComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false });
   }, [handlePuzzleComplete]);
 
   const handleGrade = useCallback(async (grade: SrsGrade): Promise<void> => {

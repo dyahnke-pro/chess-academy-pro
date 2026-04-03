@@ -31,7 +31,9 @@ vi.mock('../../hooks/usePieceSound', () => {
   const playMoveSound = vi.fn();
   const playCelebration = vi.fn();
   const playEncouragement = vi.fn();
-  return { usePieceSound: () => ({ playMoveSound, playCelebration, playEncouragement }) };
+  const playErrorPing = vi.fn();
+  const playSuccessChime = vi.fn();
+  return { usePieceSound: () => ({ playMoveSound, playCelebration, playEncouragement, playErrorPing, playSuccessChime }) };
 });
 
 vi.mock('../../hooks/useHintSystem', () => {
@@ -95,10 +97,10 @@ describe('PuzzleBoard', () => {
     expect(screen.getByTestId('puzzle-loading')).toBeInTheDocument();
   });
 
-  it('shows puzzle rating and themes', () => {
+  it('shows puzzle rating badge and themes', () => {
     const puzzle = makePuzzle({ rating: 1500, themes: ['pin', 'middlegame'] });
     render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
-    expect(screen.getByText('Rating: 1500')).toBeInTheDocument();
+    expect(screen.getByTestId('puzzle-rating-badge')).toHaveTextContent('Puzzle Rating: 1500');
     expect(screen.getByText('pin, middlegame')).toBeInTheDocument();
   });
 
@@ -128,5 +130,31 @@ describe('PuzzleBoard', () => {
     render(<PuzzleBoard puzzle={puzzle} onComplete={onComplete} disabled />);
     expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it('shows show-solution button when playing', async () => {
+    const puzzle = makePuzzle();
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+
+    await waitFor(
+      () => expect(screen.getByTestId('show-solution-button')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+  });
+
+  it('renders board wrapper with flash class container', () => {
+    const puzzle = makePuzzle();
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    expect(screen.getByTestId('board-wrapper')).toBeInTheDocument();
+  });
+
+  it('shows puzzle controls area when playing', async () => {
+    const puzzle = makePuzzle();
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+
+    await waitFor(
+      () => expect(screen.getByTestId('puzzle-controls')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
   });
 });

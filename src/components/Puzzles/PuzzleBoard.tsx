@@ -5,7 +5,7 @@ import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useHintSystem } from '../../hooks/useHintSystem';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
@@ -14,10 +14,22 @@ import type { PuzzleRecord } from '../../types';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
+/** Outcome metadata passed to the parent on puzzle completion. */
+export interface PuzzleOutcome {
+  correct: boolean;
+  usedHint: boolean;
+  /** True if the player needed more than one attempt on any move. */
+  hadRetry: boolean;
+  /** True if the player explicitly viewed the solution. */
+  showedSolution: boolean;
+}
+
 interface PuzzleBoardProps {
   puzzle: PuzzleRecord;
-  onComplete: (correct: boolean) => void;
+  onComplete: (outcome: PuzzleOutcome) => void;
   disabled?: boolean;
+  /** Maximum wrong attempts before auto-failing the puzzle (default: 2). */
+  maxWrongAttempts?: number;
 }
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
@@ -28,18 +40,26 @@ function parseUciMoves(uci: string): { from: string; to: string; promotion?: str
   }));
 }
 
-export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoardProps): JSX.Element {
+export function PuzzleBoard({
+  puzzle,
+  onComplete,
+  disabled = false,
+  maxWrongAttempts = 2,
+}: PuzzleBoardProps): JSX.Element {
   const [state, setState] = useState<PuzzleState>('loading');
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
   const [boardKey, setBoardKey] = useState(0);
+  const [flashClass, setFlashClass] = useState<string>('');
   const hasMadeMistakeRef = useRef(false);
   const wrongAttemptsRef = useRef(0);
+  const hintUsedRef = useRef(false);
+  const showedSolutionRef = useRef(false);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
-  const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
+  const { playMoveSound, playErrorPing, playSuccessChime } = usePieceSound();
   const { settings } = useSettings();
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
@@ -76,6 +96,21 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     puzzleThemes: puzzle.themes,
   });
 
+  // Track hint usage
+  const handleRequestHint = useCallback((): void => {
+    hintUsedRef.current = true;
+    requestHint();
+  }, [requestHint]);
+
+  // Trigger flash animation helper
+  const triggerFlash = useCallback((cls: string): void => {
+    setFlashClass('');
+    // Force reflow to re-trigger animation
+    requestAnimationFrame(() => {
+      setFlashClass(cls);
+    });
+  }, []);
+
   // Reset state when puzzle changes
   useEffect(() => {
     const chess = new Chess(puzzle.fen);
@@ -85,8 +120,11 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     setFen(puzzle.fen);
     setLastMoveHighlight(null);
     setBoardKey((k) => k + 1);
+    setFlashClass('');
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
+    hintUsedRef.current = false;
+    showedSolutionRef.current = false;
     setState('loading');
     resetHints();
 
@@ -125,6 +163,16 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     if (state === 'correct') void voiceService.speak('Excellent! Puzzle solved!');
   }, [state, settings.voiceEnabled]);
 
+  // Complete the puzzle with outcome metadata
+  const completePuzzle = useCallback((correct: boolean): void => {
+    onComplete({
+      correct,
+      usedHint: hintUsedRef.current,
+      hadRetry: hasMadeMistakeRef.current,
+      showedSolution: showedSolutionRef.current,
+    });
+  }, [onComplete]);
+
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
 
@@ -137,19 +185,16 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     if (isCorrect) {
       playMoveSound(move.san);
       resetHints();
-      wrongAttemptsRef.current = 0;
       setLastMoveHighlight({ from: move.from, to: move.to });
       const nextIndex = moveIndex + 1;
 
       // Check if puzzle is fully solved
       if (nextIndex >= movesRef.current.length) {
-        const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
-        playCelebration();
-        // Delay onComplete so the "Puzzle solved!" voice feedback
-        // finishes before the parent advances to the next puzzle
+        triggerFlash('board-flash-success');
+        playSuccessChime();
         completionTimerRef.current = setTimeout(() => {
-          onComplete(solvedCleanly);
+          completePuzzle(true);
         }, 2500);
         return;
       }
@@ -175,15 +220,28 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         }, 400);
       }
     } else {
-      // Wrong move — undo and let them try again from the same position
+      // Wrong move — undo, flash red, play error sound
       hasMadeMistakeRef.current = true;
       wrongAttemptsRef.current += 1;
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setBoardKey((k) => k + 1);
+      triggerFlash('board-flash-error');
+      playErrorPing();
+
+      // Check if max wrong attempts reached
+      if (wrongAttemptsRef.current >= maxWrongAttempts) {
+        setState('incorrect');
+        voiceService.stop();
+        // Auto-fail after max wrong attempts
+        completionTimerRef.current = setTimeout(() => {
+          completePuzzle(false);
+        }, 1200);
+        return;
+      }
+
       setState('incorrect');
       voiceService.stop();
-      playEncouragement();
 
       // Progressive voice hint based on attempt count and puzzle themes
       if (settings.voiceEnabled) {
@@ -202,14 +260,9 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         setState('playing');
       }, 1000);
     }
-  }, [state, disabled, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, settings.voiceEnabled, puzzle.themes]);
+  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
-    // ChessBoard's internal chess.js has already applied the move.
-    // We need to sync our ref and then validate.
-    // Since ChessBoard uses its own chess instance, we apply the same move to ours.
-    // Note: we do NOT call setFen() here — handleMove will update FEN after
-    // validation, avoiding a temporary FEN change that would reset hints.
     try {
       chessRef.current.move({ from: moveResult.from, to: moveResult.to, promotion: moveResult.promotion });
     } catch {
@@ -218,9 +271,55 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
     handleMove(moveResult);
   }, [handleMove]);
 
+  // Show Solution: auto-play remaining moves and mark as failed
+  const handleShowSolution = useCallback((): void => {
+    if (state !== 'playing' && state !== 'incorrect') return;
+    showedSolutionRef.current = true;
+
+    // Play remaining moves in sequence
+    const allMoves = movesRef.current;
+    let currentIndex = moveIndex;
+    const chess = chessRef.current;
+
+    const playNextMove = (): void => {
+      if (currentIndex >= allMoves.length) {
+        setState('incorrect');
+        completionTimerRef.current = setTimeout(() => {
+          completePuzzle(false);
+        }, 1500);
+        return;
+      }
+
+      const move = allMoves[currentIndex];
+      try {
+        const result = chess.move({ from: move.from, to: move.to, promotion: move.promotion });
+        playMoveSound(result.san);
+        setLastMoveHighlight({ from: move.from, to: move.to });
+        setFen(chess.fen());
+        setBoardKey((k) => k + 1);
+      } catch {
+        // skip
+      }
+      currentIndex += 1;
+      setMoveIndex(currentIndex);
+
+      if (currentIndex < allMoves.length) {
+        setTimeout(playNextMove, 600);
+      } else {
+        setState('incorrect');
+        completionTimerRef.current = setTimeout(() => {
+          completePuzzle(false);
+        }, 1500);
+      }
+    };
+
+    setState('loading'); // Disable interaction during solution playback
+    playNextMove();
+  }, [state, moveIndex, completePuzzle, playMoveSound]);
+
   return (
     <div className="space-y-3" data-testid="puzzle-board">
-      <div className="w-full md:max-w-[420px] mx-auto">
+      <div className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${flashClass}`} data-testid="board-wrapper">
         <ChessBoard
           initialFen={fen}
           key={boardKey}
@@ -236,33 +335,38 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         />
       </div>
 
-      {/* Hint controls */}
-      {state === 'playing' && settings.showHints && (
-        <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
-          <HintButton
-            currentLevel={hintState.level}
-            onRequestHint={requestHint}
-            disabled={hintState.isAnalyzing}
-          />
-          {hintState.nudgeText && (
-            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
-              {hintState.nudgeText}
-            </p>
+      {/* Hint + Show Solution controls */}
+      {state === 'playing' && (
+        <div className="flex items-center gap-3" data-testid="puzzle-controls">
+          {settings.showHints && (
+            <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
+              <HintButton
+                currentLevel={hintState.level}
+                onRequestHint={handleRequestHint}
+                disabled={hintState.isAnalyzing}
+              />
+              {hintState.nudgeText && (
+                <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
+                  {hintState.nudgeText}
+                </p>
+              )}
+            </div>
           )}
+          <button
+            onClick={handleShowSolution}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors"
+            data-testid="show-solution-button"
+          >
+            <Eye size={14} />
+            Show Solution
+          </button>
         </div>
       )}
 
-      {/* Status message */}
+      {/* Status message — only show for correct (incorrect uses flash-only feedback) */}
       {state === 'correct' && (
         <div className="flex items-center gap-2" style={{ color: 'var(--color-success)' }} data-testid="puzzle-correct">
-          <CheckCircle size={18} />
           <span className="text-sm font-medium">Correct!</span>
-        </div>
-      )}
-      {state === 'incorrect' && (
-        <div className="flex items-center gap-2" style={{ color: 'var(--color-error)' }} data-testid="puzzle-incorrect">
-          <XCircle size={18} />
-          <span className="text-sm font-medium">Incorrect — try again</span>
         </div>
       )}
       {state === 'loading' && (
@@ -271,13 +375,17 @@ export function PuzzleBoard({ puzzle, onComplete, disabled = false }: PuzzleBoar
         </div>
       )}
 
-      {/* Puzzle info */}
+      {/* Puzzle info with rating badge */}
       <div className="flex items-center gap-3 text-xs text-theme-text-muted">
-        <span>Rating: {puzzle.rating}</span>
+        <span
+          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-theme-surface font-semibold text-theme-text ${flashClass.includes('success') || state === 'correct' ? 'rating-bump' : ''}`}
+          data-testid="puzzle-rating-badge"
+        >
+          Puzzle Rating: {puzzle.rating}
+        </span>
         <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
         <span>{puzzle.themes.slice(0, 3).join(', ')}</span>
       </div>
     </div>
   );
 }
-
