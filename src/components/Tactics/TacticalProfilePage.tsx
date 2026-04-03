@@ -31,7 +31,6 @@ export function TacticalProfilePage(): JSX.Element {
       }
       setProfile(stored);
     } catch (err) {
-      console.error('Failed to load tactical profile:', err);
       setError(err instanceof Error ? err.message : 'Failed to load profile');
     } finally {
       setLoading(false);
@@ -45,7 +44,6 @@ export function TacticalProfilePage(): JSX.Element {
       const fresh = await computeTacticalProfile();
       setProfile(fresh);
     } catch (err) {
-      console.error('Failed to refresh tactical profile:', err);
       setError(err instanceof Error ? err.message : 'Failed to refresh profile');
     } finally {
       setRefreshing(false);

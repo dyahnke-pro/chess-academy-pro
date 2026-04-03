@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import { getThemeSkills } from './puzzleService';
 import { detectTacticType } from './missedTacticService';
+import { TACTIC_LABELS } from './tacticClassifierService';
 import type {
   TacticalProfile,
   TacticTypeStats,
@@ -195,25 +196,7 @@ function classifyMistakePuzzles(mistakes: MistakePuzzle[]): ClassifiedMistake[] 
  * Returns a human-readable label for a tactic type.
  */
 export function tacticTypeLabel(type: TacticType): string {
-  const labels: Record<TacticType, string> = {
-    fork: 'Fork',
-    pin: 'Pin',
-    skewer: 'Skewer',
-    discovered_attack: 'Discovered Attack',
-    back_rank: 'Back Rank',
-    hanging_piece: 'Hanging Piece',
-    promotion: 'Promotion',
-    deflection: 'Deflection',
-    overloaded_piece: 'Overloaded Piece',
-    trapped_piece: 'Trapped Piece',
-    clearance: 'Clearance',
-    interference: 'Interference',
-    zwischenzug: 'Zwischenzug',
-    x_ray: 'X-Ray',
-    double_check: 'Double Check',
-    tactical_sequence: 'Tactical Sequence',
-  };
-  return labels[type];
+  return TACTIC_LABELS[type];
 }
 
 /**

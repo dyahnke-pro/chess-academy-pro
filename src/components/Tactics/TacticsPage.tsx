@@ -22,9 +22,8 @@ import {
   getRecentClassifiedTactics,
   getClassifiedTacticCount,
   backfillClassifiedTactics,
-  TACTIC_LABELS,
 } from '../../services/tacticClassifierService';
-import { getStoredTacticalProfile } from '../../services/tacticalProfileService';
+import { getStoredTacticalProfile, tacticTypeLabel } from '../../services/tacticalProfileService';
 import { getTacticDrillCounts } from '../../services/tacticDrillService';
 import { getContextDepth } from '../../services/tacticCreateService';
 import { SkillBar } from '../ui/SkillBar';
@@ -89,21 +88,25 @@ export function TacticsPage(): JSX.Element {
   }, []);
 
   const loadTrainingData = useCallback(async (): Promise<void> => {
-    const stored = await getStoredTacticalProfile();
-    setTacticalProfile(stored);
+    try {
+      const stored = await getStoredTacticalProfile();
+      setTacticalProfile(stored);
 
-    const counts = await getTacticDrillCounts();
-    let total = 0;
-    counts.forEach((c) => { total += c; });
-    setDrillCount(total);
+      const counts = await getTacticDrillCounts();
+      let total = 0;
+      counts.forEach((c) => { total += c; });
+      setDrillCount(total);
 
-    const setups = await db.setupPuzzles
-      .filter((sp) => sp.status !== 'mastered')
-      .count();
-    setSetupCount(setups);
+      const setups = await db.setupPuzzles
+        .filter((sp) => sp.status !== 'mastered')
+        .count();
+      setSetupCount(setups);
 
-    const depth = await getContextDepth();
-    setCreateDepth(depth);
+      const depth = await getContextDepth();
+      setCreateDepth(depth);
+    } catch {
+      // Training tab data is non-critical; defaults are fine
+    }
   }, []);
 
   useEffect(() => {
@@ -266,7 +269,7 @@ function ProfileTab({
           <SummaryCard label="Motif Types" value={`${motifStats.length}`} color="var(--color-warning)" />
           <SummaryCard
             label="Top Weakness"
-            value={motifStats[0] ? TACTIC_LABELS[motifStats[0].tacticType] : '—'}
+            value={motifStats[0] ? tacticTypeLabel(motifStats[0].tacticType) : '—'}
             color="var(--color-error)"
           />
         </div>
@@ -301,7 +304,7 @@ function ProfileTab({
                       <Icon size={16} />
                       <div className="flex-1">
                         <SkillBar
-                          label={TACTIC_LABELS[stat.tacticType]}
+                          label={tacticTypeLabel(stat.tacticType)}
                           value={stat.puzzleAccuracy || 0}
                         />
                       </div>
@@ -320,7 +323,7 @@ function ProfileTab({
                       className="p-1.5 rounded-lg transition-colors hover:bg-black/5 shrink-0"
                       onClick={() => setExpandedMotif(isExpanded ? null : stat.tacticType)}
                       data-testid={`motif-toggle-${stat.tacticType}`}
-                      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${TACTIC_LABELS[stat.tacticType]} details`}
+                      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${tacticTypeLabel(stat.tacticType)} details`}
                     >
                       {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                     </button>
@@ -582,8 +585,8 @@ function MotifDetail({ stat }: { stat: MotifStats }): JSX.Element {
           style={{ background: 'var(--color-warning)', color: 'var(--color-bg)', opacity: 0.9 }}
         >
           {stat.puzzleAccuracy >= 70
-            ? `You solve ${TACTIC_LABELS[stat.tacticType].toLowerCase()} puzzles well but miss them in games. Focus on pattern recognition during play.`
-            : `Both puzzle accuracy and game detection need work. Practice more ${TACTIC_LABELS[stat.tacticType].toLowerCase()} puzzles.`}
+            ? `You solve ${tacticTypeLabel(stat.tacticType).toLowerCase()} puzzles well but miss them in games. Focus on pattern recognition during play.`
+            : `Both puzzle accuracy and game detection need work. Practice more ${tacticTypeLabel(stat.tacticType).toLowerCase()} puzzles.`}
         </div>
       )}
     </div>
@@ -606,7 +609,7 @@ function RecentTacticCard({ tactic }: { tactic: ClassifiedTactic }): JSX.Element
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">{TACTIC_LABELS[tactic.tacticType]}</span>
+          <span className="text-sm font-medium">{tacticTypeLabel(tactic.tacticType)}</span>
           <span
             className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
             style={{
