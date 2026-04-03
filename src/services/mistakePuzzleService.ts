@@ -341,6 +341,9 @@ async function analyzeGameWithStockfish(
       playerMove = san;
     }
 
+    // Skip if deeper analysis confirms the player's move was actually best
+    if (bestMove === playerMove || bestMoveSan === playerMoveSan) continue;
+
     // Eval before mistake from the player's perspective (positive = player is better)
     const evalBeforeFromPlayer = playerColor === 'white'
       ? evalBefore / 100
@@ -525,6 +528,9 @@ async function generateFromAnnotations(
     } catch {
       playerMove = annotation.san;
     }
+
+    // Skip if deeper analysis confirms the player's move was actually best
+    if (bestMove === playerMove || bestMoveSan === playerMoveSan) continue;
 
     // Compute eval before from annotation context (player perspective)
     let evalBeforeFromPlayer: number | null = null;
