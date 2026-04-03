@@ -8,6 +8,7 @@ import { buildWeaknessPuzzleQueue } from '../../services/weaknessPuzzleService';
 import { recordAttempt, updatePuzzleRating } from '../../services/puzzleService';
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { PuzzleBoard } from './PuzzleBoard';
+import type { PuzzleOutcome } from './PuzzleBoard';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import type { WeaknessPuzzleItem } from '../../services/weaknessPuzzleService';
 
@@ -178,7 +179,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
             ) : (
               <PuzzleBoard
                 puzzle={currentItem.puzzle}
-                onComplete={(correct) => void handleComplete(correct)}
+                onComplete={(outcome: PuzzleOutcome) => void handleComplete(outcome.correct)}
               />
             )}
 

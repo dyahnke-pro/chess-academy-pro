@@ -5,6 +5,7 @@ import { voiceService } from '../../services/voiceService';
 import { getKidPuzzles, seedPuzzles, recordAttempt } from '../../services/puzzleService';
 import { DifficultyToggle } from '../Coach/DifficultyToggle';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
+import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
 import { useAppStore } from '../../stores/appStore';
 import type { CoachDifficulty, PuzzleRecord } from '../../types';
 
@@ -120,7 +121,7 @@ export function KidPuzzlePage(): JSX.Element {
     }
   }, [currentIndex, puzzles.length, phase, difficulty, fetchMorePuzzles]);
 
-  const handlePuzzleComplete = useCallback((correct: boolean): void => {
+  const handlePuzzleComplete = useCallback(({ correct }: PuzzleOutcome): void => {
     if (correct) setSolvedCount((c) => c + 1);
     setTotalAttempted((t) => t + 1);
     setResultOverlay(correct ? 'correct' : 'incorrect');

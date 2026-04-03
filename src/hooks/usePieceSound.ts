@@ -9,6 +9,10 @@ export interface UsePieceSoundReturn {
   playCelebration: () => void;
   /** Play the Kid Mode encouragement sound (wrong move in drill). */
   playEncouragement: () => void;
+  /** Soft error ping for wrong puzzle moves. */
+  playErrorPing: () => void;
+  /** Soft success chime for correct puzzle completion. */
+  playSuccessChime: () => void;
 }
 
 export function usePieceSound(): UsePieceSoundReturn {
@@ -42,5 +46,13 @@ export function usePieceSound(): UsePieceSoundReturn {
     soundService.playKidEncouragement();
   }, []);
 
-  return { playMoveSound, playCelebration, playEncouragement };
+  const playErrorPing = useCallback((): void => {
+    soundService.playErrorPing();
+  }, []);
+
+  const playSuccessChime = useCallback((): void => {
+    soundService.playSuccessChime();
+  }, []);
+
+  return { playMoveSound, playCelebration, playEncouragement, playErrorPing, playSuccessChime };
 }
