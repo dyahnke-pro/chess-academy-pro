@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   getRepertoireOpenings,
-  searchOpenings,
   getOpeningsByEcoLetter,
   toggleFavorite,
 } from '../../services/openingService';
 import { seedDatabase } from '../../services/dataLoader';
+import { db } from '../../db/schema';
 import { OpeningCard } from './OpeningCard';
-import type { OpeningRecord } from '../../types';
+import type { OpeningRecord, SmartSearchResult } from '../../types';
 import { ProRepertoiresTab } from './ProRepertoiresTab';
 import { GambitsTab } from './GambitsTab';
-import { Search, BookOpen, Library, ChevronDown, ChevronRight, Users, Swords } from 'lucide-react';
+import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords } from 'lucide-react';
 
 type TabMode = 'common' | 'pro' | 'gambits' | 'all';
 
@@ -29,10 +30,10 @@ const ECO_DESCRIPTIONS: Record<string, string> = {
 export function OpeningExplorerPage(): JSX.Element {
   const navigate = useNavigate();
   const [repertoire, setRepertoire] = useState<OpeningRecord[]>([]);
-  const [searchResults, setSearchResults] = useState<OpeningRecord[] | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResultIds, setSearchResultIds] = useState<Set<string> | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<TabMode>('common');
+  const [allOpenings, setAllOpenings] = useState<OpeningRecord[]>([]);
 
   // ECO groups for "All Openings" tab
   const [ecoGroups, setEcoGroups] = useState<Record<string, OpeningRecord[]>>({});
@@ -64,19 +65,18 @@ export function OpeningExplorerPage(): JSX.Element {
     void loadAll();
   }, [tab, ecoGroups]);
 
-  // Debounced search
+  // Load all openings once for search result filtering
   useEffect(() => {
-    if (!searchQuery.trim()) {
-      setSearchResults(null);
+    void db.openings.toArray().then(setAllOpenings);
+  }, []);
+
+  const handleSearchResults = useCallback((results: SmartSearchResult[]): void => {
+    if (results.length === 0) {
+      setSearchResultIds(null);
       return;
     }
-    const timer = setTimeout(() => {
-      void searchOpenings(searchQuery).then((results) => {
-        setSearchResults(results);
-      });
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+    setSearchResultIds(new Set(results.map((r) => r.id)));
+  }, []);
 
   const toggleLetter = useCallback((letter: string): void => {
     setExpandedLetters((prev) => {
@@ -97,19 +97,19 @@ export function OpeningExplorerPage(): JSX.Element {
     );
   }, []);
 
-  // Most Common display (with optional search)
+  // Common/repertoire display (with optional search)
   const displayCommon = useMemo((): OpeningRecord[] => {
-    if (searchResults && tab === 'common') {
-      return searchResults.filter((o) => o.isRepertoire);
+    if (searchResultIds && tab === 'common') {
+      return repertoire.filter((o) => searchResultIds.has(o.id));
     }
     return repertoire;
-  }, [repertoire, searchResults, tab]);
+  }, [repertoire, searchResultIds, tab]);
 
   // All openings search results
   const displayAllSearch = useMemo((): OpeningRecord[] | null => {
-    if (tab !== 'all' || !searchResults) return null;
-    return searchResults;
-  }, [tab, searchResults]);
+    if (tab !== 'all' || !searchResultIds) return null;
+    return allOpenings.filter((o) => searchResultIds.has(o.id));
+  }, [tab, searchResultIds, allOpenings]);
 
   if (loading) {
     return (
@@ -152,18 +152,10 @@ export function OpeningExplorerPage(): JSX.Element {
       </div>
 
       {/* Search bar */}
-      <div className="relative mb-6">
-        <Search
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-text-muted"
-        />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by name or ECO code..."
-          className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-theme-surface text-theme-text text-sm placeholder:text-theme-text-muted border border-theme-border focus:border-theme-accent focus:outline-none transition-colors"
-          data-testid="opening-search"
+      <div className="mb-6">
+        <SmartSearchBar
+          scope="opening"
+          onResultsChange={handleSearchResults}
         />
       </div>
 

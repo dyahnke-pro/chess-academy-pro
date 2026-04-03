@@ -4,6 +4,7 @@ import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
 import { BookOpen, GraduationCap, Puzzle, Target, AlertTriangle } from 'lucide-react';
+import { SmartSearchBar } from '../Search/SmartSearchBar';
 
 interface SectionItem {
   label: string;
@@ -85,6 +86,11 @@ export function DashboardPage(): JSX.Element {
       <h1 className="text-xl font-bold text-center mt-2">
         Chess Academy Pro
       </h1>
+
+      {/* Smart Search */}
+      <div className="max-w-lg mx-auto w-full">
+        <SmartSearchBar />
+      </div>
 
       {/* 5 big squares */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">

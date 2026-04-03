@@ -15,6 +15,7 @@ export function TacticalProfilePage(): JSX.Element {
   const [profile, setProfile] = useState<TacticalProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     void loadProfile();
@@ -22,19 +23,33 @@ export function TacticalProfilePage(): JSX.Element {
 
   async function loadProfile(): Promise<void> {
     setLoading(true);
-    let stored = await getStoredTacticalProfile();
-    if (!stored) {
-      stored = await computeTacticalProfile();
+    setError(null);
+    try {
+      let stored = await getStoredTacticalProfile();
+      if (!stored) {
+        stored = await computeTacticalProfile();
+      }
+      setProfile(stored);
+    } catch (err) {
+      console.error('Failed to load tactical profile:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load profile');
+    } finally {
+      setLoading(false);
     }
-    setProfile(stored);
-    setLoading(false);
   }
 
   const handleRefresh = useCallback(async (): Promise<void> => {
     setRefreshing(true);
-    const fresh = await computeTacticalProfile();
-    setProfile(fresh);
-    setRefreshing(false);
+    setError(null);
+    try {
+      const fresh = await computeTacticalProfile();
+      setProfile(fresh);
+    } catch (err) {
+      console.error('Failed to refresh tactical profile:', err);
+      setError(err instanceof Error ? err.message : 'Failed to refresh profile');
+    } finally {
+      setRefreshing(false);
+    }
   }, []);
 
   const handleBeginTraining = useCallback((): void => {
@@ -50,6 +65,32 @@ export function TacticalProfilePage(): JSX.Element {
     return (
       <div className="max-w-2xl mx-auto w-full p-6 flex items-center justify-center min-h-[60vh]">
         <p style={{ color: 'var(--color-text-muted)' }}>Analyzing your tactical profile...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-2xl mx-auto w-full p-6 pb-20 md:pb-6 flex flex-col gap-6">
+        <div className="flex items-center gap-3">
+          <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80">
+            <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
+          </button>
+          <Eye size={24} style={{ color: 'var(--color-accent)' }} />
+          <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Tactical Profile</h1>
+        </div>
+        <div className="rounded-xl border p-6 text-center" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
+          <p className="text-sm mb-3" style={{ color: 'var(--color-error)' }}>
+            Failed to load profile: {error}
+          </p>
+          <button
+            onClick={() => void loadProfile()}
+            className="text-sm px-4 py-2 rounded-lg font-semibold"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
