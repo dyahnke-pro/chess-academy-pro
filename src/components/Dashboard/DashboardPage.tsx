@@ -90,16 +90,16 @@ export function DashboardPage(): JSX.Element {
       <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">
         {SECTIONS.map((section, i) => {
           const Icon = section.icon;
-          const isLast = i === SECTIONS.length - 1;
+          const isFirst = i === 0;
           return (
             <button
               key={section.route}
               onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity aspect-square ${isLast ? 'col-span-2 aspect-auto py-8' : ''}`}
+              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity ${isFirst ? 'col-span-2 py-10' : 'aspect-square'}`}
               data-testid={`section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              <Icon size={40} className={section.color} />
-              <span className={`text-base font-bold ${section.color}`}>{section.label}</span>
+              <Icon size={isFirst ? 48 : 40} className={section.color} />
+              <span className={`${isFirst ? 'text-lg' : 'text-base'} font-bold ${section.color}`}>{section.label}</span>
             </button>
           );
         })}
