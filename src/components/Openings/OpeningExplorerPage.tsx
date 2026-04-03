@@ -12,9 +12,9 @@ import { OpeningCard } from './OpeningCard';
 import type { OpeningRecord } from '../../types';
 import { ProRepertoiresTab } from './ProRepertoiresTab';
 import { GambitsTab } from './GambitsTab';
-import { Search, BookOpen, Library, ChevronDown, ChevronRight, Star, Users, Swords } from 'lucide-react';
+import { Search, BookOpen, Library, ChevronDown, ChevronRight, Users, Swords } from 'lucide-react';
 
-type TabMode = 'repertoire' | 'all' | 'gambits' | 'pro';
+type TabMode = 'common' | 'pro' | 'gambits' | 'all';
 
 const ECO_LETTERS = ['A', 'B', 'C', 'D', 'E'] as const;
 
@@ -32,7 +32,7 @@ export function OpeningExplorerPage(): JSX.Element {
   const [searchResults, setSearchResults] = useState<OpeningRecord[] | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<TabMode>('repertoire');
+  const [tab, setTab] = useState<TabMode>('common');
 
   // ECO groups for "All Openings" tab
   const [ecoGroups, setEcoGroups] = useState<Record<string, OpeningRecord[]>>({});
@@ -97,17 +97,13 @@ export function OpeningExplorerPage(): JSX.Element {
     );
   }, []);
 
-  // Repertoire display (with optional search)
-  const displayRepertoire = useMemo((): OpeningRecord[] => {
-    if (searchResults && tab === 'repertoire') {
+  // Most Common display (with optional search)
+  const displayCommon = useMemo((): OpeningRecord[] => {
+    if (searchResults && tab === 'common') {
       return searchResults.filter((o) => o.isRepertoire);
     }
     return repertoire;
   }, [repertoire, searchResults, tab]);
-
-  const favorites = displayRepertoire.filter((o) => o.isFavorite);
-  const whites = displayRepertoire.filter((o) => o.color === 'white' && !o.isFavorite);
-  const blacks = displayRepertoire.filter((o) => o.color === 'black' && !o.isFavorite);
 
   // All openings search results
   const displayAllSearch = useMemo((): OpeningRecord[] | null => {
@@ -133,54 +129,26 @@ export function OpeningExplorerPage(): JSX.Element {
 
       {/* Tab toggle */}
       <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
-        <button
-          onClick={() => setTab('repertoire')}
-          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
-            tab === 'repertoire'
-              ? 'bg-theme-accent text-white'
-              : 'text-theme-text-muted hover:text-theme-text'
-          }`}
-          data-testid="tab-repertoire"
-        >
-          <BookOpen size={16} />
-          <span className="leading-tight text-center">Repertoire</span>
-        </button>
-        <button
-          onClick={() => setTab('all')}
-          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
-            tab === 'all'
-              ? 'bg-theme-accent text-white'
-              : 'text-theme-text-muted hover:text-theme-text'
-          }`}
-          data-testid="tab-all"
-        >
-          <Library size={16} />
-          <span className="leading-tight text-center">All</span>
-        </button>
-        <button
-          onClick={() => setTab('gambits')}
-          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
-            tab === 'gambits'
-              ? 'bg-theme-accent text-white'
-              : 'text-theme-text-muted hover:text-theme-text'
-          }`}
-          data-testid="tab-gambits"
-        >
-          <Swords size={16} />
-          <span className="leading-tight text-center">Gambits</span>
-        </button>
-        <button
-          onClick={() => setTab('pro')}
-          className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
-            tab === 'pro'
-              ? 'bg-theme-accent text-white'
-              : 'text-theme-text-muted hover:text-theme-text'
-          }`}
-          data-testid="tab-pro"
-        >
-          <Users size={16} />
-          <span className="leading-tight text-center">Pro</span>
-        </button>
+        {([
+          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-common' },
+          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro' },
+          { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits' },
+          { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all' },
+        ]).map(({ id, label, icon: Icon, testId }) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
+              tab === id
+                ? 'bg-theme-accent text-white'
+                : 'text-theme-text-muted hover:text-theme-text'
+            }`}
+            data-testid={testId}
+          >
+            <Icon size={16} />
+            <span className="leading-tight text-center">{label}</span>
+          </button>
+        ))}
       </div>
 
       {/* Search bar */}
@@ -199,83 +167,29 @@ export function OpeningExplorerPage(): JSX.Element {
         />
       </div>
 
-      {/* ─── Repertoire tab ──────────────────────────────────────────────── */}
-      {tab === 'repertoire' && (
+      {/* ─── Most Common tab ────────────────────────────────────────────── */}
+      {tab === 'common' && (
         <>
-          {favorites.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-3 flex items-center gap-1.5">
-                <Star size={12} className="text-amber-500 fill-amber-500" />
-                Favorites
-              </h2>
-              <div className="space-y-2">
-                {favorites.map((opening, i) => (
-                  <motion.div
-                    key={opening.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03, duration: 0.25 }}
-                  >
-                    <OpeningCard
-                      opening={opening}
-                      onClick={() => void navigate(`/openings/${opening.id}`)}
-                      onToggleFavorite={() => void handleToggleFavorite(opening.id)}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {whites.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-3">
-                My White Openings
-              </h2>
-              <div className="space-y-2">
-                {whites.map((opening, i) => (
-                  <motion.div
-                    key={opening.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03, duration: 0.25 }}
-                  >
-                    <OpeningCard
-                      opening={opening}
-                      onClick={() => void navigate(`/openings/${opening.id}`)}
-                      onToggleFavorite={() => void handleToggleFavorite(opening.id)}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {blacks.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-3">
-                My Black Openings
-              </h2>
-              <div className="space-y-2">
-                {blacks.map((opening, i) => (
-                  <motion.div
-                    key={opening.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03, duration: 0.25 }}
-                  >
-                    <OpeningCard
-                      opening={opening}
-                      onClick={() => void navigate(`/openings/${opening.id}`)}
-                      onToggleFavorite={() => void handleToggleFavorite(opening.id)}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {displayRepertoire.length === 0 && (
+          <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-3">
+            Most Common Openings
+          </h2>
+          <div className="space-y-2">
+            {displayCommon.map((opening, i) => (
+              <motion.div
+                key={opening.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03, duration: 0.25 }}
+              >
+                <OpeningCard
+                  opening={opening}
+                  onClick={() => void navigate(`/openings/${opening.id}`)}
+                  onToggleFavorite={() => void handleToggleFavorite(opening.id)}
+                />
+              </motion.div>
+            ))}
+          </div>
+          {displayCommon.length === 0 && (
             <div className="flex flex-1 items-center justify-center text-theme-text-muted">
               No openings found.
             </div>
@@ -283,11 +197,11 @@ export function OpeningExplorerPage(): JSX.Element {
         </>
       )}
 
-      {/* ─── Gambits tab ─────────────────────────────────────────────────── */}
-      {tab === 'gambits' && <GambitsTab />}
-
       {/* ─── Pro Repertoires tab ──────────────────────────────────────────── */}
       {tab === 'pro' && <ProRepertoiresTab />}
+
+      {/* ─── Gambits tab ─────────────────────────────────────────────────── */}
+      {tab === 'gambits' && <GambitsTab />}
 
       {/* ─── All Openings tab ────────────────────────────────────────────── */}
       {tab === 'all' && (
