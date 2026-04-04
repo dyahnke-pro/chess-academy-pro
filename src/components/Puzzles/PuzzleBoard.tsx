@@ -11,9 +11,8 @@ import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
-import { detectTacticType } from '../../services/missedTacticService';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
-import { TACTIC_LABELS } from '../../services/tacticClassifierService';
+import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
 import { useAppStore } from '../../stores/appStore';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { PuzzleRecord } from '../../types';
@@ -78,21 +77,9 @@ export function PuzzleBoard({
   // Publish board context for global coach drawer
   useBoardContext(fen, '', 0, userColor, fen.split(' ')[1] === 'b' ? 'b' : 'w');
 
-  // Detect tactic type from first player move (after opponent's setup move)
-  const tacticType = useMemo(() => {
-    const moves = parseUciMoves(puzzle.moves);
-    if (moves.length < 2) return null;
-    try {
-      const chess = new Chess(puzzle.fen);
-      const setupMove = moves[0];
-      chess.move({ from: setupMove.from, to: setupMove.to, promotion: setupMove.promotion });
-      const playerFen = chess.fen();
-      const playerMove = moves[1];
-      return detectTacticType(playerFen, `${playerMove.from}${playerMove.to}${playerMove.promotion ?? ''}`);
-    } catch {
-      return null;
-    }
-  }, [puzzle.fen, puzzle.moves]);
+  // Use Lichess curated themes for tactic type (more accurate than pattern matching)
+  const tacticType = useMemo(() => getTacticTypeFromThemes(puzzle.themes), [puzzle.themes]);
+  const themeLabel = useMemo(() => getPrimaryThemeLabel(puzzle.themes), [puzzle.themes]);
 
   // Proactive struggle detection — coach speaks up when player is stuck
   const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {
@@ -443,13 +430,11 @@ export function PuzzleBoard({
         >
           Puzzle Rating: {puzzle.rating}
         </span>
-        {tacticType && tacticType !== 'tactical_sequence' && (
+        {themeLabel && (
           <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium" data-testid="tactic-type-badge">
-            {TACTIC_LABELS[tacticType]}
+            {themeLabel}
           </span>
         )}
-        <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
-        <span>{puzzle.themes.slice(0, 3).join(', ')}</span>
       </div>
     </div>
   );
