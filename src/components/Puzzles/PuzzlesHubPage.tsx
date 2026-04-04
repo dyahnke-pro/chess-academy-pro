@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Puzzle,
-  Brain,
   AlertTriangle,
   TrendingUp,
   Trophy,
@@ -118,19 +117,6 @@ export function PuzzlesHubPage(): JSX.Element {
           <ChevronRight size={20} className="text-text-tertiary flex-shrink-0" />
         </button>
 
-        <button
-          onClick={() => void navigate('/puzzles/weakness')}
-          className="w-full bg-surface-secondary hover:bg-surface-tertiary rounded-xl p-4 flex items-center gap-4 transition-colors text-left"
-        >
-          <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
-            <Brain size={24} className="text-purple-400" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="font-semibold text-text-primary">Weakness Puzzles</div>
-            <div className="text-sm text-text-secondary">Targeted training for your weakest areas</div>
-          </div>
-          <ChevronRight size={20} className="text-text-tertiary flex-shrink-0" />
-        </button>
       </div>
     </div>
   );
