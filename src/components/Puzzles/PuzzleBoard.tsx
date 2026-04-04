@@ -445,7 +445,7 @@ export function PuzzleBoard({
         </span>
         {tacticType && tacticType !== 'tactical_sequence' && (
           <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium" data-testid="tactic-type-badge">
-            {TACTIC_LABELS[tacticType] ?? tacticType}
+            {TACTIC_LABELS[tacticType]}
           </span>
         )}
         <span className="w-1 h-1 rounded-full bg-theme-text-muted" />

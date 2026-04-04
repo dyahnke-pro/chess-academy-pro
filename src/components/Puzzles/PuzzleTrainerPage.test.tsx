@@ -72,7 +72,7 @@ vi.mock('../../hooks/useSolveTimer', () => ({
 // Mock DB
 vi.mock('../../db/schema', () => ({
   db: {
-    profiles: { update: vi.fn().mockResolvedValue(1) },
+    profiles: { update: vi.fn().mockResolvedValue(1), get: vi.fn().mockResolvedValue(null) },
     puzzles: {
       bulkPut: vi.fn(),
       count: vi.fn().mockResolvedValue(0),
