@@ -224,7 +224,7 @@ export function mistakePuzzleToPuzzleRecord(mp: MistakePuzzle): PuzzleRecord {
   return {
     id: mp.id,
     fen: mp.fen,
-    moves: mp.bestMove,
+    moves: mp.moves,
     rating: 1200,
     themes: [mp.classification],
     openingTags: 'mistake',
