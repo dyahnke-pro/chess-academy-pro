@@ -29,6 +29,117 @@ export const TACTIC_LABELS: Record<TacticType, string> = {
   tactical_sequence: 'Combination',
 };
 
+// ─── Lichess Theme Mapping ──────────────────────────────────────────────────
+
+/** Maps Lichess puzzle theme strings to our TacticType enum. */
+export const LICHESS_THEME_TO_TACTIC: Partial<Record<string, TacticType>> = {
+  fork: 'fork',
+  pin: 'pin',
+  skewer: 'skewer',
+  discoveredAttack: 'discovered_attack',
+  backRankMate: 'back_rank',
+  hangingPiece: 'hanging_piece',
+  promotion: 'promotion',
+  deflection: 'deflection',
+  overloadedPiece: 'overloaded_piece',
+  trappedPiece: 'trapped_piece',
+  clearance: 'clearance',
+  interference: 'interference',
+  zwischenzug: 'zwischenzug',
+  xRayAttack: 'x_ray',
+  doubleCheck: 'double_check',
+  attraction: 'deflection',
+  capturingDefender: 'deflection',
+  discoveredCheck: 'discovered_attack',
+  intermezzo: 'zwischenzug',
+  sacrifice: 'tactical_sequence',
+};
+
+/** Human-friendly labels for common Lichess themes not in TacticType. */
+export const LICHESS_THEME_LABELS: Record<string, string> = {
+  fork: 'Fork',
+  pin: 'Pin',
+  skewer: 'Skewer',
+  discoveredAttack: 'Discovered Attack',
+  discoveredCheck: 'Discovered Check',
+  backRankMate: 'Back Rank Mate',
+  hangingPiece: 'Hanging Piece',
+  promotion: 'Promotion',
+  underPromotion: 'Under-Promotion',
+  deflection: 'Deflection',
+  overloadedPiece: 'Overloaded Piece',
+  trappedPiece: 'Trapped Piece',
+  clearance: 'Clearance',
+  interference: 'Interference',
+  zwischenzug: 'Zwischenzug',
+  intermezzo: 'Intermezzo',
+  xRayAttack: 'X-Ray Attack',
+  doubleCheck: 'Double Check',
+  attraction: 'Attraction',
+  capturingDefender: 'Removing the Defender',
+  sacrifice: 'Sacrifice',
+  mateIn1: 'Mate in 1',
+  mateIn2: 'Mate in 2',
+  mateIn3: 'Mate in 3',
+  mateIn4: 'Mate in 4',
+  mateIn5: 'Mate in 5',
+  smotheredMate: 'Smothered Mate',
+  hookMate: 'Hook Mate',
+  arabianMate: 'Arabian Mate',
+  anastasiaMate: 'Anastasia Mate',
+  exposedKing: 'Exposed King',
+  kingsideAttack: 'Kingside Attack',
+  queensideAttack: 'Queenside Attack',
+  quietMove: 'Quiet Move',
+  defensiveMove: 'Defensive Move',
+  zugzwang: 'Zugzwang',
+  endgame: 'Endgame',
+  middlegame: 'Middlegame',
+  opening: 'Opening',
+  openingTrap: 'Opening Trap',
+  enPassant: 'En Passant',
+  castling: 'Castling',
+  advancedPawn: 'Advanced Pawn',
+};
+
+/**
+ * Get the best tactic type from a Lichess puzzle's theme array.
+ * Returns the first tactical theme found (ignoring phase/style tags), or null.
+ */
+export function getTacticTypeFromThemes(themes: string[]): TacticType | null {
+  for (const theme of themes) {
+    const mapped = LICHESS_THEME_TO_TACTIC[theme];
+    if (mapped && mapped !== 'tactical_sequence') return mapped;
+  }
+  return null;
+}
+
+/**
+ * Get the best human-friendly label from a Lichess puzzle's theme array.
+ * Prioritizes tactical themes over phase/style themes.
+ */
+export function getPrimaryThemeLabel(themes: string[]): string | null {
+  // Priority: tactical themes first
+  const tacticalPriority = [
+    'fork', 'pin', 'skewer', 'discoveredAttack', 'discoveredCheck',
+    'backRankMate', 'smotheredMate', 'hookMate', 'arabianMate', 'anastasiaMate',
+    'doubleCheck', 'deflection', 'attraction', 'capturingDefender',
+    'sacrifice', 'clearance', 'interference', 'zwischenzug', 'intermezzo',
+    'xRayAttack', 'overloadedPiece', 'trappedPiece', 'hangingPiece',
+    'exposedKing', 'kingsideAttack', 'queensideAttack',
+    'promotion', 'underPromotion', 'enPassant',
+    'quietMove', 'defensiveMove', 'zugzwang', 'advancedPawn',
+    'mateIn1', 'mateIn2', 'mateIn3', 'mateIn4', 'mateIn5',
+  ];
+
+  for (const priority of tacticalPriority) {
+    if (themes.includes(priority)) {
+      return LICHESS_THEME_LABELS[priority] ?? priority;
+    }
+  }
+  return null;
+}
+
 // ─── Classify & Persist ─────────────────────────────────────────────────────
 
 /**
@@ -160,23 +271,7 @@ export async function getTacticMotifStats(): Promise<TacticMotifStats[]> {
   }
 
   // Map puzzle themes to tactic types (puzzles from Lichess use theme tags)
-  const puzzleThemeToTactic: Partial<Record<string, TacticType>> = {
-    fork: 'fork',
-    pin: 'pin',
-    skewer: 'skewer',
-    discoveredAttack: 'discovered_attack',
-    backRankMate: 'back_rank',
-    hangingPiece: 'hanging_piece',
-    promotion: 'promotion',
-    deflection: 'deflection',
-    overloadedPiece: 'overloaded_piece',
-    trappedPiece: 'trapped_piece',
-    clearance: 'clearance',
-    interference: 'interference',
-    zwischenzug: 'zwischenzug',
-    xRayAttack: 'x_ray',
-    doubleCheck: 'double_check',
-  };
+  const puzzleThemeToTactic = LICHESS_THEME_TO_TACTIC;
 
   // Get puzzle stats grouped by tactic type
   const puzzleStatsByType = new Map<TacticType, { attempts: number; successes: number }>();
