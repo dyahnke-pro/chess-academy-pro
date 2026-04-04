@@ -5,11 +5,17 @@ import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { Eye } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
+import { detectTacticType } from '../../services/missedTacticService';
+import { recordTacticOutcome } from '../../services/tacticAlertService';
+import { TACTIC_LABELS } from '../../services/tacticClassifierService';
+import { useAppStore } from '../../stores/appStore';
+import type { CoachingTier } from '../../services/tacticAlertService';
 import type { PuzzleRecord } from '../../types';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
@@ -61,6 +67,9 @@ export function PuzzleBoard({
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playErrorPing, playSuccessChime } = usePieceSound();
   const { settings } = useSettings();
+  const activeProfile = useAppStore((s) => s.activeProfile);
+  const [subtitle, setSubtitle] = useState<string>('');
+  const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
@@ -68,6 +77,37 @@ export function PuzzleBoard({
 
   // Publish board context for global coach drawer
   useBoardContext(fen, '', 0, userColor, fen.split(' ')[1] === 'b' ? 'b' : 'w');
+
+  // Detect tactic type from first player move (after opponent's setup move)
+  const tacticType = useMemo(() => {
+    const moves = parseUciMoves(puzzle.moves);
+    if (moves.length < 2) return null;
+    try {
+      const chess = new Chess(puzzle.fen);
+      const setupMove = moves[0];
+      chess.move({ from: setupMove.from, to: setupMove.to, promotion: setupMove.promotion });
+      const playerFen = chess.fen();
+      const playerMove = moves[1];
+      return detectTacticType(playerFen, `${playerMove.from}${playerMove.to}${playerMove.promotion ?? ''}`);
+    } catch {
+      return null;
+    }
+  }, [puzzle.fen, puzzle.moves]);
+
+  // Proactive struggle detection — coach speaks up when player is stuck
+  const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {
+    voiceService.stop();
+    setSubtitle(message);
+    void voiceService.speak(message);
+  }, []);
+
+  const { reset: resetStruggle } = useStruggleDetection({
+    tacticType,
+    playerRating: activeProfile?.currentRating ?? 1200,
+    active: state === 'playing',
+    wrongAttempts: wrongAttemptCount,
+    onCoach: handleStruggleCoach,
+  });
 
   // Derive the expected move for the hint system
   const knownMove = useMemo((): { from: string; to: string; san: string } | null => {
@@ -127,6 +167,10 @@ export function PuzzleBoard({
     showedSolutionRef.current = false;
     setState('loading');
     resetHints();
+    setSubtitle('');
+    setWrongAttemptCount(0);
+    resetStruggle();
+    void voiceService.warmup();
 
     // Auto-play the first move (opponent sets up the puzzle)
     const timer = setTimeout(() => {
@@ -155,7 +199,7 @@ export function PuzzleBoard({
       }
       voiceService.stop();
     };
-  }, [puzzle, playMoveSound, resetHints]);
+  }, [puzzle, playMoveSound, resetHints, resetStruggle]);
 
   // Voice feedback on correct solve (respects user voice setting)
   useEffect(() => {
@@ -165,13 +209,21 @@ export function PuzzleBoard({
 
   // Complete the puzzle with outcome metadata
   const completePuzzle = useCallback((correct: boolean): void => {
+    if (tacticType && tacticType !== 'tactical_sequence') {
+      recordTacticOutcome({
+        tacticType,
+        found: correct,
+        wasCoached: subtitle !== '',
+        context: 'drill',
+      });
+    }
     onComplete({
       correct,
       usedHint: hintUsedRef.current,
       hadRetry: hasMadeMistakeRef.current,
       showedSolution: showedSolutionRef.current,
     });
-  }, [onComplete]);
+  }, [onComplete, tacticType, subtitle]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
@@ -223,6 +275,7 @@ export function PuzzleBoard({
       // Wrong move — undo, flash red, play error sound
       hasMadeMistakeRef.current = true;
       wrongAttemptsRef.current += 1;
+      setWrongAttemptCount((c) => c + 1);
       chessRef.current.undo();
       setFen(chessRef.current.fen());
       setBoardKey((k) => k + 1);
@@ -335,6 +388,13 @@ export function PuzzleBoard({
         />
       </div>
 
+      {/* Coaching subtitle from struggle detection */}
+      {subtitle && state === 'playing' && (
+        <p className="text-sm text-amber-400 px-1" data-testid="coaching-subtitle">
+          {subtitle}
+        </p>
+      )}
+
       {/* Hint + Show Solution controls */}
       {state === 'playing' && (
         <div className="flex items-center gap-3" data-testid="puzzle-controls">
@@ -375,14 +435,19 @@ export function PuzzleBoard({
         </div>
       )}
 
-      {/* Puzzle info with rating badge */}
-      <div className="flex items-center gap-3 text-xs text-theme-text-muted">
+      {/* Puzzle info with rating badge + tactic type */}
+      <div className="flex items-center gap-3 text-xs text-theme-text-muted flex-wrap">
         <span
           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-theme-surface font-semibold text-theme-text ${flashClass.includes('success') || state === 'correct' ? 'rating-bump' : ''}`}
           data-testid="puzzle-rating-badge"
         >
           Puzzle Rating: {puzzle.rating}
         </span>
+        {tacticType && tacticType !== 'tactical_sequence' && (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium" data-testid="tactic-type-badge">
+            {TACTIC_LABELS[tacticType] ?? tacticType}
+          </span>
+        )}
         <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
         <span>{puzzle.themes.slice(0, 3).join(', ')}</span>
       </div>
