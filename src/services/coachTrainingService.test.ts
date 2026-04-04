@@ -480,29 +480,6 @@ describe('coachTrainingService', () => {
       expect(openingRec?.type).toBe('opening_review');
     });
 
-    it('maps positional category to tactic_drill', async () => {
-      const weakness: WeaknessProfile = {
-        computedAt: new Date().toISOString(),
-        items: [
-          {
-            category: 'positional',
-            label: 'Positional Play',
-            metric: '40%',
-            severity: 75,
-            detail: 'Positional.',
-          },
-        ],
-        strengths: [],
-        overallAssessment: 'Positional.',
-      };
-      mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
-
-      const profile = buildUserProfile();
-      const recs = await getTrainingRecommendations(profile);
-      const posRec = recs.find((r) => r.id === 'weakness-positional');
-      expect(posRec?.type).toBe('tactic_drill');
-    });
-
     it('maps endgame category to endgame_practice', async () => {
       const weakness: WeaknessProfile = {
         computedAt: new Date().toISOString(),

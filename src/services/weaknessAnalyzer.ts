@@ -84,18 +84,6 @@ function analyzeOpenings(repertoire: OpeningRecord[]): {
     }
   }
 
-  // Identify openings never drilled
-  const neverDrilled = repertoire.filter((o) => o.drillAttempts === 0);
-  if (neverDrilled.length > 0) {
-    weaknesses.push({
-      category: 'openings',
-      label: `${neverDrilled.length} openings never drilled`,
-      metric: `${neverDrilled.length} of ${repertoire.length} repertoire openings untouched`,
-      severity: 40,
-      detail: `You have ${neverDrilled.length} openings in your repertoire that you've never drilled: ${neverDrilled.slice(0, 3).map((o) => o.name).join(', ')}${neverDrilled.length > 3 ? '...' : ''}.`,
-    });
-  }
-
   weaknesses.sort((a, b) => b.severity - a.severity);
 
   return { weaknesses, strengths };
@@ -160,11 +148,11 @@ function analyzeGames(games: GameRecord[]): {
     strengths.push(`Clean calculation (only ${totalBlunders + totalMistakes} errors in ${gamesWithAnnotations} games)`);
   }
 
-  // Time management / late-game collapse
+  // Late-game collapse
   if (lateBlunderGames >= 2 && gamesWithAnnotations >= MIN_GAMES_FOR_TIME_ANALYSIS) {
     const collapseRate = lateBlunderGames / gamesWithAnnotations;
     weaknesses.push({
-      category: 'time_management',
+      category: 'calculation',
       label: 'Late-game collapses',
       metric: `${lateBlunderGames} of ${gamesWithAnnotations} games had multiple errors in the last 10 moves`,
       severity: Math.min(85, Math.round(collapseRate * 200)),
@@ -235,17 +223,8 @@ function analyzeSessionConsistency(sessions: SessionRecord[]): {
 
   if (gaps.length > 0) {
     const avgGap = gaps.reduce((sum, g) => sum + g, 0) / gaps.length;
-    const maxGap = Math.max(...gaps);
 
-    if (avgGap > 3) {
-      weaknesses.push({
-        category: 'time_management',
-        label: 'Inconsistent training',
-        metric: `Avg ${avgGap.toFixed(1)} days between sessions (max gap: ${maxGap} days)`,
-        severity: Math.min(60, Math.round(avgGap * 10)),
-        detail: `You're training every ${avgGap.toFixed(1)} days on average. Consistent daily practice, even just 15 minutes, is more effective than sporadic longer sessions.`,
-      });
-    } else if (avgGap <= 1.5 && sessions.length >= 7) {
+    if (avgGap <= 1.5 && sessions.length >= 7) {
       strengths.push(`Excellent training consistency (${avgGap.toFixed(1)} days between sessions)`);
     }
   }
@@ -264,21 +243,7 @@ function analyzeFlashcards(flashcards: FlashcardRecord[]): {
 
   if (flashcards.length === 0) return { weaknesses, strengths };
 
-  const today = new Date().toISOString().split('T')[0];
-  const overdue = flashcards.filter((f) => f.srsDueDate <= today);
   const reviewed = flashcards.filter((f) => f.srsLastReview !== null);
-
-  // Overdue flashcards
-  if (overdue.length > 10) {
-    const overdueRatio = overdue.length / flashcards.length;
-    weaknesses.push({
-      category: 'openings',
-      label: 'Flashcard backlog',
-      metric: `${overdue.length} of ${flashcards.length} flashcards overdue`,
-      severity: Math.min(50, Math.round(overdueRatio * 100)),
-      detail: `You have ${overdue.length} overdue flashcards. These are opening concepts you've learned but are starting to forget. Spending 5 minutes daily on flashcards maintains long-term retention.`,
-    });
-  }
 
   // Good retention
   if (reviewed.length > 0) {
@@ -367,21 +332,6 @@ function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
         metric: `${blunders} blunders out of ${total} mistakes (${Math.round(blunderRatio * 100)}%)`,
         severity: Math.min(85, Math.round(blunderRatio * 120)),
         detail: `${Math.round(blunderRatio * 100)}% of your game mistakes are blunders (300+ centipawn loss). Before each move, do a quick blunder check — ask if anything is hanging or if your opponent has a tactic.`,
-      });
-    }
-  }
-
-  // Unsolved ratio: are they actually working on their mistakes?
-  const unsolved = mistakePuzzles.filter((p) => p.status === 'unsolved').length;
-  if (unsolved >= 5) {
-    const unsolvedRatio = unsolved / total;
-    if (unsolvedRatio > 0.6) {
-      weaknesses.push({
-        category: 'tactics',
-        label: 'Unresolved game mistakes',
-        metric: `${unsolved} of ${total} mistake puzzles still unsolved`,
-        severity: Math.round(unsolvedRatio * 50),
-        detail: `You have ${unsolved} mistake puzzles from your own games that haven't been solved yet. Reviewing your mistakes is one of the most effective ways to improve. Head to My Mistakes to work through them.`,
       });
     }
   }

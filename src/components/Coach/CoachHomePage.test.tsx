@@ -1,217 +1,97 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '../../test/utils';
+import { render, screen, fireEvent } from '../../test/utils';
 import { CoachHomePage } from './CoachHomePage';
-import { useAppStore } from '../../stores/appStore';
-import { buildUserProfile } from '../../test/factories';
-import type { WeaknessProfile } from '../../types';
 
-const mockGetStoredWeaknessProfile = vi.fn();
-const mockComputeWeaknessProfile = vi.fn();
+const mockNavigate = vi.fn();
 
-vi.mock('../../services/weaknessAnalyzer', () => ({
-  getStoredWeaknessProfile: (...args: unknown[]): unknown =>
-    mockGetStoredWeaknessProfile(...args),
-  computeWeaknessProfile: (...args: unknown[]): unknown =>
-    mockComputeWeaknessProfile(...args),
-}));
-
-vi.mock('../../services/chesscomService', () => ({
-  importChessComGames: vi.fn().mockResolvedValue(5),
-}));
-
-vi.mock('../../services/lichessService', () => ({
-  importLichessGames: vi.fn().mockResolvedValue(3),
-}));
-
-vi.mock('../../services/voiceInputService', () => ({
-  voiceInputService: {
-    isSupported: vi.fn().mockReturnValue(false),
-    startListening: vi.fn().mockReturnValue(false),
-    stopListening: vi.fn(),
-    onResult: vi.fn(),
-  },
-}));
-
-const mockWeaknessProfile: WeaknessProfile = {
-  computedAt: new Date().toISOString(),
-  items: [
-    {
-      category: 'tactics',
-      label: 'Fork Recognition',
-      metric: '32% accuracy',
-      severity: 75,
-      detail: 'Struggles with knight forks',
-    },
-    {
-      category: 'openings',
-      label: 'Italian Game',
-      metric: '40% win rate',
-      severity: 55,
-      detail: 'Below average results',
-    },
-    {
-      category: 'endgame',
-      label: 'Rook Endgames',
-      metric: '25% accuracy',
-      severity: 80,
-      detail: 'Needs endgame practice',
-    },
-  ],
-  strengths: ['Strong pin tactics', 'Good calculation speed'],
-  overallAssessment: 'Focus on tactical patterns.',
-};
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe('CoachHomePage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    useAppStore.getState().reset();
-    mockGetStoredWeaknessProfile.mockResolvedValue(null);
-    mockComputeWeaknessProfile.mockResolvedValue(null);
   });
 
-  function setupProfile(): void {
-    const profile = buildUserProfile({ level: 1 });
-    useAppStore.getState().setActiveProfile(profile);
-  }
-
-  it('renders coach home page container', async () => {
-    setupProfile();
+  it('renders coach home page container', () => {
     render(<CoachHomePage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('coach-home-page')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('coach-home-page')).toBeInTheDocument();
   });
 
-  it('shows loading state initially', () => {
-    setupProfile();
-    mockGetStoredWeaknessProfile.mockReturnValue(new Promise(() => {})); // never resolves
+  it('shows "Work with Coach" action card', () => {
     render(<CoachHomePage />);
-
-    expect(screen.getByTestId('weakness-loading')).toBeInTheDocument();
-    expect(screen.getByText('Analysing your data...')).toBeInTheDocument();
+    const card = screen.getByTestId('coach-action-train');
+    expect(card).toBeInTheDocument();
+    expect(card).toHaveTextContent('Work with Coach');
   });
 
-  it('shows weakness cards when profile data exists', async () => {
-    setupProfile();
-    mockGetStoredWeaknessProfile.mockResolvedValue(mockWeaknessProfile);
-
+  it('shows "Play & Review" action card', () => {
     render(<CoachHomePage />);
-
-    await waitFor(() => {
-      const cards = screen.getAllByTestId('weakness-card');
-      expect(cards).toHaveLength(3);
-    });
+    const card = screen.getByTestId('coach-action-play');
+    expect(card).toBeInTheDocument();
+    expect(card).toHaveTextContent('Play & Review');
   });
 
-  it('shows game import card when no weakness data', async () => {
-    setupProfile();
-    mockGetStoredWeaknessProfile.mockResolvedValue(null);
-    mockComputeWeaknessProfile.mockResolvedValue(null);
-
+  it('shows "Game Insights" action card', () => {
     render(<CoachHomePage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('game-import-card')).toBeInTheDocument();
-    });
-
-    // Should show import card instead of old empty state
-    expect(screen.queryByText('Play some games and solve puzzles to unlock insights')).not.toBeInTheDocument();
+    const card = screen.getByTestId('coach-action-report');
+    expect(card).toBeInTheDocument();
+    expect(card).toHaveTextContent('Game Insights');
   });
 
-  it('renders all primary action buttons', async () => {
-    setupProfile();
+  it('shows secondary actions: Training Plan, Analyse, Chat', () => {
     render(<CoachHomePage />);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('coach-action-play')).toBeInTheDocument();
-      expect(screen.getByTestId('coach-action-report')).toBeInTheDocument();
-    });
+    const plan = screen.getByTestId('coach-action-plan');
+    expect(plan).toBeInTheDocument();
+    expect(plan).toHaveTextContent('Training Plan');
 
-    expect(screen.getByTestId('coach-action-play')).toHaveTextContent(
-      'Play & Review',
-    );
-    expect(screen.getByTestId('coach-action-report')).toHaveTextContent(
-      'Weakness Report',
-    );
+    const analyse = screen.getByTestId('coach-action-analyse');
+    expect(analyse).toBeInTheDocument();
+    expect(analyse).toHaveTextContent('Analyse');
+
+    const chat = screen.getByTestId('coach-action-chat');
+    expect(chat).toBeInTheDocument();
+    expect(chat).toHaveTextContent('Chat');
   });
 
-  it('renders all secondary action buttons', async () => {
-    setupProfile();
+  it('navigates to /coach/train when "Work with Coach" is clicked', () => {
     render(<CoachHomePage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('coach-action-plan')).toBeInTheDocument();
-      expect(screen.getByTestId('coach-action-analyse')).toBeInTheDocument();
-      expect(screen.getByTestId('coach-action-chat')).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId('coach-action-plan')).toHaveTextContent(
-      'Training Plan',
-    );
-    expect(screen.getByTestId('coach-action-analyse')).toHaveTextContent(
-      'Analyse',
-    );
-    expect(screen.getByTestId('coach-action-chat')).toHaveTextContent('Chat');
+    fireEvent.click(screen.getByTestId('coach-action-train'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/train');
   });
 
-  it('shows "View Full Report" link when weakness data exists', async () => {
-    setupProfile();
-    mockGetStoredWeaknessProfile.mockResolvedValue(mockWeaknessProfile);
-
+  it('navigates to /coach/play when "Play & Review" is clicked', () => {
     render(<CoachHomePage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('view-full-report')).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId('view-full-report')).toHaveTextContent(
-      'View Full Report',
-    );
+    fireEvent.click(screen.getByTestId('coach-action-play'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/play');
   });
 
-  it('weakness cards show correct data', async () => {
-    setupProfile();
-    mockGetStoredWeaknessProfile.mockResolvedValue(mockWeaknessProfile);
-
+  it('navigates to /coach/report when "Game Insights" is clicked', () => {
     render(<CoachHomePage />);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('weakness-card')).toHaveLength(3);
-    });
-
-    // Check labels
-    expect(screen.getByText('Fork Recognition')).toBeInTheDocument();
-    expect(screen.getByText('Italian Game')).toBeInTheDocument();
-    expect(screen.getByText('Rook Endgames')).toBeInTheDocument();
-
-    // Check metrics
-    expect(screen.getByText('32% accuracy')).toBeInTheDocument();
-    expect(screen.getByText('40% win rate')).toBeInTheDocument();
-    expect(screen.getByText('25% accuracy')).toBeInTheDocument();
-
-    // Check severity bars exist
-    const severityBars = screen.getAllByTestId('severity-bar');
-    expect(severityBars).toHaveLength(3);
-
-    // Check train buttons exist
-    const trainButtons = screen.getAllByTestId('train-btn');
-    expect(trainButtons).toHaveLength(3);
-    for (const btn of trainButtons) {
-      expect(btn).toHaveTextContent('Train');
-    }
+    fireEvent.click(screen.getByTestId('coach-action-report'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/report');
   });
 
-  it('import card shows both platform tabs', async () => {
-    setupProfile();
-    mockGetStoredWeaknessProfile.mockResolvedValue(null);
-    mockComputeWeaknessProfile.mockResolvedValue(null);
-
+  it('navigates to /coach/plan when "Training Plan" is clicked', () => {
     render(<CoachHomePage />);
+    fireEvent.click(screen.getByTestId('coach-action-plan'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/plan');
+  });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('tab-chesscom')).toBeInTheDocument();
-      expect(screen.getByTestId('tab-lichess')).toBeInTheDocument();
-    });
+  it('navigates to /coach/analyse when "Analyse" is clicked', () => {
+    render(<CoachHomePage />);
+    fireEvent.click(screen.getByTestId('coach-action-analyse'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/analyse');
+  });
+
+  it('navigates to /coach/chat when "Chat" is clicked', () => {
+    render(<CoachHomePage />);
+    fireEvent.click(screen.getByTestId('coach-action-chat'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/chat');
   });
 });

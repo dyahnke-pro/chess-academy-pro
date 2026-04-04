@@ -152,6 +152,7 @@ export function CoachGamePage(): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const reviewGameId = searchParams.get('review');
+  const startMoveParam = searchParams.get('move');
   const activeProfile = useAppStore((s) => s.activeProfile);
 
   // ─── Guided Lesson State (review query param) ──────────────────────────────
@@ -837,9 +838,10 @@ export function CoachGamePage(): JSX.Element {
           playerRating={reviewPlayerRating}
           opponentRating={reviewOpponentRating}
           onPlayAgain={() => void navigate('/coach/play')}
-          onBackToCoach={() => void navigate('/coach')}
+          onBackToCoach={() => void navigate(startMoveParam ? '/coach/report' : '/coach')}
           isGuidedLesson
           pgn={reviewGame.pgn}
+          initialMoveIndex={startMoveParam ? parseInt(startMoveParam, 10) : undefined}
         />
       </div>
     );

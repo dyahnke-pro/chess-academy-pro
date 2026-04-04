@@ -216,20 +216,6 @@ describe('weaknessAnalyzer', () => {
       expect(result.weaknesses[0].category).toBe('openings');
     });
 
-    it('identifies never-drilled openings', () => {
-      const openings = [
-        createOpening('op-1', { name: 'Sicilian', drillAttempts: 0 }),
-        createOpening('op-2', { name: 'Italian', drillAttempts: 0 }),
-        createOpening('op-3', { name: 'French', drillAttempts: 10, drillAccuracy: 0.8 }),
-      ];
-
-      const result = analyzeOpenings(openings);
-
-      const neverDrilled = result.weaknesses.find((w) => w.label.includes('never drilled'));
-      expect(neverDrilled).toBeDefined();
-      expect(neverDrilled?.detail).toContain('Sicilian');
-    });
-
     it('identifies strong openings', () => {
       const openings = [
         createOpening('op-1', { name: 'Italian', drillAccuracy: 0.85, drillAttempts: 20 }),
@@ -280,9 +266,9 @@ describe('weaknessAnalyzer', () => {
 
       const result = analyzeGames(games);
 
-      const timeWeakness = result.weaknesses.find((w) => w.category === 'time_management');
-      expect(timeWeakness).toBeDefined();
-      expect(timeWeakness?.label).toContain('Late-game');
+      const calcWeakness = result.weaknesses.find((w) => w.category === 'calculation');
+      expect(calcWeakness).toBeDefined();
+      expect(calcWeakness?.label).toContain('Late-game');
     });
 
     it('detects high blunder rate', () => {
@@ -346,20 +332,6 @@ describe('weaknessAnalyzer', () => {
       expect(accuracyWeakness?.category).toBe('tactics');
     });
 
-    it('detects inconsistent training', () => {
-      const sessions = [
-        createSession('s1', { date: '2024-01-01' }),
-        createSession('s2', { date: '2024-01-08' }),
-        createSession('s3', { date: '2024-01-15' }),
-      ];
-
-      const result = analyzeSessionConsistency(sessions);
-
-      const inconsistency = result.weaknesses.find((w) => w.label.includes('Inconsistent'));
-      expect(inconsistency).toBeDefined();
-      expect(inconsistency?.category).toBe('time_management');
-    });
-
     it('identifies consistent training as strength', () => {
       const sessions = Array.from({ length: 7 }, (_, i) =>
         createSession(`s${i}`, {
@@ -383,18 +355,6 @@ describe('weaknessAnalyzer', () => {
   // ─── analyzeFlashcards ────────────────────────────────────────────────
 
   describe('analyzeFlashcards', () => {
-    it('detects flashcard backlog', () => {
-      const today = new Date().toISOString().split('T')[0];
-      const flashcards = Array.from({ length: 15 }, (_, i) =>
-        createFlashcard(`f${i}`, { srsDueDate: today }),
-      );
-
-      const result = analyzeFlashcards(flashcards);
-
-      const backlog = result.weaknesses.find((w) => w.label.includes('backlog'));
-      expect(backlog).toBeDefined();
-    });
-
     it('identifies good retention as strength', () => {
       const flashcards = Array.from({ length: 25 }, (_, i) =>
         createFlashcard(`f${i}`, {
@@ -672,17 +632,6 @@ describe('weaknessAnalyzer', () => {
       const blunderWeakness = result.weaknesses.find((w) => w.label.includes('blunder'));
       expect(blunderWeakness).toBeDefined();
       expect(blunderWeakness?.category).toBe('calculation');
-    });
-
-    it('detects unresolved mistake puzzles', () => {
-      const puzzles = Array.from({ length: 8 }, (_, i) =>
-        createMistakePuzzle(`p${i}`, { status: 'unsolved' }),
-      );
-
-      const result = analyzeMistakePuzzles(puzzles);
-      const unresolvedWeakness = result.weaknesses.find((w) => w.label.includes('Unresolved'));
-      expect(unresolvedWeakness).toBeDefined();
-      expect(unresolvedWeakness?.category).toBe('tactics');
     });
 
     it('identifies high mastery rate as strength', () => {
