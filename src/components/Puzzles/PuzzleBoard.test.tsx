@@ -59,16 +59,13 @@ vi.mock('../../hooks/useStruggleDetection', () => {
   return { useStruggleDetection: () => ({ reset }) };
 });
 
-vi.mock('../../services/missedTacticService', () => ({
-  detectTacticType: vi.fn().mockReturnValue(null),
-}));
-
 vi.mock('../../services/tacticAlertService', () => ({
   recordTacticOutcome: vi.fn(),
 }));
 
 vi.mock('../../services/tacticClassifierService', () => ({
-  TACTIC_LABELS: {},
+  getTacticTypeFromThemes: vi.fn().mockReturnValue(null),
+  getPrimaryThemeLabel: vi.fn().mockReturnValue(null),
 }));
 
 vi.mock('../../stores/appStore', () => ({
@@ -119,11 +116,10 @@ describe('PuzzleBoard', () => {
     expect(screen.getByTestId('puzzle-loading')).toBeInTheDocument();
   });
 
-  it('shows puzzle rating badge and themes', () => {
+  it('shows puzzle rating badge', () => {
     const puzzle = makePuzzle({ rating: 1500, themes: ['pin', 'middlegame'] });
     render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
     expect(screen.getByTestId('puzzle-rating-badge')).toHaveTextContent('Puzzle Rating: 1500');
-    expect(screen.getByText('pin, middlegame')).toBeInTheDocument();
   });
 
   it('orients board for user (black to move in FEN → user plays white)', () => {
