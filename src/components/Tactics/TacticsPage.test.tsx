@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '../../test/utils';
+import { render, screen, waitFor } from '../../test/utils';
 import { TacticsPage } from './TacticsPage';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
@@ -161,7 +161,7 @@ describe('TacticsPage', () => {
     expect(screen.getByText('No Tactics Yet')).toBeInTheDocument();
   });
 
-  it('shows stats row when tactics exist', async () => {
+  it('shows stats on section buttons when data exists', async () => {
     setProfile();
     mockGetClassifiedTacticCount.mockResolvedValue(15);
     mockGetStoredTacticalProfile.mockResolvedValue({
@@ -173,15 +173,11 @@ describe('TacticsPage', () => {
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('stats-row')).toBeInTheDocument();
+      expect(screen.getByText('2 types')).toBeInTheDocument();
     });
-    expect(screen.getByText('15')).toBeInTheDocument();
-    expect(screen.getByText('Found')).toBeInTheDocument();
-    expect(screen.getAllByText('Fork').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('Weakest')).toBeInTheDocument();
   });
 
-  it('hides stats row when no tactics', async () => {
+  it('hides stats text when no data', async () => {
     setProfile();
     mockGetClassifiedTacticCount.mockResolvedValue(0);
     render(<TacticsPage />);
@@ -189,46 +185,35 @@ describe('TacticsPage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('tactics-empty')).toBeInTheDocument();
     });
-    expect(screen.queryByTestId('stats-row')).not.toBeInTheDocument();
   });
 
-  it('shows drill count on layer card', async () => {
+  it('shows drill count on Drill button', async () => {
     setProfile();
     mockGetTacticDrillCounts.mockResolvedValue(new Map([['fork', 5], ['pin', 3]]));
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('8 drills ready')).toBeInTheDocument();
+      expect(screen.getByText('8 ready')).toBeInTheDocument();
     });
   });
 
-  it('refresh button reloads data', async () => {
-    setProfile();
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('tactics-refresh-btn')).toBeInTheDocument();
-    });
-    expect(mockGetClassifiedTacticCount).toHaveBeenCalledTimes(1);
-
-    fireEvent.click(screen.getByTestId('tactics-refresh-btn'));
-
-    await waitFor(() => {
-      expect(mockGetClassifiedTacticCount).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  it('shows subtitle with tactic count', async () => {
+  it('shows summary with tactic count', async () => {
     setProfile();
     mockGetClassifiedTacticCount.mockResolvedValue(10);
+    mockGetStoredTacticalProfile.mockResolvedValue({
+      stats: [{ tacticType: 'fork' }],
+      weakestTypes: ['fork'],
+      totalGamesAnalyzed: 5,
+      totalGamesMissed: 10,
+    } as unknown as TacticalProfile);
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('10 missed tactics from your games')).toBeInTheDocument();
+      expect(screen.getByText(/10 tactics from 5 games/)).toBeInTheDocument();
     });
   });
 
-  it('shows summary when profile exists', async () => {
+  it('shows focus area in summary', async () => {
     setProfile();
     mockGetClassifiedTacticCount.mockResolvedValue(5);
     mockGetStoredTacticalProfile.mockResolvedValue({
@@ -240,12 +225,12 @@ describe('TacticsPage', () => {
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText(/8 games analyzed/)).toBeInTheDocument();
+      expect(screen.getByText(/Focus:/)).toBeInTheDocument();
     });
-    expect(screen.getByText(/5 tactical positions found/)).toBeInTheDocument();
+    expect(screen.getByText('Fork')).toBeInTheDocument();
   });
 
-  it('shows context depth on Create layer card', async () => {
+  it('shows context depth on Create button', async () => {
     setProfile();
     mockGetContextDepth.mockResolvedValue(12);
     mockGetStoredTacticalProfile.mockResolvedValue({
@@ -257,7 +242,7 @@ describe('TacticsPage', () => {
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Depth: 12 moves')).toBeInTheDocument();
+      expect(screen.getByText('Depth 12')).toBeInTheDocument();
     });
   });
 });

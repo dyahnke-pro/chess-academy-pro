@@ -6,8 +6,6 @@ import {
   Swords,
   Wrench,
   Lightbulb,
-  ChevronRight,
-  RefreshCw,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import {
@@ -21,59 +19,54 @@ import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { db } from '../../db/schema';
 import type { TacticalProfile } from '../../types';
 
-// ─── Layer Definitions ─────────────────────────────────────────────────────
+// ─── Section Definitions ───────────────────────────────────────────────────
 
-interface LayerConfig {
-  number: number;
-  title: string;
-  subtitle: string;
+interface SectionItem {
+  label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   route: string;
   color: string;
   bgColor: string;
   borderColor: string;
+  statKey: number;
 }
 
-const LAYERS: LayerConfig[] = [
+const SECTIONS: SectionItem[] = [
   {
-    number: 1,
-    title: 'Spot',
-    subtitle: 'See which tactics you miss in your games',
+    label: 'Spot',
     icon: Eye,
     route: '/tactics/profile',
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/10',
     borderColor: 'border-amber-500/30',
+    statKey: 1,
   },
   {
-    number: 2,
-    title: 'Drill',
-    subtitle: 'Puzzles from your own missed opportunities',
+    label: 'Drill',
     icon: Swords,
     route: '/tactics/drill',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10',
     borderColor: 'border-orange-500/30',
+    statKey: 2,
   },
   {
-    number: 3,
-    title: 'Setup',
-    subtitle: 'Find the quiet moves that create tactics',
+    label: 'Setup',
     icon: Wrench,
     route: '/tactics/setup',
     color: 'text-green-400',
     bgColor: 'bg-green-500/10',
     borderColor: 'border-green-500/30',
+    statKey: 3,
   },
   {
-    number: 4,
-    title: 'Create',
-    subtitle: 'Replay games and spot tactics in context',
+    label: 'Create',
     icon: Lightbulb,
     route: '/tactics/create',
     color: 'text-purple-400',
     bgColor: 'bg-purple-500/10',
     borderColor: 'border-purple-500/30',
+    statKey: 4,
   },
 ];
 
@@ -125,11 +118,11 @@ export function TacticsPage(): JSX.Element {
   const weakestType = tacticalProfile?.weakestTypes[0];
   const weakestLabel = weakestType ? tacticTypeLabel(weakestType) : null;
 
-  const layerStats: Record<number, string | undefined> = {
-    1: tacticalProfile ? `${tacticalProfile.stats.length} types tracked` : undefined,
-    2: drillCount > 0 ? `${drillCount} drills ready` : undefined,
+  const sectionStats: Record<number, string | undefined> = {
+    1: tacticalProfile ? `${tacticalProfile.stats.length} types` : undefined,
+    2: drillCount > 0 ? `${drillCount} ready` : undefined,
     3: setupCount > 0 ? `${setupCount} puzzles` : undefined,
-    4: tacticalProfile ? `Depth: ${createDepth} moves` : undefined,
+    4: tacticalProfile ? `Depth ${createDepth}` : undefined,
   };
 
   return (
@@ -138,134 +131,65 @@ export function TacticsPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="tactics-page"
     >
-      <div className="max-w-lg mx-auto w-full flex flex-col gap-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Target size={24} className="text-orange-400" />
-            <div>
-              <h1 className="text-xl font-bold">Tactical Training</h1>
-              <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                {totalCount > 0
-                  ? `${totalCount} missed tactics from your games`
-                  : '4-layer program built from your games'}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => void loadData()}
-            disabled={loading}
-            className="p-2 rounded-lg hover:opacity-80 disabled:opacity-40"
-            data-testid="tactics-refresh-btn"
-          >
-            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} style={{ color: 'var(--color-text-muted)' }} />
-          </button>
-        </div>
+      <h1 className="text-xl font-bold text-center mt-2">
+        Tactical Training
+      </h1>
 
-        {/* Search */}
+      {/* Search */}
+      <div className="max-w-lg mx-auto w-full">
         <SmartSearchBar placeholder="Search tactics, games, openings..." />
-
-        {/* Quick Stats */}
-        {totalCount > 0 && (
-          <div className="grid grid-cols-3 gap-3" data-testid="stats-row">
-            <StatCard label="Found" value={`${totalCount}`} color="text-orange-400" />
-            <StatCard label="Weakest" value={weakestLabel ?? '—'} color="text-red-400" />
-            <StatCard label="Drills" value={drillCount > 0 ? `${drillCount}` : '—'} color="text-amber-400" />
-          </div>
-        )}
-
-        {/* Layer Cards */}
-        <div className="flex flex-col gap-3">
-          {LAYERS.map((layer) => (
-            <LayerCard
-              key={layer.number}
-              layer={layer}
-              stat={layerStats[layer.number]}
-              onClick={() => void navigate(layer.route)}
-            />
-          ))}
-        </div>
-
-        {/* Summary */}
-        {tacticalProfile && (
-          <div className="text-center text-xs py-2" style={{ color: 'var(--color-text-muted)' }}>
-            {tacticalProfile.totalGamesAnalyzed} games analyzed &middot;{' '}
-            {tacticalProfile.totalGamesMissed} tactical positions found
-            {weakestLabel && (
-              <> &middot; Focus: <span className="text-orange-400">{weakestLabel}</span></>
-            )}
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && totalCount === 0 && (
-          <div
-            className="bg-orange-500/10 border-orange-500/30 border-2 rounded-2xl p-8 text-center"
-            data-testid="tactics-empty"
-          >
-            <Target size={48} className="text-orange-400 mx-auto mb-3" />
-            <h2 className="font-semibold text-lg mb-2">No Tactics Yet</h2>
-            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-              Import and analyze your games to discover missed tactics.
-              Each missed tactic gets classified by motif type — fork, pin,
-              skewer, discovered attack, and more.
-            </p>
-          </div>
-        )}
       </div>
-    </div>
-  );
-}
 
-// ─── Sub-Components ────────────────────────────────────────────────────────
-
-function StatCard({ label, value, color }: {
-  label: string;
-  value: string;
-  color: string;
-}): JSX.Element {
-  return (
-    <div className="bg-orange-500/10 border-orange-500/30 border-2 rounded-2xl p-3 text-center">
-      <div className={`text-lg font-bold truncate ${color}`}>{value}</div>
-      <div className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
-        {label}
+      {/* Grid */}
+      <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">
+        {SECTIONS.map((section, i) => {
+          const Icon = section.icon;
+          const isFirst = i === 0;
+          const stat = sectionStats[section.statKey];
+          return (
+            <button
+              key={section.route}
+              onClick={() => void navigate(section.route)}
+              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity ${isFirst ? 'col-span-2 py-10' : 'aspect-square'}`}
+              data-testid={`layer-${section.statKey}-card`}
+            >
+              <Icon size={isFirst ? 48 : 40} className={section.color} />
+              <span className={`${isFirst ? 'text-lg' : 'text-base'} font-bold ${section.color}`}>
+                {section.label}
+              </span>
+              {stat && (
+                <span className={`text-xs ${section.color} opacity-70`}>
+                  {stat}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
-    </div>
-  );
-}
 
-function LayerCard({ layer, stat, onClick }: {
-  layer: LayerConfig;
-  stat?: string;
-  onClick: () => void;
-}): JSX.Element {
-  const Icon = layer.icon;
-  return (
-    <button
-      onClick={onClick}
-      className={`${layer.bgColor} ${layer.borderColor} border-2 rounded-2xl p-4 text-left w-full hover:opacity-80 transition-opacity`}
-      data-testid={`layer-${layer.number}-card`}
-    >
-      <div className="flex items-center gap-4">
-        <Icon size={28} className={layer.color} />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-base font-bold">{layer.title}</span>
-            <span className={`text-[10px] font-bold uppercase tracking-wide ${layer.color}`}>
-              Layer {layer.number}
-            </span>
-          </div>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
-            {layer.subtitle}
-          </p>
-          {stat && (
-            <span className={`text-xs font-medium mt-1 inline-block ${layer.color}`}>
-              {stat}
-            </span>
+      {/* Summary */}
+      {!loading && totalCount > 0 && (
+        <div className="text-center text-xs max-w-lg mx-auto" style={{ color: 'var(--color-text-muted)' }}>
+          {totalCount} tactics from {tacticalProfile?.totalGamesAnalyzed ?? 0} games
+          {weakestLabel && (
+            <> &middot; Focus: <span className="text-orange-400">{weakestLabel}</span></>
           )}
         </div>
-        <ChevronRight size={16} className={`${layer.color} shrink-0`} />
-      </div>
-    </button>
+      )}
+
+      {/* Empty State */}
+      {!loading && totalCount === 0 && (
+        <div
+          className="bg-orange-500/10 border-orange-500/30 border-2 rounded-2xl p-8 text-center max-w-lg mx-auto w-full"
+          data-testid="tactics-empty"
+        >
+          <Target size={48} className="text-orange-400 mx-auto mb-3" />
+          <h2 className="font-semibold text-lg mb-2">No Tactics Yet</h2>
+          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Import and analyze your games to discover missed tactics.
+          </p>
+        </div>
+      )}
+    </div>
   );
 }
