@@ -3,41 +3,18 @@ import { render, screen, waitFor, fireEvent } from '../../test/utils';
 import { TacticsPage } from './TacticsPage';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import type { UserProfile, TacticMotifStats, ClassifiedTactic } from '../../types';
+import type { UserProfile, TacticalProfile } from '../../types';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-const mockGetTacticMotifStats = vi.fn<() => Promise<TacticMotifStats[]>>();
-const mockGetRecentClassifiedTactics = vi.fn<() => Promise<ClassifiedTactic[]>>();
 const mockGetClassifiedTacticCount = vi.fn<() => Promise<number>>();
 
 vi.mock('../../services/tacticClassifierService', () => ({
-  getTacticMotifStats: (): unknown => mockGetTacticMotifStats(),
-  getRecentClassifiedTactics: (): unknown => mockGetRecentClassifiedTactics(),
   getClassifiedTacticCount: (): unknown => mockGetClassifiedTacticCount(),
   backfillClassifiedTactics: (): Promise<number> => Promise.resolve(0),
-  TACTIC_LABELS: {
-    fork: 'Fork',
-    pin: 'Pin',
-    skewer: 'Skewer',
-    discovered_attack: 'Discovered Attack',
-    back_rank: 'Back Rank',
-    hanging_piece: 'Hanging Piece',
-    promotion: 'Promotion',
-    deflection: 'Deflection',
-    overloaded_piece: 'Overloaded Piece',
-    trapped_piece: 'Trapped Piece',
-    clearance: 'Clearance',
-    interference: 'Interference',
-    zwischenzug: 'Zwischenzug',
-    x_ray: 'X-Ray',
-    double_check: 'Double Check',
-    tactical_sequence: 'Tactical Sequence',
-  },
 }));
 
-
-const mockGetStoredTacticalProfile = vi.fn();
+const mockGetStoredTacticalProfile = vi.fn<() => Promise<TacticalProfile | null>>();
 vi.mock('../../services/tacticalProfileService', () => ({
   getStoredTacticalProfile: (): unknown => mockGetStoredTacticalProfile(),
   tacticTypeLabel: (t: string): string => {
@@ -50,7 +27,6 @@ vi.mock('../../services/tacticalProfileService', () => ({
     };
     return labels[t] ?? t.replace(/_/g, ' ');
   },
-  tacticTypeIcon: (): string => '',
 }));
 
 const mockGetTacticDrillCounts = vi.fn();
@@ -138,8 +114,6 @@ describe('TacticsPage', () => {
     useAppStore.getState().reset();
     vi.clearAllMocks();
 
-    mockGetTacticMotifStats.mockResolvedValue([]);
-    mockGetRecentClassifiedTactics.mockResolvedValue([]);
     mockGetClassifiedTacticCount.mockResolvedValue(0);
     mockGetStoredTacticalProfile.mockResolvedValue(null);
     mockGetTacticDrillCounts.mockResolvedValue(new Map());
@@ -161,35 +135,9 @@ describe('TacticsPage', () => {
     expect(screen.getByText('Tactical Training')).toBeInTheDocument();
   });
 
-  it('shows Profile and Training tabs', async () => {
+  it('shows all 4 layer cards', async () => {
     setProfile();
     render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('tab-profile')).toBeInTheDocument();
-    });
-    expect(screen.getByTestId('tab-training')).toBeInTheDocument();
-  });
-
-  it('defaults to Profile tab', async () => {
-    setProfile();
-    mockGetClassifiedTacticCount.mockResolvedValue(0);
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('tactics-empty')).toBeInTheDocument();
-    });
-  });
-
-  it('switches to Training tab and shows layer cards', async () => {
-    setProfile();
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('tab-training')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('tab-training'));
 
     await waitFor(() => {
       expect(screen.getByTestId('layer-1-card')).toBeInTheDocument();
@@ -205,7 +153,6 @@ describe('TacticsPage', () => {
 
   it('shows empty state when no tactics classified', async () => {
     setProfile();
-    mockGetClassifiedTacticCount.mockResolvedValue(0);
     render(<TacticsPage />);
 
     await waitFor(() => {
@@ -214,159 +161,103 @@ describe('TacticsPage', () => {
     expect(screen.getByText('No Tactics Yet')).toBeInTheDocument();
   });
 
-  it('shows tactic motif breakdown when data exists', async () => {
+  it('shows stats row when tactics exist', async () => {
     setProfile();
     mockGetClassifiedTacticCount.mockResolvedValue(15);
-    mockGetTacticMotifStats.mockResolvedValue([
-      { tacticType: 'fork', missedInGames: 8, puzzleAttempts: 20, puzzleAccuracy: 75, gameAwareness: 50 },
-      { tacticType: 'pin', missedInGames: 5, puzzleAttempts: 10, puzzleAccuracy: 60, gameAwareness: 65 },
-    ]);
+    mockGetStoredTacticalProfile.mockResolvedValue({
+      stats: [{ tacticType: 'fork' }, { tacticType: 'pin' }],
+      weakestTypes: ['fork'],
+      totalGamesAnalyzed: 10,
+      totalGamesMissed: 15,
+    } as unknown as TacticalProfile);
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('motif-breakdown')).toBeInTheDocument();
+      expect(screen.getByTestId('stats-row')).toBeInTheDocument();
     });
+    expect(screen.getByText('15')).toBeInTheDocument();
+    expect(screen.getByText('Found')).toBeInTheDocument();
     expect(screen.getAllByText('Fork').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('Pin')).toBeInTheDocument();
-    expect(screen.getByText('8x missed')).toBeInTheDocument();
-    expect(screen.getByText('5x missed')).toBeInTheDocument();
+    expect(screen.getByText('Weakest')).toBeInTheDocument();
   });
 
-  it('expands motif detail on chevron click', async () => {
+  it('hides stats row when no tactics', async () => {
     setProfile();
-    mockGetClassifiedTacticCount.mockResolvedValue(5);
-    mockGetTacticMotifStats.mockResolvedValue([
-      { tacticType: 'fork', missedInGames: 3, puzzleAttempts: 10, puzzleAccuracy: 80, gameAwareness: 40 },
-    ]);
+    mockGetClassifiedTacticCount.mockResolvedValue(0);
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('motif-toggle-fork')).toBeInTheDocument();
+      expect(screen.getByTestId('tactics-empty')).toBeInTheDocument();
     });
-
-    fireEvent.click(screen.getByTestId('motif-toggle-fork'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('motif-detail-fork')).toBeInTheDocument();
-    });
+    expect(screen.queryByTestId('stats-row')).not.toBeInTheDocument();
   });
 
-  it('collapses motif detail on second chevron click', async () => {
+  it('shows drill count on layer card', async () => {
     setProfile();
-    mockGetClassifiedTacticCount.mockResolvedValue(5);
-    mockGetTacticMotifStats.mockResolvedValue([
-      { tacticType: 'fork', missedInGames: 3, puzzleAttempts: 10, puzzleAccuracy: 80, gameAwareness: 40 },
-    ]);
+    mockGetTacticDrillCounts.mockResolvedValue(new Map([['fork', 5], ['pin', 3]]));
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('motif-toggle-fork')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('motif-toggle-fork'));
-    await waitFor(() => {
-      expect(screen.getByTestId('motif-detail-fork')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('motif-toggle-fork'));
-    await waitFor(() => {
-      expect(screen.queryByTestId('motif-detail-fork')).not.toBeInTheDocument();
+      expect(screen.getByText('8 drills ready')).toBeInTheDocument();
     });
   });
 
-  it('shows recent missed tactics', async () => {
-    setProfile();
-    mockGetClassifiedTacticCount.mockResolvedValue(3);
-    mockGetRecentClassifiedTactics.mockResolvedValue([
-      {
-        id: 'ct-1',
-        sourceGameId: 'g1',
-        moveIndex: 5,
-        fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-        bestMoveUci: 'e2e4',
-        bestMoveSan: 'e4',
-        playerMoveUci: 'h2h3',
-        playerMoveSan: 'h3',
-        playerColor: 'white',
-        tacticType: 'fork',
-        evalSwing: 250,
-        explanation: 'Missed fork with e4 (2.5 pawns lost)',
-        opponentName: 'Magnus',
-        gameDate: '2026-03-15',
-        openingName: null,
-        puzzleAttempts: 0,
-        puzzleSuccesses: 0,
-        createdAt: new Date().toISOString(),
-      },
-    ]);
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('recent-tactics')).toBeInTheDocument();
-    });
-    expect(screen.getByText('Recent Missed Tactics')).toBeInTheDocument();
-    expect(screen.getByText('Fork')).toBeInTheDocument();
-    expect(screen.getByText(/vs Magnus/)).toBeInTheDocument();
-  });
-
-  it('shows summary cards with data', async () => {
-    setProfile();
-    mockGetClassifiedTacticCount.mockResolvedValue(15);
-    mockGetTacticMotifStats.mockResolvedValue([
-      { tacticType: 'fork', missedInGames: 8, puzzleAttempts: 20, puzzleAccuracy: 75, gameAwareness: 50 },
-      { tacticType: 'pin', missedInGames: 5, puzzleAttempts: 10, puzzleAccuracy: 60, gameAwareness: 65 },
-    ]);
-    render(<TacticsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('15')).toBeInTheDocument();
-    });
-    expect(screen.getByText('Tactics Found')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getAllByText('Fork').length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('refresh button is rendered and clickable', async () => {
+  it('refresh button reloads data', async () => {
     setProfile();
     render(<TacticsPage />);
 
     await waitFor(() => {
       expect(screen.getByTestId('tactics-refresh-btn')).toBeInTheDocument();
     });
-
-    expect(mockGetTacticMotifStats).toHaveBeenCalled();
+    expect(mockGetClassifiedTacticCount).toHaveBeenCalledTimes(1);
 
     fireEvent.click(screen.getByTestId('tactics-refresh-btn'));
 
     await waitFor(() => {
-      expect(mockGetTacticMotifStats.mock.calls.length).toBeGreaterThanOrEqual(2);
+      expect(mockGetClassifiedTacticCount).toHaveBeenCalledTimes(2);
     });
   });
 
-  it('shows description text when tactics exist', async () => {
+  it('shows subtitle with tactic count', async () => {
     setProfile();
     mockGetClassifiedTacticCount.mockResolvedValue(10);
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('10 missed tactics classified from your games')).toBeInTheDocument();
+      expect(screen.getByText('10 missed tactics from your games')).toBeInTheDocument();
     });
   });
 
-  it('shows drill count on training tab', async () => {
+  it('shows summary when profile exists', async () => {
     setProfile();
-    const counts = new Map([['fork', 5], ['pin', 3]]);
-    mockGetTacticDrillCounts.mockResolvedValue(counts);
+    mockGetClassifiedTacticCount.mockResolvedValue(5);
+    mockGetStoredTacticalProfile.mockResolvedValue({
+      stats: [{ tacticType: 'fork' }],
+      weakestTypes: ['fork'],
+      totalGamesAnalyzed: 8,
+      totalGamesMissed: 5,
+    } as unknown as TacticalProfile);
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('tab-training')).toBeInTheDocument();
+      expect(screen.getByText(/8 games analyzed/)).toBeInTheDocument();
     });
+    expect(screen.getByText(/5 tactical positions found/)).toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByTestId('tab-training'));
+  it('shows context depth on Create layer card', async () => {
+    setProfile();
+    mockGetContextDepth.mockResolvedValue(12);
+    mockGetStoredTacticalProfile.mockResolvedValue({
+      stats: [{ tacticType: 'fork' }],
+      weakestTypes: ['fork'],
+      totalGamesAnalyzed: 5,
+      totalGamesMissed: 3,
+    } as unknown as TacticalProfile);
+    render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('8 tactic drills available')).toBeInTheDocument();
+      expect(screen.getByText('Depth: 12 moves')).toBeInTheDocument();
     });
   });
 });
