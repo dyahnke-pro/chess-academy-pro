@@ -202,6 +202,18 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
     movesRef.current = parseUciMoves(puzzle.moves);
+    if (movesRef.current.length === 0) {
+      // No moves in puzzle — skip it
+      onComplete(false);
+      return;
+    }
+
+    const fenTurn = puzzle.fen.split(' ')[1];
+    const expectedColor = fenTurn === 'w' ? 'white' : 'black';
+    if (expectedColor !== puzzle.playerColor) {
+      console.warn(`Puzzle ${puzzle.id}: FEN turn (${fenTurn}) doesn't match playerColor (${puzzle.playerColor})`);
+    }
+
     playerMoveCountRef.current = 0;
     setMoveIndex(0);
     setMoveCount(0);
@@ -465,7 +477,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     if (moveIndex >= allMoves.length) return;
     const expected = allMoves[moveIndex];
 
-    const isCorrect = move.from === expected.from && move.to === expected.to;
+    const isCorrect = move.from === expected.from && move.to === expected.to && (!expected.promotion || move.promotion === expected.promotion);
 
     if (isCorrect) {
       playMoveSound(move.san);
@@ -531,10 +543,15 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
             setLastMoveHighlight({ from: opponentMove.from, to: opponentMove.to });
             setFen(newFen);
             setBoardKey((k) => k + 1);
+            setMoveIndex(nextIndex + 1);
           } catch {
-            // skip invalid opponent move
+            // Invalid opponent move — puzzle data is corrupted, fail gracefully
+            setState('incorrect');
+            completionTimerRef.current = setTimeout(() => {
+              onComplete(false);
+            }, 1200);
+            return;
           }
-          setMoveIndex(nextIndex + 1);
         }, 500);
       }
     } else {

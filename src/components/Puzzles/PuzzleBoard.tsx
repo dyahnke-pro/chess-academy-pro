@@ -219,7 +219,7 @@ export function PuzzleBoard({
     if (moveIndex >= allMoves.length) return;
     const expected = allMoves[moveIndex];
 
-    const isCorrect = move.from === expected.from && move.to === expected.to;
+    const isCorrect = move.from === expected.from && move.to === expected.to && (!expected.promotion || move.promotion === expected.promotion);
 
     if (isCorrect) {
       playMoveSound(move.san);

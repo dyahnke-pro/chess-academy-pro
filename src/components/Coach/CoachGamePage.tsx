@@ -114,13 +114,13 @@ function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
   });
 }
 
-function movesToAnnotations(moves: CoachGameMove[]): MoveAnnotation[] {
+function movesToAnnotations(moves: CoachGameMove[], playerColor: 'white' | 'black'): MoveAnnotation[] {
   return moves
     .filter((m): m is CoachGameMove & { classification: MoveClassification } =>
       !m.isCoachMove && m.classification !== null)
     .map((m) => ({
-      moveNumber: m.moveNumber,
-      color: m.moveNumber % 2 === 1 ? 'white' : 'black',
+      moveNumber: Math.ceil(m.moveNumber / 2),
+      color: playerColor,
       san: m.san,
       evaluation: m.evaluation,
       bestMove: m.bestMove,
@@ -542,7 +542,7 @@ export function CoachGamePage(): JSX.Element {
         : (playerWon ? '0-1' : playerLost ? '1-0' : '1/2-1/2');
       const tags: string[] = [difficulty === 'hard' ? 'Hard' : '', gameState.hintsUsed === 0 ? 'NoHints' : ''].filter(Boolean);
 
-      const annotations = movesToAnnotations(gameState.moves);
+      const annotations = movesToAnnotations(gameState.moves, playerColor);
       const summary = buildAnalysisSummary(gameState.moves, keyMoments, playerColor, result);
 
       const playerName = activeProfile?.name ?? 'Player';
