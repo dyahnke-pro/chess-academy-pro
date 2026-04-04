@@ -594,8 +594,15 @@ export function TacticCreatePage(): JSX.Element {
               </>
             ) : (
               <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
-                No games with tactical positions available. Import and analyze more games to unlock Create mode.
+                Import games to review your in-game mistakes and unlock Create mode.
               </p>
+              <button
+                onClick={() => void navigate('/games/import')}
+                className="mt-4 px-5 py-2.5 rounded-xl font-semibold text-sm"
+                style={{ background: '#a78bfa', color: 'var(--color-bg)' }}
+              >
+                Import Games
+              </button>
             )}
           </div>
           <div className="flex gap-3">

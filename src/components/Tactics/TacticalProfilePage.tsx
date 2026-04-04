@@ -109,10 +109,17 @@ export function TacticalProfilePage(): JSX.Element {
           <Eye size={24} style={{ color: 'var(--color-accent)' }} />
           <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Tactical Profile</h1>
         </div>
-        <div className="rounded-xl border p-6 text-center" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
+        <div className="rounded-xl border p-6 text-center flex flex-col items-center gap-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            No tactical data yet. Import and analyze some games to build your profile.
+            Import games to review your in-game mistakes and build your tactical profile.
           </p>
+          <button
+            onClick={() => void navigate('/games/import')}
+            className="px-5 py-2.5 rounded-xl font-semibold text-sm"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          >
+            Import Games
+          </button>
         </div>
       </div>
     );

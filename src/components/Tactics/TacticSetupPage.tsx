@@ -177,8 +177,15 @@ export function TacticSetupPage(): JSX.Element {
               </p>
             ) : (
               <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
-                No setup puzzles available at this difficulty. Try analyzing more games or reducing the difficulty.
+                Import games to review your in-game mistakes and unlock setup training.
               </p>
+              <button
+                onClick={() => void navigate('/games/import')}
+                className="mt-4 px-5 py-2.5 rounded-xl font-semibold text-sm"
+                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+              >
+                Import Games
+              </button>
             )}
           </div>
           <div className="flex gap-3">

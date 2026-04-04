@@ -313,12 +313,18 @@ export function MyMistakesPage(): JSX.Element {
 
       {/* Empty state */}
       {puzzles.length === 0 && (
-        <div className="text-center py-12 text-theme-text-muted" data-testid="empty-state">
-          <AlertTriangle size={48} className="mx-auto mb-4 opacity-30" />
+        <div className="text-center py-12 text-theme-text-muted flex flex-col items-center gap-4" data-testid="empty-state">
+          <AlertTriangle size={48} className="mx-auto opacity-30" />
           <p className="text-lg font-medium">No mistakes yet</p>
-          <p className="text-sm mt-1">
-            Play games in Coach mode or import from Lichess/Chess.com to generate mistake puzzles.
+          <p className="text-sm">
+            Import games to review your in-game mistakes and generate practice puzzles.
           </p>
+          <button
+            onClick={() => void navigate('/games/import')}
+            className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-red-500 text-white hover:opacity-90 transition-opacity"
+          >
+            Import Games
+          </button>
         </div>
       )}
 
