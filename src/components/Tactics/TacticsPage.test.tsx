@@ -7,10 +7,6 @@ import type { UserProfile } from '../../types';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('../../services/tacticClassifierService', () => ({
-  backfillClassifiedTactics: (): Promise<number> => Promise.resolve(0),
-}));
-
 vi.mock('../../services/themeService', async () => {
   const actual = await vi.importActual<typeof import('../../services/themeService')>('../../services/themeService');
   return { ...actual, applyTheme: vi.fn() };
@@ -102,35 +98,31 @@ describe('TacticsPage', () => {
     expect(screen.getByText('Tactical Training')).toBeInTheDocument();
   });
 
-  it('shows all 6 section buttons', async () => {
+  it('shows My Profile and My Mistakes sections', async () => {
     setProfile();
     render(<TacticsPage />);
 
     await waitFor(() => {
       expect(screen.getByTestId('section-spot')).toBeInTheDocument();
     });
-    expect(screen.getByTestId('section-drill')).toBeInTheDocument();
-    expect(screen.getByTestId('section-setup')).toBeInTheDocument();
-    expect(screen.getByTestId('section-create')).toBeInTheDocument();
     expect(screen.getByTestId('section-my mistakes')).toBeInTheDocument();
-    expect(screen.getByTestId('section-weaknesses')).toBeInTheDocument();
+    expect(screen.getByText('My Profile')).toBeInTheDocument();
+    expect(screen.getByText('My Mistakes')).toBeInTheDocument();
   });
 
-  it('displays section labels', async () => {
+  it('shows tactic theme categories', async () => {
     setProfile();
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Spot')).toBeInTheDocument();
+      expect(screen.getByText('Forks')).toBeInTheDocument();
     });
-    expect(screen.getByText('Drill')).toBeInTheDocument();
-    expect(screen.getByText('Setup')).toBeInTheDocument();
-    expect(screen.getByText('Create')).toBeInTheDocument();
-    expect(screen.getByText('My Mistakes')).toBeInTheDocument();
-    expect(screen.getByText('Weaknesses')).toBeInTheDocument();
+    expect(screen.getByText('Pins & Skewers')).toBeInTheDocument();
+    expect(screen.getByText('Back Rank Mates')).toBeInTheDocument();
+    expect(screen.getByText('Mating Nets')).toBeInTheDocument();
   });
 
-  it('first section spans full width', async () => {
+  it('My Profile spans full width', async () => {
     setProfile();
     render(<TacticsPage />);
 
@@ -140,17 +132,13 @@ describe('TacticsPage', () => {
     expect(screen.getByTestId('section-spot').className).toContain('col-span-2');
   });
 
-  it('remaining sections are square', async () => {
+  it('theme cards are square', async () => {
     setProfile();
     render(<TacticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('section-drill')).toBeInTheDocument();
+      expect(screen.getByTestId('section-forks')).toBeInTheDocument();
     });
-    expect(screen.getByTestId('section-drill').className).toContain('aspect-square');
-    expect(screen.getByTestId('section-setup').className).toContain('aspect-square');
-    expect(screen.getByTestId('section-create').className).toContain('aspect-square');
-    expect(screen.getByTestId('section-my mistakes').className).toContain('aspect-square');
-    expect(screen.getByTestId('section-weaknesses').className).toContain('aspect-square');
+    expect(screen.getByTestId('section-forks').className).toContain('aspect-square');
   });
 });
