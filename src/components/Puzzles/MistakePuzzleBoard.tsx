@@ -5,7 +5,6 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
-import { describePositionIdea } from '../../services/mistakeNarration';
 import { getCoachCommentary } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
@@ -14,7 +13,8 @@ import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Pl
 import { HintButton } from '../Coach/HintButton';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
-import { recordTacticOutcome } from '../../services/tacticAlertService';
+import { getCoachingMessage, recordTacticOutcome } from '../../services/tacticAlertService';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
@@ -393,15 +393,17 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     voiceService.stop();
 
     if (state === 'playing') {
-      // Spoiler-free hint during play
+      // Spoiler-free hint during play — tactic-specific teaching, not generic position description
       const hint = puzzle.narration.conceptHint;
       if (hint) {
         setSubtitle(hint);
         void voiceService.speak(hint);
       } else {
-        const explanation = describePositionIdea(puzzle.fen, puzzle.bestMoveSan, puzzle.gamePhase);
-        setSubtitle(explanation);
-        void voiceService.speak(explanation);
+        const rating = activeProfile?.currentRating ?? 1200;
+        const coaching = getCoachingMessage(tacticType, 'teach', rating);
+        const message = coaching ?? 'Take your time. Look for checks, captures, and threats.';
+        setSubtitle(message);
+        void voiceService.speak(message);
       }
       return;
     }
@@ -411,46 +413,50 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setSubtitle('Analyzing why this was the best move...');
 
     const rating = activeProfile?.currentRating ?? 1200;
-    void getCoachCommentary('puzzle_feedback', {
-      fen: puzzle.fen,
-      lastMoveSan: puzzle.bestMoveSan,
-      moveNumber: puzzle.moveNumber,
-      pgn: '',
-      openingName: puzzle.openingName,
-      stockfishAnalysis: null,
-      playerMove: puzzle.playerMoveSan,
-      moveClassification: null,
-      playerProfile: {
-        rating,
-        weaknesses: [],
-      },
-      additionalContext: [
-        `The student just solved a tactic puzzle from one of their own games.`,
-        `Position before: FEN ${puzzle.fen}`,
-        `Their original (wrong) move was: ${puzzle.playerMoveSan} (${puzzle.classification}, lost ${puzzle.cpLoss} centipawns)`,
-        `The best move was: ${puzzle.bestMoveSan}`,
-        `Solution line (UCI): ${puzzle.moves}`,
-        `Game phase: ${puzzle.gamePhase}`,
-        puzzle.opponentName ? `Opponent: ${puzzle.opponentName}` : '',
-        puzzle.openingName ? `Opening: ${puzzle.openingName}` : '',
-        ``,
-        `Give a thorough explanation (3-5 sentences) of WHY ${puzzle.bestMoveSan} is the best move.`,
-        `Explain what it accomplishes tactically/strategically, why their original move ${puzzle.playerMoveSan} was worse,`,
-        `and what principle or pattern they should remember for next time.`,
-        `Be specific about the position — reference pieces, squares, and threats.`,
-      ].filter(Boolean).join('\n'),
+    // Fetch Stockfish analysis so the LLM has concrete eval data to work with
+    void stockfishEngine.analyzePosition(puzzle.fen, 16).then((analysis) => {
+      return getCoachCommentary('puzzle_feedback', {
+        fen: puzzle.fen,
+        lastMoveSan: puzzle.bestMoveSan,
+        moveNumber: puzzle.moveNumber,
+        pgn: '',
+        openingName: puzzle.openingName,
+        stockfishAnalysis: analysis,
+        playerMove: puzzle.playerMoveSan,
+        moveClassification: null,
+        playerProfile: {
+          rating,
+          weaknesses: [],
+        },
+        additionalContext: [
+          `The student just solved a tactic puzzle from one of their own games.`,
+          `Position before: FEN ${puzzle.fen}`,
+          `Their original (wrong) move was: ${puzzle.playerMoveSan} (${puzzle.classification}, lost ${puzzle.cpLoss} centipawns)`,
+          `The best move was: ${puzzle.bestMoveSan}`,
+          `Solution line (UCI): ${puzzle.moves}`,
+          `Game phase: ${puzzle.gamePhase}`,
+          puzzle.opponentName ? `Opponent: ${puzzle.opponentName}` : '',
+          puzzle.openingName ? `Opening: ${puzzle.openingName}` : '',
+          ``,
+          `Give a thorough explanation (3-5 sentences) of WHY ${puzzle.bestMoveSan} is the best move.`,
+          `Explain what it accomplishes tactically/strategically, why their original move ${puzzle.playerMoveSan} was worse,`,
+          `and what principle or pattern they should remember for next time.`,
+          `Be specific about the position — reference pieces, squares, and threats.`,
+        ].filter(Boolean).join('\n'),
+      });
     }).then((response) => {
       setWhyLoading(false);
       setSubtitle(response);
       void voiceService.speak(response);
     }).catch(() => {
       setWhyLoading(false);
-      // Fallback to local explanation
-      const explanation = describePositionIdea(puzzle.fen, puzzle.bestMoveSan, puzzle.gamePhase);
-      setSubtitle(explanation);
-      void voiceService.speak(explanation);
+      // Fallback to tactic-specific coaching
+      const coaching = getCoachingMessage(tacticType, 'guide', rating);
+      const fallback = coaching ?? 'The best move exploits a tactical pattern in this position.';
+      setSubtitle(fallback);
+      void voiceService.speak(fallback);
     });
-  }, [state, puzzle, activeProfile?.currentRating]);
+  }, [state, puzzle, activeProfile?.currentRating, tacticType]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;

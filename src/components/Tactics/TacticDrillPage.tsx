@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Swords, Play, SkipForward, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Swords, Play, SkipForward, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { buildTacticDrillQueue } from '../../services/tacticDrillService';
@@ -311,6 +311,26 @@ export function TacticDrillPage(): JSX.Element {
     }
   }, [currentIndex, queue]);
 
+  const handlePrev = useCallback(async (): Promise<void> => {
+    if (currentIndex <= 0) return;
+    setWaitingForNext(false);
+    voiceService.stop();
+    const prevIndex = currentIndex - 1;
+    setCurrentIndex(prevIndex);
+    await prepareContext(queue[prevIndex]);
+  }, [currentIndex, queue]);
+
+  const handleSkip = useCallback(async (): Promise<void> => {
+    voiceService.stop();
+    const nextIndex = currentIndex + 1;
+    if (nextIndex >= queue.length) {
+      setPhase('summary');
+    } else {
+      setCurrentIndex(nextIndex);
+      await prepareContext(queue[nextIndex]);
+    }
+  }, [currentIndex, queue]);
+
   const currentItem = queue.at(currentIndex);
   const total = solved + failed;
 
@@ -505,9 +525,20 @@ export function TacticDrillPage(): JSX.Element {
               skipReplayContext
             />
 
-            {/* Next button — shown after puzzle is completed */}
-            {waitingForNext && (
-              <div className="flex justify-center">
+            {/* Navigation buttons */}
+            <div className="flex justify-center gap-3">
+              {currentIndex > 0 && (
+                <button
+                  onClick={() => void handlePrev()}
+                  className="px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-1.5 border"
+                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                  data-testid="prev-puzzle-btn"
+                >
+                  <ChevronLeft size={16} />
+                  Prev
+                </button>
+              )}
+              {waitingForNext ? (
                 <button
                   onClick={() => void handleNext()}
                   className="px-8 py-3 rounded-xl font-semibold text-sm flex items-center gap-2"
@@ -517,8 +548,18 @@ export function TacticDrillPage(): JSX.Element {
                   Next
                   <ChevronRight size={16} />
                 </button>
-              </div>
-            )}
+              ) : (
+                <button
+                  onClick={() => void handleSkip()}
+                  className="px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-1.5 border"
+                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
+                  data-testid="skip-puzzle-btn"
+                >
+                  Skip
+                  <SkipForward size={14} />
+                </button>
+              )}
+            </div>
 
             {/* Session stats */}
             <div className="flex justify-center gap-6 text-sm" style={{ color: 'var(--color-text-muted)' }}>
