@@ -4,6 +4,17 @@ import { getMistakePuzzlesDue } from './mistakePuzzleService';
 import puzzleData from '../data/puzzles.json';
 import type { PuzzleRecord, SrsGrade, CoachDifficulty, MistakePuzzle } from '../types';
 
+// ─── Shuffle Utility ───────────────────────────────────────────────────────
+
+/** Fisher-Yates shuffle — mutates the array in place and returns it. */
+function shuffle<T>(arr: T[]): T[] {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 // ─── Theme Mapping ──────────────────────────────────────────────────────────
 
 export const TACTICAL_THEMES = [
@@ -197,11 +208,11 @@ export async function getPuzzlesInRatingBand(
 ): Promise<PuzzleRecord[]> {
   const min = userRating - bandWidth;
   const max = userRating + bandWidth;
-  return db.puzzles
+  const candidates = await db.puzzles
     .where('rating')
     .between(min, max)
-    .limit(limit)
     .toArray();
+  return shuffle(candidates).slice(0, limit);
 }
 
 /**
@@ -209,11 +220,11 @@ export async function getPuzzlesInRatingBand(
  */
 export async function getDuePuzzles(limit: number = 20): Promise<PuzzleRecord[]> {
   const today = new Date().toISOString().split('T')[0];
-  return db.puzzles
+  const candidates = await db.puzzles
     .where('srsDueDate')
     .belowOrEqual(today)
-    .limit(limit)
     .toArray();
+  return shuffle(candidates).slice(0, limit);
 }
 
 /**
@@ -421,20 +432,20 @@ export async function getPuzzlesForMode(
   if (mode === 'daily_challenge') {
     // One puzzle per day — use today's date as seed for consistent selection
     const today = new Date().toISOString().split('T')[0];
-    const all = await db.puzzles.toArray();
+    const all = await db.puzzles.orderBy('id').toArray();
     if (all.length === 0) return [];
-    // Simple hash-based selection for daily consistency
-    const hash = today.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    // Stable hash: use character codes × position to avoid collisions
+    const hash = today.split('').reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 1), 0);
     const idx = hash % all.length;
     return [all[idx]];
   }
 
   if (config.puzzleFilter) {
     const all = await db.puzzles.filter(config.puzzleFilter).toArray();
-    // Sort by closeness to user rating
-    return all
-      .sort((a, b) => Math.abs(a.rating - userRating) - Math.abs(b.rating - userRating))
-      .slice(0, limit);
+    // Shuffle within a reasonable rating band for variety, then trim
+    const band = all.filter((p) => Math.abs(p.rating - userRating) <= 300);
+    const pool = band.length >= limit ? band : all;
+    return shuffle(pool).slice(0, limit);
   }
 
   return getDailyPuzzles(userRating, limit);
