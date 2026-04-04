@@ -14,6 +14,7 @@ export const BOARD_COLORS: BoardColorScheme[] = [
   { id: 'wood', name: 'Wood', lightSquare: '#e8c99b', darkSquare: '#a87642' },
   { id: 'ice', name: 'Ice', lightSquare: '#e0f0ff', darkSquare: '#7ca9c4' },
   { id: 'coral', name: 'Coral', lightSquare: '#fff0f0', darkSquare: '#d88c9a' },
+  { id: 'neon', name: 'Neon', lightSquare: '#1a1a2e', darkSquare: '#0f3460' },
 ];
 
 export const DEFAULT_BOARD_COLOR = 'classic';
