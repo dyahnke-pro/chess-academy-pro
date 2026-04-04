@@ -17,6 +17,7 @@ import {
 import { getStoredTacticalProfile, tacticTypeLabel } from '../../services/tacticalProfileService';
 import { getTacticDrillCounts } from '../../services/tacticDrillService';
 import { getContextDepth } from '../../services/tacticCreateService';
+import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { db } from '../../db/schema';
 import type { TacticalProfile } from '../../types';
 
@@ -160,6 +161,9 @@ export function TacticsPage(): JSX.Element {
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} style={{ color: 'var(--color-text-muted)' }} />
           </button>
         </div>
+
+        {/* Search */}
+        <SmartSearchBar placeholder="Search tactics, games, openings..." />
 
         {/* Quick Stats */}
         {totalCount > 0 && (
