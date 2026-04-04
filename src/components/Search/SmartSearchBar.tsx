@@ -1,6 +1,6 @@
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2 } from 'lucide-react';
+import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Settings, Loader2 } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
 
@@ -15,6 +15,7 @@ const CATEGORY_ICONS: Record<SmartSearchCategory, typeof BookOpen> = {
   game: Swords,
   mistake: Target,
   puzzle: Puzzle,
+  setting: Settings,
 };
 
 const CATEGORY_LABELS: Record<SmartSearchCategory, string> = {
@@ -22,6 +23,7 @@ const CATEGORY_LABELS: Record<SmartSearchCategory, string> = {
   game: 'Game',
   mistake: 'Mistake',
   puzzle: 'Puzzle',
+  setting: 'Setting',
 };
 
 export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSearchBarProps): JSX.Element {

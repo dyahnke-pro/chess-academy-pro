@@ -1319,7 +1319,7 @@ export interface ColorWarsLevel {
 
 // ─── Smart Search ────────────────────────────────────────────────────────────
 
-export type SmartSearchCategory = 'opening' | 'game' | 'mistake' | 'puzzle';
+export type SmartSearchCategory = 'opening' | 'game' | 'mistake' | 'puzzle' | 'setting';
 
 export interface SmartSearchResult {
   category: SmartSearchCategory;
@@ -1330,7 +1330,7 @@ export interface SmartSearchResult {
 }
 
 export interface SearchIntent {
-  table: 'openings' | 'games' | 'mistakePuzzles' | 'puzzles';
+  table: 'openings' | 'games' | 'mistakePuzzles' | 'puzzles' | 'settings';
   filters: SearchFilter[];
   sortBy?: string;
   sortDirection?: 'asc' | 'desc';

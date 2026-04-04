@@ -15,11 +15,113 @@ import type {
 
 const MAX_RESULTS = 12;
 
-const SEARCH_SYSTEM_PROMPT = `You are a search intent parser for a chess training app. The user types a natural language query about their chess data.
+// ─── Settings Search Index ───────────────────────────────────────────────
+
+interface SettingsEntry {
+  id: string;
+  title: string;
+  subtitle: string;
+  keywords: string[];
+  tab: string;
+  section: string;
+}
+
+const SETTINGS_INDEX: SettingsEntry[] = [
+  // Profile tab
+  { id: 'profile-name', title: 'Display Name', subtitle: 'Profile — change your player name', keywords: ['name', 'display name', 'player name', 'username'], tab: 'profile', section: 'profile' },
+  { id: 'profile-elo', title: 'ELO Rating', subtitle: 'Profile — set your current chess rating', keywords: ['elo', 'rating', 'rank', 'level'], tab: 'profile', section: 'profile' },
+  { id: 'profile-session', title: 'Daily Session Duration', subtitle: 'Profile — how long to train each day', keywords: ['session', 'daily', 'duration', 'minutes', 'time', 'training time'], tab: 'profile', section: 'profile' },
+  { id: 'profile-export', title: 'Export Data', subtitle: 'Profile — download your data as JSON', keywords: ['export', 'backup', 'download', 'data'], tab: 'profile', section: 'profile' },
+  { id: 'profile-sync', title: 'Cloud Sync', subtitle: 'Profile — Supabase cloud sync settings', keywords: ['sync', 'cloud', 'supabase', 'backup'], tab: 'profile', section: 'sync' },
+  { id: 'profile-lichess', title: 'Lichess Integration', subtitle: 'Profile — Lichess API token for puzzle dashboard', keywords: ['lichess', 'token', 'integration', 'api', 'puzzle dashboard'], tab: 'profile', section: 'lichess' },
+
+  // Board tab — Display
+  { id: 'board-highlight', title: 'Highlight Last Move', subtitle: 'Board — show highlight on last move squares', keywords: ['highlight', 'last move', 'move highlight', 'yellow highlight'], tab: 'board', section: 'board-display' },
+  { id: 'board-legal', title: 'Show Legal Moves', subtitle: 'Board — show dots on valid squares', keywords: ['legal moves', 'valid moves', 'move dots', 'show moves'], tab: 'board', section: 'board-display' },
+  { id: 'board-coords', title: 'Show Coordinates', subtitle: 'Board — display rank/file labels', keywords: ['coordinates', 'rank', 'file', 'labels', 'a-h', '1-8', 'numbers', 'letters'], tab: 'board', section: 'board-display' },
+  { id: 'board-animation', title: 'Piece Animation Speed', subtitle: 'Board — speed of piece movement', keywords: ['animation', 'speed', 'piece movement', 'move speed', 'fast', 'slow'], tab: 'board', section: 'board-display' },
+  { id: 'board-orientation', title: 'White on Bottom', subtitle: 'Board — board orientation', keywords: ['orientation', 'white on bottom', 'flip board', 'board direction', 'rotate'], tab: 'board', section: 'board-display' },
+
+  // Board tab — Appearance
+  { id: 'board-color', title: 'Board Color', subtitle: 'Board — color scheme for squares', keywords: ['board color', 'board theme', 'square color', 'color scheme', 'classic', 'tournament', 'green', 'blue', 'purple', 'wood', 'ice', 'coral', 'change color', 'board colour'], tab: 'board', section: 'board-appearance' },
+  { id: 'board-pieces', title: 'Piece Set', subtitle: 'Board — visual style of chess pieces', keywords: ['piece set', 'pieces', 'piece style', 'staunton', 'neo', 'alpha', 'merida', 'california', 'pixel', 'horsey', 'piece theme'], tab: 'board', section: 'board-appearance' },
+
+  // Board tab — Audio
+  { id: 'board-sound', title: 'Sound Effects', subtitle: 'Board — sounds on moves, captures, and checks', keywords: ['sound', 'audio', 'effects', 'mute', 'volume', 'sounds'], tab: 'board', section: 'audio' },
+
+  // Board tab — Engine
+  { id: 'board-eval', title: 'Eval Bar', subtitle: 'Board — Stockfish evaluation bar', keywords: ['eval bar', 'evaluation', 'stockfish', 'engine bar', 'analysis bar'], tab: 'board', section: 'engine' },
+  { id: 'board-lines', title: 'Engine Lines', subtitle: 'Board — computer analysis lines', keywords: ['engine lines', 'analysis lines', 'computer lines', 'variations'], tab: 'board', section: 'engine' },
+
+  // Board tab — Feedback & Coaching
+  { id: 'board-flash', title: 'Move Quality Flash', subtitle: 'Board — flash border based on move quality', keywords: ['move quality', 'flash', 'quality flash', 'green red', 'move feedback'], tab: 'board', section: 'feedback' },
+  { id: 'board-hints', title: 'Show Hints', subtitle: 'Board — allow hint button during play', keywords: ['hints', 'hint button', 'help', 'show hints', 'assistance'], tab: 'board', section: 'feedback' },
+  { id: 'board-voice', title: 'Voice Narration', subtitle: 'Board — spoken coach commentary', keywords: ['voice', 'narration', 'speech', 'spoken', 'commentary', 'talk', 'speak'], tab: 'board', section: 'feedback' },
+
+  // Board tab — Game Behavior
+  { id: 'board-move-method', title: 'Move Method', subtitle: 'Board — drag, click, or both', keywords: ['move method', 'drag', 'click', 'drag and drop', 'how to move'], tab: 'board', section: 'game-behavior' },
+  { id: 'board-confirm', title: 'Move Confirmation', subtitle: 'Board — require confirmation before each move', keywords: ['confirmation', 'confirm move', 'move confirmation', 'confirm'], tab: 'board', section: 'game-behavior' },
+  { id: 'board-promote', title: 'Auto-Promote to Queen', subtitle: 'Board — auto promote pawns to queen', keywords: ['promote', 'queen', 'auto promote', 'pawn promotion', 'promotion'], tab: 'board', section: 'game-behavior' },
+  { id: 'board-master-off', title: 'Master All Off', subtitle: 'Board — disable all feedback features at once', keywords: ['master', 'all off', 'disable all', 'turn off everything', 'minimal'], tab: 'board', section: 'master-off' },
+
+  // Coach tab
+  { id: 'coach-provider', title: 'AI Provider', subtitle: 'Coach — DeepSeek or Anthropic', keywords: ['provider', 'ai provider', 'deepseek', 'anthropic', 'claude', 'ai', 'llm'], tab: 'coach', section: 'coach' },
+  { id: 'coach-api-key', title: 'API Key', subtitle: 'Coach — set your AI provider API key', keywords: ['api key', 'key', 'secret key', 'authentication', 'api'], tab: 'coach', section: 'coach' },
+  { id: 'coach-budget', title: 'Monthly Budget Cap', subtitle: 'Coach — spending limit for AI usage', keywords: ['budget', 'spending', 'cost', 'money', 'limit', 'monthly', 'cap'], tab: 'coach', section: 'coach' },
+  { id: 'coach-commentary-model', title: 'Commentary Model', subtitle: 'Coach — AI model for narration', keywords: ['commentary model', 'narration model', 'model', 'haiku', 'sonnet', 'opus'], tab: 'coach', section: 'coach' },
+  { id: 'coach-analysis-model', title: 'Analysis Model', subtitle: 'Coach — AI model for game analysis', keywords: ['analysis model', 'model', 'analysis', 'haiku', 'sonnet', 'opus'], tab: 'coach', section: 'coach' },
+  { id: 'coach-reports-model', title: 'Reports Model', subtitle: 'Coach — AI model for report generation', keywords: ['reports model', 'report model', 'model', 'reports'], tab: 'coach', section: 'coach' },
+  { id: 'coach-voice', title: 'Voice Settings', subtitle: 'Coach — speech voice and speed preferences', keywords: ['voice settings', 'speech', 'voice', 'tts', 'text to speech', 'voice speed'], tab: 'coach', section: 'voice-settings' },
+
+  // Appearance tab
+  { id: 'appearance-theme', title: 'App Theme', subtitle: 'Appearance — light, dark, or custom theme', keywords: ['theme', 'dark mode', 'light mode', 'appearance', 'dark', 'light', 'color theme', 'app color', 'app theme'], tab: 'appearance', section: 'appearance' },
+
+  // About tab
+  { id: 'about-version', title: 'App Version', subtitle: 'About — current app version info', keywords: ['version', 'about', 'app info'], tab: 'about', section: 'about' },
+  { id: 'about-reset', title: 'Reset All Data', subtitle: 'About — delete all data and start fresh', keywords: ['reset', 'delete data', 'clear data', 'start over', 'factory reset', 'wipe'], tab: 'about', section: 'about' },
+];
+
+function searchSettings(query: string): SmartSearchResult[] {
+  const lower = query.toLowerCase().trim();
+  if (!lower) return [];
+  const words = lower.split(/\s+/).filter(Boolean);
+
+  const scored = SETTINGS_INDEX.map((entry) => {
+    let score = 0;
+    // Check title match
+    if (entry.title.toLowerCase().includes(lower)) score += 10;
+    // Check keyword matches
+    for (const kw of entry.keywords) {
+      if (kw.includes(lower)) score += 8;
+      for (const word of words) {
+        if (kw.includes(word)) score += 3;
+      }
+    }
+    // Check subtitle
+    if (entry.subtitle.toLowerCase().includes(lower)) score += 4;
+    for (const word of words) {
+      if (entry.subtitle.toLowerCase().includes(word)) score += 1;
+    }
+    return { entry, score };
+  })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6);
+
+  return scored.map(({ entry }) => ({
+    category: 'setting' as SmartSearchCategory,
+    id: entry.id,
+    title: entry.title,
+    subtitle: entry.subtitle,
+    route: `/settings?tab=${entry.tab}&section=${entry.section}`,
+  }));
+}
+
+const SEARCH_SYSTEM_PROMPT = `You are a search intent parser for a chess training app. The user types a natural language query about their chess data or app settings.
 
 Parse the query into a JSON object with this exact schema:
 {
-  "table": "openings" | "games" | "mistakePuzzles" | "puzzles",
+  "table": "openings" | "games" | "mistakePuzzles" | "puzzles" | "settings",
   "filters": [{ "field": "fieldName", "op": "eq"|"contains"|"gt"|"lt"|"gte"|"lte", "value": "..." }],
   "sortBy": "fieldName" (optional),
   "sortDirection": "asc" | "desc" (optional),
@@ -31,9 +133,12 @@ Available tables and fields:
 - games: white (string), black (string), result ("1-0"|"0-1"|"1/2-1/2"), date (string), eco (string), source ("lichess"|"chesscom"|"coach"|"import"), isMasterGame (boolean)
 - mistakePuzzles: classification ("inaccuracy"|"mistake"|"blunder"|"miss"), gamePhase ("opening"|"middlegame"|"endgame"), openingName (string), opponentName (string), playerColor ("white"|"black"), cpLoss (number)
 - puzzles: rating (number), themes (string[] — e.g. "fork", "pin", "skewer", "backRankMate", "discoveredAttack", "hangingPiece")
+- settings: keyword (string) — use this table when user wants to change, configure, or find a setting. Filter by keyword with "contains" operator. Keywords: board color, piece set, theme, dark mode, sound, voice, hints, eval bar, engine lines, animation, coordinates, orientation, api key, provider, budget, model, name, elo, rating, reset, export, sync, lichess, move method, confirmation, promote, master off
 
 Rules:
 - Use "contains" for partial name matches (case-insensitive)
+- For queries about changing settings, preferences, or configuration → use table: "settings"
+- For "change the color of the board" → table: settings, filters: [{field: "keyword", op: "contains", value: "board color"}]
 - For "worst openings" → table: openings, sortBy: drillAccuracy, sortDirection: asc, filters: [{field: "isRepertoire", op: "eq", value: true}]
 - For "games I lost" → assume the user is the lower-rated player or check result
 - For tactical themes like "forks" → use puzzles or mistakePuzzles table
@@ -123,6 +228,11 @@ function sortItems<T extends Record<string, unknown>>(items: T[], sortBy: string
 
 async function executeIntent(intent: SearchIntent): Promise<SmartSearchResult[]> {
   const limit = Math.min(intent.limit ?? MAX_RESULTS, 20);
+
+  if (intent.table === 'settings') {
+    const keyword = intent.filters.find((f) => f.field === 'keyword')?.value ?? '';
+    return searchSettings(String(keyword));
+  }
 
   switch (intent.table) {
     case 'openings': {
@@ -226,6 +336,11 @@ async function basicTextSearch(query: string, scope?: SmartSearchCategory): Prom
     results.push(...games.map(gameToResult));
   }
 
+  // Settings
+  if (!scope || scope === 'setting') {
+    results.push(...searchSettings(lower));
+  }
+
   // Mistakes (search by opening name or opponent)
   if (!scope || scope === 'mistake') {
     const mistakes = await db.mistakePuzzles
@@ -283,4 +398,4 @@ export async function smartSearch(
 /**
  * Basic text search without LLM. Used for short queries or as fallback.
  */
-export { basicTextSearch };
+export { basicTextSearch, searchSettings };

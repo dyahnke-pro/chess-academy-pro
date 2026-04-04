@@ -127,6 +127,16 @@ body {
   animation: ratingBump 300ms ease-out;
 }
 
+/* ─── Settings highlight from search navigation ─────────────────────────── */
+.settings-highlight {
+  animation: settingsHighlight 2s ease-out;
+}
+
+@keyframes settingsHighlight {
+  0%, 20% { background-color: var(--color-accent); color: var(--color-bg); border-radius: 6px; padding-inline: 8px; }
+  100% { background-color: transparent; }
+}
+
 /* ─── Kid Mode overrides ──────────────────────────────────────────────────── */
 [data-theme="kid-mode"] body {
   font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;

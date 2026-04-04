@@ -3,7 +3,7 @@
 // Users should only see user-facing preferences. Core settings that could break
 // the app experience must be hidden or admin-only.
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { exportUserData } from '../../services/dbService';
@@ -11,7 +11,7 @@ import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
 import { encryptApiKey } from '../../services/cryptoService';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import type { UserProfile, PieceAnimationSpeed, MoveMethod } from '../../types';
@@ -29,7 +29,35 @@ const TABS: { id: SettingsTab; label: string }[] = [
 export function SettingsPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  const [tab, setTab] = useState<SettingsTab>('profile');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') as SettingsTab | null;
+  const sectionParam = searchParams.get('section');
+  const [tab, setTab] = useState<SettingsTab>(
+    tabParam && TABS.some((t) => t.id === tabParam) ? tabParam : 'profile',
+  );
+
+  // Sync tab from URL params (e.g. navigating from search)
+  useEffect(() => {
+    if (tabParam && TABS.some((t) => t.id === tabParam) && tabParam !== tab) {
+      setTab(tabParam);
+    }
+  }, [tabParam]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Scroll to section when navigated from search
+  useEffect(() => {
+    if (!sectionParam) return;
+    const timer = setTimeout(() => {
+      const el = document.querySelector(`[data-settings-section="${sectionParam}"]`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('settings-highlight');
+        setTimeout(() => el.classList.remove('settings-highlight'), 2000);
+      }
+      // Clear the search params after scrolling so back nav works cleanly
+      setSearchParams({}, { replace: true });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [sectionParam, tab, setSearchParams]);
 
   if (!activeProfile) return <></>;
 
@@ -143,11 +171,12 @@ function SelectRow({ label, tooltip, value, options, onChange, testId, disabled 
   );
 }
 
-function SectionHeader({ title }: { title: string }): JSX.Element {
+function SectionHeader({ title, sectionId }: { title: string; sectionId?: string }): JSX.Element {
   return (
     <h3
-      className="text-xs font-semibold uppercase tracking-wider pt-3 pb-1 border-t"
+      className="text-xs font-semibold uppercase tracking-wider pt-3 pb-1 border-t transition-colors duration-500"
       style={{ color: 'var(--color-text-muted)', borderColor: 'var(--color-border)' }}
+      {...(sectionId ? { 'data-settings-section': sectionId } : {})}
     >
       {title}
     </h3>
@@ -244,6 +273,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
     <div className="space-y-2" data-testid="board-tab">
       {/* Master All Off */}
       <button
+        data-settings-section="master-off"
         onClick={handleToggleMasterOff}
         className="w-full py-3 rounded-lg text-sm font-bold transition-colors"
         style={{
@@ -263,7 +293,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       )}
 
       {/* Board Display */}
-      <SectionHeader title="Board Display" />
+      <SectionHeader title="Board Display" sectionId="board-display" />
       <ToggleRow
         label="Highlight Last Move"
         tooltip="Show yellow highlight on the last move's from/to squares"
@@ -310,7 +340,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       />
 
       {/* Board Appearance */}
-      <SectionHeader title="Board Appearance" />
+      <SectionHeader title="Board Appearance" sectionId="board-appearance" />
       <SelectRow
         label="Board Color"
         tooltip="Color scheme for the board squares"
@@ -349,7 +379,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       />
 
       {/* Audio */}
-      <SectionHeader title="Audio" />
+      <SectionHeader title="Audio" sectionId="audio" />
       <ToggleRow
         label="Sound Effects"
         tooltip="Play sounds on piece moves, captures, and checks"
@@ -359,7 +389,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       />
 
       {/* Engine */}
-      <SectionHeader title="Engine" />
+      <SectionHeader title="Engine" sectionId="engine" />
       <ToggleRow
         label="Eval Bar"
         tooltip="Show the Stockfish evaluation bar alongside the board"
@@ -376,7 +406,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       />
 
       {/* Feedback & Coaching */}
-      <SectionHeader title="Feedback & Coaching" />
+      <SectionHeader title="Feedback & Coaching" sectionId="feedback" />
       <ToggleRow
         label="Move Quality Flash"
         tooltip="Board border flashes green/yellow/red based on move quality"
@@ -403,7 +433,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       />
 
       {/* Game Behavior */}
-      <SectionHeader title="Game Behavior" />
+      <SectionHeader title="Game Behavior" sectionId="game-behavior" />
       <SelectRow
         label="Move Method"
         tooltip="How to move pieces: drag, click, or both"
@@ -485,7 +515,7 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
   };
 
   return (
-    <div className="space-y-4" data-testid="profile-tab">
+    <div className="space-y-4" data-testid="profile-tab" data-settings-section="profile">
       <div>
         <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>Name</label>
         <input
@@ -544,11 +574,11 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
         Export Data
       </button>
 
-      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }} data-settings-section="sync">
         <SyncSettingsPanel />
       </div>
 
-      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }} data-settings-section="lichess">
         <LichessTokenPanel profile={profile} setProfile={setProfile} />
       </div>
     </div>
@@ -632,7 +662,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
   };
 
   return (
-    <div className="space-y-4" data-testid="coach-tab">
+    <div className="space-y-4" data-testid="coach-tab" data-settings-section="coach">
       <div>
         <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
           AI Provider
@@ -738,7 +768,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 
       {status && <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>{status}</p>}
 
-      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }} data-settings-section="voice-settings">
         <VoiceSettingsPanel />
       </div>
     </div>
@@ -749,7 +779,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 
 function AppearanceTab(): JSX.Element {
   return (
-    <div className="space-y-4" data-testid="appearance-tab">
+    <div className="space-y-4" data-testid="appearance-tab" data-settings-section="appearance">
       <ThemePickerPanel />
     </div>
   );
@@ -877,7 +907,7 @@ function AboutTab(): JSX.Element {
   };
 
   return (
-    <div className="space-y-4" data-testid="about-tab">
+    <div className="space-y-4" data-testid="about-tab" data-settings-section="about">
       <div>
         <div className="text-lg font-bold">Chess Academy Pro</div>
         <div className="flex items-center gap-2">

@@ -8,7 +8,7 @@ vi.mock('./coachApi', () => ({
 }));
 
 // Import after mocks
-const { smartSearch, basicTextSearch } = await import('./smartSearchService');
+const { smartSearch, basicTextSearch, searchSettings } = await import('./smartSearchService');
 
 describe('smartSearchService', () => {
   beforeEach(async () => {
@@ -64,6 +64,65 @@ describe('smartSearchService', () => {
 
       const openingOnly = await basicTextSearch('Test', 'opening');
       expect(openingOnly.every((r) => r.category === 'opening')).toBe(true);
+    });
+  });
+
+  describe('searchSettings', () => {
+    it('finds board color setting', () => {
+      const results = searchSettings('board color');
+      expect(results.length).toBeGreaterThan(0);
+      expect(results[0].category).toBe('setting');
+      expect(results[0].title).toBe('Board Color');
+      expect(results[0].route).toBe('/settings?tab=board&section=board-appearance');
+    });
+
+    it('finds settings by natural language keywords', () => {
+      const results = searchSettings('change color');
+      expect(results.some((r) => r.title === 'Board Color')).toBe(true);
+    });
+
+    it('finds piece set setting', () => {
+      const results = searchSettings('piece set');
+      expect(results.some((r) => r.title === 'Piece Set')).toBe(true);
+    });
+
+    it('finds voice setting', () => {
+      const results = searchSettings('voice');
+      expect(results.some((r) => r.title === 'Voice Narration' || r.title === 'Voice Settings')).toBe(true);
+    });
+
+    it('finds theme setting', () => {
+      const results = searchSettings('dark mode');
+      expect(results.some((r) => r.title === 'App Theme')).toBe(true);
+    });
+
+    it('finds API key setting', () => {
+      const results = searchSettings('api key');
+      expect(results.some((r) => r.title === 'API Key')).toBe(true);
+      expect(results.find((r) => r.title === 'API Key')?.route).toBe('/settings?tab=coach&section=coach');
+    });
+
+    it('returns empty for unrelated queries', () => {
+      const results = searchSettings('xyznonexistent');
+      expect(results).toEqual([]);
+    });
+
+    it('limits results to 6', () => {
+      // "model" matches multiple settings entries
+      const results = searchSettings('model');
+      expect(results.length).toBeLessThanOrEqual(6);
+    });
+  });
+
+  describe('basicTextSearch with settings', () => {
+    it('includes settings results in unscoped search', async () => {
+      const results = await basicTextSearch('board color');
+      expect(results.some((r) => r.category === 'setting')).toBe(true);
+    });
+
+    it('scopes to settings only', async () => {
+      const results = await basicTextSearch('board color', 'setting');
+      expect(results.every((r) => r.category === 'setting')).toBe(true);
     });
   });
 

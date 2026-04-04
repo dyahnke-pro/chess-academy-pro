@@ -1,5 +1,9 @@
+import { type ReactNode } from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '../../test/utils';
+import { render as rtlRender } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { SettingsPage } from './SettingsPage';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
@@ -207,6 +211,52 @@ describe('SettingsPage', () => {
       fireEvent.click(screen.getByTestId('tab-board'));
 
       expect(screen.getByTestId('save-board-btn')).toBeInTheDocument();
+    });
+  });
+
+  describe('URL param navigation', () => {
+    function renderWithRoute(initialEntry: string): ReturnType<typeof rtlRender> {
+      function Wrapper({ children }: { children: ReactNode }): JSX.Element {
+        return (
+          <MemoryRouter initialEntries={[initialEntry]}>
+            <MotionConfig transition={{ duration: 0 }}>
+              {children}
+            </MotionConfig>
+          </MemoryRouter>
+        );
+      }
+      return rtlRender(<SettingsPage />, { wrapper: Wrapper });
+    }
+
+    it('opens board tab when ?tab=board is in URL', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      renderWithRoute('/settings?tab=board');
+      expect(screen.getByTestId('board-tab')).toBeInTheDocument();
+    });
+
+    it('opens coach tab when ?tab=coach is in URL', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      renderWithRoute('/settings?tab=coach');
+      expect(screen.getByTestId('coach-tab')).toBeInTheDocument();
+    });
+
+    it('opens about tab when ?tab=about is in URL', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      renderWithRoute('/settings?tab=about');
+      expect(screen.getByTestId('about-tab')).toBeInTheDocument();
+    });
+
+    it('defaults to profile tab for invalid tab param', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      renderWithRoute('/settings?tab=nonexistent');
+      expect(screen.getByTestId('profile-tab')).toBeInTheDocument();
+    });
+
+    it('adds data-settings-section attributes for scroll targeting', () => {
+      useAppStore.getState().setActiveProfile(buildUserProfile());
+      renderWithRoute('/settings?tab=board&section=board-appearance');
+      const section = document.querySelector('[data-settings-section="board-appearance"]');
+      expect(section).toBeInTheDocument();
     });
   });
 });
