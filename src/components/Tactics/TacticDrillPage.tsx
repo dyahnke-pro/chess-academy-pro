@@ -587,8 +587,15 @@ export function TacticDrillPage(): JSX.Element {
               </p>
             ) : (
               <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
-                No tactic drills available yet. Import and analyze games to generate tactical positions.
+                Import games to review your in-game mistakes and train on real tactical positions.
               </p>
+              <button
+                onClick={() => void navigate('/games/import')}
+                className="mt-4 px-5 py-2.5 rounded-xl font-semibold text-sm"
+                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+              >
+                Import Games
+              </button>
             )}
           </div>
           <div className="flex gap-3">
