@@ -82,5 +82,16 @@ export default defineConfig(({ mode }) => {
       },
     },
   },
+  server: {
+    watch: {
+      ignored: ['**/api/**'],
+    },
+    proxy: {
+      '/api': {
+        target: 'https://chess-academy-pro.vercel.app',
+        changeOrigin: true,
+      },
+    },
+  },
 };
 });
