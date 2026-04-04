@@ -68,8 +68,6 @@ export async function buildTacticDrillQueue(
   const classified: Array<{ mistake: MistakePuzzle; tacticType: TacticType }> = [];
   for (const m of allMistakes) {
     const tacticType = detectTacticType(m.fen, m.bestMove);
-    // Skip generic "tactical_sequence" — we want specific tactic types
-    if (tacticType === 'tactical_sequence') continue;
     if (filterTypes && !filterTypes.includes(tacticType)) continue;
     classified.push({ mistake: m, tacticType });
   }
@@ -234,7 +232,6 @@ export async function getTacticDrillCounts(): Promise<Map<TacticType, number>> {
   const counts = new Map<TacticType, number>();
   for (const m of allMistakes) {
     const tacticType = detectTacticType(m.fen, m.bestMove);
-    if (tacticType === 'tactical_sequence') continue;
     counts.set(tacticType, (counts.get(tacticType) ?? 0) + 1);
   }
 

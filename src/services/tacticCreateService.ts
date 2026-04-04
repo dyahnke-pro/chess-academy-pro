@@ -101,7 +101,6 @@ export async function buildTacticCreateQueue(
   const classified: Array<{ mistake: MistakePuzzle; tacticType: TacticType }> = [];
   for (const m of allMistakes) {
     const tacticType = detectTacticType(m.fen, m.bestMove);
-    if (tacticType === 'tactical_sequence') continue;
     if (filterTypes && !filterTypes.includes(tacticType)) continue;
     classified.push({ mistake: m, tacticType });
   }

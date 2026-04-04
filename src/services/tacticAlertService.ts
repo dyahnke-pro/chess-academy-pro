@@ -104,9 +104,9 @@ const TACTIC_TEACHING: Record<TacticType, {
     beginnerHint: 'If you can check the king with two pieces at once, it is incredibly powerful!',
   },
   tactical_sequence: {
-    concept: 'A combination of moves that creates an advantage through forcing play.',
-    lookFor: 'Look for checks, captures, and threats — forcing moves that limit your opponent\'s options.',
-    beginnerHint: 'Start with checks and captures. What moves force your opponent to respond?',
+    concept: 'Sometimes the best move involves a combination of ideas — a sequence of forcing moves that work together.',
+    lookFor: 'Look for checks, captures, and threats that force your opponent\'s responses. Each move should limit their options.',
+    beginnerHint: 'Try to find moves that force your opponent to respond in a specific way. Checks and captures are good starting points.',
   },
 };
 
