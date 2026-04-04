@@ -50,7 +50,29 @@ vi.mock('../../services/voiceService', () => ({
     speak: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
     isPlaying: vi.fn().mockReturnValue(false),
+    warmup: vi.fn().mockResolvedValue(undefined),
   },
+}));
+
+vi.mock('../../hooks/useStruggleDetection', () => {
+  const reset = vi.fn();
+  return { useStruggleDetection: () => ({ reset }) };
+});
+
+vi.mock('../../services/missedTacticService', () => ({
+  detectTacticType: vi.fn().mockReturnValue(null),
+}));
+
+vi.mock('../../services/tacticAlertService', () => ({
+  recordTacticOutcome: vi.fn(),
+}));
+
+vi.mock('../../services/tacticClassifierService', () => ({
+  TACTIC_LABELS: {},
+}));
+
+vi.mock('../../stores/appStore', () => ({
+  useAppStore: () => null,
 }));
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

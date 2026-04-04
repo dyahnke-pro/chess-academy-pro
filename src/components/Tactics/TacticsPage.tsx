@@ -5,6 +5,8 @@ import {
   Swords,
   Wrench,
   Lightbulb,
+  AlertTriangle,
+  Brain,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { backfillClassifiedTactics } from '../../services/tacticClassifierService';
@@ -53,6 +55,22 @@ const SECTIONS: SectionItem[] = [
     color: 'text-purple-400',
     bgColor: 'bg-purple-500/10',
     borderColor: 'border-purple-500/30',
+  },
+  {
+    label: 'My Mistakes',
+    icon: AlertTriangle,
+    route: '/puzzles/mistakes',
+    color: 'text-red-400',
+    bgColor: 'bg-red-500/10',
+    borderColor: 'border-red-500/30',
+  },
+  {
+    label: 'Weaknesses',
+    icon: Brain,
+    route: '/puzzles/weakness',
+    color: 'text-pink-400',
+    bgColor: 'bg-pink-500/10',
+    borderColor: 'border-pink-500/30',
   },
 ];
 

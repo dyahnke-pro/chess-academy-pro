@@ -26,7 +26,7 @@ export const TACTIC_LABELS: Record<TacticType, string> = {
   zwischenzug: 'Zwischenzug',
   x_ray: 'X-Ray',
   double_check: 'Double Check',
-  tactical_sequence: 'Tactical Sequence',
+  tactical_sequence: 'Combination',
 };
 
 // ─── Classify & Persist ─────────────────────────────────────────────────────

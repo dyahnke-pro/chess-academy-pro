@@ -67,7 +67,8 @@ function traceRay(
 
 /**
  * Get squares attacked by a piece at a given square.
- * Uses a temporary position with the piece's side to move to generate attacks.
+ * Returns ALL squares the piece can move to (captures AND non-capture moves),
+ * since a piece "attacks" every square it can reach — needed for fork detection.
  */
 function getAttackedSquares(chess: Chess, square: Square): Square[] {
   const piece = chess.get(square);
@@ -84,10 +85,7 @@ function getAttackedSquares(chess: Chess, square: Square): Square[] {
     const attacked = new Set<string>();
 
     for (const m of moves) {
-      const target = testChess.get(m.to);
-      if (target && target.color !== piece.color) {
-        attacked.add(m.to);
-      }
+      attacked.add(m.to);
     }
 
     return Array.from(attacked) as Square[];
@@ -107,11 +105,30 @@ function isDefended(chess: Chess, square: Square, byColor: Color): boolean {
     fenParts[3] = '-';
     const testChess = new Chess(fenParts.join(' '));
 
+    // Check pawn defense by directly examining diagonal attack squares,
+    // since chess.js moves() only returns pawn captures when an enemy piece
+    // occupies the target — missing defense of empty/friendly-occupied squares.
+    const targetFile = square.charCodeAt(0) - 97;
+    const targetRank = parseInt(square[1], 10) - 1;
+    const pawnRankOffset = byColor === 'w' ? -1 : 1;
+    const pawnSourceRank = targetRank + pawnRankOffset;
+    for (const df of [-1, 1]) {
+      const pawnSourceFile = targetFile + df;
+      const pawnSq = coordsToSquare(pawnSourceFile, pawnSourceRank);
+      if (pawnSq) {
+        const boardRow = 7 - pawnSourceRank;
+        const piece = testChess.board()[boardRow][pawnSourceFile];
+        if (piece && piece.color === byColor && piece.type === 'p') {
+          return true;
+        }
+      }
+    }
+
     const board = testChess.board();
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = board[r][c];
-        if (piece && piece.color === byColor) {
+        if (piece && piece.color === byColor && piece.type !== 'p') {
           const sq = coordsToSquare(c, 7 - r);
           if (!sq) continue;
           const moves = testChess.moves({ square: sq, verbose: true });
@@ -136,11 +153,29 @@ function countDefenders(chess: Chess, square: Square, byColor: Color): number {
     const testChess = new Chess(fenParts.join(' '));
 
     let count = 0;
+
+    // Check pawn defenders directly via diagonal attack geometry
+    const targetFile = square.charCodeAt(0) - 97;
+    const targetRank = parseInt(square[1], 10) - 1;
+    const pawnRankOffset = byColor === 'w' ? -1 : 1;
+    const pawnSourceRank = targetRank + pawnRankOffset;
+    for (const df of [-1, 1]) {
+      const pawnSourceFile = targetFile + df;
+      const pawnSq = coordsToSquare(pawnSourceFile, pawnSourceRank);
+      if (pawnSq) {
+        const boardRow = 7 - pawnSourceRank;
+        const piece = testChess.board()[boardRow][pawnSourceFile];
+        if (piece && piece.color === byColor && piece.type === 'p') {
+          count++;
+        }
+      }
+    }
+
     const board = testChess.board();
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = board[r][c];
-        if (piece && piece.color === byColor) {
+        if (piece && piece.color === byColor && piece.type !== 'p') {
           const sq = coordsToSquare(c, 7 - r);
           if (!sq) continue;
           const moves = testChess.moves({ square: sq, verbose: true });
@@ -313,10 +348,12 @@ function detectDeflection(
 
 /**
  * Detect overloaded piece: a piece that must defend multiple things at once.
- * If the best move attacks something that forces a defender to choose.
+ * The best move attacks something defended by this piece, AND after the defender
+ * responds to the threat, at least one of its other duties becomes undefended.
  */
 function detectOverloadedPiece(
   chessBeforeMove: Chess,
+  chessAfterMove: Chess,
   to: Square,
   movingColor: Color,
 ): boolean {
@@ -341,7 +378,8 @@ function detectOverloadedPiece(
         const defendsTarget = defenderMoves.some((m) => m.to === to);
         if (!defendsTarget) continue;
 
-        let defensiveDuties = 0;
+        // Find what else this defender is protecting
+        const otherDuties: Square[] = [];
         for (let r2 = 0; r2 < 8; r2++) {
           for (let c2 = 0; c2 < 8; c2++) {
             const friendlyPiece = board[r2][c2];
@@ -353,12 +391,24 @@ function detectOverloadedPiece(
               pieceValue(friendlyPiece.type) >= 3 &&
               defenderMoves.some((m) => m.to === friendlySq)
             ) {
-              defensiveDuties++;
+              otherDuties.push(friendlySq);
             }
           }
         }
 
-        if (defensiveDuties >= 2) return true;
+        if (otherDuties.length < 1) continue;
+
+        // Verify exploitation: after the move, at least one of the other duties
+        // has fewer defenders (the overloaded piece can't cover everything)
+        for (const dutySq of otherDuties) {
+          const defendersBefore = countDefenders(chessBeforeMove, dutySq, enemyColor);
+          const defendersAfter = countDefenders(chessAfterMove, dutySq, enemyColor);
+          if (defendersAfter < defendersBefore) return true;
+        }
+
+        // Also check: if the attacker now threatens the target square, the defender
+        // must choose between recapturing and maintaining its other duties
+        if (otherDuties.length >= 2) return true;
       }
     }
   } catch {
@@ -369,19 +419,37 @@ function detectOverloadedPiece(
 }
 
 /**
- * Detect trapped piece: the best move traps an enemy piece with no safe escape squares.
+ * Check if a specific piece is trapped (all moves go to defended squares and it's attacked).
  */
-function detectTrappedPiece(chess: Chess, movingColor: Color): boolean {
-  const enemyColor = oppositeColor(movingColor);
-
+function isPieceTrapped(chess: Chess, sq: Square, pieceColor: Color, attackerColor: Color): boolean {
   try {
-    // Force enemy's turn to check their escape moves
     const fenParts = chess.fen().split(' ');
-    fenParts[1] = enemyColor;
+    fenParts[1] = pieceColor;
     fenParts[3] = '-';
     const testChess = new Chess(fenParts.join(' '));
 
-    const board = testChess.board();
+    const moves = testChess.moves({ square: sq, verbose: true });
+    if (moves.length === 0) return false;
+
+    const allMovesBad = moves.every((m) =>
+      isDefended(chess, m.to, attackerColor),
+    );
+
+    return allMovesBad && countDefenders(chess, sq, attackerColor) > 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Detect trapped piece: the best move traps an enemy piece with no safe escape squares.
+ * Compares before and after — the piece must NOT have been trapped before the move.
+ */
+function detectTrappedPiece(chessBefore: Chess, chessAfter: Chess, movingColor: Color): boolean {
+  const enemyColor = oppositeColor(movingColor);
+
+  try {
+    const board = chessAfter.board();
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = board[r][c];
@@ -391,16 +459,16 @@ function detectTrappedPiece(chess: Chess, movingColor: Color): boolean {
         const sq = coordsToSquare(c, 7 - r);
         if (!sq) continue;
 
-        const moves = testChess.moves({ square: sq, verbose: true });
-        if (moves.length === 0) continue;
+        // Must be trapped AFTER the move
+        if (!isPieceTrapped(chessAfter, sq, enemyColor, movingColor)) continue;
 
-        const allMovesBad = moves.every((m) =>
-          isDefended(chess, m.to, movingColor),
-        );
-
-        if (allMovesBad && countDefenders(chess, sq, movingColor) > 0) {
-          return true;
+        // Must NOT have been trapped BEFORE the move (otherwise it's pre-existing)
+        const wasBefore = chessBefore.get(sq);
+        if (wasBefore && wasBefore.type === piece.type && wasBefore.color === piece.color) {
+          if (isPieceTrapped(chessBefore, sq, enemyColor, movingColor)) continue;
         }
+
+        return true;
       }
     }
   } catch {
@@ -629,13 +697,13 @@ export function detectTacticType(fen: string, bestMoveUci: string): TacticType {
       return 'deflection';
     }
 
-    // 8. Overloaded piece
-    if (detectOverloadedPiece(chessBefore, to, movingColor)) {
+    // 8. Overloaded piece (must verify the move exploits the overload)
+    if (detectOverloadedPiece(chessBefore, chessAfter, to, movingColor)) {
       return 'overloaded_piece';
     }
 
-    // 9. Trapped piece
-    if (detectTrappedPiece(chessAfter, movingColor)) {
+    // 9. Trapped piece (must be newly trapped by this move, not pre-existing)
+    if (detectTrappedPiece(chessBefore, chessAfter, movingColor)) {
       return 'trapped_piece';
     }
 
