@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Puzzle, Target, AlertTriangle } from 'lucide-react';
+import { BookOpen, GraduationCap, Puzzle, Target, AlertTriangle, Upload } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 
 interface SectionItem {
@@ -86,6 +86,18 @@ export function DashboardPage(): JSX.Element {
       <h1 className="text-xl font-bold text-center mt-2">
         Chess Academy Pro
       </h1>
+
+      {/* Import Games */}
+      <div className="max-w-lg mx-auto w-full">
+        <button
+          onClick={() => void navigate('/games/import')}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-cyan-500/30 bg-cyan-500/10 hover:opacity-80 transition-opacity"
+          data-testid="import-games-btn"
+        >
+          <Upload size={18} className="text-cyan-400" />
+          <span className="text-sm font-semibold text-cyan-400">Import Games</span>
+        </button>
+      </div>
 
       {/* Smart Search */}
       <div className="max-w-lg mx-auto w-full">
