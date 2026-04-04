@@ -8,11 +8,13 @@ import {
   tacticTypeLabel,
   tacticTypeIcon,
 } from '../../services/tacticalProfileService';
-import type { TacticalProfile, TacticTypeStats, TacticType } from '../../types';
+import { getRecentClassifiedTactics } from '../../services/tacticClassifierService';
+import type { TacticalProfile, TacticTypeStats, TacticType, ClassifiedTactic } from '../../types';
 
 export function TacticalProfilePage(): JSX.Element {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<TacticalProfile | null>(null);
+  const [recentTactics, setRecentTactics] = useState<ClassifiedTactic[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,8 +32,9 @@ export function TacticalProfilePage(): JSX.Element {
         stored = await computeTacticalProfile();
       }
       setProfile(stored);
+      const recent = await getRecentClassifiedTactics(10);
+      setRecentTactics(recent);
     } catch (err) {
-      console.error('Failed to load tactical profile:', err);
       setError(err instanceof Error ? err.message : 'Failed to load profile');
     } finally {
       setLoading(false);
@@ -44,8 +47,9 @@ export function TacticalProfilePage(): JSX.Element {
     try {
       const fresh = await computeTacticalProfile();
       setProfile(fresh);
+      const recent = await getRecentClassifiedTactics(10);
+      setRecentTactics(recent);
     } catch (err) {
-      console.error('Failed to refresh tactical profile:', err);
       setError(err instanceof Error ? err.message : 'Failed to refresh profile');
     } finally {
       setRefreshing(false);
@@ -192,6 +196,11 @@ export function TacticalProfilePage(): JSX.Element {
 
       {/* Opening Correlation */}
       <OpeningBreakdown stats={profile.stats} />
+
+      {/* Recent Missed Tactics */}
+      {recentTactics.length > 0 && (
+        <RecentTactics tactics={recentTactics} />
+      )}
     </motion.div>
   );
 }
@@ -315,6 +324,47 @@ function OpeningBreakdown({ stats }: { stats: TacticTypeStats[] }): JSX.Element 
               />
             </div>
             <span className="text-xs font-medium w-6 text-right" style={{ color: 'var(--color-error)' }}>{count}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RecentTactics({ tactics }: { tactics: ClassifiedTactic[] }): JSX.Element {
+  return (
+    <div className="rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }} data-testid="recent-tactics">
+      <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text)' }}>Recent Missed Tactics</h3>
+      <div className="flex flex-col gap-2">
+        {tactics.map((t) => (
+          <div
+            key={t.id}
+            className="flex items-center gap-3 p-2.5 rounded-lg"
+            style={{ background: 'var(--color-bg)' }}
+          >
+            <span className="text-sm shrink-0">{tacticTypeIcon(t.tacticType)}</span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold">{tacticTypeLabel(t.tacticType)}</span>
+                <span
+                  className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
+                  style={{
+                    background: t.evalSwing >= 200 ? 'var(--color-error)' : 'var(--color-warning)',
+                    color: 'var(--color-bg)',
+                  }}
+                >
+                  {(t.evalSwing / 100).toFixed(1)} pawns
+                </span>
+              </div>
+              <div className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
+                {t.explanation}
+              </div>
+            </div>
+            {t.opponentName && (
+              <span className="text-[10px] shrink-0" style={{ color: 'var(--color-text-muted)' }}>
+                vs {t.opponentName}
+              </span>
+            )}
           </div>
         ))}
       </div>
