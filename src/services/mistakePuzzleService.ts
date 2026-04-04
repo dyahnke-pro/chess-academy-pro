@@ -3,6 +3,7 @@ import { db } from '../db/schema';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { generateMistakeNarration } from './mistakeNarration';
+import { detectTacticType } from './missedTacticService';
 import type {
   MistakePuzzle,
   MistakeClassification,
@@ -405,6 +406,7 @@ async function analyzeGameWithStockfish(
       status: 'unsolved',
       attempts: 0,
       successes: 0,
+      tacticType: detectTacticType(fen, bestMove),
     });
   }
 
@@ -593,6 +595,7 @@ async function generateFromAnnotations(
       status: 'unsolved',
       attempts: 0,
       successes: 0,
+      tacticType: detectTacticType(fen, bestMove),
     });
   }
 

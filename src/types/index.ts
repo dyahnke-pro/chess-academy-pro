@@ -66,6 +66,7 @@ export interface MistakePuzzle {
   status: MistakePuzzleStatus;
   attempts: number;
   successes: number;
+  tacticType?: TacticType | null;
 }
 
 // ─── Opening Annotations ────────────────────────────────────────────────────

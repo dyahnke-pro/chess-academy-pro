@@ -42,8 +42,8 @@ export async function computeTacticalProfile(): Promise<TacticalProfile> {
   // Get all mistake puzzles (these come from analyzed games)
   const allMistakes = await db.mistakePuzzles.toArray();
 
-  // Classify each mistake puzzle by tactic type
-  const classifiedMistakes = classifyMistakePuzzles(allMistakes);
+  // Classify each mistake puzzle by tactic type (yields to main thread to avoid freezing)
+  const classifiedMistakes = await classifyMistakePuzzles(allMistakes);
 
   // Get puzzle theme accuracy for gap calculation
   const themeSkills = await getThemeSkills();
@@ -175,21 +175,53 @@ interface ClassifiedMistake {
 }
 
 /**
- * Classify each mistake puzzle by its tactic type using the best move.
+ * Classify each mistake puzzle by its tactic type.
+ * Uses cached tacticType when available; computes and persists for uncached puzzles.
+ * Yields to the main thread every 20 puzzles to keep the UI responsive.
  */
-function classifyMistakePuzzles(mistakes: MistakePuzzle[]): ClassifiedMistake[] {
-  return mistakes
-    .filter((m) => m.cpLoss >= 50 && m.fen && m.bestMove) // Only valid, meaningful tactical misses
-    .map((m) => {
-      const tacticType = detectTacticType(m.fen, m.bestMove);
-      return {
-        id: m.id,
-        tacticType,
-        gamePhase: m.gamePhase,
-        openingName: m.openingName ?? null,
-        cpLoss: m.cpLoss,
-      };
+async function classifyMistakePuzzles(mistakes: MistakePuzzle[]): Promise<ClassifiedMistake[]> {
+  const valid = mistakes.filter((m) => m.cpLoss >= 50 && m.fen && m.bestMove);
+  const results: ClassifiedMistake[] = [];
+  const toUpdate: Array<{ id: string; tacticType: TacticType }> = [];
+
+  for (let i = 0; i < valid.length; i++) {
+    const m = valid[i];
+    let tacticType: TacticType;
+
+    if (m.tacticType != null) {
+      tacticType = m.tacticType;
+    } else {
+      tacticType = detectTacticType(m.fen, m.bestMove);
+      toUpdate.push({ id: m.id, tacticType });
+    }
+
+    results.push({
+      id: m.id,
+      tacticType,
+      gamePhase: m.gamePhase,
+      openingName: m.openingName ?? null,
+      cpLoss: m.cpLoss,
     });
+
+    // Yield to main thread every 20 puzzles to avoid freezing
+    if (i % 20 === 19) {
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    }
+  }
+
+  // Persist computed tactic types so we don't recompute next time
+  if (toUpdate.length > 0) {
+    await db.mistakePuzzles.bulkGet(toUpdate.map((u) => u.id)).then(async (records) => {
+      const updates = toUpdate
+        .map((u, idx) => records[idx] ? { ...records[idx], tacticType: u.tacticType } : null)
+        .filter((r): r is MistakePuzzle => r !== null);
+      if (updates.length > 0) {
+        await db.mistakePuzzles.bulkPut(updates);
+      }
+    });
+  }
+
+  return results;
 }
 
 /**
