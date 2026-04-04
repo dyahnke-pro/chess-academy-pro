@@ -649,9 +649,13 @@ export function detectTacticType(fen: string, bestMoveUci: string): TacticType {
       return 'x_ray';
     }
 
-    // 12. Hanging piece (undefended capture)
+    // 12. Hanging piece (undefended capture — the captured piece had no defenders)
     if (moveResult.captured) {
-      return 'hanging_piece';
+      const enemyColor = oppositeColor(movingColor);
+      const wasDefended = isDefended(chessBefore, to, enemyColor);
+      if (!wasDefended) {
+        return 'hanging_piece';
+      }
     }
 
     return 'tactical_sequence';
