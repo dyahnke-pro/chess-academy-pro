@@ -211,14 +211,14 @@ async function classifyMistakePuzzles(mistakes: MistakePuzzle[]): Promise<Classi
 
   // Persist computed tactic types so we don't recompute next time
   if (toUpdate.length > 0) {
-    await db.mistakePuzzles.bulkGet(toUpdate.map((u) => u.id)).then(async (records) => {
-      const updates = toUpdate
-        .map((u, idx) => records[idx] ? { ...records[idx], tacticType: u.tacticType } : null)
-        .filter((r): r is MistakePuzzle => r !== null);
-      if (updates.length > 0) {
-        await db.mistakePuzzles.bulkPut(updates);
+    const records = await db.mistakePuzzles.bulkGet(toUpdate.map((u) => u.id));
+    for (let j = 0; j < toUpdate.length; j++) {
+      const record = records[j];
+      if (record) {
+        record.tacticType = toUpdate[j].tacticType;
+        await db.mistakePuzzles.put(record);
       }
-    });
+    }
   }
 
   return results;
