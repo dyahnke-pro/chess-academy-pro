@@ -104,6 +104,23 @@ export const THEMES: AppTheme[] = [
     },
   },
   {
+    id: 'neon',
+    name: 'Neon',
+    colors: {
+      bg: '#0a0a12',
+      bgSecondary: '#0f0f1e',
+      surface: '#14142a',
+      border: '#2a1a4a',
+      text: '#e0f0ff',
+      textMuted: '#7a7aaa',
+      accent: '#00ff88',
+      accentHover: '#33ffaa',
+      success: '#00ff88',
+      error: '#ff3366',
+      warning: '#ffaa00',
+    },
+  },
+  {
     id: 'kid-mode',
     name: 'Kid Mode',
     colors: {

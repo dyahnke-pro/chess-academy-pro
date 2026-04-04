@@ -119,7 +119,14 @@ export function ChessBoard({
 
   // ─── Board color + piece set from settings ────────────────────────────────
   const boardColorScheme = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
-  const customPieces = useMemo(() => buildPieceRenderer(settings.pieceSet), [settings.pieceSet]);
+  const pieceFilters = useMemo(() => ({
+    whitePieceFilter: boardColorScheme.whitePieceFilter,
+    blackPieceFilter: boardColorScheme.blackPieceFilter,
+  }), [boardColorScheme]);
+  const customPieces = useMemo(
+    () => buildPieceRenderer(settings.pieceSet, pieceFilters),
+    [settings.pieceSet, pieceFilters],
+  );
 
   // ─── Board border flash ─────────────────────────────────────────────────────
   const [flashColor, setFlashColor] = useState<string | null>(null);
@@ -283,7 +290,14 @@ export function ChessBoard({
         )}
 
         {/* Board */}
-        <div className="relative flex-1" data-testid="board-wrapper">
+        <div
+          className="relative flex-1"
+          data-testid="board-wrapper"
+          style={boardColorScheme.borderGlow
+            ? { boxShadow: boardColorScheme.borderGlow, borderRadius: '4px' }
+            : undefined
+          }
+        >
           <Chessboard
             options={{
               position: game.position,

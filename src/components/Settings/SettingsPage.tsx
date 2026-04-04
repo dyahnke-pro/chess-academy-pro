@@ -324,6 +324,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
           { value: 'wood', label: 'Wood' },
           { value: 'ice', label: 'Ice' },
           { value: 'coral', label: 'Coral' },
+          { value: 'neon', label: 'Neon' },
         ]}
         onChange={setBoardColor}
         testId="board-color-select"

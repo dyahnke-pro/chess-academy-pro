@@ -27,19 +27,36 @@ const PIECE_MAP: Record<string, string> = {
 
 export const LICHESS_CDN = 'https://lichess1.org/assets/piece';
 
+export interface PieceFilterOptions {
+  whitePieceFilter?: string;
+  blackPieceFilter?: string;
+}
+
 /**
  * Builds a PieceRenderObject for react-chessboard from a Lichess piece set name.
- * Returns undefined for the default set (uses react-chessboard built-in pieces).
+ * Returns undefined for the default set when no filters are applied.
+ * When piece filters are provided, always returns a custom renderer so filters
+ * can be applied via CSS (falls back to 'cburnett' CDN set for Staunton).
  */
-export function buildPieceRenderer(pieceSetId: string): PieceRenderObject | undefined {
+export function buildPieceRenderer(
+  pieceSetId: string,
+  filters?: PieceFilterOptions,
+): PieceRenderObject | undefined {
   const config = PIECE_SETS.find((ps) => ps.id === pieceSetId);
-  if (!config?.lichessName) return undefined;
+  const hasFilters = filters?.whitePieceFilter || filters?.blackPieceFilter;
 
-  const setName = config.lichessName;
+  // No custom set and no filters → use react-chessboard defaults
+  if (!config?.lichessName && !hasFilters) return undefined;
+
+  // Use the configured set, or fall back to cburnett when we need filters on the default set
+  const setName = config?.lichessName ?? 'cburnett';
   const pieces: PieceRenderObject = {};
 
   for (const [key, file] of Object.entries(PIECE_MAP)) {
     const url = `${LICHESS_CDN}/${setName}/${file}.svg`;
+    const isWhite = key.startsWith('w');
+    const pieceFilter = isWhite ? filters?.whitePieceFilter : filters?.blackPieceFilter;
+
     pieces[key] = ({ svgStyle } = {}) => (
       <img
         src={url}
@@ -47,6 +64,7 @@ export function buildPieceRenderer(pieceSetId: string): PieceRenderObject | unde
         style={{
           width: '100%',
           height: '100%',
+          ...(pieceFilter ? { filter: pieceFilter } : {}),
           ...svgStyle,
         }}
         draggable={false}

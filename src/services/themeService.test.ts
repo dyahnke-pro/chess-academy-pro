@@ -18,8 +18,8 @@ describe('themeService', () => {
   });
 
   describe('THEMES constant', () => {
-    it('has 7 theme entries', () => {
-      expect(THEMES).toHaveLength(7);
+    it('has 8 theme entries', () => {
+      expect(THEMES).toHaveLength(8);
     });
 
     it('each theme has all required color keys', () => {
