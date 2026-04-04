@@ -102,7 +102,7 @@ describe('TacticsPage', () => {
     expect(screen.getByText('Tactical Training')).toBeInTheDocument();
   });
 
-  it('shows all 4 section buttons', async () => {
+  it('shows all 6 section buttons', async () => {
     setProfile();
     render(<TacticsPage />);
 
@@ -112,6 +112,8 @@ describe('TacticsPage', () => {
     expect(screen.getByTestId('section-drill')).toBeInTheDocument();
     expect(screen.getByTestId('section-setup')).toBeInTheDocument();
     expect(screen.getByTestId('section-create')).toBeInTheDocument();
+    expect(screen.getByTestId('section-my mistakes')).toBeInTheDocument();
+    expect(screen.getByTestId('section-weaknesses')).toBeInTheDocument();
   });
 
   it('displays section labels', async () => {
@@ -124,6 +126,8 @@ describe('TacticsPage', () => {
     expect(screen.getByText('Drill')).toBeInTheDocument();
     expect(screen.getByText('Setup')).toBeInTheDocument();
     expect(screen.getByText('Create')).toBeInTheDocument();
+    expect(screen.getByText('My Mistakes')).toBeInTheDocument();
+    expect(screen.getByText('Weaknesses')).toBeInTheDocument();
   });
 
   it('first section spans full width', async () => {
@@ -146,5 +150,7 @@ describe('TacticsPage', () => {
     expect(screen.getByTestId('section-drill').className).toContain('aspect-square');
     expect(screen.getByTestId('section-setup').className).toContain('aspect-square');
     expect(screen.getByTestId('section-create').className).toContain('aspect-square');
+    expect(screen.getByTestId('section-my mistakes').className).toContain('aspect-square');
+    expect(screen.getByTestId('section-weaknesses').className).toContain('aspect-square');
   });
 });
