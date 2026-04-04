@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Swords } from 'lucide-react';
-import { getPuzzlesByTheme, updatePuzzleRating } from '../../services/puzzleService';
+import { getPuzzlesByTheme } from '../../services/puzzleService';
 import { useAppStore } from '../../stores/appStore';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
 import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
@@ -81,15 +81,6 @@ export function TacticDrillPage(): JSX.Element {
       setSolved((s) => s + 1);
     } else {
       setFailed((f) => f + 1);
-    }
-
-    // Update puzzle rating
-    if (currentPuzzle && activeProfile) {
-      await updatePuzzleRating(
-        currentPuzzle.id,
-        outcome.correct,
-        activeProfile.currentRating,
-      );
     }
 
     // Move to next puzzle after a short delay

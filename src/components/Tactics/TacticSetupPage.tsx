@@ -176,6 +176,7 @@ export function TacticSetupPage(): JSX.Element {
                 {solved}/{total} setups found ({Math.round((solved / total) * 100)}%)
               </p>
             ) : (
+              <>
               <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
                 Import games to review your in-game mistakes and unlock setup training.
               </p>
@@ -186,6 +187,7 @@ export function TacticSetupPage(): JSX.Element {
               >
                 Import Games
               </button>
+              </>
             )}
           </div>
           <div className="flex gap-3">

@@ -593,6 +593,7 @@ export function TacticCreatePage(): JSX.Element {
                 )}
               </>
             ) : (
+              <>
               <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
                 Import games to review your in-game mistakes and unlock Create mode.
               </p>
@@ -603,6 +604,7 @@ export function TacticCreatePage(): JSX.Element {
               >
                 Import Games
               </button>
+              </>
             )}
           </div>
           <div className="flex gap-3">
