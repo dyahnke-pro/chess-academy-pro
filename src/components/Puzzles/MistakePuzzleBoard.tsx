@@ -12,6 +12,10 @@ import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
 import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
+import { useStruggleDetection } from '../../hooks/useStruggleDetection';
+import { detectTacticType } from '../../services/missedTacticService';
+import { recordTacticOutcome } from '../../services/tacticAlertService';
+import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
 
@@ -138,6 +142,25 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const [whyLoading, setWhyLoading] = useState(false);
+  const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
+
+  // Derive the tactic type for coaching (sub-millisecond, pure pattern matching)
+  const tacticType = useMemo(() => detectTacticType(puzzle.fen, puzzle.bestMove), [puzzle.fen, puzzle.bestMove]);
+
+  // Proactive struggle detection — coach speaks up when player is stuck
+  const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {
+    voiceService.stop();
+    setSubtitle(message);
+    void voiceService.speak(message);
+  }, []);
+
+  const { reset: resetStruggle } = useStruggleDetection({
+    tacticType,
+    playerRating: activeProfile?.currentRating ?? 1200,
+    active: state === 'playing',
+    wrongAttempts: wrongAttemptCount,
+    onCoach: handleStruggleCoach,
+  });
 
   // Replay state
   const [replaySteps, setReplaySteps] = useState<ReplayStep[]>([]);
@@ -187,9 +210,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setWhyLoading(false);
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
+    setWrongAttemptCount(0);
     setReplayIndex(-1);
 
     resetHints();
+    resetStruggle();
     voiceService.stop();
 
     void voiceService.warmup();
@@ -276,7 +301,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       }
       voiceService.stop();
     };
-  }, [puzzle, resetHints, skipReplayContext]);
+  }, [puzzle, resetHints, resetStruggle, skipReplayContext]);
 
   // Auto-play replay moves one at a time
   useEffect(() => {
@@ -460,6 +485,13 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
+        // Record outcome for cross-session coaching
+        recordTacticOutcome({
+          tacticType,
+          found: true,
+          wasCoached: hasMadeMistakeRef.current,
+          context: skipReplayContext ? 'create' : 'drill',
+        });
         // Speak outro after celebration sound, then signal completion.
         // Delay onComplete so the parent doesn't advance to the next
         // puzzle while the outro is still playing.
@@ -503,6 +535,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       // Wrong move — undo and let them try again from the same position
       hasMadeMistakeRef.current = true;
       wrongAttemptsRef.current += 1;
+      setWrongAttemptCount(wrongAttemptsRef.current);
       chessRef.current.undo();
       const prevFen = chessRef.current.fen();
       setState('incorrect');
@@ -549,7 +582,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         setState('playing');
       }, 1500);
     }
-  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration]);
+  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     // Apply the move to our chess ref but do NOT call setFen() here —

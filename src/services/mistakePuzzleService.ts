@@ -810,6 +810,9 @@ export async function gradeMistakePuzzle(
     attempts: newAttempts,
     successes: newSuccesses,
   });
+
+  // Invalidate the tactical profile cache so it recomputes with fresh data
+  await db.meta.delete('tactical_profile');
 }
 
 // ─── Delete ─────────────────────────────────────────────────────────────────

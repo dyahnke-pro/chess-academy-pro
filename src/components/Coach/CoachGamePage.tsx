@@ -348,13 +348,20 @@ export function CoachGamePage(): JSX.Element {
     gameChatRef.current?.injectAssistantMessage(tip);
   }, []);
 
+  // Missed tactic alert — coach tells player they missed a tactic and suggests takeback
+  const handleMissedTactic = useCallback((message: string) => {
+    gameChatRef.current?.injectAssistantMessage(message);
+  }, []);
+
   useCoachTips({
     fen: game.fen,
     playerColor,
     isPlayerTurn: isPlayersTurn,
     enabled: coachTipsOn && !voiceActive && gameState.status === 'playing' && !game.isGameOver,
     moves: gameState.moves,
+    playerRating: activeProfile?.currentRating ?? 1200,
     onTip: handleCoachTip,
+    onMissedTactic: handleMissedTactic,
   });
 
   // Move navigation — null means live position

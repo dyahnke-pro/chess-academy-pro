@@ -1,7 +1,15 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
-import type { StockfishAnalysis, CoachGameMove } from '../types';
+import {
+  detectGameplayTactic,
+  scanUpcomingTactic,
+  buildTacticAlertMessage,
+  getTacticLookahead,
+  isTacticWeakness,
+  recordTacticOutcome,
+} from '../services/tacticAlertService';
+import type { StockfishAnalysis, CoachGameMove, TacticType } from '../types';
 
 export interface UseCoachTipsConfig {
   fen: string;
@@ -9,7 +17,10 @@ export interface UseCoachTipsConfig {
   isPlayerTurn: boolean;
   enabled: boolean;
   moves: CoachGameMove[];
+  playerRating: number;
   onTip: (tip: string) => void;
+  /** Called when the player missed a tactic on the previous move */
+  onMissedTactic?: (message: string, tacticType: TacticType) => void;
 }
 
 interface TipContext {
@@ -20,50 +31,32 @@ interface TipContext {
   prevEval: number | null;
 }
 
+/** A tactic that was available but the player hasn't acted on yet */
+interface PendingTactic {
+  fen: string;
+  tacticType: TacticType;
+  moveNumber: number;
+  isWeakness: boolean;
+}
+
 const ANALYSIS_DEPTH = 10;
 const MIN_MOVES_BEFORE_TIPS = 2;
-
-function detectTacticAvailable(ctx: TipContext): string | null {
-  const { analysis, playerColor } = ctx;
-  if (analysis.topLines.length < 2) return null;
-
-  const bestEval = analysis.topLines[0].evaluation;
-  const secondEval = analysis.topLines[1].evaluation;
-
-  // A tactic exists when the best move is significantly better than alternatives
-  const gap = playerColor === 'white'
-    ? bestEval - secondEval
-    : secondEval - bestEval;
-
-  if (gap >= 150) {
-    if (analysis.isMate && analysis.mateIn !== null && Math.abs(analysis.mateIn) <= 5) {
-      return 'There is a forced checkmate available. Look carefully!';
-    }
-    return 'There is a tactic available in this position. Take your time.';
-  }
-  return null;
-}
 
 function detectKeyMoment(ctx: TipContext): string | null {
   const { analysis, prevEval, playerColor } = ctx;
   if (prevEval === null) return null;
 
   const currentEval = analysis.evaluation;
-  // Eval swing from opponent's last move — position changed significantly
   const swing = playerColor === 'white'
     ? currentEval - prevEval
     : prevEval - currentEval;
 
-  // Opponent just blundered — position shifted in player's favor
   if (swing >= 150) {
     return 'This is a key moment — your opponent may have made an error. Look for the best response.';
   }
-
-  // Position becoming critical (close to losing)
   if (swing <= -150) {
     return 'Be careful here — the position has become more difficult. Think defensively.';
   }
-
   return null;
 }
 
@@ -71,7 +64,6 @@ function detectMateThreats(ctx: TipContext): string | null {
   const { analysis, playerColor } = ctx;
   if (!analysis.isMate || analysis.mateIn === null) return null;
 
-  // Mate threat against the player
   const isThreatAgainstPlayer = playerColor === 'white'
     ? analysis.mateIn < 0
     : analysis.mateIn > 0;
@@ -79,19 +71,18 @@ function detectMateThreats(ctx: TipContext): string | null {
   if (isThreatAgainstPlayer && Math.abs(analysis.mateIn) <= 4) {
     return `Watch out — there is a mate threat in ${Math.abs(analysis.mateIn)} moves. Prioritize king safety!`;
   }
-
   return null;
 }
 
 function detectDevelopmentReminder(ctx: TipContext): string | null {
   const { fen, moveCount, playerColor } = ctx;
-  if (moveCount > 14) return null; // Only in the opening
+  if (moveCount > 14) return null;
 
   try {
     const chess = new Chess(fen);
     const board = chess.board();
     const color = playerColor === 'white' ? 'w' : 'b';
-    const backRank = color === 'w' ? 7 : 0; // board array: row 0 = rank 8
+    const backRank = color === 'w' ? 7 : 0;
 
     let undeveloped = 0;
     for (const sq of board[backRank] ?? []) {
@@ -156,11 +147,10 @@ function detectEndgameTransition(ctx: TipContext): string | null {
   return null;
 }
 
-function generateTip(ctx: TipContext): string | null {
-  // Priority order: mate threats > tactic > key moment > positional guidance
+function generatePositionalTip(ctx: TipContext): string | null {
+  // Priority order: mate threats > key moment > positional guidance
   return (
     detectMateThreats(ctx) ??
-    detectTacticAvailable(ctx) ??
     detectKeyMoment(ctx) ??
     detectEndgameTransition(ctx) ??
     detectDevelopmentReminder(ctx) ??
@@ -174,19 +164,54 @@ export function useCoachTips({
   isPlayerTurn,
   enabled,
   moves,
+  playerRating,
   onTip,
+  onMissedTactic,
 }: UseCoachTipsConfig): void {
   const lastTipFenRef = useRef<string | null>(null);
   const tipCooldownRef = useRef<number>(0);
   const onTipRef = useRef(onTip);
   onTipRef.current = onTip;
+  const onMissedTacticRef = useRef(onMissedTactic);
+  onMissedTacticRef.current = onMissedTactic;
+
+  // Track pending tactic that was available but possibly not played
+  const pendingTacticRef = useRef<PendingTactic | null>(null);
 
   const getLatestEval = useCallback((): number | null => {
     if (moves.length === 0) return null;
-    // Get eval from the last move (coach's move that just happened)
     const lastMove = moves[moves.length - 1];
     return lastMove.evaluation;
   }, [moves]);
+
+  // Check if the player missed a pending tactic (runs when position changes).
+  // This fires for ALL players immediately — the "you missed it, take it back"
+  // notification is universal. The proactive "a tactic is coming" alert is what
+  // adapts to rating (via lookahead distance).
+  useEffect(() => {
+    const pending = pendingTacticRef.current;
+    if (!pending || !onMissedTacticRef.current) return;
+
+    // If the player moved to a new position without finding the tactic
+    if (moves.length > pending.moveNumber && fen !== pending.fen) {
+      const message = buildTacticAlertMessage(
+        pending.tacticType,
+        'missed',
+        playerRating,
+        pending.isWeakness,
+      );
+
+      recordTacticOutcome({
+        tacticType: pending.tacticType,
+        found: false,
+        wasCoached: false,
+        context: 'gameplay',
+      });
+
+      onMissedTacticRef.current(message, pending.tacticType);
+      pendingTacticRef.current = null;
+    }
+  }, [fen, moves.length, playerRating]);
 
   useEffect(() => {
     if (!enabled || !isPlayerTurn || moves.length < MIN_MOVES_BEFORE_TIPS) return;
@@ -215,7 +240,53 @@ export function useCoachTips({
           prevEval: getLatestEval(),
         };
 
-        const tip = generateTip(ctx);
+        // First: check for a tactic available RIGHT NOW
+        const immediateTactic = detectGameplayTactic(fen, analysis, playerColor);
+        if (immediateTactic) {
+          const isWeakness = await isTacticWeakness(immediateTactic);
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (abortController.signal.aborted) return;
+
+          // Track as pending — if player doesn't play it, alert after their move
+          pendingTacticRef.current = {
+            fen,
+            tacticType: immediateTactic,
+            moveNumber: moves.length,
+            isWeakness,
+          };
+
+          // Always alert about immediate tactics (all players benefit)
+          const message = buildTacticAlertMessage(
+            immediateTactic,
+            'available',
+            playerRating,
+            isWeakness,
+          );
+          lastTipFenRef.current = fen;
+          onTipRef.current(message);
+          return;
+        }
+
+        // Second: scan ahead for upcoming tactics (rating-adaptive lookahead).
+        // Weaker players: 1 move ahead. Stronger players: 2-4 moves ahead.
+        // This teaches stronger players to plan and weaker players to recognize.
+        const lookahead = getTacticLookahead(playerRating);
+        const upcoming = scanUpcomingTactic(fen, analysis, playerColor, lookahead);
+        if (upcoming) {
+          const isWeakness = await isTacticWeakness(upcoming.tacticType);
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (abortController.signal.aborted) return;
+
+          const teaching = isWeakness
+            ? `A tactic you've been working on is developing — keep your eyes open in the next ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''}.`
+            : `Something tactical is building in this position. Think ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''} ahead.`;
+          lastTipFenRef.current = fen;
+          onTipRef.current(teaching);
+          return;
+        }
+
+        // Fall through: positional/strategic tips
+        const tip = generatePositionalTip(ctx);
         if (tip) {
           lastTipFenRef.current = fen;
           onTipRef.current(tip);
@@ -232,5 +303,5 @@ export function useCoachTips({
       abortController.abort();
       clearTimeout(timer);
     };
-  }, [fen, enabled, isPlayerTurn, moves.length, playerColor, getLatestEval]);
+  }, [fen, enabled, isPlayerTurn, moves.length, playerColor, getLatestEval, playerRating]);
 }

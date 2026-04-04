@@ -4,6 +4,7 @@ import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useCoachTips } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
@@ -130,6 +131,43 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
       void voiceService.speak(text);
     }
   }, [voiceOn]);
+
+  // Coach tips during middlegame — detect tactics and alert about missed ones
+  const coachTipMoves = useMemo(() =>
+    moveHistory.map((m, i) => ({
+      moveNumber: Math.floor(i / 2) + 1,
+      san: '',
+      fen: m.fen,
+      isCoachMove: false,
+      commentary: '',
+      evaluation: null,
+      classification: null,
+      expanded: false,
+      bestMove: null,
+      bestMoveEval: null,
+      preMoveEval: null,
+    } as const)),
+    [moveHistory],
+  );
+
+  const handleOpeningTip = useCallback((tip: string) => {
+    say(tip);
+  }, [say]);
+
+  const handleMissedTacticInOpening = useCallback((message: string) => {
+    say(message);
+  }, [say]);
+
+  useCoachTips({
+    fen: game.fen,
+    playerColor,
+    isPlayerTurn: isPlayersTurn,
+    enabled: playPhase === 'middlegame' && !game.isGameOver,
+    moves: coachTipMoves,
+    playerRating,
+    onTip: handleOpeningTip,
+    onMissedTactic: handleMissedTacticInOpening,
+  });
 
   // ─── Stockfish eval on position change ──────────────────────────────────
   useEffect(() => {

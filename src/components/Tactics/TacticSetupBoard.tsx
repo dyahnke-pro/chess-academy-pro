@@ -4,11 +4,15 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { HintButton } from '../Coach/HintButton';
 import { motion } from 'framer-motion';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { useSettings } from '../../hooks/useSettings';
+import { useAppStore } from '../../stores/appStore';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import { voiceService } from '../../services/voiceService';
 import { setupIntro, setupCorrectPrep, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
+import { recordTacticOutcome } from '../../services/tacticAlertService';
+import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
 
 type BoardState = 'thinking' | 'correct' | 'incorrect' | 'reveal';
@@ -36,6 +40,9 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const [boardKey, setBoardKey] = useState(0);
   const hasCompleted = useRef(false);
 
+  const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
+  const wrongAttemptsRef = useRef(0);
+
   const solutionMoves = puzzle.solutionMoves.split(' ').filter(Boolean);
   const tacticMoves = puzzle.tacticMoves.split(' ').filter(Boolean);
   const isPlayerTurn = moveIndex % 2 === 0; // Player moves on even indices
@@ -44,6 +51,22 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const orientation = puzzle.playerColor === 'black' ? 'black' : 'white';
 
   const { settings } = useSettings();
+  const activeProfile = useAppStore((s) => s.activeProfile);
+
+  // Proactive struggle detection — coach speaks up when player is stuck
+  const handleStruggleCoach = useCallback((coachMsg: string, _tier: CoachingTier) => {
+    voiceService.stop();
+    setMessage(coachMsg);
+    void voiceService.speak(coachMsg);
+  }, []);
+
+  const { reset: resetStruggle } = useStruggleDetection({
+    tacticType: puzzle.tacticType,
+    playerRating: activeProfile?.currentRating ?? 1200,
+    active: boardState === 'thinking' && isPlayerTurn,
+    wrongAttempts: wrongAttemptCount,
+    onCoach: handleStruggleCoach,
+  });
 
   // Derive the expected move for the hint system
   const knownMove = useMemo((): { from: string; to: string; san: string } | null => {
@@ -69,13 +92,16 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     knownMove,
   });
 
-  // Narrate intro on mount and reset hints
+  // Narrate intro on mount and reset hints/struggle
   useEffect(() => {
     resetHints();
+    resetStruggle();
+    wrongAttemptsRef.current = 0;
+    setWrongAttemptCount(0);
     const intro = setupIntro(puzzle.tacticType, puzzle.difficulty);
     void voiceService.speak(intro);
     return () => { voiceService.stop(); };
-  }, [resetHints]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [resetHints, resetStruggle]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-play opponent responses
   useEffect(() => {
@@ -115,6 +141,12 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
           const completeMsg = setupRevealComplete(puzzle.tacticType);
           setMessage(completeMsg);
           void voiceService.speak(completeMsg);
+          recordTacticOutcome({
+            tacticType: puzzle.tacticType,
+            found: true,
+            wasCoached: wrongAttemptsRef.current > 0,
+            context: 'setup',
+          });
           setTimeout(() => onComplete(true), 2000);
         }, 800);
         return () => clearTimeout(timer);
@@ -174,8 +206,12 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       return;
     }
 
-    // Wrong move — reset the board to current position
+    // Wrong move — let the player retry (not one-shot fail)
+    wrongAttemptsRef.current += 1;
+    setWrongAttemptCount(wrongAttemptsRef.current);
     setBoardState('incorrect');
+    voiceService.stop();
+
     const wrongMsg = setupIncorrect();
     setMessage(wrongMsg);
     void voiceService.speak(wrongMsg);
@@ -185,10 +221,10 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     setFen(chessRef.current.fen());
     setBoardKey((k) => k + 1);
 
-    if (!hasCompleted.current) {
-      hasCompleted.current = true;
-      setTimeout(() => onComplete(false), 2000);
-    }
+    // Brief feedback then back to thinking — allow retry
+    setTimeout(() => {
+      setBoardState('thinking');
+    }, 1500);
   }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType, onComplete, resetHints]);
 
   const statusColor = boardState === 'correct'
