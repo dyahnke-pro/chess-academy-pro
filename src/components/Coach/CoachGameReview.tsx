@@ -39,6 +39,7 @@ interface CoachGameReviewProps {
   onPracticeInChat?: (prompt: string) => void;
   isGuidedLesson?: boolean;
   pgn?: string;
+  initialMoveIndex?: number;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -78,15 +79,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     onPlayAgain, onBackToCoach, onPracticeInChat,
     isGuidedLesson, pgn,
   } = props;
+  const initialMoveIndex = props.initialMoveIndex;
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
     isGuidedLesson ? 'analysis' : 'summary',
   );
 
+  const startIndex = initialMoveIndex !== undefined
+    ? Math.min(initialMoveIndex, moves.length - 1)
+    : isGuidedLesson ? -1 : (moves.length > 0 ? moves.length - 1 : -1);
+
   const [reviewState, setReviewState] = useState<ReviewState>({
     mode: isGuidedLesson ? 'guided_lesson' : 'analysis',
-    currentMoveIndex: isGuidedLesson ? -1 : (moves.length > 0 ? moves.length - 1 : -1),
+    currentMoveIndex: startIndex,
     whatIfMoves: [],
     whatIfStartFen: null,
   });

@@ -110,6 +110,7 @@ function analyzeOpenings(repertoire: OpeningRecord[]): {
     });
   }
 
+
   weaknesses.sort((a, b) => b.severity - a.severity);
 
   return { weaknesses, strengths };
@@ -179,11 +180,11 @@ function analyzeGames(games: GameRecord[]): {
     strengths.push(`Clean calculation (only ${totalBlunders + totalMistakes} errors in ${gamesWithAnnotations} games)`);
   }
 
-  // Time management / late-game collapse
+  // Late-game collapse
   if (lateBlunderGames >= 2 && gamesWithAnnotations >= MIN_GAMES_FOR_TIME_ANALYSIS) {
     const collapseRate = lateBlunderGames / gamesWithAnnotations;
     weaknesses.push({
-      category: 'time_management',
+      category: 'calculation',
       label: 'Late-game collapses',
       metric: `${lateBlunderGames} of ${gamesWithAnnotations} games had multiple errors in the last 10 moves`,
       severity: Math.min(85, Math.round(collapseRate * 200)),
@@ -301,9 +302,9 @@ function analyzeFlashcards(flashcards: FlashcardRecord[]): {
 
   if (flashcards.length === 0) return { weaknesses, strengths };
 
-  const today = new Date().toISOString().split('T')[0];
-  const overdue = flashcards.filter((f) => f.srsDueDate <= today);
   const reviewed = flashcards.filter((f) => f.srsLastReview !== null);
+  const today = new Date().toISOString().split('T')[0];
+  const overdue = flashcards.filter((f) => f.srsLastReview !== null && f.srsDueDate < today);
 
   // Overdue flashcards
   if (overdue.length > 10) {
@@ -320,6 +321,7 @@ function analyzeFlashcards(flashcards: FlashcardRecord[]): {
       },
     });
   }
+
 
   // Good retention
   if (reviewed.length > 0) {

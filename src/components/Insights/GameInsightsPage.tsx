@@ -1,0 +1,195 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowLeft, RefreshCw, Search, Sparkles } from 'lucide-react';
+import {
+  getOverviewInsights,
+  getOpeningInsights,
+  getMistakeInsights,
+  getTacticInsights,
+} from '../../services/gameInsightsService';
+import { OverviewTab } from './OverviewTab';
+import { OpeningsTab } from './OpeningsTab';
+import { MistakesTab } from './MistakesTab';
+import { TacticsTab } from './TacticsTab';
+import type {
+  InsightsTab,
+  OverviewInsights,
+  OpeningInsights,
+  MistakeInsights,
+  TacticInsights,
+} from '../../types';
+
+const TABS: { id: InsightsTab; label: string }[] = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'openings', label: 'Openings' },
+  { id: 'mistakes', label: 'Mistakes' },
+  { id: 'tactics', label: 'Tactics' },
+];
+
+export function GameInsightsPage(): JSX.Element {
+  const navigate = useNavigate();
+  const [tab, setTab] = useState<InsightsTab>('overview');
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [overview, setOverview] = useState<OverviewInsights | null>(null);
+  const [openings, setOpenings] = useState<OpeningInsights | null>(null);
+  const [mistakes, setMistakes] = useState<MistakeInsights | null>(null);
+  const [tactics, setTactics] = useState<TacticInsights | null>(null);
+
+  async function loadAll(): Promise<void> {
+    const [ov, op, mi, ta] = await Promise.all([
+      getOverviewInsights(),
+      getOpeningInsights(),
+      getMistakeInsights(),
+      getTacticInsights(),
+    ]);
+    setOverview(ov);
+    setOpenings(op);
+    setMistakes(mi);
+    setTactics(ta);
+  }
+
+  useEffect(() => {
+    void loadAll().finally(() => setLoading(false));
+  }, []);
+
+  async function handleRefresh(): Promise<void> {
+    if (refreshing) return;
+    setRefreshing(true);
+    await loadAll();
+    setRefreshing(false);
+  }
+
+  function handleSearch(e: React.SyntheticEvent): void {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      void navigate(`/coach/chat?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-12" data-testid="insights-loading">
+        <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Analysing your games...</span>
+      </div>
+    );
+  }
+
+  const totalGames = overview?.totalGames ?? 0;
+
+  return (
+    <motion.div
+      className="flex flex-col h-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      data-testid="game-insights-page"
+    >
+      {/* Fixed header */}
+      <div className="px-5 pt-5 pb-0 shrink-0">
+        {/* Title row */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => void navigate('/coach')}
+              className="p-1.5 rounded-lg hover:opacity-80"
+              data-testid="back-btn"
+            >
+              <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
+            </button>
+            <div>
+              <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Game Insights</h2>
+              <span className="text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
+                {totalGames} game{totalGames !== 1 ? 's' : ''} analysed
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => void handleRefresh()}
+            disabled={refreshing}
+            className="p-2 rounded-lg hover:opacity-80 disabled:opacity-40"
+            data-testid="refresh-btn"
+          >
+            <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} style={{ color: 'var(--color-text-muted)' }} />
+          </button>
+        </div>
+
+        {/* Search bar */}
+        <form onSubmit={handleSearch} className="mb-3">
+          <div
+            className="flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 border"
+            style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+          >
+            <Search size={14} style={{ color: 'var(--color-text-muted)' }} />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Ask about your games..."
+              className="flex-1 bg-transparent border-none outline-none text-sm"
+              style={{ color: 'var(--color-text)' }}
+              data-testid="search-input"
+            />
+            <div
+              className="flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-md"
+              style={{ color: 'var(--color-accent)', background: 'color-mix(in srgb, var(--color-accent) 12%, transparent)' }}
+            >
+              <Sparkles size={10} />
+              AI
+            </div>
+          </div>
+        </form>
+
+        {/* Summary stats */}
+        {overview && overview.totalGames > 0 && (
+          <div
+            className="flex justify-between py-3 border-b"
+            style={{ borderColor: 'var(--color-border)' }}
+          >
+            <SummaryItem value={`${overview.totalGames}`} label="Games" />
+            <SummaryItem value={`${overview.winRate}%`} label="Win Rate" color="var(--color-success)" />
+            <SummaryItem value={`${overview.avgElo}`} label="Avg ELO" />
+            <SummaryItem value={`${overview.avgAccuracy}%`} label="Accuracy" color="var(--color-warning)" />
+          </div>
+        )}
+
+        {/* Tabs */}
+        <div className="flex border-b" style={{ borderColor: 'var(--color-border)' }}>
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className="flex-1 text-center py-3 text-[11px] font-semibold transition-colors"
+              style={{
+                color: tab === t.id ? 'var(--color-text)' : 'var(--color-text-muted)',
+                borderBottom: tab === t.id ? '2px solid var(--color-accent)' : '2px solid transparent',
+              }}
+              data-testid={`tab-${t.id}`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-5 pb-20 md:pb-6">
+        {tab === 'overview' && overview && <OverviewTab data={overview} />}
+        {tab === 'openings' && openings && <OpeningsTab data={openings} />}
+        {tab === 'mistakes' && mistakes && <MistakesTab data={mistakes} />}
+        {tab === 'tactics' && tactics && <TacticsTab data={tactics} />}
+      </div>
+    </motion.div>
+  );
+}
+
+function SummaryItem({ value, label, color }: { value: string; label: string; color?: string }): JSX.Element {
+  return (
+    <div className="text-center flex-1">
+      <div className="text-xl font-bold" style={{ color: color ?? 'var(--color-text)' }}>{value}</div>
+      <div className="text-[9px] uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>{label}</div>
+    </div>
+  );
+}

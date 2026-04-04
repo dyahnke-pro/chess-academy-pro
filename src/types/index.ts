@@ -672,9 +672,9 @@ export type WeaknessCategory =
   | 'openings'
   | 'opening_weakspots'
   | 'endgame'
-  | 'time_management'
+  | 'calculation'
   | 'positional'
-  | 'calculation';
+  | 'time_management';
 
 export interface WeaknessTrainingAction {
   route: string;
@@ -781,6 +781,112 @@ export interface MissedTactic {
   evalSwing: number;
   tacticType: TacticType;
   explanation: string;
+}
+
+// ─── Game Insights ──────────────────────────────────────────────────────────
+
+export type InsightsTab = 'overview' | 'openings' | 'mistakes' | 'tactics';
+
+export interface OverviewInsights {
+  totalGames: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  winRate: number;
+  winRateWhite: number;
+  winRateBlack: number;
+  avgElo: number;
+  avgAccuracy: number;
+  highestBeaten: { name: string; elo: number; gameId: string } | null;
+  lowestLostTo: { name: string; elo: number; gameId: string } | null;
+  classificationCounts: MoveClassificationCounts;
+  totalMoves: number;
+  avgMovesPerGame: number;
+  avgBrilliantsPerGame: number;
+  avgMistakesPerGame: number;
+  avgBlundersPerGame: number;
+  avgInaccuraciesPerGame: number;
+  bestMoveAgreement: number;
+  phaseAccuracy: PhaseAccuracy[];
+  accuracyWhite: number;
+  accuracyBlack: number;
+  strengths: string[];
+}
+
+export interface OpeningAggregateStats {
+  name: string;
+  eco: string | null;
+  openingId: string | null;
+  games: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  winRate: number;
+  avgAccuracy: number;
+  gameIds: string[];
+}
+
+export interface OpeningInsights {
+  repertoireCoverage: { inBook: number; offBook: number };
+  mostPlayedWhite: OpeningAggregateStats[];
+  mostPlayedBlack: OpeningAggregateStats[];
+  winRateByOpening: OpeningAggregateStats[];
+  drillAccuracyByOpening: { name: string; accuracy: number; attempts: number }[];
+  strengths: string[];
+}
+
+export interface CostlyMistake {
+  gameId: string;
+  moveNumber: number;
+  san: string;
+  cpLoss: number;
+  classification: string;
+  opponentName: string;
+  date: string;
+  openingName: string | null;
+  phase: MistakeGamePhase;
+}
+
+export interface MistakeInsights {
+  errorBreakdown: { blunders: number; mistakes: number; inaccuracies: number };
+  missedWins: number;
+  avgCpLoss: number;
+  errorsByPhase: { phase: GamePhase; errors: number; avgCpLoss: number }[];
+  errorsBySituation: { winning: number; equal: number; losing: number };
+  thrownWins: number;
+  lateGameCollapses: number;
+  costliestMistakes: CostlyMistake[];
+  puzzleProgress: { unsolved: number; solved: number; mastered: number };
+  totalGames: number;
+  strengths: string[];
+}
+
+export interface TacticalMoment {
+  gameId: string;
+  moveNumber: number;
+  san: string;
+  fen: string;
+  evalSwing: number;
+  tacticType: TacticType;
+  explanation: string;
+  opponentName: string;
+  date: string;
+  openingName: string | null;
+}
+
+export interface TacticInsights {
+  tacticsFound: { brilliant: number; great: number };
+  avgBrilliantsPerGame: number;
+  avgGreatPerGame: number;
+  tacticsByType: { type: TacticType; count: number }[];
+  bestSequences: TacticalMoment[];
+  worstMisses: TacticalMoment[];
+  missedByType: { type: TacticType; count: number; avgCost: number }[];
+  foundVsMissed: { found: number; missed: number };
+  awarenessRate: number;
+  missedByPhase: { phase: GamePhase; count: number }[];
+  totalGames: number;
+  strengths: string[];
 }
 
 // ─── Classified Tactics (persisted) ─────────────────────────────────────────

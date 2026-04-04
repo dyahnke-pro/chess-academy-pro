@@ -511,6 +511,7 @@ describe('coachTrainingService', () => {
       expect(posRec?.type).toBe('tactic_drill');
     });
 
+
     it('maps endgame category to endgame_practice', async () => {
       const weakness: WeaknessProfile = {
         computedAt: new Date().toISOString(),

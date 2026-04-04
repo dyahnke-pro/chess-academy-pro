@@ -26,7 +26,8 @@ import { PuzzlesHubPage } from './components/Puzzles/PuzzlesHubPage';
 import { CoachGamePage } from './components/Coach/CoachGamePage';
 import { CoachChatPage } from './components/Coach/CoachChatPage';
 import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
-import { CoachWeaknessReport } from './components/Coach/CoachWeaknessReport';
+import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
+import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { CoachTrainPage } from './components/Coach/CoachTrainPage';
 import { TacticsPage } from './components/Tactics/TacticsPage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
@@ -148,6 +149,8 @@ export function App(): JSX.Element {
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
           <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
+          <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
+          <Route path="/coach/report" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           {/* Puzzles */}
           <Route path="/puzzles" element={<ErrorBoundary><PuzzlesHubPage /></ErrorBoundary>} />
@@ -162,9 +165,8 @@ export function App(): JSX.Element {
           <Route path="/tactics/drill" element={<ErrorBoundary><TacticDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/setup" element={<ErrorBoundary><TacticSetupPage /></ErrorBoundary>} />
           <Route path="/tactics/create" element={<ErrorBoundary><TacticCreatePage /></ErrorBoundary>} />
-          {/* Weaknesses */}
-          <Route path="/weaknesses" element={<ErrorBoundary><CoachWeaknessReport /></ErrorBoundary>} />
           {/* Backward-compat redirects */}
+          <Route path="/weaknesses" element={<Navigate to="/coach/report" replace />} />
           <Route path="/weaknesses/puzzles" element={<Navigate to="/puzzles/weakness" replace />} />
           <Route path="/weaknesses/adaptive" element={<Navigate to="/puzzles/adaptive" replace />} />
           <Route path="/weaknesses/classic" element={<Navigate to="/puzzles/classic" replace />} />
