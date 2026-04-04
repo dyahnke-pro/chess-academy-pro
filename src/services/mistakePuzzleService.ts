@@ -341,6 +341,9 @@ async function analyzeGameWithStockfish(
       playerMove = san;
     }
 
+    // Skip if deeper analysis confirms the player's move was actually best
+    if (bestMove === playerMove || bestMoveSan === playerMoveSan) continue;
+
     // Eval before mistake from the player's perspective (positive = player is better)
     const evalBeforeFromPlayer = playerColor === 'white'
       ? evalBefore / 100
@@ -526,6 +529,9 @@ async function generateFromAnnotations(
       playerMove = annotation.san;
     }
 
+    // Skip if deeper analysis confirms the player's move was actually best
+    if (bestMove === playerMove || bestMoveSan === playerMoveSan) continue;
+
     // Compute eval before from annotation context (player perspective)
     let evalBeforeFromPlayer: number | null = null;
     if (annotation.evaluation !== null) {
@@ -698,11 +704,24 @@ export async function getMistakePuzzlesDue(
   limit: number = 20,
 ): Promise<MistakePuzzle[]> {
   const today = new Date().toISOString().split('T')[0];
-  return db.mistakePuzzles
+  const due = await db.mistakePuzzles
     .where('srsDueDate')
     .belowOrEqual(today)
-    .limit(limit)
     .toArray();
+
+  // Prioritize newest games first; games older than 1 year are lowest priority
+  const now = Date.now();
+  const oneYear = 365 * 24 * 60 * 60 * 1000;
+  due.sort((a, b) => {
+    const dateA = a.gameDate ? new Date(a.gameDate).getTime() : new Date(a.createdAt).getTime();
+    const dateB = b.gameDate ? new Date(b.gameDate).getTime() : new Date(b.createdAt).getTime();
+    const oldA = (now - dateA) > oneYear;
+    const oldB = (now - dateB) > oneYear;
+    if (oldA !== oldB) return oldA ? 1 : -1;
+    return dateB - dateA;
+  });
+
+  return due.slice(0, limit);
 }
 
 export async function getMistakePuzzlesByGame(
@@ -724,7 +743,21 @@ export async function getMistakePuzzlesByClassification(
 }
 
 export async function getAllMistakePuzzles(): Promise<MistakePuzzle[]> {
-  return db.mistakePuzzles.toArray();
+  const all = await db.mistakePuzzles.toArray();
+
+  // Newest games first; games older than 1 year are lowest priority
+  const now = Date.now();
+  const oneYear = 365 * 24 * 60 * 60 * 1000;
+  all.sort((a, b) => {
+    const dateA = a.gameDate ? new Date(a.gameDate).getTime() : new Date(a.createdAt).getTime();
+    const dateB = b.gameDate ? new Date(b.gameDate).getTime() : new Date(b.createdAt).getTime();
+    const oldA = (now - dateA) > oneYear;
+    const oldB = (now - dateB) > oneYear;
+    if (oldA !== oldB) return oldA ? 1 : -1;
+    return dateB - dateA;
+  });
+
+  return all;
 }
 
 export async function getMistakePuzzlesByPhase(
@@ -777,6 +810,9 @@ export async function gradeMistakePuzzle(
     attempts: newAttempts,
     successes: newSuccesses,
   });
+
+  // Invalidate the tactical profile cache so it recomputes with fresh data
+  await db.meta.delete('tactical_profile');
 }
 
 // ─── Delete ─────────────────────────────────────────────────────────────────

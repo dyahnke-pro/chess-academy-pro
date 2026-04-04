@@ -95,7 +95,7 @@ describe('LeapFrogGame', () => {
 
     const board = screen.getByTestId('chessboard');
     const pos = JSON.parse(board.getAttribute('data-position') ?? '{}') as Record<string, { pieceType: string }>;
-    expect(pos['e1']?.pieceType).toBe('wN');
+    expect(pos['e1'].pieceType).toBe('wN');
   });
 
   it('renders treasure overlay', () => {
@@ -115,7 +115,7 @@ describe('LeapFrogGame', () => {
     expect(screen.getByText(/Moves: 1/)).toBeInTheDocument();
     const board = screen.getByTestId('chessboard');
     const pos = JSON.parse(board.getAttribute('data-position') ?? '{}') as Record<string, { pieceType: string }>;
-    expect(pos['d3']?.pieceType).toBe('wN');
+    expect(pos['d3'].pieceType).toBe('wN');
     expect(pos['e1']).toBeUndefined();
   });
 

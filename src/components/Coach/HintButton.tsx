@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Lightbulb } from 'lucide-react';
 import type { HintLevel } from '../../types';
 
@@ -32,11 +31,10 @@ export function HintButton({
   const isMaxed = currentLevel >= maxLevel;
 
   return (
-    <motion.button
+    <button
       onClick={onRequestHint}
       disabled={disabled || isMaxed}
-      className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors disabled:opacity-50 ${LEVEL_COLORS[currentLevel]}`}
-      whileTap={{ scale: 0.95 }}
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors active:scale-95 disabled:opacity-50 ${LEVEL_COLORS[currentLevel]}`}
       data-testid="hint-button"
       data-level={currentLevel}
     >
@@ -53,6 +51,6 @@ export function HintButton({
           />
         ))}
       </div>
-    </motion.button>
+    </button>
   );
 }

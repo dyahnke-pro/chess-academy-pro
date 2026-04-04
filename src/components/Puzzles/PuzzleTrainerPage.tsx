@@ -6,10 +6,12 @@ import type { PuzzleRecord } from '../../types';
 import type { SrsGrade } from '../../types';
 import { PuzzleModeSelector } from './PuzzleModeSelector';
 import { PuzzleBoard } from './PuzzleBoard';
+import type { PuzzleOutcome } from './PuzzleBoard';
 import { SrsGradeButtons } from './SrsGradeButtons';
 import { PuzzleTimer } from './PuzzleTimer';
 import { PuzzleSessionStats } from './PuzzleSessionStats';
 import { useSolveTimer } from '../../hooks/useSolveTimer';
+import { voiceService } from '../../services/voiceService';
 import { ArrowLeft, Brain, SkipForward } from 'lucide-react';
 import { db } from '../../db/schema';
 
@@ -63,7 +65,7 @@ export function PuzzleTrainerPage(): JSX.Element {
     resetTimer();
   }, [userRating, resetTimer]);
 
-  const handlePuzzleComplete = useCallback((correct: boolean): void => {
+  const handlePuzzleComplete = useCallback(({ correct }: PuzzleOutcome): void => {
     if (!session) return;
     setTimerRunning(false);
 
@@ -88,7 +90,7 @@ export function PuzzleTrainerPage(): JSX.Element {
   }, [session]);
 
   const handleTimeout = useCallback((): void => {
-    handlePuzzleComplete(false);
+    handlePuzzleComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false });
   }, [handlePuzzleComplete]);
 
   const handleGrade = useCallback(async (grade: SrsGrade): Promise<void> => {
@@ -122,6 +124,7 @@ export function PuzzleTrainerPage(): JSX.Element {
     }
 
     // Move to next puzzle or end session
+    voiceService.stop();
     const nextIndex = session.currentIndex + 1;
     if (nextIndex >= session.puzzles.length) {
       setPhase('complete');
@@ -140,6 +143,7 @@ export function PuzzleTrainerPage(): JSX.Element {
 
   const handleSkip = useCallback((): void => {
     if (!session) return;
+    voiceService.stop();
 
     const nextIndex = session.currentIndex + 1;
     if (nextIndex >= session.puzzles.length) {
@@ -158,6 +162,7 @@ export function PuzzleTrainerPage(): JSX.Element {
   }, [session, resetTimer]);
 
   const handleBack = useCallback((): void => {
+    voiceService.stop();
     setPhase('mode_select');
     setSession(null);
     setTimerRunning(false);

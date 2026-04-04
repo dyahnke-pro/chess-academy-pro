@@ -42,7 +42,6 @@ import {
 const mockGetStoredWeaknessProfile = vi.mocked(getStoredWeaknessProfile);
 const mockGetFlashcardStats = vi.mocked(getFlashcardStats);
 const mockGetWeakestOpenings = vi.mocked(getWeakestOpenings);
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const mockGamesWhere = vi.mocked(db.games.where);
 
 function mockGamesQuery(games: GameRecord[]): void {
@@ -186,6 +185,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Needs work on tactics.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -218,6 +218,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Work needed.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -250,6 +251,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Work needed.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -314,6 +316,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Work needed.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -361,6 +364,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Openings need work.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -404,6 +408,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Multiple weaknesses.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -441,6 +446,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'OK.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -470,6 +476,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Openings.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
@@ -479,6 +486,31 @@ describe('coachTrainingService', () => {
       const openingRec = recs.find((r) => r.id === 'weakness-openings');
       expect(openingRec?.type).toBe('opening_review');
     });
+
+    it('maps positional category to tactic_drill', async () => {
+      const weakness: WeaknessProfile = {
+        computedAt: new Date().toISOString(),
+        items: [
+          {
+            category: 'positional',
+            label: 'Positional Play',
+            metric: '40%',
+            severity: 75,
+            detail: 'Positional.',
+          },
+        ],
+        strengths: [],
+        strengthItems: [],
+        overallAssessment: 'Positional.',
+      };
+      mockGetStoredWeaknessProfile.mockResolvedValue(weakness);
+
+      const profile = buildUserProfile();
+      const recs = await getTrainingRecommendations(profile);
+      const posRec = recs.find((r) => r.id === 'weakness-positional');
+      expect(posRec?.type).toBe('tactic_drill');
+    });
+
 
     it('maps endgame category to endgame_practice', async () => {
       const weakness: WeaknessProfile = {
@@ -493,6 +525,7 @@ describe('coachTrainingService', () => {
           },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: 'Endgames.',
       };
       mockGetStoredWeaknessProfile.mockResolvedValue(weakness);

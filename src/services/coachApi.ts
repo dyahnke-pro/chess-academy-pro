@@ -26,6 +26,10 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   weakness_report:         'deepseek-reasoner',
   weekly_report:           'deepseek-reasoner',
   deep_analysis:           'deepseek-reasoner',
+  model_game_annotation:   'deepseek-reasoner',
+  middlegame_plan_generation: 'deepseek-reasoner',
+  sideline_explanation:    'deepseek-chat',
+  smart_search:            'deepseek-chat',
 };
 
 const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
@@ -48,6 +52,10 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   weakness_report:         'claude-opus-4-6',
   weekly_report:           'claude-opus-4-6',
   deep_analysis:           'claude-opus-4-6',
+  model_game_annotation:   'claude-sonnet-4-6',
+  middlegame_plan_generation: 'claude-sonnet-4-6',
+  sideline_explanation:    'claude-haiku-4-5-20251001',
+  smart_search:            'claude-haiku-4-5-20251001',
 };
 
 // Offline fallback templates
@@ -114,7 +122,7 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
 }
 
 /** Get a fallback config using the OTHER provider. Returns null if no alternate key available. */
-async function getFallbackConfig(failedProvider: AiProvider): Promise<ProviderConfig | null> {
+function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
   try {
     const anthropicEnvKey = getAnthropicKey();
     const deepseekEnvKey = getDeepseekKey();
@@ -267,22 +275,24 @@ async function callChatWithConfig(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPrompt: string,
   onStream?: (chunk: string) => void,
+  task: CoachTask = 'chat_response',
+  maxTokens: number = 1024,
 ): Promise<string> {
-  const model = getModel('chat_response', config.provider);
+  const model = getModel(task, config.provider);
   if (config.provider === 'anthropic') {
     if (onStream) {
-      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 1024, onStream);
+      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, maxTokens, onStream);
     }
-    return await callAnthropic(config.apiKey, model, systemPrompt, messages, 1024, 'chat_response');
+    return await callAnthropic(config.apiKey, model, systemPrompt, messages, maxTokens, 'chat_response');
   } else {
     const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       ...messages,
     ];
     if (onStream) {
-      return await callDeepSeekStream(config.apiKey, model, allMessages, 1024, onStream);
+      return await callDeepSeekStream(config.apiKey, model, allMessages, maxTokens, onStream);
     }
-    return await callDeepSeek(config.apiKey, model, allMessages, 1024, 'chat_response');
+    return await callDeepSeek(config.apiKey, model, allMessages, maxTokens, 'chat_response');
   }
 }
 
@@ -290,6 +300,8 @@ export async function getCoachChatResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPromptAddition: string,
   onStream?: (chunk: string) => void,
+  task: CoachTask = 'chat_response',
+  maxTokens: number = 1024,
 ): Promise<string> {
   const config = await getProviderConfig();
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
@@ -297,13 +309,13 @@ export async function getCoachChatResponse(
   const systemPrompt = SYSTEM_PROMPT + '\n\n' + systemPromptAddition;
 
   try {
-    return await callChatWithConfig(config, messages, systemPrompt, onStream);
+    return await callChatWithConfig(config, messages, systemPrompt, onStream, task, maxTokens);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
-    const fallback = await getFallbackConfig(config.provider);
+    const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
-        return await callChatWithConfig(fallback, messages, systemPrompt, onStream);
+        return await callChatWithConfig(fallback, messages, systemPrompt, onStream, task, maxTokens);
       } catch (fallbackError) {
         console.error('[CoachAPI] Fallback also failed:', fallbackError);
         const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
@@ -356,7 +368,7 @@ export async function getCoachCommentary(
     return await callCommentaryWithConfig(config, task, userMessage, onStream);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
-    const fallback = await getFallbackConfig(config.provider);
+    const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
         return await callCommentaryWithConfig(fallback, task, userMessage, onStream);

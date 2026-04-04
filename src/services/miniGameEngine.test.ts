@@ -179,8 +179,9 @@ describe('getAiMove', () => {
   it('returns a valid pawn move in standard position', () => {
     const move = getAiMove(STANDARD_PAWN_WARS, DEFAULT_AI_CONFIG, 'pawn-wars');
     expect(move).not.toBeNull();
+    if (move === null) throw new Error('Expected move to be non-null');
     // Move should be a UCI string (e.g. "e2e4")
-    expect(move!.length).toBeGreaterThanOrEqual(4);
+    expect(move.length).toBeGreaterThanOrEqual(4);
   });
 
   it('returns null when no legal pawn moves exist', () => {
@@ -200,8 +201,9 @@ describe('getAiMove', () => {
     const blackToMoveFen = '7k/8/2pppp2/8/8/2PPPP2/8/K7 b - - 0 1';
     const move = getAiMove(blackToMoveFen, aiConfig, 'blocker');
     expect(move).not.toBeNull();
+    if (move === null) throw new Error('Expected move to be non-null');
     // With targetPawnFile 'e' and high score bonus, the e6 pawn should be selected
-    expect(move!.startsWith('e6')).toBe(true);
+    expect(move.startsWith('e6')).toBe(true);
   });
 
   it('always returns a move when pawn moves are available', () => {
@@ -224,8 +226,9 @@ describe('getAiMove', () => {
       'pawn-wars',
     );
     expect(move).not.toBeNull();
+    if (move === null) throw new Error('Expected move to be non-null');
     // Should include promotion piece (e.g. "e7e8q")
-    expect(move!).toMatch(/e7e8/);
+    expect(move).toMatch(/e7e8/);
   });
 });
 
@@ -235,8 +238,9 @@ describe('getBestPlayerMove', () => {
   it('returns a move when it is the player turn', () => {
     const move = getBestPlayerMove(STANDARD_PAWN_WARS, 'w');
     expect(move).not.toBeNull();
-    expect(move!.from).toBeDefined();
-    expect(move!.to).toBeDefined();
+    if (move === null) throw new Error('Expected move to be non-null');
+    expect(move.from).toBeDefined();
+    expect(move.to).toBeDefined();
   });
 
   it('returns null when it is not the player turn', () => {

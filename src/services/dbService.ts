@@ -21,7 +21,6 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
     longestStreak: 0,
     streakFreezes: 1,
     lastActiveDate: new Date().toISOString().split('T')[0],
-    achievements: [],
     skillRadar: {
       opening: 50,
       tactics: 50,
@@ -210,12 +209,31 @@ export async function getRecentSessions(limit: number = 30): Promise<SessionReco
 // ─── Export / Import ──────────────────────────────────────────────────────────
 
 export async function exportUserData(): Promise<string> {
-  const [profiles, sessions, openings, flashcards] = await Promise.all([
+  const [
+    profiles,
+    sessions,
+    openings,
+    flashcards,
+    games,
+    mistakePuzzles,
+    classifiedTactics,
+    setupPuzzles,
+    openingWeakSpots,
+  ] = await Promise.all([
     db.profiles.toArray(),
     db.sessions.toArray(),
     db.openings.filter((o) => o.isRepertoire).toArray(),
     db.flashcards.toArray(),
+    db.games.toArray(),
+    db.mistakePuzzles.toArray(),
+    db.classifiedTactics.toArray(),
+    db.setupPuzzles.toArray(),
+    db.openingWeakSpots.toArray(),
   ]);
 
-  return JSON.stringify({ profiles, sessions, openings, flashcards }, null, 2);
+  return JSON.stringify(
+    { profiles, sessions, openings, flashcards, games, mistakePuzzles, classifiedTactics, setupPuzzles, openingWeakSpots },
+    null,
+    2,
+  );
 }

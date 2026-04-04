@@ -12,7 +12,7 @@ test.describe('Puzzle Session', () => {
   });
 
   test('puzzle page loads chess board', async ({ page }) => {
-    await page.goto('/puzzles');
+    await page.goto('/weaknesses/adaptive');
     await page.waitForLoadState('networkidle');
     // Page should render some puzzle UI
     const body = page.locator('body');

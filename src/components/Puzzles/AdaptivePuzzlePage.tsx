@@ -16,6 +16,8 @@ import type {
   AdaptiveSessionSummary as SummaryData,
 } from '../../services/adaptivePuzzleService';
 import type { PuzzleRecord } from '../../types';
+import type { PuzzleOutcome } from './PuzzleBoard';
+import { voiceService } from '../../services/voiceService';
 import { DifficultySelector } from './DifficultySelector';
 import { PuzzleBoard } from './PuzzleBoard';
 import { AdaptiveSessionPanel } from './AdaptiveSessionPanel';
@@ -25,6 +27,11 @@ import { db } from '../../db/schema';
 type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'summary';
 
 const CHECKPOINT_INTERVAL = 10;
+
+/** WO-TACTICS-ADAPTIVE-01: Rating adjustments per outcome. */
+const RATING_DELTA_CLEAN = 20;
+const RATING_DELTA_ASSISTED = 5;
+const RATING_DELTA_FAILED = -20;
 
 export function AdaptivePuzzlePage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -38,9 +45,16 @@ export function AdaptivePuzzlePage(): JSX.Element {
   const [currentPuzzle, setCurrentPuzzle] = useState<PuzzleRecord | null>(null);
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [stats, setStats] = useState<PuzzleStats | null>(null);
+  const [playerRating, setPlayerRating] = useState<number>(activeProfile?.puzzleRating ?? 1200);
+  const [ratingDelta, setRatingDelta] = useState<number | null>(null);
   const seenIdsRef = useRef<Set<string>>(new Set());
 
   const userRating = activeProfile?.puzzleRating ?? 1200;
+
+  // Keep playerRating synced with profile
+  useEffect(() => {
+    setPlayerRating(activeProfile?.puzzleRating ?? 1200);
+  }, [activeProfile?.puzzleRating]);
 
   // Seed puzzles and load stats on mount
   useEffect(() => {
@@ -51,12 +65,15 @@ export function AdaptivePuzzlePage(): JSX.Element {
     const puzzle = await getNextAdaptivePuzzle(sess, seenIdsRef.current);
     if (!puzzle) {
       // No more puzzles available — end session
+      voiceService.stop();
       setSummary(getAdaptiveSessionSummary(sess));
       setPhase('summary');
       return;
     }
+    voiceService.stop();
     seenIdsRef.current.add(puzzle.id);
     setCurrentPuzzle(puzzle);
+    setRatingDelta(null);
     setPhase('solving');
   }, []);
 
@@ -76,31 +93,49 @@ export function AdaptivePuzzlePage(): JSX.Element {
     }
   }, [forcedWeakThemes, handleSelectDifficulty]);
 
-  const handlePuzzleComplete = useCallback(async (correct: boolean): Promise<void> => {
+  const handlePuzzleComplete = useCallback(async (outcome: PuzzleOutcome): Promise<void> => {
     if (!session || !currentPuzzle) return;
+
+    // Determine WO-specified rating delta
+    let delta: number;
+    if (outcome.correct && !outcome.usedHint && !outcome.hadRetry && !outcome.showedSolution) {
+      // Clean solve: no hints, 1st try
+      delta = RATING_DELTA_CLEAN;
+    } else if (outcome.correct) {
+      // Correct but used hint or had retry
+      delta = RATING_DELTA_ASSISTED;
+    } else {
+      // Failed (2 wrong attempts or showed solution)
+      delta = RATING_DELTA_FAILED;
+    }
 
     // Update adaptive session state
     const updatedSession = processAdaptiveResult(
       session,
       currentPuzzle.rating,
-      correct,
+      outcome.correct,
       currentPuzzle.themes,
     );
     setSession(updatedSession);
 
+    // Apply the WO-specified Elo delta to the player's persistent puzzle rating
+    const newRating = Math.max(100, playerRating + delta);
+    setPlayerRating(newRating);
+    setRatingDelta(delta);
+
     // Record attempt in DB (auto-grade: correct='good', incorrect='again')
-    const result = await recordAttempt(
+    await recordAttempt(
       currentPuzzle.id,
-      correct,
+      outcome.correct,
       userRating,
-      correct ? 'good' : 'again',
+      outcome.correct ? 'good' : 'again',
     );
 
-    // Update profile rating
-    if (result && activeProfile) {
-      const updatedProfile = { ...activeProfile, puzzleRating: result.newUserRating };
+    // Update profile rating with the WO delta
+    if (activeProfile) {
+      const updatedProfile = { ...activeProfile, puzzleRating: newRating };
       setActiveProfile(updatedProfile);
-      void db.profiles.update(activeProfile.id, { puzzleRating: result.newUserRating });
+      void db.profiles.update(activeProfile.id, { puzzleRating: newRating });
     }
 
     // Check if checkpoint
@@ -111,7 +146,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
 
     // Fetch next puzzle
     await fetchNextPuzzle(updatedSession);
-  }, [session, currentPuzzle, userRating, activeProfile, setActiveProfile, fetchNextPuzzle]);
+  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle]);
 
   const handleContinueAfterCheckpoint = useCallback(async (): Promise<void> => {
     if (!session) return;
@@ -130,6 +165,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
     setSession(null);
     setCurrentPuzzle(null);
     setSummary(null);
+    setRatingDelta(null);
     seenIdsRef.current = new Set();
     void getPuzzleStats().then(setStats);
   }, []);
@@ -161,7 +197,20 @@ export function AdaptivePuzzlePage(): JSX.Element {
           <h1 className="text-xl font-bold text-theme-text">Puzzles</h1>
         </div>
         <div className="flex-1" />
-        <span className="text-sm text-theme-text-muted">Rating: {userRating}</span>
+        {/* Player rating badge with animated delta */}
+        <div className="flex items-center gap-2" data-testid="player-rating-header">
+          <span className={`text-sm font-semibold text-theme-text ${ratingDelta !== null ? 'rating-bump' : ''}`} data-testid="player-rating-value">
+            Rating: {playerRating}
+          </span>
+          {ratingDelta !== null && (
+            <span
+              className={`text-xs font-bold ${ratingDelta > 0 ? 'text-green-400' : 'text-red-400'}`}
+              data-testid="rating-delta"
+            >
+              {ratingDelta > 0 ? '+' : ''}{ratingDelta}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Difficulty Select */}
@@ -179,7 +228,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
           <DifficultySelector onSelect={(d) => void handleSelectDifficulty(d)} />
           <div className="flex justify-center gap-6">
             <Link
-              to="/puzzles/classic"
+              to="/weaknesses/classic"
               className="flex items-center gap-2 text-sm text-theme-text-muted hover:text-theme-text transition-colors"
               data-testid="classic-trainer-link"
             >
@@ -187,7 +236,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
               Classic Trainer
             </Link>
             <Link
-              to="/puzzles/mistakes"
+              to="/weaknesses/mistakes"
               className="flex items-center gap-2 text-sm text-theme-text-muted hover:text-theme-text transition-colors"
               data-testid="my-mistakes-link"
             >
@@ -211,7 +260,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
           <div className="space-y-3">
             <PuzzleBoard
               puzzle={currentPuzzle}
-              onComplete={(correct) => void handlePuzzleComplete(correct)}
+              onComplete={(outcome) => void handlePuzzleComplete(outcome)}
             />
           </div>
           <div className="space-y-4">

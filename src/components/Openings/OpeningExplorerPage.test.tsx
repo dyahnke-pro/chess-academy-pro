@@ -94,6 +94,10 @@ vi.mock('../../services/dataLoader', () => ({
   seedDatabase: vi.fn().mockResolvedValue(undefined),
 }));
 
+vi.mock('../../services/coachApi', () => ({
+  getCoachChatResponse: vi.fn().mockResolvedValue(''),
+}));
+
 describe('OpeningExplorerPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -123,7 +127,7 @@ describe('OpeningExplorerPage', () => {
   it('shows search input', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByTestId('opening-search')).toBeInTheDocument();
+      expect(screen.getByTestId('smart-search-input')).toBeInTheDocument();
     });
   });
 
@@ -195,10 +199,10 @@ describe('OpeningExplorerPage', () => {
 
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByTestId('opening-search')).toBeInTheDocument();
+      expect(screen.getByTestId('smart-search-input')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('opening-search');
+    const searchInput = screen.getByTestId('smart-search-input');
     await user.type(searchInput, 'Vienna');
 
     await waitFor(() => {
@@ -215,7 +219,7 @@ describe('OpeningExplorerPage', () => {
       expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('opening-search');
+    const searchInput = screen.getByTestId('smart-search-input');
     await user.type(searchInput, 'Vienna');
 
     await waitFor(() => {

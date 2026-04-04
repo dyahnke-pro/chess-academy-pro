@@ -8,6 +8,16 @@ import { TrainMode } from './TrainMode';
 import { WalkthroughMode } from './WalkthroughMode';
 import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
+import { ModelGamesSection } from './ModelGamesSection';
+import { ModelGameViewer } from './ModelGameViewer';
+import { MiddlegamePlansSection } from './MiddlegamePlansSection';
+import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
+import { CheckpointQuiz } from './CheckpointQuiz';
+import { CommonMistakesSection } from './CommonMistakesSection';
+import { SidelineExplainer } from './SidelineExplainer';
+import commonMistakesData from '../../data/common-mistakes.json';
+import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
+import type { CommonMistake, CheckpointQuizItem } from '../../types';
 import {
   getOpeningById,
   getMasteryPercent,
@@ -16,7 +26,7 @@ import {
   getTotalLines,
   toggleFavorite,
 } from '../../services/openingService';
-import type { OpeningRecord } from '../../types';
+import type { OpeningRecord, ModelGame, MiddlegamePlan } from '../../types';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -35,6 +45,7 @@ import {
   Crosshair,
   Heart,
   PlayCircle,
+  Lock,
 } from 'lucide-react';
 
 type ViewMode =
@@ -56,7 +67,9 @@ type ViewMode =
   | 'trap-walkthrough'
   | 'warning-walkthrough'
   | 'train-traps'
-  | 'train-warnings';
+  | 'train-warnings'
+  | 'model-game'
+  | 'middlegame-plan';
 
 function computeFenFromPgn(pgn: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -84,6 +97,10 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
+  const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -112,8 +129,20 @@ export function OpeningDetailPage(): JSX.Element {
     setActiveVariationIndex(-1);
     setActiveTrapLineIndex(-1);
     setActiveWarningLineIndex(-1);
+    setActiveModelGame(null);
+    setActiveMiddlegamePlan(null);
     void loadOpening();
   }, [loadOpening]);
+
+  const handleSelectModelGame = useCallback((game: ModelGame): void => {
+    setActiveModelGame(game);
+    setViewMode('model-game');
+  }, []);
+
+  const handleSelectMiddlegamePlan = useCallback((plan: MiddlegamePlan): void => {
+    setActiveMiddlegamePlan(plan);
+    setViewMode('middlegame-plan');
+  }, []);
 
   const handleStartVariationWalkthrough = useCallback((index: number): void => {
     setActiveVariationIndex(index);
@@ -377,11 +406,40 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Model game viewer
+  if (viewMode === 'model-game' && activeModelGame) {
+    return (
+      <ModelGameViewer
+        game={activeModelGame}
+        boardOrientation={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Middlegame plan study
+  if (viewMode === 'middlegame-plan' && activeMiddlegamePlan) {
+    return (
+      <MiddlegamePlanStudy
+        plan={activeMiddlegamePlan}
+        boardOrientation={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
   // Detail view
   const mastery = getMasteryPercent(opening);
   const totalLines = getTotalLines(opening);
   const discovered = getLinesDiscovered(opening);
   const perfected = getLinesPerfected(opening);
+
+  // Data lookups for new features
+  const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
+  const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
+  const currentQuiz: CheckpointQuizItem | null = quizzes[quizIndex] as CheckpointQuizItem | undefined ?? null;
+  const hasCompletedMainLine = opening.drillAttempts > 0;
+  const isAdvancedUnlocked = hasCompletedMainLine || mastery > 0;
 
   const NarrationButton = ({ sectionId, text }: { sectionId: string; text: string }): JSX.Element => {
     const isNarrating = narratingSection === sectionId;
@@ -446,37 +504,37 @@ export function OpeningDetailPage(): JSX.Element {
       )}
 
       {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons */}
-      <div className="grid grid-cols-4 gap-2 mb-6">
+      <div className="grid grid-cols-4 gap-1.5 mb-6">
         <button
           onClick={() => setViewMode('walkthrough')}
-          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-accent text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-accent text-white font-semibold text-xs hover:opacity-90 transition-opacity"
           data-testid="walkthrough-btn"
         >
-          <PlayCircle size={20} />
+          <PlayCircle size={18} />
           Watch
         </button>
         <button
           onClick={() => setViewMode('learn')}
-          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-sm hover:bg-theme-border transition-colors"
+          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors"
           data-testid="learn-btn"
         >
-          <LearnIcon size={20} />
+          <LearnIcon size={18} />
           Learn
         </button>
         <button
           onClick={() => setViewMode('practice')}
-          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-sm hover:bg-theme-border transition-colors"
+          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors"
           data-testid="practice-btn"
         >
-          <Brain size={20} />
+          <Brain size={18} />
           Practice
         </button>
         <button
           onClick={() => setViewMode('play')}
-          className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-sm hover:bg-theme-border transition-colors"
+          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors"
           data-testid="play-btn"
         >
-          <Swords size={20} />
+          <Swords size={18} />
           Play
         </button>
       </div>
@@ -512,6 +570,61 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
+      {/* Checkpoint Quiz — after Key Ideas */}
+      {currentQuiz && !quizCompleted && (
+        <CheckpointQuiz
+          quiz={currentQuiz}
+          boardOrientation={opening.color}
+          onComplete={() => {
+            if (quizIndex < quizzes.length - 1) {
+              setQuizIndex((prev) => prev + 1);
+            } else {
+              setQuizCompleted(true);
+            }
+          }}
+        />
+      )}
+
+      {/* Middlegame Plans — gated behind first drill */}
+      {isAdvancedUnlocked ? (
+        <MiddlegamePlansSection
+          openingId={opening.id}
+          onSelectPlan={handleSelectMiddlegamePlan}
+        />
+      ) : (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="plans-locked">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-theme-text-muted" />
+            <h3 className="text-sm font-semibold text-theme-text">Middlegame Plans</h3>
+          </div>
+          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock middlegame plans.</p>
+        </div>
+      )}
+
+      {/* Model Games — gated behind first drill */}
+      {isAdvancedUnlocked ? (
+        <ModelGamesSection
+          openingId={opening.id}
+          onSelectGame={handleSelectModelGame}
+        />
+      ) : (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="games-locked">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-theme-text-muted" />
+            <h3 className="text-sm font-semibold text-theme-text">Model Games</h3>
+          </div>
+          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock model games.</p>
+        </div>
+      )}
+
+      {/* Common Mistakes */}
+      {mistakes.length > 0 && (
+        <CommonMistakesSection
+          mistakes={mistakes}
+          boardOrientation={opening.color}
+        />
+      )}
+
       {/* Traps */}
       {opening.traps && opening.traps.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4">
@@ -541,50 +654,52 @@ export function OpeningDetailPage(): JSX.Element {
               {opening.trapLines.map((line, i) => (
                 <div
                   key={i}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                  className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
                   data-testid={`trap-line-${i}`}
                 >
-                  <MiniBoard fen={trapLineFens[i]} size={52} orientation={opening.color} />
-                  <div className="flex-1 min-w-0">
-                    <span className="text-sm font-medium text-theme-text">{line.name}</span>
-                    <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
+                  <div className="flex items-center gap-3">
+                    <MiniBoard fen={trapLineFens[i]} size={48} orientation={opening.color} />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium text-theme-text">{line.name}</span>
+                      <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 ml-2">
+                  <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
                     <button
                       onClick={() => handleStartTrapLineAction(i, 'walkthrough')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Watch ${line.name}`}
                       title="Watch"
                       data-testid={`trap-walkthrough-${i}`}
                     >
-                      <PlayCircle size={20} />
+                      <PlayCircle size={16} />
                     </button>
                     <button
                       onClick={() => handleStartTrapLineAction(i, 'learn')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Learn ${line.name}`}
                       title="Learn"
                       data-testid={`trap-learn-${i}`}
                     >
-                      <LearnIcon size={20} />
+                      <LearnIcon size={16} />
                     </button>
                     <button
                       onClick={() => handleStartTrapLineAction(i, 'practice')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Practice ${line.name}`}
                       title="Practice"
                       data-testid={`trap-practice-${i}`}
                     >
-                      <Brain size={20} />
+                      <Brain size={16} />
                     </button>
                     <button
                       onClick={() => handleStartTrapLineAction(i, 'play')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Play ${line.name}`}
                       title="Play"
                       data-testid={`trap-play-${i}`}
                     >
-                      <Swords size={20} />
+                      <Swords size={16} />
                     </button>
                   </div>
                 </div>
@@ -623,50 +738,52 @@ export function OpeningDetailPage(): JSX.Element {
               {opening.warningLines.map((line, i) => (
                 <div
                   key={i}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                  className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
                   data-testid={`warning-line-${i}`}
                 >
-                  <MiniBoard fen={warningLineFens[i]} size={52} orientation={opening.color} />
-                  <div className="flex-1 min-w-0">
-                    <span className="text-sm font-medium text-theme-text">{line.name}</span>
-                    <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
+                  <div className="flex items-center gap-3">
+                    <MiniBoard fen={warningLineFens[i]} size={48} orientation={opening.color} />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium text-theme-text">{line.name}</span>
+                      <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 ml-2">
+                  <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
                     <button
                       onClick={() => handleStartWarningLineAction(i, 'walkthrough')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Watch ${line.name}`}
                       title="Watch"
                       data-testid={`warning-walkthrough-${i}`}
                     >
-                      <PlayCircle size={20} />
+                      <PlayCircle size={16} />
                     </button>
                     <button
                       onClick={() => handleStartWarningLineAction(i, 'learn')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Learn ${line.name}`}
                       title="Learn"
                       data-testid={`warning-learn-${i}`}
                     >
-                      <LearnIcon size={20} />
+                      <LearnIcon size={16} />
                     </button>
                     <button
                       onClick={() => handleStartWarningLineAction(i, 'practice')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Practice ${line.name}`}
                       title="Practice"
                       data-testid={`warning-practice-${i}`}
                     >
-                      <Brain size={20} />
+                      <Brain size={16} />
                     </button>
                     <button
                       onClick={() => handleStartWarningLineAction(i, 'play')}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Play ${line.name}`}
                       title="Play"
                       data-testid={`warning-play-${i}`}
                     >
-                      <Swords size={20} />
+                      <Swords size={16} />
                     </button>
                   </div>
                 </div>
@@ -689,60 +806,84 @@ export function OpeningDetailPage(): JSX.Element {
               return (
                 <div
                   key={i}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-theme-border/50 transition-colors group"
+                  className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors group"
                   data-testid={`variation-${i}`}
                 >
-                  {/* Board thumbnail */}
-                  <MiniBoard
-                    fen={variationFens[i]}
-                    size={52}
-                    orientation={opening.color}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-theme-text">{variation.name}</span>
-                      {isPerfected && <Trophy size={12} className="text-yellow-500" />}
-                      {isDiscovered && !isPerfected && <CheckCircle size={12} className="text-green-500" />}
+                  <div className="flex items-center gap-3">
+                    {/* Board thumbnail */}
+                    <MiniBoard
+                      fen={variationFens[i]}
+                      size={48}
+                      orientation={opening.color}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-medium text-theme-text">{variation.name}</span>
+                        {isPerfected && <Trophy size={12} className="text-yellow-500" />}
+                        {isDiscovered && !isPerfected && <CheckCircle size={12} className="text-green-500" />}
+                        {variation.frequency && (
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                            variation.frequency === 'common' ? 'bg-blue-500/15 text-blue-400' :
+                            variation.frequency === 'uncommon' ? 'bg-amber-500/15 text-amber-400' :
+                            'bg-gray-500/15 text-gray-400'
+                          }`}>
+                            {variation.frequency}
+                          </span>
+                        )}
+                        {variation.danger && variation.danger !== 'safe' && (
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                            variation.danger === 'critical' ? 'bg-red-500/15 text-red-400' :
+                            'bg-amber-500/15 text-amber-400'
+                          }`}>
+                            {variation.danger}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                     </div>
-                    <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                   </div>
-                  <div className="flex items-center gap-1.5 ml-2">
+                  <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
                     <button
                       onClick={() => handleStartVariationWalkthrough(i)}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Watch ${variation.name}`}
                       title="Watch"
                       data-testid={`variation-walkthrough-${i}`}
                     >
-                      <PlayCircle size={20} />
+                      <PlayCircle size={16} />
                     </button>
                     <button
                       onClick={() => handleStartVariationLearn(i)}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Learn ${variation.name}`}
                       title="Learn"
                       data-testid={`variation-learn-${i}`}
                     >
-                      <LearnIcon size={20} />
+                      <LearnIcon size={16} />
                     </button>
                     <button
                       onClick={() => handleStartVariationPractice(i)}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Practice ${variation.name}`}
                       title="Practice"
                       data-testid={`variation-practice-${i}`}
                     >
-                      <Brain size={20} />
+                      <Brain size={16} />
                     </button>
                     <button
                       onClick={() => handleStartVariationPlay(i)}
-                      className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
+                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors"
                       aria-label={`Play ${variation.name}`}
                       title="Play"
                       data-testid={`variation-play-${i}`}
                     >
-                      <Swords size={20} />
+                      <Swords size={16} />
                     </button>
+                    <SidelineExplainer
+                      opening={opening}
+                      variation={variation}
+                      fen={variationFens[i]}
+                    />
                   </div>
                 </div>
               );

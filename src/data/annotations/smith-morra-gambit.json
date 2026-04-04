@@ -1320,5 +1320,2186 @@
       ],
       "pawnStructure": "The bishop blockade on d4 is Black's only hope against the passed d6 pawn. The endgame battle revolves around this pawn."
     }
+  ],
+  "subLines": [
+    {
+      "name": "Smith-Morra: Classical Setup",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Smith-Morra: Classical Setup is an important variation of the Smith-Morra Gambit. The main line where Black plays a standard Sicilian setup. White develops naturally with Bc4, O-O, Qe2, and Rd1. The e5 push opens the position and creates immediate threats. After Nxe5, White's pieces dominate the center and the bishop pair rakes across the board. Let's walk through the key ideas."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black replies with c5. This is the defining move of the Smith-Morra: Classical Setup — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "dxc3 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 brings the queen into the game. Development with purpose — the queen on e2 eyes important squares."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 brings the bishop into the game. Development with purpose — the bishop on e7 eyes important squares."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "Rd1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe5",
+          "annotation": "Qxe5 captures the knight. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qc7",
+          "annotation": "Qc7 brings the queen into the game. Development with purpose — the queen on c7 eyes important squares."
+        },
+        {
+          "san": "Qg3",
+          "annotation": "Qg3 activates the queen. From g3, the queen has maximum influence across multiple diagonals and files."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Bd6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Qg5",
+          "annotation": "Qg5 activates the queen. From g5, the queen has maximum influence across multiple diagonals and files."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 improves the bishop's placement. The bishop was less effective on d6 and moves to e7 where it serves the plan better."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4 brings the bishop into the game. Development with purpose — the bishop on f4 eyes important squares."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 captures the knight. This exchange changes the balance — White reconfigures the pawn structure or gains material. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "exd5 captures the knight. This exchange is thematic in the Smith-Morra: Classical Setup — it defines the resulting pawn structure and piece activity.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxd5",
+          "annotation": "Bxd5 completes the variation. The resulting position after this capture offers White clear targets and plans. Study this structure — you'll see it often.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Smith-Morra: Fianchetto Defense",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Smith-Morra: Fianchetto Defense is an important variation of the Smith-Morra Gambit. Black fianchettos with g6 and Bg7. White pushes e5 to cramp Black's position and prevent d5. The Bf4 development combined with O-O creates a harmonious setup. After Nb5 and Nc7, White's knight creates chaos on the queenside while maintaining central control. Let's walk through the key ideas."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black replies with c5. This is the defining move of the Smith-Morra: Fianchetto Defense — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "dxc3 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4 brings the bishop into the game. Development with purpose — the bishop on f4 eyes important squares."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "exd6",
+          "annotation": "exd6 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "d6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxd6",
+          "annotation": "Qxd6 brings the queen into the game. Development with purpose — the queen on d6 eyes important squares.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "d6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nb5",
+          "annotation": "Nb5 improves the knight's placement. The knight was less effective on c3 and moves to b5 where it serves the plan better."
+        },
+        {
+          "san": "Qd7",
+          "annotation": "Qd7 activates the queen. From d7, the queen has maximum influence across multiple diagonals and files."
+        },
+        {
+          "san": "Qxd7",
+          "annotation": "Qxd7 brings the queen into the game. Development with purpose — the queen on d7 eyes important squares.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxd7",
+          "annotation": "Bxd7 brings the bishop into the game. Development with purpose — the bishop on d7 eyes important squares.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc7",
+          "annotation": "Nc7 improves the knight's placement. The knight was less effective on b5 and moves to c7 where it serves the plan better."
+        },
+        {
+          "san": "Rac8",
+          "annotation": "Rac8 improves the rook's placement. The rook was less effective on a8 and moves to c8 where it serves the plan better."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxd5",
+          "annotation": "Bxd5 captures the knight. This exchange changes the balance — White reconfigures the pawn structure or gains material. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rac1",
+          "annotation": "Rac1. This is the typical position arising from the Smith-Morra: Fianchetto Defense. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "c1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Smith-Morra Declined: d3 Push",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Smith-Morra Declined: d3 Push is an important variation of the Smith-Morra Gambit. Black declines by pushing d3 instead of taking on c3. This avoids the gambit but gives White a free developing move with Bxd3. The resulting position is like a Maroczy Bind where White has a comfortable space advantage. The Nc4 and a4-a5 plan creates queenside pressure. Let's walk through the key ideas."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black replies with c5. This is the defining move of the Smith-Morra Declined: d3 Push — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "d3",
+          "annotation": "d3 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bxd3",
+          "annotation": "Bxd3 brings the bishop into the game. Development with purpose — the bishop on d3 eyes important squares.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "Nbd2 brings the knight into the game. Development with purpose — the knight on d2 eyes important squares."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Bc2",
+          "annotation": "Bc2 improves the bishop's placement. The bishop was less effective on d3 and moves to c2 where it serves the plan better."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "b3",
+          "annotation": "b3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "Bb2",
+          "annotation": "Bb2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+        },
+        {
+          "san": "Be6",
+          "annotation": "Be6 brings the bishop into the game. Development with purpose — the bishop on e6 eyes important squares."
+        },
+        {
+          "san": "Nc4",
+          "annotation": "Nc4 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Rc8",
+          "annotation": "Rc8 improves the rook's placement. The rook was less effective on a8 and moves to c8 where it serves the plan better."
+        },
+        {
+          "san": "a4",
+          "annotation": "a4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7 improves the knight's placement. The knight was less effective on f6 and moves to d7 where it serves the plan better. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a5",
+          "annotation": "a5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "a4",
+              "to": "a5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f5",
+          "annotation": "f5. This is the typical position arising from the Smith-Morra Declined: d3 Push. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "f5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Smith-Morra: Siberian Trap",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Smith-Morra: Siberian Trap is an important variation of the Smith-Morra Gambit. The Siberian Trap is the Smith-Morra's most famous tactical idea. After Qa5 and e5, the position becomes razor-sharp. The Nd5 jump is the key move — it forks multiple pieces and creates discovered threats along the e-file. Even if Black defends accurately, White emerges with excellent compensation. Let's walk through the key ideas."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black replies with c5. This is the defining move of the Smith-Morra: Siberian Trap — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "dxc3 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 brings the queen into the game. Development with purpose — the queen on e2 eyes important squares."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 brings the bishop into the game. Development with purpose — the bishop on e7 eyes important squares."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "Rd1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4 brings the bishop into the game. Development with purpose — the bishop on f4 eyes important squares."
+        },
+        {
+          "san": "Qa5",
+          "annotation": "Qa5 brings the queen into the game. Development with purpose — the queen on a5 eyes important squares."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe5",
+          "annotation": "Bxe5 captures the knight. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe5",
+          "annotation": "Qxe5 captures the bishop. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "a5",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Qd6",
+          "annotation": "Qd6 activates the queen. From d6, the queen has maximum influence across multiple diagonals and files."
+        },
+        {
+          "san": "Nxe7+",
+          "annotation": "Nxe7+ captures the bishop. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe7",
+          "annotation": "Qxe7 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe6",
+          "annotation": "Bxe6 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "e6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe6",
+          "annotation": "Bxe6 captures the bishop. This exchange is thematic in the Smith-Morra: Siberian Trap — it defines the resulting pawn structure and piece activity.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe6",
+          "annotation": "Qxe6 completes the variation. The resulting position after this capture offers White clear targets and plans. Study this structure — you'll see it often.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Smith-Morra: Taylor Defense",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Smith-Morra: Taylor Defense is an important variation of the Smith-Morra Gambit. The Taylor Defense with a6 and Nge7 is a common amateur setup. White plays Bg5 to create a pin and then Nd5 is devastating. After exd5 and d6, the passed pawn cramps Black's entire position. The Re1+ pin and Nd4 centralization create a winning attack. Let's walk through the key ideas."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black replies with c5. This is the defining move of the Smith-Morra: Taylor Defense — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "dxc3 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Nge7",
+          "annotation": "Nge7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "Bg5 brings the bishop into the game. Development with purpose — the bishop on g5 eyes important squares."
+        },
+        {
+          "san": "h6",
+          "annotation": "h6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Bh4",
+          "annotation": "Bh4 improves the bishop's placement. The bishop was less effective on g5 and moves to h4 where it serves the plan better."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "Bb3 improves the bishop's placement. The bishop was less effective on c4 and moves to b3 where it serves the plan better."
+        },
+        {
+          "san": "Ng6",
+          "annotation": "Ng6 improves the knight's placement. The knight was less effective on e7 and moves to g6 where it serves the plan better."
+        },
+        {
+          "san": "Bg3",
+          "annotation": "Bg3 improves the bishop's placement. The bishop was less effective on h4 and moves to g3 where it serves the plan better."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 brings the bishop into the game. Development with purpose — the bishop on e7 eyes important squares."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "exd5",
+          "annotation": "exd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "exd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Na5",
+          "annotation": "Na5 improves the knight's placement. The knight was less effective on c6 and moves to a5 where it serves the plan better."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bf6",
+          "annotation": "Bf6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Re1+",
+          "annotation": "Re1+! Check — White forces the king to respond, gaining tempo to improve the position. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Kf8",
+          "annotation": "Kf8 improves the king's placement. The king was less effective on e8 and moves to f8 where it serves the plan better. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "f8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd4",
+          "annotation": "Nd4. This is the typical position arising from the Smith-Morra: Taylor Defense. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Siberian Trap (Qa5-Qe5)",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Smith-Morra Gambit, the Siberian Trap (Qa5-Qe5) is a tactical pattern you should know. A devastating variation of the Siberian Trap. After White's Rd1 and Bf4, the pin on the d-file sets up multiple tactical motifs. The Nd5 sacrifice blows open the position — after exd5 Bxf6, the discovered attack on the queen combined with the bishop invasion is fatal. Let's walk through how it works."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black captures with cxd4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "Black captures with dxc3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "White captures with Nxc3. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black continues with Nf6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays a6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White plays Rd1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qc7",
+          "annotation": "Black continues with Qc7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Ne5",
+          "annotation": "Black plays Ne5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rd8+",
+          "annotation": "White gives check with Rd8+! This is a critical moment in the trap."
+        },
+        {
+          "san": "Kxd8",
+          "annotation": "Black captures with Kxd8. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "d8",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White plays Bg5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf6",
+          "annotation": "White captures with Bxf6. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures with dxc4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxe7+",
+          "annotation": "Bxe7+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Ke8",
+          "annotation": "Ke8! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "e8",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxc4",
+          "annotation": "Qxc4! White wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+        }
+      ]
+    },
+    {
+      "name": "Nd5 Tactical Bomb",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Smith-Morra Gambit, the Nd5 Tactical Bomb is a tactical pattern you should know. The thematic Nd5 jump is the signature move of the Smith-Morra. When it lands, the position explodes. After Nxd5 exd5, the passed d-pawn races forward to d6, cutting Black's position in half. Combined with Nxe5 and Bxe5, White's pieces converge with devastating force. Let's walk through how it works."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black captures with cxd4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "Black captures with dxc3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "White captures with Nxc3. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White plays Rd1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "White plays Nd5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nb8",
+          "annotation": "Black plays Nb8, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bf6",
+          "annotation": "Black plays Bf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bxe5",
+          "annotation": "White captures with Bxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bxe5",
+          "annotation": "Black captures with Bxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxe5",
+          "annotation": "Qxe5. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Qg3",
+          "annotation": "Qg3! The trap is sprung. White has a winning position. This is the key takeaway from the Nd5 Tactical Bomb."
+        }
+      ]
+    },
+    {
+      "name": "Pin Trick on d-file (Nd4)",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Smith-Morra Gambit, the Pin Trick on d-file (Nd4) is a tactical pattern you should know. The pin trick along the d-file is a common motif in the Smith-Morra. After e5 opens the position, Nd5 combines with the rook on d1 to create a deadly pin. Black's queen is under constant pressure, and even if material is traded, White's initiative continues into the endgame. Let's walk through how it works."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black captures with cxd4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "Black captures with dxc3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "White captures with Nxc3. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black continues with Nf6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black plays Be7, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White plays Rd1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "Bg5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays a6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e5",
+          "annotation": "White plays e5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxd5",
+          "annotation": "White captures with Bxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxd5",
+          "annotation": "Black captures with Qxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Rxd5",
+          "annotation": "White captures with Rxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Qxe5",
+          "annotation": "White captures with Qxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bf6",
+          "annotation": "Black plays Bf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Qe8",
+          "annotation": "Qe8. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Bxb2",
+          "annotation": "Bxb2! Now the trap is revealed. Black wins material with this capture."
+        },
+        {
+          "san": "Rb1",
+          "annotation": "Rb1! The trap is sprung. White has a winning position. This is the key takeaway from the Pin Trick on d-file (Nd4)."
+        }
+      ]
+    },
+    {
+      "name": "Development Trap: Passive Play Punished",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Smith-Morra Gambit, the Development Trap: Passive Play Punished is a tactical pattern you should know. When Black plays passively with a6 and delays castling, the e5 push combined with Bg5 creates a nasty pin. After Nd5, the threats multiply — Nxe7 combined with various discovered attacks make the position unplayable for Black. The extra development tempo decides the game. Let's walk through how it works."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black captures with cxd4. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "Black captures with dxc3. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "White captures with Nxc3. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black continues with a6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "Qe2 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White plays Rd1. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Qc7",
+          "annotation": "Black continues with Qc7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays e5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White plays Bg5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black captures with Nxd5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Bxe7",
+          "annotation": "White captures with Bxe7. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Ncxe7",
+          "annotation": "Black captures with Ncxe7. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures with exd5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxe5",
+          "annotation": "Qxe5. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Qxe5",
+          "annotation": "Qxe5! Now the trap is revealed. Black wins material with this capture."
+        },
+        {
+          "san": "Bxa6",
+          "annotation": "Bxa6! White wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+        }
+      ]
+    },
+    {
+      "name": "Chicago Defense: Black Neutralizes",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Smith-Morra Gambit, the Chicago Defense: Black Neutralizes is a dangerous line you must be aware of. Black's most solid setup with ...e6, ...a6, ...b5, and ...Bb7 neutralizes a lot of White's initiative. The bishop on b7 covers d5 and Black slowly untangles. Against this precise defense, White's compensation is at its thinnest — active play is essential to justify the pawn sacrifice. Let's see why."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "dxc3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White continues with Bc4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White plays Bb3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Bb7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White plays Qe2. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White continues with Rd1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Ngf6",
+          "annotation": "Ngf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White plays Bf4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Rac1",
+          "annotation": "White continues with Rac1. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "e5",
+          "annotation": "White plays e5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxe5",
+          "annotation": "Bxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Bf4. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Bf6",
+          "annotation": "Bf6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    },
+    {
+      "name": "Endgame Danger: Black Simplifies",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Smith-Morra Gambit, the Endgame Danger: Black Simplifies is a dangerous line you must be aware of. If Black trades pieces carefully and reaches an endgame, the extra pawn becomes the dominant factor. This is the fundamental weakness of the Smith-Morra — it's built for the middlegame. If you let the position simplify, you're fighting for a draw at best. Let's see why."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "dxc3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White continues with Bc4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White continues with Qe2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White plays Rd1. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "Be3",
+          "annotation": "White continues with Be3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Rac1",
+          "annotation": "White plays Rac1. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Qa5",
+          "annotation": "Qa5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White continues with Bb3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bd7",
+          "annotation": "Bd7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nd4",
+          "annotation": "White plays Nd4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "Nxd4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bxd4",
+          "annotation": "Bxd4 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Bc6",
+          "annotation": "Bc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "f3",
+          "annotation": "White plays f3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Be3",
+          "annotation": "White continues with Be3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bf6",
+          "annotation": "Bf6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "White plays Nd5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bxd5",
+          "annotation": "Bxd5. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Rxd5",
+          "annotation": "Rxd5! This is the move that causes all the trouble."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Black Plays d5 Counterstrike",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the Smith-Morra Gambit, the Black Plays d5 Counterstrike is a dangerous line you must be aware of. When Black plays the accurate d5 counterstrike at the right moment, the position simplifies favorably. Black's central control and bishop pair provide adequate compensation for any initiative White might claim. This is why precise timing of e5 is critical for White. Let's see why."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "d4",
+          "annotation": "White plays d4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "cxd4 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxc3",
+          "annotation": "dxc3 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White continues with Bc4. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "e6",
+          "annotation": "e6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, but the position requires careful play."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Nf6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White continues with Qe2. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Be7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White plays Rd1. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, but the position requires careful play."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White continues with Bg5. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "a6",
+          "annotation": "a6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e5",
+          "annotation": "White plays e5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Qc7",
+          "annotation": "Qc7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nxc6",
+          "annotation": "Nxc6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "bxc6",
+          "annotation": "bxc6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "c6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be3",
+          "annotation": "White continues with Be3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Nd5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "cxd5",
+          "annotation": "cxd5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White continues with Bd3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Bb7. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Rac1",
+          "annotation": "Rac1. The position is now very difficult. This is the warning — don't let your opponent reach this."
+        },
+        {
+          "san": "Qd7",
+          "annotation": "Qd7. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    }
   ]
 }

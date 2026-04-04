@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chessboard } from 'react-chessboard';
+import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
 import { useSettings } from '../../hooks/useSettings';
@@ -394,33 +395,35 @@ export function LeapFrogGame(): JSX.Element {
       )}
 
       {/* Board */}
-      <div className="w-full md:max-w-[420px] mx-auto relative">
-        <Chessboard
-          options={{
-            position,
-            boardOrientation: 'white' as const,
-            squareStyles,
-            darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
-            lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
-            ...(customPieces ? { pieces: customPieces } : {}),
-            allowDragging: false,
-            onSquareClick: handleSquareClick,
-          }}
-        />
-        {/* Treasure icon overlay on e8 */}
-        <div
-          className="absolute inset-0 pointer-events-none grid grid-cols-8 grid-rows-8"
-          data-testid="treasure-overlay"
-        >
+      <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px] mx-auto">
+        <div className="relative">
+          <Chessboard
+            options={{
+              position,
+              boardOrientation: 'white' as const,
+              squareStyles,
+              darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
+              lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
+              ...(customPieces ? { pieces: customPieces } : {}),
+              allowDragging: false,
+              onSquareClick: handleSquareClick,
+            }}
+          />
+          {/* Treasure icon overlay on e8 */}
           <div
-            style={{ gridColumn: 5, gridRow: 1 }}
-            className="flex items-center justify-center text-2xl sm:text-3xl"
-            data-testid="treasure-icon"
+            className="absolute inset-0 pointer-events-none grid grid-cols-8 grid-rows-8"
+            data-testid="treasure-overlay"
           >
-            💎
+            <div
+              style={{ gridColumn: 5, gridRow: 1 }}
+              className="flex items-center justify-center text-2xl sm:text-3xl"
+              data-testid="treasure-icon"
+            >
+              💎
+            </div>
           </div>
         </div>
-      </div>
+      </BoardVoiceOverlay>
     </div>
   );
 }

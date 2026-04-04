@@ -1,0 +1,402 @@
+{
+  "italian-game": [
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "wrongMove": "Ng5",
+      "correctMove": "c3",
+      "explanation": "Ng5 looks aggressive targeting f7, but after d5! exd5 Na5, Black wins the bishop pair and has a strong center. Instead c3 prepares d4 for a sound central build-up."
+    },
+    {
+      "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 7",
+      "wrongMove": "d4",
+      "correctMove": "Nbd2",
+      "explanation": "Playing d4 immediately is premature — after exd4 cxd4 Bb4, Black pins the knight and puts pressure on d4. First develop with Nbd2, preparing d4 with proper support."
+    },
+    {
+      "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "wrongMove": "Bxf7+",
+      "correctMove": "d3",
+      "explanation": "Bxf7+ wins a pawn but after Kxf7, Black gets the bishop pair and the king is safe on g8 after Rf8. Develop solidly with d3 instead."
+    }
+  ],
+  "sicilian-najdorf": [
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+      "wrongMove": "e5",
+      "correctMove": "Be2",
+      "explanation": "e5 too early lets Black play dxe5 Nxe5 (or Fxe5) with tempo. Develop pieces first with Be2, f3, Be3, Qd2, and O-O-O before launching the pawn storm."
+    },
+    {
+      "fen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP1P1/2N1B3/PPP2P1P/R2QKB1R b KQkq - 0 7",
+      "wrongMove": "Nxg4",
+      "correctMove": "d5",
+      "explanation": "Taking the g4 pawn is a trap! After Nxg4 Bg2, White's bishops rake across the board and Black's knight is misplaced. Play d5 for central counterplay."
+    },
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 0 6",
+      "wrongMove": "Nbd7",
+      "correctMove": "e6",
+      "explanation": "Nbd7 blocks the bishop and is passive. e6 prepares Be7 and keeps flexible development while fighting for the center."
+    }
+  ],
+  "french-defence": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "Nf3",
+      "correctMove": "Bd3",
+      "explanation": "Nf3 blocks the f-pawn and removes the option of f4 to support e5. Bd3 develops actively, eyes h7, and keeps f2-f4 available for later."
+    },
+    {
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2NB4/PPP2PPP/R1BQK1NR b KQkq - 0 5",
+      "wrongMove": "c5",
+      "correctMove": "Nfd7",
+      "explanation": "c5 immediately gives White a target after dxc5 Bxc5 Qg4. First retreat the knight to d7 (or e4) to reorganize, then break with c5 when better prepared."
+    },
+    {
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "Nf6",
+      "correctMove": "d5",
+      "explanation": "Nf6 allows e5 pushing the knight back and gaining space. d5 is the whole point of the French — challenge the center immediately."
+    }
+  ],
+  "caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "e6",
+      "correctMove": "Bf5",
+      "explanation": "e6 locks in the light-squared bishop — the Caro-Kann's main advantage is developing this bishop OUTSIDE the pawn chain first. Bf5 is the whole point of the opening."
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 2",
+      "wrongMove": "f3",
+      "correctMove": "Nc3",
+      "explanation": "f3 weakens the kingside and blocks the knight. Nc3 develops naturally and maintains pressure on d5."
+    },
+    {
+      "fen": "rn1qkb1r/pp2pppp/2p2n2/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR b KQkq - 0 4",
+      "wrongMove": "Nxe4",
+      "correctMove": "dxe4",
+      "explanation": "Nxe4 walks into Nxe4 dxe4 Qd4 forking e4 and g7. Simply recapture with dxe4 keeping a solid position."
+    }
+  ],
+  "ruy-lopez": [
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 3",
+      "wrongMove": "Nf6",
+      "correctMove": "a6",
+      "explanation": "Nf6 allows 4. O-O Nxe4 5. d4 (the Open Ruy Lopez) which leads to very sharp tactical play favoring White. a6 forces the bishop back and gives Black more flexibility."
+    },
+    {
+      "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "wrongMove": "Bxc6",
+      "correctMove": "Ba4",
+      "explanation": "Bxc6 gives up the bishop pair and doubles pawns but gives Black the bishop pair and strong center. Ba4 maintains tension and preserves options."
+    },
+    {
+      "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N1P/PP1P1PP1/RNBQR1K1 w - - 0 10",
+      "wrongMove": "Bxb5",
+      "correctMove": "d4",
+      "explanation": "Bxb5 wins a pawn but after axb5 Rxa1 Black gets counterplay. d4 breaks through the center where White is better developed."
+    }
+  ],
+  "qgd": [
+    {
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "dxc4",
+      "correctMove": "e6",
+      "explanation": "Taking on c4 too early (QGA) lets White develop freely with e3+Bxc4. In the QGD, e6 maintains the central tension and keeps a solid pawn structure."
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "cxd5",
+      "correctMove": "Bg5",
+      "explanation": "Exchanging on d5 too early relieves tension and makes Black's position easier. Bg5 maintains pressure, pins the knight, and keeps Black guessing about when you'll exchange."
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 0 4",
+      "wrongMove": "Bb4",
+      "correctMove": "Be7",
+      "explanation": "Bb4 pins the knight but after Qa4+ Nc6 e3, the bishop is awkwardly placed. Be7 is the classical move, developing solidly and preparing to castle."
+    }
+  ],
+  "kings-indian-defence": [
+    {
+      "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+      "wrongMove": "e5",
+      "correctMove": "d6",
+      "explanation": "Playing e5 immediately runs into d5 closing the center when White is better prepared. Play d6 first to support e5, which typically comes after O-O and proper piece placement."
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b - - 0 6",
+      "wrongMove": "Bg4",
+      "correctMove": "e5",
+      "explanation": "Bg4 pins the knight but after Be3 the pin is not effective and Black wastes time. e5 is the key KID break, fighting for the center."
+    },
+    {
+      "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7",
+      "wrongMove": "exd4",
+      "correctMove": "Nh5",
+      "explanation": "exd4 opens the center which favors White. Nh5 prepares f5 for the classic KID kingside attack."
+    }
+  ],
+  "london-system": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
+      "wrongMove": "Nh5",
+      "correctMove": "c5",
+      "explanation": "Nh5 tries to win the bishop but after Bg5! the bishop is safe on g5 and the knight on h5 is offside. Play c5 instead to challenge the center — this is the main way to fight the London."
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
+      "wrongMove": "Bf5",
+      "correctMove": "c5",
+      "explanation": "Bf5 looks logical but after e3 e6, Black has a passive French-like structure. c5 challenges the center and is the most principled response."
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 3",
+      "wrongMove": "Qb6",
+      "correctMove": "Bg4",
+      "explanation": "Qb6 attacks b2 but after Qc1 the queen is misplaced and loses time. Bg4 develops with tempo by pinning the knight."
+    }
+  ],
+  "english-opening": [
+    {
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 1",
+      "wrongMove": "d5",
+      "correctMove": "e5",
+      "explanation": "d5 allows cxd5 Qxd5 Nc3, developing White's knight with tempo on the queen. Playing e5 grabs central space and avoids the tempo loss. If White plays d3, you keep a symmetrical but comfortable position."
+    },
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+      "wrongMove": "d4",
+      "correctMove": "Nc3",
+      "explanation": "d4 transposes to an open game where Black is well prepared. Nc3 keeps the English character with flexible development."
+    },
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+      "wrongMove": "e4",
+      "correctMove": "g3",
+      "explanation": "e4 gives Black a target with d5. g3 fianchettoes the bishop to control the center from the flank — the English way."
+    }
+  ],
+  "sicilian-dragon": [
+    {
+      "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R b KQkq - 0 7",
+      "wrongMove": "Ng4",
+      "correctMove": "O-O",
+      "explanation": "Ng4 tries to win the bishop pair but after Bxg4 Bxg4 f3 Bd7, White has gained a tempo and Black hasn't castled yet. Castle first — king safety is paramount before starting queenside counterplay."
+    },
+    {
+      "fen": "r1bqk2r/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R b KQkq - 0 7",
+      "wrongMove": "a5",
+      "correctMove": "O-O",
+      "explanation": "a5 is premature queenside expansion before castling. O-O gets the king safe first — in the Dragon, a single tempo can decide the game."
+    },
+    {
+      "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 8",
+      "wrongMove": "Be6",
+      "correctMove": "Qa5",
+      "explanation": "Be6 allows Nxe6 fxe6 with a weakened pawn structure. Qa5 starts immediate queenside counterplay which is critical in the Yugoslav Attack."
+    }
+  ],
+  "scandinavian-defence": [
+    {
+      "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "Qxd5",
+      "correctMove": "Nf6",
+      "explanation": "Recapturing with the queen early exposes it to tempo-gaining attacks after Nc3. The modern 2...Nf6 develops a piece and recaptures the pawn later without losing time."
+    },
+    {
+      "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+      "wrongMove": "Qe5+",
+      "correctMove": "Qa5",
+      "explanation": "Qe5+ blocks the e-pawn and hinders Black's own development after Be2 blocks the check calmly. Qa5 keeps the queen active on the queenside while allowing e5 or e6 to develop the bishop naturally."
+    },
+    {
+      "fen": "rnb1kb1r/ppp1pppp/5n2/q2P4/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 4",
+      "wrongMove": "Qb6",
+      "correctMove": "Nxd5",
+      "explanation": "Retreating the queen to b6 wastes another tempo and leaves the d5 pawn unchallenged. Recapturing with Nxd5 equalizes material and centralizes the knight on a strong square."
+    }
+  ],
+  "catalan-opening": [
+    {
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Bb4+",
+      "correctMove": "d5",
+      "explanation": "Bb4+ transposes into unfavorable lines where White's fianchettoed bishop gains power on the long diagonal. Playing d5 stakes a claim in the center and challenges White's pawn structure directly."
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/6P1/PP2PPBP/RNBQK1NR b KQkq - 1 4",
+      "wrongMove": "dxc4",
+      "correctMove": "Be7",
+      "explanation": "Capturing on c4 gives White a powerful center and the Catalan bishop devastating scope on the long diagonal. Developing with Be7 keeps the position solid and prepares to castle without conceding the center."
+    },
+    {
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/6P1/PP1NPPBP/R1BQK1NR b KQkq - 3 5",
+      "wrongMove": "Nc6",
+      "correctMove": "O-O",
+      "explanation": "Nc6 blocks the c-pawn and commits the knight before the pawn structure is clarified. Castling immediately brings the king to safety and connects the rooks for flexible development."
+    }
+  ],
+  "slav-defence": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+      "wrongMove": "dxc4",
+      "correctMove": "Nf6",
+      "explanation": "Premature capture on c4 without preparation allows White to recapture easily and gain a strong center. Developing Nf6 first maintains tension and follows sound Slav principles."
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4",
+      "wrongMove": "Bg4",
+      "correctMove": "e6",
+      "explanation": "Bg4 pins the knight but allows the sharp Slav Exchange where White plays Ne5 with tempo on the bishop. Playing e6 solidifies the center and prepares Bd6 or Bb4 with a sound position."
+    },
+    {
+      "fen": "rnbqkb1r/pp3ppp/2p1pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+      "wrongMove": "Bg5",
+      "correctMove": "e3",
+      "explanation": "Bg5 in the mainline Slav pins the knight but allows the sharp Botvinnik variation after dxc4 which requires deep preparation. Playing e3 leads to the solid Meran or anti-Meran systems that are easier to handle positionally."
+    }
+  ],
+  "nimzo-indian": [
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 3",
+      "wrongMove": "Bg5",
+      "correctMove": "e3",
+      "explanation": "Bg5 allows the sharp Leningrad variation where Black plays h6 and gains the bishop pair with tempo. Playing e3 is the solid Rubinstein system that protects d4 and prepares smooth development."
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 0 4",
+      "wrongMove": "b6",
+      "correctMove": "O-O",
+      "explanation": "Playing b6 too early allows White to push e4 gaining a massive center before Black is fully developed. Castling first ensures king safety and keeps options open for both b6 and d5 plans."
+    },
+    {
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+      "wrongMove": "Bxc3+",
+      "correctMove": "d5",
+      "explanation": "Exchanging on c3 too early gives White the bishop pair and strong central pawns without extracting any concession. Playing d5 first challenges the center and may provoke a3, making the exchange more favorable strategically."
+    }
+  ],
+  "grunfeld-defence": [
+    {
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq d6 0 4",
+      "wrongMove": "Nf3",
+      "correctMove": "cxd5",
+      "explanation": "Nf3 allows Black to comfortably capture on c4 or play Bg7 with an ideal Grunfeld setup. Capturing cxd5 immediately tests Black's commitment and leads to the mainline Exchange Variation where White builds a strong center."
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pp1p/6p1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+      "wrongMove": "Bg7",
+      "correctMove": "Nxd5",
+      "explanation": "Developing the bishop before recapturing on d5 gives White a free pawn and a dominating center with e4. Recapturing Nxd5 first is essential to keep material balance and challenge White's central control."
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/6p1/8/2BPn3/2N1BN2/PP3PPP/R2QK2R b KQ - 5 7",
+      "wrongMove": "Nxc3",
+      "correctMove": "c5",
+      "explanation": "Exchanging on c3 helps White recapture and strengthen the center without any compensation. Playing c5 immediately strikes at the d4 pawn, generating counterplay on the dark squares as is typical in the Grunfeld."
+    }
+  ],
+  "scotch-game": [
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+      "wrongMove": "Nxd4",
+      "correctMove": "exd4",
+      "explanation": "Nxd4 Nxd4 exd4 leaves Black with an isolated d-pawn and no compensation. exd4 Nxd4 gives Black active piece play."
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "wrongMove": "Nxe4",
+      "correctMove": "Bd6",
+      "explanation": "Nxe4 loses to d5 forking the knight and bishop. Bd6 attacks the knight and develops naturally."
+    },
+    {
+      "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+      "wrongMove": "e5",
+      "correctMove": "Bd3",
+      "explanation": "e5 pushes the pawn forward without support and the knight retreats to safety. Bd3 develops calmly with a lead in development."
+    }
+  ],
+  "vienna-game": [
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+      "wrongMove": "Bc5",
+      "correctMove": "Nf6",
+      "explanation": "Bc5 is passive and allows f4 with tempo. Nf6 counter-attacks e4 and fights for the initiative."
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+      "wrongMove": "exf4",
+      "correctMove": "d5",
+      "explanation": "exf4 gives up the center. d5 strikes back centrally and opens lines for development."
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "fxe5",
+      "correctMove": "d3",
+      "explanation": "fxe5 Nxe4 gives Black active piece play. d3 solidifies the center and prepares calm development."
+    }
+  ],
+  "four-knights-game": [
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+      "wrongMove": "Nxe5",
+      "correctMove": "Bb5",
+      "explanation": "Nxe5 Nxe5 d4 recovers the piece but Black gets easy equality. Bb5 enters the Spanish Four Knights with positional pressure."
+    },
+    {
+      "fen": "r1bqk2r/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
+      "wrongMove": "Bxc6",
+      "correctMove": "O-O",
+      "explanation": "Bxc6 dxc6 gives Black the bishop pair and strong center. O-O keeps tension and develops naturally."
+    },
+    {
+      "fen": "r1bq1rk1/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 8 6",
+      "wrongMove": "Nd5",
+      "correctMove": "d3",
+      "explanation": "Nd5 Nxd5 exd5 Ne7 gives Black comfortable play. d3 is solid and prepares Bg5 or Be3."
+    }
+  ],
+  "sicilian-alapin": [
+    {
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "e6",
+      "correctMove": "d5",
+      "explanation": "e6 is too passive and lets White build a big center with d4. d5 immediately challenges White's center."
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+      "wrongMove": "e5",
+      "correctMove": "exd5",
+      "explanation": "e5 creates a fixed center that can become a target. exd5 Qxd5 d4 gives White good development and central control."
+    },
+    {
+      "fen": "rnb1kbnr/pp2pppp/8/3q4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+      "wrongMove": "Qxd4",
+      "correctMove": "Nf6",
+      "explanation": "Qxd4 loses time after Nc3 Qd8 and White has a big development lead. Nf6 develops and eyes e4."
+    }
+  ],
+  "pirc-defence": [
+    {
+      "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "e5",
+      "correctMove": "Nf6",
+      "explanation": "e5 runs into dxe5 dxe5 Qxd8+ leaving Black worse. Nf6 develops and pressures e4 in true Pirc style."
+    },
+    {
+      "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+      "wrongMove": "Bg4",
+      "correctMove": "O-O",
+      "explanation": "Bg4 is premature — after e5 dxe5 dxe5 the pin is awkward and Black loses material. Castle first, then look for counterplay."
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b - - 0 5",
+      "wrongMove": "c5",
+      "correctMove": "Bg4",
+      "explanation": "c5 allows d5 closing the center in White's favor. Bg4 pins the knight and creates tension before White consolidates."
+    }
+  ]
+}

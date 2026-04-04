@@ -7,6 +7,7 @@ import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
 import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
+import { voiceService } from './services/voiceService';
 import { db } from './db/schema';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -20,16 +21,24 @@ import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
 import { AdaptivePuzzlePage } from './components/Puzzles/AdaptivePuzzlePage';
 import { MyMistakesPage } from './components/Puzzles/MyMistakesPage';
 import { LichessDashboardPage } from './components/Puzzles/LichessDashboardPage';
-import { GamesPage } from './components/Play/GamesPage';
-import { AnalysisBoardPage } from './components/Analysis/AnalysisBoardPage';
-import { CoachPage } from './components/Coach/CoachPage';
-import { CoachChatPage } from './components/Coach/CoachChatPage';
+import { WeaknessPuzzlePage } from './components/Puzzles/WeaknessPuzzlePage';
+import { PuzzlesHubPage } from './components/Puzzles/PuzzlesHubPage';
 import { CoachGamePage } from './components/Coach/CoachGamePage';
+import { CoachChatPage } from './components/Coach/CoachChatPage';
 import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
 import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { CoachTrainPage } from './components/Coach/CoachTrainPage';
-import { StatsPage } from './components/Stats/StatsPage';
+import { TacticsPage } from './components/Tactics/TacticsPage';
+import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
+import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
+import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
+import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
+import { SettingsPage } from './components/Settings/SettingsPage';
+import { OnboardingPage } from './components/Settings/OnboardingPage';
+import { GameDatabasePage } from './components/Games/GameDatabasePage';
+import { ImportPage } from './components/Games/ImportPage';
+import { ProPlayerPage } from './components/Openings/ProPlayerPage';
 import { KidLayout } from './components/Kid/KidLayout';
 import { KidModePage } from './components/Kid/KidModePage';
 import { KidPiecePage } from './components/Kid/KidPiecePage';
@@ -51,16 +60,26 @@ import { QueenGamesHub } from './components/Kid/QueenGamesHub';
 import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
 import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
 import { GuidedGamePage } from './components/Kid/GuidedGamePage';
-import { SettingsPage } from './components/Settings/SettingsPage';
-import { OnboardingPage } from './components/Settings/OnboardingPage';
-import { GameDatabasePage } from './components/Games/GameDatabasePage';
-import { ImportPage } from './components/Games/ImportPage';
-import { ProPlayerPage } from './components/Openings/ProPlayerPage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
     useAppStore();
   const [onboardingSkipped, setOnboardingSkipped] = useState(true);
+
+  // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
+  useEffect(() => {
+    const unlock = (): void => {
+      speechService.warmupInGestureContext();
+      document.removeEventListener('touchstart', unlock);
+      document.removeEventListener('click', unlock);
+    };
+    document.addEventListener('touchstart', unlock, { once: true });
+    document.addEventListener('click', unlock, { once: true });
+    return () => {
+      document.removeEventListener('touchstart', unlock);
+      document.removeEventListener('click', unlock);
+    };
+  }, []);
 
   useEffect(() => {
     async function init(): Promise<void> {
@@ -83,6 +102,9 @@ export function App(): JSX.Element {
         if (profile.preferences.voiceSpeed) {
           speechService.setRate(profile.preferences.voiceSpeed);
         }
+
+        // Warm up the voice pipeline early so the first narration has no cold-start delay
+        void voiceService.warmup();
 
         const skippedMeta = await db.meta.get('onboarding_skipped');
         if (skippedMeta?.value !== 'true') {
@@ -118,26 +140,42 @@ export function App(): JSX.Element {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
-          <Route path="/puzzles" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
-          <Route path="/puzzles/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
-          <Route path="/puzzles/mistakes" element={<ErrorBoundary><MyMistakesPage /></ErrorBoundary>} />
-          <Route path="/puzzles/lichess-dashboard" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
+          {/* Openings */}
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/pro/:playerId" element={<ErrorBoundary><ProPlayerPage /></ErrorBoundary>} />
           <Route path="/openings/pro/:playerId/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
-          <Route path="/play" element={<ErrorBoundary><GamesPage /></ErrorBoundary>} />
-          <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
+          {/* Coach */}
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
           <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
           <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
           <Route path="/coach/report" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
+          {/* Puzzles */}
+          <Route path="/puzzles" element={<ErrorBoundary><PuzzlesHubPage /></ErrorBoundary>} />
+          <Route path="/puzzles/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
+          <Route path="/puzzles/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
+          <Route path="/puzzles/mistakes" element={<ErrorBoundary><MyMistakesPage /></ErrorBoundary>} />
+          <Route path="/puzzles/weakness" element={<ErrorBoundary><WeaknessPuzzlePage /></ErrorBoundary>} />
+          <Route path="/puzzles/lichess-dashboard" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
+          {/* Tactics */}
+          <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
+          <Route path="/tactics/profile" element={<ErrorBoundary><TacticalProfilePage /></ErrorBoundary>} />
+          <Route path="/tactics/drill" element={<ErrorBoundary><TacticDrillPage /></ErrorBoundary>} />
+          <Route path="/tactics/setup" element={<ErrorBoundary><TacticSetupPage /></ErrorBoundary>} />
+          <Route path="/tactics/create" element={<ErrorBoundary><TacticCreatePage /></ErrorBoundary>} />
+          {/* Backward-compat redirects */}
+          <Route path="/weaknesses" element={<Navigate to="/coach/report" replace />} />
+          <Route path="/weaknesses/puzzles" element={<Navigate to="/puzzles/weakness" replace />} />
+          <Route path="/weaknesses/adaptive" element={<Navigate to="/puzzles/adaptive" replace />} />
+          <Route path="/weaknesses/classic" element={<Navigate to="/puzzles/classic" replace />} />
+          <Route path="/weaknesses/mistakes" element={<Navigate to="/puzzles/mistakes" replace />} />
+          <Route path="/weaknesses/lichess-dashboard" element={<Navigate to="/puzzles/lichess-dashboard" replace />} />
+          {/* Games (accessible from weakness report) */}
           <Route path="/games" element={<ErrorBoundary><GameDatabasePage /></ErrorBoundary>} />
           <Route path="/games/import" element={<ErrorBoundary><ImportPage /></ErrorBoundary>} />
-          <Route path="/analysis" element={<ErrorBoundary><AnalysisBoardPage /></ErrorBoundary>} />
-          <Route path="/stats" element={<ErrorBoundary><StatsPage /></ErrorBoundary>} />
+          {/* Settings */}
           <Route
             path="/settings"
             element={

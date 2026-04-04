@@ -6,6 +6,10 @@ vi.mock('./mistakePuzzleService', () => ({
   generateMistakePuzzlesForBatch: vi.fn().mockResolvedValue(0),
 }));
 
+vi.mock('./gameAnalysisService', () => ({
+  runBackgroundAnalysis: vi.fn(),
+}));
+
 const MOCK_GAMES = [
   {
     url: 'https://www.chess.com/game/live/12345',

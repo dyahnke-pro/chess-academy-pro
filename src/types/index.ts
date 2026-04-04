@@ -31,6 +31,7 @@ export interface MistakeNarration {
   intro: string;
   moveNarrations: string[];
   outro: string;
+  conceptHint: string; // Conceptual hint when player makes wrong move (e.g. "Think about reinforcing the center")
 }
 
 export interface MistakePuzzle {
@@ -88,12 +89,38 @@ export interface OpeningMoveAnnotation {
   pawnStructure?: string;
   plans?: string[];
   alternatives?: string[];
+  moveOrderNote?: string;
   arrows?: AnnotationArrow[];
   highlights?: AnnotationHighlight[];
 }
 
+// ─── Common Mistakes ──────────────────────────────────────────────────────
+
+export interface CommonMistake {
+  fen: string;
+  wrongMove: string;
+  correctMove: string;
+  explanation: string;
+}
+
+// ─── Checkpoint Quiz ──────────────────────────────────────────────────────
+
+export interface CheckpointQuizItem {
+  fen: string;
+  type?: 'move' | 'plan';
+  // Move-type fields
+  correctMove?: string;
+  // Plan-type fields (multiple choice)
+  question?: string;
+  choices?: string[];
+  correctIndex?: number;
+  hint: string;
+  concept: string;
+}
+
 export interface OpeningSubLine {
   name: string;
+  type?: 'variation' | 'trap' | 'warning';
   moveAnnotations: OpeningMoveAnnotation[];
 }
 
@@ -105,10 +132,92 @@ export interface OpeningAnnotations {
 
 // ─── Opening ─────────────────────────────────────────────────────────────────
 
+export type SidelineFrequency = 'common' | 'uncommon' | 'rare';
+export type SidelineDanger = 'safe' | 'tricky' | 'critical';
+
 export interface OpeningVariation {
   name: string;
   pgn: string;
   explanation: string;
+  frequency?: SidelineFrequency;
+  danger?: SidelineDanger;
+  deviationMove?: number;
+}
+
+// ─── Model Games ────────────────────────────────────────────────────────────
+
+export interface ModelGameCriticalMoment {
+  moveNumber: number;
+  color: 'white' | 'black';
+  fen: string;
+  annotation: string;
+  concept: string;
+  arrows?: AnnotationArrow[];
+  highlights?: AnnotationHighlight[];
+}
+
+export interface ModelGame {
+  id: string;
+  openingId: string;
+  white: string;
+  black: string;
+  whiteElo: number | null;
+  blackElo: number | null;
+  result: GameResult;
+  year: number;
+  event: string;
+  pgn: string;
+  overview: string;
+  criticalMoments: ModelGameCriticalMoment[];
+  middlegameTheme: string;
+  lessonSummary: string;
+}
+
+// ─── Middlegame Plans ───────────────────────────────────────────────────────
+
+export interface PawnBreak {
+  move: string;
+  explanation: string;
+  fen: string;
+  arrows?: AnnotationArrow[];
+}
+
+export interface PieceManeuver {
+  piece: string;
+  route: string;
+  explanation: string;
+  arrows?: AnnotationArrow[];
+}
+
+export interface MiddlegamePlan {
+  id: string;
+  openingId: string;
+  criticalPositionFen: string;
+  title: string;
+  overview: string;
+  pawnBreaks: PawnBreak[];
+  pieceManeuvers: PieceManeuver[];
+  strategicThemes: string[];
+  endgameTransitions: string[];
+  arrows?: AnnotationArrow[];
+  highlights?: AnnotationHighlight[];
+}
+
+// ─── Content Generation (LLM Pipeline) ─────────────────────────────────────
+
+export type GeneratedContentType =
+  | 'model_game_annotation'
+  | 'middlegame_plan'
+  | 'sideline_explanation'
+  | 'deep_annotation';
+
+export interface GeneratedContent {
+  id: string;
+  openingId: string;
+  type: GeneratedContentType;
+  content: string;
+  groundingData: string;
+  generatedAt: string;
 }
 
 export interface DrillAttempt {
@@ -360,7 +469,6 @@ export interface UserProfile {
   longestStreak: number;
   streakFreezes: number;
   lastActiveDate: string;
-  achievements: string[];
   skillRadar: SkillRadar;
   badHabits: BadHabit[];
   preferences: UserPreferences;
@@ -479,7 +587,7 @@ export interface ChatMessage {
   };
 }
 
-export type CoachGameStatus = 'pregame' | 'playing' | 'postgame';
+export type CoachGameStatus = 'pregame' | 'playing' | 'gameover' | 'postgame';
 export type CoachGameResult = 'win' | 'loss' | 'draw' | 'ongoing';
 
 export interface CoachGameMove {
@@ -535,7 +643,11 @@ export type CoachTask =
   | 'weakness_report'
   | 'interactive_review'
   | 'whatif_commentary'
-  | 'game_narrative_summary';
+  | 'game_narrative_summary'
+  | 'model_game_annotation'
+  | 'middlegame_plan_generation'
+  | 'sideline_explanation'
+  | 'smart_search';
 
 export interface CoachContext {
   fen: string;
@@ -558,8 +670,17 @@ export interface CoachContext {
 export type WeaknessCategory =
   | 'tactics'
   | 'openings'
+  | 'opening_weakspots'
   | 'endgame'
-  | 'calculation';
+  | 'calculation'
+  | 'positional'
+  | 'time_management';
+
+export interface WeaknessTrainingAction {
+  route: string;
+  buttonLabel: string;
+  state?: Record<string, unknown>;
+}
 
 export interface WeaknessItem {
   category: WeaknessCategory;
@@ -567,16 +688,40 @@ export interface WeaknessItem {
   metric: string;
   severity: number; // 0-100, higher = worse
   detail: string;
+  trainingAction?: WeaknessTrainingAction;
+}
+
+export interface StrengthItem {
+  title: string;
+  detail: string;
+  category: WeaknessCategory;
+  metric: string;
 }
 
 export interface WeaknessProfile {
   computedAt: string;
   items: WeaknessItem[];
   strengths: string[];
+  strengthItems: StrengthItem[];
   overallAssessment: string;
 }
 
 export type ReviewMode = 'analysis' | 'whatif' | 'practice' | 'guided_lesson';
+
+// ─── Opening Weak Spots ─────────────────────────────────────────────────────
+
+export interface OpeningWeakSpot {
+  id: string;
+  openingId: string;
+  openingName: string;
+  fen: string;
+  moveIndex: number;
+  correctMoveSan: string;
+  failCount: number;
+  lastFailedAt: string;
+  lastDrilledAt: string | null;
+}
+
 
 export interface ReviewState {
   mode: ReviewMode;
@@ -620,6 +765,12 @@ export type TacticType =
   | 'promotion'
   | 'deflection'
   | 'overloaded_piece'
+  | 'trapped_piece'
+  | 'clearance'
+  | 'interference'
+  | 'zwischenzug'
+  | 'x_ray'
+  | 'double_check'
   | 'tactical_sequence';
 
 export interface MissedTactic {
@@ -738,6 +889,88 @@ export interface TacticInsights {
   strengths: string[];
 }
 
+// ─── Classified Tactics (persisted) ─────────────────────────────────────────
+
+export interface ClassifiedTactic {
+  id: string;
+  sourceGameId: string;
+  moveIndex: number;
+  fen: string;
+  bestMoveUci: string;
+  bestMoveSan: string;
+  playerMoveUci: string;
+  playerMoveSan: string;
+  playerColor: 'white' | 'black';
+  tacticType: TacticType;
+  evalSwing: number;
+  explanation: string;
+  // Game context
+  opponentName: string | null;
+  gameDate: string | null;
+  openingName: string | null;
+  // Training tracking
+  puzzleAttempts: number;
+  puzzleSuccesses: number;
+  createdAt: string;
+}
+
+export interface TacticMotifStats {
+  tacticType: TacticType;
+  missedInGames: number;
+  puzzleAttempts: number;
+  puzzleAccuracy: number;
+  gameAwareness: number;
+}
+
+// ─── Tactics Training Program ────────────────────────────────────────────────
+
+export type SetupPuzzleDifficulty = 1 | 2 | 3;
+export type SetupPuzzleStatus = 'unsolved' | 'solved' | 'mastered';
+
+export interface SetupPuzzle {
+  id: string;
+  setupFen: string;
+  solutionMoves: string;
+  tacticFen: string;
+  tacticMoves: string;
+  tacticType: TacticType;
+  difficulty: SetupPuzzleDifficulty;
+  sourceGameId: string | null;
+  sourceMistakePuzzleId: string | null;
+  playerColor: 'white' | 'black';
+  openingName: string | null;
+  srsInterval: number;
+  srsEaseFactor: number;
+  srsRepetitions: number;
+  srsDueDate: string;
+  srsLastReview: string | null;
+  status: SetupPuzzleStatus;
+  attempts: number;
+  successes: number;
+  createdAt: string;
+}
+
+export interface TacticTypeStats {
+  tacticType: TacticType;
+  puzzleAccuracy: number;
+  puzzleAttempts: number;
+  gameMissCount: number;
+  gameSpotCount: number;
+  gameTotalOccurrences: number;
+  gameSpotRate: number;
+  gap: number;
+  byPhase: Record<MistakeGamePhase, number>;
+  byOpening: Record<string, number>;
+}
+
+export interface TacticalProfile {
+  computedAt: string;
+  stats: TacticTypeStats[];
+  totalGamesMissed: number;
+  totalGamesAnalyzed: number;
+  weakestTypes: TacticType[];
+}
+
 // ─── Theme ───────────────────────────────────────────────────────────────────
 
 export interface AppTheme {
@@ -756,17 +989,6 @@ export interface AppTheme {
     error: string;
     warning: string;
   };
-}
-
-// ─── Achievement ──────────────────────────────────────────────────────────────
-
-export interface Achievement {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  condition: (profile: UserProfile) => boolean;
-  xpReward: number;
 }
 
 // ─── Kid Mode ────────────────────────────────────────────────────────────────
@@ -1093,4 +1315,30 @@ export interface ColorWarsLevel {
   timerSeconds: number;
   showBishopMoves: boolean;
   showEnemyGlow: boolean;
+}
+
+// ─── Smart Search ────────────────────────────────────────────────────────────
+
+export type SmartSearchCategory = 'opening' | 'game' | 'mistake' | 'puzzle';
+
+export interface SmartSearchResult {
+  category: SmartSearchCategory;
+  id: string;
+  title: string;
+  subtitle: string;
+  route: string;
+}
+
+export interface SearchIntent {
+  table: 'openings' | 'games' | 'mistakePuzzles' | 'puzzles';
+  filters: SearchFilter[];
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
+  limit?: number;
+}
+
+export interface SearchFilter {
+  field: string;
+  op: 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte';
+  value: string | number | boolean;
 }

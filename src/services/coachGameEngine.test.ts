@@ -8,11 +8,10 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { getAdaptiveMove, getTargetStrength } from './coachGameEngine';
+import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/unbound-method -- vitest mock pattern
 const analyzePositionMock = vi.mocked(stockfishEngine).analyzePosition;
 
 const mockAnalysis: StockfishAnalysis = {
@@ -112,6 +111,51 @@ describe('coachGameEngine', () => {
 
     it('returns 600 for rating 600 (at the floor)', () => {
       expect(getTargetStrength(600)).toBe(600);
+    });
+  });
+
+  describe('tryOpeningBookMove', () => {
+    const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const AFTER_E4_FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+
+    it('returns the next book move when on the opening line', () => {
+      // French Defense: e4 e6 — AI is black, after 1.e4 should play e6
+      const frenchMoves = ['e4', 'e6', 'd4', 'd5'];
+      const result = tryOpeningBookMove(AFTER_E4_FEN, ['e4'], frenchMoves, 'black');
+      expect(result).toBe('e7e6');
+    });
+
+    it('returns null when no opening is requested', () => {
+      const result = tryOpeningBookMove(AFTER_E4_FEN, ['e4'], null, 'black');
+      expect(result).toBeNull();
+    });
+
+    it('returns null when game has deviated from book', () => {
+      const frenchMoves = ['e4', 'e6', 'd4', 'd5'];
+      // Player played d4 instead of e4 — not in the French Defense line
+      const result = tryOpeningBookMove(AFTER_E4_FEN, ['d4'], frenchMoves, 'black');
+      expect(result).toBeNull();
+    });
+
+    it('returns null when it is not the AI turn', () => {
+      // AI is black but it's white's turn at move 0
+      const frenchMoves = ['e4', 'e6', 'd4', 'd5'];
+      const result = tryOpeningBookMove(START_FEN, [], frenchMoves, 'black');
+      expect(result).toBeNull();
+    });
+
+    it('returns null when past the end of book moves', () => {
+      const frenchMoves = ['e4', 'e6'];
+      const afterE4E6Fen = 'rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+      const result = tryOpeningBookMove(afterE4E6Fen, ['e4', 'e6'], frenchMoves, 'white');
+      expect(result).toBeNull();
+    });
+
+    it('returns the correct move for AI playing white', () => {
+      // Italian Game: e4 e5 Nf3 — AI is white, at move 0 should play e4
+      const italianMoves = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'];
+      const result = tryOpeningBookMove(START_FEN, [], italianMoves, 'white');
+      expect(result).toBe('e2e4');
     });
   });
 });

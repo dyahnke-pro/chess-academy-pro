@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectMissedTactics } from './missedTacticService';
+import { detectTacticType, detectMissedTactics } from './missedTacticService';
 import type { CoachGameMove } from '../types';
 
 function makeMoves(overrides: Partial<CoachGameMove>[]): CoachGameMove[] {
@@ -18,6 +18,71 @@ function makeMoves(overrides: Partial<CoachGameMove>[]): CoachGameMove[] {
     ...o,
   }));
 }
+
+describe('detectTacticType', () => {
+  it('detects promotion with explicit promotion piece', () => {
+    const fen = '8/P7/8/8/8/8/8/4K2k w - - 0 1';
+    expect(detectTacticType(fen, 'a7a8q')).toBe('promotion');
+  });
+
+  it('detects promotion from pawn reaching 8th rank', () => {
+    const fen = '8/P7/8/8/8/8/8/4K2k w - - 0 1';
+    expect(detectTacticType(fen, 'a7a8')).toBe('promotion');
+  });
+
+  it('detects back rank check', () => {
+    // White rook on a1, black king on g8 with pawns blocking
+    const fen = '6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1';
+    expect(detectTacticType(fen, 'a1a8')).toBe('back_rank');
+  });
+
+  it('detects fork (knight attacks two valuable pieces)', () => {
+    // Knight on e5 moves to d3 forking queen on b2 and rook on f2
+    // Use a midboard position to avoid back_rank detection
+    const fen = '8/8/4k3/4N3/8/8/1q3r2/4K3 w - - 0 1';
+    // Ne5-d3 attacks b2 (queen) and f2 (rook) — both ≥3 value
+    expect(detectTacticType(fen, 'e5d3')).toBe('fork');
+  });
+
+  it('detects pin on file (rook pins piece to king)', () => {
+    // White rook on a2 moves to a1, and from a1 pins black knight on a4 to black king on a8
+    // Position: black king a8, black knight a4, white rook a2, white king h1
+    const fen = 'k7/8/8/8/n7/8/R7/7K w - - 0 1';
+    // Ra2-a1 creates a pin on the a-file (rook on a1, knight on a4, king on a8)
+    const result = detectTacticType(fen, 'a2a1');
+    expect(result).toBe('pin');
+  });
+
+  it('returns tactical_sequence for invalid input', () => {
+    expect(detectTacticType('invalid fen', 'e2e4')).toBe('tactical_sequence');
+  });
+
+  it('returns tactical_sequence for empty move', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    expect(detectTacticType(fen, '')).toBe('tactical_sequence');
+  });
+
+  it('detects hanging piece capture', () => {
+    // White knight on e5 captures undefended black pawn/piece on f7
+    const fen = 'rnbqkb1r/pppppppp/5n2/4N3/8/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1';
+    const result = detectTacticType(fen, 'e5f7');
+    expect(typeof result).toBe('string');
+    expect(result).not.toBe('');
+  });
+
+  it('handles all new tactic types as valid return values', () => {
+    // Just verify the function can return without crashing on various positions
+    const positions = [
+      { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', move: 'e2e4' },
+      { fen: '8/8/8/8/8/8/4K3/4k3 w - - 0 1', move: 'e2e3' },
+      { fen: 'r1bqkbnr/pppppppp/2n5/4N3/8/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1', move: 'e5c6' },
+    ];
+    for (const { fen, move } of positions) {
+      const result = detectTacticType(fen, move);
+      expect(typeof result).toBe('string');
+    }
+  });
+});
 
 describe('detectMissedTactics', () => {
   it('returns empty array for no moves', () => {

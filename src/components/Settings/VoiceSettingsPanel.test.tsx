@@ -5,29 +5,15 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { buildUserProfile } from '../../test/factories';
 
-vi.mock('../../services/cryptoService', () => ({
-  encryptApiKey: vi.fn().mockResolvedValue({ encrypted: 'enc', iv: 'iv' }),
-}));
-
-vi.mock('../../services/voicePackService', () => ({
-  voicePackService: {
-    getStatus: vi.fn().mockReturnValue('idle'),
-    getDownloadProgress: vi.fn().mockReturnValue(0),
-    getClipCount: vi.fn().mockReturnValue(0),
-    isReady: vi.fn().mockReturnValue(false),
-    isPlaying: vi.fn().mockReturnValue(false),
-    onStatusChange: vi.fn().mockReturnValue(() => undefined),
-    onProgress: vi.fn().mockReturnValue(() => undefined),
-    loadFromUrl: vi.fn().mockResolvedValue(undefined),
-    loadCached: vi.fn().mockResolvedValue(false),
-    speak: vi.fn().mockResolvedValue(false),
+vi.mock('../../services/speechService', () => ({
+  speechService: {
+    getAvailableVoices: vi.fn().mockReturnValue([]),
+    onVoicesChanged: vi.fn().mockReturnValue(() => undefined),
+    setRate: vi.fn(),
+    setVoice: vi.fn(),
+    speak: vi.fn(),
     stop: vi.fn(),
-    unload: vi.fn(),
   },
-  VOICE_PACK_VOICES: [
-    { id: 'af_heart', name: 'Heart', accent: 'American', gender: 'Female' },
-    { id: 'bm_daniel', name: 'Daniel', accent: 'British', gender: 'Male' },
-  ],
 }));
 
 describe('VoiceSettingsPanel', () => {
@@ -43,64 +29,70 @@ describe('VoiceSettingsPanel', () => {
     expect(screen.getByTestId('voice-settings-panel')).toBeInTheDocument();
   });
 
-  it('shows Kokoro HD Voice section', () => {
+  it('shows Cloud Voice (AI) section', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByText('HD Voice (Bella)')).toBeInTheDocument();
+    expect(screen.getByText('Cloud Voice (AI)')).toBeInTheDocument();
   });
 
-  it('shows Kokoro toggle', () => {
+  it('shows Polly toggle', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('kokoro-toggle')).toBeInTheDocument();
+    expect(screen.getByTestId('polly-toggle')).toBeInTheDocument();
   });
 
-  it('shows download button when model not loaded', () => {
+  it('shows Polly voice selector when enabled', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({
       id: 'main',
-      preferences: { kokoroEnabled: true },
+      preferences: { pollyEnabled: true },
     }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('kokoro-download-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('polly-voice-select')).toBeInTheDocument();
   });
 
-  it('shows voice selector', () => {
+  it('shows preview button when Polly enabled', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({
       id: 'main',
-      preferences: { kokoroEnabled: true },
+      preferences: { pollyEnabled: true },
     }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('kokoro-voice-select')).toBeInTheDocument();
+    expect(screen.getByTestId('polly-preview-btn')).toBeInTheDocument();
   });
 
-  it('shows ElevenLabs section', () => {
-    useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
+  it('shows test API endpoint button when Polly enabled', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile({
+      id: 'main',
+      preferences: { pollyEnabled: true },
+    }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByText('ElevenLabs (Advanced)')).toBeInTheDocument();
+    expect(screen.getByTestId('polly-test-btn')).toBeInTheDocument();
   });
 
-  it('shows ElevenLabs key input', () => {
+  it('shows System Voices section', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('elevenlabs-key-input')).toBeInTheDocument();
+    expect(screen.getByText('System Voices (Free)')).toBeInTheDocument();
   });
 
-  it('shows single voice ID input', () => {
+  it('shows system voice preview button', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('voice-id-elevenlabs')).toBeInTheDocument();
-  });
-
-  it('has save buttons', () => {
-    useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
-    render(<VoiceSettingsPanel />);
-    expect(screen.getByTestId('save-elevenlabs-key-btn')).toBeInTheDocument();
-    expect(screen.getByTestId('save-voice-ids-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('system-voice-preview-btn')).toBeInTheDocument();
   });
 
   it('has voice speed slider', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('voice-speed-slider')).toBeInTheDocument();
+  });
+
+  it('hides Polly controls when disabled', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile({
+      id: 'main',
+      preferences: { pollyEnabled: false },
+    }));
+    render(<VoiceSettingsPanel />);
+    expect(screen.queryByTestId('polly-voice-select')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('polly-preview-btn')).not.toBeInTheDocument();
   });
 });

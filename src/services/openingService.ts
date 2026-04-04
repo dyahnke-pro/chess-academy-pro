@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import type { OpeningRecord, DrillAttempt } from '../types';
+import { fuzzyScore } from '../utils/fuzzySearch';
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
@@ -32,13 +33,26 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
   if (!query.trim()) return [];
   const lower = query.toLowerCase();
 
-  // Dexie doesn't support full-text search natively — load and filter in JS.
   const all = await db.openings.toArray();
-  return all.filter(
-    (o) =>
-      o.name.toLowerCase().includes(lower) ||
-      o.eco.toLowerCase().startsWith(lower),
-  );
+
+  // Score every opening and keep matches
+  const scored: Array<{ opening: OpeningRecord; score: number }> = [];
+  for (const o of all) {
+    // ECO prefix match (always exact)
+    if (o.eco.toLowerCase().startsWith(lower)) {
+      scored.push({ opening: o, score: -1 });
+      continue;
+    }
+    // Fuzzy name match
+    const s = fuzzyScore(query, o.name);
+    if (s !== null) {
+      scored.push({ opening: o, score: s });
+    }
+  }
+
+  // Sort by score (lower = better), then alphabetically
+  scored.sort((a, b) => a.score - b.score || a.opening.name.localeCompare(b.opening.name));
+  return scored.map((s) => s.opening);
 }
 
 /** Returns all openings (both repertoire and ECO reference), sorted by ECO code. */

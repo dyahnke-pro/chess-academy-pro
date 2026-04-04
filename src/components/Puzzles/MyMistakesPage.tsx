@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import {
   getAllMistakePuzzles,
@@ -51,15 +51,25 @@ const PHASE_TABS: PhaseTabConfig[] = [
   { phase: 'endgame', label: 'Endgame', icon: <Crown size={16} />, description: 'Conversion and technique mistakes' },
 ];
 
+interface MistakesPageLocationState {
+  initialPhase?: MistakeGamePhase;
+  initialClassification?: MistakeClassification;
+  initialStatus?: MistakePuzzleStatus;
+  initialOpeningName?: string;
+}
+
 export function MyMistakesPage(): JSX.Element {
   const navigate = useNavigate();
+  const location = useLocation();
+  const navState = (location.state ?? {}) as MistakesPageLocationState;
   const [puzzles, setPuzzles] = useState<MistakePuzzle[]>([]);
   const [stats, setStats] = useState<MistakePuzzleStats | null>(null);
   const [activePuzzle, setActivePuzzle] = useState<MistakePuzzle | null>(null);
-  const [phaseTab, setPhaseTab] = useState<MistakeGamePhase | 'all'>('all');
-  const [classFilter, setClassFilter] = useState<ClassificationFilter>('all');
+  const [phaseTab, setPhaseTab] = useState<MistakeGamePhase | 'all'>(navState.initialPhase ?? 'all');
+  const [classFilter, setClassFilter] = useState<ClassificationFilter>(navState.initialClassification ?? 'all');
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(navState.initialStatus ?? 'all');
+  const [openingFilter, setOpeningFilter] = useState<string | null>(navState.initialOpeningName ?? null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState<ReanalysisProgress | null>(null);
@@ -83,7 +93,18 @@ export function MyMistakesPage(): JSX.Element {
     if (classFilter !== 'all' && p.classification !== classFilter) return false;
     if (sourceFilter !== 'all' && p.sourceMode !== sourceFilter) return false;
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
+    if (openingFilter !== null && p.openingName !== openingFilter) return false;
     return true;
+  }).sort((a, b) => {
+    // Newest games first; games older than 1 year sink to the bottom
+    const now = Date.now();
+    const oneYear = 365 * 24 * 60 * 60 * 1000;
+    const dateA = a.gameDate ? new Date(a.gameDate).getTime() : new Date(a.createdAt).getTime();
+    const dateB = b.gameDate ? new Date(b.gameDate).getTime() : new Date(b.createdAt).getTime();
+    const oldA = (now - dateA) > oneYear;
+    const oldB = (now - dateB) > oneYear;
+    if (oldA !== oldB) return oldA ? 1 : -1;
+    return dateB - dateA;
   });
 
   const handleDelete = useCallback(async (id: string) => {
@@ -152,7 +173,7 @@ export function MyMistakesPage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
-          onClick={() => void navigate('/puzzles')}
+          onClick={() => void navigate('/weaknesses')}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
           aria-label="Back to puzzles"
         >
@@ -277,6 +298,17 @@ export function MyMistakesPage(): JSX.Element {
           <option value="solved">Solved</option>
           <option value="mastered">Mastered</option>
         </select>
+
+        {openingFilter !== null && (
+          <button
+            onClick={() => setOpeningFilter(null)}
+            className="text-xs px-2 py-1 rounded font-medium flex items-center gap-1"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="opening-filter-badge"
+          >
+            {openingFilter} &times;
+          </button>
+        )}
       </div>
 
       {/* Empty state */}

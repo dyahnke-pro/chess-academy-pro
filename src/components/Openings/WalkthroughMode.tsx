@@ -32,27 +32,60 @@ interface MoveInfo {
   to: string;
 }
 
-type AutoPlaySpeed = 'slow' | 'normal' | 'fast';
+type AutoPlaySpeed = 'learn' | 'study' | 'review' | 'drill';
 
-// Words-per-minute reading speed for each auto-play speed
+// Words-per-minute reading speed for auto-advance timing
 const READING_WPM: Record<AutoPlaySpeed, number> = {
-  slow: 120,
-  normal: 180,
-  fast: 300,
+  learn: 120,
+  study: 160,
+  review: 250,
+  drill: 999, // effectively instant — drill uses fixed delay
 };
 
 // Minimum delay per move even if annotation is short/missing
 const MIN_DELAY_MS: Record<AutoPlaySpeed, number> = {
-  slow: 3000,
-  normal: 1500,
-  fast: 800,
+  learn: 3000,
+  study: 2000,
+  review: 1500,
+  drill: 2000,
 };
+
+// Post-narration buffer before advancing to next move
+const POST_NARRATION_MS: Record<AutoPlaySpeed, number> = {
+  learn: 600,
+  study: 300,
+  review: 200,
+  drill: 0,
+};
+
+// Whether arrows should stagger in progressively or appear all at once
+const STAGGER_ARROWS: Record<AutoPlaySpeed, boolean> = {
+  learn: true,
+  study: true,
+  review: false,
+  drill: false,
+};
+
+// Whether narration should be spoken
+const NARRATE: Record<AutoPlaySpeed, boolean> = {
+  learn: true,
+  study: true,
+  review: true,
+  drill: false,
+};
+
+/** Trim annotation to first 1-2 sentences for Review speed. */
+function trimAnnotation(text: string): string {
+  // Split on sentence boundaries (period, exclamation, question mark followed by space or end)
+  const sentences = text.match(/[^.!?]+[.!?]+/g);
+  if (!sentences || sentences.length <= 2) return text;
+  return sentences.slice(0, 2).join('').trim();
+}
 
 function getAnnotationDelay(text: string | undefined, speed: AutoPlaySpeed): number {
   if (!text) return MIN_DELAY_MS[speed];
   const wordCount = text.split(/\s+/).length;
   const readingMs = (wordCount / READING_WPM[speed]) * 60 * 1000;
-  // Add small buffer for the move animation
   return Math.max(MIN_DELAY_MS[speed], readingMs + 500);
 }
 
@@ -96,7 +129,7 @@ export function WalkthroughMode({
   const boundaryHandlerRef = useRef<((charIndex: number) => void) | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const isAutoPlayingRef = useRef(false);
-  const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('normal');
+  const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('learn');
 
   // Do NOT auto-load Kokoro here — the 87 MB WASM model causes OOM crashes
   // on iOS Safari. Kokoro only loads when the user explicitly taps
@@ -151,36 +184,38 @@ export function WalkthroughMode({
 
   // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
+    // Pre-warm voice service (caches DB prefs + primes AudioContext)
+    void voiceService.warmup();
     void (async () => {
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
       const data = effectiveKey
         ? await loadSubLineAnnotations(opening.id, effectiveKey)
         : await loadAnnotations(opening.id);
-      if (!cancelled) {
+      if (!guard.cancelled) {
         setAnnotations(data);
       }
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [opening.id, subLineKey, isVariation, variationIndex]);
 
   // Analyze position when it changes
   useEffect(() => {
-    let cancelled = false;
+    const guard = { cancelled: false };
     void (async () => {
       try {
         const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
-        if (!cancelled) {
+        if (!guard.cancelled) {
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
-          setLatestTopLines(analysis.topLines ?? []);
+          setLatestTopLines(analysis.topLines);
         }
       } catch {
         // Stockfish not ready yet
       }
     })();
-    return () => { cancelled = true; };
+    return () => { guard.cancelled = true; };
   }, [currentFen]);
 
   // Lichess cloud eval on position change
@@ -249,6 +284,13 @@ export function WalkthroughMode({
     const arrows = currentAnnotation.arrows ?? [];
     const highlights = currentAnnotation.highlights ?? [];
     if (arrows.length === 0 && highlights.length === 0) return;
+
+    // At Review/Drill speed, show all arrows and highlights immediately
+    if (!STAGGER_ARROWS[autoPlaySpeed]) {
+      setVisibleArrowCount(arrows.length);
+      setVisibleHighlightCount(highlights.length);
+      return;
+    }
 
     const text = currentAnnotation.annotation;
     const { arrowCharPos, highlightCharPos } = computeCharTriggers(
@@ -351,6 +393,16 @@ export function WalkthroughMode({
     : Math.floor((currentMoveIndex - 1) / 2) + 1;
   const displayIsWhite = currentMoveIndex === 0 || (currentMoveIndex - 1) % 2 === 0;
 
+  const postNarrationDelay = POST_NARRATION_MS[autoPlaySpeed];
+
+  const cycleSpeed = useCallback(() => {
+    setAutoPlaySpeed((prev) => {
+      const order: AutoPlaySpeed[] = ['learn', 'study', 'review', 'drill'];
+      const idx = order.indexOf(prev);
+      return order[(idx + 1) % order.length];
+    });
+  }, []);
+
   // Keep ref in sync with state so closures can read current value
   useEffect(() => {
     isAutoPlayingRef.current = isAutoPlaying;
@@ -387,10 +439,10 @@ export function WalkthroughMode({
         ttsFinishedRef.current = null;
 
         if (nextIndex < expectedMoves.length) {
-          // Small pause after TTS ends for the board move to register visually
+          // Pause after TTS ends — shorter at higher speeds
           autoPlayRef.current = setTimeout(() => {
             scheduleNextMove();
-          }, 600);
+          }, postNarrationDelay);
         } else {
           setIsAutoPlaying(false);
         }
@@ -399,25 +451,25 @@ export function WalkthroughMode({
       // Register TTS end callback — advances as soon as narration finishes
       ttsFinishedRef.current = advanceToNext;
 
-      // Fallback timer in case TTS doesn't fire onEnd (voice disabled, no annotation, etc.)
-      const ann = annotations?.[prev] as OpeningMoveAnnotation | undefined;
+      const ann = annotations?.[prev];
       const spokenText = ann?.annotation;
+      const shouldNarrate = NARRATE[autoPlaySpeed] && voiceEnabled && spokenText;
 
-      if (voiceEnabled && spokenText) {
+      if (shouldNarrate) {
         // When voice is active, Polly fetch + playback can take much longer than
         // the estimated reading time. Use a generous safety-net timeout and let
         // ttsFinishedRef handle the normal advance when narration actually ends.
         autoPlayRef.current = setTimeout(advanceToNext, 30_000);
       } else {
-        // Voice off or no annotation — use reading-time estimate
+        // No narration — use fixed delay based on speed tier
         const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
-        autoPlayRef.current = setTimeout(advanceToNext, delay + 1500);
+        autoPlayRef.current = setTimeout(advanceToNext, delay);
       }
 
       setBoardKey((k) => k + 1);
       return nextIndex;
     });
-  }, [expectedMoves.length, annotations, autoPlaySpeed, voiceEnabled]);
+  }, [expectedMoves.length, annotations, autoPlaySpeed, voiceEnabled, postNarrationDelay]);
 
   // Auto-play logic: kick off the chain when play starts
   useEffect(() => {
@@ -442,12 +494,10 @@ export function WalkthroughMode({
     }
   }, [currentMoveIndex, expectedMoves.length]);
 
-  // Map auto-play speed to TTS speech rate
-  const TTS_RATE: Record<AutoPlaySpeed, number> = useMemo(() => ({
-    slow: 0.75,
-    normal: 0.95,
-    fast: 1.4,
-  }), []);
+  // Voice speed comes from the user's global preference in Settings,
+  // NOT from the walkthrough speed tier. The tier controls lesson pace
+  // (content amount, timing, arrows) while Settings controls how the
+  // voice sounds.
 
   // Track when TTS finishes speaking — used to advance auto-play immediately
   const ttsFinishedRef = useRef<(() => void) | null>(null);
@@ -456,13 +506,19 @@ export function WalkthroughMode({
   useEffect(() => {
     if (currentMoveIndex === 0) return;
     if (!annotations) return;
+    if (!NARRATE[autoPlaySpeed]) return;
     const ann = annotations[currentMoveIndex - 1] as OpeningMoveAnnotation | undefined;
     if (!ann) return;
     if (!voiceEnabled) return;
 
     let cancelled = false;
 
-    void voiceService.speak(ann.annotation).then(() => {
+    // Review speed: trim to first 1-2 sentences for brevity
+    const spokenText = autoPlaySpeed === 'review'
+      ? trimAnnotation(ann.annotation)
+      : ann.annotation;
+
+    void voiceService.speak(spokenText).then(() => {
       if (!cancelled) {
         ttsFinishedRef.current?.();
       }
@@ -472,7 +528,7 @@ export function WalkthroughMode({
       cancelled = true;
       voiceService.stop();
     };
-  }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed, TTS_RATE]);
+  }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed]);
 
   // Clean up speech on unmount
   useEffect(() => {
@@ -528,14 +584,6 @@ export function WalkthroughMode({
       return true;
     });
   }, [currentMoveIndex, expectedMoves.length]);
-
-  const cycleSpeed = useCallback(() => {
-    setAutoPlaySpeed((prev) => {
-      if (prev === 'slow') return 'normal';
-      if (prev === 'normal') return 'fast';
-      return 'slow';
-    });
-  }, []);
 
   const progress = expectedMoves.length > 0
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
@@ -638,38 +686,43 @@ export function WalkthroughMode({
           extraRight={
             <button
               onClick={cycleSpeed}
-              className="px-2 py-1.5 rounded-lg border text-xs font-medium text-theme-text-muted hover:bg-theme-surface transition-colors"
-              style={{ borderColor: 'var(--color-border)' }}
-              aria-label="Change speed"
-              data-testid="walkthrough-speed"
+              className="px-2.5 py-1.5 rounded-lg border text-xs font-medium hover:bg-theme-surface transition-colors"
+              style={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text-muted)',
+              }}
+              aria-label={`Speed: ${autoPlaySpeed}`}
+              data-testid="walkthrough-speed-toggle"
             >
-              {autoPlaySpeed === 'slow' ? '0.5x' : autoPlaySpeed === 'normal' ? '1x' : '2x'}
+              {autoPlaySpeed.charAt(0).toUpperCase() + autoPlaySpeed.slice(1)}
             </button>
           }
         />
       </div>
 
-      {/* Annotation */}
-      <div className="px-4 pb-safe-4 min-h-[100px]">
-        {currentMoveIndex === 0 && opening.overview ? (
-          <div
-            className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg"
-            data-testid="walkthrough-overview"
-          >
-            <p className="text-xs font-semibold text-theme-text-muted uppercase tracking-wide mb-2">
-              Overview
-            </p>
-            <p className="text-sm text-theme-text leading-relaxed">{opening.overview}</p>
-          </div>
-        ) : (
-          <AnnotationCard
-            annotation={currentAnnotation}
-            moveNumber={displayMoveNumber}
-            isWhite={displayIsWhite}
-            visible={currentMoveIndex > 0}
-          />
-        )}
-      </div>
+      {/* Annotation — hidden in Drill mode */}
+      {autoPlaySpeed !== 'drill' && (
+        <div className="px-4 pb-safe-4 min-h-[100px]">
+          {currentMoveIndex === 0 && opening.overview ? (
+            <div
+              className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg"
+              data-testid="walkthrough-overview"
+            >
+              <p className="text-xs font-semibold text-theme-text-muted uppercase tracking-wide mb-2">
+                Overview
+              </p>
+              <p className="text-sm text-theme-text leading-relaxed">{opening.overview}</p>
+            </div>
+          ) : (
+            <AnnotationCard
+              annotation={currentAnnotation}
+              moveNumber={displayMoveNumber}
+              isWhite={displayIsWhite}
+              visible={currentMoveIndex > 0}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }

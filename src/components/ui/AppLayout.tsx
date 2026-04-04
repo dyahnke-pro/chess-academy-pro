@@ -3,22 +3,18 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
-  Swords,
-  Database,
-  BarChart3,
   Settings,
   Baby,
-  Search,
-  GraduationCap,
   Puzzle,
   Menu,
   X,
   MessageCircle,
   ChevronLeft,
+  AlertTriangle,
+  Target,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
-import { AchievementToast } from './AchievementToast';
 import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
 import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
@@ -29,21 +25,16 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-// Primary learning features — ordered by frequency of use
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/', label: 'Home', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
-  { to: '/coach', label: 'Coach', icon: GraduationCap },
   { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
-  { to: '/play', label: 'Play', icon: Swords },
-  { to: '/analysis', label: 'Analysis', icon: Search },
-  { to: '/games', label: 'Games', icon: Database },
-  { to: '/stats', label: 'Stats', icon: BarChart3 },
-  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/tactics', label: 'Tactics', icon: Target },
+  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/kid', label: 'Kids Mode', icon: Baby },
+  { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
-// Bottom tab bar shows the 5 most-used destinations
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
 
 export function AppLayout(): JSX.Element {
@@ -54,6 +45,8 @@ export function AppLayout(): JSX.Element {
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const coachEdgeTabPercent = useAppStore((s) => s.coachEdgeTabPercent);
   const setCoachEdgeTabPercent = useAppStore((s) => s.setCoachEdgeTabPercent);
+  const bgAnalysisRunning = useAppStore((s) => s.backgroundAnalysisRunning);
+  const bgAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
   const location = useLocation();
 
   // Draggable edge tab
@@ -95,6 +88,17 @@ export function AppLayout(): JSX.Element {
   return (
     <div className="flex flex-col min-h-dvh" style={{ background: 'var(--color-bg)' }}>
       <OfflineBanner />
+
+      {bgAnalysisRunning && (
+        <div
+          className="flex items-center gap-2 px-4 py-1.5 text-xs font-medium"
+          style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+          data-testid="bg-analysis-banner"
+        >
+          <span className="animate-spin inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
+          <span>Analyzing games{bgAnalysisProgress ? ` — ${bgAnalysisProgress}` : '...'}</span>
+        </div>
+      )}
 
       {/* Mobile header */}
       <header
@@ -237,7 +241,6 @@ export function AppLayout(): JSX.Element {
         </main>
       </div>
 
-      <AchievementToast />
       <InstallPrompt />
 
       {/* Mobile bottom nav */}

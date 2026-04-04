@@ -115,11 +115,11 @@ describe('WalkthroughMode integration — real annotation data', () => {
 
     // Click Next to advance to move 1 (d4)
     const nextBtn = screen.getByRole('button', { name: /next/i });
-    await act(async () => { fireEvent.click(nextBtn); });
+    act(() => { fireEvent.click(nextBtn); });
 
     // Annotation card should now show (real data from london-system.json)
     await waitFor(() => {
-      const text = document.body.textContent ?? '';
+      const text = document.body.textContent;
       // The annotation for d4 mentions controlling key squares / central space
       expect(text.length).toBeGreaterThan(200);
       expect(text).toMatch(/queen|pawn|d4|central|control|space/i);
@@ -135,14 +135,14 @@ describe('WalkthroughMode integration — real annotation data', () => {
     const seenTexts: string[] = [];
 
     for (let i = 0; i < 4; i++) {
-      await act(async () => { fireEvent.click(nextBtn); });
+      act(() => { fireEvent.click(nextBtn); });
 
       await waitFor(() => {
-        const text = document.body.textContent ?? '';
+        const text = document.body.textContent;
         expect(text.length).toBeGreaterThan(100);
       }, { timeout: 3000 });
 
-      seenTexts.push((document.body.textContent ?? '').substring(0, 120));
+      seenTexts.push((document.body.textContent).substring(0, 120));
     }
 
     // Each move should produce distinct text (annotation advances)
@@ -166,11 +166,11 @@ describe('WalkthroughMode integration — real annotation data', () => {
 
     // Advance to move 1 (d4 in Jobava London)
     const nextBtn = screen.getByRole('button', { name: /next/i });
-    await act(async () => { fireEvent.click(nextBtn); });
+    act(() => { fireEvent.click(nextBtn); });
 
     // Should show real annotation data for d4 from subLines[2]
     await waitFor(() => {
-      const text = document.body.textContent ?? '';
+      const text = document.body.textContent;
       expect(text.length).toBeGreaterThan(200);
       expect(text).toMatch(/queen|pawn|d4|central|control|space/i);
     }, { timeout: 5000 });
@@ -190,14 +190,14 @@ describe('WalkthroughMode integration — real annotation data', () => {
     const nextBtn = screen.getByRole('button', { name: /next/i });
 
     for (let moveNum = 1; moveNum <= 5; moveNum++) {
-      await act(async () => { fireEvent.click(nextBtn); });
+      act(() => { fireEvent.click(nextBtn); });
 
       await waitFor(() => {
-        const text = document.body.textContent ?? '';
+        const text = document.body.textContent;
         expect(text.length).toBeGreaterThan(100);
       }, { timeout: 3000 });
 
-      const snippet = (document.body.textContent ?? '').substring(0, 100).trim();
+      const snippet = (document.body.textContent).substring(0, 100).trim();
       console.log(`Jobava move ${moveNum}: "${snippet}"`);
     }
   });
@@ -210,15 +210,15 @@ describe('WalkthroughMode integration — real annotation data', () => {
     await waitFor(() => screen.getByTestId('walkthrough-overview'), { timeout: 3000 });
 
     const nextBtn = screen.getByRole('button', { name: /next/i });
-    await act(async () => { fireEvent.click(nextBtn); });
+    act(() => { fireEvent.click(nextBtn); });
 
     // Wait for the TTS useEffect to fire (reads DB, then calls speak)
     await waitFor(() => {
       expect(mockSpeak).toHaveBeenCalled();
     }, { timeout: 3000 });
 
-    const firstCallText = mockSpeak.mock.calls[0]?.[0] as string;
-    console.log(`speak() called with: "${firstCallText?.substring(0, 80)}..."`);
+    const firstCallText = mockSpeak.mock.calls[0][0];
+    console.log(`speak() called with: "${firstCallText.substring(0, 80)}..."`);
     expect(typeof firstCallText).toBe('string');
     expect(firstCallText.length).toBeGreaterThan(20);
   });
@@ -239,7 +239,7 @@ describe('WalkthroughMode integration — real annotation data', () => {
     await waitFor(() => screen.getByTestId('walkthrough-overview'), { timeout: 3000 });
 
     const nextBtn = screen.getByRole('button', { name: /next/i });
-    await act(async () => { fireEvent.click(nextBtn); });
+    act(() => { fireEvent.click(nextBtn); });
 
     // Give a moment for any async effects to fire
     await new Promise((r) => setTimeout(r, 300));

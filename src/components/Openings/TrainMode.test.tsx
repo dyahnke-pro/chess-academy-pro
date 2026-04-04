@@ -58,6 +58,8 @@ vi.mock('../../services/voiceService', () => ({
     speak: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
     isPlaying: vi.fn().mockReturnValue(false),
+    warmup: vi.fn().mockResolvedValue(undefined),
+    clearCache: vi.fn(),
   },
 }));
 
@@ -211,7 +213,7 @@ describe('TrainMode', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('wrong-flash')).toBeInTheDocument();
-        expect(screen.getByText(/restart this line/i)).toBeInTheDocument();
+        expect(screen.getByTestId('explanation-card')).toBeInTheDocument();
       });
     });
 

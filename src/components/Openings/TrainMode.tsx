@@ -12,7 +12,9 @@ import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
-import type { OpeningRecord, OpeningVariation, AnalysisLine, LichessCloudEval } from '../../types';
+import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
+import { recordWeakSpot } from '../../services/weakSpotService';
+import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
@@ -89,6 +91,37 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
   const [lichessOverride, setLichessOverride] = useState<boolean | null>(null);
   const showLichessEffective = lichessOverride ?? false;
   const [cloudEval, setCloudEval] = useState<LichessCloudEval | null>(null);
+
+  // Annotations for mistake explanations
+  const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
+
+  useEffect(() => {
+    void voiceService.warmup();
+    const guard = { cancelled: false };
+    void (async () => {
+      // Train mode uses trap/warning lines — try sub-line annotations first
+      const subKey = sectionLabel.toLowerCase().includes('trap')
+        ? `trap-${currentLineIndex}`
+        : `warning-${currentLineIndex}`;
+      const data = await loadSubLineAnnotations(opening.id, subKey)
+        ?? await loadAnnotations(opening.id);
+      if (!guard.cancelled) setAnnotations(data);
+    })();
+    return () => { guard.cancelled = true; };
+  }, [opening.id, sectionLabel, currentLineIndex]);
+
+  const mistakeExplanation = useMemo((): string => {
+    if (currentMoveIndex >= expectedMoves.length) {
+      return 'Incorrect move — restart this line to try again.';
+    }
+    const ann: OpeningMoveAnnotation | undefined = annotations?.[currentMoveIndex];
+    if (!ann) {
+      return `Incorrect. The correct move is ${expectedMoves[currentMoveIndex].san}. Restart to try again.`;
+    }
+    const parts: string[] = [`The correct move is ${ann.san}.`];
+    if (ann.annotation) parts.push(ann.annotation);
+    return parts.join(' ');
+  }, [currentMoveIndex, expectedMoves, annotations]);
 
   const isPlayerTurn = useCallback(
     (idx: number): boolean => {
@@ -174,9 +207,17 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
         }
         playEncouragement();
         setBoardKey((k) => k + 1);
+        // Record weak spot
+        void recordWeakSpot(
+          opening.id,
+          opening.name,
+          currentFen,
+          currentMoveIndex,
+          expectedMoves[currentMoveIndex].san,
+        );
       }
     },
-    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash],
+    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash, opening.id, opening.name, currentFen],
   );
 
   const handleUndo = useCallback((): void => {
@@ -469,7 +510,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
         {showWrongMove ? (
           <div className="flex flex-col gap-2">
             <ExplanationCard
-              text="Incorrect move — restart this line to try again."
+              text={mistakeExplanation}
               visible={true}
               variant="error"
             />

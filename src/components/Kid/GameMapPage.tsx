@@ -178,33 +178,21 @@ export function GameMapPage({ config }: GameMapPageProps): JSX.Element {
                 <button
                   onClick={() => void navigate('/kid/queen-games')}
                   disabled={!knightCompleted}
-                  className={[
-                    'rounded-xl p-4 border-2 flex items-center gap-4 text-left transition-all ml-6',
-                    !knightCompleted && 'opacity-50 cursor-not-allowed',
-                    knightCompleted && 'hover:opacity-90',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
+                  className="rounded-xl p-4 border-2 flex items-center gap-4 text-left transition-all ml-6 hover:opacity-90"
                   style={{
                     background: 'var(--color-surface)',
-                    borderColor: knightCompleted
-                      ? 'var(--color-accent)'
-                      : 'var(--color-border)',
+                    borderColor: 'var(--color-accent)',
                   }}
                   data-testid="queen-games-card"
                 >
-                  <span className="text-2xl flex-shrink-0">
-                    {knightCompleted ? '👑' : '🔒'}
-                  </span>
+                  <span className="text-2xl flex-shrink-0">👑</span>
                   <div className="flex-1 min-w-0">
                     <div className="font-bold text-sm">Queen Games</div>
                     <div
                       className="text-xs truncate"
                       style={{ color: 'var(--color-text-muted)' }}
                     >
-                      {knightCompleted
-                        ? 'Two queen mini-games to test your skills!'
-                        : 'Complete the Knight chapter to unlock'}
+                      Two queen mini-games to test your skills!
                     </div>
                   </div>
                 </button>

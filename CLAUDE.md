@@ -62,6 +62,19 @@ src/
 - Theme colors defined in Tailwind config and referenced by semantic names.
 - Responsive: mobile-first. Use `sm:`, `md:`, `lg:` breakpoints.
 
+### UI Design Language (IMPORTANT)
+**All hub/landing pages must match the Dashboard pattern.** This means:
+- Centered title at top
+- `SmartSearchBar` below title (on all non-playing pages)
+- **2-column grid** of big tap targets: `grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full`
+- Each section button: `border-2 rounded-2xl`, tinted bg (`bg-{color}-500/10`), tinted border (`border-{color}-500/30`), centered icon + bold label
+- First item spans 2 columns (`col-span-2 py-10`), rest are `aspect-square`
+- Each section owns a color (Tailwind opacity classes, not CSS variables)
+- Container: `flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-20 md:pb-6`
+- Content constrained to `max-w-lg mx-auto`
+
+**When "clean up" or "make it match" is requested, match BOTH structure AND visual.** Don't just reorganize information flow — replicate the actual layout, grid, card style, spacing, and interaction patterns of the reference page. Study the reference's exact JSX, Tailwind classes, and component hierarchy before writing new code.
+
 ### State Management
 - **Zustand** for global app state (user profile, settings, current session, theme).
 - **React state** (`useState`) for local component state only.

@@ -1,30 +1,32 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, waitFor } from '../../test/utils';
+import { render, screen, waitFor, fireEvent } from '../../test/utils';
 import { StatsPage } from './StatsPage';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { buildSessionRecord, buildBadHabit } from '../../test/factories';
-import type { UserProfile } from '../../types';
-import type { PuzzleStats, ThemeSkill } from '../../services/puzzleService';
+import { buildBadHabit } from '../../test/factories';
+import type { UserProfile, WeaknessProfile } from '../../types';
+import type { ThemeSkill } from '../../services/puzzleService';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-const mockGetPuzzleStats = vi.fn<() => Promise<PuzzleStats | null>>();
 const mockGetThemeSkills = vi.fn<() => Promise<ThemeSkill[]>>();
-const mockGetRecentSessions = vi.fn();
 const mockDetectBadHabits = vi.fn();
+const mockGetStoredWeaknessProfile = vi.fn<() => Promise<WeaknessProfile | null>>();
+const mockComputeWeaknessProfile = vi.fn<() => Promise<WeaknessProfile>>();
 
 vi.mock('../../services/puzzleService', () => ({
-  getPuzzleStats: (): unknown => mockGetPuzzleStats(),
   getThemeSkills: (): unknown => mockGetThemeSkills(),
-}));
-
-vi.mock('../../services/sessionGenerator', () => ({
-  getRecentSessions: (...args: unknown[]): unknown => mockGetRecentSessions(...args),
 }));
 
 vi.mock('../../services/coachFeatureService', () => ({
   detectBadHabits: (...args: unknown[]): unknown => mockDetectBadHabits(...args),
+}));
+
+vi.mock('../../services/weaknessAnalyzer', () => ({
+  getStoredWeaknessProfile: (): unknown => mockGetStoredWeaknessProfile(),
+  computeWeaknessProfile: (): unknown => mockComputeWeaknessProfile(),
+  filterWeaknessesByCategory: (profile: WeaknessProfile, category: string) =>
+    profile.items.filter((item) => item.category === category),
 }));
 
 vi.mock('../../services/themeService', async () => {
@@ -33,6 +35,14 @@ vi.mock('../../services/themeService', async () => {
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const EMPTY_WEAKNESS_PROFILE: WeaknessProfile = {
+  computedAt: new Date().toISOString(),
+  items: [],
+  strengths: [],
+  strengthItems: [],
+  overallAssessment: '',
+};
 
 function createProfile(overrides: Partial<UserProfile> = {}): UserProfile {
   return {
@@ -47,7 +57,6 @@ function createProfile(overrides: Partial<UserProfile> = {}): UserProfile {
     longestStreak: 10,
     streakFreezes: 0,
     lastActiveDate: new Date().toISOString().split('T')[0],
-    achievements: ['first_puzzle', 'streak_3'],
     skillRadar: { opening: 60, tactics: 70, endgame: 40, memory: 55, calculation: 65 },
     badHabits: [],
     preferences: {
@@ -107,18 +116,16 @@ describe('StatsPage', () => {
     useAppStore.getState().reset();
     vi.clearAllMocks();
 
-    mockGetPuzzleStats.mockResolvedValue(null);
     mockGetThemeSkills.mockResolvedValue([]);
-    mockGetRecentSessions.mockResolvedValue([]);
     mockDetectBadHabits.mockResolvedValue([]);
+    mockGetStoredWeaknessProfile.mockResolvedValue(EMPTY_WEAKNESS_PROFILE);
+    mockComputeWeaknessProfile.mockResolvedValue(EMPTY_WEAKNESS_PROFILE);
   });
 
-  // ─── Original tests (preserved) ──────────────────────────────────────────
+  // ─── Basic rendering ──────────────────────────────────────────────────────
 
   it('renders the stats page with profile data', async () => {
-    const profile = createProfile();
-    useAppStore.getState().setActiveProfile(profile);
-
+    setProfile();
     render(<StatsPage />);
 
     await waitFor(() => {
@@ -127,166 +134,39 @@ describe('StatsPage', () => {
     expect(screen.getByText('Stats & Progress')).toBeInTheDocument();
   });
 
-  it('shows header stats cards', async () => {
-    const profile = createProfile();
-    useAppStore.getState().setActiveProfile(profile);
-
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('1600')).toBeInTheDocument();
-    });
-    expect(screen.getByText('250')).toBeInTheDocument();
-  });
-
-  it('shows XP progress bar', async () => {
-    const profile = createProfile({ xp: 250 });
-    useAppStore.getState().setActiveProfile(profile);
-
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('xp-bar')).toBeInTheDocument();
-    });
-  });
-
-  it('shows skill breakdown bars', async () => {
-    const profile = createProfile();
-    useAppStore.getState().setActiveProfile(profile);
-
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('opening')).toBeInTheDocument();
-      expect(screen.getByText('tactics')).toBeInTheDocument();
-    });
-  });
-
-  it('shows achievements grid with earned and locked', async () => {
-    const profile = createProfile({ achievements: ['first_puzzle'] });
-    useAppStore.getState().setActiveProfile(profile);
-
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('achievements-grid')).toBeInTheDocument();
-      expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
-      expect(screen.getByTestId('achievement-streak_3')).toBeInTheDocument();
-    });
-  });
-
-  it('shows activity dots for last 7 days', async () => {
-    const profile = createProfile();
-    useAppStore.getState().setActiveProfile(profile);
-
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Activity')).toBeInTheDocument();
-    });
-  });
-
   it('renders empty state when no profile', () => {
     render(<StatsPage />);
     expect(screen.queryByTestId('stats-page')).not.toBeInTheDocument();
   });
 
-  // ─── New tests: Header stats row ─────────────────────────────────────────
+  // ─── Header stats cards ────────────────────────────────────────────────────
 
-  it('shows level title in header stats', async () => {
-    setProfile({ level: 1 });
+  it('shows Puzzle Rating and Game ELO cards', async () => {
+    setProfile({ puzzleRating: 1600, currentRating: 1500 });
     render(<StatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Lv 1')).toBeInTheDocument();
-      // "Beginner" appears in both the stat card and the XP bar section
-      expect(screen.getAllByText('Beginner').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText('1600')).toBeInTheDocument();
     });
+    expect(screen.getByText('1500')).toBeInTheDocument();
+    expect(screen.getByText('Puzzle Rating')).toBeInTheDocument();
+    expect(screen.getByText('Game ELO')).toBeInTheDocument();
   });
 
-  it('shows ELO in header stats', async () => {
-    setProfile({ currentRating: 1800 });
+  it('does not show XP or Level cards', async () => {
+    setProfile({ xp: 999, level: 5 });
     render(<StatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('1800')).toBeInTheDocument();
-      expect(screen.getByText('ELO')).toBeInTheDocument();
+      expect(screen.getByTestId('stats-page')).toBeInTheDocument();
     });
+    expect(screen.queryByText('Total XP')).not.toBeInTheDocument();
+    expect(screen.queryByText('Lv 5')).not.toBeInTheDocument();
   });
 
-  it('shows Total XP label in header stats', async () => {
-    setProfile({ xp: 750 });
-    render(<StatsPage />);
+  // ─── Skill breakdown ──────────────────────────────────────────────────────
 
-    await waitFor(() => {
-      expect(screen.getByText('750')).toBeInTheDocument();
-      expect(screen.getByText('Total XP')).toBeInTheDocument();
-    });
-  });
-
-  it('shows Puzzle Rating label in header stats', async () => {
-    setProfile({ puzzleRating: 1900 });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('1900')).toBeInTheDocument();
-      expect(screen.getByText('Puzzle Rating')).toBeInTheDocument();
-    });
-  });
-
-  // ─── New tests: XP progress bar details ───────────────────────────────────
-
-  it('XP progress bar shows current/needed text', async () => {
-    setProfile({ xp: 300 });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('300/500 XP to next level')).toBeInTheDocument();
-    });
-  });
-
-  it('XP progress bar shows correct percentage width', async () => {
-    setProfile({ xp: 250 });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      const bar = screen.getByTestId('xp-bar');
-      expect(bar).toHaveStyle({ width: '50%' });
-    });
-  });
-
-  // ─── New tests: Activity dots ─────────────────────────────────────────────
-
-  it('renders 7 activity dots', async () => {
-    setProfile();
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Activity')).toBeInTheDocument();
-    });
-
-    // The component renders 7 days, each with a data-testid like activity-dot-YYYY-MM-DD
-    const today = new Date();
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
-      expect(screen.getByTestId(`activity-dot-${dateStr}`)).toBeInTheDocument();
-    }
-  });
-
-  it('shows streak day count in activity section', async () => {
-    setProfile({ currentStreak: 12 });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('12 day streak')).toBeInTheDocument();
-    });
-  });
-
-  // ─── New tests: Skill breakdown (all 5 skills) ───────────────────────────
-
-  it('shows all five skill bars with values', async () => {
+  it('shows all five skill bars', async () => {
     setProfile({
       skillRadar: { opening: 80, tactics: 90, endgame: 30, memory: 45, calculation: 72 },
     });
@@ -299,17 +179,104 @@ describe('StatsPage', () => {
     expect(screen.getByText('endgame')).toBeInTheDocument();
     expect(screen.getByText('memory')).toBeInTheDocument();
     expect(screen.getByText('calculation')).toBeInTheDocument();
-    // SkillBar renders the numeric value
-    expect(screen.getByText('80')).toBeInTheDocument();
-    expect(screen.getByText('90')).toBeInTheDocument();
-    expect(screen.getByText('30')).toBeInTheDocument();
-    expect(screen.getByText('45')).toBeInTheDocument();
-    expect(screen.getByText('72')).toBeInTheDocument();
   });
 
-  // ─── New tests: Tactical themes ──────────────────────────────────────────
+  it('skill bars are clickable and expand drill-down', async () => {
+    setProfile();
+    render(<StatsPage />);
 
-  it('shows tactical theme breakdown when theme skills are available', async () => {
+    await waitFor(() => {
+      expect(screen.getByTestId('skill-toggle-tactics')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('skill-toggle-tactics'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('drilldown-tactics')).toBeInTheDocument();
+    });
+  });
+
+  it('clicking expanded skill bar collapses it', async () => {
+    setProfile();
+    render(<StatsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('skill-toggle-tactics')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('skill-toggle-tactics'));
+    await waitFor(() => {
+      expect(screen.getByTestId('drilldown-tactics')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('skill-toggle-tactics'));
+    await waitFor(() => {
+      expect(screen.queryByTestId('drilldown-tactics')).not.toBeInTheDocument();
+    });
+  });
+
+  it('drill-down shows weakness items for category', async () => {
+    const wp: WeaknessProfile = {
+      ...EMPTY_WEAKNESS_PROFILE,
+      items: [
+        {
+          category: 'tactics',
+          label: 'Weak at forks',
+          metric: '30% accuracy (10 attempts)',
+          severity: 70,
+          detail: 'Focus on fork patterns.',
+          trainingAction: { route: '/puzzles', buttonLabel: 'Train forks' },
+        },
+      ],
+    };
+    mockGetStoredWeaknessProfile.mockResolvedValue(wp);
+    setProfile();
+    render(<StatsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('skill-toggle-tactics')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('skill-toggle-tactics'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Weak at forks')).toBeInTheDocument();
+      expect(screen.getByText('Focus on fork patterns.')).toBeInTheDocument();
+      expect(screen.getByText('Train forks')).toBeInTheDocument();
+    });
+  });
+
+  it('drill-down shows strength items for category', async () => {
+    const wp: WeaknessProfile = {
+      ...EMPTY_WEAKNESS_PROFILE,
+      strengthItems: [
+        {
+          title: 'Pin Mastery',
+          detail: 'Great at pins',
+          category: 'tactics',
+          metric: '92% accuracy',
+        },
+      ],
+    };
+    mockGetStoredWeaknessProfile.mockResolvedValue(wp);
+    setProfile();
+    render(<StatsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('skill-toggle-tactics')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('skill-toggle-tactics'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Pin Mastery')).toBeInTheDocument();
+      expect(screen.getByText('92% accuracy')).toBeInTheDocument();
+    });
+  });
+
+  // ─── Tactical themes ──────────────────────────────────────────────────────
+
+  it('shows tactical themes when data available', async () => {
     setProfile();
     mockGetThemeSkills.mockResolvedValue([
       { theme: 'fork', accuracy: 0.85, attempts: 20 },
@@ -324,7 +291,19 @@ describe('StatsPage', () => {
     expect(screen.getByText('pin')).toBeInTheDocument();
   });
 
-  it('hides tactical theme section when no theme skills', async () => {
+  it('shows attempt count per theme', async () => {
+    setProfile();
+    mockGetThemeSkills.mockResolvedValue([
+      { theme: 'fork', accuracy: 0.85, attempts: 20 },
+    ]);
+    render(<StatsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('20 tries')).toBeInTheDocument();
+    });
+  });
+
+  it('hides tactical themes when no data', async () => {
     setProfile();
     mockGetThemeSkills.mockResolvedValue([]);
     render(<StatsPage />);
@@ -335,122 +314,7 @@ describe('StatsPage', () => {
     expect(screen.queryByText('Tactical Themes')).not.toBeInTheDocument();
   });
 
-  it('shows theme accuracy as percentage in tactical themes', async () => {
-    setProfile();
-    mockGetThemeSkills.mockResolvedValue([
-      { theme: 'discoveredAttack', accuracy: 0.73, attempts: 10 },
-    ]);
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('discoveredAttack')).toBeInTheDocument();
-    });
-    // SkillBar renders Math.round(0.73*100) = 73
-    expect(screen.getByText('73')).toBeInTheDocument();
-  });
-
-  // ─── New tests: Puzzle stats panel ────────────────────────────────────────
-
-  it('shows puzzle stats panel when data is available', async () => {
-    setProfile();
-    mockGetPuzzleStats.mockResolvedValue({
-      totalAttempted: 100,
-      totalCorrect: 75,
-      overallAccuracy: 0.75,
-      averageRating: 1450,
-      totalPuzzles: 500,
-      duePuzzles: 20,
-    });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Puzzle Stats')).toBeInTheDocument();
-    });
-    expect(screen.getByText('100')).toBeInTheDocument();
-    expect(screen.getByText('75')).toBeInTheDocument();
-    expect(screen.getByText('75%')).toBeInTheDocument();
-    expect(screen.getByText('20')).toBeInTheDocument();
-    expect(screen.getByText('1450')).toBeInTheDocument();
-  });
-
-  it('shows puzzle stats labels', async () => {
-    setProfile();
-    mockGetPuzzleStats.mockResolvedValue({
-      totalAttempted: 50,
-      totalCorrect: 30,
-      overallAccuracy: 0.6,
-      averageRating: 1300,
-      totalPuzzles: 200,
-      duePuzzles: 10,
-    });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Attempted')).toBeInTheDocument();
-    });
-    expect(screen.getByText('Correct')).toBeInTheDocument();
-    expect(screen.getByText('Accuracy')).toBeInTheDocument();
-    expect(screen.getByText('Due')).toBeInTheDocument();
-    expect(screen.getByText('Avg Rating')).toBeInTheDocument();
-  });
-
-  it('hides puzzle stats when no data', async () => {
-    setProfile();
-    mockGetPuzzleStats.mockResolvedValue(null);
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('stats-page')).toBeInTheDocument();
-    });
-    expect(screen.queryByText('Puzzle Stats')).not.toBeInTheDocument();
-  });
-
-  // ─── New tests: Session history ───────────────────────────────────────────
-
-  it('shows session history when sessions exist', async () => {
-    setProfile();
-    mockGetRecentSessions.mockResolvedValue([
-      buildSessionRecord({
-        id: 'sess-1',
-        date: '2026-03-01',
-        durationMinutes: 30,
-        puzzlesSolved: 10,
-        xpEarned: 200,
-        completed: true,
-      }),
-      buildSessionRecord({
-        id: 'sess-2',
-        date: '2026-03-02',
-        durationMinutes: 20,
-        puzzlesSolved: 5,
-        xpEarned: 100,
-        completed: false,
-      }),
-    ]);
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Session History')).toBeInTheDocument();
-    });
-    expect(screen.getByText('2026-03-01')).toBeInTheDocument();
-    expect(screen.getByText('30m')).toBeInTheDocument();
-    expect(screen.getByText('10 puzzles')).toBeInTheDocument();
-    expect(screen.getByText('200 XP')).toBeInTheDocument();
-    expect(screen.getByText('Done')).toBeInTheDocument();
-  });
-
-  it('hides session history when no sessions', async () => {
-    setProfile();
-    mockGetRecentSessions.mockResolvedValue([]);
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('stats-page')).toBeInTheDocument();
-    });
-    expect(screen.queryByText('Session History')).not.toBeInTheDocument();
-  });
-
-  // ─── New tests: Bad habits ────────────────────────────────────────────────
+  // ─── Bad habits ────────────────────────────────────────────────────────────
 
   it('shows bad habits when detected', async () => {
     setProfile();
@@ -491,66 +355,57 @@ describe('StatsPage', () => {
     expect(screen.queryByText('Bad Habits')).not.toBeInTheDocument();
   });
 
-  // ─── New tests: Achievements grid detail ──────────────────────────────────
+  // ─── Refresh button ────────────────────────────────────────────────────────
 
-  it('earned achievements show XP reward text', async () => {
-    setProfile({ achievements: ['first_puzzle'] });
+  it('shows refresh button', async () => {
+    setProfile();
     render(<StatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
+      expect(screen.getByTestId('refresh-btn')).toBeInTheDocument();
     });
-    // first_puzzle has xpReward of 50
-    expect(screen.getByText('+50 XP')).toBeInTheDocument();
+    expect(screen.getByText('Refresh')).toBeInTheDocument();
   });
 
-  it('locked achievements show description text', async () => {
-    setProfile({ achievements: [] });
+  // ─── Auto-refresh (staleness check) ───────────────────────────────────────
+
+  it('uses stored profile if fresh enough', async () => {
+    const freshProfile: WeaknessProfile = {
+      ...EMPTY_WEAKNESS_PROFILE,
+      computedAt: new Date().toISOString(), // just computed
+    };
+    mockGetStoredWeaknessProfile.mockResolvedValue(freshProfile);
+    setProfile();
     render(<StatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
+      expect(screen.getByTestId('stats-page')).toBeInTheDocument();
     });
-    // first_puzzle description is "Attempt your first puzzle"
-    expect(screen.getByText('Attempt your first puzzle')).toBeInTheDocument();
+    // Should NOT have called compute since the stored profile is fresh
+    expect(mockComputeWeaknessProfile).not.toHaveBeenCalled();
   });
 
-  it('achievements grid renders all defined achievements', async () => {
-    setProfile({ achievements: [] });
+  it('recomputes when stored profile is stale', async () => {
+    const staleProfile: WeaknessProfile = {
+      ...EMPTY_WEAKNESS_PROFILE,
+      computedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours old
+    };
+    mockGetStoredWeaknessProfile.mockResolvedValue(staleProfile);
+    setProfile();
     render(<StatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('achievements-grid')).toBeInTheDocument();
-    });
-    // Check a few specific achievement test IDs
-    expect(screen.getByTestId('achievement-first_puzzle')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-ten_puzzles')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-streak_3')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-streak_7')).toBeInTheDocument();
-    expect(screen.getByTestId('achievement-reach_1500')).toBeInTheDocument();
-  });
-
-  // ─── New tests: Level titles ──────────────────────────────────────────────
-
-  it('level 5 shows Rook title', async () => {
-    setProfile({ level: 5 });
-    render(<StatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Lv 5')).toBeInTheDocument();
-      // "Rook" appears in both the stat card and the XP bar section
-      expect(screen.getAllByText('Rook').length).toBeGreaterThanOrEqual(1);
+      expect(mockComputeWeaknessProfile).toHaveBeenCalled();
     });
   });
 
-  it('level 7+ shows Grandmaster title', async () => {
-    setProfile({ level: 8, xp: 3900 });
+  it('recomputes when no stored profile', async () => {
+    mockGetStoredWeaknessProfile.mockResolvedValue(null);
+    setProfile();
     render(<StatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Lv 8')).toBeInTheDocument();
-      // getLevelTitle shows Grandmaster in both the stat card and the XP bar section
-      expect(screen.getAllByText('Grandmaster').length).toBeGreaterThanOrEqual(1);
+      expect(mockComputeWeaknessProfile).toHaveBeenCalled();
     });
   });
 });

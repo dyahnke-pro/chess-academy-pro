@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type {
-  UserProfile, SessionRecord, AppTheme, Achievement,
+  UserProfile, SessionRecord, AppTheme,
   CoachGameState, ChatMessage, WeaknessProfile,
 } from '../types';
 
@@ -19,9 +19,6 @@ interface AppState {
   activeTheme: AppTheme | null;
   sidebarOpen: boolean;
 
-  // Gamification
-  pendingAchievement: Achievement | null;
-
   // Engine
   engineEnabled: boolean;
   evalBarVisible: boolean;
@@ -35,6 +32,11 @@ interface AppState {
   coachBubbleVisible: boolean;
   coachBubbleText: string;
   coachVoiceOn: boolean;
+  coachTipsOn: boolean;
+
+  // Background analysis
+  backgroundAnalysisRunning: boolean;
+  backgroundAnalysisProgress: string | null; // e.g. "3/12 — Smith vs Jones"
 
   // Global coach drawer
   coachDrawerOpen: boolean;
@@ -58,7 +60,6 @@ interface AppActions {
   tickSessionTimer: () => void;
   setActiveTheme: (theme: AppTheme) => void;
   setSidebarOpen: (open: boolean) => void;
-  setPendingAchievement: (achievement: Achievement | null) => void;
   toggleEngine: () => void;
   toggleEvalBar: () => void;
   setCoachGameState: (state: CoachGameState | null) => void;
@@ -69,6 +70,8 @@ interface AppActions {
   toggleCoachBubble: () => void;
   setCoachBubbleText: (text: string) => void;
   toggleCoachVoice: () => void;
+  toggleCoachTips: () => void;
+  setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
   setCoachEdgeTabPercent: (percent: number) => void;
   setGlobalBoardContext: (ctx: AppState['globalBoardContext']) => void;
@@ -83,7 +86,6 @@ const DEFAULT_STATE: AppState = {
   sessionTimerActive: false,
   sessionElapsedSeconds: 0,
   activeTheme: null,
-  pendingAchievement: null,
   sidebarOpen: false,
   engineEnabled: true,
   evalBarVisible: true,
@@ -93,6 +95,9 @@ const DEFAULT_STATE: AppState = {
   coachBubbleVisible: true,
   coachBubbleText: '',
   coachVoiceOn: false,
+  coachTipsOn: false,
+  backgroundAnalysisRunning: false,
+  backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
   coachEdgeTabPercent: 50,
   globalBoardContext: null,
@@ -124,8 +129,6 @@ export const useAppStore = create<AppState & AppActions>()(
 
     setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
-    setPendingAchievement: (achievement) => set({ pendingAchievement: achievement }),
-
     toggleEngine: () => set((state) => ({ engineEnabled: !state.engineEnabled })),
 
     toggleEvalBar: () => set((state) => ({ evalBarVisible: !state.evalBarVisible })),
@@ -146,6 +149,11 @@ export const useAppStore = create<AppState & AppActions>()(
     setCoachBubbleText: (text) => set({ coachBubbleText: text }),
 
     toggleCoachVoice: () => set((state) => ({ coachVoiceOn: !state.coachVoiceOn })),
+
+    toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
+
+    setBackgroundAnalysis: (running, progress) =>
+      set({ backgroundAnalysisRunning: running, backgroundAnalysisProgress: progress ?? null }),
 
     setCoachDrawerOpen: (open) => set({ coachDrawerOpen: open }),
 

@@ -45,7 +45,6 @@ function createProfile(): UserProfile {
     longestStreak: 5,
     streakFreezes: 0,
     lastActiveDate: new Date().toISOString().split('T')[0],
-    achievements: [],
     skillRadar: { opening: 30, tactics: 40, endgame: 20, memory: 35, calculation: 25 },
     badHabits: [],
     preferences: {
@@ -125,7 +124,6 @@ describe('KidPiecePage', () => {
     render(<KidPiecePage />);
     // Voice service speak is called after a 500ms delay
     await vi.waitFor(() => {
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(voiceService.speak).toHaveBeenCalled();
     });
   });
@@ -136,7 +134,6 @@ describe('KidPiecePage', () => {
     vi.clearAllMocks();
 
     fireEvent.click(screen.getByTestId('kid-speak-btn'));
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(voiceService.speak).toHaveBeenCalled();
   });
 

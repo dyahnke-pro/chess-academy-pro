@@ -64,16 +64,16 @@ describe('miniGameService', () => {
       await completeMiniGameLevel('pawn-wars', 1, 3, 0);
       const result = await completeMiniGameLevel('pawn-wars', 1, 1, 2);
 
-      expect(result.levels[1]!.stars).toBe(3);
-      expect(result.levels[1]!.hintsUsed).toBe(2);
+      expect(result.levels[1]?.stars).toBe(3);
+      expect(result.levels[1]?.hintsUsed).toBe(2);
     });
 
     it('updates to higher star count when replaying with more stars', async () => {
       await completeMiniGameLevel('pawn-wars', 1, 1, 2);
       const result = await completeMiniGameLevel('pawn-wars', 1, 3, 0);
 
-      expect(result.levels[1]!.stars).toBe(3);
-      expect(result.levels[1]!.hintsUsed).toBe(0);
+      expect(result.levels[1]?.stars).toBe(3);
+      expect(result.levels[1]?.hintsUsed).toBe(0);
     });
 
     it('preserves other levels when completing a new level', async () => {
@@ -141,11 +141,11 @@ describe('miniGameService', () => {
       const pawnWars = await getMiniGameProgress('pawn-wars');
       const blocker = await getMiniGameProgress('blocker');
 
-      expect(pawnWars!.levels[1]!.stars).toBe(3);
-      expect(pawnWars!.levels[1]!.hintsUsed).toBe(0);
+      expect(pawnWars?.levels[1]?.stars).toBe(3);
+      expect(pawnWars?.levels[1]?.hintsUsed).toBe(0);
 
-      expect(blocker!.levels[1]!.stars).toBe(1);
-      expect(blocker!.levels[1]!.hintsUsed).toBe(2);
+      expect(blocker?.levels[1]?.stars).toBe(1);
+      expect(blocker?.levels[1]?.hintsUsed).toBe(2);
     });
   });
 });

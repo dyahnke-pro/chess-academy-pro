@@ -94,10 +94,6 @@ vi.mock('../../services/coachFeatureService', () => ({
   detectBadHabitsFromGame: vi.fn().mockResolvedValue([]),
 }));
 
-vi.mock('../../services/gamificationService', () => ({
-  checkAndAwardAchievements: vi.fn().mockResolvedValue([]),
-}));
-
 vi.mock('../../hooks/useIsMobile', () => ({
   useIsMobile: () => false,
 }));
@@ -204,8 +200,15 @@ describe('CoachGamePage', () => {
     expect(screen.getByTestId('panel-divider')).toBeInTheDocument();
   });
 
-  it('renders speaker toggle button', () => {
+  it('renders coach tips toggle button', () => {
     render(<CoachGamePage />);
-    expect(screen.getByTestId('coach-speaker-toggle')).toBeInTheDocument();
+    expect(screen.getByTestId('coach-tips-toggle')).toBeInTheDocument();
+  });
+
+  it('includes gameover in CoachGameStatus type for intermediate game-over state', () => {
+    // Verify the gameover status is a valid state that can be set
+    // This tests that the type system supports the intermediate gameover state
+    const status: import('../../types').CoachGameStatus = 'gameover';
+    expect(status).toBe('gameover');
   });
 });

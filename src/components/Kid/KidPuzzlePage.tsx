@@ -5,6 +5,7 @@ import { voiceService } from '../../services/voiceService';
 import { getKidPuzzles, seedPuzzles, recordAttempt } from '../../services/puzzleService';
 import { DifficultyToggle } from '../Coach/DifficultyToggle';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
+import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
 import { useAppStore } from '../../stores/appStore';
 import type { CoachDifficulty, PuzzleRecord } from '../../types';
 
@@ -64,10 +65,11 @@ export function KidPuzzlePage(): JSX.Element {
     kidSpeak('Welcome to Puzzle Quest! Pick your level and start solving!');
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Cleanup auto-advance timer on unmount
+  // Cleanup auto-advance timer and voice on unmount
   useEffect(() => {
     return () => {
       if (autoAdvanceTimerRef.current) clearTimeout(autoAdvanceTimerRef.current);
+      voiceService.stop();
     };
   }, []);
 
@@ -101,6 +103,7 @@ export function KidPuzzlePage(): JSX.Element {
   }, [difficulty, kidSpeak, fetchMorePuzzles]);
 
   const advanceToNext = useCallback((): void => {
+    voiceService.stop();
     setResultOverlay(null);
     setCurrentIndex((prev) => prev + 1);
   }, []);
@@ -118,7 +121,7 @@ export function KidPuzzlePage(): JSX.Element {
     }
   }, [currentIndex, puzzles.length, phase, difficulty, fetchMorePuzzles]);
 
-  const handlePuzzleComplete = useCallback((correct: boolean): void => {
+  const handlePuzzleComplete = useCallback(({ correct }: PuzzleOutcome): void => {
     if (correct) setSolvedCount((c) => c + 1);
     setTotalAttempted((t) => t + 1);
     setResultOverlay(correct ? 'correct' : 'incorrect');
@@ -126,16 +129,15 @@ export function KidPuzzlePage(): JSX.Element {
     // Record the attempt
     if (activeProfile) {
       const puzzle = puzzles[currentIndex];
-      if (puzzle) {
-        void recordAttempt(
-          puzzle.id,
-          correct,
-          activeProfile.puzzleRating,
-          correct ? 'good' : 'again',
-        );
-      }
+      void recordAttempt(
+        puzzle.id,
+        correct,
+        activeProfile.puzzleRating,
+        correct ? 'good' : 'again',
+      );
     }
 
+    voiceService.stop();
     const messages = correct ? CORRECT_MESSAGES : INCORRECT_MESSAGES;
     const msg = messages[Math.floor(Math.random() * messages.length)];
     kidSpeak(msg);

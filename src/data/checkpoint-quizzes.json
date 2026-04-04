@@ -1,0 +1,622 @@
+{
+  "italian-game": [
+    {
+      "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 8",
+      "correctMove": "d4",
+      "hint": "It's time to challenge Black's center. What pawn break opens the position?",
+      "concept": "Central d4 Break"
+    },
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 3",
+      "correctMove": "Bc4",
+      "hint": "Develop a piece toward the center and target a weakness.",
+      "concept": "Piece Development"
+    },
+    {
+      "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQ1RK1 b - - 0 7",
+      "type": "plan",
+      "question": "What is Black's best strategic plan after White plays d4?",
+      "choices": [
+        "Trade pawns with exd4 and develop quickly",
+        "Push e4 to gain space",
+        "Castle queenside for opposite-side attacks",
+        "Play a6 to prevent Bb5"
+      ],
+      "correctIndex": 0,
+      "hint": "After exd4 cxd4, Black can target d4 or play Bb4 to pin.",
+      "concept": "Responding to the Central Break"
+    },
+    {
+      "fen": "r1bq1rk1/ppp1bppp/2np1n2/4p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
+      "correctMove": "a4",
+      "hint": "Restrict Black's queenside expansion.",
+      "concept": "Preventing b5"
+    }
+  ],
+  "sicilian-najdorf": [
+    {
+      "fen": "r1b1kb1r/1pqnpppp/p2p1n2/8/3NP1P1/2N1BP2/PPP4P/R2QKB1R w KQkq - 0 8",
+      "correctMove": "Qd2",
+      "hint": "Connect the queen to the dark-squared bishop for opposite-side castling.",
+      "concept": "English Attack Setup"
+    },
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+      "correctMove": "Be2",
+      "hint": "Develop the bishop to a stable square before deciding on the plan.",
+      "concept": "Flexible Development"
+    },
+    {
+      "fen": "r1b1kb1r/1pqnpppp/p2p1n2/8/3NP3/2N1B3/PPPQ1PPP/R3KB1R w KQkq - 0 8",
+      "type": "plan",
+      "question": "What is White's main plan in the English Attack?",
+      "choices": [
+        "Castle queenside and launch a kingside pawn storm with g4-g5",
+        "Castle kingside and play for a quiet positional game",
+        "Exchange queens and head for an endgame",
+        "Play Nd5 immediately to dominate the center"
+      ],
+      "correctIndex": 0,
+      "hint": "The English Attack is all about opposite-side castling and attacking.",
+      "concept": "English Attack Plan"
+    },
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+      "correctMove": "Bg5",
+      "hint": "Pin the knight to create tactical pressure.",
+      "concept": "Richter-Rauzer Pin"
+    }
+  ],
+  "french-defence": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "correctMove": "Bd3",
+      "hint": "Which square puts the bishop on an active diagonal while keeping f4 available?",
+      "concept": "Bishop Development in French"
+    },
+    {
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 6",
+      "correctMove": "O-O",
+      "hint": "Get the king to safety before starting your counterplay.",
+      "concept": "King Safety First"
+    },
+    {
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2NB4/PPP2PPP/R1BQK1NR w KQkq - 0 5",
+      "type": "plan",
+      "question": "What is White's main plan in the French Advance?",
+      "choices": [
+        "Support e5 with f4, develop pieces to active squares, and attack the kingside",
+        "Trade the e5 pawn and simplify to an endgame",
+        "Play c4 to attack d5 from both sides",
+        "Fianchetto the dark-squared bishop with g3-Bg2"
+      ],
+      "correctIndex": 0,
+      "hint": "White wants to maintain the space advantage and build a kingside attack.",
+      "concept": "French Advance Attack Plan"
+    },
+    {
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2N5/PPP1BPPP/R1BQK1NR b KQkq - 0 5",
+      "correctMove": "c5",
+      "hint": "Attack the base of White's pawn chain.",
+      "concept": "Attacking the Pawn Chain"
+    }
+  ],
+  "caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "dxe4",
+      "hint": "Capture the pawn to simplify the center — this is the main idea of the Caro-Kann.",
+      "concept": "Main Line Exchange"
+    },
+    {
+      "fen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+      "correctMove": "e6",
+      "hint": "Support the d5 pawn and prepare to develop the dark-squared bishop.",
+      "concept": "Advance Variation Defense"
+    },
+    {
+      "fen": "rn1qkbnr/pp2pppp/2p3b1/3P4/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+      "type": "plan",
+      "question": "What is Black's strategic plan after White plays d4 and Nf3?",
+      "choices": [
+        "Develop with Nd7, e6, Ngf6, and aim for c5 to challenge the center",
+        "Push f5 to attack e4",
+        "Play Qa5+ and grab queenside pawns",
+        "Fianchetto with g6-Bg7 and castle kingside"
+      ],
+      "correctIndex": 0,
+      "hint": "Solid development and the c5 break are key in the Caro-Kann.",
+      "concept": "Caro-Kann Development Plan"
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+      "correctMove": "dxe4",
+      "hint": "Capture to enter the main line and develop the bishop.",
+      "concept": "Classical Capture"
+    }
+  ],
+  "ruy-lopez": [
+    {
+      "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "correctMove": "Ba4",
+      "hint": "Maintain the pin while keeping options open. Don't exchange yet.",
+      "concept": "Maintaining Tension"
+    },
+    {
+      "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
+      "correctMove": "c3",
+      "hint": "Prepare the central pawn break that defines the Closed Ruy Lopez.",
+      "concept": "Preparing d4"
+    },
+    {
+      "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
+      "type": "plan",
+      "question": "What is White's main strategic plan in the Closed Ruy Lopez?",
+      "choices": [
+        "Prepare d4 with c3 and build a strong center",
+        "Sacrifice on f7 for a quick attack",
+        "Exchange the bishop for the knight on c6",
+        "Play h4-h5 for a direct kingside assault"
+      ],
+      "correctIndex": 0,
+      "hint": "The Closed Ruy is about slow central build-up, not quick attacks.",
+      "concept": "Closed Ruy Lopez Strategy"
+    },
+    {
+      "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 0 6",
+      "correctMove": "Re1",
+      "hint": "Protect e4 and prepare central action.",
+      "concept": "Rook to e1"
+    }
+  ],
+  "qgd": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+      "correctMove": "Bg5",
+      "hint": "Pin the knight and develop with purpose. This is the Classical QGD.",
+      "concept": "Classical Development"
+    },
+    {
+      "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 8",
+      "correctMove": "e4",
+      "hint": "Challenge the d5 pawn directly to activate your pieces.",
+      "concept": "Central e4 Break"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 0 4",
+      "type": "plan",
+      "question": "What is Black's best strategic approach in the QGD?",
+      "choices": [
+        "Develop solidly with Be7, O-O, Nbd7 and wait for the right moment to break with c5 or e5",
+        "Attack immediately with c5",
+        "Play Bb4 to pin the knight",
+        "Capture on c4 and hold the pawn with b5"
+      ],
+      "correctIndex": 0,
+      "hint": "The QGD is about solid development first, then choosing the right break.",
+      "concept": "QGD Development Strategy"
+    },
+    {
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 5",
+      "correctMove": "e3",
+      "hint": "Solidify the center before developing the bishop.",
+      "concept": "Orthodox Development"
+    }
+  ],
+  "kings-indian-defence": [
+    {
+      "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7",
+      "correctMove": "f5",
+      "hint": "Launch the classic KID kingside counter-attack by challenging e4.",
+      "concept": "f5 Pawn Storm"
+    },
+    {
+      "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+      "correctMove": "d6",
+      "hint": "Support e5 and complete development before pushing pawns.",
+      "concept": "Solid Development"
+    },
+    {
+      "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 7",
+      "type": "plan",
+      "question": "What is White's best plan in the Classical King's Indian?",
+      "choices": [
+        "Play d5 to close the center and expand on the queenside with c5",
+        "Exchange on e5 and simplify",
+        "Push f4 immediately to attack the kingside",
+        "Play Bg5 to pin the knight"
+      ],
+      "correctIndex": 0,
+      "hint": "When the center is closed, play on the wing where you have more space.",
+      "concept": "Classical KID Queenside Expansion"
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP2BPPP/R1BQK1NR w KQ - 0 5",
+      "correctMove": "Nf3",
+      "hint": "Complete development before committing to a plan.",
+      "concept": "Natural Development"
+    }
+  ],
+  "london-system": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
+      "correctMove": "c5",
+      "hint": "Challenge White's center immediately — the best reaction to the London.",
+      "concept": "Anti-London Counter"
+    },
+    {
+      "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 4",
+      "correctMove": "Bd3",
+      "hint": "Offer to trade the light-squared bishops. This is a key London idea.",
+      "concept": "Bishop Trade"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 3",
+      "type": "plan",
+      "question": "What is Black's best approach against the London System?",
+      "choices": [
+        "Challenge the center with c5 and develop actively",
+        "Mirror White's setup with Bf5 and e6",
+        "Play g6 and Bg7 for a KID-style setup",
+        "Push e5 immediately"
+      ],
+      "correctIndex": 0,
+      "hint": "The most principled response is to fight for the center.",
+      "concept": "Anti-London Strategy"
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 3",
+      "correctMove": "Bd3",
+      "hint": "Develop the bishop to its best square eyeing h7.",
+      "concept": "London Bishop Development"
+    }
+  ],
+  "english-opening": [
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+      "correctMove": "g3",
+      "hint": "Fianchetto the bishop to control the long diagonal.",
+      "concept": "King's Fianchetto"
+    },
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N3P1/PP1PPP1P/R1BQKBNR w KQkq - 0 3",
+      "correctMove": "Bg2",
+      "hint": "Complete the fianchetto — the bishop belongs on g2.",
+      "concept": "Completing the Fianchetto"
+    },
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+      "type": "plan",
+      "question": "What is White's strategic plan in the English?",
+      "choices": [
+        "Fianchetto the bishop with g3-Bg2 and control the center from the flank",
+        "Push d4 immediately to transpose to 1.d4 openings",
+        "Play f4 for a Grand Prix Attack",
+        "Develop Nf3-e4 for a direct center"
+      ],
+      "correctIndex": 0,
+      "hint": "The English is a flank opening — control the center indirectly.",
+      "concept": "English Opening Fianchetto Plan"
+    },
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N3P1/PP1PPP1P/R1BQKBNR b KQkq - 0 3",
+      "correctMove": "Nf6",
+      "hint": "Develop a piece and control the center.",
+      "concept": "Piece Development"
+    }
+  ],
+  "sicilian-dragon": [
+    {
+      "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R w KQkq - 0 7",
+      "correctMove": "O-O-O",
+      "hint": "Castle queenside to prepare the h4-h5 pawn storm on the kingside.",
+      "concept": "Opposite Side Castling"
+    },
+    {
+      "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP2P/2N1B3/PPPQBPP1/R3K2R w KQ - 0 8",
+      "correctMove": "h5",
+      "hint": "Continue the pawn storm — break open the h-file!",
+      "concept": "h-File Attack"
+    },
+    {
+      "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R w - - 0 9",
+      "type": "plan",
+      "question": "What is White's main attacking plan in the Yugoslav Attack?",
+      "choices": [
+        "Push h4-h5 to open the h-file against Black's king",
+        "Play Nd5 to dominate the center",
+        "Exchange dark-squared bishops and play a quiet game",
+        "Push f4-f5 to break through"
+      ],
+      "correctIndex": 0,
+      "hint": "In the Yugoslav Attack, the h-file pawn storm is the primary weapon.",
+      "concept": "Yugoslav Attack h-File Storm"
+    },
+    {
+      "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 9",
+      "correctMove": "a5",
+      "hint": "Start queenside counterplay before White's kingside attack arrives.",
+      "concept": "Dragon Queenside Counter"
+    }
+  ],
+  "scotch-game": [
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq d3 0 3",
+      "correctMove": "exd4",
+      "hint": "Capture the pawn that is attacking your center.",
+      "concept": "Central pawn exchange in the Scotch Game"
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+      "correctMove": "Nxc6",
+      "hint": "Exchange the knight to double Black's pawns.",
+      "concept": "Knight exchange to damage pawn structure"
+    },
+    {
+      "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+      "type": "plan",
+      "question": "What is the best plan here?",
+      "choices": [
+        "Develop pieces quickly with Nc3 and Bd3, exploiting the lead in development",
+        "Push e5 immediately to attack the knight",
+        "Castle queenside and launch a kingside pawn storm",
+        "Play a3 and b4 to expand on the queenside"
+      ],
+      "correctIndex": 0,
+      "hint": "White has a development advantage after the pawn exchange — use it.",
+      "concept": "Rapid development to exploit structural advantage"
+    }
+  ],
+  "vienna-game": [
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+      "correctMove": "Nf6",
+      "hint": "Develop a piece that attacks White's e4 pawn.",
+      "concept": "Counter-attacking the center in the Vienna Game"
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq f3 0 3",
+      "correctMove": "d5",
+      "hint": "Strike back in the center before White consolidates.",
+      "concept": "Central counter-strike against the Vienna Gambit"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq d6 0 4",
+      "type": "plan",
+      "question": "What is the best plan here?",
+      "choices": [
+        "Play fxe5 followed by d4 to seize the center",
+        "Play d3 to solidify the pawn chain and develop slowly",
+        "Castle queenside immediately",
+        "Play Bb5+ to disrupt Black's development"
+      ],
+      "correctIndex": 0,
+      "hint": "Opening the center while you have a lead in development is powerful.",
+      "concept": "Central pawn break to open lines in the Vienna Gambit"
+    }
+  ],
+  "four-knights-game": [
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+      "correctMove": "Bb5",
+      "hint": "Pin the knight to the king, entering the Spanish variation.",
+      "concept": "Spanish Four Knights with Bb5"
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+      "correctMove": "Nd4",
+      "hint": "Place the knight on a strong central square attacking the bishop.",
+      "concept": "Rubinstein variation knight jump"
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+      "type": "plan",
+      "question": "What is the best plan here?",
+      "choices": [
+        "Play Nxe4 to win a pawn, exploiting the symmetry",
+        "Play d6 to solidify the center and develop the bishop",
+        "Play Bc5 to put pressure on f2",
+        "Play h6 to prevent Bg5"
+      ],
+      "correctIndex": 0,
+      "hint": "The symmetrical position allows a tactical trick involving the unprotected e4 pawn.",
+      "concept": "Tactical pawn win in the Italian Four Knights"
+    }
+  ],
+  "sicilian-alapin": [
+    {
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "d5",
+      "hint": "Challenge the center immediately before White plays d4.",
+      "concept": "Central counter-strike against the Alapin Sicilian"
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq d6 0 3",
+      "correctMove": "exd5",
+      "hint": "Capture to open the center and free your pieces.",
+      "concept": "Pawn exchange to create open lines in the Alapin"
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/5n2/3P4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 4",
+      "type": "plan",
+      "question": "What is the best plan here?",
+      "choices": [
+        "Play d4 to build a strong pawn center and develop naturally",
+        "Play Bb5+ to check the king immediately",
+        "Play Qa4+ to harass Black's king",
+        "Play g3 and fianchetto the bishop"
+      ],
+      "correctIndex": 0,
+      "hint": "Establishing a strong d4-c3 pawn duo is the key idea in the Alapin.",
+      "concept": "Building the ideal pawn center in the Alapin Sicilian"
+    }
+  ],
+  "pirc-defence": [
+    {
+      "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "Nf6",
+      "hint": "Develop the knight to pressure White's e4 pawn.",
+      "concept": "Knight development attacking the center in the Pirc"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "correctMove": "f3",
+      "hint": "Support the e4 pawn and prepare a kingside attack.",
+      "concept": "Austrian Attack setup with f3 in the Pirc Defence"
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R w KQ - 4 6",
+      "type": "plan",
+      "question": "What is the best plan here?",
+      "choices": [
+        "Castle kingside, play Be3, and prepare a central or queenside expansion",
+        "Push h4-h5 immediately to attack Black's king",
+        "Play e5 to blast open the center right away",
+        "Play a4-a5 to gain queenside space"
+      ],
+      "correctIndex": 0,
+      "hint": "Solid development and central control are more effective than premature attacks.",
+      "concept": "Classical setup against the Pirc Defence"
+    }
+  ],
+  "scandinavian-defence": [
+    {
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2",
+      "correctMove": "exd5",
+      "hint": "Capture the pawn to challenge Black's center immediately.",
+      "concept": "Central pawn exchange in the Scandinavian"
+    },
+    {
+      "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+      "correctMove": "Qa5",
+      "hint": "The queen needs a safe square that keeps pressure on the position.",
+      "concept": "Queen retreat to a5 in the main line Scandinavian"
+    },
+    {
+      "fen": "r1b1kbnr/ppp1pppp/2n5/q7/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 5",
+      "type": "plan",
+      "question": "What is the best plan for White here?",
+      "choices": [
+        "Develop the bishop to d2 to connect the queen to the queenside and prepare long castle",
+        "Push a3 immediately to chase the queen",
+        "Play e4 to build a big pawn center",
+        "Fianchetto the kingside bishop with g3 and Bg2"
+      ],
+      "correctIndex": 0,
+      "hint": "White should develop efficiently while addressing the queen's placement on a5.",
+      "concept": "Harmonious piece development against the Scandinavian queen sortie"
+    }
+  ],
+  "catalan-opening": [
+    {
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+      "correctMove": "d5",
+      "hint": "Stake a claim in the center before White completes the fianchetto.",
+      "concept": "Central counter-play with d5 in the Catalan"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/6P1/PP2PPBP/RNBQK1NR w KQkq d6 0 4",
+      "correctMove": "Nf3",
+      "hint": "Develop the knight to its natural square before castling.",
+      "concept": "Standard kingside development in the Catalan setup"
+    },
+    {
+      "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 4 6",
+      "type": "plan",
+      "question": "What is the best plan for White in this Catalan middlegame?",
+      "choices": [
+        "Play Qc2 and prepare e4 to open the center and activate the g2 bishop",
+        "Push b4 and a4 for an immediate queenside pawn storm",
+        "Play Nc3 and push e4 immediately on the next move",
+        "Trade queens with Qb3 and steer toward an endgame"
+      ],
+      "correctIndex": 0,
+      "hint": "The g2 bishop thrives on an open long diagonal.",
+      "concept": "Central expansion to activate the Catalan bishop"
+    }
+  ],
+  "slav-defence": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq d6 0 3",
+      "correctMove": "Nf3",
+      "hint": "Develop the knight before committing to a pawn structure.",
+      "concept": "Flexible development in the main line Slav"
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 2 4",
+      "correctMove": "dxc4",
+      "hint": "Capture the pawn to open the diagonal for the light-squared bishop.",
+      "concept": "Pawn capture to develop the c8 bishop in the Slav"
+    },
+    {
+      "fen": "rn1qkb1r/pp2pppp/2p2n2/3p1b2/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 3 5",
+      "type": "plan",
+      "question": "What is White's best plan against the Slav with Bf5?",
+      "choices": [
+        "Play Qb3 to attack b7 and pressure the queenside",
+        "Push e3 and Bd3 to trade off Black's strong bishop",
+        "Play g4 immediately to chase the bishop",
+        "Castle queenside to launch a kingside attack"
+      ],
+      "correctIndex": 0,
+      "hint": "Targeting a key pawn creates immediate pressure.",
+      "concept": "Queenside pressure with Qb3 in the Slav main line"
+    }
+  ],
+  "nimzo-indian": [
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 3",
+      "correctMove": "e3",
+      "hint": "Solid development that supports d4 and prepares to develop the kingside.",
+      "concept": "The Rubinstein variation with e3 in the Nimzo-Indian"
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 0 4",
+      "correctMove": "O-O",
+      "hint": "Get the king to safety before committing to a pawn structure.",
+      "concept": "Early castling in the Nimzo-Indian Rubinstein"
+    },
+    {
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N1PN2/PP3PPP/R1BQKB1R w KQ - 3 5",
+      "type": "plan",
+      "question": "What is White's best strategic plan here?",
+      "choices": [
+        "Play Bd3 and aim for e4 to seize the center and gain the bishop pair",
+        "Play a3 immediately to force Bxc3 and double pawns",
+        "Fianchetto with b3 and Bb2 for long diagonal control",
+        "Push c5 to gain queenside space immediately"
+      ],
+      "correctIndex": 0,
+      "hint": "Preparing a central break often outweighs forcing the bishop trade immediately.",
+      "concept": "Classical center expansion with Bd3 and e4 in the Nimzo-Indian"
+    }
+  ],
+  "grunfeld-defence": [
+    {
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq d6 0 4",
+      "correctMove": "cxd5",
+      "hint": "Capture to build a strong pawn center.",
+      "concept": "Accepting the Grunfeld pawn structure with cxd5"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pp1p/6p1/3nP3/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+      "correctMove": "Nxc3",
+      "hint": "Exchange the knight and damage White's pawn structure.",
+      "concept": "Knight exchange to undermine White's center in the Grunfeld"
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/6p1/8/2BPP3/2N5/PP3PPP/R1BQK2R b KQ - 3 7",
+      "type": "plan",
+      "question": "What is Black's best plan against White's big center?",
+      "choices": [
+        "Play c5 to immediately strike at the d4 pawn and undermine the center",
+        "Play e6 to solidify the position and block the bishop",
+        "Play a6 and b5 for a queenside minority attack",
+        "Play Nc6 and Bg4 to put pressure on d4 indirectly"
+      ],
+      "correctIndex": 0,
+      "hint": "The Grunfeld philosophy is to attack the center with pieces and pawns from the flanks.",
+      "concept": "Counter-attacking the center with c5 in the Grunfeld Exchange"
+    }
+  ]
+}

@@ -31,7 +31,10 @@ const CATEGORY_TO_TRAINING: Record<WeaknessCategory, TrainingType> = {
   tactics: 'tactic_drill',
   calculation: 'tactic_drill',
   openings: 'opening_review',
+  opening_weakspots: 'opening_review',
   endgame: 'endgame_practice',
+  positional: 'tactic_drill',
+  time_management: 'tactic_drill',
 };
 
 function getTimeOfDayGreeting(): string {

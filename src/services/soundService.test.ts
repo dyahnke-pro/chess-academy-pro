@@ -172,6 +172,38 @@ describe('SoundService', () => {
     });
   });
 
+  describe('playErrorPing', () => {
+    it('synthesises error ping when enabled', () => {
+      service.playErrorPing();
+      expect(mockCreateOscillator).toHaveBeenCalled();
+    });
+
+    it('does not synthesise error ping when disabled', () => {
+      service.setEnabled(false);
+      service.playErrorPing();
+      expect(mockCreateOscillator).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('playSuccessChime', () => {
+    it('synthesises success chime when enabled', () => {
+      vi.useFakeTimers();
+      service.playSuccessChime();
+      vi.advanceTimersByTime(300);
+      expect(mockCreateOscillator.mock.calls.length).toBeGreaterThanOrEqual(3);
+      vi.useRealTimers();
+    });
+
+    it('does not synthesise success chime when disabled', () => {
+      service.setEnabled(false);
+      vi.useFakeTimers();
+      service.playSuccessChime();
+      vi.advanceTimersByTime(300);
+      expect(mockCreateOscillator).not.toHaveBeenCalled();
+      vi.useRealTimers();
+    });
+  });
+
   describe('preload', () => {
     it('is a no-op and does not throw', () => {
       expect(() => service.preload()).not.toThrow();

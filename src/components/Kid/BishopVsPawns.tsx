@@ -86,9 +86,8 @@ export function BishopVsPawns({ onBack }: BishopVsPawnsProps): JSX.Element {
     // If a bishop is selected and this is a legal move, execute it
     if (selectedSquare && legalMoves.includes(square)) {
       const isCapture = pieces[square] === 'p';
-      const newPieces = { ...pieces };
-      delete newPieces[selectedSquare];
-      newPieces[square] = 'B';
+      const { [selectedSquare]: _removed, ...remaining } = pieces;
+      const newPieces: Record<string, string> = { ...remaining, [square]: 'B' };
 
       setPieces(newPieces);
       setSelectedSquare(null);
@@ -153,7 +152,6 @@ export function BishopVsPawns({ onBack }: BishopVsPawnsProps): JSX.Element {
 
   // Build highlight styles for overlay squares
   const getSquareClass = useCallback((sq: string): string => {
-    if (!levelConfig) return '';
     const classes: string[] = ['w-full', 'h-full'];
 
     if (selectedSquare === sq) {
@@ -182,7 +180,7 @@ export function BishopVsPawns({ onBack }: BishopVsPawnsProps): JSX.Element {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => { voiceService.stop(); phase === 'playing' ? setPhase('menu') : onBack(); }}
+            onClick={() => { voiceService.stop(); if (phase === 'playing') { setPhase('menu'); } else { onBack(); } }}
             className="p-2 rounded-lg hover:opacity-80"
             style={{ background: 'var(--color-surface)' }}
             data-testid="bvp-back-btn"

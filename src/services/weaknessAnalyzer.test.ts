@@ -421,7 +421,6 @@ describe('weaknessAnalyzer', () => {
       const result = generateOverallAssessment(profile, items, strengths);
 
       expect(result).toContain('1500');
-      expect(result).toContain('Level 5');
       expect(result).toContain('forks');
       expect(result).toContain('pins');
     });
@@ -548,6 +547,7 @@ describe('weaknessAnalyzer', () => {
         computedAt: '2024-01-01T00:00:00Z',
         items: [],
         strengths: ['Good at forks'],
+        strengthItems: [],
         overallAssessment: 'Solid player',
       };
       await db.meta.put({ key: 'weakness_profile', value: JSON.stringify(wp) });
@@ -581,7 +581,7 @@ describe('weaknessAnalyzer', () => {
         sourceMode: 'lichess',
         playerColor: 'white',
         promptText: 'Find the best move.',
-        narration: { intro: '', moveNarrations: [], outro: '' },
+        narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
         createdAt: new Date().toISOString(),
         opponentName: null,
         gameDate: null,
@@ -620,19 +620,79 @@ describe('weaknessAnalyzer', () => {
       expect(phaseWeakness?.metric).toContain('3 of 4');
     });
 
-    it('detects high blunder ratio', () => {
+    it('detects high blunder ratio with specific context', () => {
       const puzzles = [
-        createMistakePuzzle('p1', { classification: 'blunder' }),
-        createMistakePuzzle('p2', { classification: 'blunder' }),
-        createMistakePuzzle('p3', { classification: 'blunder' }),
-        createMistakePuzzle('p4', { classification: 'mistake' }),
+        createMistakePuzzle('p1', { classification: 'blunder', cpLoss: 350, openingName: 'Sicilian Defense' }),
+        createMistakePuzzle('p2', { classification: 'blunder', cpLoss: 400 }),
+        createMistakePuzzle('p3', { classification: 'blunder', cpLoss: 500 }),
+        createMistakePuzzle('p4', { classification: 'mistake', cpLoss: 120 }),
       ];
 
       const result = analyzeMistakePuzzles(puzzles);
       const blunderWeakness = result.weaknesses.find((w) => w.label.includes('blunder'));
       expect(blunderWeakness).toBeDefined();
       expect(blunderWeakness?.category).toBe('calculation');
+      expect(blunderWeakness?.trainingAction?.state).toHaveProperty('initialClassification', 'blunder');
     });
+
+    it('detects unresolved mistake puzzles', () => {
+      const puzzles = Array.from({ length: 8 }, (_, i) =>
+        createMistakePuzzle(`p${i}`, { status: 'unsolved' }),
+      );
+
+      const result = analyzeMistakePuzzles(puzzles);
+      const unresolvedWeakness = result.weaknesses.find((w) => w.label.includes('Unresolved'));
+      expect(unresolvedWeakness).toBeDefined();
+      expect(unresolvedWeakness?.category).toBe('tactics');
+    });
+
+    it('identifies opening-specific mistake clusters', () => {
+      const puzzles = [
+        createMistakePuzzle('p1', { openingName: 'Sicilian Defense', gamePhase: 'middlegame', cpLoss: 200 }),
+        createMistakePuzzle('p2', { openingName: 'Sicilian Defense', gamePhase: 'middlegame', cpLoss: 350, classification: 'blunder' }),
+        createMistakePuzzle('p3', { openingName: 'Sicilian Defense', gamePhase: 'opening', cpLoss: 100 }),
+        createMistakePuzzle('p4', { openingName: 'Italian Game', cpLoss: 80 }),
+      ];
+
+      const result = analyzeMistakePuzzles(puzzles);
+      const sicilianWeakness = result.weaknesses.find((w) => w.label.includes('Sicilian Defense'));
+      expect(sicilianWeakness).toBeDefined();
+      expect(sicilianWeakness?.detail).toContain('3 mistakes');
+      expect(sicilianWeakness?.detail).toContain('1 were blunders');
+      expect(sicilianWeakness?.trainingAction?.state).toHaveProperty('initialOpeningName', 'Sicilian Defense');
+    });
+
+    it('routes opening mistakes to pre-filtered My Mistakes page', () => {
+      const puzzles = [
+        createMistakePuzzle('p1', { openingName: 'French Defense', cpLoss: 200 }),
+        createMistakePuzzle('p2', { openingName: 'French Defense', cpLoss: 300, classification: 'blunder' }),
+        createMistakePuzzle('p3', { openingName: 'Italian Game', cpLoss: 100 }),
+      ];
+
+      const result = analyzeMistakePuzzles(puzzles);
+      const frenchWeakness = result.weaknesses.find((w) => w.label.includes('French Defense'));
+      expect(frenchWeakness).toBeDefined();
+      expect(frenchWeakness?.trainingAction?.route).toBe('/weaknesses/mistakes');
+      expect(frenchWeakness?.trainingAction?.buttonLabel).toContain('French Defense');
+      expect(frenchWeakness?.trainingAction?.state).toEqual({
+        initialOpeningName: 'French Defense',
+        initialStatus: 'unsolved',
+      });
+    });
+
+    it('surfaces due mistake puzzles for SRS review', () => {
+      const today = new Date().toISOString().split('T')[0];
+      const puzzles = Array.from({ length: 6 }, (_, i) =>
+        createMistakePuzzle(`p${i}`, { status: 'solved', srsDueDate: today }),
+      );
+
+      const result = analyzeMistakePuzzles(puzzles);
+      const dueWeakness = result.weaknesses.find((w) => w.label.includes('due for review'));
+      expect(dueWeakness).toBeDefined();
+      expect(dueWeakness?.label).toContain('6');
+      expect(dueWeakness?.detail).toContain('exact positions');
+    });
+
 
     it('identifies high mastery rate as strength', () => {
       const puzzles = Array.from({ length: 10 }, (_, i) =>
@@ -654,6 +714,7 @@ describe('weaknessAnalyzer', () => {
           { category: 'tactics', label: 'Weak pins', metric: '35%', severity: 65, detail: '' },
         ],
         strengths: [],
+        strengthItems: [],
         overallAssessment: '',
       };
 

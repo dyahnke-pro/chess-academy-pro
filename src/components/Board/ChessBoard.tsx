@@ -8,6 +8,8 @@ import { useSettings } from '../../hooks/useSettings';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { EvalBar } from './EvalBar';
+import { VoiceChatMic } from './VoiceChatMic';
+import type { EngineSnapshot, LastMoveContext } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
@@ -54,6 +56,22 @@ export interface ChessBoardProps {
   ghostMove?: GhostMoveData | null;
   /** Classification icon overlay on a square (Chess.com-style badge). */
   classificationOverlay?: { square: string; symbol: string; color: string } | null;
+  /** Show the voice-chat microphone button below the board. Defaults to true. */
+  showVoiceMic?: boolean;
+  /** PGN string passed to voice chat for context. */
+  pgnForChat?: string;
+  /** Called when the user asks the coach to play a specific opening via voice. */
+  onOpeningRequest?: (openingName: string) => void;
+  /** Pre-computed engine snapshot passed to voice chat (avoids re-running Stockfish). */
+  voiceEngineSnapshot?: EngineSnapshot | null;
+  /** Context about the last move played, for voice chat move quality questions. */
+  voiceLastMoveContext?: LastMoveContext | null;
+  /** Which color the student is playing, for voice chat context. */
+  voicePlayerColor?: 'white' | 'black';
+  /** Called when voice mic listening/streaming state changes. */
+  onVoiceActiveChange?: (active: boolean) => void;
+  /** Called when the voice chat LLM response includes arrow annotations. */
+  onVoiceArrows?: (arrows: Array<{ startSquare: string; endSquare: string; color: string }>) => void;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -85,6 +103,14 @@ export function ChessBoard({
   annotationHighlights,
   ghostMove,
   classificationOverlay = null,
+  showVoiceMic = true,
+  pgnForChat,
+  onOpeningRequest,
+  voiceEngineSnapshot,
+  voiceLastMoveContext,
+  voicePlayerColor,
+  onVoiceActiveChange,
+  onVoiceArrows,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -227,7 +253,7 @@ export function ChessBoard({
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
-  const hasControls = showFlipButton || showUndoButton || showResetButton;
+  const hasControls = showFlipButton || showUndoButton || showResetButton || showVoiceMic;
 
   return (
     <div
@@ -300,6 +326,7 @@ export function ChessBoard({
               boardOrientation={game.boardOrientation}
             />
           )}
+          {/* Voice chat mic — bottom-right of the board */}
         </div>
       </div>
 
@@ -342,8 +369,22 @@ export function ChessBoard({
               <span>Flip</span>
             </button>
           )}
+          {showVoiceMic && (
+            <VoiceChatMic
+              fen={game.position}
+              pgn={pgnForChat}
+              turn={game.turn}
+              onOpeningRequest={onOpeningRequest}
+              engineSnapshot={voiceEngineSnapshot}
+              lastMoveContext={voiceLastMoveContext}
+              playerColor={voicePlayerColor}
+              onListeningChange={onVoiceActiveChange}
+              onArrows={onVoiceArrows}
+            />
+          )}
         </div>
       )}
+
     </div>
   );
 }

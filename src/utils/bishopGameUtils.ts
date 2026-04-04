@@ -96,7 +96,7 @@ export function positionToFen(pieces: Record<string, string>): string {
       const piece = board[sq];
       if (piece) {
         if (empty > 0) {
-          rank += empty;
+          rank += String(empty);
           empty = 0;
         }
         rank += piece;
@@ -104,7 +104,7 @@ export function positionToFen(pieces: Record<string, string>): string {
         empty++;
       }
     }
-    if (empty > 0) rank += empty;
+    if (empty > 0) rank += String(empty);
     ranks.push(rank);
   }
 

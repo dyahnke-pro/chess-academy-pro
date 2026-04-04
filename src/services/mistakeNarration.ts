@@ -56,7 +56,6 @@ function advantageText(evalBefore: number): string {
 function buildContextSentence(params: NarrationParams): string {
   const parts: string[] = [];
 
-  // "In your game vs opponent (X days ago)"
   if (params.opponentName && params.gameDate) {
     parts.push(`In your game vs ${params.opponentName} ${timeAgoText(params.gameDate)}`);
   } else if (params.opponentName) {
@@ -65,7 +64,6 @@ function buildContextSentence(params: NarrationParams): string {
     parts.push(`In your game from ${timeAgoText(params.gameDate)}`);
   }
 
-  // "playing the Sicilian Defense"
   if (params.openingName) {
     parts.push(`playing the ${params.openingName}`);
   }
@@ -77,7 +75,6 @@ function buildContextSentence(params: NarrationParams): string {
     sentence += ', ' + parts[1];
   }
 
-  // "you were slightly better."
   if (params.evalBefore !== null && params.evalBefore !== undefined) {
     sentence += ': ' + advantageText(params.evalBefore).toLowerCase() + '.';
   } else {
@@ -100,35 +97,189 @@ function uciToSan(fen: string, uci: string): string {
   }
 }
 
+// ─── Position-Aware Move Analysis ──────────────────────────────────────────
+
+const CENTER_SQUARES = new Set(['d4', 'd5', 'e4', 'e5']);
+const EXTENDED_CENTER = new Set(['c3', 'c4', 'c5', 'c6', 'd3', 'd4', 'd5', 'd6', 'e3', 'e4', 'e5', 'e6', 'f3', 'f4', 'f5', 'f6']);
+const DEVELOPMENT_RANK_WHITE = new Set(['1']); // pieces starting on rank 1
+const DEVELOPMENT_RANK_BLACK = new Set(['8']);
+
+interface MoveIdea {
+  isCapture: boolean;
+  isCheck: boolean;
+  isCastle: boolean;
+  isPromotion: boolean;
+  movesToCenter: boolean;
+  developsPiece: boolean;
+  createsPin: boolean;
+  attacksKing: boolean;
+  pieceMoved: string; // 'pawn', 'knight', 'bishop', 'rook', 'queen', 'king'
+  conceptHints: string[];
+}
+
+function analyzeMoveIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGamePhase): MoveIdea {
+  const idea: MoveIdea = {
+    isCapture: false,
+    isCheck: false,
+    isCastle: false,
+    isPromotion: false,
+    movesToCenter: false,
+    developsPiece: false,
+    createsPin: false,
+    attacksKing: false,
+    pieceMoved: 'pawn',
+    conceptHints: [],
+  };
+
+  try {
+    const chess = new Chess(fen);
+    const turnColor = chess.turn() === 'w' ? 'white' : 'black';
+    const move = chess.move(bestMoveSan);
+
+    idea.isCapture = move.captured !== undefined;
+    idea.isCheck = chess.isCheck();
+    idea.isCastle = move.san === 'O-O' || move.san === 'O-O-O';
+    idea.isPromotion = move.promotion !== undefined;
+    idea.movesToCenter = CENTER_SQUARES.has(move.to) || EXTENDED_CENTER.has(move.to);
+
+    // Determine piece type
+    const pieceMap: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+    idea.pieceMoved = pieceMap[move.piece] ?? 'piece';
+
+    // Check if this develops a piece from its starting rank
+    const devRank = turnColor === 'white' ? DEVELOPMENT_RANK_WHITE : DEVELOPMENT_RANK_BLACK;
+    if (devRank.has(move.from[1]) && move.piece !== 'k' && move.piece !== 'p') {
+      idea.developsPiece = true;
+    }
+
+    // Build conceptual hints based on what the move accomplishes
+    if (idea.isCastle) {
+      idea.conceptHints.push('Think about king safety — getting your king tucked away.');
+      idea.conceptHints.push('Consider castling to connect your rooks and protect your king.');
+    }
+    if (idea.isCheck && idea.isCapture) {
+      idea.conceptHints.push('Look for a forcing move that wins material.');
+      idea.conceptHints.push('There\'s a way to capture with check here.');
+    } else if (idea.isCheck) {
+      idea.conceptHints.push('Look for a way to put the king under pressure.');
+      idea.conceptHints.push('There\'s a forcing check available that improves your position.');
+    } else if (idea.isCapture) {
+      idea.conceptHints.push('There\'s an unprotected piece you can take advantage of.');
+      idea.conceptHints.push('Look at what your opponent left hanging.');
+    }
+    if (idea.developsPiece && gamePhase === 'opening') {
+      idea.conceptHints.push(`Think about getting your ${idea.pieceMoved} into the game with tempo.`);
+      idea.conceptHints.push('Focus on developing a piece to an active square.');
+    }
+    if (idea.movesToCenter && idea.pieceMoved === 'pawn') {
+      idea.conceptHints.push('Consider reinforcing your control of the center.');
+      idea.conceptHints.push('There\'s a pawn move that stakes a claim in the center.');
+    } else if (idea.movesToCenter) {
+      idea.conceptHints.push(`Think about placing your ${idea.pieceMoved} on a more active central square.`);
+    }
+    if (idea.isPromotion) {
+      idea.conceptHints.push('One of your pawns is ready to become something much stronger.');
+    }
+
+    // If no specific hints were generated, add general strategic advice
+    if (idea.conceptHints.length === 0) {
+      if (gamePhase === 'opening') {
+        idea.conceptHints.push('Think about what move improves your piece activity the most.');
+        idea.conceptHints.push('Consider which piece isn\'t doing much and how to activate it.');
+      } else if (gamePhase === 'middlegame') {
+        idea.conceptHints.push('Look for the move that creates the most problems for your opponent.');
+        idea.conceptHints.push('Think about improving your worst-placed piece.');
+      } else {
+        idea.conceptHints.push('In this endgame, think about king activity and pawn advancement.');
+        idea.conceptHints.push('Consider which side of the board holds the key to this position.');
+      }
+    }
+  } catch {
+    idea.conceptHints.push('Take a closer look at the position — there\'s a stronger idea here.');
+  }
+
+  return idea;
+}
+
+/** Build a spoiler-free explanation of the position's key idea (no move name) */
+export function describePositionIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGamePhase): string {
+  const idea = analyzeMoveIdea(fen, bestMoveSan, gamePhase);
+
+  if (idea.isCastle) return 'King safety is critical here — think about tucking the king away and connecting the rooks.';
+  if (idea.isCheck && idea.isCapture) return 'There\'s a way to win material with a forcing move that also attacks the king.';
+  if (idea.isPromotion) return 'A pawn is ready to promote. Look for the path to get it across.';
+  if (idea.isCheck) return 'There\'s a check available that creates serious problems for your opponent.';
+  if (idea.isCapture) return 'Something is hanging — look for the material you can win.';
+  if (idea.developsPiece && idea.movesToCenter) return `Your ${idea.pieceMoved} wants a more active square — think about centralizing it with tempo.`;
+  if (idea.developsPiece) return `Think about which piece isn't in the game yet. Your ${idea.pieceMoved} needs a better square.`;
+  if (idea.movesToCenter) return 'The center is the key to this position — look for ways to strengthen your grip.';
+
+  if (gamePhase === 'endgame') return 'In this endgame, king activity and pawn advancement are everything.';
+  if (gamePhase === 'opening') return 'Focus on development, center control, and king safety.';
+  return 'Look for the move that creates the most problems for your opponent.';
+}
+
+/** Build a natural-sounding description of what the best move accomplishes */
+function describeMoveIdea(idea: MoveIdea, bestMoveSan: string): string {
+  const parts: string[] = [];
+
+  if (idea.isCastle) {
+    return `${bestMoveSan} tucks the king to safety and connects the rooks.`;
+  }
+  if (idea.isCheck && idea.isCapture) {
+    return `${bestMoveSan} captures with check — winning material while keeping the initiative.`;
+  }
+  if (idea.isPromotion) {
+    return `${bestMoveSan} promotes the pawn, creating a decisive advantage.`;
+  }
+  if (idea.isCheck) {
+    parts.push(`${bestMoveSan} delivers check`);
+  } else if (idea.isCapture) {
+    parts.push(`${bestMoveSan} picks up material`);
+  } else if (idea.developsPiece && idea.movesToCenter) {
+    return `${bestMoveSan} develops the ${idea.pieceMoved} to an active central square.`;
+  } else if (idea.developsPiece) {
+    return `${bestMoveSan} gets the ${idea.pieceMoved} into the game.`;
+  } else if (idea.movesToCenter) {
+    return `${bestMoveSan} strengthens your grip on the center.`;
+  }
+
+  if (parts.length > 0) {
+    return parts[0] + '.';
+  }
+
+  return `${bestMoveSan} improves your position.`;
+}
+
 // ─── Intro Templates ────────────────────────────────────────────────────────
 
 const INTRO_TEMPLATES: Record<MistakeClassification, string[]> = {
   blunder: [
-    'You played {playerMove} here, but that was a blunder costing {cpText}. The right move was {bestMove}.',
-    '{playerMove} was a serious mistake — you lost {cpText}. Let\'s see why {bestMove} was the correct play.',
-    'Uh oh — {playerMove} dropped {cpText}. {bestMove} was what you needed here.',
+    'You played {playerMove} here, but that was a blunder costing {cpText}. Can you find the better move?',
+    '{playerMove} was a serious mistake — you lost {cpText}. What should you have played?',
+    'Uh oh — {playerMove} dropped {cpText}. Find the right move.',
   ],
   mistake: [
-    'You played {playerMove}, but {bestMove} was significantly better — that cost you {cpText}.',
-    '{playerMove} wasn\'t the best here. {bestMove} keeps you in better shape, saving {cpText}.',
-    'With {playerMove} you gave up {cpText}. {bestMove} was the stronger option.',
+    'You played {playerMove}, but there was something significantly better — that cost {cpText}. What was it?',
+    '{playerMove} wasn\'t the best here, costing {cpText}. Can you spot the improvement?',
+    'With {playerMove} you gave up {cpText}. Find the stronger option.',
   ],
   inaccuracy: [
-    '{playerMove} was okay, but {bestMove} was more precise. The difference is {cpText}.',
-    'Slight slip with {playerMove}. {bestMove} would have been a touch better, about {cpText}.',
-    'Not a bad move with {playerMove}, but {bestMove} was more accurate — {cpText} difference.',
+    '{playerMove} was okay, but there\'s a more precise option. Can you find it?',
+    'Slight slip with {playerMove}. What\'s the sharper move?',
+    'Not a bad move with {playerMove}, but the engine found something better. What is it?',
   ],
   miss: [
-    'Your opponent slipped here and you missed it! {bestMove} was the way to punish them.',
-    'There was a chance to capitalize with {bestMove}, but you played {playerMove} instead.',
-    '{playerMove} let your opponent off the hook. {bestMove} would have won {cpText}.',
+    'Your opponent slipped here and you missed it! What was the best response?',
+    'There was a chance to capitalize here, but you played {playerMove} instead. Find the winning move.',
+    '{playerMove} let your opponent off the hook. What should you have played?',
   ],
 };
 
 const PHASE_CONTEXT: Record<MistakeGamePhase, string[]> = {
   opening: [
     'In the opening, piece development and center control are everything.',
-    'Early in the game, every tempo counts. Developing with a threat is ideal.',
+    'Early in the game, every tempo counts.',
     'In the opening, look for moves that develop pieces while fighting for the center.',
   ],
   middlegame: [
@@ -138,7 +289,7 @@ const PHASE_CONTEXT: Record<MistakeGamePhase, string[]> = {
   ],
   endgame: [
     'In the endgame, king activity and passed pawns decide the game.',
-    'Endgame technique requires precision — small advantages matter a lot more here.',
+    'Endgame technique requires precision — small advantages matter more here.',
     'In endgames, calculate carefully. One wrong move can flip the result.',
   ],
 };
@@ -146,54 +297,98 @@ const PHASE_CONTEXT: Record<MistakeGamePhase, string[]> = {
 // ─── Move Narrations ────────────────────────────────────────────────────────
 
 const FIRST_MOVE_TEMPLATES = [
-  'Good — {san} is the right move here.',
-  'That\'s it! {san} is the key move.',
-  'Correct, {san}. Now let\'s see what follows.',
-  '{san} — exactly right.',
+  'That\'s it! {san}. {ideaText}',
+  'Correct, {san}. {ideaText}',
+  '{san} — exactly right. {ideaText}',
+  'Nice find! {san}. {ideaText}',
 ];
 
 const CONTINUATION_TEMPLATES = [
-  'Your opponent plays {opponentSan}. Now find the next best move.',
-  'After {opponentSan}, what\'s the best continuation?',
-  '{opponentSan} is the response. Keep the pressure up.',
+  'Your opponent responds with {opponentSan}. Now find the follow-up.',
+  'After {opponentSan}, what keeps the pressure on?',
+  '{opponentSan}. Now stay sharp — what\'s next?',
 ];
 
 const MID_MOVE_TEMPLATES = [
-  'Nice, {san}. Keep going.',
-  '{san} — well done. The position is improving.',
-  'Good, {san}. You\'re on the right track.',
+  '{san} — good continuation.',
+  '{san}. The position keeps getting better.',
+  'Well played, {san}.',
 ];
 
 const FINAL_MOVE_TEMPLATES = [
-  '{san} — and that completes the combination!',
-  'And {san} finishes it off nicely.',
+  '{san} — and that wraps it up!',
+  'And {san} finishes it off.',
   '{san}! That\'s the whole idea.',
+  'Perfect, {san}. You\'ve got it.',
 ];
 
-// ─── Outro Templates ────────────────────────────────────────────────────────
+// ─── Outro Templates (position-aware) ──────────────────────────────────────
 
-const OUTRO_TEMPLATES: Record<MistakeClassification, string[]> = {
-  blunder: [
-    'Blunders often come from moving too fast. Take an extra moment to check for threats before committing.',
-    'The key lesson here is to always ask yourself: is my piece safe after this move?',
-    'Before every move, scan for checks, captures, and threats. That habit prevents blunders.',
-  ],
-  mistake: [
-    'Mistakes like this are part of learning. The pattern to remember here is to consider all forcing moves first.',
-    'Next time in a position like this, look for moves that improve your position while creating threats.',
-    'Good players minimize mistakes by checking their candidate moves systematically.',
-  ],
-  inaccuracy: [
-    'Small inaccuracies add up over a game. Sharpening your move selection here will gain you rating points.',
-    'The difference between good and great is catching these small improvements. Keep training your pattern recognition.',
-    'Precision like this comes with practice. You\'re already on the right track by studying your mistakes.',
-  ],
-  miss: [
-    'Spotting your opponent\'s mistakes is just as important as avoiding your own. Stay alert for opportunities.',
-    'When your opponent makes an error, punish it immediately. Missed chances can be the difference in a game.',
-    'Train your tactical eye to catch these moments. The more puzzles you solve, the sharper you\'ll get.',
-  ],
-};
+function buildOutro(params: NarrationParams, idea: MoveIdea): string {
+  const { classification, gamePhase } = params;
+
+  // Build a position-specific outro based on what the best move was about
+  const outroVariants: string[] = [];
+
+  if (idea.isCastle) {
+    outroVariants.push('Remember — king safety is never optional. Castle early when you can.');
+    outroVariants.push('Getting your king safe early frees you to attack without worrying about back-rank issues.');
+  }
+  if (idea.isCapture) {
+    outroVariants.push('Always check if something is undefended before committing to your plan.');
+    outroVariants.push('Hanging pieces are free points. Make it a habit to scan for captures first.');
+  }
+  if (idea.isCheck) {
+    outroVariants.push('Checks are forcing — they limit your opponent\'s options. Always consider them.');
+    outroVariants.push('When you have a forcing check that also improves your position, it\'s usually the right call.');
+  }
+  if (idea.developsPiece) {
+    outroVariants.push('Developing with purpose is the hallmark of strong opening play. Get those pieces working.');
+    outroVariants.push('Every move in the opening should either develop a piece, control the center, or prepare castling.');
+  }
+  if (idea.movesToCenter && idea.pieceMoved === 'pawn') {
+    outroVariants.push('Central pawns control key squares. Reinforcing the center is almost always a solid plan.');
+  }
+
+  // Phase-specific fallbacks
+  if (outroVariants.length === 0) {
+    if (gamePhase === 'opening') {
+      outroVariants.push('Opening mistakes compound fast — get your pieces out, control the center, and castle.');
+      outroVariants.push('The opening is about getting a playable middlegame. Every tempo matters.');
+      outroVariants.push('Solid opening play comes from following principles: develop, control, castle.');
+    } else if (gamePhase === 'middlegame') {
+      outroVariants.push('In the middlegame, the right move often creates multiple threats at once.');
+      outroVariants.push('When you\'re unsure, ask yourself: what\'s my opponent\'s idea, and how can I improve my worst piece?');
+      outroVariants.push('Tactical awareness in the middlegame comes from pattern recognition. You\'re building that now.');
+    } else {
+      outroVariants.push('Endgames reward patience and precision. Every pawn move is permanent.');
+      outroVariants.push('In endgames, activate your king aggressively — it\'s a fighting piece now.');
+      outroVariants.push('Endgame technique separates club players from experts. This kind of study is exactly how you improve.');
+    }
+  }
+
+  // Add a classification-flavored closer
+  const closerVariants: Record<MistakeClassification, string[]> = {
+    blunder: [
+      'Next time, take one extra second to double-check.',
+      'These moments are painful but they teach the most lasting lessons.',
+    ],
+    mistake: [
+      'Catching these patterns gets easier with practice.',
+      'The more you train this, the more automatic it becomes.',
+    ],
+    inaccuracy: [
+      'These small edges add up to wins over a full game.',
+      'Refining your accuracy here is what separates levels.',
+    ],
+    miss: [
+      'Stay hungry for your opponent\'s errors — they happen more often than you think.',
+      'The sharper your tactical eye, the more points you\'ll collect.',
+    ],
+  };
+
+  return pick(outroVariants) + ' ' + pick(closerVariants[classification]);
+}
 
 // ─── Main Generator ─────────────────────────────────────────────────────────
 
@@ -201,11 +396,13 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   const { classification, gamePhase, playerMoveSan, bestMoveSan, cpLoss, fen, moves } = params;
 
   const cpText = cpToText(cpLoss);
+  const idea = analyzeMoveIdea(fen, bestMoveSan, gamePhase);
+  const ideaText = describeMoveIdea(idea, bestMoveSan);
 
   // Build context sentence (opponent, time ago, opening, advantage)
   const contextSentence = buildContextSentence(params);
 
-  // Build intro
+  // Build intro — now includes the idea description instead of just naming the best move
   const introTemplate = pick(INTRO_TEMPLATES[classification]);
   const phaseContext = pick(PHASE_CONTEXT[gamePhase]);
   const mistakeExplanation = introTemplate
@@ -216,16 +413,19 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
     ? contextSentence + ' ' + mistakeExplanation + ' ' + phaseContext
     : mistakeExplanation + ' ' + phaseContext;
 
-  // Build per-move narrations
-  const moveNarrations = buildMoveNarrations(fen, moves);
+  // Build per-move narrations with idea text on first move
+  const moveNarrations = buildMoveNarrations(fen, moves, ideaText);
 
-  // Build outro
-  const outro = pick(OUTRO_TEMPLATES[classification]);
+  // Build position-aware outro
+  const outro = buildOutro(params, idea);
 
-  return { intro, moveNarrations, outro };
+  // Build conceptual hint for when the player makes a wrong attempt
+  const conceptHint = pick(idea.conceptHints);
+
+  return { intro, moveNarrations, outro, conceptHint };
 }
 
-function buildMoveNarrations(fen: string, movesUci: string): string[] {
+function buildMoveNarrations(fen: string, movesUci: string, firstMoveIdea: string): string[] {
   const uciMoves = movesUci.trim().split(/\s+/).filter(Boolean);
   if (uciMoves.length === 0) return [];
 
@@ -247,7 +447,7 @@ function buildMoveNarrations(fen: string, movesUci: string): string[] {
       const playerIdx = Math.floor(i / 2);
       let template: string;
       if (playerIdx === 0) {
-        template = pick(FIRST_MOVE_TEMPLATES);
+        template = pick(FIRST_MOVE_TEMPLATES).replace(/\{ideaText\}/g, firstMoveIdea);
       } else if (playerIdx === playerMoveCount - 1) {
         template = pick(FINAL_MOVE_TEMPLATES);
       } else {
@@ -255,7 +455,6 @@ function buildMoveNarrations(fen: string, movesUci: string): string[] {
       }
       narrations.push(template.replace(/\{san\}/g, san));
     } else {
-      // Opponent move — attach narration to the previous player move if exists
       const continuationText = pick(CONTINUATION_TEMPLATES).replace(/\{opponentSan\}/g, san);
       if (narrations.length > 0) {
         narrations[narrations.length - 1] += ' ' + continuationText;

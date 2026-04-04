@@ -53,7 +53,7 @@ export function LichessDashboardPage(): JSX.Element {
   const handleTrainWeaknesses = (): void => {
     if (!dashboard) return;
     const weakThemes = getWeakestThemesFromDashboard(dashboard, 5);
-    void navigate('/puzzles', { state: { forcedWeakThemes: weakThemes } });
+    void navigate('/weaknesses/adaptive', { state: { forcedWeakThemes: weakThemes } });
   };
 
   if (!hasToken) {
@@ -61,7 +61,7 @@ export function LichessDashboardPage(): JSX.Element {
       <div className="flex flex-col gap-6 p-6 flex-1 overflow-y-auto pb-20 md:pb-6" data-testid="lichess-dashboard-no-token">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => void navigate('/puzzles')}
+            onClick={() => void navigate('/weaknesses')}
             className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
           >
             <ArrowLeft size={18} className="text-theme-text" />
@@ -125,7 +125,7 @@ export function LichessDashboardPage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button
-          onClick={() => void navigate('/puzzles')}
+          onClick={() => void navigate('/weaknesses')}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
           aria-label="Back"
         >

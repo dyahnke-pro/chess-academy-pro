@@ -138,9 +138,7 @@ describe('useHintSystem', () => {
         expect(result.current.hintState.level).toBe(1);
       });
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(stockfishEngine.initialize).toHaveBeenCalled();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(stockfishEngine.analyzePosition).toHaveBeenCalledWith(
         DEFAULT_CONFIG.fen,
         16,

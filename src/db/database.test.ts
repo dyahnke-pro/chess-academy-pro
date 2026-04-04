@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(11);
+    expect(db.verno).toBe(18);
   });
 
   it('has puzzles table', () => {
@@ -44,6 +44,10 @@ describe('Database Schema', () => {
 
   it('has meta table', () => {
     expect(db.tables.map((t) => t.name)).toContain('meta');
+  });
+
+  it('has classifiedTactics table', () => {
+    expect(db.tables.map((t) => t.name)).toContain('classifiedTactics');
   });
 
   it('can write and read from meta table', async () => {

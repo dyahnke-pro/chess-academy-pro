@@ -89,6 +89,66 @@ export function isStillInOpening(moveHistory: string[]): boolean {
   return node.children.size > 0;
 }
 
+/**
+ * Given an opening name (e.g. "French Defense"), find the main-line PGN moves.
+ * Returns the longest (most specific) matching line as an array of SAN moves,
+ * or null if no match. If `preferMainLine` is true (default), picks the
+ * canonical shortest match (e.g. "e4 e6" for French Defense) to start the
+ * opening and then the longest continuation to guide play deeper.
+ */
+export function getOpeningMoves(openingName: string): string[] | null {
+  const entries = openingsData as OpeningEntry[];
+  const lower = openingName.toLowerCase();
+
+  // Find all entries whose name starts with the requested opening
+  const matches = entries.filter((e) => e.name.toLowerCase().startsWith(lower));
+  if (matches.length === 0) {
+    // Fallback: substring match
+    const fuzzy = entries.filter((e) => e.name.toLowerCase().includes(lower));
+    if (fuzzy.length === 0) return null;
+    // Pick the longest line for maximum guidance
+    const best = fuzzy.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b));
+    return best.pgn.split(/\s+/).filter(Boolean);
+  }
+
+  // Pick the longest continuation so the AI follows the opening as deep as possible
+  const best = matches.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b));
+  return best.pgn.split(/\s+/).filter(Boolean);
+}
+
+/**
+ * Given a requested opening's move list and the current game history,
+ * return the next book move the AI should play, or null if we've left the book.
+ * Only returns a move if it's the AI's turn according to the opening line.
+ *
+ * @param openingMoves - Full SAN move list for the opening (from getOpeningMoves)
+ * @param gameHistory - Current game SAN history (from chess.js .history())
+ * @param aiColor - 'white' | 'black' — which side the AI is playing
+ */
+export function getNextOpeningBookMove(
+  openingMoves: string[],
+  gameHistory: string[],
+  aiColor: 'white' | 'black',
+): string | null {
+  const nextPly = gameHistory.length;
+
+  // Check that all game moves so far match the opening line
+  for (let i = 0; i < gameHistory.length; i++) {
+    if (i >= openingMoves.length) return null; // Past the book
+    if (gameHistory[i] !== openingMoves[i]) return null; // Deviated from book
+  }
+
+  // Check if the next move is in the book
+  if (nextPly >= openingMoves.length) return null;
+
+  // Check if it's the AI's turn (ply 0 = white, ply 1 = black, etc.)
+  const isWhiteTurn = nextPly % 2 === 0;
+  const isAiTurn = (aiColor === 'white' && isWhiteTurn) || (aiColor === 'black' && !isWhiteTurn);
+  if (!isAiTurn) return null;
+
+  return openingMoves[nextPly];
+}
+
 /** Reset cached trie (for testing). */
 export function _resetTrie(): void {
   cachedTrie = null;

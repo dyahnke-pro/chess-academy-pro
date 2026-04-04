@@ -272,7 +272,8 @@ describe('Queen vs Army', () => {
     it('includes knight for level 3', () => {
       const state = initQueenArmyState(QUEEN_ARMY_LEVELS[2]);
       const pos = queenArmyPosition(state);
-      expect(pos[state.knight!]).toEqual({ pieceType: 'bN' });
+      if (state.knight === null) throw new Error('Expected knight to be non-null for level 3');
+      expect(pos[state.knight]).toEqual({ pieceType: 'bN' });
     });
   });
 

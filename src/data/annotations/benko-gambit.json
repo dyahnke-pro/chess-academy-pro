@@ -4,325 +4,2445 @@
     {
       "san": "d4",
       "annotation": "White opens with the queen's pawn, claiming central space and preparing to build a strong pawn center with c4. This move controls e5 and c5, and opens the diagonal for the dark-squared bishop.",
-      "plans": ["Build a broad pawn center with c4 and e4", "Develop pieces to active squares controlling the center"],
-      "arrows": [{"from": "d2", "to": "d4", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d4", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d4", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Build a broad pawn center with c4 and e4",
+        "Develop pieces to active squares controlling the center"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d4",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to its most natural square, attacking the d4 pawn and controlling e4. This flexible move keeps options open for various Indian Defense systems including the Benko Gambit.",
-      "plans": ["Control e4 and pressure d5 after White advances", "Prepare a kingside fianchetto or classical development"],
-      "arrows": [{"from": "g8", "to": "f6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f6", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "f6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Control e4 and pressure d5 after White advances",
+        "Prepare a kingside fianchetto or classical development"
+      ],
+      "arrows": [
+        {
+          "from": "g8",
+          "to": "f6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f6",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c4",
       "annotation": "White expands on the queenside, supporting d4 and controlling the d5 and b5 squares. This is the characteristic Queen's Gambit setup, giving White a broad pawn center and space advantage.",
       "pawnStructure": "White has pawns on c4 and d4 forming a strong central duo. This structure controls key central squares and restricts Black's options.",
-      "plans": ["Support the center with Nc3 and e4", "Gain space and restrict Black's piece activity"],
-      "arrows": [{"from": "c2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c4", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "c4", "to": "b5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Support the center with Nc3 and e4",
+        "Gain space and restrict Black's piece activity"
+      ],
+      "arrows": [
+        {
+          "from": "c2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c4",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "c4",
+          "to": "b5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "c5",
       "annotation": "Black challenges the d4 pawn immediately, signaling the Benoni/Benko complex. Rather than accepting a passive position, Black fights for counterplay from the start. This move invites White to advance d5, after which Black will strike with the thematic b5 gambit.",
-      "plans": ["Provoke d5, then launch the b5 pawn sacrifice", "Create an asymmetric position with queenside counterplay"],
-      "arrows": [{"from": "c7", "to": "c5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c5", "to": "d4", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "c5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Provoke d5, then launch the b5 pawn sacrifice",
+        "Create an asymmetric position with queenside counterplay"
+      ],
+      "arrows": [
+        {
+          "from": "c7",
+          "to": "c5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c5",
+          "to": "d4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d5",
       "annotation": "White advances the d-pawn, gaining space and fixing the pawn structure. This creates a Benoni-type formation where White has more central territory but Black gets queenside counterplay. The advance is necessary to maintain the pawn on d4, but it also gives Black a clear target and plan.",
       "pawnStructure": "The d5 advance creates a fixed pawn chain. White has space but the d5 pawn can become a target. Black will aim to undermine White's queenside pawns.",
-      "plans": ["Build a strong center with e4 and Nc3", "Use the space advantage to restrict Black's pieces"],
-      "arrows": [{"from": "d4", "to": "d5", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Build a strong center with e4 and Nc3",
+        "Use the space advantage to restrict Black's pieces"
+      ],
+      "arrows": [
+        {
+          "from": "d4",
+          "to": "d5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "b5",
       "annotation": "The Benko Gambit! Black sacrifices a pawn to rip open the a-file and b-file for long-term queenside pressure. This is one of the most principled gambit ideas in chess: Black invests material for lasting positional compensation. The open files, active pieces, and pressure against White's queenside will persist deep into the endgame.",
       "pawnStructure": "Black sacrifices the b-pawn to destroy White's queenside pawn structure. After the capture and ...a6, Black will have open files and a lead in development on the queenside.",
-      "plans": ["Open the a-file and b-file after ...a6", "Fianchetto the bishop to g7 for long diagonal pressure", "Build a rook battery on the a and b files"],
-      "alternatives": ["b6 — the Benoni approach, keeping the pawn but with less dynamic play"],
-      "arrows": [{"from": "b7", "to": "b5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b5", "to": "c4", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "a8", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Open the a-file and b-file after ...a6",
+        "Fianchetto the bishop to g7 for long diagonal pressure",
+        "Build a rook battery on the a and b files"
+      ],
+      "alternatives": [
+        "b6 — the Benoni approach, keeping the pawn but with less dynamic play"
+      ],
+      "arrows": [
+        {
+          "from": "b7",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b5",
+          "to": "c4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "cxb5",
       "annotation": "White accepts the gambit, taking the offered pawn. This is the most critical test — declining with Nf3 or e3 allows Black easy equality. By accepting, White gains material but must weather a storm of queenside pressure.",
-      "plans": ["Try to consolidate the extra pawn", "Develop quickly to counter Black's initiative"],
-      "alternatives": ["Nf3 — declining the gambit, leading to a solid but passive position for White"],
-      "arrows": [{"from": "c4", "to": "b5", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Try to consolidate the extra pawn",
+        "Develop quickly to counter Black's initiative"
+      ],
+      "alternatives": [
+        "Nf3 — declining the gambit, leading to a solid but passive position for White"
+      ],
+      "arrows": [
+        {
+          "from": "c4",
+          "to": "b5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "a6",
       "annotation": "Black continues the assault, attacking the b5 pawn and preparing to open the a-file. This is the second sacrifice — Black offers another pawn to open lines. After bxa6, both the a-file and the a6 square become available for Black's pieces.",
-      "plans": ["Recapture on a6 with the bishop, developing with tempo", "Open the a-file for the rook"],
-      "arrows": [{"from": "a7", "to": "a6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a6", "to": "b5", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "a6", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "a8", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Recapture on a6 with the bishop, developing with tempo",
+        "Open the a-file for the rook"
+      ],
+      "arrows": [
+        {
+          "from": "a7",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a6",
+          "to": "b5",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "bxa6",
       "annotation": "White captures, maintaining the extra pawn. Now Black will recapture with the bishop, gaining development while opening the a-file. White has two extra pawns but the a6 pawn is isolated and weak — it will likely be recovered.",
       "pawnStructure": "White has an isolated a6 pawn that is difficult to defend. Black will target it while building pressure along the open files.",
-      "plans": ["Try to hold the a6 pawn or return it for active play", "Develop quickly with Nc3, e4, and Nf3"],
-      "arrows": [{"from": "b5", "to": "a6", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "a6", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Try to hold the a6 pawn or return it for active play",
+        "Develop quickly with Nc3, e4, and Nf3"
+      ],
+      "arrows": [
+        {
+          "from": "b5",
+          "to": "a6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bxa6",
       "annotation": "Black recaptures with the bishop, developing a piece and recovering one of the sacrificed pawns. The bishop is well-placed on a6, eyeing the f1 square and preventing White from castling kingside easily. Black now has one open file (a-file) with the b-file about to open as well.",
-      "plans": ["Exchange the bishop for White's f1 bishop to prevent castling", "Play ...d6 and ...Nbd7 to complete development", "Station rooks on a8 and b8 for maximum pressure"],
-      "arrows": [{"from": "c8", "to": "a6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a6", "to": "f1", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "a6", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "f1", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Exchange the bishop for White's f1 bishop to prevent castling",
+        "Play ...d6 and ...Nbd7 to complete development",
+        "Station rooks on a8 and b8 for maximum pressure"
+      ],
+      "arrows": [
+        {
+          "from": "c8",
+          "to": "a6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a6",
+          "to": "f1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "f1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nc3",
       "annotation": "White develops the knight to its natural square, defending d5 and preparing e4. The knight on c3 also helps control the b5 square, but it can become a target for Black's pieces. White aims to build a strong center before Black's pressure becomes overwhelming.",
-      "plans": ["Play e4 to build a strong pawn center", "Develop the kingside pieces and find a way to castle"],
-      "arrows": [{"from": "b1", "to": "c3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c3", "to": "d5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "c3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play e4 to build a strong pawn center",
+        "Develop the kingside pieces and find a way to castle"
+      ],
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "c3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c3",
+          "to": "d5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "d6",
       "annotation": "Black solidifies the center and prepares to complete the fianchetto with ...g6 and ...Bg7. The pawn on d6 supports a potential ...e6 break later and gives the knight on f6 a stable base. This is patient gambit play — Black builds up pressure methodically.",
       "pawnStructure": "Black's pawn structure with c5 and d6 is the classic Benoni formation. The d6 pawn is solid and supports future pawn breaks like ...e6.",
-      "plans": ["Fianchetto with ...g6 and ...Bg7", "Play ...Nbd7 to support the knight and prepare ...Nb6 or ...Ne5"],
-      "arrows": [{"from": "d7", "to": "d6", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "d6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Fianchetto with ...g6 and ...Bg7",
+        "Play ...Nbd7 to support the knight and prepare ...Nb6 or ...Ne5"
+      ],
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "d6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "e4",
       "annotation": "White builds the imposing pawn center with pawns on d5 and e4. This gives White significant space but also creates a structure that Black can chip away at. The e4 pawn opens the diagonal for the f1 bishop, but the bishop on a6 is already eyeing that square.",
       "pawnStructure": "White has a broad pawn center on d5 and e4. This center gives space but can become overextended if Black generates enough counterplay.",
-      "plans": ["Develop the kingside and try to castle", "Use the space advantage to maneuver pieces to strong squares"],
-      "arrows": [{"from": "e2", "to": "e4", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e4", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "d5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Develop the kingside and try to castle",
+        "Use the space advantage to maneuver pieces to strong squares"
+      ],
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "e4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bxf1",
       "annotation": "A key Benko idea — Black exchanges the light-squared bishop for White's, preventing kingside castling. White must recapture with the king, leaving it awkwardly placed in the center. This exchange is the price Black paid for the pawn sacrifice: lasting structural damage to White's position.",
-      "plans": ["Force White's king to f1, disrupting castling", "Follow up with ...g6 and ...Bg7 to complete development"],
-      "arrows": [{"from": "a6", "to": "f1", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "f1", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Force White's king to f1, disrupting castling",
+        "Follow up with ...g6 and ...Bg7 to complete development"
+      ],
+      "arrows": [
+        {
+          "from": "a6",
+          "to": "f1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Kxf1",
       "annotation": "White is forced to recapture with the king, losing the right to castle. The king on f1 is safe for now but will need to find shelter. White must spend time relocating the king, typically via g2 after g3, which costs valuable tempo.",
-      "plans": ["Play g3 and Kg2 to artificially castle the king", "Complete development with Nf3 and Re1"],
-      "arrows": [{"from": "e1", "to": "f1", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f1", "to": "g2", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "f1", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Play g3 and Kg2 to artificially castle the king",
+        "Complete development with Nf3 and Re1"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "f1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "g6",
       "annotation": "Black prepares the crucial fianchetto. The bishop on g7 will be a monster, controlling the long diagonal from a1 to h8. Combined with the open a-file and b-file, Black's pieces will coordinate beautifully against White's queenside.",
-      "plans": ["Complete the fianchetto with ...Bg7", "Castle kingside and bring rooks to the open files"],
-      "arrows": [{"from": "g7", "to": "g6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "g7", "to": "a1", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "g7", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Complete the fianchetto with ...Bg7",
+        "Castle kingside and bring rooks to the open files"
+      ],
+      "arrows": [
+        {
+          "from": "g7",
+          "to": "g6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g7",
+          "to": "a1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "g3",
       "annotation": "White mirrors the fianchetto structure to shelter the king. After Kg2, the king will be reasonably safe behind the g3 and f2 pawns. This also prepares to develop the knight to f3 and the rook to e1.",
-      "plans": ["Play Kg2 to tuck the king into safety", "Develop with Nf3 and Re1 to complete the setup"],
-      "arrows": [{"from": "g2", "to": "g3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f1", "to": "g2", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "g3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play Kg2 to tuck the king into safety",
+        "Develop with Nf3 and Re1 to complete the setup"
+      ],
+      "arrows": [
+        {
+          "from": "g2",
+          "to": "g3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Bg7",
       "annotation": "The bishop takes its dominant post on g7, raking the entire long diagonal. This bishop is one of Black's strongest pieces in the Benko — it pressures the queenside from afar and supports potential pawn breaks. Combined with rooks on the open files, it creates devastating pressure.",
-      "plans": ["Castle kingside immediately", "Coordinate the bishop with rooks on a8 and b8"],
-      "arrows": [{"from": "f8", "to": "g7", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "g7", "to": "a1", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "g7", "to": "c3", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "g7", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "a1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Castle kingside immediately",
+        "Coordinate the bishop with rooks on a8 and b8"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "g7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "g7",
+          "to": "a1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "g7",
+          "to": "c3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Kg2",
       "annotation": "White completes the artificial castling, tucking the king behind the g3 pawn. The king is reasonably safe here, though not as secure as after normal castling. White can now focus on completing development and trying to neutralize Black's queenside pressure.",
-      "plans": ["Develop with Nf3 and Re1", "Try to consolidate and activate the extra pawn"],
-      "arrows": [{"from": "f1", "to": "g2", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "g2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Develop with Nf3 and Re1",
+        "Try to consolidate and activate the extra pawn"
+      ],
+      "arrows": [
+        {
+          "from": "f1",
+          "to": "g2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "O-O",
       "annotation": "Black castles, connecting the rooks and preparing to swing them to the a-file and b-file. The king is safe on g8, and now Black's entire focus shifts to building queenside pressure. This is the ideal Benko setup — king safe, bishop on g7, rooks ready to attack.",
-      "plans": ["Play ...Nbd7 to develop the last minor piece", "Double rooks on the a-file and b-file", "Apply relentless pressure to White's queenside pawns"],
-      "arrows": [{"from": "e8", "to": "g8", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a8", "to": "a1", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "g8", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play ...Nbd7 to develop the last minor piece",
+        "Double rooks on the a-file and b-file",
+        "Apply relentless pressure to White's queenside pawns"
+      ],
+      "arrows": [
+        {
+          "from": "e8",
+          "to": "g8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a8",
+          "to": "a1",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "g8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nf3",
       "annotation": "White develops the knight to f3, a natural square controlling e5 and d4. The knight also supports a potential Re1 and helps maintain the center. White is catching up in development but still faces persistent queenside pressure.",
-      "plans": ["Play Re1 to activate the rook", "Prepare to reroute pieces to defend the queenside"],
-      "arrows": [{"from": "g1", "to": "f3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "f3", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "f3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play Re1 to activate the rook",
+        "Prepare to reroute pieces to defend the queenside"
+      ],
+      "arrows": [
+        {
+          "from": "g1",
+          "to": "f3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "f3",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "f3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nbd7",
       "annotation": "Black develops the knight toward the queenside action. From d7, the knight can go to b6 to pressure a4 and c4, or to e5 to challenge White's knight and control key central squares. This flexible development is typical of the Benko.",
       "pawnStructure": "Black's pawn structure is solid with d6 and c5. The absence of the a and b pawns is a feature, not a weakness — the open files are Black's main asset.",
-      "plans": ["Reroute the knight via Nb6 to pressure a4", "Alternatively play ...Ne5 to challenge the center", "Prepare ...Qa5 or ...Qb6 to add pressure"],
-      "arrows": [{"from": "b8", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d7", "to": "b6", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "d7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Reroute the knight via Nb6 to pressure a4",
+        "Alternatively play ...Ne5 to challenge the center",
+        "Prepare ...Qa5 or ...Qb6 to add pressure"
+      ],
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "d7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d7",
+          "to": "b6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d7",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Re1",
       "annotation": "White activates the rook on the semi-open e-file, supporting the e4 pawn and preparing potential central action. The rook also indirectly protects the e4 pawn, freeing the knight for potential redeployment.",
-      "plans": ["Support e4 and prepare e5 advance if possible", "Free the knight to help defend the queenside"],
-      "arrows": [{"from": "h1", "to": "e1", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e1", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "e1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Support e4 and prepare e5 advance if possible",
+        "Free the knight to help defend the queenside"
+      ],
+      "arrows": [
+        {
+          "from": "h1",
+          "to": "e1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e1",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qa5",
       "annotation": "The queen enters the game on the queenside, adding to the pressure on White's position. From a5, the queen eyes the a2 pawn and supports potential tactics along the a-file. The queen also puts indirect pressure on the c3 knight.",
-      "plans": ["Increase pressure on a2 and the queenside", "Coordinate with rooks on the a and b files", "Threaten tactical ideas involving ...Nb6 and ...Nc4"],
-      "arrows": [{"from": "d8", "to": "a5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a5", "to": "a2", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "a5", "to": "c3", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "a5", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Increase pressure on a2 and the queenside",
+        "Coordinate with rooks on the a and b files",
+        "Threaten tactical ideas involving ...Nb6 and ...Nc4"
+      ],
+      "arrows": [
+        {
+          "from": "d8",
+          "to": "a5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a5",
+          "to": "a2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "a5",
+          "to": "c3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Re2",
       "annotation": "White doubles purpose with the rook — defending the a2 pawn laterally while keeping the e-file presence. This slightly awkward rook placement shows the difficulty of defending against the Benko. White is struggling to find active play while dealing with Black's initiative.",
-      "plans": ["Defend the a2 pawn and prepare Qc2", "Try to consolidate and slowly untangle"],
-      "alternatives": ["Qc2 — defending a2 directly but blocking the c-file"],
-      "arrows": [{"from": "e1", "to": "e2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e2", "to": "a2", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "e2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Defend the a2 pawn and prepare Qc2",
+        "Try to consolidate and slowly untangle"
+      ],
+      "alternatives": [
+        "Qc2 — defending a2 directly but blocking the c-file"
+      ],
+      "arrows": [
+        {
+          "from": "e1",
+          "to": "e2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e2",
+          "to": "a2",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rfb8",
       "annotation": "Black swings the f-rook to the b-file, creating a powerful battery on the queenside. With rooks on a8 and b8, and the queen on a5, Black has maximum pressure against White's b2 and a2 pawns. This is the dream Benko setup — every piece is participating in the queenside attack.",
       "pawnStructure": "Black's open a-file and b-file are the direct consequence of the gambit. These files provide permanent compensation that persists into the endgame.",
-      "plans": ["Double rooks on the b-file or create a rook battery", "Target the b2 pawn as the primary weakness", "Prepare ...Nb6-c4 to invade with the knight"],
-      "arrows": [{"from": "f8", "to": "b8", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b8", "to": "b2", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "a8", "to": "a2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b8", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "b2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Double rooks on the b-file or create a rook battery",
+        "Target the b2 pawn as the primary weakness",
+        "Prepare ...Nb6-c4 to invade with the knight"
+      ],
+      "arrows": [
+        {
+          "from": "f8",
+          "to": "b8",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b8",
+          "to": "b2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "a8",
+          "to": "a2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b8",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "b2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Nd2",
       "annotation": "White reroutes the knight to help defend the queenside. From d2, the knight can go to c4 to block the c-file or to b3 to support the a-pawn. This defensive maneuver shows how the Benko forces White into passive positions.",
-      "plans": ["Reroute the knight to c4 or b3 for defense", "Try to trade pieces to ease the pressure"],
-      "alternatives": ["Bd2 — developing the bishop but not addressing the main threats"],
-      "arrows": [{"from": "f3", "to": "d2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d2", "to": "c4", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "d2", "to": "b3", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Reroute the knight to c4 or b3 for defense",
+        "Try to trade pieces to ease the pressure"
+      ],
+      "alternatives": [
+        "Bd2 — developing the bishop but not addressing the main threats"
+      ],
+      "arrows": [
+        {
+          "from": "f3",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d2",
+          "to": "c4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d2",
+          "to": "b3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nb6",
       "annotation": "The knight hops to b6, a powerful outpost square. From here it eyes the c4 and a4 squares, both of which are critical for the queenside attack. The knight on b6 is difficult to dislodge and supports all of Black's attacking ideas.",
-      "plans": ["Play ...Nc4 to invade White's position", "Alternatively target a4 with ...Na4", "Maintain maximum pressure on the queenside"],
-      "arrows": [{"from": "d7", "to": "b6", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b6", "to": "c4", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "b6", "to": "a4", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "b6", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play ...Nc4 to invade White's position",
+        "Alternatively target a4 with ...Na4",
+        "Maintain maximum pressure on the queenside"
+      ],
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "b6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b6",
+          "to": "c4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "b6",
+          "to": "a4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nc4",
       "annotation": "White's knight reaches c4, a strong central square that blocks the c-file and attacks key squares. This is White's best defensive idea — the knight on c4 is well-placed and hard to remove. White is trying to simplify and neutralize the pressure.",
-      "plans": ["Use the knight to control the queenside", "Prepare a2-a3 and b2-b4 to stabilize the pawn structure"],
-      "arrows": [{"from": "d2", "to": "c4", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "c4", "to": "b6", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Use the knight to control the queenside",
+        "Prepare a2-a3 and b2-b4 to stabilize the pawn structure"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "c4",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "c4",
+          "to": "b6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nxc4",
       "annotation": "Black captures the knight, opening the c-file and removing a key defender. After White recaptures, the open c-file becomes another avenue for Black's heavy pieces to infiltrate. Exchanging pieces in the Benko is often favorable for Black since the structural advantage persists.",
-      "plans": ["Open the c-file for rook infiltration", "Maintain pressure with the queen on a5 and rooks on open files"],
-      "arrows": [{"from": "b6", "to": "c4", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "c4", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Open the c-file for rook infiltration",
+        "Maintain pressure with the queen on a5 and rooks on open files"
+      ],
+      "arrows": [
+        {
+          "from": "b6",
+          "to": "c4",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c4",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rc2",
       "annotation": "White slides the rook to the c-file, contesting it while keeping the second rank defended. The rook on c2 is solid but passive — the hallmark of the Benko from the defender's perspective. White must carefully coordinate pieces to avoid being overwhelmed on the queenside.",
-      "plans": ["Contest the c-file with the rook", "Try to coordinate pieces for a defensive setup"],
-      "arrows": [{"from": "e2", "to": "c2", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "c2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Contest the c-file with the rook",
+        "Try to coordinate pieces for a defensive setup"
+      ],
+      "arrows": [
+        {
+          "from": "e2",
+          "to": "c2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd7",
       "annotation": "Black reroutes the knight, heading for e5 where it can dominate the center and contest key squares. The knight maneuver is typical of the Benko — pieces keep finding strong squares while White struggles to find active counterplay.",
       "pawnStructure": "The position is still asymmetric. Black has open files and active pieces compensating for the pawn deficit. Endgames tend to favor Black.",
-      "plans": ["Play ...Ne5 to dominate the center", "Alternatively ...Nc5 to pressure a4 and e4"],
-      "arrows": [{"from": "f6", "to": "d7", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d7", "to": "e5", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "d7", "to": "c5", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d7", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Play ...Ne5 to dominate the center",
+        "Alternatively ...Nc5 to pressure a4 and e4"
+      ],
+      "arrows": [
+        {
+          "from": "f6",
+          "to": "d7",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d7",
+          "to": "e5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "d7",
+          "to": "c5",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d7",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qd3",
       "annotation": "White centralizes the queen, defending the e4 pawn and keeping an eye on the queenside. The queen on d3 is well-placed but White remains passive. This is a common defensive setup in the Benko — White tries to hold everything together while looking for chances to break free.",
-      "plans": ["Defend e4 and maintain central control", "Prepare Bd2 to develop the last minor piece"],
-      "arrows": [{"from": "d1", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d3", "to": "e4", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d3", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Defend e4 and maintain central control",
+        "Prepare Bd2 to develop the last minor piece"
+      ],
+      "arrows": [
+        {
+          "from": "d1",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d3",
+          "to": "e4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nde5",
       "annotation": "The knight lands on the powerful e5 outpost, controlling critical central squares. This is a dream square for the Benko knight — it radiates influence in all directions and cannot be easily challenged. The knight on e5 supports tactics along the c-file and b-file.",
-      "plans": ["Use the knight to support infiltration on the queenside", "Prepare ...Qa3 or ...Qb4 to increase pressure", "Threaten ...Nd3 to fork key squares"],
-      "arrows": [{"from": "d7", "to": "e5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "e5", "to": "d3", "color": "rgba(0, 100, 255, 0.7)"}, {"from": "e5", "to": "c6", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "e5", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Use the knight to support infiltration on the queenside",
+        "Prepare ...Qa3 or ...Qb4 to increase pressure",
+        "Threaten ...Nd3 to fork key squares"
+      ],
+      "arrows": [
+        {
+          "from": "d7",
+          "to": "e5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "e5",
+          "to": "d3",
+          "color": "rgba(0, 100, 255, 0.7)"
+        },
+        {
+          "from": "e5",
+          "to": "c6",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qe2",
       "annotation": "White retreats the queen to e2 to defend the second rank and keep pieces coordinated. This is a concession — the queen was more active on d3 but the knight on e5 controls too many squares. White's pieces are now passively defending.",
-      "plans": ["Defend the second rank and maintain coordination", "Look for a chance to break free with f4 or Nb5"],
-      "arrows": [{"from": "d3", "to": "e2", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Defend the second rank and maintain coordination",
+        "Look for a chance to break free with f4 or Nb5"
+      ],
+      "arrows": [
+        {
+          "from": "d3",
+          "to": "e2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Qa3",
       "annotation": "The queen infiltrates to a3, putting pressure on multiple targets. From a3, the queen eyes the a2 pawn, the b2 square, and coordinates with the rooks for potential tactics. This is the kind of infiltration that makes the Benko so unpleasant for White.",
-      "plans": ["Target the a2 pawn and b2 pawn", "Coordinate with the rooks for a decisive breakthrough", "Threaten ...Nd3 to fork material"],
-      "arrows": [{"from": "a5", "to": "a3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a3", "to": "a2", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "a3", "to": "b2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "a3", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}, {"square": "b2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Target the a2 pawn and b2 pawn",
+        "Coordinate with the rooks for a decisive breakthrough",
+        "Threaten ...Nd3 to fork material"
+      ],
+      "arrows": [
+        {
+          "from": "a5",
+          "to": "a3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a3",
+          "to": "a2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "a3",
+          "to": "b2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "b2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Bd2",
       "annotation": "White develops the last minor piece, defending the b2 pawn and preparing to connect the rooks. The bishop on d2 is somewhat passive but necessary for defense. White's setup is solid but lacks any real counterplay.",
-      "plans": ["Defend the queenside pawns", "Try to create some counterplay with f4 or Nb5"],
-      "arrows": [{"from": "c1", "to": "d2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d2", "to": "b4", "color": "rgba(0, 100, 255, 0.7)"}],
-      "highlights": [{"square": "d2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Defend the queenside pawns",
+        "Try to create some counterplay with f4 or Nb5"
+      ],
+      "arrows": [
+        {
+          "from": "c1",
+          "to": "d2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d2",
+          "to": "b4",
+          "color": "rgba(0, 100, 255, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rxb2",
       "annotation": "Black invades the second rank with devastating effect, capturing the b2 pawn. The rook on b2 is incredibly powerful, threatening to win more material and creating threats in conjunction with the other pieces. This is the Benko at its best — relentless pressure building into a decisive invasion.",
-      "plans": ["Double rooks on the second rank if possible", "Target the a2 pawn next", "Create tactical threats in combination with the queen and knight"],
-      "arrows": [{"from": "b8", "to": "b2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b2", "to": "a2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b2", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "a2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Double rooks on the second rank if possible",
+        "Target the a2 pawn next",
+        "Create tactical threats in combination with the queen and knight"
+      ],
+      "arrows": [
+        {
+          "from": "b8",
+          "to": "b2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b2",
+          "to": "a2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "a2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Be1",
       "annotation": "White retreats the bishop to defend against the threats. The bishop on e1 is passive but holds the position together temporarily. White is under severe pressure and running out of useful moves — a sign that the Benko compensation is overwhelming.",
-      "plans": ["Try to hold the position together", "Look for any tactical chance to relieve the pressure"],
-      "arrows": [{"from": "d2", "to": "e1", "color": "rgba(0, 180, 80, 0.8)"}],
-      "highlights": [{"square": "e1", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Try to hold the position together",
+        "Look for any tactical chance to relieve the pressure"
+      ],
+      "arrows": [
+        {
+          "from": "d2",
+          "to": "e1",
+          "color": "rgba(0, 180, 80, 0.8)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "e1",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Rxa2",
       "annotation": "Black doubles on the second rank with devastating force, capturing the a2 pawn. The two rooks on the second rank create enormous tactical threats, particularly against the king. White's position is crumbling. This is a textbook Benko endgame — the pressure converts to material gain.",
       "pawnStructure": "Black has successfully recovered the gambit pawn and now has two rooks dominating White's second rank. The positional advantage is decisive.",
-      "plans": ["Create passed pawns on the queenside", "Coordinate all pieces for the final assault", "Convert the material and positional advantage"],
-      "arrows": [{"from": "a8", "to": "a2", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "a2", "to": "a1", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "a2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Create passed pawns on the queenside",
+        "Coordinate all pieces for the final assault",
+        "Convert the material and positional advantage"
+      ],
+      "arrows": [
+        {
+          "from": "a8",
+          "to": "a2",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "a2",
+          "to": "a1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "a2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nb5",
       "annotation": "White tries for counterplay by activating the knight. The knight on b5 attacks d6 and threatens Nc7, trying to create complications. This is White's last practical chance — without active play, the position is lost.",
-      "plans": ["Attack d6 and threaten Nc7 forking the rooks", "Create enough counterplay to survive"],
-      "alternatives": ["Nd1 — retreating but losing more material slowly"],
-      "arrows": [{"from": "c3", "to": "b5", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "b5", "to": "d6", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "b5", "to": "c7", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "b5", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "d6", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Attack d6 and threaten Nc7 forking the rooks",
+        "Create enough counterplay to survive"
+      ],
+      "alternatives": [
+        "Nd1 — retreating but losing more material slowly"
+      ],
+      "arrows": [
+        {
+          "from": "c3",
+          "to": "b5",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "b5",
+          "to": "d6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "b5",
+          "to": "c7",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "b5",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "d6",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
     },
     {
       "san": "Rxc2",
       "annotation": "Black captures the rook on c2, winning the exchange and achieving a completely winning position. White's counterplay with Nb5 is too slow. Black has achieved the ultimate Benko dream — converting the long-term pressure into a decisive material advantage.",
-      "plans": ["Simplify into a winning endgame", "Use the extra material and active pieces to force resignation"],
-      "arrows": [{"from": "a2", "to": "c2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "c2", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Simplify into a winning endgame",
+        "Use the extra material and active pieces to force resignation"
+      ],
+      "arrows": [
+        {
+          "from": "a2",
+          "to": "c2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "c2",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nxd6",
       "annotation": "White captures the d6 pawn, trying to generate counterplay. The knight is active on d6 but Black's material advantage and piece activity are overwhelming. White hopes for some tactical tricks but the position is objectively lost.",
-      "plans": ["Try to win back material with the active knight", "Create forks or discovered attacks"],
-      "arrows": [{"from": "b5", "to": "d6", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "d6", "color": "rgba(255, 255, 0, 0.4)"}]
+      "plans": [
+        "Try to win back material with the active knight",
+        "Create forks or discovered attacks"
+      ],
+      "arrows": [
+        {
+          "from": "b5",
+          "to": "d6",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d6",
+          "color": "rgba(255, 255, 0, 0.4)"
+        }
+      ]
     },
     {
       "san": "Nd3",
       "annotation": "Black's knight invades to d3, a devastating square that forks the e1 bishop and e2 queen. This tactical blow is the culmination of the Benko pressure — Black's piece activity generates concrete threats that win material. The knight on d3 is immune to capture due to the double attack.",
-      "plans": ["Win the queen or bishop", "Convert the overwhelming advantage into checkmate"],
-      "arrows": [{"from": "e5", "to": "d3", "color": "rgba(0, 180, 80, 0.8)"}, {"from": "d3", "to": "e1", "color": "rgba(220, 50, 50, 0.7)"}, {"from": "d3", "to": "e2", "color": "rgba(220, 50, 50, 0.7)"}],
-      "highlights": [{"square": "d3", "color": "rgba(255, 255, 0, 0.4)"}, {"square": "e1", "color": "rgba(255, 80, 80, 0.3)"}, {"square": "e2", "color": "rgba(255, 80, 80, 0.3)"}]
+      "plans": [
+        "Win the queen or bishop",
+        "Convert the overwhelming advantage into checkmate"
+      ],
+      "arrows": [
+        {
+          "from": "e5",
+          "to": "d3",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
+          "from": "d3",
+          "to": "e1",
+          "color": "rgba(220, 50, 50, 0.7)"
+        },
+        {
+          "from": "d3",
+          "to": "e2",
+          "color": "rgba(220, 50, 50, 0.7)"
+        }
+      ],
+      "highlights": [
+        {
+          "square": "d3",
+          "color": "rgba(255, 255, 0, 0.4)"
+        },
+        {
+          "square": "e1",
+          "color": "rgba(255, 80, 80, 0.3)"
+        },
+        {
+          "square": "e2",
+          "color": "rgba(255, 80, 80, 0.3)"
+        }
+      ]
+    }
+  ],
+  "subLines": [
+    {
+      "name": "Benko Gambit: Fianchetto Variation",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Benko Gambit: Fianchetto Variation is an important variation of the Benko Gambit. White delays Nc3 and fianchettoes the king's bishop. This is one of the most popular systems where White tries to consolidate the extra pawn. Black gets excellent compensation with open files and the powerful g7 bishop. Let's walk through the key ideas."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black replies with Nf6. This is the defining move of the Benko Gambit: Fianchetto Variation — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "cxb5 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "bxa6",
+          "annotation": "bxa6 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "Bxa6",
+          "annotation": "Bxa6 brings the bishop into the game. Development with purpose — the bishop on a6 eyes important squares.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "Bxf1",
+          "annotation": "Bxf1 captures the bishop. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "f1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Kxf1",
+          "annotation": "Kxf1 captures the bishop. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "f1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+        },
+        {
+          "san": "Kg2",
+          "annotation": "Kg2 improves the king's placement. The king was less effective on f1 and moves to g2 where it serves the plan better."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7. This is the typical position arising from the Benko Gambit: Fianchetto Variation. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Benko Gambit: King Walk Variation",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Benko Gambit: King Walk Variation is an important variation of the Benko Gambit. The main line where White's king takes the scenic route via f1-g2. Black immediately targets the queenside with ...Qa5 and ...Rfb8, building up that classic Benko pressure on the a- and b-files. Let's walk through the key ideas."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black replies with Nf6. This is the defining move of the Benko Gambit: King Walk Variation — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "cxb5 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "bxa6",
+          "annotation": "bxa6 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxa6",
+          "annotation": "Bxa6 brings the bishop into the game. Development with purpose — the bishop on a6 eyes important squares.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "e4",
+          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "Bxf1",
+          "annotation": "Bxf1 captures the bishop. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "f1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Kxf1",
+          "annotation": "Kxf1 captures the bishop. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "f1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Kg2",
+          "annotation": "Kg2 improves the king's placement. The king was less effective on f1 and moves to g2 where it serves the plan better."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7 brings the knight into the game. Development with purpose — the knight on d7 eyes important squares. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "h1",
+              "to": "e1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qa5",
+          "annotation": "Qa5. This is the typical position arising from the Benko Gambit: King Walk Variation. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "a5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Benko Declined: Nf3 System",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Benko Declined: Nf3 System is an important variation of the Benko Gambit. White declines the gambit by playing Nf3 instead of taking on b5. This avoids the typical Benko structure but Black still gets a playable game with the fianchettoed bishop and central counterplay. Let's walk through the key ideas."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black replies with Nf6. This is the defining move of the Benko Declined: Nf3 System — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "bxc4",
+          "annotation": "bxc4 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "e4",
+          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "Bxc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is the typical position arising from the Benko Declined: Nf3 System. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Benko Gambit: Zaitsev Variation",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Benko Gambit: Zaitsev Variation is an important variation of the Benko Gambit. White pushes e4 immediately and plays Nb5 after ...b4. This aggressive approach fights for the initiative, but Black's fianchettoed bishop and queenside pressure still provide full compensation. Let's walk through the key ideas."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black replies with Nf6. This is the defining move of the Benko Gambit: Zaitsev Variation — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "cxb5 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "axb5",
+          "annotation": "axb5 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "b4",
+          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "Nb5",
+          "annotation": "Nb5 improves the knight's placement. The knight was less effective on c3 and moves to b5 where it serves the plan better."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is the typical position arising from the Benko Gambit: Zaitsev Variation. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Benko Gambit: Half-Accepted",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Benko Gambit: Half-Accepted is an important variation of the Benko Gambit. White takes on b5 but plays e3 instead of bxa6, only half-accepting the gambit. Black gets active piece play with ...Qa5+ and ...Bb7 pressuring the long diagonal. Let's walk through the key ideas."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black replies with Nf6. This is the defining move of the Benko Gambit: Half-Accepted — it shapes the pawn structure and determines the resulting plans."
+        },
+        {
+          "san": "c4",
+          "annotation": "c4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "cxb5 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+        },
+        {
+          "san": "e3",
+          "annotation": "e3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+        },
+        {
+          "san": "axb5",
+          "annotation": "axb5 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxb5",
+          "annotation": "Bxb5 brings the bishop into the game. Development with purpose — the bishop on b5 eyes important squares.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qa5+",
+          "annotation": "Qa5+ brings the queen into the game. Development with purpose — the queen on a5 eyes important squares.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "a5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Bb7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+        },
+        {
+          "san": "Nge2",
+          "annotation": "Nge2 brings the knight into the game. Development with purpose — the knight on e2 eyes important squares."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Nxd5 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Nxc3 captures the knight. This exchange is thematic in the Benko Gambit: Half-Accepted — it defines the resulting pawn structure and piece activity.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be4",
+          "annotation": "Be4. This is the typical position arising from the Benko Gambit: Half-Accepted. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Queenside Bind Trap",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Benko Gambit, the Queenside Bind Trap is a tactical pattern you should know. Black builds a classic Benko bind with ...Qa5, ...Rfb8 and ...Ne8-c7. White's a4 pawn push actually weakens the b3 square, and Black's pressure on the a- and b-files becomes overwhelming. Let's walk through how it works."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "d5",
+          "annotation": "White plays d5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black continues with b5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "White captures with cxb5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays a6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "bxa6",
+          "annotation": "White captures with bxa6. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a6",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxa6",
+          "annotation": "Black captures with Bxa6. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bxf1",
+          "annotation": "Black captures with Bxf1. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Kxf1",
+          "annotation": "White captures with Kxf1. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "f1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black plays g6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black continues with Bg7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The position looks safe, but danger lurks."
+        },
+        {
+          "san": "Kg2",
+          "annotation": "White plays Kg2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black continues with Nbd7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "a4",
+          "annotation": "a4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Qa5",
+          "annotation": "Black plays Qa5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "Bd2",
+          "annotation": "White plays Bd2. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "Rfb8",
+          "annotation": "Rfb8. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+        },
+        {
+          "san": "Qc2",
+          "annotation": "Qc2! This is the critical move that springs the trap. The opponent is in serious trouble."
+        },
+        {
+          "san": "Ne8",
+          "annotation": "Ne8! The trap is sprung. Black has a winning position. This is the key takeaway from the Queenside Bind Trap."
+        }
+      ]
+    },
+    {
+      "name": "f3 Delay Exploitation",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Benko Gambit, the f3 Delay Exploitation is a tactical pattern you should know. When White plays the slow f3, Black gets extra time. The f3 pawn weakens the kingside and blocks the natural Nf3 square, giving Black even more queenside pressure than the main line. Let's walk through how it works."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, establishing the position. The key moment is approaching."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black plays c5, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "d5",
+          "annotation": "White plays d5. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black continues with b5. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "White captures with cxb5. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays a6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "bxa6",
+          "annotation": "White captures with bxa6. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a6",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxa6",
+          "annotation": "Black captures with Bxa6. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Nc3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays d6, developing normally. The opponent may not see what's coming."
+        },
+        {
+          "san": "f3",
+          "annotation": "White plays f3. This move looks reasonable but allows the trap to unfold."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black continues with g6. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "e4",
+          "annotation": "e4 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "Bxf1",
+          "annotation": "Black captures with Bxf1. This looks natural, but it walks into the trap."
+        },
+        {
+          "san": "Kxf1",
+          "annotation": "White captures with Kxf1. This looks natural, but it walks into the trap.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "f1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black continues with Bg7. The trap is being set up — watch the next few moves carefully."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 by White. The position is heading toward the critical moment."
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Kg2",
+          "annotation": "Kg2! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7! The trap is sprung. Black has a winning position. This is the key takeaway from the f3 Delay Exploitation."
+        }
+      ]
+    },
+    {
+      "name": "Premature e5 Break",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Benko Gambit, the Premature e5 Break is a dangerous line you must be aware of. If Black provokes or allows e5, White can open the center where the extra pawn matters more. Keep the position closed on the queenside where your rook pressure dominates. Let's see why."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d5",
+          "annotation": "White plays d5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "cxb5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "a6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "bxa6",
+          "annotation": "bxa6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxa6",
+          "annotation": "Bxa6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White continues with Nc3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bxf1",
+          "annotation": "Bxf1 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Kxf1",
+          "annotation": "Kxf1 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "f1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "g6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "e5",
+          "annotation": "e5. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "dxe5! This is the move that causes all the trouble.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Nxe5. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line."
+        }
+      ]
+    },
+    {
+      "name": "Delayed Fianchetto",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "In the Benko Gambit, the Delayed Fianchetto is a dangerous line you must be aware of. Playing ...Nbd7 before ...g6 and ...Bg7 gives White extra time to consolidate. The bishop on g7 is the heart of Black's compensation — fianchetto it as quickly as possible. Let's see why."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black plays Nf6. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4. This is the natural continuation that leads into the warning line."
+        },
+        {
+          "san": "c5",
+          "annotation": "c5. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "d5",
+          "annotation": "White plays d5. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "b5",
+          "annotation": "b5 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "cxb5",
+          "annotation": "cxb5 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "b5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "a6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "bxa6",
+          "annotation": "bxa6 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxa6",
+          "annotation": "Bxa6 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White continues with Nc3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "d6",
+          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "Bxf1",
+          "annotation": "Bxf1 — this capture changes the character of the position. Be alert."
+        },
+        {
+          "san": "Kxf1",
+          "annotation": "Kxf1 — this capture changes the character of the position. Be alert.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "f1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7. The position is sharp and requires precise play from this point forward."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 by Black. The position is becoming uncomfortable — careful defense is needed."
+        },
+        {
+          "san": "g3",
+          "annotation": "White continues with g3. Watch out — a mistake here would be very costly."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+        },
+        {
+          "san": "Kg2",
+          "annotation": "Kg2. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "O-O. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g1",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

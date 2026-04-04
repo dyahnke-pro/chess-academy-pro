@@ -4,10 +4,6 @@ import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 
 // Mock child components that hit APIs/DB
-vi.mock('./AchievementToast', () => ({
-  AchievementToast: () => <div data-testid="achievement-toast" />,
-}));
-
 vi.mock('./InstallPrompt', () => ({
   InstallPrompt: () => <div data-testid="install-prompt" />,
 }));
@@ -58,7 +54,7 @@ describe('AppLayout a11y', () => {
 
   it('all nav links render with text labels', () => {
     render(<AppLayout />);
-    const expectedLabels = ['Dashboard', 'Openings', 'Coach', 'Puzzles', 'Play', 'Games', 'Analysis', 'Stats', 'Settings', 'Kids Mode'];
+    const expectedLabels = ['Dashboard', 'Openings', 'Coach', 'Weaknesses', 'Play', 'Games', 'Analysis', 'Stats', 'Settings', 'Kids Mode'];
     for (const label of expectedLabels) {
       const links = screen.getAllByText(label);
       expect(links.length).toBeGreaterThanOrEqual(1);

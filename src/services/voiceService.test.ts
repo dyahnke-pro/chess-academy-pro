@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { buildUserProfile } from '../test/factories';
 import { speechService } from './speechService';
-import { voicePackService } from './voicePackService';
 
 // We need a fresh instance for each test since voiceService is a singleton.
 // Re-import the module to get the singleton.
@@ -17,16 +16,12 @@ describe('voiceService', () => {
     // Spy on speechService methods before each test
     vi.spyOn(speechService, 'speak').mockImplementation(() => undefined);
     vi.spyOn(speechService, 'stop').mockImplementation(() => undefined);
-
-    // Spy on voicePackService methods
-    vi.spyOn(voicePackService, 'isReady').mockReturnValue(false);
-    vi.spyOn(voicePackService, 'speak').mockResolvedValue(false);
-    vi.spyOn(voicePackService, 'stop').mockImplementation(() => undefined);
-    vi.spyOn(voicePackService, 'isPlaying').mockReturnValue(false);
+    vi.spyOn(speechService, 'setVoice').mockImplementation(() => undefined);
 
     // Re-import to get the singleton (it persists state between tests)
     const mod = await import('./voiceService');
     voiceService = mod.voiceService;
+    voiceService.clearCache();
   });
 
   describe('fallback to speechService', () => {
@@ -34,7 +29,6 @@ describe('voiceService', () => {
       // No profile in DB at all
       await voiceService.speak('Hello world');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Hello world',
         expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
@@ -51,61 +45,48 @@ describe('voiceService', () => {
       await voiceService.speak('Test speech');
 
       // When voiceEnabled is false, the service returns early without speaking
-      // speechService.speak should NOT be called because it returns before fallback
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('falls back when no ElevenLabs API key is set and voice pack not ready', async () => {
+    it('falls back when Polly is disabled', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          elevenlabsKeyEncrypted: null,
-          elevenlabsKeyIv: null,
-          kokoroEnabled: false,
+          pollyEnabled: false,
         },
       });
       await db.profiles.put(profile);
 
       await voiceService.speak('Fallback test');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Fallback test',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
+        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
       );
     });
 
-    it('falls back when ElevenLabs API returns error and voice pack not ready', async () => {
+    it('falls back when Polly API returns error', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          elevenlabsKeyEncrypted: 'fakekey',
-          elevenlabsKeyIv: 'fakeiv',
-          kokoroEnabled: false,
+          pollyEnabled: true,
         },
       });
       await db.profiles.put(profile);
 
-      // Mock decryptApiKey to return a key
-      vi.mock('./cryptoService', () => ({
-        decryptApiKey: vi.fn().mockResolvedValue('test-api-key'),
-      }));
-
-      // Mock fetch to return an error from ElevenLabs
+      // Mock fetch to return an error from Polly
       vi.spyOn(globalThis, 'fetch').mockResolvedValue({
         ok: false,
-        status: 401,
+        status: 500,
       } as Response);
 
       await voiceService.speak('Error fallback');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Error fallback',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
+        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
       );
     });
 
@@ -114,168 +95,36 @@ describe('voiceService', () => {
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          elevenlabsKeyEncrypted: 'fakekey',
-          elevenlabsKeyIv: 'fakeiv',
-          kokoroEnabled: false,
+          pollyEnabled: true,
         },
       });
       await db.profiles.put(profile);
-
-      vi.mock('./cryptoService', () => ({
-        decryptApiKey: vi.fn().mockResolvedValue('test-api-key'),
-      }));
 
       vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Network offline'));
 
       await voiceService.speak('Network fail');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.speak).toHaveBeenCalledWith(
         'Network fail',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
+        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
       );
     });
-  });
 
-  describe('Voice pack fallback tier', () => {
-    it('uses voice pack when enabled and ready, no ElevenLabs key', async () => {
-      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
-      vi.spyOn(voicePackService, 'speak').mockResolvedValue(true);
-
+    it('uses system voice URI when set in preferences', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          elevenlabsKeyEncrypted: null,
-          elevenlabsKeyIv: null,
-          kokoroEnabled: true,
-          kokoroVoiceId: 'af_bella',
+          pollyEnabled: false,
+          systemVoiceURI: 'Microsoft Aria Online (Natural)',
         },
       });
       await db.profiles.put(profile);
 
-      await voiceService.speak('Voice pack test');
+      await voiceService.speak('Custom voice');
 
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(voicePackService.speak).toHaveBeenCalledWith('Voice pack test', expect.any(Number));
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(speechService.speak).not.toHaveBeenCalled();
-    });
-
-    it('falls back to Web Speech when voice pack clip not found', async () => {
-      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
-      vi.spyOn(voicePackService, 'speak').mockResolvedValue(false);
-
-      const profile = buildUserProfile({
-        id: 'main',
-        preferences: {
-          voiceEnabled: true,
-          elevenlabsKeyEncrypted: null,
-          elevenlabsKeyIv: null,
-          kokoroEnabled: true,
-        },
-      });
-      await db.profiles.put(profile);
-
-      await voiceService.speak('Missing clip');
-
-      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(speechService.setVoice).toHaveBeenCalledWith('Microsoft Aria Online (Natural)');
       expect(speechService.speak).toHaveBeenCalled();
-    });
-
-    it('logs a warning when voice pack clip is missing', async () => {
-      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
-      vi.spyOn(voicePackService, 'speak').mockResolvedValue(false);
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-
-      const profile = buildUserProfile({
-        id: 'main',
-        preferences: {
-          voiceEnabled: true,
-          elevenlabsKeyEncrypted: null,
-          elevenlabsKeyIv: null,
-          kokoroEnabled: true,
-        },
-      });
-      await db.profiles.put(profile);
-
-      await voiceService.speak('Some missing phrase');
-
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[TTS] Missing clip for:'),
-      );
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Some missing phrase'),
-      );
-    });
-
-
-    it('skips voice pack when not ready', async () => {
-      vi.spyOn(voicePackService, 'isReady').mockReturnValue(false);
-
-      const profile = buildUserProfile({
-        id: 'main',
-        preferences: {
-          voiceEnabled: true,
-          elevenlabsKeyEncrypted: null,
-          elevenlabsKeyIv: null,
-          kokoroEnabled: true,
-        },
-      });
-      await db.profiles.put(profile);
-
-      await voiceService.speak('Skip voice pack');
-
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(voicePackService.speak).not.toHaveBeenCalled();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(speechService.speak).toHaveBeenCalled();
-    });
-
-    it('skips voice pack when disabled in preferences', async () => {
-      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
-
-      const profile = buildUserProfile({
-        id: 'main',
-        preferences: {
-          voiceEnabled: true,
-          elevenlabsKeyEncrypted: null,
-          elevenlabsKeyIv: null,
-          kokoroEnabled: false,
-        },
-      });
-      await db.profiles.put(profile);
-
-      await voiceService.speak('Voice pack disabled');
-
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(voicePackService.speak).not.toHaveBeenCalled();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(speechService.speak).toHaveBeenCalled();
-    });
-
-    it('falls back to Web Speech when voice pack throws', async () => {
-      vi.spyOn(voicePackService, 'isReady').mockReturnValue(true);
-      vi.spyOn(voicePackService, 'speak').mockRejectedValue(new Error('Playback error'));
-
-      const profile = buildUserProfile({
-        id: 'main',
-        preferences: {
-          voiceEnabled: true,
-          elevenlabsKeyEncrypted: null,
-          elevenlabsKeyIv: null,
-          kokoroEnabled: true,
-        },
-      });
-      await db.profiles.put(profile);
-
-      await voiceService.speak('Voice pack fail');
-
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(speechService.speak).toHaveBeenCalledWith(
-        'Voice pack fail',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
-      );
     });
   });
 
@@ -317,12 +166,9 @@ describe('voiceService', () => {
       expect(voiceService.isPlaying()).toBe(false);
     });
 
-    it('calls speechService.stop and voicePackService.stop on stop', () => {
+    it('calls speechService.stop on stop', () => {
       voiceService.stop();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.stop).toHaveBeenCalled();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(voicePackService.stop).toHaveBeenCalled();
     });
 
     it('can be called multiple times safely', () => {
@@ -330,7 +176,6 @@ describe('voiceService', () => {
       voiceService.stop();
       voiceService.stop();
       expect(voiceService.isPlaying()).toBe(false);
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(speechService.stop).toHaveBeenCalledTimes(3);
     });
   });
