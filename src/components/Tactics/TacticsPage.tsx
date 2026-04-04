@@ -1,92 +1,43 @@
-import { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Eye,
-  Swords,
-  Wrench,
-  Lightbulb,
-  AlertTriangle,
-  Brain,
-} from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
-import { backfillClassifiedTactics } from '../../services/tacticClassifierService';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { THEME_MAP } from '../../services/puzzleService';
 
-// ─── Section Definitions ───────────────────────────────────────────────────
+// ─── Theme Category Definitions ──────────────────────────────────────────
 
-interface SectionItem {
+interface ThemeCard {
   label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-  route: string;
+  themes: string[];
+  emoji: string;
   color: string;
   bgColor: string;
   borderColor: string;
 }
 
-const SECTIONS: SectionItem[] = [
-  {
-    label: 'Spot',
-    icon: Eye,
-    route: '/tactics/profile',
-    color: 'text-amber-400',
-    bgColor: 'bg-amber-500/10',
-    borderColor: 'border-amber-500/30',
-  },
-  {
-    label: 'Drill',
-    icon: Swords,
-    route: '/tactics/drill',
-    color: 'text-orange-400',
-    bgColor: 'bg-orange-500/10',
-    borderColor: 'border-orange-500/30',
-  },
-  {
-    label: 'Setup',
-    icon: Wrench,
-    route: '/tactics/setup',
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'border-green-500/30',
-  },
-  {
-    label: 'Create',
-    icon: Lightbulb,
-    route: '/tactics/create',
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/10',
-    borderColor: 'border-purple-500/30',
-  },
-  {
-    label: 'My Mistakes',
-    icon: AlertTriangle,
-    route: '/puzzles/mistakes',
-    color: 'text-red-400',
-    bgColor: 'bg-red-500/10',
-    borderColor: 'border-red-500/30',
-  },
-  {
-    label: 'Weaknesses',
-    icon: Brain,
-    route: '/puzzles/weakness',
-    color: 'text-pink-400',
-    bgColor: 'bg-pink-500/10',
-    borderColor: 'border-pink-500/30',
-  },
-];
+const THEME_STYLE: Record<string, { emoji: string; color: string; bgColor: string; borderColor: string }> = {
+  'Forks':              { emoji: '\u2694\uFE0F', color: 'text-red-400', bgColor: 'bg-red-500/10', borderColor: 'border-red-500/30' },
+  'Pins & Skewers':     { emoji: '\uD83D\uDCCC', color: 'text-blue-400', bgColor: 'bg-blue-500/10', borderColor: 'border-blue-500/30' },
+  'Discovered Attacks':  { emoji: '\uD83D\uDCA5', color: 'text-orange-400', bgColor: 'bg-orange-500/10', borderColor: 'border-orange-500/30' },
+  'Back Rank Mates':     { emoji: '\uD83C\uDFF0', color: 'text-purple-400', bgColor: 'bg-purple-500/10', borderColor: 'border-purple-500/30' },
+  'Sacrifices':          { emoji: '\uD83D\uDD25', color: 'text-amber-400', bgColor: 'bg-amber-500/10', borderColor: 'border-amber-500/30' },
+  'Deflection & Decoy':  { emoji: '\u21AA\uFE0F', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10', borderColor: 'border-cyan-500/30' },
+  'Zugzwang':            { emoji: '\u26A1', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', borderColor: 'border-yellow-500/30' },
+  'Endgame Technique':   { emoji: '\uD83C\uDFC1', color: 'text-green-400', bgColor: 'bg-green-500/10', borderColor: 'border-green-500/30' },
+  'Opening Traps':       { emoji: '\uD83E\uDEA4', color: 'text-rose-400', bgColor: 'bg-rose-500/10', borderColor: 'border-rose-500/30' },
+  'Mating Nets':         { emoji: '\uD83D\uDC51', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', borderColor: 'border-indigo-500/30' },
+};
+
+const THEME_CARDS: ThemeCard[] = Object.entries(THEME_MAP).map(([label, themes]) => {
+  const config = THEME_STYLE[label] ?? { emoji: '\uD83C\uDFAF', color: 'text-gray-400', bgColor: 'bg-gray-500/10', borderColor: 'border-gray-500/30' };
+  return { label, themes, ...config };
+});
 
 // ─── Main Page ──────────────────────────────────────────────────────────────
 
 export function TacticsPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const navigate = useNavigate();
-
-  const ensureClassified = useCallback(async (): Promise<void> => {
-    await backfillClassifiedTactics();
-  }, []);
-
-  useEffect(() => {
-    void ensureClassified();
-  }, [ensureClassified]);
 
   if (!activeProfile) return <></>;
 
@@ -106,24 +57,49 @@ export function TacticsPage(): JSX.Element {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">
-        {SECTIONS.map((section, i) => {
-          const Icon = section.icon;
-          const isFirst = i === 0;
-          return (
-            <button
-              key={section.route}
-              onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity ${isFirst ? 'col-span-2 py-10' : 'aspect-square'}`}
-              data-testid={`section-${section.label.toLowerCase()}`}
-            >
-              <Icon size={isFirst ? 48 : 40} className={section.color} />
-              <span className={`${isFirst ? 'text-lg' : 'text-base'} font-bold ${section.color}`}>
-                {section.label}
-              </span>
-            </button>
-          );
-        })}
+      <div className="grid grid-cols-2 gap-3 flex-1 content-start max-w-lg mx-auto w-full">
+        {/* My Profile — spans full width at top */}
+        <button
+          onClick={() => void navigate('/tactics/profile')}
+          className="col-span-2 py-8 bg-amber-500/10 border-amber-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity"
+          data-testid="section-spot"
+        >
+          <Eye size={40} className="text-amber-400" />
+          <span className="text-lg font-bold text-amber-400">My Profile</span>
+        </button>
+
+        {/* Random Mix */}
+        <button
+          onClick={() => void navigate('/tactics/drill', { state: { filterThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'backRankMate', 'sacrifice', 'deflection'] } })}
+          className="col-span-2 py-6 bg-emerald-500/10 border-emerald-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity"
+          data-testid="section-random-mix"
+        >
+          <Shuffle size={32} className="text-emerald-400" />
+          <span className="text-base font-bold text-emerald-400">Random Mix</span>
+        </button>
+
+        {/* Individual tactic categories */}
+        {THEME_CARDS.map((card) => (
+          <button
+            key={card.label}
+            onClick={() => void navigate('/tactics/drill', { state: { filterThemes: card.themes } })}
+            className={`${card.bgColor} ${card.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-2 hover:opacity-80 transition-opacity aspect-square`}
+            data-testid={`section-${card.label.toLowerCase()}`}
+          >
+            <span className="text-2xl">{card.emoji}</span>
+            <span className={`text-sm font-bold ${card.color} text-center px-2 leading-tight`}>{card.label}</span>
+          </button>
+        ))}
+
+        {/* My Mistakes — spans full width at bottom */}
+        <button
+          onClick={() => void navigate('/puzzles/mistakes')}
+          className="col-span-2 py-6 bg-red-500/10 border-red-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity"
+          data-testid="section-my mistakes"
+        >
+          <AlertTriangle size={32} className="text-red-400" />
+          <span className="text-base font-bold text-red-400">My Mistakes</span>
+        </button>
       </div>
     </div>
   );

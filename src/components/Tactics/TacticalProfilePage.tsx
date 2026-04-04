@@ -2,130 +2,101 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Play, Eye, ChevronRight } from 'lucide-react';
-import {
-  computeTacticalProfile,
-  getStoredTacticalProfile,
-  tacticTypeLabel,
-  tacticTypeIcon,
-} from '../../services/tacticalProfileService';
-import { getRecentClassifiedTactics } from '../../services/tacticClassifierService';
-import type { TacticalProfile, TacticTypeStats, TacticType, ClassifiedTactic } from '../../types';
+import { getThemeSkills, THEME_MAP } from '../../services/puzzleService';
+import type { ThemeSkill } from '../../services/puzzleService';
+
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+interface ThemeCategoryStats {
+  name: string;
+  accuracy: number;
+  attempts: number;
+  themes: string[];
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+const THEME_ICONS: Record<string, string> = {
+  'Forks': '\u2694\uFE0F',
+  'Pins & Skewers': '\uD83D\uDCCC',
+  'Discovered Attacks': '\uD83D\uDCA5',
+  'Back Rank Mates': '\uD83C\uDFF0',
+  'Sacrifices': '\uD83D\uDD25',
+  'Deflection & Decoy': '\u21AA\uFE0F',
+  'Zugzwang': '\u26A1',
+  'Endgame Technique': '\uD83C\uDFC1',
+  'Opening Traps': '\uD83E\uDEA4',
+  'Mating Nets': '\uD83D\uDC51',
+};
+
+function buildCategoryStats(skills: ThemeSkill[]): ThemeCategoryStats[] {
+  const skillMap = new Map(skills.map((s) => [s.theme, s]));
+
+  return Object.entries(THEME_MAP).map(([name, themes]) => {
+    let totalAttempts = 0;
+    let totalCorrect = 0;
+
+    for (const theme of themes) {
+      const skill = skillMap.get(theme);
+      if (skill) {
+        totalAttempts += skill.attempts;
+        totalCorrect += Math.round(skill.accuracy * skill.attempts);
+      }
+    }
+
+    return {
+      name,
+      accuracy: totalAttempts > 0 ? totalCorrect / totalAttempts : -1,
+      attempts: totalAttempts,
+      themes,
+    };
+  });
+}
+
+// ─── Main Component ─────────────────────────────────────────────────────────
 
 export function TacticalProfilePage(): JSX.Element {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<TacticalProfile | null>(null);
-  const [recentTactics, setRecentTactics] = useState<ClassifiedTactic[]>([]);
+  const [categories, setCategories] = useState<ThemeCategoryStats[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    void loadProfile();
+  const loadProfile = useCallback(async (): Promise<void> => {
+    const skills = await getThemeSkills();
+    setCategories(buildCategoryStats(skills));
   }, []);
 
-  async function loadProfile(): Promise<void> {
+  useEffect(() => {
     setLoading(true);
-    setError(null);
-    try {
-      let stored = await getStoredTacticalProfile();
-      if (!stored) {
-        stored = await computeTacticalProfile();
-      }
-      setProfile(stored);
-      const recent = await getRecentClassifiedTactics(10);
-      setRecentTactics(recent);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load profile');
-    } finally {
-      setLoading(false);
-    }
-  }
+    void loadProfile().finally(() => setLoading(false));
+  }, [loadProfile]);
 
   const handleRefresh = useCallback(async (): Promise<void> => {
     setRefreshing(true);
-    setError(null);
-    try {
-      const fresh = await computeTacticalProfile();
-      setProfile(fresh);
-      const recent = await getRecentClassifiedTactics(10);
-      setRecentTactics(recent);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to refresh profile');
-    } finally {
-      setRefreshing(false);
-    }
-  }, []);
+    await loadProfile();
+    setRefreshing(false);
+  }, [loadProfile]);
 
-  const handleBeginTraining = useCallback((): void => {
-    if (!profile || profile.weakestTypes.length === 0) {
-      void navigate('/tactics/drill');
-      return;
-    }
-    // Navigate to drill page pre-filtered to weakest tactic types
-    void navigate('/tactics/drill', { state: { filterTypes: profile.weakestTypes } });
-  }, [profile, navigate]);
+  const totalAttempts = categories.reduce((sum, c) => sum + c.attempts, 0);
+  const attempted = categories.filter((c) => c.attempts > 0);
+  const weakest = [...categories]
+    .filter((c) => c.attempts > 0)
+    .sort((a, b) => a.accuracy - b.accuracy);
+  const unattempted = categories.filter((c) => c.attempts === 0);
+
+  const weakestThemes = weakest.length > 0
+    ? weakest[0].themes
+    : unattempted.length > 0
+      ? unattempted[0].themes
+      : ['fork'];
 
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto w-full p-6 flex items-center justify-center min-h-[60vh]">
-        <p style={{ color: 'var(--color-text-muted)' }}>Analyzing your tactical profile...</p>
+        <p style={{ color: 'var(--color-text-muted)' }}>Loading tactical profile...</p>
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div className="max-w-2xl mx-auto w-full p-6 pb-20 md:pb-6 flex flex-col gap-6">
-        <div className="flex items-center gap-3">
-          <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80">
-            <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-          </button>
-          <Eye size={24} style={{ color: 'var(--color-accent)' }} />
-          <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Tactical Profile</h1>
-        </div>
-        <div className="rounded-xl border p-6 text-center" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
-          <p className="text-sm mb-3" style={{ color: 'var(--color-error)' }}>
-            Failed to load profile: {error}
-          </p>
-          <button
-            onClick={() => void loadProfile()}
-            className="text-sm px-4 py-2 rounded-lg font-semibold"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!profile || profile.stats.length === 0) {
-    return (
-      <div className="max-w-2xl mx-auto w-full p-6 pb-20 md:pb-6 flex flex-col gap-6">
-        <div className="flex items-center gap-3">
-          <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80">
-            <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-          </button>
-          <Eye size={24} style={{ color: 'var(--color-accent)' }} />
-          <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Tactical Profile</h1>
-        </div>
-        <div className="rounded-xl border p-6 text-center flex flex-col items-center gap-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
-          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            Import games to review your in-game mistakes and build your tactical profile.
-          </p>
-          <button
-            onClick={() => void navigate('/games/import')}
-            className="px-5 py-2.5 rounded-xl font-semibold text-sm"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-          >
-            Import Games
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const maxMissCount = Math.max(...profile.stats.map((s) => s.gameMissCount), 1);
 
   return (
     <motion.div
@@ -150,18 +121,18 @@ export function TacticalProfilePage(): JSX.Element {
         </button>
       </div>
 
-      {/* Begin Your Training CTA */}
+      {/* Begin Training CTA */}
       <button
-        onClick={handleBeginTraining}
+        onClick={() => void navigate('/tactics/drill', { state: { filterThemes: weakestThemes } })}
         className="w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-3 transition-opacity hover:opacity-90"
         style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
         data-testid="begin-training-btn"
       >
         <Play size={18} />
-        Begin Your Training
-        {profile.weakestTypes.length > 0 && (
+        Train Your Weakest
+        {weakest.length > 0 && (
           <span className="text-xs opacity-80">
-            — Focus: {profile.weakestTypes.slice(0, 2).map((t) => tacticTypeLabel(t)).join(', ')}
+            — {weakest[0].name}
           </span>
         )}
       </button>
@@ -169,212 +140,92 @@ export function TacticalProfilePage(): JSX.Element {
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-xl border p-3 text-center" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
-          <div className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>{profile.totalGamesAnalyzed}</div>
-          <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Games Analyzed</div>
+          <div className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>{totalAttempts}</div>
+          <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Puzzles Solved</div>
         </div>
         <div className="rounded-xl border p-3 text-center" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
-          <div className="text-lg font-bold" style={{ color: 'var(--color-error)' }}>{profile.totalGamesMissed}</div>
-          <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Tactics Found</div>
+          <div className="text-lg font-bold" style={{ color: 'var(--color-success)' }}>
+            {attempted.length > 0
+              ? `${Math.round(attempted.reduce((sum, c) => sum + c.accuracy * c.attempts, 0) / totalAttempts * 100)}%`
+              : '—'}
+          </div>
+          <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Overall Accuracy</div>
         </div>
         <div className="rounded-xl border p-3 text-center" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
-          <div className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>{profile.stats.length}</div>
-          <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Types Tracked</div>
+          <div className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>{attempted.length}/{categories.length}</div>
+          <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Themes Practiced</div>
         </div>
       </div>
 
-      {/* Tactic Type Breakdown */}
+      {/* Theme Breakdown */}
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-          Tactic Breakdown
+          Theme Accuracy
           <span className="font-normal ml-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>tap to drill</span>
         </h3>
-        {profile.stats.map((stat) => (
-          <TacticTypeRow
-            key={stat.tacticType}
-            stat={stat}
-            maxMissCount={maxMissCount}
-            onTrain={(type) => void navigate('/tactics/drill', { state: { filterTypes: [type] } })}
+        {categories.map((cat) => (
+          <ThemeRow
+            key={cat.name}
+            category={cat}
+            onTrain={() => void navigate('/tactics/drill', { state: { filterThemes: cat.themes } })}
           />
         ))}
       </div>
-
-      {/* Game Phase Distribution */}
-      <PhaseBreakdown stats={profile.stats} />
-
-      {/* Opening Correlation */}
-      <OpeningBreakdown stats={profile.stats} />
-
-      {/* Recent Missed Tactics */}
-      {recentTactics.length > 0 && (
-        <RecentTactics tactics={recentTactics} />
-      )}
     </motion.div>
   );
 }
 
 // ─── Sub-components ─────────────────────────────────────────────────────────
 
-function TacticTypeRow({ stat, maxMissCount, onTrain }: { stat: TacticTypeStats; maxMissCount: number; onTrain: (type: TacticType) => void }): JSX.Element {
-  const barWidth = maxMissCount > 0 ? Math.round((stat.gameMissCount / maxMissCount) * 100) : 0;
-  const puzzlePct = stat.puzzleAttempts > 0 ? Math.round(stat.puzzleAccuracy * 100) : -1;
-  const gapDisplay = stat.gap > 0 ? `${Math.round(stat.gap * 100)}%` : null;
+function ThemeRow({ category, onTrain }: { category: ThemeCategoryStats; onTrain: () => void }): JSX.Element {
+  const pct = category.accuracy >= 0 ? Math.round(category.accuracy * 100) : -1;
+  const barColor = pct < 0
+    ? 'var(--color-border)'
+    : pct >= 70
+      ? 'var(--color-success)'
+      : pct >= 40
+        ? 'var(--color-warning)'
+        : 'var(--color-error)';
 
   return (
     <button
-      onClick={() => onTrain(stat.tacticType)}
+      onClick={onTrain}
       className="w-full rounded-lg border p-3 text-left transition-all hover:opacity-90"
       style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
-      data-testid="tactic-type-row"
+      data-testid="theme-row"
     >
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-sm">{tacticTypeIcon(stat.tacticType)}</span>
+        <span className="text-sm">{THEME_ICONS[category.name] ?? '\uD83C\uDFAF'}</span>
         <span className="text-sm font-semibold flex-1" style={{ color: 'var(--color-text)' }}>
-          {tacticTypeLabel(stat.tacticType)}
+          {category.name}
         </span>
-        <span className="text-xs font-medium" style={{ color: 'var(--color-error)' }}>
-          {stat.gameMissCount} missed
-        </span>
+        {pct >= 0 ? (
+          <span className="text-xs font-medium" style={{ color: barColor }}>
+            {pct}%
+          </span>
+        ) : (
+          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            not started
+          </span>
+        )}
         <ChevronRight size={14} style={{ color: 'var(--color-text-muted)' }} />
       </div>
 
-      {/* Miss count bar */}
-      <div className="h-2 rounded-full overflow-hidden mb-2" style={{ background: 'var(--color-border)' }}>
-        <div
-          className="h-full rounded-full transition-all duration-500"
-          style={{ background: 'var(--color-error)', width: `${barWidth}%` }}
-        />
-      </div>
-
-      {/* Puzzle accuracy vs game gap */}
-      <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-        {puzzlePct >= 0 && (
-          <span>Puzzle accuracy: <span style={{ color: 'var(--color-success)' }}>{puzzlePct}%</span></span>
-        )}
-        {gapDisplay && (
-          <span>Gap: <span style={{ color: 'var(--color-warning)' }}>{gapDisplay}</span></span>
-        )}
-        {stat.puzzleAttempts > 0 && (
-          <span>{stat.puzzleAttempts} puzzle attempts</span>
-        )}
-      </div>
-    </button>
-  );
-}
-
-function PhaseBreakdown({ stats }: { stats: TacticTypeStats[] }): JSX.Element {
-  const totals = { opening: 0, middlegame: 0, endgame: 0 };
-  for (const stat of stats) {
-    totals.opening += stat.byPhase.opening || 0;
-    totals.middlegame += stat.byPhase.middlegame || 0;
-    totals.endgame += stat.byPhase.endgame || 0;
-  }
-  const total = totals.opening + totals.middlegame + totals.endgame;
-  if (total === 0) return <></>;
-
-  const phases = [
-    { label: 'Opening', count: totals.opening, color: 'var(--color-accent)' },
-    { label: 'Middlegame', count: totals.middlegame, color: 'var(--color-warning)' },
-    { label: 'Endgame', count: totals.endgame, color: 'var(--color-success)' },
-  ];
-
-  return (
-    <div className="rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }} data-testid="phase-breakdown">
-      <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text)' }}>When You Miss Tactics</h3>
-      <div className="flex gap-2 h-3 rounded-full overflow-hidden mb-3" style={{ background: 'var(--color-border)' }}>
-        {phases.map((p) => (
+      {/* Accuracy bar */}
+      <div className="h-2 rounded-full overflow-hidden mb-1" style={{ background: 'var(--color-border)' }}>
+        {pct >= 0 && (
           <div
-            key={p.label}
-            className="h-full transition-all duration-500"
-            style={{ background: p.color, width: `${Math.round((p.count / total) * 100)}%` }}
+            className="h-full rounded-full transition-all duration-500"
+            style={{ background: barColor, width: `${pct}%` }}
           />
-        ))}
+        )}
       </div>
-      <div className="flex justify-between text-xs" style={{ color: 'var(--color-text-muted)' }}>
-        {phases.map((p) => (
-          <span key={p.label}>
-            <span className="inline-block w-2 h-2 rounded-full mr-1" style={{ background: p.color }} />
-            {p.label} ({p.count})
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-function OpeningBreakdown({ stats }: { stats: TacticTypeStats[] }): JSX.Element {
-  const openingCounts: Record<string, number> = {};
-  for (const stat of stats) {
-    for (const [opening, count] of Object.entries(stat.byOpening)) {
-      openingCounts[opening] = (openingCounts[opening] || 0) + count;
-    }
-  }
-
-  const sorted = Object.entries(openingCounts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 5);
-
-  if (sorted.length === 0) return <></>;
-
-  const maxCount = sorted[0]?.[1] ?? 1;
-
-  return (
-    <div className="rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }} data-testid="opening-breakdown">
-      <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text)' }}>Openings Where You Miss Tactics</h3>
-      <div className="flex flex-col gap-2">
-        {sorted.map(([opening, count]) => (
-          <div key={opening} className="flex items-center gap-3">
-            <span className="text-xs truncate flex-1 min-w-0" style={{ color: 'var(--color-text)' }}>{opening}</span>
-            <div className="w-24 h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{ background: 'var(--color-error)', width: `${Math.round((count / maxCount) * 100)}%` }}
-              />
-            </div>
-            <span className="text-xs font-medium w-6 text-right" style={{ color: 'var(--color-error)' }}>{count}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function RecentTactics({ tactics }: { tactics: ClassifiedTactic[] }): JSX.Element {
-  return (
-    <div className="rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }} data-testid="recent-tactics">
-      <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text)' }}>Recent Missed Tactics</h3>
-      <div className="flex flex-col gap-2">
-        {tactics.map((t) => (
-          <div
-            key={t.id}
-            className="flex items-center gap-3 p-2.5 rounded-lg"
-            style={{ background: 'var(--color-bg)' }}
-          >
-            <span className="text-sm shrink-0">{tacticTypeIcon(t.tacticType)}</span>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold">{tacticTypeLabel(t.tacticType)}</span>
-                <span
-                  className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
-                  style={{
-                    background: t.evalSwing >= 200 ? 'var(--color-error)' : 'var(--color-warning)',
-                    color: 'var(--color-bg)',
-                  }}
-                >
-                  {(t.evalSwing / 100).toFixed(1)} pawns
-                </span>
-              </div>
-              <div className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
-                {t.explanation}
-              </div>
-            </div>
-            {t.opponentName && (
-              <span className="text-[10px] shrink-0" style={{ color: 'var(--color-text-muted)' }}>
-                vs {t.opponentName}
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
+      {category.attempts > 0 && (
+        <div className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+          {category.attempts} attempts
+        </div>
+      )}
+    </button>
   );
 }
