@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
