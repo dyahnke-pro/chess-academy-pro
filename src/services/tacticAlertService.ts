@@ -141,9 +141,9 @@ export function detectStruggleTier(signals: StruggleSignals): CoachingTier {
   const mult = ratingMultiplier(signals.playerRating);
 
   // Time thresholds (seconds), scaled by rating
-  const nudgeTime = 20 * mult;
-  const teachTime = 45 * mult;
-  const guideTime = 75 * mult;
+  const nudgeTime = 60 * mult;
+  const teachTime = 90 * mult;
+  const guideTime = 120 * mult;
 
   // Wrong attempt thresholds
   const nudgeAttempts = 1;
