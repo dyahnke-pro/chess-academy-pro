@@ -15,10 +15,10 @@ vi.mock('../../services/puzzleService', () => ({
 }));
 
 vi.mock('../Puzzles/PuzzleBoard', () => ({
-  PuzzleBoard: ({ puzzle, onComplete }: { puzzle: PuzzleRecord; onComplete: (outcome: { correct: boolean; usedHint: boolean; hadRetry: boolean; showedSolution: boolean }) => void }) => (
+  PuzzleBoard: ({ puzzle, onComplete }: { puzzle: PuzzleRecord; onComplete: (outcome: { correct: boolean; usedHint: boolean; hadRetry: boolean; showedSolution: boolean; solveTimeMs: number }) => void }) => (
     <div data-testid="puzzle-board" data-puzzle-id={puzzle.id}>
-      <button data-testid="complete-correct" onClick={() => onComplete({ correct: true, usedHint: false, hadRetry: false, showedSolution: false })}>Correct</button>
-      <button data-testid="complete-incorrect" onClick={() => onComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false })}>Incorrect</button>
+      <button data-testid="complete-correct" onClick={() => onComplete({ correct: true, usedHint: false, hadRetry: false, showedSolution: false, solveTimeMs: 5000 })}>Correct</button>
+      <button data-testid="complete-incorrect" onClick={() => onComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false, solveTimeMs: 10000 })}>Incorrect</button>
     </div>
   ),
 }));

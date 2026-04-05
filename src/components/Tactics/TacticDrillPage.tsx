@@ -2,37 +2,66 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Swords, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getPuzzlesByTheme, getPuzzlesInRatingBand } from '../../services/puzzleService';
+import {
+  getPuzzleForThemeAtRating,
+  calculateRatingDelta,
+  applyTimeBonus,
+  THEME_MAP,
+} from '../../services/puzzleService';
 import { useAppStore } from '../../stores/appStore';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
 import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
-import { shuffleArray } from '../../services/puzzleService';
+import { db } from '../../db/schema';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
 const DRILL_SIZE = 10;
 
+/** Aggressive adaptive ramping — find the player's ceiling in 10 puzzles. */
+const CLEAN_FAST_BONUS = 100;   // Clean solve < 20s
+const CLEAN_SOLVE_BONUS = 75;   // Clean solve (any time)
+const ASSISTED_SOLVE_BONUS = 30; // Solved with hint or retry
+const FAIL_PENALTY = -50;        // Failed puzzle
+
+interface DrillResult {
+  puzzleRating: number;
+  correct: boolean;
+  solveTimeMs: number;
+}
+
 export function TacticDrillPage(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const activeProfile = useAppStore((s) => s.activeProfile);
+  const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const setGlobalBoardContext = useAppStore((s) => s.setGlobalBoardContext);
 
   const filterThemes = (location.state as { filterThemes?: string[] } | null)?.filterThemes;
-  // Legacy support: filterTypes from old Spot page
   const filterTypes = (location.state as { filterTypes?: string[] } | null)?.filterTypes;
   const themes = filterThemes ?? filterTypes ?? ['fork'];
 
+  // Resolve theme labels to Lichess tags
+  const lichessThemes = themes.flatMap((t) => {
+    const mapped = THEME_MAP[t];
+    return mapped ?? [t];
+  });
+
   const [phase, setPhase] = useState<Phase>('loading');
-  const [queue, setQueue] = useState<PuzzleRecord[]>([]);
+  const [puzzleHistory, setPuzzleHistory] = useState<PuzzleRecord[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solved, setSolved] = useState(0);
   const [failed, setFailed] = useState(0);
-  const completedRef = useRef<Set<number>>(new Set());
+  const [sessionRating, setSessionRating] = useState(
+    activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200,
+  );
+  const [ratingDelta, setRatingDelta] = useState<number | null>(null);
 
-  const total = queue.length;
-  const currentPuzzle = queue[currentIndex] ?? null;
+  const seenIdsRef = useRef<Set<string>>(new Set());
+  const completedRef = useRef<Set<number>>(new Set());
+  const resultsRef = useRef<DrillResult[]>([]);
+
+  const currentPuzzle = puzzleHistory[currentIndex] ?? null;
   const themeLabel = themes.length === 1
     ? themes[0].replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim()
     : 'Mixed';
@@ -42,76 +71,136 @@ export function TacticDrillPage(): JSX.Element {
     return () => { setGlobalBoardContext(null); };
   }, [setGlobalBoardContext]);
 
-  const loadQueue = useCallback(async (): Promise<void> => {
+  /** Fetch the next puzzle at the current adaptive rating. */
+  const fetchNextPuzzle = useCallback(async (targetRating: number): Promise<PuzzleRecord | null> => {
+    return getPuzzleForThemeAtRating(lichessThemes, targetRating, seenIdsRef.current);
+  }, [lichessThemes]);
+
+  /** Start or restart a drill session. */
+  const startSession = useCallback(async (): Promise<void> => {
     setPhase('loading');
+    const startRating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+    setSessionRating(startRating);
+    seenIdsRef.current = new Set();
+    completedRef.current = new Set();
+    resultsRef.current = [];
+    setSolved(0);
+    setFailed(0);
+    setRatingDelta(null);
 
-    // Fetch puzzles for each theme and merge
-    const allPuzzles: PuzzleRecord[] = [];
-    for (const theme of themes) {
-      const puzzles = await getPuzzlesByTheme(theme, DRILL_SIZE);
-      allPuzzles.push(...puzzles);
-    }
-
-    // Deduplicate and shuffle
-    const seen = new Set<string>();
-    const unique = allPuzzles.filter((p) => {
-      if (seen.has(p.id)) return false;
-      seen.add(p.id);
-      return true;
-    });
-    let shuffled = shuffleArray(unique).slice(0, DRILL_SIZE);
-
-    // Fallback: if no puzzles found for the theme, use rating-matched puzzles
-    if (shuffled.length === 0) {
-      const userRating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
-      const fallback = await getPuzzlesInRatingBand(userRating, 300, DRILL_SIZE);
-      shuffled = shuffleArray(fallback).slice(0, DRILL_SIZE);
-    }
-
-    if (shuffled.length === 0) {
+    const puzzle = await getPuzzleForThemeAtRating(lichessThemes, startRating, seenIdsRef.current);
+    if (!puzzle) {
       setPhase('summary');
       return;
     }
-
-    setQueue(shuffled);
+    seenIdsRef.current.add(puzzle.id);
+    setPuzzleHistory([puzzle]);
     setCurrentIndex(0);
-    setSolved(0);
-    setFailed(0);
-    completedRef.current = new Set();
     setPhase('solving');
-  }, [themes]);
+  }, [lichessThemes, activeProfile]);
 
   useEffect(() => {
-    void loadQueue();
+    void startSession();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handlePuzzleComplete = useCallback((_outcome: PuzzleOutcome): void => {
-    // Only count the first completion of each puzzle
+  /** Handle puzzle completion — update adaptive rating and fetch next. */
+  const handlePuzzleComplete = useCallback((outcome: PuzzleOutcome): void => {
     if (completedRef.current.has(currentIndex)) return;
     completedRef.current.add(currentIndex);
 
-    if (_outcome.correct) {
+    const puzzle = puzzleHistory[currentIndex];
+    if (!puzzle) return;
+
+    // Determine adaptive rating bump
+    const isClean = outcome.correct && !outcome.usedHint && !outcome.hadRetry && !outcome.showedSolution;
+    const isFast = outcome.solveTimeMs < 20_000;
+    let ratingBump: number;
+    if (outcome.correct) {
+      if (isClean && isFast) {
+        ratingBump = CLEAN_FAST_BONUS;
+      } else if (isClean) {
+        ratingBump = CLEAN_SOLVE_BONUS;
+      } else {
+        ratingBump = ASSISTED_SOLVE_BONUS;
+      }
       setSolved((s) => s + 1);
     } else {
+      ratingBump = FAIL_PENALTY;
       setFailed((f) => f + 1);
     }
-    // No auto-advance — user navigates with arrows
-  }, [currentIndex]);
+
+    const newSessionRating = Math.max(400, sessionRating + ratingBump);
+    setSessionRating(newSessionRating);
+
+    // Apply Elo with time bonus to the player's persistent puzzle rating
+    const eloDelta = calculateRatingDelta(
+      activeProfile?.puzzleRating ?? 1200,
+      puzzle.rating,
+      outcome.correct,
+    );
+    const adjustedDelta = outcome.correct
+      ? applyTimeBonus(eloDelta, outcome.solveTimeMs)
+      : eloDelta;
+    setRatingDelta(adjustedDelta);
+
+    if (activeProfile) {
+      const newPuzzleRating = Math.max(100, (activeProfile.puzzleRating ?? 1200) + adjustedDelta);
+      const updated = { ...activeProfile, puzzleRating: newPuzzleRating };
+      setActiveProfile(updated);
+      void db.profiles.update(activeProfile.id, { puzzleRating: newPuzzleRating });
+    }
+
+    resultsRef.current.push({
+      puzzleRating: puzzle.rating,
+      correct: outcome.correct,
+      solveTimeMs: outcome.solveTimeMs,
+    });
+
+    // Pre-fetch next puzzle if we haven't reached the drill size
+    if (resultsRef.current.length < DRILL_SIZE) {
+      void fetchNextPuzzle(newSessionRating).then((next) => {
+        if (next) {
+          seenIdsRef.current.add(next.id);
+          setPuzzleHistory((prev) => [...prev, next]);
+        }
+      });
+    }
+  }, [currentIndex, puzzleHistory, sessionRating, activeProfile, setActiveProfile, fetchNextPuzzle]);
 
   const goNext = useCallback((): void => {
     const nextIndex = currentIndex + 1;
-    if (nextIndex >= queue.length) {
-      setPhase('summary');
-    } else {
-      setCurrentIndex(nextIndex);
+    if (nextIndex >= DRILL_SIZE || nextIndex >= puzzleHistory.length) {
+      // Check if we need to wait for the next puzzle to load
+      if (nextIndex < DRILL_SIZE && nextIndex >= puzzleHistory.length) {
+        // Puzzle still loading — fetch and navigate when ready
+        setPhase('loading');
+        void fetchNextPuzzle(sessionRating).then((puzzle) => {
+          if (puzzle) {
+            seenIdsRef.current.add(puzzle.id);
+            setPuzzleHistory((prev) => [...prev, puzzle]);
+            setCurrentIndex(nextIndex);
+            setPhase('solving');
+          } else {
+            setPhase('summary');
+          }
+        });
+        return;
+      }
+      if (nextIndex >= DRILL_SIZE) {
+        setPhase('summary');
+        return;
+      }
     }
-  }, [currentIndex, queue.length]);
+    setCurrentIndex(nextIndex);
+  }, [currentIndex, puzzleHistory.length, sessionRating, fetchNextPuzzle]);
 
   const goPrev = useCallback((): void => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
   }, [currentIndex]);
+
+  const totalCompleted = solved + failed;
 
   return (
     <div
@@ -129,16 +218,23 @@ export function TacticDrillPage(): JSX.Element {
           Drill: {themeLabel}
         </h1>
         {phase === 'solving' && (
-          <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
-            {currentIndex + 1}/{total}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
+              Target: {sessionRating}
+            </span>
+            {ratingDelta !== null && (
+              <span className={`text-xs font-bold ${ratingDelta >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {ratingDelta >= 0 ? '+' : ''}{ratingDelta}
+              </span>
+            )}
+          </div>
         )}
       </div>
 
       {/* Loading */}
       {phase === 'loading' && (
         <div className="flex items-center justify-center flex-1">
-          <p style={{ color: 'var(--color-text-muted)' }}>Loading puzzles...</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>Loading puzzle...</p>
         </div>
       )}
 
@@ -163,7 +259,7 @@ export function TacticDrillPage(): JSX.Element {
               <ChevronLeft size={20} />
             </button>
             <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
-              {currentIndex + 1} / {total}
+              {currentIndex + 1} / {DRILL_SIZE}
             </span>
             <button
               onClick={goNext}
@@ -179,6 +275,7 @@ export function TacticDrillPage(): JSX.Element {
           <div className="flex justify-center gap-6 text-sm py-2" style={{ color: 'var(--color-text-muted)' }}>
             <span style={{ color: 'var(--color-success)' }}>{solved} solved</span>
             <span style={{ color: 'var(--color-error)' }}>{failed} missed</span>
+            <span>Puzzle: {currentPuzzle.rating}</span>
           </div>
         </div>
       )}
@@ -194,10 +291,15 @@ export function TacticDrillPage(): JSX.Element {
           <Swords size={40} style={{ color: 'var(--color-warning)' }} />
           <div className="text-center">
             <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>Drill Complete</h2>
-            {total > 0 ? (
-              <p className="text-lg mt-2" style={{ color: 'var(--color-text-muted)' }}>
-                {solved}/{total} tactics found ({Math.round((solved / total) * 100)}%)
-              </p>
+            {totalCompleted > 0 ? (
+              <>
+                <p className="text-lg mt-2" style={{ color: 'var(--color-text-muted)' }}>
+                  {solved}/{totalCompleted} tactics found ({Math.round((solved / totalCompleted) * 100)}%)
+                </p>
+                <p className="text-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>
+                  Peak difficulty: {Math.max(...resultsRef.current.map((r) => r.puzzleRating))}
+                </p>
+              </>
             ) : (
               <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
                 No puzzles found for this theme. Try a different category.
@@ -206,7 +308,7 @@ export function TacticDrillPage(): JSX.Element {
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => void loadQueue()}
+              onClick={() => void startSession()}
               className="px-6 py-3 rounded-xl font-semibold text-sm"
               style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
               data-testid="play-again"
