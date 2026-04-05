@@ -6,19 +6,9 @@ import { buildPieceRenderer } from '../../services/pieceSetService';
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const MID_FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
 
-const NEON_GLOW_STYLES = {
-  cyan: {
-    boxShadow: '0 0 12px 2px #00ff88, 0 0 30px 4px rgba(0, 255, 136, 0.3)',
-    borderRadius: '4px',
-  },
-  purple: {
-    boxShadow: '0 0 12px 2px #a855f7, 0 0 30px 4px rgba(168, 85, 247, 0.3)',
-    borderRadius: '4px',
-  },
-  gold: {
-    boxShadow: '0 0 12px 2px #c9a84c, 0 0 30px 4px rgba(201, 168, 76, 0.3)',
-    borderRadius: '4px',
-  },
+const AQUA_GLOW = {
+  boxShadow: '0 0 12px 2px #00e5ff, 0 0 30px 4px rgba(0, 229, 255, 0.35)',
+  borderRadius: '4px',
 };
 
 function BoardPreview({
@@ -63,98 +53,64 @@ export function NeonBoardMock(): JSX.Element {
       style={{ background: '#0a0a0a' }}
       data-testid="neon-board-mock"
     >
-      <h1 className="text-2xl font-bold" style={{ color: '#00ffc8' }}>
+      <h1 className="text-2xl font-bold" style={{ color: '#00e5ff' }}>
         Neon Board Preview
       </h1>
       <p className="text-sm" style={{ color: '#888' }}>
-        Standard board colors with neon glow outlines
+        Classic board with aqua glow outline &bull; White pieces glow green &bull; Black pieces glow purple
       </p>
 
-      {/* Row 1: No glow vs Cyan glow on classic board */}
+      {/* Row 1: Before vs After */}
       <div className="flex flex-wrap justify-center gap-8">
-        <div className="w-[320px]">
+        <div className="w-[360px]">
           <BoardPreview
-            label="Classic (no glow)"
+            label="Before (no glow)"
             boardColorId="classic"
             pieceSetId="staunton"
             fen={START_FEN}
           />
         </div>
-        <div className="w-[320px]">
+        <div className="w-[360px]">
           <BoardPreview
-            label="Classic + Cyan Glow"
-            boardColorId="classic"
+            label="Neon (aqua glow + piece outlines)"
+            boardColorId="neon"
             pieceSetId="staunton"
             fen={START_FEN}
-            glowStyle={NEON_GLOW_STYLES.cyan}
+            glowStyle={AQUA_GLOW}
           />
         </div>
       </div>
 
-      {/* Row 2: Different glow colors on standard boards */}
+      {/* Row 2: Mid-game with different piece sets */}
       <h2 className="text-lg font-semibold" style={{ color: '#e0e0e0' }}>
-        Glow color options
+        Mid-game positions
       </h2>
       <div className="flex flex-wrap justify-center gap-8">
-        <div className="w-[280px]">
+        <div className="w-[320px]">
           <BoardPreview
-            label="Tournament + Cyan"
-            boardColorId="tournament"
+            label="Neon + Staunton"
+            boardColorId="neon"
             pieceSetId="staunton"
             fen={MID_FEN}
-            glowStyle={NEON_GLOW_STYLES.cyan}
+            glowStyle={AQUA_GLOW}
           />
         </div>
-        <div className="w-[280px]">
+        <div className="w-[320px]">
           <BoardPreview
-            label="Classic + Purple"
-            boardColorId="classic"
-            pieceSetId="staunton"
-            fen={MID_FEN}
-            glowStyle={NEON_GLOW_STYLES.purple}
-          />
-        </div>
-        <div className="w-[280px]">
-          <BoardPreview
-            label="Classic + Gold"
-            boardColorId="classic"
-            pieceSetId="staunton"
-            fen={MID_FEN}
-            glowStyle={NEON_GLOW_STYLES.gold}
-          />
-        </div>
-      </div>
-
-      {/* Row 3: Other board colors with glow */}
-      <h2 className="text-lg font-semibold" style={{ color: '#e0e0e0' }}>
-        Other board colors with neon glow
-      </h2>
-      <div className="flex flex-wrap justify-center gap-8">
-        <div className="w-[280px]">
-          <BoardPreview
-            label="Blue + Cyan Glow"
-            boardColorId="blue"
+            label="Neon + Neo"
+            boardColorId="neon"
             pieceSetId="neo"
             fen={MID_FEN}
-            glowStyle={NEON_GLOW_STYLES.cyan}
+            glowStyle={AQUA_GLOW}
           />
         </div>
-        <div className="w-[280px]">
+        <div className="w-[320px]">
           <BoardPreview
-            label="Wood + Gold Glow"
-            boardColorId="wood"
-            pieceSetId="staunton"
-            fen={MID_FEN}
-            glowStyle={NEON_GLOW_STYLES.gold}
-          />
-        </div>
-        <div className="w-[280px]">
-          <BoardPreview
-            label="Purple + Purple Glow"
-            boardColorId="purple"
+            label="Neon + California"
+            boardColorId="neon"
             pieceSetId="california"
             fen={MID_FEN}
-            glowStyle={NEON_GLOW_STYLES.purple}
+            glowStyle={AQUA_GLOW}
           />
         </div>
       </div>

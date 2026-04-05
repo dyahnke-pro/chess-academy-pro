@@ -23,9 +23,9 @@ export const BOARD_COLORS: BoardColorScheme[] = [
   {
     id: 'neon',
     name: 'Neon',
-    lightSquare: '#1a1040',
-    darkSquare: '#0c1a3a',
-    borderGlow: '0 0 12px 2px #00ff88, 0 0 30px 4px rgba(0, 255, 136, 0.3)',
+    lightSquare: '#f0d9b5',
+    darkSquare: '#b58863',
+    borderGlow: '0 0 12px 2px #00e5ff, 0 0 30px 4px rgba(0, 229, 255, 0.35)',
     whitePieceFilter: 'drop-shadow(0 0 6px #00ff88) drop-shadow(0 0 2px #00ff88)',
     blackPieceFilter: 'drop-shadow(0 0 6px #a855f7) drop-shadow(0 0 2px #a855f7)',
   },
