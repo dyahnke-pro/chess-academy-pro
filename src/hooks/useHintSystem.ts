@@ -36,7 +36,17 @@ function uciToSquares(uci: string): { from: string; to: string } {
   return { from: uci.slice(0, 2), to: uci.slice(2, 4) };
 }
 
-function buildArrowsFromAnalysis(analysis: StockfishAnalysis): BoardArrow[] {
+function isLegalMove(fen: string, from: string, to: string): boolean {
+  try {
+    const chess = new Chess(fen);
+    const legal = chess.moves({ verbose: true });
+    return legal.some((m) => m.from === from && m.to === to);
+  } catch {
+    return false;
+  }
+}
+
+function buildArrowsFromAnalysis(analysis: StockfishAnalysis, fen: string): BoardArrow[] {
   const arrows: BoardArrow[] = [];
   const colors = [BEST_MOVE_COLOR, ALT_MOVE_COLOR_2, ALT_MOVE_COLOR_3];
 
@@ -45,13 +55,16 @@ function buildArrowsFromAnalysis(analysis: StockfishAnalysis): BoardArrow[] {
     const move = line.moves[0];
     if (!move) continue;
     const { from, to } = uciToSquares(move);
+    if (!isLegalMove(fen, from, to)) continue;
     arrows.push({ startSquare: from, endSquare: to, color: colors[i] });
   }
 
   // Fallback: if topLines is empty but bestMove exists
   if (arrows.length === 0 && analysis.bestMove) {
     const { from, to } = uciToSquares(analysis.bestMove);
-    arrows.push({ startSquare: from, endSquare: to, color: BEST_MOVE_COLOR });
+    if (isLegalMove(fen, from, to)) {
+      arrows.push({ startSquare: from, endSquare: to, color: BEST_MOVE_COLOR });
+    }
   }
 
   return arrows;
@@ -75,6 +88,8 @@ function buildGhostMove(
     const chess = new Chess(fen);
     const from = bestMoveUci.slice(0, 2);
     const to = bestMoveUci.slice(2, 4);
+
+    if (!isLegalMove(fen, from, to)) return null;
 
     const piece = chess.get(from as Parameters<typeof chess.get>[0]);
     if (!piece) return null;
@@ -154,7 +169,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
                 setHintState((s) => ({
                   ...s,
                   level: 1,
-                  arrows: buildArrowsFromAnalysis(analysis),
+                  arrows: buildArrowsFromAnalysis(analysis, fen),
                   isAnalyzing: false,
                   hintsUsed: s.hintsUsed + (s.level === 0 ? 1 : 0),
                 }));
@@ -172,7 +187,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         return {
           ...prev,
           level: 1,
-          arrows: buildArrowsFromAnalysis(analysisRef.current),
+          arrows: buildArrowsFromAnalysis(analysisRef.current, fen),
           hintsUsed: prev.hintsUsed + 1,
         };
       }

@@ -34,6 +34,8 @@ class StockfishEngine {
   // Analysis queue — serializes requests so they don't cancel each other
   private _queue: QueueEntry[] = [];
   private _queueRunning = false;
+  // Gate to ignore stale bestmove/info from a stopped analysis
+  private _analysisStarted = false;
 
   get status(): StockfishStatus {
     return this._status;
@@ -133,6 +135,10 @@ class StockfishEngine {
 
       const blackToMove = fen.split(' ')[1] === 'b';
 
+      // Mark analysis as not yet started so stale bestmove from a
+      // previously-stopped analysis is ignored (see handleMessage gate).
+      this._analysisStarted = false;
+
       this.pending = {
         resolve,
         reject,
@@ -157,6 +163,7 @@ class StockfishEngine {
           }
           this.send(`position fen ${fen}`);
           this.send(`go depth ${depth}`);
+          this._analysisStarted = true;
         }
       };
       this.worker?.addEventListener('message', readyHandler);
@@ -246,7 +253,7 @@ class StockfishEngine {
   }
 
   private handleMessage(data: string): void {
-    if (!this.pending) return;
+    if (!this.pending || !this._analysisStarted) return;
 
     // Parse info lines (MultiPV)
     const infoMatch = /^info /.exec(data);
