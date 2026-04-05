@@ -68,6 +68,7 @@ vi.mock('../../hooks/useSettings', () => ({
 
 vi.mock('../../services/coachFeatureService', () => ({
   generateNarrativeSummary: vi.fn().mockResolvedValue('This was a well-played game with some key moments.'),
+  generateReviewNarrationSegments: vi.fn().mockResolvedValue({ intro: 'Let us review this game.', closing: 'That concludes the review.' }),
 }));
 
 vi.mock('../../services/coachPrompts', () => ({
@@ -224,7 +225,10 @@ function renderReview(overrides?: {
 function renderAnalysis(overrides?: Parameters<typeof renderReview>[0]): ReturnType<typeof render> {
   const result = renderReview(overrides);
   // Click "Review Game" to transition from summary to analysis phase
+  // (this also activates auto-review; stop it so manual navigation tests work)
   fireEvent.click(screen.getByTestId('start-review-btn'));
+  const stopBtn = screen.queryByTestId('auto-review-stop-btn');
+  if (stopBtn) fireEvent.click(stopBtn);
   return result;
 }
 
