@@ -1,10 +1,22 @@
 import { ANNOTATION_MODULES } from '../data/annotations';
 import type { OpeningMoveAnnotation, OpeningAnnotations } from '../types';
 
-// Map pro-repertoire suffixes that need a specific sub-line instead of the main line.
-// Format: 'suffix': 'variation-N' | 'trap-N' | 'warning-N'
+// Map pro repertoires to a specific sub-line instead of the main line.
+// Keyed by full opening ID first, then by suffix as fallback.
+const PRO_ID_TO_SUBLINE: Record<string, string> = {
+  'pro-naroditsky-scotch': 'variation-0',
+  'pro-hikaru-scotch': 'variation-1',
+  'pro-dubov-scotch': 'variation-3',
+};
+
 const PRO_SUFFIX_TO_SUBLINE: Record<string, string> = {
+  'berlin': 'variation-2',
+  'english': 'variation-0',
   'fantasy-caro': 'variation-4',
+  'kia': 'variation-0',
+  'milner-barry': 'variation-0',
+  'stafford-refute': 'variation-2',
+  'tarrasch-french': 'variation-3',
 };
 
 // Map pro-repertoire suffixes to base annotation IDs
@@ -83,6 +95,10 @@ async function loadModule(openingId: string): Promise<OpeningAnnotations | null>
 
 export async function loadAnnotations(openingId: string): Promise<OpeningMoveAnnotation[] | null> {
   // Check if this pro repertoire should use a sub-line instead of the main line
+  const fullIdSubLine = PRO_ID_TO_SUBLINE[openingId];
+  if (fullIdSubLine) {
+    return loadSubLineAnnotations(openingId, fullIdSubLine);
+  }
   const proMatch = /^pro-[a-z]+-(.+)$/.exec(openingId);
   if (proMatch) {
     const subLineKey = PRO_SUFFIX_TO_SUBLINE[proMatch[1]];
