@@ -20,8 +20,8 @@ import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../servi
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
-import { generateNarrativeSummary } from '../../services/coachFeatureService';
-import type { NarrativeMoveData } from '../../services/coachFeatureService';
+import { generateNarrativeSummary, generateReviewNarrationSegments } from '../../services/coachFeatureService';
+import type { NarrativeMoveData, ReviewNarrationSegments } from '../../services/coachFeatureService';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
@@ -142,6 +142,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const autoReviewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Track whether we're waiting for AI commentary to finish before advancing
   const [awaitingAiNarration, setAwaitingAiNarration] = useState(false);
+  // Structured narration segments (intro/closing) for the walkthrough
+  const [narrationSegments, setNarrationSegments] = useState<ReviewNarrationSegments | null>(null);
 
   // ─── Guided Lesson State ────────────────────────────────────────────────────
   const [guidedLessonActive, setGuidedLessonActive] = useState(!!isGuidedLesson);
@@ -781,10 +783,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
     const moveIdx = reviewState.currentMoveIndex;
     if (moveIdx >= moves.length - 1) {
-      // Reached end of game — narrate the ending
-      void voiceService.speak('That concludes the game review.');
+      // Reached end of game — speak the closing narration segment if available
+      const closingText = narrationSegments?.closing ?? 'That concludes the game review.';
+      void voiceService.speak(closingText);
       setAutoReviewActive(false);
       return;
+    }
+
+    // Starting position (moveIdx === -1): speak the intro narration segment
+    if (moveIdx === -1) {
+      if (narrationSegments?.intro) {
+        void voiceService.speak(narrationSegments.intro);
+        const introDelay = Math.max(4000, narrationSegments.intro.length * 55);
+        autoReviewTimerRef.current = setTimeout(() => {
+          setReviewState((prev) => ({ ...prev, currentMoveIndex: 0 }));
+        }, introDelay);
+      } else {
+        // Segments still loading — brief pause then start
+        autoReviewTimerRef.current = setTimeout(() => {
+          setReviewState((prev) => ({ ...prev, currentMoveIndex: 0 }));
+        }, 1500);
+      }
+      return () => {
+        if (autoReviewTimerRef.current) clearTimeout(autoReviewTimerRef.current);
+      };
     }
 
     const currentMoveForAutoReview = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
@@ -890,7 +912,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depend on specific values
-  }, [autoReviewActive, autoReviewPaused, awaitingAiNarration, reviewState.currentMoveIndex, moves, reviewDepth]);
+  }, [autoReviewActive, autoReviewPaused, awaitingAiNarration, reviewState.currentMoveIndex, moves, reviewDepth, narrationSegments]);
 
   // ─── Guided Lesson Auto-Advance Effect ────────────────────────────────────
   const GUIDED_ADVANCE_MS = 2000;
@@ -1038,7 +1060,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }));
     setAutoReviewActive(true);
     setAutoReviewPaused(false);
-  }, []);
+
+    // Fetch structured intro/closing narration segments in the background
+    const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
+    void generateReviewNarrationSegments(
+      gamePgn, playerColor, openingName, result, playerRating, narrativeMoveData,
+    ).then((segments) => {
+      setNarrationSegments(segments);
+    }).catch(() => {
+      // Fallback handled inside generateReviewNarrationSegments
+    });
+  }, [pgn, moves, playerColor, openingName, result, playerRating, narrativeMoveData]);
 
   // Empty state
   if (moves.length === 0) {
