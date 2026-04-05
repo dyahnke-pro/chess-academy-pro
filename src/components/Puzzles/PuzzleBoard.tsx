@@ -269,15 +269,9 @@ export function PuzzleBoard({
       triggerFlash('board-flash-error');
       playErrorPing();
 
-      // Check if max wrong attempts reached
-      if (wrongAttemptsRef.current >= maxWrongAttempts) {
-        setState('incorrect');
-        voiceService.stop();
-        // Auto-fail after max wrong attempts
-        completionTimerRef.current = setTimeout(() => {
-          completePuzzle(false);
-        }, 1200);
-        return;
+      // Record the failure at max wrong attempts, but don't lock the board
+      if (wrongAttemptsRef.current === maxWrongAttempts) {
+        completePuzzle(false);
       }
 
       setState('incorrect');
@@ -295,7 +289,7 @@ export function PuzzleBoard({
         void voiceService.speak(hint);
       }
 
-      // Brief feedback then back to playing
+      // Brief feedback then back to playing — user can keep trying
       setTimeout(() => {
         setState('playing');
       }, 1000);

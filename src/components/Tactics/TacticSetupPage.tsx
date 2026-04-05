@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Wrench, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Wrench, ChevronRight, ChevronLeft } from 'lucide-react';
 import { buildSetupPuzzleQueue, gradeSetupPuzzle } from '../../services/tacticSetupService';
 import { tacticTypeLabel, tacticTypeIcon } from '../../services/tacticalProfileService';
 import { TacticSetupBoard } from './TacticSetupBoard';
@@ -23,6 +23,7 @@ export function TacticSetupPage(): JSX.Element {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solved, setSolved] = useState(0);
   const [failed, setFailed] = useState(0);
+  const completedRef = useRef<Set<number>>(new Set());
 
   const handleSelectDifficulty = useCallback(async (d: SetupPuzzleDifficulty): Promise<void> => {
     setDifficulty(d);
@@ -37,6 +38,7 @@ export function TacticSetupPage(): JSX.Element {
     setCurrentIndex(0);
     setSolved(0);
     setFailed(0);
+    completedRef.current = new Set();
     setPhase('solving');
   }, []);
 
@@ -44,19 +46,32 @@ export function TacticSetupPage(): JSX.Element {
     const puzzle = queue.at(currentIndex);
     if (!puzzle) return;
 
+    // Only count the first completion of each puzzle
+    if (completedRef.current.has(currentIndex)) return;
+    completedRef.current.add(currentIndex);
+
     if (correct) setSolved((s) => s + 1);
     else setFailed((f) => f + 1);
 
     const grade = correct ? 'good' : 'again';
     await gradeSetupPuzzle(puzzle.id, grade, correct);
+    // No auto-advance — user navigates with arrows
+  }, [queue, currentIndex]);
 
+  const goNext = useCallback((): void => {
     const nextIndex = currentIndex + 1;
     if (nextIndex >= queue.length) {
       setPhase('summary');
     } else {
       setCurrentIndex(nextIndex);
     }
-  }, [queue, currentIndex]);
+  }, [currentIndex, queue.length]);
+
+  const goPrev = useCallback((): void => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  }, [currentIndex]);
 
   const currentPuzzle = queue.at(currentIndex);
   const total = solved + failed;
@@ -150,6 +165,30 @@ export function TacticSetupPage(): JSX.Element {
               puzzle={currentPuzzle}
               onComplete={(correct) => void handleComplete(correct)}
             />
+
+            {/* Navigation arrows */}
+            <div className="flex items-center justify-center gap-6 py-1" data-testid="puzzle-nav">
+              <button
+                onClick={goPrev}
+                disabled={currentIndex === 0}
+                className="p-2 rounded-lg border transition-opacity disabled:opacity-30"
+                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="nav-prev"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                {currentIndex + 1} / {queue.length}
+              </span>
+              <button
+                onClick={goNext}
+                className="p-2 rounded-lg border transition-opacity"
+                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="nav-next"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
 
             {/* Stats */}
             <div className="flex justify-center gap-6 text-sm" style={{ color: 'var(--color-text-muted)' }}>
