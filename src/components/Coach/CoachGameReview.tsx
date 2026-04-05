@@ -67,7 +67,8 @@ function sanToSquares(san: string, fen: string): { from: string; to: string } | 
 const AUTO_REVIEW_ADVANCE_MS = 2500;
 const AUTO_REVIEW_PAUSE_MS = 6000;
 const AUTO_REVIEW_NARRATION_PAUSE_MS = 8000;
-const AUTO_REVIEW_REPLY_MS = 600;
+// Removed AUTO_REVIEW_REPLY_MS (600ms was too fast — opponent moves now use
+// longer delays to prevent perception of two pieces moving simultaneously)
 
 const CLASSIFICATION_BORDER_COLORS: Record<string, string> = {
   brilliant: 'rgba(34, 197, 94, 0.6)',
@@ -343,8 +344,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   });
 
   // ─── AI Commentary: lazy-load for key moments and significant positions ─────
+  // Skipped during auto-review / guided lesson auto-advance — those modes
+  // handle their own narration and voice. Running both simultaneously causes
+  // duplicate fetches, interleaved streaming chunks, and a mismatch between
+  // the spoken text (template) and displayed text (AI analysis).
   useEffect(() => {
     if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
+    if (autoReviewActive || (guidedLessonActive && !guidedStopped)) {
+      // Auto-advance modes manage their own commentary; clear stale AI text
+      setAiCommentary(null);
+      setIsLoadingAiCommentary(false);
+      return;
+    }
     if (!currentMove) {
       setAiCommentary(null);
       return;
@@ -413,7 +424,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (!cancelled) {
         aiCommentaryCacheRef.current.set(moveIdx, fullText);
         setAiCommentary(fullText);
-        if (settings.coachReviewVoice && !autoReviewActive) {
+        if (settings.coachReviewVoice) {
           void voiceService.speak(fullText);
         }
       }
@@ -423,7 +434,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depends on moveIndex, not full currentMove
-  }, [reviewState.currentMoveIndex, reviewState.mode]);
+  }, [reviewState.currentMoveIndex, reviewState.mode, autoReviewActive, guidedLessonActive, guidedStopped]);
 
   // ─── Ask About Position handler ────────────────────────────────────────────
   const handleAskSend = useCallback((question: string) => {
@@ -781,15 +792,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Auto-review advancement effect with voice narration
   useEffect(() => {
-    if (!autoReviewActive || autoReviewPaused || awaitingAiNarration) return;
+    // Shared cleanup: always clear any pending auto-review timer when this
+    // effect re-runs or unmounts, preventing leaked timeouts that could
+    // double-advance the move index.
+    const cleanup = (): void => {
+      if (autoReviewTimerRef.current) {
+        clearTimeout(autoReviewTimerRef.current);
+        autoReviewTimerRef.current = null;
+      }
+    };
+
+    if (!autoReviewActive || autoReviewPaused || awaitingAiNarration) {
+      cleanup();
+      return cleanup;
+    }
 
     const moveIdx = reviewState.currentMoveIndex;
     if (moveIdx >= moves.length - 1) {
+      cleanup();
       // Reached end of game — speak the closing narration segment if available
       const closingText = narrationSegments?.closing ?? 'That concludes the game review.';
       void voiceService.speak(closingText);
       setAutoReviewActive(false);
-      return;
+      return cleanup;
     }
 
     // Starting position (moveIdx === -1): speak the intro narration segment
@@ -806,9 +831,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           setReviewState((prev) => ({ ...prev, currentMoveIndex: 0 }));
         }, 1500);
       }
-      return () => {
-        if (autoReviewTimerRef.current) clearTimeout(autoReviewTimerRef.current);
-      };
+      return cleanup;
     }
 
     const currentMoveForAutoReview = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
@@ -819,21 +842,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const isKeyMoment = !isOpponentMove && (cls === 'blunder' || cls === 'mistake' || cls === 'brilliant');
     const isNotable = !isOpponentMove && (cls === 'inaccuracy' || cls === 'great' || cls === 'miss');
 
+    // Helper: schedule advancement to the next move
+    const scheduleAdvance = (delay: number): void => {
+      autoReviewTimerRef.current = setTimeout(() => {
+        setReviewState((prev) => ({
+          ...prev,
+          currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
+        }));
+      }, delay);
+    };
+
     // ─── Full Review: fetch AI commentary for key moments, pause until done ──
     if (reviewDepth === 'full' && isKeyMoment && currentMoveForAutoReview) {
       const cachedComment = aiCommentaryCacheRef.current.get(moveIdx);
       if (cachedComment) {
-        // Already cached — speak it and wait for narration-length pause
+        // Already cached — speak it, show it, and wait for narration-length pause
+        setAiCommentary(cachedComment);
         void voiceService.speak(cachedComment);
-        autoReviewTimerRef.current = setTimeout(() => {
-          setReviewState((prev) => ({
-            ...prev,
-            currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
-          }));
-        }, Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, cachedComment.length * 55));
+        scheduleAdvance(Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, cachedComment.length * 55));
       } else {
         // Fetch AI commentary — pause advancement until it's done
         setAwaitingAiNarration(true);
+        setAiCommentary(null);
+        setIsLoadingAiCommentary(true);
         const moveNum = Math.floor(moveIdx / 2) + 1;
         const ctx: CoachContext = {
           fen: currentMoveForAutoReview.fen,
@@ -861,30 +892,36 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         }).then((fullText) => {
           aiCommentaryCacheRef.current.set(moveIdx, fullText);
           setAiCommentary(fullText);
+          setIsLoadingAiCommentary(false);
           void voiceService.speak(fullText);
-          // Wait proportional to commentary length before advancing
+          // Wait proportional to commentary length, then advance directly
           const narrationDelay = Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, fullText.length * 55);
           autoReviewTimerRef.current = setTimeout(() => {
             setAwaitingAiNarration(false);
+            // Advance immediately — don't re-enter this effect for the same move
+            setReviewState((prev) => ({
+              ...prev,
+              currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
+            }));
           }, narrationDelay);
         }).catch(() => {
+          setIsLoadingAiCommentary(false);
           setAwaitingAiNarration(false);
         });
       }
-      return () => {
-        if (autoReviewTimerRef.current) {
-          clearTimeout(autoReviewTimerRef.current);
-        }
-      };
+      return cleanup;
     }
 
-    // ─── Voice narration (quick: key moments only; full: key + notable) ──────
+    // ─── Voice narration: speak the commentary that matches what's displayed ──
     if (currentMoveForAutoReview && !isOpponentMove) {
       const moveNum = Math.ceil(currentMoveForAutoReview.moveNumber / 2);
-      if (isKeyMoment && currentMoveForAutoReview.commentary) {
-        void voiceService.speak(`Move ${moveNum}. ${currentMoveForAutoReview.commentary}`);
-      } else if (reviewDepth === 'full' && isNotable && currentMoveForAutoReview.commentary) {
-        void voiceService.speak(currentMoveForAutoReview.commentary);
+      // Use cached AI commentary if available (richer), otherwise template
+      const cachedAi = aiCommentaryCacheRef.current.get(moveIdx);
+      const spokenText = cachedAi ?? currentMoveForAutoReview.commentary;
+      if (isKeyMoment && spokenText) {
+        void voiceService.speak(`Move ${moveNum}. ${spokenText}`);
+      } else if (reviewDepth === 'full' && isNotable && spokenText) {
+        void voiceService.speak(spokenText);
       }
     }
 
@@ -895,24 +932,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     } else if (isNotable) {
       delay = reviewDepth === 'full' ? AUTO_REVIEW_PAUSE_MS : AUTO_REVIEW_ADVANCE_MS;
     } else if (isOpponentMove) {
-      // Visible pause so each side's move is distinct (not simultaneous)
-      delay = 1200;
+      // Visible pause so each side's move is distinct (not simultaneous).
+      // Must be longer than the board animation (200ms) to avoid perception
+      // of two pieces moving at once.
+      delay = AUTO_REVIEW_ADVANCE_MS;
     } else {
       delay = AUTO_REVIEW_ADVANCE_MS;
     }
 
-    autoReviewTimerRef.current = setTimeout(() => {
-      setReviewState((prev) => ({
-        ...prev,
-        currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
-      }));
-    }, delay);
-
-    return () => {
-      if (autoReviewTimerRef.current) {
-        clearTimeout(autoReviewTimerRef.current);
-      }
-    };
+    scheduleAdvance(delay);
+    return cleanup;
   // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depend on specific values
   }, [autoReviewActive, autoReviewPaused, awaitingAiNarration, reviewState.currentMoveIndex, moves, reviewDepth, narrationSegments]);
 
@@ -979,9 +1008,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
 
-    // Normal advance — show opponent replies quickly
+    // Normal advance — opponent replies use a shorter delay but still long
+    // enough for the board animation (200ms) to complete so that moves are
+    // visually distinct and don't appear to happen simultaneously.
     const currentGuidedMove = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
-    const guidedDelay = currentGuidedMove?.isCoachMove ? AUTO_REVIEW_REPLY_MS : GUIDED_ADVANCE_MS;
+    const guidedDelay = currentGuidedMove?.isCoachMove ? 1200 : GUIDED_ADVANCE_MS;
 
     guidedTimerRef.current = setTimeout(() => {
       setReviewState((prev) => ({
