@@ -70,17 +70,17 @@ describe('tacticAlertService', () => {
     });
 
     it('helps weaker players sooner (time-based)', () => {
-      // 600-rated player: nudge threshold = 20 * 0.5 = 10s
+      // 600-rated player: nudge threshold = 60 * 0.5 = 30s
       expect(detectStruggleTier({
-        elapsedSeconds: 12,
+        elapsedSeconds: 35,
         wrongAttempts: 0,
         sameTypeFailed: false,
         playerRating: 600,
       })).toBe('nudge');
 
-      // 1600-rated player: nudge threshold = 20 * 1.0 = 20s
+      // 1600-rated player: nudge threshold = 60 * 1.0 = 60s
       expect(detectStruggleTier({
-        elapsedSeconds: 12,
+        elapsedSeconds: 35,
         wrongAttempts: 0,
         sameTypeFailed: false,
         playerRating: 1600,
@@ -97,8 +97,9 @@ describe('tacticAlertService', () => {
     });
 
     it('triggers nudge based on time alone', () => {
+      // 1200-rated player: nudge threshold = 60 * 1.0 = 60s
       expect(detectStruggleTier({
-        elapsedSeconds: 25,
+        elapsedSeconds: 65,
         wrongAttempts: 0,
         sameTypeFailed: false,
         playerRating: 1200,

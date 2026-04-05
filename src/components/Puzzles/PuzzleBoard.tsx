@@ -358,6 +358,15 @@ export function PuzzleBoard({
 
   return (
     <div className="space-y-3" data-testid="puzzle-board">
+      {/* Puzzle theme label — big neon text above the board */}
+      {themeLabel && (
+        <h2
+          className="text-center text-2xl md:text-3xl font-extrabold tracking-wide uppercase drop-shadow-[0_0_12px_rgba(0,255,200,0.5)] text-cyan-400"
+          data-testid="tactic-type-heading"
+        >
+          {themeLabel}
+        </h2>
+      )}
       <div className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${flashClass}`} data-testid="board-wrapper">
         <ChessBoard
           initialFen={fen}
@@ -429,11 +438,6 @@ export function PuzzleBoard({
         >
           Puzzle Rating: {puzzle.rating}
         </span>
-        {themeLabel && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium" data-testid="tactic-type-badge">
-            {themeLabel}
-          </span>
-        )}
       </div>
     </div>
   );
