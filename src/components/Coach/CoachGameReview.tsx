@@ -20,8 +20,8 @@ import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../servi
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
-import { generateNarrativeSummary } from '../../services/coachFeatureService';
-import type { NarrativeMoveData } from '../../services/coachFeatureService';
+import { generateNarrativeSummary, generateReviewNarrationSegments } from '../../services/coachFeatureService';
+import type { NarrativeMoveData, ReviewNarrationSegments } from '../../services/coachFeatureService';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
@@ -138,7 +138,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // ─── Auto-Review State ────────────────────────────────────────────────────
   const [autoReviewActive, setAutoReviewActive] = useState(false);
   const [autoReviewPaused, setAutoReviewPaused] = useState(false);
+  const [reviewDepth, setReviewDepth] = useState<'quick' | 'full'>('quick');
   const autoReviewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track whether we're waiting for AI commentary to finish before advancing
+  const [awaitingAiNarration, setAwaitingAiNarration] = useState(false);
+  // Structured narration segments (intro/closing) for the walkthrough
+  const [narrationSegments, setNarrationSegments] = useState<ReviewNarrationSegments | null>(null);
 
   // ─── Guided Lesson State ────────────────────────────────────────────────────
   const [guidedLessonActive, setGuidedLessonActive] = useState(!!isGuidedLesson);
@@ -245,14 +250,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
 
-    // Best move arrow (green) — only show when revealed via button or in guided lesson
-    if (bestMoveRevealed || reviewState.mode === 'guided_lesson') {
+    // Best move arrow (green) — show when revealed via button, in guided lesson,
+    // or automatically during auto-review on key moments (blunders/mistakes)
+    const autoShowArrow = autoReviewActive
+      && (cls === 'blunder' || cls === 'mistake' || cls === 'miss');
+    if (bestMoveRevealed || reviewState.mode === 'guided_lesson' || autoShowArrow) {
       const bestArrow = uciToArrow(currentMove.bestMove, 'rgba(34, 197, 94, 0.8)');
       if (bestArrow) result.push(bestArrow);
     }
 
     return result;
-  }, [reviewState.mode, reviewState.currentMoveIndex, currentMove, moves, bestMoveRevealed]);
+  }, [reviewState.mode, reviewState.currentMoveIndex, currentMove, moves, bestMoveRevealed, autoReviewActive]);
 
   // Board highlights: classification-colored square for played move (mistakes/blunders)
   const classificationHighlights = useMemo(() => {
@@ -739,6 +747,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleStartAutoReview = useCallback(() => {
     setAutoReviewActive(true);
     setAutoReviewPaused(false);
+    setAwaitingAiNarration(false);
     setReviewState((prev) => ({
       ...prev,
       mode: 'analysis',
@@ -753,6 +762,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleStopAutoReview = useCallback(() => {
     setAutoReviewActive(false);
     setAutoReviewPaused(false);
+    setAwaitingAiNarration(false);
     voiceService.stop();
     if (autoReviewTimerRef.current) {
       clearTimeout(autoReviewTimerRef.current);
@@ -769,43 +779,122 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Auto-review advancement effect with voice narration
   useEffect(() => {
-    if (!autoReviewActive || autoReviewPaused) return;
+    if (!autoReviewActive || autoReviewPaused || awaitingAiNarration) return;
 
     const moveIdx = reviewState.currentMoveIndex;
     if (moveIdx >= moves.length - 1) {
-      // Reached end of game — narrate the ending
-      void voiceService.speak('That concludes the game review.');
+      // Reached end of game — speak the closing narration segment if available
+      const closingText = narrationSegments?.closing ?? 'That concludes the game review.';
+      void voiceService.speak(closingText);
       setAutoReviewActive(false);
       return;
     }
 
+    // Starting position (moveIdx === -1): speak the intro narration segment
+    if (moveIdx === -1) {
+      if (narrationSegments?.intro) {
+        void voiceService.speak(narrationSegments.intro);
+        const introDelay = Math.max(4000, narrationSegments.intro.length * 55);
+        autoReviewTimerRef.current = setTimeout(() => {
+          setReviewState((prev) => ({ ...prev, currentMoveIndex: 0 }));
+        }, introDelay);
+      } else {
+        // Segments still loading — brief pause then start
+        autoReviewTimerRef.current = setTimeout(() => {
+          setReviewState((prev) => ({ ...prev, currentMoveIndex: 0 }));
+        }, 1500);
+      }
+      return () => {
+        if (autoReviewTimerRef.current) clearTimeout(autoReviewTimerRef.current);
+      };
+    }
+
     const currentMoveForAutoReview = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
-    const nextMove = moveIdx + 1 < moves.length ? moves[moveIdx + 1] : null;
-    const isNextOpponentReply = nextMove?.isCoachMove === true;
+    const isOpponentMove = currentMoveForAutoReview?.isCoachMove === true;
 
-    // Determine if this is a key moment
+    // Determine if this is a key moment (only for player moves)
     const cls = currentMoveForAutoReview?.classification;
-    const isKeyMoment = cls === 'blunder' || cls === 'mistake' || cls === 'brilliant';
-    const isNotable = cls === 'inaccuracy' || cls === 'great' || cls === 'miss';
+    const isKeyMoment = !isOpponentMove && (cls === 'blunder' || cls === 'mistake' || cls === 'brilliant');
+    const isNotable = !isOpponentMove && (cls === 'inaccuracy' || cls === 'great' || cls === 'miss');
 
-    // Voice narration for the current move
-    if (currentMoveForAutoReview && !currentMoveForAutoReview.isCoachMove) {
+    // ─── Full Review: fetch AI commentary for key moments, pause until done ──
+    if (reviewDepth === 'full' && isKeyMoment && currentMoveForAutoReview) {
+      const cachedComment = aiCommentaryCacheRef.current.get(moveIdx);
+      if (cachedComment) {
+        // Already cached — speak it and wait for narration-length pause
+        void voiceService.speak(cachedComment);
+        autoReviewTimerRef.current = setTimeout(() => {
+          setReviewState((prev) => ({
+            ...prev,
+            currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
+          }));
+        }, Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, cachedComment.length * 55));
+      } else {
+        // Fetch AI commentary — pause advancement until it's done
+        setAwaitingAiNarration(true);
+        const moveNum = Math.floor(moveIdx / 2) + 1;
+        const ctx: CoachContext = {
+          fen: currentMoveForAutoReview.fen,
+          lastMoveSan: currentMoveForAutoReview.san,
+          moveNumber: moveNum,
+          pgn: moves.slice(0, moveIdx + 1).map((m) => m.san).join(' '),
+          openingName,
+          stockfishAnalysis: currentMoveForAutoReview.evaluation !== null ? {
+            evaluation: currentMoveForAutoReview.evaluation,
+            bestMove: currentMoveForAutoReview.bestMove ?? '',
+            isMate: false,
+            mateIn: null,
+            depth: 0,
+            topLines: [],
+            nodesPerSecond: 0,
+          } : null,
+          playerMove: currentMoveForAutoReview.san,
+          moveClassification: currentMoveForAutoReview.classification,
+          playerProfile: { rating: playerRating, weaknesses: [] },
+          additionalContext: INTERACTIVE_REVIEW_ADDITION,
+        };
+
+        void getCoachCommentary('interactive_review', ctx, (chunk) => {
+          setAiCommentary((prev) => (prev ?? '') + chunk);
+        }).then((fullText) => {
+          aiCommentaryCacheRef.current.set(moveIdx, fullText);
+          setAiCommentary(fullText);
+          void voiceService.speak(fullText);
+          // Wait proportional to commentary length before advancing
+          const narrationDelay = Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, fullText.length * 55);
+          autoReviewTimerRef.current = setTimeout(() => {
+            setAwaitingAiNarration(false);
+          }, narrationDelay);
+        }).catch(() => {
+          setAwaitingAiNarration(false);
+        });
+      }
+      return () => {
+        if (autoReviewTimerRef.current) {
+          clearTimeout(autoReviewTimerRef.current);
+        }
+      };
+    }
+
+    // ─── Voice narration (quick: key moments only; full: key + notable) ──────
+    if (currentMoveForAutoReview && !isOpponentMove) {
       const moveNum = Math.ceil(currentMoveForAutoReview.moveNumber / 2);
       if (isKeyMoment && currentMoveForAutoReview.commentary) {
         void voiceService.speak(`Move ${moveNum}. ${currentMoveForAutoReview.commentary}`);
-      } else if (isNotable && currentMoveForAutoReview.commentary) {
+      } else if (reviewDepth === 'full' && isNotable && currentMoveForAutoReview.commentary) {
         void voiceService.speak(currentMoveForAutoReview.commentary);
       }
     }
 
-    // Set timing: longer pauses for key moments, fast for opponent replies
+    // ─── Timing ─────────────────────────────────────────────────────────────
     let delay: number;
     if (isKeyMoment) {
       delay = AUTO_REVIEW_NARRATION_PAUSE_MS;
     } else if (isNotable) {
-      delay = AUTO_REVIEW_PAUSE_MS;
-    } else if (isNextOpponentReply) {
-      delay = AUTO_REVIEW_REPLY_MS;
+      delay = reviewDepth === 'full' ? AUTO_REVIEW_PAUSE_MS : AUTO_REVIEW_ADVANCE_MS;
+    } else if (isOpponentMove) {
+      // Visible pause so each side's move is distinct (not simultaneous)
+      delay = 1200;
     } else {
       delay = AUTO_REVIEW_ADVANCE_MS;
     }
@@ -822,7 +911,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         clearTimeout(autoReviewTimerRef.current);
       }
     };
-  }, [autoReviewActive, autoReviewPaused, reviewState.currentMoveIndex, moves]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depend on specific values
+  }, [autoReviewActive, autoReviewPaused, awaitingAiNarration, reviewState.currentMoveIndex, moves, reviewDepth, narrationSegments]);
 
   // ─── Guided Lesson Auto-Advance Effect ────────────────────────────────────
   const GUIDED_ADVANCE_MS = 2000;
@@ -960,14 +1050,27 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [missedTactics, onPracticeInChat]);
 
   // Handle transitioning from summary to analysis
-  const handleStartReview = useCallback(() => {
+  const handleStartReview = useCallback((depth: 'quick' | 'full') => {
     setReviewPhase('analysis');
-    // Start at the beginning for step-through
+    setReviewDepth(depth);
+    // Start at the beginning and immediately kick off auto-review
     setReviewState((prev) => ({
       ...prev,
       currentMoveIndex: -1,
     }));
-  }, []);
+    setAutoReviewActive(true);
+    setAutoReviewPaused(false);
+
+    // Fetch structured intro/closing narration segments in the background
+    const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
+    void generateReviewNarrationSegments(
+      gamePgn, playerColor, openingName, result, playerRating, narrativeMoveData,
+    ).then((segments) => {
+      setNarrationSegments(segments);
+    }).catch(() => {
+      // Fallback handled inside generateReviewNarrationSegments
+    });
+  }, [pgn, moves, playerColor, openingName, result, playerRating, narrativeMoveData]);
 
   // Empty state
   if (moves.length === 0) {

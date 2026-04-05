@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { RotateCcw, Home, ChevronRight, Bot, Target } from 'lucide-react';
+import { RotateCcw, Home, ChevronRight, Bot, Target, FastForward } from 'lucide-react';
 import { AnimatedAccuracy } from './AnimatedAccuracy';
 import { ClassificationPills } from './ClassificationPills';
 import { PhaseGrades } from './PhaseGrades';
@@ -17,7 +17,7 @@ interface ReviewSummaryCardProps {
   moves: CoachGameMove[];
   narrativeSummary?: string;
   missedOpportunities?: number;
-  onStartReview: () => void;
+  onStartReview: (depth: 'quick' | 'full') => void;
   onPlayAgain: () => void;
   onBackToCoach: () => void;
   onNavigateToMistakes?: () => void;
@@ -181,15 +181,30 @@ export function ReviewSummaryCard({
         transition={{ duration: 0.3, delay: 0.4 }}
         className="w-full flex flex-col gap-2 pt-1"
       >
-        <button
-          onClick={onStartReview}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
-          style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-          data-testid="start-review-btn"
-        >
-          Review Game
-          <ChevronRight size={16} />
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => onStartReview('quick')}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
+            style={{
+              background: 'var(--color-surface)',
+              color: 'var(--color-text)',
+              border: '1px solid var(--color-border)',
+            }}
+            data-testid="start-review-quick-btn"
+          >
+            <FastForward size={14} />
+            Quick Review
+          </button>
+          <button
+            onClick={() => onStartReview('full')}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="start-review-full-btn"
+          >
+            Full Review
+            <ChevronRight size={16} />
+          </button>
+        </div>
         <div className="flex gap-2">
           <button
             onClick={onPlayAgain}

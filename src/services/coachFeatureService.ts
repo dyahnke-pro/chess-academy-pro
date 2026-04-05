@@ -217,6 +217,80 @@ export async function generateNarrativeSummary(
   return getCoachCommentary('game_narrative_summary', context, onStream);
 }
 
+// ─── Review Narration Segments ─────────────────────────────────────────────
+
+export interface ReviewNarrationSegments {
+  intro: string;
+  closing: string;
+}
+
+export async function generateReviewNarrationSegments(
+  pgn: string,
+  playerColor: string,
+  openingName: string | null,
+  result: string,
+  playerRating: number,
+  moveData?: NarrativeMoveData[],
+): Promise<ReviewNarrationSegments> {
+  let analysisContext = '';
+  if (moveData && moveData.length > 0) {
+    const keyMoves = moveData.filter((m) =>
+      !m.isCoachMove && m.classification &&
+      m.classification !== 'good' && m.classification !== 'book',
+    );
+    if (keyMoves.length > 0) {
+      analysisContext = '\n\nEngine analysis of key moments:\n' +
+        keyMoves.map((m) => {
+          const evalText = m.evaluation !== null ? ` (eval: ${(m.evaluation / 100).toFixed(1)})` : '';
+          const bestText = m.bestMove ? `, best was ${m.bestMove}` : '';
+          return `- Move ${Math.ceil(m.moveNumber / 2)} ${m.san}: ${m.classification}${evalText}${bestText}`;
+        }).join('\n');
+    }
+  }
+
+  const context: CoachContext = {
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    lastMoveSan: null,
+    moveNumber: 0,
+    pgn,
+    openingName,
+    stockfishAnalysis: null,
+    playerMove: null,
+    moveClassification: null,
+    playerProfile: {
+      rating: playerRating,
+      weaknesses: [],
+    },
+    additionalContext: `Player color: ${playerColor}. Game result: ${result}.
+Generate two short narration segments for a move-by-move game review (2-3 sentences each, spoken aloud):
+
+1. INTRO: Spoken before any moves play. Set the scene — mention the opening, early impressions, and what to watch for.
+2. CLOSING: Spoken after the last move. Summarize takeaways — what went well, what to improve, and an encouraging note.
+
+Respond ONLY with valid JSON: {"intro": "...", "closing": "..."}
+Do not include any other text outside the JSON.${analysisContext}`,
+  };
+
+  const raw = await getCoachCommentary('game_narrative_summary', context);
+  try {
+    // Extract JSON from the response (may have markdown fences)
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]) as { intro: string; closing: string };
+      return { intro: parsed.intro, closing: parsed.closing };
+    }
+  } catch {
+    // Fallback: split the text in half
+  }
+  // Fallback if parsing fails
+  return {
+    intro: openingName
+      ? `Let's review this game. You played the ${openingName}.`
+      : `Let's walk through this game together.`,
+    closing: 'That wraps up the review. Keep practicing and learning from each game!',
+  };
+}
+
 // ─── Build Context from Profile ─────────────────────────────────────────────
 
 export function buildProfileContext(profile: UserProfile): CoachContext {
