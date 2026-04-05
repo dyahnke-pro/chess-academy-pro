@@ -53,7 +53,7 @@ export function LichessDashboardPage(): JSX.Element {
   const handleTrainWeaknesses = (): void => {
     if (!dashboard) return;
     const weakThemes = getWeakestThemesFromDashboard(dashboard, 5);
-    void navigate('/weaknesses/adaptive', { state: { forcedWeakThemes: weakThemes } });
+    void navigate('/tactics/adaptive', { state: { forcedWeakThemes: weakThemes } });
   };
 
   if (!hasToken) {

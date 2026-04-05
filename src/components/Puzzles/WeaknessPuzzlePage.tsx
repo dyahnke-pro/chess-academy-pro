@@ -117,7 +117,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button
-          onClick={() => void navigate('/weaknesses')}
+          onClick={() => void navigate('/tactics')}
           className="p-2 rounded-lg hover:opacity-80"
           data-testid="back-btn"
         >
@@ -276,7 +276,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
               Play Again
             </button>
             <button
-              onClick={() => void navigate('/weaknesses')}
+              onClick={() => void navigate('/tactics')}
               className="px-6 py-3 rounded-xl font-semibold text-sm border"
               style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
               data-testid="back-to-report"

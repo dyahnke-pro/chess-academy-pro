@@ -38,14 +38,14 @@ function getRouteForRecommendation(rec: TrainingRecommendation): string {
         : '/coach/play';
     case 'tactic_drill':
       return rec.data.puzzleTheme
-        ? `/weaknesses/adaptive?theme=${rec.data.puzzleTheme}`
-        : '/weaknesses/adaptive';
+        ? `/tactics/adaptive?theme=${rec.data.puzzleTheme}`
+        : '/tactics/adaptive';
     case 'opening_review':
       return rec.data.openingId
         ? `/openings/${rec.data.openingId}`
         : '/openings';
     case 'endgame_practice':
-      return '/weaknesses/adaptive?theme=endgame';
+      return '/tactics/adaptive?theme=endgame';
     case 'flashcard_review':
       return '/play';
     case 'position_practice':

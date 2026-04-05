@@ -358,7 +358,7 @@ export function ImportPage(): JSX.Element {
                     </span>
                   </div>
                   <Link
-                    to="/weaknesses/lichess-dashboard"
+                    to="/tactics/lichess"
                     className="flex items-center gap-1 text-xs"
                     style={{ color: 'var(--color-accent)' }}
                     data-testid="view-dashboard-link"

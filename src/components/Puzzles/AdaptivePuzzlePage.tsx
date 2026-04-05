@@ -228,7 +228,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
           <DifficultySelector onSelect={(d) => void handleSelectDifficulty(d)} />
           <div className="flex justify-center gap-6">
             <Link
-              to="/weaknesses/classic"
+              to="/tactics/classic"
               className="flex items-center gap-2 text-sm text-theme-text-muted hover:text-theme-text transition-colors"
               data-testid="classic-trainer-link"
             >
@@ -236,7 +236,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
               Classic Trainer
             </Link>
             <Link
-              to="/weaknesses/mistakes"
+              to="/tactics/mistakes"
               className="flex items-center gap-2 text-sm text-theme-text-muted hover:text-theme-text transition-colors"
               data-testid="my-mistakes-link"
             >

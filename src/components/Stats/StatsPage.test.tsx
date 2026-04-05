@@ -225,7 +225,7 @@ describe('StatsPage', () => {
           metric: '30% accuracy (10 attempts)',
           severity: 70,
           detail: 'Focus on fork patterns.',
-          trainingAction: { route: '/puzzles', buttonLabel: 'Train forks' },
+          trainingAction: { route: '/tactics', buttonLabel: 'Train forks' },
         },
       ],
     };
