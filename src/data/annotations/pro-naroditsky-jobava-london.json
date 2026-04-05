@@ -1,0 +1,42 @@
+{
+  "openingId": "pro-naroditsky-jobava-london",
+  "moveAnnotations": [
+    {
+      "san": "d4",
+      "annotation": "The starting move of the Jobava London System. We're claiming the center and preparing to develop our pieces aggressively. Unlike 1.e4, this gives us more flexibility in how we arrange our minor pieces. Naroditsky chooses d4 because the Jobava setup creates immediate tactical threats while avoiding the massive theory of mainline Queen's Gambit or Nimzo-Indian positions.",
+      "arrows": [{ "from": "d4", "to": "e5", "color": "green", "delay": 0 }, { "from": "d4", "to": "c5", "color": "green", "delay": 0 }]
+    },
+    {
+      "san": "d5",
+      "annotation": "Black's most natural response, fighting for central control. By playing d5, Black mirrors our central pawn and prevents an immediate e4. This is the most common reply and leads to the main lines of the Jobava London."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "The key move that defines the Jobava London! Instead of the traditional London move Nf3, we develop the knight to c3 where it pressures d5 and — crucially — prepares the Nb5 jump targeting c7. This is what separates the Jobava from the regular London System. The knight on c3 also supports a future e4 pawn break, which is White's primary strategic goal.",
+      "plans": ["Nb5 threatening Nc7+ fork", "Support e4 break with f3", "Coordinate with Bf4 to control dark squares"],
+      "arrows": [{ "from": "c3", "to": "b5", "color": "red", "delay": 0 }, { "from": "c3", "to": "e4", "color": "green", "delay": 500 }]
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Black develops the knight to its most natural square, defending d5 and preparing to castle. This is the most principled response. From here, the game branches into many critical variations depending on Black's next moves — e6, g6, Bf5, c5, c6, or a6.",
+      "alternatives": ["c5 — immediately challenges the center", "e6 — solid French-like setup", "g6 — fianchetto with sharp play", "Bf5 — develops the bishop but allows the f3-g4 bishop hunt", "c6 — Slav-like setup"]
+    },
+    {
+      "san": "Bf4",
+      "annotation": "Completing the Jobava London setup! The bishop comes to f4 BEFORE playing e3, keeping it active outside the pawn chain. This bishop controls the crucial e5 and c7 squares, working in harmony with the Nc3. Together, Nc3 and Bf4 create a powerful duo — the knight threatens to jump to b5 hitting c7, while the bishop already eyes that same square. Danya emphasizes that this piece coordination is what makes the Jobava so dangerous.",
+      "plans": ["Nb5 + Bf4 pressure on c7", "e3 followed by Bd3 and O-O", "Against g6: h4-h5 kingside attack", "Against Bf5: f3-g4-h4 bishop hunt"],
+      "arrows": [{ "from": "f4", "to": "c7", "color": "red", "delay": 0 }, { "from": "c3", "to": "b5", "color": "red", "delay": 500 }]
+    },
+    {
+      "san": "e6",
+      "annotation": "Black chooses the solid e6 setup, bolstering d5 and preparing to develop the bishop to e7 or d6. However, this move blocks in the light-squared bishop and — most importantly — does nothing to prevent our Nb5 jump! This is where the Jobava London gets exciting.",
+      "alternatives": ["g6 — leads to the sharp h4 attack", "Bf5 — allows the f3-g4 bishop hunt", "c5 — challenges the center directly", "c6 — Slav setup, solid but passive", "a6 — prevents Nb5 but wastes tempo"]
+    },
+    {
+      "san": "Nb5",
+      "annotation": "The signature move of the Jobava London against e6! The knight jumps to b5 threatening Nc7+ forking the king and rook. Black is forced to play the awkward Na6 — the only move that defends c7 while not allowing the fork. This is the key moment that justifies the entire Nc3 setup. Naroditsky shows that Black's knight on a6 will take several tempi to reroute, giving White a lasting initiative.",
+      "arrows": [{ "from": "b5", "to": "c7", "color": "red", "delay": 0 }],
+      "highlights": [{ "square": "c7", "color": "red", "delay": 0 }]
+    }
+  ]
+}
