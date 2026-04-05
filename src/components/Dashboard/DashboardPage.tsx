@@ -101,23 +101,22 @@ export function DashboardPage(): JSX.Element {
         <SmartSearchBar />
       </div>
 
-      {/* 5 big squares */}
+      {/* Section grid — uniform cards, order matches sidebar */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">
-        {SECTIONS.map((section, i) => {
+        {SECTIONS.map((section) => {
           const Icon = section.icon;
-          const isFirst = i === 0;
           return (
             <button
               key={section.route}
               onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200 ${isFirst ? 'col-span-2 py-10' : 'aspect-square'}`}
-              style={{ boxShadow: 'none' }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 14px ${section.glowColor}`; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200 aspect-square`}
+              style={{ boxShadow: `0 0 8px ${section.glowColor}` }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 18px ${section.glowColor}, 0 0 4px ${section.glowColor}`; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 8px ${section.glowColor}`; }}
               data-testid={`section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              <Icon size={isFirst ? 48 : 40} className={section.color} />
-              <span className={`${isFirst ? 'text-lg' : 'text-base'} font-bold ${section.color}`}>{section.label}</span>
+              <Icon size={40} className={section.color} />
+              <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{section.label}</span>
             </button>
           );
         })}

@@ -3,6 +3,7 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
+  GraduationCap,
   Settings,
   Baby,
   Menu,
@@ -27,6 +28,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Home', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
+  { to: '/coach/play', label: 'Coach', icon: GraduationCap },
   { to: '/tactics', label: 'Tactics', icon: Target },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/kid', label: 'Kids Mode', icon: Baby },
@@ -173,7 +175,7 @@ export function AppLayout(): JSX.Element {
           className="hidden md:flex flex-col w-56 shrink-0 border-r py-6"
           style={{
             background: 'var(--color-bg-secondary)',
-            borderColor: 'var(--color-border)',
+            borderColor: 'color-mix(in srgb, var(--color-accent) 20%, var(--color-border))',
           }}
         >
           <div className="px-4 mb-8">
@@ -203,6 +205,9 @@ export function AppLayout(): JSX.Element {
                       : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
                   }`
                 }
+                style={({ isActive }) => isActive ? {
+                  boxShadow: '0 0 10px color-mix(in srgb, var(--color-accent) 40%, transparent)',
+                } : undefined}
               >
                 <Icon size={16} />
                 {label}
@@ -261,6 +266,9 @@ export function AppLayout(): JSX.Element {
                 isActive ? 'text-theme-accent' : 'text-theme-text-muted'
               }`
             }
+            style={({ isActive }) => isActive ? {
+              filter: 'drop-shadow(0 0 6px var(--color-accent))',
+            } : undefined}
           >
             <Icon size={22} />
             <span className="truncate w-full text-center leading-tight">{label}</span>
