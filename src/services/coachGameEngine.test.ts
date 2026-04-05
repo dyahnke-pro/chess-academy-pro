@@ -5,6 +5,8 @@ vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn(),
     initialize: vi.fn(),
+    send: vi.fn(),
+    stop: vi.fn(),
   },
 }));
 
@@ -13,6 +15,7 @@ import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
 const analyzePositionMock = vi.mocked(stockfishEngine).analyzePosition;
+const sendMock = vi.mocked(stockfishEngine).send;
 
 const mockAnalysis: StockfishAnalysis = {
   bestMove: 'e2e4',
@@ -31,6 +34,7 @@ const mockAnalysis: StockfishAnalysis = {
 describe('coachGameEngine', () => {
   beforeEach(() => {
     analyzePositionMock.mockResolvedValue(mockAnalysis);
+    sendMock.mockClear();
   });
 
   describe('getAdaptiveMove', () => {
@@ -40,11 +44,16 @@ describe('coachGameEngine', () => {
       expect(result.analysis).toBe(mockAnalysis);
     });
 
+    it('sets Skill Level before analyzing', async () => {
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
+      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 11');
+    });
+
     it('calls stockfish with lower depth for lower ELO', async () => {
       await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 800);
       expect(analyzePositionMock).toHaveBeenCalledWith(
         expect.any(String),
-        4, // depth for 800 ELO
+        10, // depth for 800 ELO
       );
     });
 
@@ -56,39 +65,66 @@ describe('coachGameEngine', () => {
       );
     });
 
-    it('always returns a valid move from the analysis', async () => {
-      // Run multiple times to test randomness
+    it('always returns the best move or 2nd-best move', async () => {
       for (let i = 0; i < 20; i++) {
         const result = await getAdaptiveMove('startfen', 1000);
-        expect(['e2e4', 'd2d4', 'c2c4']).toContain(result.move);
+        // bestMove is always e2e4; 2nd-best d2d4 possible via variety chance
+        expect(['e2e4', 'd2d4']).toContain(result.move);
       }
     });
   });
 
   describe('getAdaptiveMove — depth by ELO', () => {
-    it('uses depth 4 for < 1000 ELO', async () => {
+    it('uses depth 10 for < 1000 ELO', async () => {
       await getAdaptiveMove('startfen', 900);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 4);
-    });
-
-    it('uses depth 6 for 1000-1199 ELO', async () => {
-      await getAdaptiveMove('startfen', 1100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 6);
-    });
-
-    it('uses depth 10 for 1200-1499 ELO', async () => {
-      await getAdaptiveMove('startfen', 1300);
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10);
     });
 
-    it('uses depth 14 for 1500-1799 ELO', async () => {
-      await getAdaptiveMove('startfen', 1600);
+    it('uses depth 12 for 1000-1199 ELO', async () => {
+      await getAdaptiveMove('startfen', 1100);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12);
+    });
+
+    it('uses depth 14 for 1200-1499 ELO', async () => {
+      await getAdaptiveMove('startfen', 1300);
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 14);
+    });
+
+    it('uses depth 16 for 1500-1799 ELO', async () => {
+      await getAdaptiveMove('startfen', 1600);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 16);
     });
 
     it('uses depth 18 for 1800+ ELO', async () => {
       await getAdaptiveMove('startfen', 2000);
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 18);
+    });
+  });
+
+  describe('getAdaptiveMove — Skill Level by ELO', () => {
+    it('uses skill 2 for < 800 ELO', async () => {
+      await getAdaptiveMove('startfen', 700);
+      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 2');
+    });
+
+    it('uses skill 5 for 800-999 ELO', async () => {
+      await getAdaptiveMove('startfen', 900);
+      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 5');
+    });
+
+    it('uses skill 8 for 1000-1199 ELO', async () => {
+      await getAdaptiveMove('startfen', 1100);
+      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 8');
+    });
+
+    it('uses skill 14 for 1400-1599 ELO', async () => {
+      await getAdaptiveMove('startfen', 1500);
+      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 14');
+    });
+
+    it('uses skill 20 for 2000+ ELO', async () => {
+      await getAdaptiveMove('startfen', 2100);
+      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 20');
     });
   });
 
@@ -119,7 +155,6 @@ describe('coachGameEngine', () => {
     const AFTER_E4_FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 
     it('returns the next book move when on the opening line', () => {
-      // French Defense: e4 e6 — AI is black, after 1.e4 should play e6
       const frenchMoves = ['e4', 'e6', 'd4', 'd5'];
       const result = tryOpeningBookMove(AFTER_E4_FEN, ['e4'], frenchMoves, 'black');
       expect(result).toBe('e7e6');
@@ -132,13 +167,11 @@ describe('coachGameEngine', () => {
 
     it('returns null when game has deviated from book', () => {
       const frenchMoves = ['e4', 'e6', 'd4', 'd5'];
-      // Player played d4 instead of e4 — not in the French Defense line
       const result = tryOpeningBookMove(AFTER_E4_FEN, ['d4'], frenchMoves, 'black');
       expect(result).toBeNull();
     });
 
     it('returns null when it is not the AI turn', () => {
-      // AI is black but it's white's turn at move 0
       const frenchMoves = ['e4', 'e6', 'd4', 'd5'];
       const result = tryOpeningBookMove(START_FEN, [], frenchMoves, 'black');
       expect(result).toBeNull();
@@ -152,7 +185,6 @@ describe('coachGameEngine', () => {
     });
 
     it('returns the correct move for AI playing white', () => {
-      // Italian Game: e4 e5 Nf3 — AI is white, at move 0 should play e4
       const italianMoves = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'];
       const result = tryOpeningBookMove(START_FEN, [], italianMoves, 'white');
       expect(result).toBe('e2e4');

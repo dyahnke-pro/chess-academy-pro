@@ -3,7 +3,7 @@ import { stockfishEngine } from './stockfishEngine';
 import { getNextOpeningBookMove } from './openingDetectionService';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 
-const COACH_MOVE_TIMEOUT_MS = 3000;
+const COACH_MOVE_TIMEOUT_MS = 5000;
 
 const FALLBACK_ANALYSIS: StockfishAnalysis = {
   bestMove: '',
@@ -15,21 +15,42 @@ const FALLBACK_ANALYSIS: StockfishAnalysis = {
   nodesPerSecond: 0,
 };
 
-// Depth mapping by target ELO range
+/**
+ * Maps target ELO to Stockfish Skill Level (0–20).
+ * Skill Level controls how many intentional "errors" the engine makes —
+ * much more natural than picking random non-best moves.
+ */
+function getSkillLevelForElo(targetElo: number): number {
+  if (targetElo < 800) return 2;
+  if (targetElo < 1000) return 5;
+  if (targetElo < 1200) return 8;
+  if (targetElo < 1400) return 11;
+  if (targetElo < 1600) return 14;
+  if (targetElo < 1800) return 16;
+  if (targetElo < 2000) return 18;
+  return 20;
+}
+
+/**
+ * Analysis depth — higher is fine because Skill Level handles weakness.
+ * We want the engine to "see" tactics so it doesn't hang pieces.
+ */
 function getDepthForElo(targetElo: number): number {
-  if (targetElo < 1000) return 4;
-  if (targetElo < 1200) return 6;
-  if (targetElo < 1500) return 10;
-  if (targetElo < 1800) return 14;
+  if (targetElo < 1000) return 10;
+  if (targetElo < 1200) return 12;
+  if (targetElo < 1500) return 14;
+  if (targetElo < 1800) return 16;
   return 18;
 }
 
-// Lower ELO = more randomness (higher chance of picking 2nd/3rd best move)
-function getRandomnessForElo(targetElo: number): number {
-  if (targetElo < 1000) return 0.35;
-  if (targetElo < 1200) return 0.25;
-  if (targetElo < 1500) return 0.15;
-  if (targetElo < 1800) return 0.08;
+/**
+ * Small chance of picking 2nd-best move for variety (not blundering).
+ * Kept very low since Skill Level already weakens play naturally.
+ */
+function getVarietyChance(targetElo: number): number {
+  if (targetElo < 1000) return 0.10;
+  if (targetElo < 1200) return 0.08;
+  if (targetElo < 1500) return 0.05;
   return 0.03;
 }
 
@@ -81,6 +102,11 @@ export async function getAdaptiveMove(
   targetElo: number,
 ): Promise<{ move: string; analysis: StockfishAnalysis }> {
   const depth = getDepthForElo(targetElo);
+  const skillLevel = getSkillLevelForElo(targetElo);
+
+  // Set Skill Level before analyzing — this makes the engine play
+  // naturally weaker without producing bizarre moves
+  stockfishEngine.send(`setoption name Skill Level value ${skillLevel}`);
 
   let analysis: StockfishAnalysis;
   try {
@@ -96,30 +122,25 @@ export async function getAdaptiveMove(
     return { move: fallbackMove, analysis: { ...FALLBACK_ANALYSIS, bestMove: fallbackMove } };
   }
 
-  const randomness = getRandomnessForElo(targetElo);
+  const varietyChance = getVarietyChance(targetElo);
   const topLines = analysis.topLines;
 
-  // Pick from top lines with weighted randomness
-  if (topLines.length >= 2) {
-    const roll = Math.random();
-    if (roll < randomness && topLines.length >= 3) {
-      // Pick 3rd best move
-      const thirdLine = topLines[2];
-      if (thirdLine.moves.length > 0) {
-        console.log('[CoachEngine] Picked 3rd-best move for variety:', thirdLine.moves[0]);
-        return { move: thirdLine.moves[0], analysis };
-      }
-    } else if (roll < randomness * 2) {
-      // Pick 2nd best move
-      const secondLine = topLines[1];
-      if (secondLine.moves.length > 0) {
+  // Occasionally pick the 2nd-best move for variety (not the 3rd — too risky)
+  if (topLines.length >= 2 && Math.random() < varietyChance) {
+    const secondLine = topLines[1];
+    if (secondLine.moves.length > 0) {
+      // Only pick 2nd-best if it's not drastically worse (within 0.8 pawns)
+      const evalDiff = Math.abs(
+        topLines[0].evaluation - secondLine.evaluation,
+      );
+      if (evalDiff < 80) {
         console.log('[CoachEngine] Picked 2nd-best move for variety:', secondLine.moves[0]);
         return { move: secondLine.moves[0], analysis };
       }
     }
   }
 
-  console.log('[CoachEngine] Playing best move:', analysis.bestMove, 'eval:', analysis.evaluation);
+  console.log('[CoachEngine] Playing best move:', analysis.bestMove, 'eval:', analysis.evaluation, 'skill:', skillLevel);
   return { move: analysis.bestMove, analysis };
 }
 
