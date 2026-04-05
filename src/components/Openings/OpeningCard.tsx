@@ -32,16 +32,16 @@ export function OpeningCard({ opening, onClick, onToggleFavorite }: OpeningCardP
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
       className="w-full text-left bg-theme-surface border border-transparent hover:border-theme-accent rounded-xl p-3.5 transition-all duration-200 group relative cursor-pointer"
       style={{
-        borderBottom: '2px solid color-mix(in srgb, var(--color-accent) 25%, transparent)',
-        boxShadow: '0 2px 6px color-mix(in srgb, var(--color-accent) 15%, transparent)',
+        borderBottom: '2px solid rgba(59, 130, 246, 0.25)',
+        boxShadow: '0 2px 6px rgba(59, 130, 246, 0.15)',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderBottom = '2px solid var(--color-accent)';
-        e.currentTarget.style.boxShadow = '0 2px 12px color-mix(in srgb, var(--color-accent) 40%, transparent)';
+        e.currentTarget.style.borderBottom = '2px solid rgba(59, 130, 246, 0.7)';
+        e.currentTarget.style.boxShadow = '0 2px 12px rgba(59, 130, 246, 0.4)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderBottom = '2px solid color-mix(in srgb, var(--color-accent) 25%, transparent)';
-        e.currentTarget.style.boxShadow = '0 2px 6px color-mix(in srgb, var(--color-accent) 15%, transparent)';
+        e.currentTarget.style.borderBottom = '2px solid rgba(59, 130, 246, 0.25)';
+        e.currentTarget.style.boxShadow = '0 2px 6px rgba(59, 130, 246, 0.15)';
       }}
       data-testid={`opening-card-${opening.id}`}
     >
