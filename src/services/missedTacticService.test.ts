@@ -36,6 +36,30 @@ describe('detectTacticType', () => {
     expect(detectTacticType(fen, 'a1a8')).toBe('back_rank');
   });
 
+  it('does NOT detect back rank for knight check on rank 8 (should be fork)', () => {
+    // Knight on f5 moves to e7+ checking king on g8, also attacks rook c8
+    // King on g8 has pawns f7/g7/h7 but this is a knight fork, not back rank
+    const fen = '2r3k1/5ppp/8/5N2/8/8/8/4K3 w - - 0 1';
+    const result = detectTacticType(fen, 'f5e7');
+    expect(result).not.toBe('back_rank');
+    expect(result).toBe('fork');
+  });
+
+  it('does NOT detect back rank for queen diagonal check on rank 8', () => {
+    // Queen on d5 checks king on g8 diagonally — not a back rank pattern
+    const fen = '6k1/5ppp/8/3Q4/8/8/8/4K3 w - - 0 1';
+    const result = detectTacticType(fen, 'd5g8');
+    // Queen captures on g8 — not a horizontal check, not back rank
+    expect(result).not.toBe('back_rank');
+  });
+
+  it('does NOT detect back rank when king has escape squares', () => {
+    // Rook on a1 checks king on e8, but king has d7, f7 available (no pawns blocking)
+    const fen = '4k3/8/8/8/8/8/8/R3K3 w Q - 0 1';
+    const result = detectTacticType(fen, 'a1a8');
+    expect(result).not.toBe('back_rank');
+  });
+
   it('detects fork (knight attacks two valuable pieces)', () => {
     // Knight on e5 moves to d3 forking queen on b2 and rook on f2
     // Use a midboard position to avoid back_rank detection
@@ -127,13 +151,12 @@ describe('detectTacticType — priority ordering', () => {
     expect(detectTacticType(fen, 'a1d4')).toBe('fork');
   });
 
-  it('back_rank beats fork: rook delivering back-rank check that also attacks a piece returns back_rank', () => {
-    // White rook on d1 moves to d8+, checking black king on f8 (king on 8th rank = back_rank).
-    // The rook on d8 also attacks Ra8 along the 8th rank (value 5), so the fork condition
-    // (check + 1 valuable attack >= 3) would also match.
-    // back_rank is priority 2, fork is priority 3 — back_rank wins.
+  it('rook check on back rank with open king is fork, not back_rank', () => {
+    // White rook on d1 moves to d8+, checking black king on f8 and attacking Ra8.
+    // King on f8 has many escape squares (e7, f7, g7, g8) — NOT trapped.
+    // This is a fork (king + rook), not a back rank pattern.
     const fen = 'r4k2/8/8/8/8/8/8/3RK3 w - - 0 1';
-    expect(detectTacticType(fen, 'd1d8')).toBe('back_rank');
+    expect(detectTacticType(fen, 'd1d8')).toBe('fork');
   });
 
   it('check plus one valuable attack equals fork', () => {

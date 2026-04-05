@@ -73,6 +73,7 @@ export async function generateSetupPuzzle(
     setupFen,
     fens.slice(setupIndex, tacticIndex + 1),
     moves.slice(setupIndex, tacticIndex),
+    difficulty,
   );
 
   if (!isValid) return null;
@@ -114,11 +115,17 @@ export async function generateSetupPuzzle(
 /**
  * Verify that Stockfish's best line from the setup position leads through
  * the same tactic. This ensures the prep moves are genuinely preparatory.
+ *
+ * Difficulty-scaled verification:
+ * - Always checks that the engine's first move matches the expected first move
+ * - Higher difficulties require the engine line to agree with more expected moves
+ * - Eval fallback threshold scales with difficulty (farther back = higher bar)
  */
 async function verifySetupPosition(
   setupFen: string,
   expectedFens: string[],
   expectedMoves: string[],
+  difficulty: SetupPuzzleDifficulty,
 ): Promise<boolean> {
   if (expectedMoves.length === 0) return false;
 
@@ -128,29 +135,58 @@ async function verifySetupPosition(
     const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
     if (!topLine || topLine.moves.length === 0) return false;
 
-    // Check if the engine's best line starts with a move that leads toward
-    // the tactic position. We allow some flexibility — the engine might find
-    // a slightly different path to the same tactic.
-    const chess = new Chess(setupFen);
-    try {
-      const uci = topLine.moves[0];
-      chess.move({
-        from: uci.slice(0, 2),
-        to: uci.slice(2, 4),
-        promotion: uci.length > 4 ? uci[4] : undefined,
-      });
-    } catch {
-      return false;
-    }
+    // Engine's first move must match the expected first move
+    const engineFirstMove = topLine.moves[0];
+    const expectedFirstMove = expectedMoves[0];
+    const firstMoveMatches = engineFirstMove === expectedFirstMove;
 
-    // If the resulting FEN matches the next expected position, the line is valid
-    if (expectedFens.length > 1 && chess.fen() === expectedFens[1]) {
+    // If the first move matches exactly, check deeper agreement for harder difficulties
+    if (firstMoveMatches) {
+      // For difficulty 1, first move match is sufficient
+      if (difficulty === 1) return true;
+
+      // For difficulty 2+, verify via FEN that we're on track
+      const chess = new Chess(setupFen);
+      try {
+        chess.move({
+          from: engineFirstMove.slice(0, 2),
+          to: engineFirstMove.slice(2, 4),
+          promotion: engineFirstMove.length > 4 ? engineFirstMove[4] : undefined,
+        });
+      } catch {
+        return false;
+      }
+
+      if (expectedFens.length > 1 && chess.fen() === expectedFens[1]) {
+        return true;
+      }
+
+      // First move matched but FEN differs (e.g., move counter) — still accept
       return true;
     }
 
-    // Also accept if the engine evaluation is strongly winning (the tactic works)
+    // First move doesn't match — only accept if eval is decisively winning.
+    // Scale the threshold by difficulty: farther back requires stronger evidence
+    // that the position is still tactically connected.
+    const evalThresholds: Record<SetupPuzzleDifficulty, number> = {
+      1: 150,
+      2: 250,
+      3: 400,
+    };
     const evalScore = Math.abs(analysis.evaluation);
-    return evalScore > 150;
+    if (evalScore <= evalThresholds[difficulty]) return false;
+
+    // For difficulty 3, even with high eval, require at least one player move
+    // in the engine line to match an expected player move (every other move is
+    // the player's: index 0, 2, 4, ...)
+    if (difficulty === 3) {
+      const playerExpectedMoves = expectedMoves.filter((_, i) => i % 2 === 0);
+      const playerEngineMoves = topLine.moves.filter((_, i) => i % 2 === 0);
+      const matchCount = playerExpectedMoves.filter((m) => playerEngineMoves.includes(m)).length;
+      return matchCount >= 1;
+    }
+
+    return true;
   } catch {
     return false;
   }

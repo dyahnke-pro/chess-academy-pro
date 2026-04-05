@@ -38,6 +38,21 @@ describe('audit: back_rank', () => {
     // Rook checks king on rank 5 — not back rank
     expect(detectTacticType('8/8/8/6k1/8/4K3/8/R7 w - - 0 1', 'a1a5')).not.toBe('back_rank');
   });
+
+  it('does NOT detect back rank for knight check on rank 8', () => {
+    // Knight check on g8 — not a rook/queen, not a back rank pattern
+    expect(detectTacticType('r1b1k2r/ppppqppp/2n2n2/4N3/2B5/8/PPPP1PPP/RNBQK2R w KQkq - 0 1', 'e5f7')).not.toBe('back_rank');
+  });
+
+  it('detects back rank with queen horizontal check and trapped king', () => {
+    // Qa1-a8+ with king trapped behind pawns on f7/g7/h7
+    expect(detectTacticType('6k1/5ppp/8/8/8/8/8/Q3K3 w Q - 0 1', 'a1a8')).toBe('back_rank');
+  });
+
+  it('does NOT detect back rank when king has ample escape squares', () => {
+    // Ra1-a8+ but king on e8 with d7, f7 open — king can flee
+    expect(detectTacticType('4k3/8/8/8/8/8/8/R3K3 w Q - 0 1', 'a1a8')).not.toBe('back_rank');
+  });
 });
 
 // ── Fork ───────────────────────────────────────────────────────────────────
