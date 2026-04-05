@@ -71,7 +71,10 @@ export function PuzzlesHubPage(): JSX.Element {
       <div className="space-y-3">
         <button
           onClick={() => void navigate('/puzzles/classic')}
-          className="w-full bg-surface-secondary hover:bg-surface-tertiary rounded-xl p-4 flex items-center gap-4 transition-colors text-left"
+          className="w-full bg-surface-secondary hover:bg-surface-tertiary border border-transparent hover:border-theme-accent rounded-xl p-4 flex items-center gap-4 transition-all duration-200 text-left"
+          style={{ boxShadow: 'none' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
         >
           <div className="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0">
             <Trophy size={24} className="text-accent" />
@@ -85,7 +88,10 @@ export function PuzzlesHubPage(): JSX.Element {
 
         <button
           onClick={() => void navigate('/puzzles/adaptive')}
-          className="w-full bg-surface-secondary hover:bg-surface-tertiary rounded-xl p-4 flex items-center gap-4 transition-colors text-left"
+          className="w-full bg-surface-secondary hover:bg-surface-tertiary border border-transparent hover:border-theme-accent rounded-xl p-4 flex items-center gap-4 transition-all duration-200 text-left"
+          style={{ boxShadow: 'none' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
         >
           <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
             <TrendingUp size={24} className="text-blue-400" />
@@ -99,7 +105,10 @@ export function PuzzlesHubPage(): JSX.Element {
 
         <button
           onClick={() => void navigate('/puzzles/mistakes')}
-          className="w-full bg-surface-secondary hover:bg-surface-tertiary rounded-xl p-4 flex items-center gap-4 transition-colors text-left"
+          className="w-full bg-surface-secondary hover:bg-surface-tertiary border border-transparent hover:border-theme-accent rounded-xl p-4 flex items-center gap-4 transition-all duration-200 text-left"
+          style={{ boxShadow: 'none' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
         >
           <div className="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
             <AlertTriangle size={24} className="text-orange-400" />
@@ -120,7 +129,10 @@ export function PuzzlesHubPage(): JSX.Element {
 
         <button
           onClick={() => void navigate('/puzzles/weakness')}
-          className="w-full bg-surface-secondary hover:bg-surface-tertiary rounded-xl p-4 flex items-center gap-4 transition-colors text-left"
+          className="w-full bg-surface-secondary hover:bg-surface-tertiary border border-transparent hover:border-theme-accent rounded-xl p-4 flex items-center gap-4 transition-all duration-200 text-left"
+          style={{ boxShadow: 'none' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
         >
           <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
             <Brain size={24} className="text-purple-400" />

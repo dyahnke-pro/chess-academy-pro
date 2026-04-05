@@ -283,7 +283,15 @@ export function ChessBoard({
         )}
 
         {/* Board */}
-        <div className="relative flex-1" data-testid="board-wrapper">
+        <div
+          className="relative flex-1"
+          data-testid="board-wrapper"
+          style={settings.boardColor === 'neon' ? {
+            borderRadius: '4px',
+            border: '1px solid rgba(0, 255, 200, 0.4)',
+            boxShadow: '0 0 15px rgba(0, 255, 200, 0.3), inset 0 0 15px rgba(0, 255, 200, 0.05)',
+          } : undefined}
+        >
           <Chessboard
             options={{
               position: game.position,
