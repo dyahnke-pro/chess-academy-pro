@@ -95,7 +95,7 @@ const DEFAULT_STATE: AppState = {
   coachBubbleVisible: true,
   coachBubbleText: '',
   coachVoiceOn: false,
-  coachTipsOn: false,
+  coachTipsOn: true,
   backgroundAnalysisRunning: false,
   backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
