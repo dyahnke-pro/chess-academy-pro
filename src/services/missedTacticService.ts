@@ -577,6 +577,55 @@ function detectDoubleCheck(chess: Chess, movingColor: Color): boolean {
 }
 
 /**
+ * Detect back rank mate/threat: a rook or queen delivers check along the back rank
+ * while the king is trapped (at most 1 legal move).
+ *
+ * This is stricter than "any check on rank 1/8" — it requires:
+ * 1. The position is in check
+ * 2. The checking piece on `to` is a rook or queen
+ * 3. The check is delivered along the back rank (same rank as king — horizontal)
+ * 4. The king has at most 1 legal move (actually trapped)
+ */
+function detectBackRank(chess: Chess, to: Square, movingColor: Color): boolean {
+  if (!chess.isCheck()) return false;
+
+  const piece = chess.get(to);
+  if (!piece) return false;
+
+  // Must be a rook or queen delivering the check
+  if (piece.type !== 'r' && piece.type !== 'q') return false;
+
+  // Find the enemy king
+  const enemyColor = oppositeColor(movingColor);
+  const board = chess.board();
+  let kingSq: Square | null = null;
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const p = board[r][c];
+      if (p && p.type === 'k' && p.color === enemyColor) {
+        kingSq = coordsToSquare(c, 7 - r);
+      }
+    }
+  }
+
+  if (!kingSq) return false;
+
+  // King must be on rank 1 or 8
+  const kingRank = kingSq[1];
+  if (kingRank !== '1' && kingRank !== '8') return false;
+
+  // Check must be delivered along the same rank (horizontal, not diagonal)
+  if (to[1] !== kingRank) return false;
+
+  // King must be trapped: at most 1 legal move
+  const legalMoves = chess.moves({ verbose: true });
+  const kingMoves = legalMoves.filter((m) => m.piece === 'k');
+  if (kingMoves.length > 1) return false;
+
+  return true;
+}
+
+/**
  * Detect x-ray attack: attacking through a piece (like a rook through a queen on the same file).
  */
 function detectXRay(chess: Chess, to: Square, movingColor: Color): boolean {
@@ -648,19 +697,9 @@ export function detectTacticType(fen: string, bestMoveUci: string): TacticType {
       return 'double_check';
     }
 
-    // 2. Back rank mate/threat
-    if (chessAfter.isCheck()) {
-      const board = chessAfter.board();
-      const enemyColor = chessAfter.turn();
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const piece = board[r][c];
-          if (piece && piece.type === 'k' && piece.color === enemyColor) {
-            const rank = 8 - r;
-            if (rank === 1 || rank === 8) return 'back_rank';
-          }
-        }
-      }
+    // 2. Back rank mate/threat (rook/queen horizontal check, king trapped)
+    if (detectBackRank(chessAfter, to, movingColor)) {
+      return 'back_rank';
     }
 
     // 3. Fork: piece attacks 2+ valuable enemy pieces
