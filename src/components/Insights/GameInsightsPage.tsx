@@ -156,21 +156,26 @@ export function GameInsightsPage(): JSX.Element {
         )}
 
         {/* Tabs */}
-        <div className="flex border-b" style={{ borderColor: 'var(--color-border)' }}>
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className="flex-1 text-center py-3 text-[11px] font-semibold transition-colors"
-              style={{
-                color: tab === t.id ? 'var(--color-text)' : 'var(--color-text-muted)',
-                borderBottom: tab === t.id ? '2px solid var(--color-accent)' : '2px solid transparent',
-              }}
-              data-testid={`tab-${t.id}`}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="flex gap-2 py-2">
+          {TABS.map((t) => {
+            const isActive = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className="flex-1 text-center py-2.5 px-2 text-sm font-semibold rounded-lg transition-all"
+                style={{
+                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                  border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
+                  background: isActive ? 'color-mix(in srgb, var(--color-accent) 8%, var(--color-surface))' : 'transparent',
+                  boxShadow: isActive ? '0 0 8px color-mix(in srgb, var(--color-accent) 40%, transparent)' : 'none',
+                }}
+                data-testid={`tab-${t.id}`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
