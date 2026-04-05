@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Target, Gamepad2 } from 'lucide-react';
+import { ArrowLeft, Target, Gamepad2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
@@ -28,6 +28,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
   const [failed, setFailed] = useState(0);
   const [mistakeCount, setMistakeCount] = useState(0);
   const [themeCount, setThemeCount] = useState(0);
+  const completedRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     void loadQueue();
@@ -46,12 +47,17 @@ export function WeaknessPuzzlePage(): JSX.Element {
     setFailed(0);
     setMistakeCount(0);
     setThemeCount(0);
+    completedRef.current = new Set();
     setPhase('solving');
   }
 
   const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
     const item = queue.at(currentIndex);
     if (!item) return;
+
+    // Only count the first completion of each puzzle
+    if (completedRef.current.has(currentIndex)) return;
+    completedRef.current.add(currentIndex);
 
     // Update stats
     if (correct) {
@@ -83,8 +89,10 @@ export function WeaknessPuzzlePage(): JSX.Element {
       const updated = { ...activeProfile, puzzleRating: newRating };
       setActiveProfile(updated);
     }
+    // No auto-advance — user navigates with arrows
+  }, [queue, currentIndex, activeProfile, setActiveProfile]);
 
-    // Advance to next puzzle or summary
+  const goNext = useCallback((): void => {
     voiceService.stop();
     const nextIndex = currentIndex + 1;
     if (nextIndex >= queue.length) {
@@ -92,7 +100,14 @@ export function WeaknessPuzzlePage(): JSX.Element {
     } else {
       setCurrentIndex(nextIndex);
     }
-  }, [queue, currentIndex, activeProfile, setActiveProfile]);
+  }, [currentIndex, queue.length]);
+
+  const goPrev = useCallback((): void => {
+    if (currentIndex > 0) {
+      voiceService.stop();
+      setCurrentIndex(currentIndex - 1);
+    }
+  }, [currentIndex]);
 
   const currentItem = queue.at(currentIndex);
   const total = solved + failed;
@@ -182,6 +197,30 @@ export function WeaknessPuzzlePage(): JSX.Element {
                 onComplete={(outcome: PuzzleOutcome) => void handleComplete(outcome.correct)}
               />
             )}
+
+            {/* Navigation arrows */}
+            <div className="flex items-center justify-center gap-6 py-1" data-testid="puzzle-nav">
+              <button
+                onClick={goPrev}
+                disabled={currentIndex === 0}
+                className="p-2 rounded-lg border transition-opacity disabled:opacity-30"
+                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="nav-prev"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                {currentIndex + 1} / {queue.length}
+              </span>
+              <button
+                onClick={goNext}
+                className="p-2 rounded-lg border transition-opacity"
+                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="nav-next"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
 
             {/* Session stats */}
             <div className="flex justify-center gap-6 text-sm" style={{ color: 'var(--color-text-muted)' }}>

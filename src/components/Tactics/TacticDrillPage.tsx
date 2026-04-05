@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Swords } from 'lucide-react';
+import { ArrowLeft, Swords, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getPuzzlesByTheme, getPuzzlesInRatingBand } from '../../services/puzzleService';
 import { useAppStore } from '../../stores/appStore';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
@@ -29,6 +29,7 @@ export function TacticDrillPage(): JSX.Element {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solved, setSolved] = useState(0);
   const [failed, setFailed] = useState(0);
+  const completedRef = useRef<Set<number>>(new Set());
 
   const total = queue.length;
   const currentPuzzle = queue[currentIndex] ?? null;
@@ -76,6 +77,7 @@ export function TacticDrillPage(): JSX.Element {
     setCurrentIndex(0);
     setSolved(0);
     setFailed(0);
+    completedRef.current = new Set();
     setPhase('solving');
   }, [themes]);
 
@@ -83,23 +85,33 @@ export function TacticDrillPage(): JSX.Element {
     void loadQueue();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handlePuzzleComplete = useCallback(async (outcome: PuzzleOutcome): Promise<void> => {
-    if (outcome.correct) {
+  const handlePuzzleComplete = useCallback((_outcome: PuzzleOutcome): void => {
+    // Only count the first completion of each puzzle
+    if (completedRef.current.has(currentIndex)) return;
+    completedRef.current.add(currentIndex);
+
+    if (_outcome.correct) {
       setSolved((s) => s + 1);
     } else {
       setFailed((f) => f + 1);
     }
+    // No auto-advance — user navigates with arrows
+  }, [currentIndex]);
 
-    // Move to next puzzle after a short delay
-    setTimeout(() => {
-      const nextIndex = currentIndex + 1;
-      if (nextIndex >= queue.length) {
-        setPhase('summary');
-      } else {
-        setCurrentIndex(nextIndex);
-      }
-    }, 1500);
-  }, [currentIndex, currentPuzzle, activeProfile, queue.length]);
+  const goNext = useCallback((): void => {
+    const nextIndex = currentIndex + 1;
+    if (nextIndex >= queue.length) {
+      setPhase('summary');
+    } else {
+      setCurrentIndex(nextIndex);
+    }
+  }, [currentIndex, queue.length]);
+
+  const goPrev = useCallback((): void => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  }, [currentIndex]);
 
   return (
     <div
@@ -138,6 +150,31 @@ export function TacticDrillPage(): JSX.Element {
             puzzle={currentPuzzle}
             onComplete={handlePuzzleComplete}
           />
+
+          {/* Navigation arrows */}
+          <div className="flex items-center justify-center gap-6 py-3" data-testid="puzzle-nav">
+            <button
+              onClick={goPrev}
+              disabled={currentIndex === 0}
+              className="p-2 rounded-lg border transition-opacity disabled:opacity-30"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+              data-testid="nav-prev"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
+              {currentIndex + 1} / {total}
+            </span>
+            <button
+              onClick={goNext}
+              className="p-2 rounded-lg border transition-opacity"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+              data-testid="nav-next"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+
           {/* Session stats bar */}
           <div className="flex justify-center gap-6 text-sm py-2" style={{ color: 'var(--color-text-muted)' }}>
             <span style={{ color: 'var(--color-success)' }}>{solved} solved</span>
