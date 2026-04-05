@@ -27,6 +27,8 @@ export interface PuzzleOutcome {
   hadRetry: boolean;
   /** True if the player explicitly viewed the solution. */
   showedSolution: boolean;
+  /** Time from first player move opportunity to completion (ms). */
+  solveTimeMs: number;
 }
 
 interface PuzzleBoardProps {
@@ -62,6 +64,7 @@ export function PuzzleBoard({
   const hintUsedRef = useRef(false);
   const showedSolutionRef = useRef(false);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const solveStartRef = useRef<number>(Date.now());
   const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playErrorPing, playSuccessChime } = usePieceSound();
@@ -175,6 +178,7 @@ export function PuzzleBoard({
         }
       }
       setMoveIndex(1);
+      solveStartRef.current = Date.now();
       setState('playing');
     }, 600);
 
@@ -209,6 +213,7 @@ export function PuzzleBoard({
       usedHint: hintUsedRef.current,
       hadRetry: hasMadeMistakeRef.current,
       showedSolution: showedSolutionRef.current,
+      solveTimeMs: Date.now() - solveStartRef.current,
     });
   }, [onComplete, tacticType, subtitle]);
 

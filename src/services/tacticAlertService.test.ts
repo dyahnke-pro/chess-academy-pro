@@ -113,21 +113,28 @@ describe('tacticAlertService', () => {
       expect(getCoachingMessage('fork', 'none', 1200)).toBeNull();
     });
 
-    it('returns generic nudge for nudge tier', () => {
+    it('returns theme-specific nudge for nudge tier', () => {
       const msg = getCoachingMessage('fork', 'nudge', 1200);
-      expect(msg).toContain('checks, captures, and threats');
-    });
-
-    it('returns tactic-specific hint for teach tier', () => {
-      const msg = getCoachingMessage('fork', 'teach', 1200);
-      expect(msg).toBeTruthy();
       expect(msg).toContain('knight or queen');
     });
 
-    it('returns beginner-friendly hint for low-rated player', () => {
+    it('returns beginner nudge for low-rated player', () => {
+      const msg = getCoachingMessage('fork', 'nudge', 800);
+      expect(msg).toContain('two things at once');
+    });
+
+    it('returns concept with hint for teach tier', () => {
+      const msg = getCoachingMessage('fork', 'teach', 1200);
+      expect(msg).toBeTruthy();
+      expect(msg).toContain('fork attacks two or more');
+      expect(msg).toContain('knight or queen');
+    });
+
+    it('returns beginner teach with concept for low-rated player', () => {
       const msg = getCoachingMessage('fork', 'teach', 800);
       expect(msg).toBeTruthy();
       expect(msg).toContain('two things at once');
+      expect(msg).toContain('fork attacks');
     });
 
     it('returns full concept for guide tier', () => {

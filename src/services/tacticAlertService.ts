@@ -193,18 +193,18 @@ export function getCoachingMessage(
 
   switch (tier) {
     case 'nudge':
-      // Gentle time-based nudge — don't reveal the tactic type yet
-      return 'Take your time. Look for checks, captures, and threats.';
-
-    case 'teach':
-      // Reveal the concept without pointing at the specific move
+      // Theme-aware nudge — hints at the pattern without revealing the answer
       return isBeginner ? teaching.beginnerHint : teaching.lookFor;
 
-    case 'guide':
-      // Full conceptual teaching
+    case 'teach':
+      // Reveal the concept alongside the hint
       return isBeginner
         ? `${teaching.beginnerHint} ${teaching.concept}`
         : `${teaching.concept} ${teaching.lookFor}`;
+
+    case 'guide':
+      // Full conceptual teaching — all three layers
+      return `${teaching.concept} ${teaching.lookFor}`;
   }
 }
 

@@ -90,7 +90,7 @@ export function PuzzleTrainerPage(): JSX.Element {
   }, [session]);
 
   const handleTimeout = useCallback((): void => {
-    handlePuzzleComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false });
+    handlePuzzleComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false, solveTimeMs: 0 });
   }, [handlePuzzleComplete]);
 
   const handleGrade = useCallback(async (grade: SrsGrade): Promise<void> => {

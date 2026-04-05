@@ -209,6 +209,69 @@ export async function getPuzzlesByTheme(
 }
 
 /**
+ * Returns a single puzzle matching any of the given themes near the target rating.
+ * Uses rating index for efficiency, then filters by theme.
+ * Expands the band up to 3× if nothing found in the initial range.
+ */
+export async function getPuzzleForThemeAtRating(
+  themes: string[],
+  targetRating: number,
+  seenIds: Set<string>,
+  bandWidth: number = 200,
+): Promise<PuzzleRecord | null> {
+  const themeSet = new Set(themes);
+  for (const mult of [1, 2, 3]) {
+    const bw = bandWidth * mult;
+    const candidates = await db.puzzles
+      .where('rating')
+      .between(targetRating - bw, targetRating + bw)
+      .toArray();
+    // Filter to matching themes, unseen, sort by closeness to target
+    const matched = candidates
+      .filter((p) => !seenIds.has(p.id) && p.themes.some((t) => themeSet.has(t)))
+      .sort((a, b) => Math.abs(a.rating - targetRating) - Math.abs(b.rating - targetRating));
+    if (matched.length > 0) {
+      // Pick randomly from top 5 closest to avoid always getting the exact same puzzle
+      const pool = matched.slice(0, 5);
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+  }
+  // Final fallback: any puzzle near the rating
+  const any = await db.puzzles
+    .where('rating')
+    .between(targetRating - 600, targetRating + 600)
+    .toArray();
+  const unseen = any.filter((p) => !seenIds.has(p.id));
+  if (unseen.length > 0) {
+    const sorted = unseen.sort((a, b) => Math.abs(a.rating - targetRating) - Math.abs(b.rating - targetRating));
+    return sorted[Math.floor(Math.random() * Math.min(5, sorted.length))];
+  }
+  return null;
+}
+
+/**
+ * Apply a time bonus/penalty multiplier to a rating delta.
+ * Fast solves (<15s) get up to 1.5× bonus. Slow solves (>60s) get 0.7× penalty.
+ * Returns the adjusted delta (integer).
+ */
+export function applyTimeBonus(delta: number, solveTimeMs: number): number {
+  const seconds = solveTimeMs / 1000;
+  let multiplier: number;
+  if (seconds < 10) {
+    multiplier = 1.5;
+  } else if (seconds < 20) {
+    multiplier = 1.3;
+  } else if (seconds < 30) {
+    multiplier = 1.1;
+  } else if (seconds < 60) {
+    multiplier = 1.0;
+  } else {
+    multiplier = 0.7;
+  }
+  return Math.round(delta * multiplier);
+}
+
+/**
  * Returns puzzles in the user's current rating band (+/- 200).
  */
 export async function getPuzzlesInRatingBand(
