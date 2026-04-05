@@ -1443,7 +1443,7 @@ export function CoachGamePage(): JSX.Element {
 
         {/* Board */}
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
-          <div className="w-full md:max-w-[420px]">
+          <div className="w-full md:max-w-[420px] relative">
             <ChessBoard
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}`}
               initialFen={displayFen}
@@ -1469,6 +1469,56 @@ export function CoachGamePage(): JSX.Element {
               onVoiceActiveChange={setVoiceActive}
               onVoiceArrows={handleVoiceArrows}
             />
+
+            {/* ─── Blunder Interception Overlay (on board) ──────────────────── */}
+            <AnimatePresence>
+              {gameState.status === 'blunder_pause' && blunderPause && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  className="absolute bottom-0 left-0 right-0 z-20 rounded-t-2xl border-t-2 border-x-2 border-red-500/40 backdrop-blur-md overflow-hidden"
+                  style={{ background: 'color-mix(in srgb, var(--color-error, #ef4444) 12%, var(--color-bg) 88%)' }}
+                  data-testid="blunder-interception"
+                >
+                  <div className="px-3 py-2.5">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <AlertTriangle size={16} className="text-red-500 flex-shrink-0" />
+                      <span className="font-bold text-red-400 text-sm">Blunder Detected</span>
+                    </div>
+                    <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
+                      {blunderPause.explanation}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 px-3 pb-3">
+                    <button
+                      onClick={handleBlunderContinue}
+                      className="flex-1 py-2 rounded-xl text-xs font-semibold border border-theme-border transition-colors"
+                      style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
+                      data-testid="blunder-continue"
+                    >
+                      Continue
+                    </button>
+                    <button
+                      onClick={handleBlunderTakeBack}
+                      className="flex-1 py-2 rounded-xl text-xs font-semibold transition-colors"
+                      style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                      data-testid="blunder-takeback"
+                    >
+                      Take Back
+                    </button>
+                    <button
+                      onClick={handleBlunderTryBestMove}
+                      className="flex-1 py-2 rounded-xl text-xs font-semibold border-2 border-green-500/40 transition-colors"
+                      style={{ background: 'color-mix(in srgb, var(--color-success, #22c55e) 15%, var(--color-surface))', color: 'var(--color-text)' }}
+                      data-testid="blunder-try-best"
+                    >
+                      Try {blunderPause.bestMoveSan}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           {showEngineLinesEffective && latestTopLines.length > 0 && (
             <EngineLines lines={latestTopLines} fen={game.fen} className="mt-1" />
@@ -1564,55 +1614,6 @@ export function CoachGamePage(): JSX.Element {
           </div>
         )}
 
-        {/* ─── Blunder Interception Overlay ─────────────────────────────────── */}
-        <AnimatePresence>
-          {gameState.status === 'blunder_pause' && blunderPause && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="mx-2 rounded-2xl border-2 border-red-500/40 overflow-hidden"
-              style={{ background: 'color-mix(in srgb, var(--color-error, #ef4444) 10%, var(--color-surface))' }}
-              data-testid="blunder-interception"
-            >
-              <div className="px-4 py-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle size={18} className="text-red-500 flex-shrink-0" />
-                  <span className="font-bold text-red-400 text-sm">Blunder Detected</span>
-                </div>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                  {blunderPause.explanation}
-                </p>
-              </div>
-              <div className="flex gap-2 px-4 pb-4">
-                <button
-                  onClick={handleBlunderContinue}
-                  className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-theme-border transition-colors"
-                  style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
-                  data-testid="blunder-continue"
-                >
-                  Continue
-                </button>
-                <button
-                  onClick={handleBlunderTakeBack}
-                  className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                  data-testid="blunder-takeback"
-                >
-                  Take Back
-                </button>
-                <button
-                  onClick={handleBlunderTryBestMove}
-                  className="flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 border-green-500/40 transition-colors"
-                  style={{ background: 'color-mix(in srgb, var(--color-success, #22c55e) 15%, var(--color-surface))', color: 'var(--color-text)' }}
-                  data-testid="blunder-try-best"
-                >
-                  Try {blunderPause.bestMoveSan}
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Mobile: swipeable chat drawer + toggle button */}
