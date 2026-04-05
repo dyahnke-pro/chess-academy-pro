@@ -30,7 +30,10 @@ export function OpeningCard({ opening, onClick, onToggleFavorite }: OpeningCardP
       tabIndex={0}
       onClick={onClick}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
-      className="w-full text-left bg-theme-surface hover:bg-theme-border rounded-xl p-3.5 transition-colors group relative cursor-pointer"
+      className="w-full text-left bg-theme-surface border border-transparent hover:border-theme-accent rounded-xl p-3.5 transition-all duration-200 group relative cursor-pointer"
+      style={{ boxShadow: 'none' }}
+      onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent)'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
       data-testid={`opening-card-${opening.id}`}
     >
       <div className="flex items-center gap-3">

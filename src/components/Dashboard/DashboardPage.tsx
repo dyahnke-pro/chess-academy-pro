@@ -13,6 +13,7 @@ interface SectionItem {
   color: string;
   bgColor: string;
   borderColor: string;
+  glowColor: string;
 }
 
 const SECTIONS: SectionItem[] = [
@@ -23,6 +24,7 @@ const SECTIONS: SectionItem[] = [
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/10',
     borderColor: 'border-blue-500/30',
+    glowColor: 'rgba(59, 130, 246, 0.35)',
   },
   {
     label: 'Play with Coach',
@@ -31,6 +33,7 @@ const SECTIONS: SectionItem[] = [
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/10',
     borderColor: 'border-amber-500/30',
+    glowColor: 'rgba(245, 158, 11, 0.35)',
   },
   {
     label: 'Tactics',
@@ -39,6 +42,7 @@ const SECTIONS: SectionItem[] = [
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10',
     borderColor: 'border-orange-500/30',
+    glowColor: 'rgba(249, 115, 22, 0.35)',
   },
   {
     label: 'Weaknesses',
@@ -47,6 +51,7 @@ const SECTIONS: SectionItem[] = [
     color: 'text-purple-400',
     bgColor: 'bg-purple-500/10',
     borderColor: 'border-purple-500/30',
+    glowColor: 'rgba(168, 85, 247, 0.35)',
   },
 ];
 
@@ -105,7 +110,10 @@ export function DashboardPage(): JSX.Element {
             <button
               key={section.route}
               onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity ${isFirst ? 'col-span-2 py-10' : 'aspect-square'}`}
+              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200 ${isFirst ? 'col-span-2 py-10' : 'aspect-square'}`}
+              style={{ boxShadow: 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 14px ${section.glowColor}`; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
               data-testid={`section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
               <Icon size={isFirst ? 48 : 40} className={section.color} />

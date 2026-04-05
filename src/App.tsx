@@ -60,6 +60,7 @@ import { QueenGamesHub } from './components/Kid/QueenGamesHub';
 import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
 import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
 import { GuidedGamePage } from './components/Kid/GuidedGamePage';
+import { NeonBoardMock } from './components/Board/NeonBoardMock';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -191,6 +192,7 @@ export function App(): JSX.Element {
             }
           />
           <Route path="/settings/onboarding" element={<ErrorBoundary><OnboardingPage /></ErrorBoundary>} />
+          <Route path="/neon-mock" element={<NeonBoardMock />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route element={<KidLayout />}>
