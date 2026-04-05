@@ -111,8 +111,24 @@ export async function getAdaptiveMove(
       makeTimeoutPromise(COACH_MOVE_TIMEOUT_MS),
     ]);
   } catch (error) {
-    console.warn('[CoachEngine] Stockfish failed or timed out, falling back to random move:', error);
+    console.warn('[CoachEngine] Full analysis failed/timed out, trying quick bestmove:', error);
     stockfishEngine.stop();
+
+    // Second attempt: use movetime-based best move (always returns within budget)
+    try {
+      const bestMove = await Promise.race([
+        stockfishEngine.getBestMove(fen, 2000),
+        makeTimeoutPromise(4000),
+      ]);
+      if (bestMove && bestMove !== '(none)') {
+        console.log('[CoachEngine] Fallback getBestMove succeeded:', bestMove);
+        return { move: bestMove, analysis: { ...FALLBACK_ANALYSIS, bestMove } };
+      }
+    } catch {
+      console.warn('[CoachEngine] getBestMove also failed, using random legal move');
+    }
+
+    // Last resort: random legal move (should be extremely rare)
     const fallbackMove = getRandomLegalMove(fen);
     if (!fallbackMove) throw new Error('No legal moves available');
     return { move: fallbackMove, analysis: { ...FALLBACK_ANALYSIS, bestMove: fallbackMove } };

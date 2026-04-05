@@ -162,6 +162,16 @@ export async function detectBadHabitsFromGame(
 
 // ─── Narrative Summary ──────────────────────────────────────────────────────
 
+export interface NarrativeMoveData {
+  moveNumber: number;
+  san: string;
+  classification: string | null;
+  commentary: string;
+  evaluation: number | null;
+  bestMove: string | null;
+  isCoachMove: boolean;
+}
+
 export async function generateNarrativeSummary(
   pgn: string,
   playerColor: string,
@@ -169,7 +179,25 @@ export async function generateNarrativeSummary(
   result: string,
   playerRating: number,
   onStream?: (chunk: string) => void,
+  moveData?: NarrativeMoveData[],
 ): Promise<string> {
+  // Build engine analysis context for the LLM so it doesn't guess
+  let analysisContext = '';
+  if (moveData && moveData.length > 0) {
+    const keyMoves = moveData.filter((m) =>
+      !m.isCoachMove && m.classification &&
+      m.classification !== 'good' && m.classification !== 'book',
+    );
+    if (keyMoves.length > 0) {
+      analysisContext = '\n\nEngine analysis of key moments (USE THIS DATA, do not guess):\n' +
+        keyMoves.map((m) => {
+          const evalText = m.evaluation !== null ? ` (eval: ${(m.evaluation / 100).toFixed(1)})` : '';
+          const bestText = m.bestMove ? `, best was ${m.bestMove}` : '';
+          return `- Move ${Math.ceil(m.moveNumber / 2)} ${m.san}: ${m.classification}${evalText}${bestText}. ${m.commentary}`;
+        }).join('\n');
+    }
+  }
+
   const context: CoachContext = {
     fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     lastMoveSan: null,
@@ -183,7 +211,7 @@ export async function generateNarrativeSummary(
       rating: playerRating,
       weaknesses: [],
     },
-    additionalContext: `Player color: ${playerColor}. Game result: ${result}. Please write a narrative summary of this game: describe the key moments, what went well, what to improve, and the overall story of the game in an encouraging coaching tone.`,
+    additionalContext: `Player color: ${playerColor}. Game result: ${result}. Please write a narrative summary of this game: describe the key moments, what went well, what to improve, and the overall story of the game in an encouraging coaching tone.${analysisContext}`,
   };
 
   return getCoachCommentary('game_narrative_summary', context, onStream);
