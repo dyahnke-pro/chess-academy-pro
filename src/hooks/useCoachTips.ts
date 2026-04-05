@@ -19,6 +19,8 @@ export interface UseCoachTipsConfig {
   moves: CoachGameMove[];
   playerRating: number;
   onTip: (tip: string) => void;
+  /** Called when a tactic is detected (available) or cleared (null) */
+  onTacticAlert?: (tacticType: TacticType | null) => void;
   /** Called when the player missed a tactic on the previous move */
   onMissedTactic?: (message: string, tacticType: TacticType) => void;
   /** Per-feature toggles from settings */
@@ -170,6 +172,7 @@ export function useCoachTips({
   moves,
   playerRating,
   onTip,
+  onTacticAlert,
   onMissedTactic,
   blunderAlerts = true,
   tacticAlerts = true,
@@ -179,6 +182,8 @@ export function useCoachTips({
   const tipCooldownRef = useRef<number>(0);
   const onTipRef = useRef(onTip);
   onTipRef.current = onTip;
+  const onTacticAlertRef = useRef(onTacticAlert);
+  onTacticAlertRef.current = onTacticAlert;
   const onMissedTacticRef = useRef(onMissedTactic);
   onMissedTacticRef.current = onMissedTactic;
 
@@ -197,7 +202,14 @@ export function useCoachTips({
   // adapts to rating (via lookahead distance).
   useEffect(() => {
     const pending = pendingTacticRef.current;
-    if (!pending || !onMissedTacticRef.current) return;
+    if (!pending) return;
+
+    // Position changed — clear the active tactic alert regardless of outcome
+    if (fen !== pending.fen && moves.length > pending.moveNumber) {
+      onTacticAlertRef.current?.(null);
+    }
+
+    if (!onMissedTacticRef.current) return;
 
     // If the player moved to a new position without finding the tactic
     if (moves.length > pending.moveNumber && fen !== pending.fen) {
@@ -283,6 +295,7 @@ export function useCoachTips({
           );
           lastTipFenRef.current = fen;
           onTipRef.current(message);
+          onTacticAlertRef.current?.(immediateTactic);
           return;
         }
 

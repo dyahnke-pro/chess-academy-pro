@@ -11,6 +11,7 @@ export interface UseHintSystemConfig {
   analysisDepth?: number;
   knownMove?: { from: string; to: string; san: string } | null;
   puzzleThemes?: string[];
+  activeTacticType?: string | null;
 }
 
 export interface HintState {
@@ -118,7 +119,7 @@ const INITIAL_STATE: HintState = {
 };
 
 export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn {
-  const { fen, enabled, analysisDepth = 16, knownMove, puzzleThemes } = config;
+  const { fen, enabled, analysisDepth = 16, knownMove, puzzleThemes, activeTacticType } = config;
 
   const [hintState, setHintState] = useState<HintState>(INITIAL_STATE);
   const analysisRef = useRef<StockfishAnalysis | null>(null);
@@ -199,11 +200,15 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             ? `${knownMove.from}${knownMove.to}`
             : analysisRef.current?.bestMove ?? '';
 
+        const themes = activeTacticType
+          ? [activeTacticType, ...(puzzleThemes ?? [])]
+          : puzzleThemes;
+
         const nudgeText = generateSocraticNudge({
           fen,
           bestMoveUci,
           topLines: analysisRef.current?.topLines,
-          puzzleThemes,
+          puzzleThemes: themes,
         });
 
         return {
@@ -233,7 +238,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
 
       return prev;
     });
-  }, [enabled, knownMove, fen, analysisDepth, puzzleThemes]);
+  }, [enabled, knownMove, fen, analysisDepth, puzzleThemes, activeTacticType]);
 
   const resetHints = useCallback((): void => {
     analysisRef.current = null;

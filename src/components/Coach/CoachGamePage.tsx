@@ -43,6 +43,7 @@ import type {
   CoachDifficulty, MoveClassification, MoveAnnotation,
   StockfishAnalysis, GameAnalysisSummary, GameRecord, AnalysisLine,
   GameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
+  TacticType,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
@@ -368,6 +369,13 @@ export function CoachGamePage(): JSX.Element {
     };
   }, [gameState.moves]);
 
+  // ─── Active Tactic Tracking (ties hint button to tactic alerts) ─────────────
+  const [activeTacticType, setActiveTacticType] = useState<TacticType | null>(null);
+
+  const handleTacticAlert = useCallback((tacticType: TacticType | null) => {
+    setActiveTacticType(tacticType);
+  }, []);
+
   // 3-tier visual hint system (Stockfish-powered, no knownMove)
   const isPlayersTurn =
     (playerColor === 'white' && game.turn === 'w') ||
@@ -376,6 +384,7 @@ export function CoachGamePage(): JSX.Element {
     fen: game.fen,
     playerColor,
     enabled: gameState.status === 'playing' && isPlayersTurn && !game.isGameOver,
+    activeTacticType,
   });
 
   // Inject nudge text into chat when it appears
@@ -417,6 +426,7 @@ export function CoachGamePage(): JSX.Element {
     moves: gameState.moves,
     playerRating: activeProfile?.currentRating ?? 1200,
     onTip: handleCoachTip,
+    onTacticAlert: handleTacticAlert,
     onMissedTactic: difficulty === 'hard' || !settings.coachMissedTacticTakeback ? undefined : handleMissedTactic,
     blunderAlerts: settings.coachBlunderAlerts,
     tacticAlerts: settings.coachTacticAlerts,
@@ -1587,6 +1597,7 @@ export function CoachGamePage(): JSX.Element {
                 currentLevel={hintState.level}
                 onRequestHint={handleHint}
                 disabled={isCoachThinking || hintState.isAnalyzing}
+                tacticActive={activeTacticType !== null}
               />
               <button
                 onClick={handleTakeback}
