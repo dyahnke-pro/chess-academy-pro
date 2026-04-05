@@ -1,6 +1,12 @@
 import { ANNOTATION_MODULES } from '../data/annotations';
 import type { OpeningMoveAnnotation, OpeningAnnotations } from '../types';
 
+// Map pro-repertoire suffixes that need a specific sub-line instead of the main line.
+// Format: 'suffix': 'variation-N' | 'trap-N' | 'warning-N'
+const PRO_SUFFIX_TO_SUBLINE: Record<string, string> = {
+  'fantasy-caro': 'variation-4',
+};
+
 // Map pro-repertoire suffixes to base annotation IDs
 const PRO_SUFFIX_TO_BASE: Record<string, string> = {
   'alapin': 'sicilian-alapin',
@@ -76,6 +82,15 @@ async function loadModule(openingId: string): Promise<OpeningAnnotations | null>
 }
 
 export async function loadAnnotations(openingId: string): Promise<OpeningMoveAnnotation[] | null> {
+  // Check if this pro repertoire should use a sub-line instead of the main line
+  const proMatch = /^pro-[a-z]+-(.+)$/.exec(openingId);
+  if (proMatch) {
+    const subLineKey = PRO_SUFFIX_TO_SUBLINE[proMatch[1]];
+    if (subLineKey) {
+      return loadSubLineAnnotations(openingId, subLineKey);
+    }
+  }
+
   const data = await loadModule(openingId);
   return data?.moveAnnotations ?? null;
 }
