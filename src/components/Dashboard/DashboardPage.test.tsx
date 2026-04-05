@@ -67,13 +67,12 @@ describe('DashboardPage', () => {
     });
   });
 
-  it('shows all five section buttons', async () => {
+  it('shows all section buttons', async () => {
     setProfile();
     render(<DashboardPage />);
     await waitFor(() => {
       expect(screen.getByTestId('section-openings')).toBeInTheDocument();
       expect(screen.getByTestId('section-play-with-coach')).toBeInTheDocument();
-      expect(screen.getByTestId('section-puzzles')).toBeInTheDocument();
       expect(screen.getByTestId('section-tactics')).toBeInTheDocument();
       expect(screen.getByTestId('section-weaknesses')).toBeInTheDocument();
     });
@@ -92,9 +91,6 @@ describe('DashboardPage', () => {
 
     fireEvent.click(screen.getByTestId('section-play-with-coach'));
     expect(mockNavigate).toHaveBeenCalledWith('/coach/play');
-
-    fireEvent.click(screen.getByTestId('section-puzzles'));
-    expect(mockNavigate).toHaveBeenCalledWith('/puzzles');
 
     fireEvent.click(screen.getByTestId('section-tactics'));
     expect(mockNavigate).toHaveBeenCalledWith('/tactics');

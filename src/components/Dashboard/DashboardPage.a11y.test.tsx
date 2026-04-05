@@ -33,12 +33,11 @@ describe('DashboardPage a11y', () => {
     });
   });
 
-  it('shows all five section buttons', async () => {
+  it('shows all section buttons', async () => {
     render(<DashboardPage />);
     await waitFor(() => {
       expect(screen.getByText('Openings')).toBeInTheDocument();
       expect(screen.getByText('Play with Coach')).toBeInTheDocument();
-      expect(screen.getByText('Puzzles')).toBeInTheDocument();
       expect(screen.getByText('Tactics')).toBeInTheDocument();
       expect(screen.getByText('Weaknesses')).toBeInTheDocument();
     });

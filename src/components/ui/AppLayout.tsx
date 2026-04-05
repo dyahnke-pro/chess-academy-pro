@@ -5,7 +5,6 @@ import {
   BookOpen,
   Settings,
   Baby,
-  Puzzle,
   Menu,
   X,
   MessageCircle,
@@ -28,7 +27,6 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Home', icon: LayoutDashboard },
   { to: '/openings', label: 'Openings', icon: BookOpen },
-  { to: '/puzzles', label: 'Puzzles', icon: Puzzle },
   { to: '/tactics', label: 'Tactics', icon: Target },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
   { to: '/kid', label: 'Kids Mode', icon: Baby },

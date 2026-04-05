@@ -110,6 +110,18 @@ describe('TacticsPage', () => {
     expect(screen.getByText('My Mistakes')).toBeInTheDocument();
   });
 
+  it('shows Daily Training and Setup Trainer sections', async () => {
+    setProfile();
+    render(<TacticsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('section-daily')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('section-setup')).toBeInTheDocument();
+    expect(screen.getByText('Daily Training')).toBeInTheDocument();
+    expect(screen.getByText('Setup Trainer')).toBeInTheDocument();
+  });
+
   it('shows tactic theme categories', async () => {
     setProfile();
     render(<TacticsPage />);

@@ -173,7 +173,7 @@ export function MyMistakesPage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
-          onClick={() => void navigate('/weaknesses')}
+          onClick={() => void navigate('/tactics')}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
           aria-label="Back to puzzles"
         >

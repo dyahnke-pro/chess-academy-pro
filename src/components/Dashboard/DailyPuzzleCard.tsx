@@ -63,7 +63,7 @@ export function DailyPuzzleCard(): JSX.Element {
 
   return (
     <button
-      onClick={() => void navigate('/weaknesses/adaptive', { state: { lichessDaily: puzzle } })}
+      onClick={() => void navigate('/tactics/adaptive', { state: { lichessDaily: puzzle } })}
       className="rounded-xl p-5 border text-left w-full hover:opacity-90 transition-opacity"
       style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
       data-testid="daily-puzzle-card"

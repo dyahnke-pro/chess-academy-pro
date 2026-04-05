@@ -842,7 +842,7 @@ function LichessTokenPanel({ profile, setProfile }: TabProps): JSX.Element {
       {hasToken && (
         <div className="flex items-center justify-between">
           <Link
-            to="/weaknesses/lichess-dashboard"
+            to="/tactics/lichess"
             className="text-xs underline"
             style={{ color: 'var(--color-accent)' }}
           >

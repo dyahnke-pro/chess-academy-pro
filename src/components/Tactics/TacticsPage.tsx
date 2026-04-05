@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { THEME_MAP } from '../../services/puzzleService';
@@ -68,6 +68,24 @@ export function TacticsPage(): JSX.Element {
           <span className="text-lg font-bold text-amber-400">My Profile</span>
         </button>
 
+        {/* Daily Challenge + Setup Trainer — side by side */}
+        <button
+          onClick={() => void navigate('/tactics/classic')}
+          className="py-6 bg-violet-500/10 border-violet-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-2 hover:opacity-80 transition-opacity"
+          data-testid="section-daily"
+        >
+          <Trophy size={28} className="text-violet-400" />
+          <span className="text-sm font-bold text-violet-400">Daily Training</span>
+        </button>
+        <button
+          onClick={() => void navigate('/tactics/setup')}
+          className="py-6 bg-teal-500/10 border-teal-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-2 hover:opacity-80 transition-opacity"
+          data-testid="section-setup"
+        >
+          <Wrench size={28} className="text-teal-400" />
+          <span className="text-sm font-bold text-teal-400">Setup Trainer</span>
+        </button>
+
         {/* Random Mix */}
         <button
           onClick={() => void navigate('/tactics/drill', { state: { filterThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'backRankMate', 'sacrifice', 'deflection'] } })}
@@ -93,7 +111,7 @@ export function TacticsPage(): JSX.Element {
 
         {/* My Mistakes — spans full width at bottom */}
         <button
-          onClick={() => void navigate('/puzzles/mistakes')}
+          onClick={() => void navigate('/tactics/mistakes')}
           className="col-span-2 py-6 bg-red-500/10 border-red-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-opacity"
           data-testid="section-my mistakes"
         >

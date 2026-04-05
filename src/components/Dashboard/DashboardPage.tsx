@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Puzzle, Target, AlertTriangle, Upload } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 
 interface SectionItem {
@@ -31,14 +31,6 @@ const SECTIONS: SectionItem[] = [
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/10',
     borderColor: 'border-amber-500/30',
-  },
-  {
-    label: 'Puzzles',
-    icon: Puzzle,
-    route: '/puzzles',
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'border-green-500/30',
   },
   {
     label: 'Tactics',
