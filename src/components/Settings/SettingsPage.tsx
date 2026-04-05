@@ -739,9 +739,62 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 
       {status && <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>{status}</p>}
 
+      <CoachGameplaySection profile={profile} setProfile={setProfile} />
+
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <VoiceSettingsPanel />
       </div>
+    </div>
+  );
+}
+
+// ─── Coach Gameplay Section ──────────────────────────────────────────────────
+
+function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice', value: boolean): Promise<void> => {
+    const updatedPrefs = { ...profile.preferences, [key]: value };
+    await db.profiles.update(profile.id, { preferences: updatedPrefs });
+    setProfile({ ...profile, preferences: updatedPrefs });
+  };
+
+  return (
+    <div className="pt-4 border-t space-y-1" style={{ borderColor: 'var(--color-border)' }}>
+      <SectionHeader title="Gameplay Coaching" />
+      <ToggleRow
+        label="Blunder Alerts"
+        tooltip="Coach alerts you when your opponent makes a big mistake"
+        checked={profile.preferences.coachBlunderAlerts ?? true}
+        onChange={(v) => void handleToggle('coachBlunderAlerts', v)}
+        testId="coach-blunder-alerts-toggle"
+      />
+      <ToggleRow
+        label="Tactic Alerts"
+        tooltip="Coach points out available tactics during play"
+        checked={profile.preferences.coachTacticAlerts ?? true}
+        onChange={(v) => void handleToggle('coachTacticAlerts', v)}
+        testId="coach-tactic-alerts-toggle"
+      />
+      <ToggleRow
+        label="Positional Tips"
+        tooltip="Development reminders, center tension, endgame tips"
+        checked={profile.preferences.coachPositionalTips ?? true}
+        onChange={(v) => void handleToggle('coachPositionalTips', v)}
+        testId="coach-positional-tips-toggle"
+      />
+      <ToggleRow
+        label="Missed Tactic Takeback"
+        tooltip="Coach suggests taking back when you miss a tactic"
+        checked={profile.preferences.coachMissedTacticTakeback ?? true}
+        onChange={(v) => void handleToggle('coachMissedTacticTakeback', v)}
+        testId="coach-missed-tactic-toggle"
+      />
+      <ToggleRow
+        label="Review Voice Narration"
+        tooltip="Speak coach commentary aloud during game review"
+        checked={profile.preferences.coachReviewVoice ?? true}
+        onChange={(v) => void handleToggle('coachReviewVoice', v)}
+        testId="coach-review-voice-toggle"
+      />
     </div>
   );
 }
