@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and strategically rich openings in chess. By controlling the central d5 square from the side, we're following hypermodern principles — instead of occupying the center immediately with pawns, we're preparing to influence it from the flanks. This move also prepares potential expansion with d2-d3 and supports a future knight on c3, while keeping our options open for various pawn structures depending on how Black responds. The English is beloved by positional players because it often leads to rich, maneuvering games where understanding pawn structures and piece coordination matters more than memorizing sharp tactical lines."
+      "annotation": "We're opening with the English Opening, one of the most flexible and strategically rich openings in chess. By controlling the central d5 square from the side, we're following hypermodern principles — instead of occupying the center immediately with pawns, we're preparing to influence it from the flanks. This move also prepares potential expansion with d2-d3 and supports a future pawn on c3, while keeping our options open for various pawn structures depending on how Black responds. The English is beloved by positional players because it often leads to rich, maneuvering games where understanding pawn structures and piece coordination matters more than memorizing sharp tactical lines."
     },
     {
       "san": "e5",
@@ -19,7 +19,7 @@
     },
     {
       "san": "g3",
-      "annotation": "We're fianchettoing our light-squared bishop, which is one of the most characteristic ideas in the English Opening and perfectly complements our hypermodern approach. The bishop will soon land on g2, where it will exert tremendous pressure along the long diagonal toward Black's kingside, particularly targeting the d5 and e6 squares. This setup also prepares castling kingside while supporting a potential d2-d3 pawn structure that would give us a solid, flexible position. The fianchetto fits beautifully with our knight on c3 because together they'll control key central squares and support various pawn breaks like d2-d3 followed by e2-e4, or even f2-f4 in more aggressive setups."
+      "annotation": "We're fianchettoing our light-squared bishop, which is one of the most characteristic ideas in the English Opening and perfectly complements our hypermodern approach. The bishop will soon land on g2, where it will exert tremendous pressure along the long diagonal toward Black's kingside, particularly targeting the d5 and e6 squares. This setup also prepares castling kingside while supporting a potential d2-d3 pawn structure that would give us a solid, flexible position. The fianchetto fits beautifully with our pawn on c3 because together they'll control key central squares and support various pawn breaks like d2-d3 followed by e2-e4, or even f2-f4 in more aggressive setups."
     },
     {
       "san": "g6",

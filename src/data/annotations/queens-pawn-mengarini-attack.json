@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening formation within our Queen's Pawn setup, expanding on the queenside and preparing to build a strong pawn center with potential d4-c5 or d5 advances later. This move takes control of the important d5 and b5 squares, preventing Black from easily establishing a knight on d5 or advancing ...b5 to challenge our queenside space. The c4 pawn also supports a potential future e4 advance, which would give us an ideal pawn center. This flexible move keeps many systems open to us, including the King's Indian Defense structures if Black continues with ...g6, or Queen's Gambit-like positions if Black plays ...e6."
+      "annotation": "We're playing the English Opening formation within our Queen's Pawn setup, expanding on the queenside and preparing to build a strong pawn center with potential d4-c5 or d5 advances later. This move takes control of the important d5 and b5 squares, preventing Black from easily establishing a pawn on d5 or advancing ...b5 to challenge our queenside space. The c4 pawn also supports a potential future e4 advance, which would give us an ideal pawn center. This flexible move keeps many systems open to us, including the King's Indian Defense structures if Black continues with ...g6, or Queen's Gambit-like positions if Black plays ...e6."
     },
     {
       "san": "g6",

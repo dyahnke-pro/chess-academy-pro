@@ -8,6 +8,8 @@ export interface AnnotationCardProps {
   moveNumber: number;
   isWhite: boolean;
   visible: boolean;
+  /** Override the SAN displayed in the header (uses annotation.san if omitted). */
+  actualSan?: string;
 }
 
 export function AnnotationCard({
@@ -15,6 +17,7 @@ export function AnnotationCard({
   moveNumber,
   isWhite,
   visible,
+  actualSan,
 }: AnnotationCardProps): JSX.Element {
   const [showAlternatives, setShowAlternatives] = useState(false);
 
@@ -22,9 +25,10 @@ export function AnnotationCard({
     return <div data-testid="annotation-card-empty" />;
   }
 
+  const displaySan = actualSan ?? annotation.san;
   const moveLabel = isWhite
-    ? `${moveNumber}. ${annotation.san}`
-    : `${moveNumber}...${annotation.san}`;
+    ? `${moveNumber}. ${displaySan}`
+    : `${moveNumber}...${displaySan}`;
 
   const hasPlans = annotation.plans && annotation.plans.length > 0;
   const hasPawnStructure = Boolean(annotation.pawnStructure);

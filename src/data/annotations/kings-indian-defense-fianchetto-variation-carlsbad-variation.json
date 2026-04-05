@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent plays the characteristic King's Indian move, supporting the knight on f6 while preparing to challenge our center with ...e5 at the appropriate moment. This pawn move also opens the c8-h3 diagonal for Black's light-squared bishop, though that piece often faces challenges finding good squares in King's Indian setups. The d6 pawn is a key structural element in Black's position - it supports the knight while maintaining flexibility for future pawn breaks. Black is essentially completing the basic King's Indian setup and preparing to choose between different plans: the immediate ...e5 break, or more patient preparation with moves like ...Nbd7 and ...Re8."
+      "annotation": "Our opponent plays the characteristic King's Indian move, supporting the pawn on f6 while preparing to challenge our center with ...e5 at the appropriate moment. This pawn move also opens the c8-h3 diagonal for Black's light-squared bishop, though that piece often faces challenges finding good squares in King's Indian setups. The d6 pawn is a key structural element in Black's position - it supports the knight while maintaining flexibility for future pawn breaks. Black is essentially completing the basic King's Indian setup and preparing to choose between different plans: the immediate ...e5 break, or more patient preparation with moves like ...Nbd7 and ...Re8."
     },
     {
       "san": "Nf3",

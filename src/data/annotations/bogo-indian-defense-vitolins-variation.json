@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to build a strong pawn center. This move signals our intention to play a positional game where we'll gradually improve our position through piece development and central control. The d4 opening leads to rich middlegame positions where strategic understanding is often more important than tactical fireworks. By controlling e5, we're already limiting Black's knight on f6 from jumping to its most natural central square."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 square and preparing to build a strong pawn center. This move signals our intention to play a positional game where we'll gradually improve our position through piece development and central control. The d4 opening leads to rich middlegame positions where strategic understanding is often more important than tactical fireworks. By controlling e5, we're already limiting Black's pawn on f6 from jumping to its most natural central square."
     },
     {
       "san": "Nf6",
@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're expanding our central influence by supporting a potential d5 advance and controlling the important b5 and d5 squares. This move defines the English Opening setup and shows our intention to fight for central space while keeping our pieces flexible. The c4 pawn also prevents Black's pieces from using the d5 square as an outpost, which is particularly important against the nimble knight on f6. By advancing c4, we're also preparing to develop our queen's knight to c3 where it will have maximum influence on the center."
+      "annotation": "We're expanding our central influence by supporting a potential d5 advance and controlling the important b5 and d5 squares. This move defines the English Opening setup and shows our intention to fight for central space while keeping our pieces flexible. The c4 pawn also prevents Black's pieces from using the d5 square as an outpost, which is particularly important against the nimble pawn on f6. By advancing c4, we're also preparing to develop our queen's knight to c3 where it will have maximum influence on the center."
     },
     {
       "san": "e6",

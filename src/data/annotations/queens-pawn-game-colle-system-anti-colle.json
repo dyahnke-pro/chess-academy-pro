@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the center and controlling the important e5 and c5 squares. This move begins the Queen's Pawn Game, which typically leads to more positional, strategic battles compared to 1.e4 openings. Our d4 pawn supports a future knight on f3 and opens lines for our dark-squared bishop and queen. The Colle System we're heading toward is a solid, systematic setup that's particularly effective for players who want to understand pawn structures and piece coordination without memorizing endless theoretical variations."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the center and controlling the important e5 and c5 squares. This move begins the Queen's Pawn Game, which typically leads to more positional, strategic battles compared to 1.e4 openings. Our d4 pawn supports a future pawn on f3 and opens lines for our dark-squared bishop and queen. The Colle System we're heading toward is a solid, systematic setup that's particularly effective for players who want to understand pawn structures and piece coordination without memorizing endless theoretical variations."
     },
     {
       "san": "d5",

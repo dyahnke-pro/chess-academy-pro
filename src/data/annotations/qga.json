@@ -1846,7 +1846,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "In the Queen's Gambit Accepted, the b5 Counter-attack is a tactical pattern you should know. When White plays a4 to prevent ...b5, Black switches plans with ...Nc6 and ...Nb4, targeting the d3 square. The knight on b4 is a powerful outpost that disrupts White's coordination. Let's walk through how it works."
+          "annotation": "In the Queen's Gambit Accepted, the b5 Counter-attack is a tactical pattern you should know. When White plays a4 to prevent ...b5, Black switches plans with ...Nc6 and ...Nb4, targeting the d3 square. The pawn on b4 is a powerful outpost that disrupts White's coordination. Let's walk through how it works."
         },
         {
           "san": "d5",

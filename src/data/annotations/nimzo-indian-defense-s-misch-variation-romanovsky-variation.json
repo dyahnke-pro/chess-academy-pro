@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, supporting our d4 pawn and preparing to expand further in the center with moves like e4 or Nc3. This pawn controls the crucial d5 and b5 squares, preventing Black from easily establishing a knight on d5. The c4 advance also opens up possibilities for our pieces - the queen can potentially come to a4 or b3, and we're preparing to develop our knight to c3. This is one of the most popular and flexible ways to handle Black's ...Nf6 response."
+      "annotation": "We're playing the English Opening move order, supporting our d4 pawn and preparing to expand further in the center with moves like e4 or Nc3. This pawn controls the crucial d5 and b5 squares, preventing Black from easily establishing a pawn on d5. The c4 advance also opens up possibilities for our pieces - the queen can potentially come to a4 or b3, and we're preparing to develop our knight to c3. This is one of the most popular and flexible ways to handle Black's ...Nf6 response."
     },
     {
       "san": "e6",
@@ -47,7 +47,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black immediately challenges our central pawn, seeking to undermine our space advantage and create counterplay on the queenside. This advance is logical because it attacks our key d4 pawn and opens lines for Black's pieces, particularly the queen and potential rook on a8. The move also prepares to potentially establish a knight on d5 or create pressure along the c-file after exchanges. Black is following classical strategic principles by challenging our center before we can fully consolidate our position."
+      "annotation": "Black immediately challenges our central pawn, seeking to undermine our space advantage and create counterplay on the queenside. This advance is logical because it attacks our key d4 pawn and opens lines for Black's pieces, particularly the queen and potential rook on a8. The move also prepares to potentially establish a pawn on d5 or create pressure along the c-file after exchanges. Black is following classical strategic principles by challenging our center before we can fully consolidate our position."
     },
     {
       "san": "cxd5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "f5",
-      "annotation": "Black plays a remarkably aggressive move, advancing the f-pawn to cramp our kingside and prepare potential attacking chances against our exposed king. This advance controls the important e4 square and supports the centralized knight on d5, creating a strong partnership between these pieces. The move is also thematically connected to Black's compensation for the bishop pair - by advancing pawns and creating threats, Black seeks to prove that piece activity can overcome material considerations. However, this pawn advance also creates some weaknesses, particularly on e5 and around Black's own king, so both sides will need to play accurately in the sharp middlegame ahead."
+      "annotation": "Black plays a remarkably aggressive move, advancing the f-pawn to cramp our kingside and prepare potential attacking chances against our exposed king. This advance controls the important e4 square and supports the centralized pawn on d5, creating a strong partnership between these pieces. The move is also thematically connected to Black's compensation for the bishop pair - by advancing pawns and creating threats, Black seeks to prove that piece activity can overcome material considerations. However, this pawn advance also creates some weaknesses, particularly on e5 and around Black's own king, so both sides will need to play accurately in the sharp middlegame ahead."
     }
   ]
 }

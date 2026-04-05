@@ -43,7 +43,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "We capture toward the center, opening the c-file for our rook and maintaining our central pawn on d4. This recapture is more active than Nxd5 would be, as it improves our pawn structure and keeps our pieces flexible for future development. The move also puts immediate pressure on Black's knight on f6, which now must decide where to recapture from. By maintaining our d4 pawn, we keep some central space advantage while opening lines for our pieces to become more active."
+      "annotation": "We capture toward the center, opening the c-file for our rook and maintaining our central pawn on d4. This recapture is more active than Nxd5 would be, as it improves our pawn structure and keeps our pieces flexible for future development. The move also puts immediate pressure on Black's pawn on f6, which now must decide where to recapture from. By maintaining our d4 pawn, we keep some central space advantage while opening lines for our pieces to become more active."
     },
     {
       "san": "Nxd5",

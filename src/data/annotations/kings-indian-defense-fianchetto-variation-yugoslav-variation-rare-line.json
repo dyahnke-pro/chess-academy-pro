@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent plays a solid, supportive move that protects the e5 square and prepares to support future central advances like ...e5 or ...c5. This move is typical in the King's Indian Defense, as it creates a solid pawn base and prepares Black's pieces for more active operations. The d6 pawn also opens up the possibility of ...Nbd7 development and supports the knight on f6 against potential attacks. While this move looks passive, it's actually preparing Black's typical King's Indian counterplay, and we should be ready for our opponent to become more active soon with moves like ...c5 or ...e5."
+      "annotation": "Our opponent plays a solid, supportive move that protects the e5 square and prepares to support future central advances like ...e5 or ...c5. This move is typical in the King's Indian Defense, as it creates a solid pawn base and prepares Black's pieces for more active operations. The d6 pawn also opens up the possibility of ...Nbd7 development and supports the pawn on f6 against potential attacks. While this move looks passive, it's actually preparing Black's typical King's Indian counterplay, and we should be ready for our opponent to become more active soon with moves like ...c5 or ...e5."
     },
     {
       "san": "Nf3",

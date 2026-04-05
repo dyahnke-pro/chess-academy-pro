@@ -55,6 +55,7 @@ const ANNOTATION_MODULES: Record<string, AnnotationLoader> = {
   'gambit-evans-gambit': () => import('./gambit-evans-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
   'gambit-budapest-gambit': () => import('./gambit-budapest-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
   'gambit-benko-gambit': () => import('./gambit-benko-gambit.json') as unknown as Promise<{ default: OpeningAnnotations }>,
+  'pro-naroditsky-jobava-london': () => import('./pro-naroditsky-jobava-london.json') as unknown as Promise<{ default: OpeningAnnotations }>,
 };
 
 export { ANNOTATION_MODULES };

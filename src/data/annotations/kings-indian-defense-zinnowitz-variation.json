@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're advancing our queen's bishop pawn to control the crucial d5 and b5 squares, while also preparing to support our d4 pawn if Black plays ...e5. This move defines the English Opening structure and gives us excellent control over the light squares in the center. By playing c4, we're also opening up the possibility of expanding on the queenside later with moves like b4, and we're discouraging Black from comfortably placing a knight on d5. This pawn thrust is fundamental to many of White's most aggressive setups against the King's Indian Defense."
+      "annotation": "We're advancing our queen's bishop pawn to control the crucial d5 and b5 squares, while also preparing to support our d4 pawn if Black plays ...e5. This move defines the English Opening structure and gives us excellent control over the light squares in the center. By playing c4, we're also opening up the possibility of expanding on the queenside later with moves like b4, and we're discouraging Black from comfortably placing a pawn on d5. This pawn thrust is fundamental to many of White's most aggressive setups against the King's Indian Defense."
     },
     {
       "san": "g6",

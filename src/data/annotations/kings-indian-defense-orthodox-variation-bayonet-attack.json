@@ -27,7 +27,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We've achieved the ideal pawn center with pawns on c4, d4, and e4, giving us maximum space advantage and control over key central squares. This advance supports our pieces, particularly allowing our knight to potentially jump to d5 or f5 later, and restricts Black's knight on f6 from accessing some central squares. Our pawn center looks impressive, but Black is betting that it will become a target for counterplay rather than a permanent advantage. The e4 pawn also opens lines for our light-squared bishop and queen, though we need to be mindful that Black's pieces are all aimed at undermining this center."
+      "annotation": "We've achieved the ideal pawn center with pawns on c4, d4, and e4, giving us maximum space advantage and control over key central squares. This advance supports our pieces, particularly allowing our knight to potentially jump to d5 or f5 later, and restricts Black's pawn on f6 from accessing some central squares. Our pawn center looks impressive, but Black is betting that it will become a target for counterplay rather than a permanent advantage. The e4 pawn also opens lines for our light-squared bishop and queen, though we need to be mindful that Black's pieces are all aimed at undermining this center."
     },
     {
       "san": "d6",

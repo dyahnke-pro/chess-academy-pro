@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our light-squared bishop and queen. This move is the foundation of many solid opening systems, giving us excellent central control and flexible development options. The d4 pawn also supports a future knight on c3 or f3, and we're keeping our options open for various pawn structures depending on how Black responds. This is a classical approach that emphasizes central control from the very first move."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our light-squared bishop and queen. This move is the foundation of many solid opening systems, giving us excellent central control and flexible development options. The d4 pawn also supports a future pawn on c3 or f3, and we're keeping our options open for various pawn structures depending on how Black responds. This is a classical approach that emphasizes central control from the very first move."
     },
     {
       "san": "Nf6",

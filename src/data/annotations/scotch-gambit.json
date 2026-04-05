@@ -1177,7 +1177,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "The Scotch Gambit: Main Line with d5 is an important variation of the Scotch Gambit. The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. After castling and developing with Be3, the position is dynamic — White has better pawn structure and the bishop pair while Black has centralized knights. Active play is essential for both sides. Let's walk through the key ideas."
+          "annotation": "The Scotch Gambit: Main Line with d5 is an important variation of the Scotch Gambit. The main line where Black strikes back with d5. After Bb5, White targets the pinned pawn on c6. After castling and developing with Be3, the position is dynamic — White has better pawn structure and the bishop pair while Black has centralized knights. Active play is essential for both sides. Let's walk through the key ideas."
         },
         {
           "san": "e5",
@@ -2752,7 +2752,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "In the Scotch Gambit, the Black Equalizes with Precise d5 and Ne4 is a dangerous line you must be aware of. If Black plays the precise d5 followed by Ne4, Bc5, and Qh4, the position becomes very sharp but Black has excellent counterplay. The queen on h4 creates real threats and the centralized knight on e4 is a powerful piece. White needs to play very accurately to maintain even a small edge. Let's see why."
+          "annotation": "In the Scotch Gambit, the Black Equalizes with Precise d5 and Ne4 is a dangerous line you must be aware of. If Black plays the precise d5 followed by Ne4, Bc5, and Qh4, the position becomes very sharp but Black has excellent counterplay. The queen on h4 creates real threats and the centralized pawn on e4 is a powerful piece. White needs to play very accurately to maintain even a small edge. Let's see why."
         },
         {
           "san": "e5",

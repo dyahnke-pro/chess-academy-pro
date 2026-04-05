@@ -1,4 +1,5 @@
 import { ANNOTATION_MODULES } from '../data/annotations';
+import { Chess } from 'chess.js';
 import type { OpeningMoveAnnotation, OpeningAnnotations } from '../types';
 
 // Map pro-repertoire suffixes to base annotation IDs
@@ -17,6 +18,7 @@ const PRO_SUFFIX_TO_BASE: Record<string, string> = {
   'englund': 'englund-gambit',
   'fantasy-caro': 'caro-kann',
   'french': 'french-defence',
+  'jobava-london': 'london-system',
   'grunfeld': 'grunfeld-defence',
   'italian': 'italian-game',
   'kia': 'kings-indian-attack',
@@ -78,6 +80,80 @@ async function loadModule(openingId: string): Promise<OpeningAnnotations | null>
 export async function loadAnnotations(openingId: string): Promise<OpeningMoveAnnotation[] | null> {
   const data = await loadModule(openingId);
   return data?.moveAnnotations ?? null;
+}
+
+/**
+ * Parse a PGN string into an array of SAN moves using chess.js for validation.
+ * Returns only valid moves (stops at the first invalid token).
+ */
+function parsePgnToSans(pgn: string): string[] {
+  const tokens = pgn.trim().split(/\s+/).filter(Boolean);
+  const chess = new Chess();
+  const sans: string[] = [];
+  for (const token of tokens) {
+    try {
+      const move = chess.move(token);
+      sans.push(move.san);
+    } catch {
+      break;
+    }
+  }
+  return sans;
+}
+
+/**
+ * Count how many leading moves match between a PGN and an annotation set.
+ */
+function countMatchingMoves(pgn: string, annotations: OpeningMoveAnnotation[]): number {
+  const sans = parsePgnToSans(pgn);
+  let matches = 0;
+  for (let i = 0; i < Math.min(sans.length, annotations.length); i++) {
+    if (sans[i] === annotations[i].san) {
+      matches++;
+    } else {
+      break;
+    }
+  }
+  return matches;
+}
+
+/**
+ * Load annotations for an opening, using the PGN to find the best-matching
+ * annotation set. When the main line annotations diverge from the opening's
+ * PGN, this searches subLines for a better match.
+ */
+export async function loadAnnotationsForPgn(
+  openingId: string,
+  pgn: string,
+): Promise<OpeningMoveAnnotation[] | null> {
+  const data = await loadModule(openingId);
+  if (!data) return null;
+
+  const mainLineMatch = countMatchingMoves(pgn, data.moveAnnotations);
+  const pgnMoveCount = parsePgnToSans(pgn).length;
+
+  // If main line matches all (or nearly all) PGN moves, use it
+  if (mainLineMatch >= pgnMoveCount || mainLineMatch >= data.moveAnnotations.length) {
+    return data.moveAnnotations;
+  }
+
+  // Search subLines for a better match
+  if (data.subLines && data.subLines.length > 0) {
+    let bestAnnotations = data.moveAnnotations;
+    let bestMatch = mainLineMatch;
+
+    for (const subLine of data.subLines) {
+      const subMatch = countMatchingMoves(pgn, subLine.moveAnnotations);
+      if (subMatch > bestMatch) {
+        bestMatch = subMatch;
+        bestAnnotations = subLine.moveAnnotations;
+      }
+    }
+
+    return bestAnnotations;
+  }
+
+  return data.moveAnnotations;
 }
 
 export async function loadSubLineAnnotations(

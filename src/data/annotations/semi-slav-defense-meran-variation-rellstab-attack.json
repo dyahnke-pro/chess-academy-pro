@@ -67,7 +67,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We're finally advancing in the center with this powerful pawn break, opening lines for our pieces and seizing space in the heart of the board. This advance is the point of our opening setup, giving us a strong central presence while opening diagonals for our bishops and creating tactical possibilities. The e4 advance also restricts Black's knight on f6 and prepares to support further central expansion with our pieces. This move transforms the character of the position from positional maneuvering to more tactical complications where our superior central control should give us the advantage."
+      "annotation": "We're finally advancing in the center with this powerful pawn break, opening lines for our pieces and seizing space in the heart of the board. This advance is the point of our opening setup, giving us a strong central presence while opening diagonals for our bishops and creating tactical possibilities. The e4 advance also restricts Black's pawn on f6 and prepares to support further central expansion with our pieces. This move transforms the character of the position from positional maneuvering to more tactical complications where our superior central control should give us the advantage."
     },
     {
       "san": "c5",
@@ -75,7 +75,7 @@
     },
     {
       "san": "e5",
-      "annotation": "We're advancing our central pawn to gain space and restrict Black's pieces, particularly the knight on f6 which is now attacked and must move. This advance gives us a strong space advantage in the center and opens attacking lines toward Black's king position. Our pawn on e5 also controls important squares like d6 and f6, limiting Black's piece coordination while preparing our own pieces for more active roles. This advance is consistent with our opening strategy of dominating the center and creating tactical complications where our better piece coordination should prevail."
+      "annotation": "We're advancing our central pawn to gain space and restrict Black's pieces, particularly the pawn on f6 which is now attacked and must move. This advance gives us a strong space advantage in the center and opens attacking lines toward Black's king position. Our pawn on e5 also controls important squares like d6 and f6, limiting Black's piece coordination while preparing our own pieces for more active roles. This advance is consistent with our opening strategy of dominating the center and creating tactical complications where our better piece coordination should prevail."
     },
     {
       "san": "cxd4",
@@ -95,7 +95,7 @@
     },
     {
       "san": "axb5",
-      "annotation": "Our opponent recaptures to restore material balance, though this opens the a-file and potentially creates weaknesses in Black's pawn structure. Black has little choice but to recapture, as leaving the knight on b5 would give us too strong an initiative and material advantage. This recapture also opens lines for Black's rook and creates some counterplay possibilities, though their king position remains somewhat vulnerable. Black is fighting to maintain balance in a position where precise move calculation is essential for both sides."
+      "annotation": "Our opponent recaptures to restore material balance, though this opens the a-file and potentially creates weaknesses in Black's pawn structure. Black has little choice but to recapture, as leaving the pawn on b5 would give us too strong an initiative and material advantage. This recapture also opens lines for Black's rook and creates some counterplay possibilities, though their king position remains somewhat vulnerable. Black is fighting to maintain balance in a position where precise move calculation is essential for both sides."
     },
     {
       "san": "O-O",

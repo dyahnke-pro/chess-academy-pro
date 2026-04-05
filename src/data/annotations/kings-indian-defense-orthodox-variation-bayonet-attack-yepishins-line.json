@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent supports the critical e5 pawn advance while maintaining maximum flexibility in their piece development, staying true to the King's Indian philosophy of gradual central counterplay. This pawn move might look passive, but it's actually preparing the thematic e5 break that will challenge our central dominance and open lines for Black's pieces. The pawn on d6 also supports potential piece placements like a knight on e7 or c6, and it ensures that Black's position remains solid and difficult to break down with direct attacks. Black is essentially saying, 'I'll let you have the center for now, but I'm preparing to strike back with maximum force when the time is right.'"
+      "annotation": "Our opponent supports the critical e5 pawn advance while maintaining maximum flexibility in their piece development, staying true to the King's Indian philosophy of gradual central counterplay. This pawn move might look passive, but it's actually preparing the thematic e5 break that will challenge our central dominance and open lines for Black's pieces. The pawn on d6 also supports potential piece placements like a pawn on e7 or c6, and it ensures that Black's position remains solid and difficult to break down with direct attacks. Black is essentially saying, 'I'll let you have the center for now, but I'm preparing to strike back with maximum force when the time is right.'"
     },
     {
       "san": "Nf3",
@@ -59,7 +59,7 @@
     },
     {
       "san": "d5",
-      "annotation": "We're advancing our central pawn to gain space and force Black's pieces into less comfortable positions, particularly the knight on c6 which must now find a new square. This advance is typical in the King's Indian structure because it transforms our central pawn duo into a space-gaining spearhead that cramps Black's position while opening new possibilities for our pieces. The d5 advance also prepares various strategic plans: we might support it with c4-c5, creating a bind on the queenside, or we might use the space advantage to launch attacks on either flank. By pushing d5, we're essentially accepting that the position will become more closed and maneuvering-based, which often favors the side with more space."
+      "annotation": "We're advancing our central pawn to gain space and force Black's pieces into less comfortable positions, particularly the pawn on c6 which must now find a new square. This advance is typical in the King's Indian structure because it transforms our central pawn duo into a space-gaining spearhead that cramps Black's position while opening new possibilities for our pieces. The d5 advance also prepares various strategic plans: we might support it with c4-c5, creating a bind on the queenside, or we might use the space advantage to launch attacks on either flank. By pushing d5, we're essentially accepting that the position will become more closed and maneuvering-based, which often favors the side with more space."
     },
     {
       "san": "Ne7",

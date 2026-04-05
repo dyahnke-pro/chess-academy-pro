@@ -311,7 +311,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the center and prepares to complete the fianchetto with ...g6 and ...Bg7. The pawn on d6 supports a potential ...e6 break later and gives the knight on f6 a stable base. This is patient gambit play — Black builds up pressure methodically.",
+      "annotation": "Black solidifies the center and prepares to complete the fianchetto with ...g6 and ...Bg7. The pawn on d6 supports a potential ...e6 break later and gives the pawn on f6 a stable base. This is patient gambit play — Black builds up pressure methodically.",
       "pawnStructure": "Black's pawn structure with c5 and d6 is the classic Benoni formation. The d6 pawn is solid and supports future pawn breaks like ...e6.",
       "plans": [
         "Fianchetto with ...g6 and ...Bg7",

@@ -246,7 +246,7 @@
     },
     {
       "san": "d4",
-      "annotation": "This is the key move. We establish a classical pawn center with d4, and we're hitting Black's d6 pawn which was supporting the knight. Black will have to figure out what to do with the knight on e4 -- it can't stay there forever. The d4-pawn also opens up our dark-squared bishop.",
+      "annotation": "This is the key move. We establish a classical pawn center with d4, and we're hitting Black's d6 pawn which was supporting the knight. Black will have to figure out what to do with the pawn on e4 -- it can't stay there forever. The d4-pawn also opens up our dark-squared bishop.",
       "pawnStructure": "White has a broad d4 center. Black needs to equalize by challenging it or completing development.",
       "plans": [
         "Develop Bd3 to pressure the e4 knight",
@@ -281,7 +281,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black solidifies. The pawn on d5 supports the knight on e4 and creates a symmetrical pawn structure. This is the hallmark of the Petrov -- both sides have a pawn on d4/d5, and the position is balanced. But don't be fooled by the symmetry; there are still real decisions about piece placement and plans.",
+      "annotation": "Black solidifies. The pawn on d5 supports the pawn on e4 and creates a symmetrical pawn structure. This is the hallmark of the Petrov -- both sides have a pawn on d4/d5, and the position is balanced. But don't be fooled by the symmetry; there are still real decisions about piece placement and plans.",
       "pawnStructure": "Symmetrical d4 vs d5. The center is locked and neither side has a pawn majority yet. This structure often leads to minority attacks or piece play.",
       "plans": [
         "Maintain the solid d5 outpost for pieces",
@@ -668,7 +668,7 @@
         },
         {
           "san": "d6",
-          "annotation": "Black immediately attacks the knight on e5, forcing it to move and gaining time for development. This move also opens the diagonal for the dark-squared bishop and prepares ...Nxe4, which will restore material balance. The pawn on d6 supports Black's central control and creates a solid pawn structure.",
+          "annotation": "Black immediately attacks the pawn on e5, forcing it to move and gaining time for development. This move also opens the diagonal for the dark-squared bishop and prepares ...Nxe4, which will restore material balance. The pawn on d6 supports Black's central control and creates a solid pawn structure.",
           "plans": [
             "Recapture the e4 pawn next move",
             "Develop the dark-squared bishop"
@@ -760,7 +760,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black creates a symmetrical pawn structure by advancing the d-pawn, matching White's central control and stabilizing the knight on e4. This move prevents White from playing c4 immediately and creates a solid central formation. The symmetrical pawn structure leads to balanced middlegame positions where piece activity becomes crucial.",
+          "annotation": "Black creates a symmetrical pawn structure by advancing the d-pawn, matching White's central control and stabilizing the pawn on e4. This move prevents White from playing c4 immediately and creates a solid central formation. The symmetrical pawn structure leads to balanced middlegame positions where piece activity becomes crucial.",
           "pawnStructure": "The position now features a symmetrical pawn structure with pawns on d4/d5, leading to balanced but rich middlegame play.",
           "plans": [
             "Maintain the centralized knight",
@@ -1287,7 +1287,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "The Cochrane Gambit is an important variation of the Petrov Defence. A wild gambit where White sacs the knight on f7! Black should accept and play carefully — ...Be7 and ...Re8 consolidate. The extra piece is usually more important than White's initiative. Let's walk through the key ideas."
+          "annotation": "The Cochrane Gambit is an important variation of the Petrov Defence. A wild gambit where White sacs the pawn on f7! Black should accept and play carefully — ...Be7 and ...Re8 consolidate. The extra piece is usually more important than White's initiative. Let's walk through the key ideas."
         },
         {
           "san": "e5",

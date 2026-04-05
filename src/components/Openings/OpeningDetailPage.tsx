@@ -657,13 +657,17 @@ export function OpeningDetailPage(): JSX.Element {
                   className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
                   data-testid={`trap-line-${i}`}
                 >
-                  <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleStartTrapLineAction(i, 'walkthrough')}
+                    className="flex items-center gap-3 w-full text-left"
+                    aria-label={`Open ${line.name}`}
+                  >
                     <MiniBoard fen={trapLineFens[i]} size={48} orientation={opening.color} />
                     <div className="flex-1 min-w-0">
                       <span className="text-sm font-medium text-theme-text">{line.name}</span>
                       <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
                     <button
                       onClick={() => handleStartTrapLineAction(i, 'walkthrough')}
@@ -741,13 +745,17 @@ export function OpeningDetailPage(): JSX.Element {
                   className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
                   data-testid={`warning-line-${i}`}
                 >
-                  <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleStartWarningLineAction(i, 'walkthrough')}
+                    className="flex items-center gap-3 w-full text-left"
+                    aria-label={`Open ${line.name}`}
+                  >
                     <MiniBoard fen={warningLineFens[i]} size={48} orientation={opening.color} />
                     <div className="flex-1 min-w-0">
                       <span className="text-sm font-medium text-theme-text">{line.name}</span>
                       <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
                     <button
                       onClick={() => handleStartWarningLineAction(i, 'walkthrough')}
@@ -809,7 +817,11 @@ export function OpeningDetailPage(): JSX.Element {
                   className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors group"
                   data-testid={`variation-${i}`}
                 >
-                  <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleStartVariationWalkthrough(i)}
+                    className="flex items-center gap-3 w-full text-left"
+                    aria-label={`Open ${variation.name}`}
+                  >
                     {/* Board thumbnail */}
                     <MiniBoard
                       fen={variationFens[i]}
@@ -841,7 +853,7 @@ export function OpeningDetailPage(): JSX.Element {
                       </div>
                       <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
                     <button
                       onClick={() => handleStartVariationWalkthrough(i)}

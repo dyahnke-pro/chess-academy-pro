@@ -27,11 +27,11 @@
     },
     {
       "san": "e4",
-      "annotation": "We're establishing the classical pawn center, occupying maximum space and restricting Black's pieces while preparing to launch potential attacks on both flanks. This advance is the logical continuation of our setup, using the support from our knight on c3 and preparing to develop our remaining pieces behind the strong pawn chain. The e4 pawn controls crucial central squares like d5 and f5, limiting Black's piece activity and central breaks. However, we must be aware that Black will soon challenge this center with ...e7-e5, leading to the typical King's Indian pawn tension that defines the opening's character."
+      "annotation": "We're establishing the classical pawn center, occupying maximum space and restricting Black's pieces while preparing to launch potential attacks on both flanks. This advance is the logical continuation of our setup, using the support from our pawn on c3 and preparing to develop our remaining pieces behind the strong pawn chain. The e4 pawn controls crucial central squares like d5 and f5, limiting Black's piece activity and central breaks. However, we must be aware that Black will soon challenge this center with ...e7-e5, leading to the typical King's Indian pawn tension that defines the opening's character."
     },
     {
       "san": "d6",
-      "annotation": "Our opponent is preparing the fundamental ...e7-e5 break while supporting their pieces and maintaining flexibility in the position. This move provides crucial support for a future knight on e5 and prepares to challenge our imposing pawn center. Black is also keeping options open for different pawn structures, as this move supports both the typical King's Indian setup and potential transpositions to other systems. The pawn on d6 also reinforces the c7-square and helps maintain Black's kingside security while they complete their development."
+      "annotation": "Our opponent is preparing the fundamental ...e7-e5 break while supporting their pieces and maintaining flexibility in the position. This move provides crucial support for a future pawn on e5 and prepares to challenge our imposing pawn center. Black is also keeping options open for different pawn structures, as this move supports both the typical King's Indian setup and potential transpositions to other systems. The pawn on d6 also reinforces the c7-square and helps maintain Black's kingside security while they complete their development."
     },
     {
       "san": "Nf3",

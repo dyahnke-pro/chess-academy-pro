@@ -324,7 +324,7 @@
     },
     {
       "san": "e4",
-      "annotation": "Black makes an ambitious central advance, pushing the pawn to e4 to gain space and restrict White's knight on f3. This is a double-edged decision: the e4 pawn grabs territory but also leaves behind a hole on d4 that White can exploit. The pawn also becomes harder to defend as it advances. White should welcome this — the d5 square and the long diagonal become even more potent for our fianchettoed bishop.",
+      "annotation": "Black makes an ambitious central advance, pushing the pawn to e4 to gain space and restrict White's pawn on f3. This is a double-edged decision: the e4 pawn grabs territory but also leaves behind a hole on d4 that White can exploit. The pawn also becomes harder to defend as it advances. White should welcome this — the d5 square and the long diagonal become even more potent for our fianchettoed bishop.",
       "pawnStructure": "Black's e4 pawn is advanced and potentially overextended. White gains the d4 and d5 outposts.",
       "plans": [
         "Exploit the d4 and d5 squares left weak by ...e4",
@@ -675,7 +675,7 @@
         },
         {
           "san": "cxd5",
-          "annotation": "We capture toward the center, which is almost always correct. Taking on d5 opens the c-file for our rook and clears the way for our fianchettoed bishop to dominate the long diagonal. The recapture will give Black an active knight on d5, but we have a concrete plan: complete development, castle, and then look to undermine that knight with d3 followed by moves like Be3 or Nd5 ourselves.",
+          "annotation": "We capture toward the center, which is almost always correct. Taking on d5 opens the c-file for our rook and clears the way for our fianchettoed bishop to dominate the long diagonal. The recapture will give Black an active pawn on d5, but we have a concrete plan: complete development, castle, and then look to undermine that knight with d3 followed by moves like Be3 or Nd5 ourselves.",
           "pawnStructure": "White has no center pawns yet (just g3). The position is open and piece activity matters most.",
           "plans": [
             "Open the c-file for rook activity after development",
@@ -1150,7 +1150,7 @@
       "moveAnnotations": [
         {
           "san": "c4",
-          "annotation": "The English: Botvinnik System is an important variation of the English Opening. The Botvinnik System with e4 and d3 creates a powerful pawn center. White's setup is extremely solid and provides long-term pressure. The knight on e2 reroutes to g3 or c3. Let's walk through the key ideas."
+          "annotation": "The English: Botvinnik System is an important variation of the English Opening. The Botvinnik System with e4 and d3 creates a powerful pawn center. White's setup is extremely solid and provides long-term pressure. The pawn on e2 reroutes to g3 or c3. Let's walk through the key ideas."
         },
         {
           "san": "e5",

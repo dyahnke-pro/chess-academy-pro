@@ -23,7 +23,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Our opponent strikes in the center with the characteristic Queen's Gambit Declined move, establishing a solid pawn chain and challenging our c4 pawn. This creates the fundamental tension of the Queen's Gambit - Black maintains central presence but accepts a somewhat passive position in exchange for solidity. The d5 pawn supports Black's knight on f6 and prepares to complete development with pieces like ...Be7 and ...O-O. Now we've reached a true Queen's Gambit position where Black has declined the gambit pawn and instead chosen to defend the center solidly."
+      "annotation": "Our opponent strikes in the center with the characteristic Queen's Gambit Declined move, establishing a solid pawn chain and challenging our c4 pawn. This creates the fundamental tension of the Queen's Gambit - Black maintains central presence but accepts a somewhat passive position in exchange for solidity. The d5 pawn supports Black's pawn on f6 and prepares to complete development with pieces like ...Be7 and ...O-O. Now we've reached a true Queen's Gambit position where Black has declined the gambit pawn and instead chosen to defend the center solidly."
     },
     {
       "san": "Nc3",

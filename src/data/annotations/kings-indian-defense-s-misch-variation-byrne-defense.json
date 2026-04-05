@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, gaining space on the queenside and preparing to support our d4 pawn with a potential e2-e3 or even e2-e4 advance. This move controls the important d5 and b5 squares, limiting Black's pawn breaks, and begins our strategy of building a broad pawn center. The c4 pawn also supports a future knight on d5, which could become a powerful outpost. By playing c4 now, we're inviting Black to show their hand - they could play ...e6 for an Indian setup, ...c5 for a symmetrical English, or as we'll see, ...g6 heading for a King's Indian structure."
+      "annotation": "We're playing the English Opening move order, gaining space on the queenside and preparing to support our d4 pawn with a potential e2-e3 or even e2-e4 advance. This move controls the important d5 and b5 squares, limiting Black's pawn breaks, and begins our strategy of building a broad pawn center. The c4 pawn also supports a future pawn on d5, which could become a powerful outpost. By playing c4 now, we're inviting Black to show their hand - they could play ...e6 for an Indian setup, ...c5 for a symmetrical English, or as we'll see, ...g6 heading for a King's Indian structure."
     },
     {
       "san": "g6",

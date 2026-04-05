@@ -27,7 +27,7 @@
     },
     {
       "san": "g3",
-      "annotation": "We're preparing our own fianchetto with Bg2, which will create a powerful battery along the long diagonal and help us maintain central control while completing kingside development. The g3 move also prevents Black from establishing a knight on h4 and prepares a secure home for our king after castling. By fianchettoing our dark-squared bishop, we'll have excellent control over the central dark squares and can potentially support a future e4 advance. This setup is particularly effective against Black's Queen's Indian structure, as our dark-squared bishop will complement Black's light-squared bishop rather than clash with it."
+      "annotation": "We're preparing our own fianchetto with Bg2, which will create a powerful battery along the long diagonal and help us maintain central control while completing kingside development. The g3 move also prevents Black from establishing a pawn on h4 and prepares a secure home for our king after castling. By fianchettoing our dark-squared bishop, we'll have excellent control over the central dark squares and can potentially support a future e4 advance. This setup is particularly effective against Black's Queen's Indian structure, as our dark-squared bishop will complement Black's light-squared bishop rather than clash with it."
     },
     {
       "san": "Bb7",

@@ -67,7 +67,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "We strike in the center by capturing the d5 pawn, opening up the position and creating immediate tactical complications. This move transforms the pawn structure dramatically and forces both sides to calculate concrete variations, as the position becomes much more dynamic. By taking on d5, we're accepting that Black will capture our knight on c3, but we believe the resulting pawn structure and piece activity will favor us. This is a critical moment in the opening where both sides must play accurately to avoid falling into a difficult position."
+      "annotation": "We strike in the center by capturing the d5 pawn, opening up the position and creating immediate tactical complications. This move transforms the pawn structure dramatically and forces both sides to calculate concrete variations, as the position becomes much more dynamic. By taking on d5, we're accepting that Black will capture our pawn on c3, but we believe the resulting pawn structure and piece activity will favor us. This is a critical moment in the opening where both sides must play accurately to avoid falling into a difficult position."
     },
     {
       "san": "Nxc3",

@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies their pawn structure and prepares the crucial ...e5 central advance that's the heart of King's Indian strategy. This move supports the e5 square and opens a potential retreat square for the knight on f6 if it gets attacked. The d6 pawn also helps control the c5 and e5 squares while keeping Black's position flexible for future piece development. By playing ...d6, Black is committing to the classic King's Indian setup where they'll typically follow with moves like ...Nc6, ...e5, and potentially ...f5 for kingside attacking chances."
+      "annotation": "Black solidifies their pawn structure and prepares the crucial ...e5 central advance that's the heart of King's Indian strategy. This move supports the e5 square and opens a potential retreat square for the pawn on f6 if it gets attacked. The d6 pawn also helps control the c5 and e5 squares while keeping Black's position flexible for future piece development. By playing ...d6, Black is committing to the classic King's Indian setup where they'll typically follow with moves like ...Nc6, ...e5, and potentially ...f5 for kingside attacking chances."
     },
     {
       "san": "O-O",

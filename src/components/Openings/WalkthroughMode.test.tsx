@@ -70,8 +70,8 @@ vi.mock('../../services/stockfishEngine', () => ({
   },
 }));
 
-vi.mock('../../services/annotationService', () => ({
-  loadAnnotations: vi.fn().mockResolvedValue([
+vi.mock('../../services/annotationService', () => {
+  const annotations = [
     {
       san: 'e4',
       annotation: 'White opens with the king pawn.',
@@ -87,10 +87,14 @@ vi.mock('../../services/annotationService', () => ({
       annotation: 'Knight develops to f3.',
       alternatives: ['Nc3 is also possible'],
     },
-  ]),
-  loadSubLineAnnotations: vi.fn().mockResolvedValue(null),
-  clearAnnotationCache: vi.fn(),
-}));
+  ];
+  return {
+    loadAnnotations: vi.fn().mockResolvedValue(annotations),
+    loadAnnotationsForPgn: vi.fn().mockResolvedValue(annotations),
+    loadSubLineAnnotations: vi.fn().mockResolvedValue(null),
+    clearAnnotationCache: vi.fn(),
+  };
+});
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

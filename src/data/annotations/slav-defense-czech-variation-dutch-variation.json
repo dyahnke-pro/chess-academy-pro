@@ -47,7 +47,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black completes their central pawn triangle with c6-d5-e6, creating a solid but somewhat passive pawn structure that supports their pieces but also restricts their light-squared bishop's mobility. This move prepares Black to develop their dark-squared bishop, likely to d6 or e7, while maintaining the advanced c4 pawn. The e6 advance also supports Black's knight on f6 and prepares potential central advances like ...c5 or ...e5 in the future. However, this pawn structure does come with the drawback of creating a 'bad' light-squared bishop that will need to find activity outside the pawn chain, which is why Black developed it to f5 on the previous move."
+      "annotation": "Black completes their central pawn triangle with c6-d5-e6, creating a solid but somewhat passive pawn structure that supports their pieces but also restricts their light-squared bishop's mobility. This move prepares Black to develop their dark-squared bishop, likely to d6 or e7, while maintaining the advanced c4 pawn. The e6 advance also supports Black's pawn on f6 and prepares potential central advances like ...c5 or ...e5 in the future. However, this pawn structure does come with the drawback of creating a 'bad' light-squared bishop that will need to find activity outside the pawn chain, which is why Black developed it to f5 on the previous move."
     },
     {
       "san": "Bxc4",

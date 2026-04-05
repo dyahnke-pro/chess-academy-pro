@@ -43,7 +43,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We advance our e-pawn, building a massive pawn center and preparing the explosive Prianishenmo Gambit continuation. This move supports our d5 pawn while opening lines for our bishop and creating threats against Black's position. The e4 advance also prepares e4-e5, which would attack Black's knight on f6 and further cramp their position. We're now playing with tremendous space advantage and attacking potential, though Black still has that extra pawn and will try to prove that our aggression is unsound."
+      "annotation": "We advance our e-pawn, building a massive pawn center and preparing the explosive Prianishenmo Gambit continuation. This move supports our d5 pawn while opening lines for our bishop and creating threats against Black's position. The e4 advance also prepares e4-e5, which would attack Black's pawn on f6 and further cramp their position. We're now playing with tremendous space advantage and attacking potential, though Black still has that extra pawn and will try to prove that our aggression is unsound."
     },
     {
       "san": "exd5",
@@ -51,7 +51,7 @@
     },
     {
       "san": "e5",
-      "annotation": "We recapture with our e-pawn, launching the sharp Prianishenmo Gambit and immediately attacking Black's knight on f6. This advance creates a powerful passed pawn on e5 while forcing Black's knight to move and disrupting their coordination. The e5 pawn also controls key squares like d6 and f6, cramping Black's position significantly. We're now two pawns down but have tremendous piece activity, a space advantage, and attacking chances - this is the critical moment where the gambit's soundness will be tested through sharp tactical play."
+      "annotation": "We recapture with our e-pawn, launching the sharp Prianishenmo Gambit and immediately attacking Black's pawn on f6. This advance creates a powerful passed pawn on e5 while forcing Black's knight to move and disrupting their coordination. The e5 pawn also controls key squares like d6 and f6, cramping Black's position significantly. We're now two pawns down but have tremendous piece activity, a space advantage, and attacking chances - this is the critical moment where the gambit's soundness will be tested through sharp tactical play."
     }
   ]
 }

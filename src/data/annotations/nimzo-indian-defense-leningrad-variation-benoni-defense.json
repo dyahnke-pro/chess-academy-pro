@@ -15,7 +15,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent is preparing the Nimzo-Indian Defense by controlling the d5 square and preparing to develop the dark-squared bishop to b4. This move stops our potential d4-d5 advance for now while supporting a future ...d5 central break that could challenge our pawn on c4. Black is also keeping the option of ...Bb4+ open, which would pin our knight once we develop it to c3. The pawn on e6 creates a solid, flexible pawn structure that's characteristic of many classical defenses to 1.d4."
+      "annotation": "Our opponent is preparing the Nimzo-Indian Defense by controlling the d5 square and preparing to develop the dark-squared bishop to b4. This move stops our potential d4-d5 advance for now while supporting a future ...d5 central break that could challenge our pawn on c4. Black is also keeping the option of ...Bb4+ open, which would pin our pawn once we develop it to c3. The pawn on e6 creates a solid, flexible pawn structure that's characteristic of many classical defenses to 1.d4."
     },
     {
       "san": "Nc3",

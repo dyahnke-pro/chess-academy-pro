@@ -55,7 +55,7 @@
     },
     {
       "san": "a6",
-      "annotation": "Black plays a6 to attack our knight on b5, forcing us to make a decision about where to retreat while also preventing any immediate Nc7+ tactical shots. This move follows the natural defensive principle of challenging our actively placed pieces, though it does commit Black to a slight weakening of their queenside pawn structure. The a6 move also prepares potential counterplay with b5, advancing Black's queenside pawns and gaining space on that flank. However, by forcing our knight to move, Black allows us to maintain the initiative and choose where to redeploy this piece for maximum effect."
+      "annotation": "Black plays a6 to attack our pawn on b5, forcing us to make a decision about where to retreat while also preventing any immediate Nc7+ tactical shots. This move follows the natural defensive principle of challenging our actively placed pieces, though it does commit Black to a slight weakening of their queenside pawn structure. The a6 move also prepares potential counterplay with b5, advancing Black's queenside pawns and gaining space on that flank. However, by forcing our knight to move, Black allows us to maintain the initiative and choose where to redeploy this piece for maximum effect."
     },
     {
       "san": "Qa4",

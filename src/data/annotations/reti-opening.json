@@ -90,7 +90,7 @@
     },
     {
       "san": "d4",
-      "annotation": "Black pushes the pawn forward rather than capturing or defending. This is a bold decision — the d4 pawn gains space but becomes a potential target because it's advanced beyond Black's support structure. The pawn on d4 also restricts White's knight on f3, which is a plus, but it can be undermined by e3 at any moment. This leads to sharp, tactical positions.",
+      "annotation": "Black pushes the pawn forward rather than capturing or defending. This is a bold decision — the d4 pawn gains space but becomes a potential target because it's advanced beyond Black's support structure. The pawn on d4 also restricts White's pawn on f3, which is a plus, but it can be undermined by e3 at any moment. This leads to sharp, tactical positions.",
       "pawnStructure": "The advanced d4 pawn is a double-edged sword: it gains space but can become a weakness.",
       "plans": [
         "Maintain the d4 pawn and use the space advantage",
@@ -170,7 +170,7 @@
     },
     {
       "san": "exd4",
-      "annotation": "White captures the d4 pawn, opening the center. This exchange is well-timed because Black has a knight on c6 that can recapture, which means the position will become open and tactical. White is happy with this because the open center suits the planned fianchetto bishop on g2, which will rake across the open lines. The exchange also gives White a tempo since Black must recapture.",
+      "annotation": "White captures the d4 pawn, opening the center. This exchange is well-timed because Black has a pawn on c6 that can recapture, which means the position will become open and tactical. White is happy with this because the open center suits the planned fianchetto bishop on g2, which will rake across the open lines. The exchange also gives White a tempo since Black must recapture.",
       "pawnStructure": "The center is now open after the exchange, favoring piece play over pawn structures.",
       "plans": [
         "Use open lines for rapid development",

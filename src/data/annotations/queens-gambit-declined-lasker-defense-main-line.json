@@ -67,7 +67,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "We're opening up the center by capturing Black's pawn, creating immediate tension and forcing our opponent to make an important decision about recapturing. This pawn break is natural and necessary - we need to challenge Black's central control and create some imbalance in the position. By taking on d5, we're also potentially opening lines for our pieces and creating new weaknesses in Black's camp. The timing is good because Black's knight is attacking our knight on c3, so we're creating complications just when our opponent thought they were simplifying the position."
+      "annotation": "We're opening up the center by capturing Black's pawn, creating immediate tension and forcing our opponent to make an important decision about recapturing. This pawn break is natural and necessary - we need to challenge Black's central control and create some imbalance in the position. By taking on d5, we're also potentially opening lines for our pieces and creating new weaknesses in Black's camp. The timing is good because Black's knight is attacking our pawn on c3, so we're creating complications just when our opponent thought they were simplifying the position."
     },
     {
       "san": "Nxc3",

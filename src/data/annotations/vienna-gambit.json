@@ -186,7 +186,7 @@
     },
     {
       "san": "fxe5",
-      "annotation": "White captures on e5, winning a pawn and opening the f-file. The knight on f6 is now attacked by the e5 pawn, so Black must deal with this immediately. White hopes to maintain the extra pawn and use the open f-file for attack.",
+      "annotation": "White captures on e5, winning a pawn and opening the f-file. The pawn on f6 is now attacked by the e5 pawn, so Black must deal with this immediately. White hopes to maintain the extra pawn and use the open f-file for attack.",
       "pawnStructure": "White has pawns on e4 and e5, forming a powerful central duo. The e5 pawn attacks f6 and controls d6, limiting Black's piece mobility. But Black's d5 pawn challenges e4 directly.",
       "plans": [
         "Maintain the e5 pawn as a space advantage",
@@ -1023,7 +1023,7 @@
     },
     {
       "san": "cxd4",
-      "annotation": "White captures with the c-pawn, opening the center. The pawn structure is now more fluid, and White has a strong central pawn on d4. The knight on e6 is now somewhat exposed, and White can target it or use the open lines for the attack.",
+      "annotation": "White captures with the c-pawn, opening the center. The pawn structure is now more fluid, and White has a strong central pawn on d4. The pawn on e6 is now somewhat exposed, and White can target it or use the open lines for the attack.",
       "plans": [
         "Use the central d4 pawn for control",
         "Exploit the open c-file and center",
@@ -1804,7 +1804,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "The Vienna Gambit: Nd5 Variation is an important variation of the Vienna Gambit. Black places the knight on d5 instead of retreating. White recaptures on c3 with the d-pawn, opening the d-file. After rapid development with Bxf4, Bd3, and Qe2, the Greek Gift sacrifice Bxh7+ followed by Qe4+ is a classic attacking pattern that demolishes Black's kingside when they castle into it. Let's walk through the key ideas."
+          "annotation": "The Vienna Gambit: Nd5 Variation is an important variation of the Vienna Gambit. Black places the pawn on d5 instead of retreating. White recaptures on c3 with the d-pawn, opening the d-file. After rapid development with Bxf4, Bd3, and Qe2, the Greek Gift sacrifice Bxh7+ followed by Qe4+ is a classic attacking pattern that demolishes Black's kingside when they castle into it. Let's walk through the key ideas."
         },
         {
           "san": "e5",
@@ -2404,7 +2404,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "In the Vienna Gambit, the Greek Gift Sacrifice is a tactical pattern you should know. If Black places the knight on d5 and castles kingside, the classic Greek Gift sacrifice Bxh7+ followed by Ng5+ tears open the kingside. After Kg6 Qd3+ f5 Qg3, the king is caught in a deadly mating net. This pattern wins countless games at the club level. Let's walk through how it works."
+          "annotation": "In the Vienna Gambit, the Greek Gift Sacrifice is a tactical pattern you should know. If Black places the pawn on d5 and castles kingside, the classic Greek Gift sacrifice Bxh7+ followed by Ng5+ tears open the kingside. After Kg6 Qd3+ f5 Qg3, the king is caught in a deadly mating net. This pattern wins countless games at the club level. Let's walk through how it works."
         },
         {
           "san": "e5",

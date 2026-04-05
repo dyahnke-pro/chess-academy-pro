@@ -490,7 +490,7 @@
     },
     {
       "san": "c3",
-      "annotation": "White solidifies the center and prepares to bring the Na3 back into the game via c2. The pawn on c3 supports d4 ideas, takes away the b4 square from Black's pawn, and most importantly clears the path for Nc2-e3-d5 (if the knight on d5 ever moves) or Nc2-a3-c4. This patient regrouping move shows that White is in no rush — the d5 knight isn't going anywhere.",
+      "annotation": "White solidifies the center and prepares to bring the Na3 back into the game via c2. The pawn on c3 supports d4 ideas, takes away the b4 square from Black's pawn, and most importantly clears the path for Nc2-e3-d5 (if the pawn on d5 ever moves) or Nc2-a3-c4. This patient regrouping move shows that White is in no rush — the d5 knight isn't going anywhere.",
       "pawnStructure": "c3 creates a solid pawn triangle e4-c3 that supports the d5 outpost from multiple angles.",
       "plans": [
         "Reroute Na3-c2-e3 to reinforce the center",

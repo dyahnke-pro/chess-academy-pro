@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent creates a solid pawn structure while preparing the thematic ...e5 break that defines the King's Indian Defense. This move supports the knight on f6 and creates a launching pad for central counterplay, while also opening the c8-h3 diagonal for the light-squared bishop. The d6 pawn might look passive, but it's actually quite flexible - it can support ...e5, ...c5, or even ...c6 depending on how the position develops. Black is completing the basic King's Indian setup, where solid development prepares for explosive central action."
+      "annotation": "Our opponent creates a solid pawn structure while preparing the thematic ...e5 break that defines the King's Indian Defense. This move supports the pawn on f6 and creates a launching pad for central counterplay, while also opening the c8-h3 diagonal for the light-squared bishop. The d6 pawn might look passive, but it's actually quite flexible - it can support ...e5, ...c5, or even ...c6 depending on how the position develops. Black is completing the basic King's Indian setup, where solid development prepares for explosive central action."
     },
     {
       "san": "g3",
@@ -87,7 +87,7 @@
     },
     {
       "san": "a5",
-      "annotation": "Black launches a typical King's Indian queenside demonstration, preparing to advance the a-pawn further and create weaknesses in our camp. This move supports the knight on c5 by preventing it from being kicked away by b4, while also preparing ...a4 to create concrete threats against our queenside. The a5 advance is part of Black's standard counterplay pattern - since we control the center and kingside, Black needs to create activity on the queenside to balance the position. This move also potentially prepares ...Bd7-a4 ideas or simply creates long-term pressure that we'll need to address carefully in our planning."
+      "annotation": "Black launches a typical King's Indian queenside demonstration, preparing to advance the a-pawn further and create weaknesses in our camp. This move supports the pawn on c5 by preventing it from being kicked away by b4, while also preparing ...a4 to create concrete threats against our queenside. The a5 advance is part of Black's standard counterplay pattern - since we control the center and kingside, Black needs to create activity on the queenside to balance the position. This move also potentially prepares ...Bd7-a4 ideas or simply creates long-term pressure that we'll need to address carefully in our planning."
     }
   ]
 }

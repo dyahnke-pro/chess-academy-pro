@@ -35,7 +35,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We continue with solid development, supporting our d4 pawn and preparing to develop our dark-squared bishop to d3. This move creates a strong pawn triangle on c4-d4-e3 that gives us excellent central control and prevents Black from establishing a knight on e4. The pawn on e3 also opens the diagonal for our light-squared bishop (already on g5) and prepares castling. While not the most aggressive continuation, e3 leads to rich positional play where we can gradually improve our pieces and create long-term pressure."
+      "annotation": "We continue with solid development, supporting our d4 pawn and preparing to develop our dark-squared bishop to d3. This move creates a strong pawn triangle on c4-d4-e3 that gives us excellent central control and prevents Black from establishing a pawn on e4. The pawn on e3 also opens the diagonal for our light-squared bishop (already on g5) and prepares castling. While not the most aggressive continuation, e3 leads to rich positional play where we can gradually improve our pieces and create long-term pressure."
     },
     {
       "san": "O-O",

@@ -596,7 +596,7 @@
         },
         {
           "san": "d6",
-          "annotation": "Black adopts the Old Indian setup, supporting the knight on f6 while keeping the center flexible. This move prepares ...e5 and allows Black to maintain a solid, compact position that's difficult to break down. The pawn on d6 also opens the diagonal for the dark-squared bishop and supports Black's kingside development plans.",
+          "annotation": "Black adopts the Old Indian setup, supporting the pawn on f6 while keeping the center flexible. This move prepares ...e5 and allows Black to maintain a solid, compact position that's difficult to break down. The pawn on d6 also opens the diagonal for the dark-squared bishop and supports Black's kingside development plans.",
           "pawnStructure": "Black establishes a solid pawn on d6, creating a flexible setup that can support both ...e5 and potentially ...c5 later.",
           "plans": [
             "Prepare ...e5 to challenge White's center",
@@ -1499,7 +1499,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "In the Old Indian Defence, the Knight Maneuver Trick is a tactical pattern you should know. The knight reroute to c5 is a key idea. The knight on c5 pressures e4 and a4, and if White isn't careful, Black gets a very comfortable position with active piece play. Let's walk through how it works."
+          "annotation": "In the Old Indian Defence, the Knight Maneuver Trick is a tactical pattern you should know. The knight reroute to c5 is a key idea. The pawn on c5 pressures e4 and a4, and if White isn't careful, Black gets a very comfortable position with active piece play. Let's walk through how it works."
         },
         {
           "san": "Nf6",

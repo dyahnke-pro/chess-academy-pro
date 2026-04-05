@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the position by supporting the knight on f6 and preparing to castle kingside safely, while also opening up the possibility of ...e5 to challenge our pawn center directly. This move creates a solid pawn chain and gives Black's pieces a secure foundation to work from. The pawn on d6 also controls the important e5 and c5 squares, giving Black some influence in the center despite our pawn dominance. While this move looks passive, it's actually setting up Black's typical King's Indian counterplay - Black will often follow up with moves like ...0-0, ...e5, ...Nbd7, and later launch attacks on both flanks."
+      "annotation": "Black solidifies the position by supporting the pawn on f6 and preparing to castle kingside safely, while also opening up the possibility of ...e5 to challenge our pawn center directly. This move creates a solid pawn chain and gives Black's pieces a secure foundation to work from. The pawn on d6 also controls the important e5 and c5 squares, giving Black some influence in the center despite our pawn dominance. While this move looks passive, it's actually setting up Black's typical King's Indian counterplay - Black will often follow up with moves like ...0-0, ...e5, ...Nbd7, and later launch attacks on both flanks."
     },
     {
       "san": "Nf3",

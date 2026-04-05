@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays the classical setup, supporting their knight on f6 and preparing to develop the dark-squared bishop, typically to e7 or d6. This solid move creates a strong pawn chain from e6 to f6 via the knight, making it difficult for us to achieve the e4-e5 pawn advance that would give us maximum central control. The e6 pawn also prepares Black's kingside development and keeps their position flexible for various piece placements. While this move may seem passive, it's part of a well-established system where Black aims for solid development before seeking counterplay in the center or on the queenside."
+      "annotation": "Black plays the classical setup, supporting their pawn on f6 and preparing to develop the dark-squared bishop, typically to e7 or d6. This solid move creates a strong pawn chain from e6 to f6 via the knight, making it difficult for us to achieve the e4-e5 pawn advance that would give us maximum central control. The e6 pawn also prepares Black's kingside development and keeps their position flexible for various piece placements. While this move may seem passive, it's part of a well-established system where Black aims for solid development before seeking counterplay in the center or on the queenside."
     },
     {
       "san": "Bxc4",

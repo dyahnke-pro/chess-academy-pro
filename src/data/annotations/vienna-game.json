@@ -1174,7 +1174,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "The Vienna Game vs 2...Nc6 is an important variation of the Vienna Game. Against 2...Nc6, the Vienna Gambit with f4 is even more effective. Black's knight on c6 doesn't pressure e4, so White can push f4 safely. The resulting positions are very sharp with attacking chances for White. Let's walk through the key ideas."
+          "annotation": "The Vienna Game vs 2...Nc6 is an important variation of the Vienna Game. Against 2...Nc6, the Vienna Gambit with f4 is even more effective. Black's pawn on c6 doesn't pressure e4, so White can push f4 safely. The resulting positions are very sharp with attacking chances for White. Let's walk through the key ideas."
         },
         {
           "san": "e5",
@@ -1374,7 +1374,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "In the Vienna Game, the Vienna Trap (Qh5 Attack) is a tactical pattern you should know. After Black takes on e4, Qh5 threatens both f7 and the knight on e4. If Black plays Nd6, the knight is awkwardly placed and White gets Nb5 with devastating threats on c7 and d6. Let's walk through how it works."
+          "annotation": "In the Vienna Game, the Vienna Trap (Qh5 Attack) is a tactical pattern you should know. After Black takes on e4, Qh5 threatens both f7 and the pawn on e4. If Black plays Nd6, the knight is awkwardly placed and White gets Nb5 with devastating threats on c7 and d6. Let's walk through how it works."
         },
         {
           "san": "e5",

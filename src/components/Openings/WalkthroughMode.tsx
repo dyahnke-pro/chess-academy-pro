@@ -13,7 +13,7 @@ import { voiceService } from '../../services/voiceService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
-import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
+import { loadSubLineAnnotations, loadAnnotationsForPgn } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowRight, Play, Pause } from 'lucide-react';
@@ -189,15 +189,19 @@ export function WalkthroughMode({
     void voiceService.warmup();
     void (async () => {
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
-      const data = effectiveKey
-        ? await loadSubLineAnnotations(opening.id, effectiveKey)
-        : await loadAnnotations(opening.id);
+      let data: OpeningMoveAnnotation[] | null;
+      if (effectiveKey) {
+        data = await loadSubLineAnnotations(opening.id, effectiveKey);
+      } else {
+        // Use PGN-aware loader to find best-matching annotation set
+        data = await loadAnnotationsForPgn(opening.id, activePgn);
+      }
       if (!guard.cancelled) {
         setAnnotations(data);
       }
     })();
     return () => { guard.cancelled = true; };
-  }, [opening.id, subLineKey, isVariation, variationIndex]);
+  }, [opening.id, activePgn, subLineKey, isVariation, variationIndex]);
 
   // Analyze position when it changes
   useEffect(() => {
@@ -392,6 +396,9 @@ export function WalkthroughMode({
     ? 1
     : Math.floor((currentMoveIndex - 1) / 2) + 1;
   const displayIsWhite = currentMoveIndex === 0 || (currentMoveIndex - 1) % 2 === 0;
+  const displayActualSan = currentMoveIndex > 0
+    ? expectedMoves[currentMoveIndex - 1]?.san
+    : undefined;
 
   const postNarrationDelay = POST_NARRATION_MS[autoPlaySpeed];
 
@@ -719,6 +726,7 @@ export function WalkthroughMode({
               moveNumber={displayMoveNumber}
               isWhite={displayIsWhite}
               visible={currentMoveIndex > 0}
+              actualSan={displayActualSan}
             />
           )}
         </div>

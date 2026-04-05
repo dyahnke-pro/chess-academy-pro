@@ -31,7 +31,7 @@
     },
     {
       "san": "exd5",
-      "annotation": "Our opponent recaptures toward the center, maintaining their central presence but accepting the isolated d-pawn structure that defines the Tarrasch Defense. Black now has an isolated pawn on d5, which can be both a strength (supports knight on e4 or f4 later) and a weakness (target for our pieces). This pawn structure gives Black active piece play and open lines, but we'll have long-term strategic targets to work with. The key battle will be whether Black can create enough activity to compensate for their structural disadvantage."
+      "annotation": "Our opponent recaptures toward the center, maintaining their central presence but accepting the isolated d-pawn structure that defines the Tarrasch Defense. Black now has an isolated pawn on d5, which can be both a strength (supports pawn on e4 or f4 later) and a weakness (target for our pieces). This pawn structure gives Black active piece play and open lines, but we'll have long-term strategic targets to work with. The key battle will be whether Black can create enough activity to compensate for their structural disadvantage."
     },
     {
       "san": "Nf3",
