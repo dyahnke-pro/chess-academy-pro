@@ -53,7 +53,6 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const [isStreaming, setIsStreaming] = useState(false);
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');
-    const messagesEndRef = useRef<HTMLDivElement>(null);
     const speechBufferRef = useRef('');
 
     // Expose method for parent to inject assistant messages (hints, takeback msgs)
@@ -73,13 +72,6 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         }
       },
     }), []);
-
-    // Auto-scroll to bottom on new messages
-    useEffect(() => {
-      if (typeof messagesEndRef.current?.scrollIntoView === 'function') {
-        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, [messages, streamingContent]);
 
     // Buffer speech to sentence boundaries
     const flushSpeechBuffer = useCallback(() => {
@@ -230,8 +222,36 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           </div>
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+        {/* Messages — flex-col-reverse so newest appear at top without scroll manipulation */}
+        <div className="flex-1 overflow-y-auto p-4 min-h-0 flex flex-col-reverse gap-4">
+          {isStreaming && !streamingContent && (
+            <ChatMessage
+              message={{
+                id: 'game-streaming-empty',
+                role: 'assistant',
+                content: '',
+                timestamp: Date.now(),
+              }}
+              isStreaming
+            />
+          )}
+
+          {isStreaming && streamingContent && (
+            <ChatMessage
+              message={{
+                id: 'game-streaming',
+                role: 'assistant',
+                content: streamingContent,
+                timestamp: Date.now(),
+              }}
+              isStreaming
+            />
+          )}
+
+          {[...messages].reverse().map((msg) => (
+            <ChatMessage key={msg.id} message={msg} />
+          ))}
+
           {messages.length === 0 && !isStreaming && (
             <motion.div
               className="flex flex-col items-center gap-3 py-8"
@@ -248,36 +268,6 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               </div>
             </motion.div>
           )}
-
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-
-          {isStreaming && streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming',
-                role: 'assistant',
-                content: streamingContent,
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          {isStreaming && !streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming-empty',
-                role: 'assistant',
-                content: '',
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}
