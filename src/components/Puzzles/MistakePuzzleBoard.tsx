@@ -32,6 +32,7 @@ interface ReplayStep {
   from: string;
   to: string;
   moveLabel: string; // e.g. "1. e4" or "1... e5"
+  isWhiteMove: boolean;
 }
 
 /** Extract the last N moves before the mistake from the game PGN */
@@ -76,6 +77,7 @@ function extractReplayMoves(pgn: string, _mistakeFen: string, playerColor: 'whit
       from: move.from,
       to: move.to,
       moveLabel,
+      isWhiteMove: isWhite,
     });
   }
 
@@ -356,10 +358,10 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       setLastMoveHighlight({ from: step.from, to: step.to });
       setBoardKey((k) => k + 1);
 
-      // Narrate the move
-      const isPlayerMove = (puzzle.playerColor === 'white' && nextIdx % 2 === 0)
-        || (puzzle.playerColor === 'black' && nextIdx % 2 === 1);
-      // Adjust: replay steps may not start at ply 0, so use the step's moveLabel
+      // Narrate the move — use absolute ply color stored in the step,
+      // not the array index, since replay may start at an arbitrary ply.
+      const isPlayerMove = (puzzle.playerColor === 'white' && step.isWhiteMove)
+        || (puzzle.playerColor === 'black' && !step.isWhiteMove);
       const whoPlayed = isPlayerMove ? 'You' : 'Opponent';
       // Only narrate every other move to keep pace — narrate player's moves
       if (isPlayerMove || nextIdx === replaySteps.length - 1) {
