@@ -24,16 +24,18 @@ interface NavItem {
   label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   glowColor: string;
+  activeText: string;
+  activeBg: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(234, 179, 8, 0.6)' },
-  { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(59, 130, 246, 0.6)' },
-  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(239, 68, 68, 0.6)' },
-  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(34, 197, 94, 0.6)' },
-  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(168, 85, 247, 0.6)' },
-  { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)' },
-  { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)' },
+  { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(234, 179, 8, 0.6)', activeText: 'text-yellow-400', activeBg: 'bg-yellow-500/10' },
+  { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(59, 130, 246, 0.6)', activeText: 'text-blue-400', activeBg: 'bg-blue-500/10' },
+  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(239, 68, 68, 0.6)', activeText: 'text-red-400', activeBg: 'bg-red-500/10' },
+  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(34, 197, 94, 0.6)', activeText: 'text-green-400', activeBg: 'bg-green-500/10' },
+  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(168, 85, 247, 0.6)', activeText: 'text-purple-400', activeBg: 'bg-purple-500/10' },
+  { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)', activeText: 'text-orange-400', activeBg: 'bg-orange-500/10' },
+  { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)', activeText: 'text-slate-400', activeBg: 'bg-slate-500/10' },
 ];
 
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
@@ -147,7 +149,7 @@ export function AppLayout(): JSX.Element {
               </button>
             </div>
             <div className="flex flex-col gap-0.5 px-2 flex-1 overflow-y-auto">
-              {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
+              {NAV_ITEMS.map(({ to, label, icon: Icon, activeText, activeBg }) => (
                 <NavLink
                   key={to}
                   to={to}
@@ -156,7 +158,7 @@ export function AppLayout(): JSX.Element {
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-theme-accent text-theme-bg'
+                        ? `${activeText} ${activeBg}`
                         : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
                     }`
                   }
@@ -194,7 +196,7 @@ export function AppLayout(): JSX.Element {
           </div>
 
           <div className="flex flex-col gap-0.5 px-2 flex-1">
-            {NAV_ITEMS.map(({ to, label, icon: Icon, glowColor }) => (
+            {NAV_ITEMS.map(({ to, label, icon: Icon, glowColor, activeText, activeBg }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -202,7 +204,7 @@ export function AppLayout(): JSX.Element {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
                     isActive
-                      ? 'text-theme-accent bg-theme-accent/10'
+                      ? `${activeText} ${activeBg}`
                       : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
                   }`
                 }
@@ -258,14 +260,14 @@ export function AppLayout(): JSX.Element {
           borderColor: 'var(--color-border)',
         }}
       >
-        {MOBILE_NAV_ITEMS.map(({ to, label, icon: Icon, glowColor }) => (
+        {MOBILE_NAV_ITEMS.map(({ to, label, icon: Icon, glowColor, activeText }) => (
           <NavLink
             key={to}
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
               `flex flex-col items-center gap-0.5 px-2 py-1 text-xs font-medium transition-colors min-w-0 ${
-                isActive ? 'text-theme-accent' : 'text-theme-text-muted'
+                isActive ? activeText : 'text-theme-text-muted'
               }`
             }
             style={({ isActive }) => isActive ? {

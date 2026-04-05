@@ -130,17 +130,17 @@ export function OpeningExplorerPage(): JSX.Element {
       {/* Tab toggle */}
       <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
-          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire' },
-          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro' },
-          { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits' },
-          { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all' },
-        ]).map(({ id, label, icon: Icon, testId }) => (
+          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-500/20 text-blue-400' },
+          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-green-500/20 text-green-400' },
+          { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-red-500/20 text-red-400' },
+          { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-purple-500/20 text-purple-400' },
+        ]).map(({ id, label, icon: Icon, testId, activeClasses }) => (
           <button
             key={id}
             onClick={() => setTab(id)}
             className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
               tab === id
-                ? 'bg-theme-accent text-white'
+                ? activeClasses
                 : 'text-theme-text-muted hover:text-theme-text'
             }`}
             data-testid={testId}
