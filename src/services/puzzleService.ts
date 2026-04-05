@@ -47,6 +47,7 @@ export type TacticalTheme = (typeof TACTICAL_THEMES)[number];
 
 /** Maps high-level app themes to Lichess tags. */
 export const THEME_MAP: Record<string, string[]> = {
+  'Opening Traps':       ['opening', 'trappedPiece', 'hangingPiece'],
   'Forks':              ['fork'],
   'Pins & Skewers':     ['pin', 'skewer'],
   'Discovered Attacks':  ['discoveredAttack'],
@@ -55,7 +56,6 @@ export const THEME_MAP: Record<string, string[]> = {
   'Deflection & Decoy':  ['deflection'],
   'Zugzwang':            ['zugzwang'],
   'Endgame Technique':   ['endgame', 'rookEndgame', 'pawnEndgame', 'bishopEndgame', 'knightEndgame', 'queenEndgame'],
-  'Opening Traps':       ['opening', 'trappedPiece', 'hangingPiece'],
   'Mating Nets':         ['mateIn1', 'mateIn2', 'mateIn3', 'mateIn4', 'mateIn5', 'smotheredMate', 'hookMate', 'arabianMate', 'anastasiaMate'],
 };
 
