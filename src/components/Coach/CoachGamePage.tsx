@@ -805,9 +805,13 @@ export function CoachGamePage(): JSX.Element {
     // Capture pre-move FEN before making the move
     const preFen = game.fen;
 
-    // Sync the page's game instance with the board's move so game.turn
-    // flips to the coach's color and triggers the coach move useEffect.
-    game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
+    // NOTE: We intentionally defer game.makeMove() until after analysis.
+    // Calling it here would flip game.turn to the coach's color, and because
+    // the analysis below is async, React would re-render between awaits,
+    // allowing the coach-move useEffect to fire before we know whether this
+    // move is a blunder.  Deferring keeps game.turn on the player's color
+    // throughout the analysis window, preventing the coach from responding
+    // prematurely.
     setCoachLastMove(null);
     moveCountRef.current += 1;
 
@@ -908,6 +912,13 @@ export function CoachGamePage(): JSX.Element {
     // BLUNDER INTERCEPTION: pause game and explain
     if (classification === 'blunder' && engineBestMoveUci) {
       const explanation = commentary;
+
+      // Sync the blunder move onto the game instance so undoMove() in
+      // handleBlunderTryBestMove / handleBlunderTakeBack can reverse it.
+      // Status is set to 'blunder_pause' in the same synchronous block,
+      // so the coach-move useEffect never sees 'playing' + coach's turn.
+      game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
+
       setBlunderPause({
         explanation,
         bestMoveSan: engineBestMoveSan,
@@ -927,6 +938,9 @@ export function CoachGamePage(): JSX.Element {
       void voiceService.speak(explanation);
       return;
     }
+
+    // Non-blunder: sync the move and let the coach-move useEffect respond.
+    game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
     setGameState((prev) => ({
       ...prev,
