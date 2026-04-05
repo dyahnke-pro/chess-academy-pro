@@ -211,4 +211,15 @@ describe('CoachGamePage', () => {
     const status: import('../../types').CoachGameStatus = 'gameover';
     expect(status).toBe('gameover');
   });
+
+  it('does not show blunder interception overlay initially', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('blunder-interception')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('blunder-explore')).not.toBeInTheDocument();
+  });
+
+  it('does not show blunder-continue button (replaced by Show)', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('blunder-continue')).not.toBeInTheDocument();
+  });
 });

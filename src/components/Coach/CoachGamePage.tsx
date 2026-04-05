@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Chess } from 'chess.js';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
@@ -265,7 +266,21 @@ export function CoachGamePage(): JSX.Element {
     bestMoveUci: string;
     preFen: string;
     playerMoveSan: string;
+    /** UCI moves showing the opponent's punishment after the blunder */
+    refutationLine: string[];
   } | null>(null);
+
+  // ─── Blunder Explore Mode ──────────────────────────────────────────────
+  // When "Show" is tapped, we enter explore mode with a scratch chess instance.
+  // The player can see the refutation played out and freely explore lines.
+  const [blunderExplore, setBlunderExplore] = useState<{
+    fen: string;
+    startFen: string;        // post-blunder FEN to reset explore from
+    history: string[];        // SAN history for display
+    canUndo: boolean;
+  } | null>(null);
+  const blunderExploreChessRef = useRef<Chess | null>(null);
+
   const [moveFlash, setMoveFlash] = useState<'blunder' | 'inaccuracy' | 'good' | null>(null);
 
   // Track whether voice mic is active (listening or streaming) to suppress tips
@@ -547,7 +562,8 @@ export function CoachGamePage(): JSX.Element {
   }, []);
 
   // Compute the displayed FEN based on navigation state
-  const displayFen = practicePosition?.fen
+  const displayFen = blunderExplore?.fen
+    ?? practicePosition?.fen
     ?? temporaryFen
     ?? (viewedMoveIndex !== null
       ? (viewedMoveIndex === -1 ? START_FEN : gameState.moves[viewedMoveIndex]?.fen ?? game.fen)
@@ -944,12 +960,16 @@ export function CoachGamePage(): JSX.Element {
       // so the coach-move useEffect never sees 'playing' + coach's turn.
       game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
+      // Grab the refutation line: opponent's best continuation after the blunder
+      const refutationLine = analysis?.topLines[0]?.moves ?? [];
+
       setBlunderPause({
         explanation,
         bestMoveSan: engineBestMoveSan,
         bestMoveUci: engineBestMoveUci,
         preFen,
         playerMoveSan: moveResult.san,
+        refutationLine,
       });
 
       setGameState((prev) => ({
@@ -980,14 +1000,131 @@ export function CoachGamePage(): JSX.Element {
     coachSay(result.message);
   }, [evaluatePracticeMove, coachSay]);
 
-  // Handle board move routing — practice mode or normal gameplay
+  // ─── Blunder Explore Handlers ──────────────────────────────────────────
+  const handleBlunderShow = useCallback(() => {
+    if (!blunderPause) return;
+    voiceService.stop();
+
+    // Create a scratch chess instance starting from the post-blunder position
+    const postBlunderFen = game.fen;
+    const scratch = new Chess(postBlunderFen);
+    blunderExploreChessRef.current = scratch;
+
+    // Auto-play the refutation line with delays
+    const moves = blunderPause.refutationLine;
+    const history: string[] = [];
+    let currentIndex = 0;
+
+    const playNext = (): void => {
+      if (currentIndex >= moves.length || currentIndex >= 6) {
+        // Cap at 6 moves (3 per side) to keep it digestible
+        setBlunderExplore({
+          fen: scratch.fen(),
+          startFen: postBlunderFen,
+          history: [...history],
+          canUndo: history.length > 0,
+        });
+        return;
+      }
+
+      const uci = moves[currentIndex];
+      const from = uci.slice(0, 2);
+      const to = uci.slice(2, 4);
+      const promotion = uci.length > 4 ? uci[4] : undefined;
+
+      try {
+        const result = scratch.move({ from, to, promotion });
+        if (result) {
+          history.push(result.san);
+          currentIndex++;
+          setBlunderExplore({
+            fen: scratch.fen(),
+            startFen: postBlunderFen,
+            history: [...history],
+            canUndo: history.length > 0,
+          });
+          if (currentIndex < moves.length && currentIndex < 6) {
+            setTimeout(playNext, 600);
+          }
+        }
+      } catch {
+        // Invalid move — stop playback
+        setBlunderExplore({
+          fen: scratch.fen(),
+          startFen: postBlunderFen,
+          history: [...history],
+          canUndo: history.length > 0,
+        });
+      }
+    };
+
+    // Set initial explore state (shows current post-blunder position)
+    setBlunderExplore({
+      fen: postBlunderFen,
+      startFen: postBlunderFen,
+      history: [],
+      canUndo: false,
+    });
+
+    // Start auto-playing after a brief delay
+    setTimeout(playNext, 400);
+  }, [blunderPause, game.fen]);
+
+  const handleBlunderExploreMove = useCallback((moveResult: MoveResult): void => {
+    const scratch = blunderExploreChessRef.current;
+    if (!scratch || !blunderExplore) return;
+
+    try {
+      const result = scratch.move({
+        from: moveResult.from,
+        to: moveResult.to,
+        promotion: moveResult.promotion,
+      });
+      if (result) {
+        setBlunderExplore({
+          ...blunderExplore,
+          fen: scratch.fen(),
+          history: [...blunderExplore.history, result.san],
+          canUndo: true,
+        });
+      }
+    } catch {
+      // illegal move — ignore
+    }
+  }, [blunderExplore]);
+
+  const handleBlunderExploreUndo = useCallback((): void => {
+    const scratch = blunderExploreChessRef.current;
+    if (!scratch || !blunderExplore) return;
+
+    scratch.undo();
+    const newHistory = blunderExplore.history.slice(0, -1);
+    setBlunderExplore({
+      ...blunderExplore,
+      fen: scratch.fen(),
+      history: newHistory,
+      canUndo: newHistory.length > 0,
+    });
+  }, [blunderExplore]);
+
+  const handleBlunderExploreResume = useCallback((): void => {
+    blunderExploreChessRef.current = null;
+    setBlunderExplore(null);
+    // Snap back to the real game position and resume play
+    setBlunderPause(null);
+    setGameState((prev) => ({ ...prev, status: 'playing' }));
+  }, []);
+
+  // Handle board move routing — blunder explore, practice mode, or normal gameplay
   const handleBoardMoveRouted = useCallback((moveResult: MoveResult) => {
-    if (practicePosition) {
+    if (blunderExplore) {
+      handleBlunderExploreMove(moveResult);
+    } else if (practicePosition) {
       void handlePracticeMove(moveResult);
     } else {
       void handlePlayerMove(moveResult);
     }
-  }, [practicePosition, handlePracticeMove, handlePlayerMove]);
+  }, [blunderExplore, handleBlunderExploreMove, practicePosition, handlePracticeMove, handlePlayerMove]);
 
   // Handle practice-in-chat from post-game review
   const handlePracticeInChat = useCallback((prompt: string) => {
@@ -1049,14 +1186,10 @@ export function CoachGamePage(): JSX.Element {
   }, [game, coachSay, resetHints, gameState.moves]);
 
   // ─── Blunder Interception Handlers ──────────────────────────────────────
-  const handleBlunderContinue = useCallback(() => {
-    voiceService.stop();
-    setBlunderPause(null);
-    setGameState((prev) => ({ ...prev, status: 'playing' }));
-  }, []);
-
   const handleBlunderTakeBack = useCallback(() => {
     voiceService.stop();
+    blunderExploreChessRef.current = null;
+    setBlunderExplore(null);
     // Undo just the player's move (coach hasn't responded yet during blunder_pause)
     game.undoMove();
     moveCountRef.current = Math.max(0, moveCountRef.current - 1);
@@ -1074,6 +1207,8 @@ export function CoachGamePage(): JSX.Element {
 
   const handleBlunderTryBestMove = useCallback(() => {
     voiceService.stop();
+    blunderExploreChessRef.current = null;
+    setBlunderExplore(null);
     if (!blunderPause) return;
 
     // Undo the blunder move
@@ -1478,7 +1613,7 @@ export function CoachGamePage(): JSX.Element {
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}`}
               initialFen={displayFen}
               orientation={playerColor}
-              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition}
+              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition || !!blunderExplore}
               onMove={handleBoardMoveRouted}
               showEvalBar={showEvalBarEffective}
               evaluation={latestEval}
@@ -1502,7 +1637,7 @@ export function CoachGamePage(): JSX.Element {
 
             {/* ─── Blunder Interception Overlay (on board) ──────────────────── */}
             <AnimatePresence>
-              {gameState.status === 'blunder_pause' && blunderPause && (
+              {gameState.status === 'blunder_pause' && blunderPause && !blunderExplore && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1522,12 +1657,13 @@ export function CoachGamePage(): JSX.Element {
                   </div>
                   <div className="flex gap-2 px-3 pb-3">
                     <button
-                      onClick={handleBlunderContinue}
-                      className="flex-1 py-2 rounded-xl text-xs font-semibold border border-theme-border transition-colors"
-                      style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
-                      data-testid="blunder-continue"
+                      onClick={handleBlunderShow}
+                      className="flex-1 py-2 rounded-xl text-xs font-semibold border-2 border-orange-500/40 transition-colors flex items-center justify-center gap-1.5"
+                      style={{ background: 'color-mix(in srgb, var(--color-warning, #f59e0b) 15%, var(--color-surface))', color: 'var(--color-text)' }}
+                      data-testid="blunder-show"
                     >
-                      Continue
+                      <Eye size={14} />
+                      Show
                     </button>
                     <button
                       onClick={handleBlunderTakeBack}
@@ -1544,6 +1680,55 @@ export function CoachGamePage(): JSX.Element {
                       data-testid="blunder-try-best"
                     >
                       Try {blunderPause.bestMoveSan}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* ─── Blunder Explore Overlay (on board) ────────────────────────── */}
+            <AnimatePresence>
+              {blunderExplore && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  className="absolute bottom-0 left-0 right-0 z-20 rounded-t-2xl border-t-2 border-x-2 border-orange-500/40 backdrop-blur-md overflow-hidden"
+                  style={{ background: 'color-mix(in srgb, var(--color-warning, #f59e0b) 10%, var(--color-bg) 90%)' }}
+                  data-testid="blunder-explore"
+                >
+                  <div className="px-3 py-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Eye size={14} className="text-orange-400 flex-shrink-0" />
+                      <span className="font-bold text-orange-400 text-xs">Exploring Blunder</span>
+                      {blunderExplore.history.length > 0 && (
+                        <span className="text-[10px] text-theme-text-muted ml-auto">
+                          {blunderExplore.history.join(' ')}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-theme-text-muted leading-relaxed">
+                      Play moves to explore what happens. Tap Resume to go back.
+                    </p>
+                  </div>
+                  <div className="flex gap-2 px-3 pb-2.5">
+                    <button
+                      onClick={handleBlunderExploreUndo}
+                      disabled={!blunderExplore.canUndo}
+                      className="py-2 px-3 rounded-xl text-xs font-semibold border border-theme-border transition-colors disabled:opacity-30 flex items-center gap-1.5"
+                      style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
+                      data-testid="blunder-explore-undo"
+                    >
+                      <Undo2 size={14} />
+                      Undo
+                    </button>
+                    <button
+                      onClick={handleBlunderExploreResume}
+                      className="flex-1 py-2 rounded-xl text-xs font-semibold transition-colors"
+                      style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                      data-testid="blunder-explore-resume"
+                    >
+                      Resume Game
                     </button>
                   </div>
                 </motion.div>
