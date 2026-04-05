@@ -21,6 +21,7 @@ import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { generateNarrativeSummary } from '../../services/coachFeatureService';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
+import { voiceService } from '../../services/voiceService';
 import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -63,6 +64,7 @@ function sanToSquares(san: string, fen: string): { from: string; to: string } | 
 
 const AUTO_REVIEW_ADVANCE_MS = 2000;
 const AUTO_REVIEW_PAUSE_MS = 5000;
+const AUTO_REVIEW_REPLY_MS = 600;
 
 const CLASSIFICATION_BORDER_COLORS: Record<string, string> = {
   brilliant: 'rgba(34, 197, 94, 0.6)',
@@ -178,6 +180,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       (chunk) => setNarrativeSummary((prev) => (prev ?? '') + chunk),
     ).then((fullText) => {
       setNarrativeSummary(fullText);
+      // Speak the narrative summary aloud
+      void voiceService.speak(fullText);
     }).catch(() => {
       setNarrativeSummary(null);
     }).finally(() => {
@@ -381,6 +385,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (!cancelled) {
         aiCommentaryCacheRef.current.set(moveIdx, fullText);
         setAiCommentary(fullText);
+        // Speak the commentary aloud
+        void voiceService.speak(fullText);
       }
     }).finally(() => {
       if (!cancelled) setIsLoadingAiCommentary(false);
@@ -454,6 +460,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [reviewState.currentMoveIndex]);
 
   const navigateMove = useCallback((direction: 'first' | 'prev' | 'next' | 'last') => {
+    voiceService.stop();
     setReviewState((prev) => {
       let newIndex = prev.currentMoveIndex;
       switch (direction) {
@@ -738,6 +745,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, []);
 
   // Auto-review advancement effect
+  // Pattern: player move → pause (2s or 5s for key moves) → opponent reply (fast 600ms) → next
   useEffect(() => {
     if (!autoReviewActive || autoReviewPaused) return;
 
@@ -748,8 +756,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return;
     }
 
-    // Check if current move is a key moment that should pause
     const currentMoveForAutoReview = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
+    const nextMove = moveIdx + 1 < moves.length ? moves[moveIdx + 1] : null;
+
+    // If the NEXT move is the opponent's reply (coach move), show it quickly
+    // This creates the natural chess.com pattern: see your move, brief pause, see reply, longer pause
+    const isNextOpponentReply = nextMove?.isCoachMove === true;
+
+    // Check if current move is a key moment that should pause longer
     const isKeyMove = currentMoveForAutoReview && (
       currentMoveForAutoReview.classification === 'blunder' ||
       currentMoveForAutoReview.classification === 'mistake' ||
@@ -757,7 +771,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       currentMoveForAutoReview.classification === 'inaccuracy'
     );
 
-    const delay = isKeyMove ? AUTO_REVIEW_PAUSE_MS : AUTO_REVIEW_ADVANCE_MS;
+    let delay: number;
+    if (isKeyMove) {
+      delay = AUTO_REVIEW_PAUSE_MS;
+    } else if (isNextOpponentReply) {
+      // Show opponent's reply quickly after player move
+      delay = AUTO_REVIEW_REPLY_MS;
+    } else {
+      delay = AUTO_REVIEW_ADVANCE_MS;
+    }
 
     autoReviewTimerRef.current = setTimeout(() => {
       setReviewState((prev) => ({
@@ -827,13 +849,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
 
-    // Normal advance
+    // Normal advance — show opponent replies quickly
+    const currentGuidedMove = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
+    const guidedDelay = currentGuidedMove?.isCoachMove ? AUTO_REVIEW_REPLY_MS : GUIDED_ADVANCE_MS;
+
     guidedTimerRef.current = setTimeout(() => {
       setReviewState((prev) => ({
         ...prev,
         currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
       }));
-    }, GUIDED_ADVANCE_MS);
+    }, guidedDelay);
 
     return () => {
       if (guidedTimerRef.current) clearTimeout(guidedTimerRef.current);

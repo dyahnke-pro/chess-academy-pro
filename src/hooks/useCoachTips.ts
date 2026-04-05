@@ -217,12 +217,9 @@ export function useCoachTips({
     if (!enabled || !isPlayerTurn || moves.length < MIN_MOVES_BEFORE_TIPS) return;
     if (lastTipFenRef.current === fen) return;
 
-    // Cooldown: don't tip every single move — skip every other player turn
+    // Cooldown: only throttle positional tips, not tactical/blunder detection
     tipCooldownRef.current++;
-    if (tipCooldownRef.current % 2 !== 0) {
-      lastTipFenRef.current = fen;
-      return;
-    }
+    const skipPositionalTips = tipCooldownRef.current > 1 && tipCooldownRef.current % 3 !== 0;
 
     const abortController = new AbortController();
 
@@ -232,15 +229,31 @@ export function useCoachTips({
 
         if (abortController.signal.aborted) return;
 
+        const prevEval = getLatestEval();
         const ctx: TipContext = {
           analysis,
           fen,
           playerColor,
           moveCount: moves.length,
-          prevEval: getLatestEval(),
+          prevEval,
         };
 
-        // First: check for a tactic available RIGHT NOW
+        // First: detect big eval swing from opponent's last move (opponent blundered)
+        // This gives the player a chance to capitalize
+        if (prevEval !== null) {
+          const currentEval = analysis.evaluation;
+          const swingInFavor = playerColor === 'white'
+            ? currentEval - prevEval
+            : prevEval - currentEval;
+
+          if (swingInFavor >= 200) {
+            lastTipFenRef.current = fen;
+            onTipRef.current('Your opponent just made a serious error! Look carefully — there should be a strong move here.');
+            return;
+          }
+        }
+
+        // Second: check for a tactic available RIGHT NOW
         const immediateTactic = detectGameplayTactic(fen, analysis, playerColor);
         if (immediateTactic) {
           const isWeakness = await isTacticWeakness(immediateTactic);
@@ -285,19 +298,21 @@ export function useCoachTips({
           return;
         }
 
-        // Fall through: positional/strategic tips
-        const tip = generatePositionalTip(ctx);
-        if (tip) {
-          lastTipFenRef.current = fen;
-          onTipRef.current(tip);
+        // Fall through: positional/strategic tips (throttled to avoid spam)
+        if (!skipPositionalTips) {
+          const tip = generatePositionalTip(ctx);
+          if (tip) {
+            lastTipFenRef.current = fen;
+            onTipRef.current(tip);
+          }
         }
       } catch {
         // Analysis failed — skip tip
       }
     };
 
-    // Small delay so it doesn't compete with other analysis
-    const timer = setTimeout(() => void analyzeTip(), 1200);
+    // Short delay so it doesn't compete with the coach's own Stockfish analysis
+    const timer = setTimeout(() => void analyzeTip(), 600);
 
     return () => {
       abortController.abort();
