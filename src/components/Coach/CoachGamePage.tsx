@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
@@ -256,6 +256,16 @@ export function CoachGamePage(): JSX.Element {
       console.warn('[CoachGame] Opening not found in book:', openingName);
     }
   }, []);
+
+  // ─── Blunder Interception State ──────────────────────────────────────────
+  const [blunderPause, setBlunderPause] = useState<{
+    explanation: string;
+    bestMoveSan: string;
+    bestMoveUci: string;
+    preFen: string;
+    playerMoveSan: string;
+  } | null>(null);
+  const [moveFlash, setMoveFlash] = useState<'blunder' | 'inaccuracy' | 'good' | null>(null);
 
   // Track whether voice mic is active (listening or streaming) to suppress tips
   const [voiceActive, setVoiceActive] = useState(false);
@@ -831,58 +841,99 @@ export function CoachGamePage(): JSX.Element {
     const bestMoveEval = preAnalysis?.topLines[0]?.evaluation ?? null;
     const secondBestEval = preAnalysis?.topLines[1]?.evaluation ?? null;
 
-    setGameState((prev) => {
-      const preMoveEval = prev.moves.length > 0 ? (prev.moves[prev.moves.length - 1].evaluation ?? null) : 0;
-      let classification = analysis
-        ? classifyMove(preMoveEval, analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval)
-        : 'good';
+    // Compute classification and build the move record
+    const prevMoves = gameState.moves;
+    const preMoveEval = prevMoves.length > 0 ? (prevMoves[prevMoves.length - 1].evaluation ?? null) : 0;
+    let classification = analysis
+      ? classifyMove(preMoveEval, analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval)
+      : 'good';
 
-      const evalLoss = analysis && preMoveEval !== null
-        ? Math.max(0, playerColor === 'white'
-            ? preMoveEval - analysis.evaluation
-            : analysis.evaluation - preMoveEval)
-        : 0;
-      // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)
-      const engineBestMoveUci = preAnalysis?.bestMove ?? null;
-      let engineBestMoveSan = '?';
-      if (engineBestMoveUci) {
-        try {
-          engineBestMoveSan = uciMoveToSan(engineBestMoveUci, preFen);
-        } catch {
-          engineBestMoveSan = engineBestMoveUci;
-        }
-      }
-      // If the engine's best move matches what the player played, override to 'good'
-      if (isEngineBestMove || engineBestMoveSan === moveResult.san) {
-        classification = 'good';
-      }
-      const vars = {
-        playerMove: moveResult.san,
-        bestMove: engineBestMoveSan,
-        evalDelta: String(evalLoss),
-      };
-      const commentary = getMoveCommentaryTemplate(classification, vars);
+    const evalLoss = analysis && preMoveEval !== null
+      ? Math.max(0, playerColor === 'white'
+          ? (preMoveEval as number) - analysis.evaluation
+          : analysis.evaluation - (preMoveEval as number))
+      : 0;
 
-      const playerMove: CoachGameMove = {
-        moveNumber: moveCountRef.current,
-        san: moveResult.san,
-        fen: moveResult.fen,
-        isCoachMove: false,
-        commentary,
-        evaluation: analysis?.evaluation ?? null,
-        classification,
-        expanded: false,
-        bestMove: engineBestMoveUci,
-        bestMoveEval: bestMoveEval,
-        preMoveEval,
-      };
-      return {
+    // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)
+    const engineBestMoveUci = preAnalysis?.bestMove ?? null;
+    let engineBestMoveSan = '?';
+    if (engineBestMoveUci) {
+      try {
+        engineBestMoveSan = uciMoveToSan(engineBestMoveUci, preFen);
+      } catch {
+        engineBestMoveSan = engineBestMoveUci;
+      }
+    }
+
+    // If the engine's best move matches what the player played, override to 'good'
+    if (isEngineBestMove || engineBestMoveSan === moveResult.san) {
+      classification = 'good';
+    }
+
+    const vars = {
+      playerMove: moveResult.san,
+      bestMove: engineBestMoveSan,
+      evalDelta: String(evalLoss),
+    };
+    const commentary = getMoveCommentaryTemplate(classification, vars);
+
+    const playerMove: CoachGameMove = {
+      moveNumber: moveCountRef.current,
+      san: moveResult.san,
+      fen: moveResult.fen,
+      isCoachMove: false,
+      commentary,
+      evaluation: analysis?.evaluation ?? null,
+      classification,
+      expanded: false,
+      bestMove: engineBestMoveUci,
+      bestMoveEval: bestMoveEval,
+      preMoveEval,
+    };
+
+    // Flash the board based on classification (map to MoveQuality type)
+    const flashMap: Record<string, 'blunder' | 'inaccuracy' | 'good'> = {
+      blunder: 'blunder',
+      mistake: 'blunder',
+      inaccuracy: 'inaccuracy',
+      brilliant: 'good',
+      great: 'good',
+    };
+    const flash = flashMap[classification] ?? null;
+    if (flash) {
+      setMoveFlash(flash);
+      setTimeout(() => setMoveFlash(null), 600);
+    }
+
+    // BLUNDER INTERCEPTION: pause game and explain
+    if (classification === 'blunder' && engineBestMoveUci) {
+      const explanation = commentary;
+      setBlunderPause({
+        explanation,
+        bestMoveSan: engineBestMoveSan,
+        bestMoveUci: engineBestMoveUci,
+        preFen,
+        playerMoveSan: moveResult.san,
+      });
+
+      setGameState((prev) => ({
         ...prev,
+        status: 'blunder_pause',
         moves: [...prev.moves, playerMove],
         currentHintLevel: 0,
-      };
-    });
-  }, [game, handleBackToGame, resetHints, playerColor]);
+      }));
+
+      // Voice the explanation
+      void voiceService.speak(explanation);
+      return;
+    }
+
+    setGameState((prev) => ({
+      ...prev,
+      moves: [...prev.moves, playerMove],
+      currentHintLevel: 0,
+    }));
+  }, [game, handleBackToGame, resetHints, playerColor, gameState.moves]);
 
   // Handle practice move (when in chat-driven practice mode)
   const handlePracticeMove = useCallback(async (moveResult: MoveResult) => {
@@ -952,6 +1003,82 @@ export function CoachGamePage(): JSX.Element {
     const msg = getScenarioTemplate('takeback_allowed');
     coachSay(msg);
   }, [game, coachSay, resetHints]);
+
+  // ─── Blunder Interception Handlers ──────────────────────────────────────
+  const handleBlunderContinue = useCallback(() => {
+    voiceService.stop();
+    setBlunderPause(null);
+    setGameState((prev) => ({ ...prev, status: 'playing' }));
+  }, []);
+
+  const handleBlunderTakeBack = useCallback(() => {
+    voiceService.stop();
+    // Undo just the player's move (coach hasn't responded yet during blunder_pause)
+    game.undoMove();
+    moveCountRef.current = Math.max(0, moveCountRef.current - 1);
+    resetHints();
+    prevNudgeRef.current = null;
+
+    setBlunderPause(null);
+    setGameState((prev) => ({
+      ...prev,
+      status: 'playing',
+      moves: prev.moves.slice(0, -1),
+      takebacksUsed: prev.takebacksUsed + 1,
+    }));
+  }, [game, resetHints]);
+
+  const handleBlunderTryBestMove = useCallback(() => {
+    voiceService.stop();
+    if (!blunderPause) return;
+
+    // Undo the blunder move
+    game.undoMove();
+    moveCountRef.current = Math.max(0, moveCountRef.current - 1);
+    resetHints();
+    prevNudgeRef.current = null;
+
+    // Apply the best move instead
+    const bestMoveUci = blunderPause.bestMoveUci;
+    const from = bestMoveUci.slice(0, 2);
+    const to = bestMoveUci.slice(2, 4);
+    const promotion = bestMoveUci.length > 4 ? bestMoveUci[4] : undefined;
+    const result = game.makeMove(from, to, promotion);
+
+    if (result) {
+      moveCountRef.current += 1;
+      const bestMove: CoachGameMove = {
+        moveNumber: moveCountRef.current,
+        san: result.san,
+        fen: result.fen,
+        isCoachMove: false,
+        commentary: `Great! ${blunderPause.bestMoveSan} is the right move here.`,
+        evaluation: null,
+        classification: 'great',
+        expanded: false,
+        bestMove: bestMoveUci,
+        bestMoveEval: null,
+        preMoveEval: null,
+      };
+
+      setBlunderPause(null);
+      setGameState((prev) => ({
+        ...prev,
+        status: 'playing',
+        moves: [...prev.moves.slice(0, -1), bestMove],
+        takebacksUsed: prev.takebacksUsed + 1,
+      }));
+    } else {
+      // If best move failed, just take back
+      setBlunderPause(null);
+      setGameState((prev) => ({
+        ...prev,
+        status: 'playing',
+        moves: prev.moves.slice(0, -1),
+        takebacksUsed: prev.takebacksUsed + 1,
+      }));
+    }
+  }, [game, resetHints, blunderPause]);
 
   // Derive opponent/player info for PlayerInfoBar
   const isPlayerWhite = playerColor === 'white';
@@ -1313,6 +1440,7 @@ export function CoachGamePage(): JSX.Element {
               evaluation={latestEval}
               isMate={latestIsMate}
               mateIn={latestMateIn}
+              moveQualityFlash={moveFlash}
               showFlipButton={false}
               showVoiceMic={false}
               highlightSquares={coachLastMove}
@@ -1421,6 +1549,56 @@ export function CoachGamePage(): JSX.Element {
             </div>
           </div>
         )}
+
+        {/* ─── Blunder Interception Overlay ─────────────────────────────────── */}
+        <AnimatePresence>
+          {gameState.status === 'blunder_pause' && blunderPause && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="mx-2 rounded-2xl border-2 border-red-500/40 overflow-hidden"
+              style={{ background: 'color-mix(in srgb, var(--color-error, #ef4444) 10%, var(--color-surface))' }}
+              data-testid="blunder-interception"
+            >
+              <div className="px-4 py-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle size={18} className="text-red-500 flex-shrink-0" />
+                  <span className="font-bold text-red-400 text-sm">Blunder Detected</span>
+                </div>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                  {blunderPause.explanation}
+                </p>
+              </div>
+              <div className="flex gap-2 px-4 pb-4">
+                <button
+                  onClick={handleBlunderContinue}
+                  className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-theme-border transition-colors"
+                  style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
+                  data-testid="blunder-continue"
+                >
+                  Continue
+                </button>
+                <button
+                  onClick={handleBlunderTakeBack}
+                  className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                  data-testid="blunder-takeback"
+                >
+                  Take Back
+                </button>
+                <button
+                  onClick={handleBlunderTryBestMove}
+                  className="flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 border-green-500/40 transition-colors"
+                  style={{ background: 'color-mix(in srgb, var(--color-success, #22c55e) 15%, var(--color-surface))', color: 'var(--color-text)' }}
+                  data-testid="blunder-try-best"
+                >
+                  Try {blunderPause.bestMoveSan}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Mobile: swipeable chat drawer + toggle button */}

@@ -58,7 +58,7 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   showCoordinates: true,
   pieceAnimationSpeed: 'medium',
   boardOrientation: true,
-  moveQualityFlash: false,
+  moveQualityFlash: true,
   showHints: true,
   moveMethod: 'both',
   moveConfirmation: false,
