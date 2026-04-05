@@ -23,16 +23,17 @@ interface NavItem {
   to: string;
   label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
+  glowColor: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Home', icon: LayoutDashboard },
-  { to: '/openings', label: 'Openings', icon: BookOpen },
-  { to: '/coach/play', label: 'Coach', icon: GraduationCap },
-  { to: '/tactics', label: 'Tactics', icon: Target },
-  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle },
-  { to: '/kid', label: 'Kids Mode', icon: Baby },
-  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(234, 179, 8, 0.6)' },
+  { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(59, 130, 246, 0.6)' },
+  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(239, 68, 68, 0.6)' },
+  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(34, 197, 94, 0.6)' },
+  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(168, 85, 247, 0.6)' },
+  { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)' },
+  { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)' },
 ];
 
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
@@ -193,7 +194,7 @@ export function AppLayout(): JSX.Element {
           </div>
 
           <div className="flex flex-col gap-0.5 px-2 flex-1">
-            {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
+            {NAV_ITEMS.map(({ to, label, icon: Icon, glowColor }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -206,8 +207,8 @@ export function AppLayout(): JSX.Element {
                   }`
                 }
                 style={({ isActive }) => isActive ? {
-                  borderBottom: '2px solid var(--color-accent)',
-                  boxShadow: '0 2px 8px color-mix(in srgb, var(--color-accent) 50%, transparent)',
+                  borderBottom: `2px solid ${glowColor}`,
+                  boxShadow: `0 2px 8px ${glowColor}`,
                 } : undefined}
               >
                 <Icon size={16} />
@@ -257,7 +258,7 @@ export function AppLayout(): JSX.Element {
           borderColor: 'var(--color-border)',
         }}
       >
-        {MOBILE_NAV_ITEMS.map(({ to, label, icon: Icon }) => (
+        {MOBILE_NAV_ITEMS.map(({ to, label, icon: Icon, glowColor }) => (
           <NavLink
             key={to}
             to={to}
@@ -268,8 +269,8 @@ export function AppLayout(): JSX.Element {
               }`
             }
             style={({ isActive }) => isActive ? {
-              borderTop: '2px solid var(--color-accent)',
-              filter: 'drop-shadow(0 0 6px var(--color-accent))',
+              borderTop: `2px solid ${glowColor}`,
+              filter: `drop-shadow(0 0 6px ${glowColor})`,
             } : { borderTop: '2px solid transparent' }}
           >
             <Icon size={22} />
