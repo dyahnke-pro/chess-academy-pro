@@ -295,7 +295,7 @@ export function MiniGamePage({ gameId }: MiniGamePageProps): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-20 md:pb-4"
+      className="flex flex-col gap-2 p-4 flex-1 overflow-y-auto pb-20 md:pb-4"
       style={{ color: 'var(--color-text)' }}
       data-testid="mini-game-page"
     >
@@ -355,53 +355,37 @@ export function MiniGamePage({ gameId }: MiniGamePageProps): JSX.Element {
             />
           </div>
 
-          {/* Controls */}
-          <div className="flex justify-center gap-3">
+          {/* Controls — compact row directly under board */}
+          <div className="flex items-center justify-center gap-2">
             <button
               onClick={handleHint}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-semibold text-sm"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold text-xs"
               style={{
                 background: 'var(--color-surface)',
-                borderColor: 'var(--color-border)',
                 border: '1px solid var(--color-border)',
               }}
               disabled={isAiTurn || hintLevel >= 2}
               data-testid="mini-game-hint"
             >
-              <Lightbulb size={16} />
+              <Lightbulb size={14} />
               Hint {hintLevel > 0 ? `(${hintLevel}/2)` : ''}
             </button>
             <button
               onClick={handleRestart}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-semibold text-sm"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold text-xs"
               style={{
                 background: 'var(--color-surface)',
-                borderColor: 'var(--color-border)',
                 border: '1px solid var(--color-border)',
               }}
               data-testid="mini-game-restart"
             >
-              <RotateCcw size={16} />
+              <RotateCcw size={14} />
               Restart
             </button>
+            <span className="text-xs ml-1" style={{ color: 'var(--color-text-muted)' }}>
+              {isAiTurn ? 'Thinking...' : `Moves: ${moveCount}`}
+            </span>
           </div>
-
-          {isAiTurn && (
-            <p
-              className="text-center text-sm font-medium animate-pulse"
-              style={{ color: 'var(--color-text-muted)' }}
-              data-testid="ai-thinking"
-            >
-              Opponent is thinking...
-            </p>
-          )}
-
-          <p
-            className="text-center text-xs"
-            style={{ color: 'var(--color-text-muted)' }}
-          >
-            Moves: {moveCount}
-          </p>
         </>
       )}
 
