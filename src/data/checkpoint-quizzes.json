@@ -618,5 +618,37 @@
       "hint": "The Grunfeld philosophy is to attack the center with pieces and pawns from the flanks.",
       "concept": "Counter-attacking the center with c5 in the Grunfeld Exchange"
     }
+  ],
+  "pro-naroditsky-jobava-london": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+      "correctMove": "Nb5",
+      "hint": "Black just played e6 — what aggressive knight jump exploits the weak c7 square?",
+      "concept": "Nb5 Jump Timing"
+    },
+    {
+      "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
+      "correctMove": "h4",
+      "hint": "Black has fianchettoed with g6 and Bg7. How do we exploit the weakened kingside?",
+      "concept": "h4 Pawn Storm vs Fianchetto"
+    },
+    {
+      "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4",
+      "correctMove": "f3",
+      "hint": "Black developed their bishop to f5 early. How do we start the bishop hunt?",
+      "concept": "f3-g4 Bishop Hunt"
+    },
+    {
+      "fen": "rnbqkb1r/pp3ppp/2p1pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 0 5",
+      "correctMove": "Nc7+",
+      "hint": "Our knight is on b5 and Black's king is still on e8. What devastating fork is available?",
+      "concept": "Nc7+ Fork"
+    },
+    {
+      "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B1P/2N1P3/PPP2PP1/R2QKBNR b KQkq - 0 5",
+      "correctMove": "O-O",
+      "hint": "White just pushed h4 threatening h5. This looks scary — what does Black typically play here that walks into our attack?",
+      "concept": "Recognizing Dangerous Castling"
+    }
   ]
 }

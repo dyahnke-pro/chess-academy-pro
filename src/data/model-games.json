@@ -770,5 +770,43 @@
     ],
     "middlegameTheme": "Kingside sacrificial attack",
     "lessonSummary": "Fischer's immortal King's Indian Attack game shows the explosive potential hidden in this quiet opening system. By patiently building up on the kingside while Black expanded on the queenside, Fischer created the conditions for a brilliant sacrificial combination. The game teaches that in the KIA, White's kingside attack can arrive with devastating speed once the pieces are optimally placed."
+  },
+  {
+    "id": "mg-jobava-mamedyarov-2014",
+    "openingId": "pro-naroditsky-jobava-london",
+    "white": "Baadur Jobava",
+    "black": "Shakhriyar Mamedyarov",
+    "whiteElo": 2706,
+    "blackElo": 2743,
+    "result": "1-0",
+    "year": 2014,
+    "event": "World Rapid Championship",
+    "pgn": "d4 Nf6 Nc3 d5 Bf4 Bf5 f3 e6 g4 Bg6 h4 h6 e3 c5 h5 Bh7 Nb5 Na6 c3 Be7 Bd3 Bxd3 Qxd3 Nd7 Ne2 O-O a4 Bf6 Bd6 Re8 f4 Nb6 g5 hxg5 h6 g6 fxg5 Bxg5 h7+ Kg7 Be5+ f6 Nd6 Rh8 Nf4 Bxf4 Bxf4 g5 O-O-O Nc4 Rh6 Kxh6 Nf7+ Kg7 Nxd8 Raxd8 b3 Nb6 Rg1 Rxh7 e4 Kh8 e5 gxf4 Qg6 Rf8 exf6",
+    "overview": "A brilliant attacking game demonstrating the Jobava London's kingside potential. Jobava uses the f3-g4-h4 pawn storm against Mamedyarov's Bf5, eventually sacrificing the exchange on h6 to deliver a crushing attack.",
+    "criticalMoments": [
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r2qr1k1/pp3pp1/nn1Bpb1p/1Npp2PP/P2P1P2/2PQP3/1P2N3/R3K2R b KQ - 0 17",
+        "annotation": "White pushes g5, the culmination of the pawn storm. The g-file opens and Black's kingside crumbles under the pressure.",
+        "concept": "Kingside Pawn Storm"
+      },
+      {
+        "moveNumber": 20,
+        "color": "white",
+        "fen": "r2qr1k1/pp3p1P/nn1Bp1p1/1Npp2b1/P2P4/2PQP3/1P2N3/R3K2R b KQ - 0 20",
+        "annotation": "h7+! A stunning pawn advance that deflects the king and opens devastating lines for White's pieces.",
+        "concept": "Pawn Breakthrough"
+      },
+      {
+        "moveNumber": 26,
+        "color": "white",
+        "fen": "r2q3r/pp4kP/n2Npp1R/2pp2p1/P1nP1B2/2PQP3/1P6/2KR4 b - - 3 26",
+        "annotation": "Rxh6! The exchange sacrifice rips open the kingside. After Kxh6 Nf7+, the knight fork wins the queen.",
+        "concept": "Exchange Sacrifice"
+      }
+    ],
+    "middlegameTheme": "Kingside Pawn Storm & Exchange Sacrifice",
+    "lessonSummary": "The Jobava London's f3-g4-h4 plan is devastatingly effective against Bf5. Jobava showed that even a world-class player like Mamedyarov can be overwhelmed when White commits fully to the kingside attack."
   }
 ]
