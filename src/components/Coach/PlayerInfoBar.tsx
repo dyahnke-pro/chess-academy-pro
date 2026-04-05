@@ -3,7 +3,7 @@ import { pieceToUnicode } from '../../services/boardUtils';
 
 interface PlayerInfoBarProps {
   name: string;
-  rating: number;
+  rating?: number;
   isBot?: boolean;
   capturedPieces: string[];
   materialAdvantage?: number;
@@ -42,9 +42,11 @@ export function PlayerInfoBar({
         <span className="font-medium truncate" style={{ color: 'var(--color-text)' }}>
           {name}
         </span>
-        <span className="text-xs flex-shrink-0" style={{ color: 'var(--color-text-muted)' }}>
-          ({rating})
-        </span>
+        {rating !== undefined && (
+          <span className="text-xs flex-shrink-0" style={{ color: 'var(--color-text-muted)' }}>
+            ({rating})
+          </span>
+        )}
       </div>
 
       {/* Right: captured pieces + material advantage */}

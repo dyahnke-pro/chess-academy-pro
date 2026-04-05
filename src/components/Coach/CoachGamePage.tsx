@@ -7,6 +7,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useCoachTips } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
+import { VoiceChatMic } from '../Board/VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from '../Board/VoiceChatMic';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
@@ -1281,6 +1282,7 @@ export function CoachGamePage(): JSX.Element {
               isMate={latestIsMate}
               mateIn={latestMateIn}
               showFlipButton={false}
+              showVoiceMic={false}
               highlightSquares={coachLastMove}
               arrows={[...hintState.arrows, ...annotationArrows, ...voiceArrows].length > 0 ? [...hintState.arrows, ...annotationArrows, ...voiceArrows] : undefined}
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
@@ -1299,11 +1301,10 @@ export function CoachGamePage(): JSX.Element {
           )}
         </div>
 
-        {/* Player info bar (bottom) */}
+        {/* Player info bar (bottom) — rating shown in header, omitted here */}
         <div className="px-2">
           <PlayerInfoBar
             name={playerName}
-            rating={playerRating}
             capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
             materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
             isActive={isPlayerTurn && !game.isGameOver}
@@ -1312,15 +1313,43 @@ export function CoachGamePage(): JSX.Element {
 
         {/* Controls */}
         {gameState.status === 'playing' && (
-          <div className="flex items-center justify-between px-4 py-2 flex-shrink-0">
-            <HintButton
-              currentLevel={hintState.level}
-              onRequestHint={handleHint}
-              disabled={isCoachThinking || hintState.isAnalyzing}
-            />
+          <div className="flex flex-col gap-1.5 px-4 py-2 flex-shrink-0">
+            {/* Row 1: Hint, Takeback, Resign — primary actions */}
+            <div className="flex items-center justify-center gap-2">
+              <HintButton
+                currentLevel={hintState.level}
+                onRequestHint={handleHint}
+                disabled={isCoachThinking || hintState.isAnalyzing}
+              />
+              <button
+                onClick={handleTakeback}
+                disabled={gameState.moves.length < 2}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-theme-border text-sm font-medium text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors"
+                data-testid="takeback-btn"
+              >
+                <Undo2 size={16} />
+                <span>Takeback</span>
+              </button>
+              <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
+            </div>
 
-            {/* Move navigation */}
-            <div className="flex items-center gap-0.5" data-testid="move-nav">
+            {/* Row 2: Ask (voice) button */}
+            <div className="flex justify-center">
+              <VoiceChatMic
+                fen={game.fen}
+                pgn={game.history.join(' ')}
+                turn={game.turn}
+                onOpeningRequest={handleOpeningRequest}
+                engineSnapshot={voiceEngineSnapshot}
+                lastMoveContext={voiceLastMoveContext}
+                playerColor={playerColor}
+                onListeningChange={setVoiceActive}
+                onArrows={handleVoiceArrows}
+              />
+            </div>
+
+            {/* Row 3: Move navigation */}
+            <div className="flex items-center justify-center gap-0.5" data-testid="move-nav">
               <button
                 onClick={goToFirstMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
@@ -1357,21 +1386,6 @@ export function CoachGamePage(): JSX.Element {
               >
                 <ChevronsRight size={16} />
               </button>
-            </div>
-
-            <div className="flex items-center gap-1 md:gap-2">
-              {difficulty !== 'hard' && (
-                <button
-                  onClick={handleTakeback}
-                  disabled={gameState.moves.length < 2}
-                  className="flex items-center gap-1 px-2 py-2 md:px-3 rounded-lg border border-theme-border text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
-                  data-testid="takeback-btn"
-                >
-                  <Undo2 size={14} />
-                  <span className="hidden md:inline">Takeback</span>
-                </button>
-              )}
-              <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
             </div>
           </div>
         )}
