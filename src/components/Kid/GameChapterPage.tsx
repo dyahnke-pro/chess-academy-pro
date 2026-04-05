@@ -477,10 +477,10 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col items-center gap-5"
+              className="flex flex-col items-center gap-2"
               data-testid="chapter-puzzle"
             >
-              <h3 className="text-xl font-bold">
+              <h3 className="text-lg font-bold">
                 Puzzle {puzzleIndex + 1} of {activePuzzles.length}
               </h3>
 
@@ -498,38 +498,38 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
                 />
               </div>
 
-              {/* Hint button */}
-              <HintButton
-                currentLevel={hintState.level}
-                onRequestHint={handleHint}
-                disabled={hintState.isAnalyzing}
-              />
+              {/* Hint + feedback row — compact, directly under board */}
+              <div className="flex items-center justify-center gap-2">
+                <HintButton
+                  currentLevel={hintState.level}
+                  onRequestHint={handleHint}
+                  disabled={hintState.isAnalyzing}
+                />
+                {puzzleFeedback && (
+                  <span
+                    className="px-3 py-1.5 rounded-lg font-bold text-xs"
+                    style={{
+                      background:
+                        puzzleFeedback === 'correct'
+                          ? 'var(--color-accent)'
+                          : 'var(--color-error)',
+                      color: 'var(--color-bg)',
+                    }}
+                    data-testid="puzzle-feedback"
+                  >
+                    {puzzleFeedback === 'correct' ? 'Correct!' : 'Try again!'}
+                  </span>
+                )}
+              </div>
 
               {hintState.nudgeText && (
                 <p
-                  className="text-sm text-center max-w-sm"
+                  className="text-xs text-center max-w-sm"
                   style={{ color: 'var(--color-accent)' }}
                   data-testid="chapter-hint-text"
                 >
                   {hintState.nudgeText}
                 </p>
-              )}
-
-              {/* Puzzle feedback */}
-              {puzzleFeedback && (
-                <div
-                  className="px-4 py-2 rounded-lg font-bold text-center"
-                  style={{
-                    background:
-                      puzzleFeedback === 'correct'
-                        ? 'var(--color-accent)'
-                        : 'var(--color-error)',
-                    color: 'var(--color-bg)',
-                  }}
-                  data-testid="puzzle-feedback"
-                >
-                  {puzzleFeedback === 'correct' ? 'Correct!' : 'Try again!'}
-                </div>
               )}
             </motion.div>
           )}
