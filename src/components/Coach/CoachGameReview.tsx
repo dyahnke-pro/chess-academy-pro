@@ -23,7 +23,6 @@ import { detectMissedTactics } from '../../services/missedTacticService';
 import { generateNarrativeSummary } from '../../services/coachFeatureService';
 import type { NarrativeMoveData } from '../../services/coachFeatureService';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
-import { voiceService } from '../../services/voiceService';
 import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
