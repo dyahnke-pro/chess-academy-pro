@@ -234,6 +234,8 @@ export function TacticCreatePage(): JSX.Element {
   const handleSkipPuzzle = useCallback((): void => {
     voiceService.stop();
     setSubtitle('');
+    // Reset streak — a skip breaks the consecutive solve chain
+    setConsecutiveSolves(0);
     const nextIndex = currentIndex + 1;
     if (nextIndex >= queue.length) {
       setPhase('summary');
