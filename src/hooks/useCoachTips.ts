@@ -21,6 +21,10 @@ export interface UseCoachTipsConfig {
   onTip: (tip: string) => void;
   /** Called when the player missed a tactic on the previous move */
   onMissedTactic?: (message: string, tacticType: TacticType) => void;
+  /** Per-feature toggles from settings */
+  blunderAlerts?: boolean;
+  tacticAlerts?: boolean;
+  positionalTips?: boolean;
 }
 
 interface TipContext {
@@ -167,6 +171,9 @@ export function useCoachTips({
   playerRating,
   onTip,
   onMissedTactic,
+  blunderAlerts = true,
+  tacticAlerts = true,
+  positionalTips = true,
 }: UseCoachTipsConfig): void {
   const lastTipFenRef = useRef<string | null>(null);
   const tipCooldownRef = useRef<number>(0);
@@ -239,8 +246,7 @@ export function useCoachTips({
         };
 
         // First: detect big eval swing from opponent's last move (opponent blundered)
-        // This gives the player a chance to capitalize
-        if (prevEval !== null) {
+        if (blunderAlerts && prevEval !== null) {
           const currentEval = analysis.evaluation;
           const swingInFavor = playerColor === 'white'
             ? currentEval - prevEval
@@ -254,7 +260,7 @@ export function useCoachTips({
         }
 
         // Second: check for a tactic available RIGHT NOW
-        const immediateTactic = detectGameplayTactic(fen, analysis, playerColor);
+        const immediateTactic = tacticAlerts ? detectGameplayTactic(fen, analysis, playerColor) : null;
         if (immediateTactic) {
           const isWeakness = await isTacticWeakness(immediateTactic);
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -284,7 +290,7 @@ export function useCoachTips({
         // Weaker players: 1 move ahead. Stronger players: 2-4 moves ahead.
         // This teaches stronger players to plan and weaker players to recognize.
         const lookahead = getTacticLookahead(playerRating);
-        const upcoming = scanUpcomingTactic(fen, analysis, playerColor, lookahead);
+        const upcoming = tacticAlerts ? scanUpcomingTactic(fen, analysis, playerColor, lookahead) : null;
         if (upcoming) {
           const isWeakness = await isTacticWeakness(upcoming.tacticType);
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -299,7 +305,7 @@ export function useCoachTips({
         }
 
         // Fall through: positional/strategic tips (throttled to avoid spam)
-        if (!skipPositionalTips) {
+        if (positionalTips && !skipPositionalTips) {
           const tip = generatePositionalTip(ctx);
           if (tip) {
             lastTipFenRef.current = fen;
@@ -318,5 +324,5 @@ export function useCoachTips({
       abortController.abort();
       clearTimeout(timer);
     };
-  }, [fen, enabled, isPlayerTurn, moves.length, playerColor, getLatestEval, playerRating]);
+  }, [fen, enabled, isPlayerTurn, moves.length, playerColor, getLatestEval, playerRating, blunderAlerts, tacticAlerts, positionalTips]);
 }

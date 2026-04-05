@@ -450,6 +450,12 @@ export interface UserPreferences {
   autoPromoteQueen: boolean;
   // Master Control (WO-5)
   masterAllOff: boolean;
+  // Coach Gameplay Settings
+  coachBlunderAlerts?: boolean;
+  coachTacticAlerts?: boolean;
+  coachPositionalTips?: boolean;
+  coachMissedTacticTakeback?: boolean;
+  coachReviewVoice?: boolean;
   // Import accounts
   chessComUsername?: string;
   lichessUsername?: string;

@@ -49,6 +49,23 @@ vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue('The position is balanced with chances for both sides.'),
 }));
 
+vi.mock('../../hooks/useSettings', () => ({
+  useSettings: () => ({
+    settings: {
+      coachReviewVoice: true,
+      voiceEnabled: true,
+      showHints: true,
+      coachBlunderAlerts: true,
+      coachTacticAlerts: true,
+      coachPositionalTips: true,
+      coachMissedTacticTakeback: true,
+    },
+    raw: null,
+    updateSetting: vi.fn(),
+    updateSettings: vi.fn(),
+  }),
+}));
+
 vi.mock('../../services/coachFeatureService', () => ({
   generateNarrativeSummary: vi.fn().mockResolvedValue('This was a well-played game with some key moments.'),
 }));

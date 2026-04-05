@@ -23,6 +23,11 @@ export interface EffectiveSettings {
   moveConfirmation: boolean;
   autoPromoteQueen: boolean;
   masterAllOff: boolean;
+  coachBlunderAlerts: boolean;
+  coachTacticAlerts: boolean;
+  coachPositionalTips: boolean;
+  coachMissedTacticTakeback: boolean;
+  coachReviewVoice: boolean;
 }
 
 export interface UseSettingsReturn {
@@ -64,6 +69,11 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   moveConfirmation: false,
   autoPromoteQueen: true,
   masterAllOff: false,
+  coachBlunderAlerts: true,
+  coachTacticAlerts: true,
+  coachPositionalTips: true,
+  coachMissedTacticTakeback: true,
+  coachReviewVoice: true,
 };
 
 export function useSettings(): UseSettingsReturn {
@@ -95,6 +105,11 @@ export function useSettings(): UseSettingsReturn {
       moveConfirmation: raw.moveConfirmation,
       autoPromoteQueen: raw.autoPromoteQueen,
       masterAllOff: raw.masterAllOff,
+      coachBlunderAlerts: raw.coachBlunderAlerts ?? true,
+      coachTacticAlerts: raw.coachTacticAlerts ?? true,
+      coachPositionalTips: raw.coachPositionalTips ?? true,
+      coachMissedTacticTakeback: raw.coachMissedTacticTakeback ?? true,
+      coachReviewVoice: raw.coachReviewVoice ?? true,
     };
 
     if (raw.masterAllOff) {

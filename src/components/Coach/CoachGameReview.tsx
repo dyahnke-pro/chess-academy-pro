@@ -23,6 +23,8 @@ import { detectMissedTactics } from '../../services/missedTacticService';
 import { generateNarrativeSummary, generateReviewNarrationSegments } from '../../services/coachFeatureService';
 import type { NarrativeMoveData, ReviewNarrationSegments } from '../../services/coachFeatureService';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
+import { voiceService } from '../../services/voiceService';
+import { useSettings } from '../../hooks/useSettings';
 import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -84,6 +86,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     isGuidedLesson, pgn,
   } = props;
   const initialMoveIndex = props.initialMoveIndex;
+  const { settings } = useSettings();
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
@@ -202,8 +205,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       narrativeMoveData,
     ).then((fullText) => {
       setNarrativeSummary(fullText);
-      // Speak the narrative summary aloud
-      void voiceService.speak(fullText);
+      if (settings.coachReviewVoice) {
+        void voiceService.speak(fullText);
+      }
     }).catch(() => {
       setNarrativeSummary(null);
     }).finally(() => {
@@ -410,8 +414,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (!cancelled) {
         aiCommentaryCacheRef.current.set(moveIdx, fullText);
         setAiCommentary(fullText);
-        // Voice narrate the AI commentary when not in auto-review (auto-review has its own narration)
-        if (!autoReviewActive) {
+        if (settings.coachReviewVoice && !autoReviewActive) {
           void voiceService.speak(fullText);
         }
       }

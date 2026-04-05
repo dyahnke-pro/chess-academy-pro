@@ -417,7 +417,10 @@ export function CoachGamePage(): JSX.Element {
     moves: gameState.moves,
     playerRating: activeProfile?.currentRating ?? 1200,
     onTip: handleCoachTip,
-    onMissedTactic: difficulty === 'hard' ? undefined : handleMissedTactic,
+    onMissedTactic: difficulty === 'hard' || !settings.coachMissedTacticTakeback ? undefined : handleMissedTactic,
+    blunderAlerts: settings.coachBlunderAlerts,
+    tacticAlerts: settings.coachTacticAlerts,
+    positionalTips: settings.coachPositionalTips,
   });
 
   // Move navigation — null means live position
@@ -1011,24 +1014,29 @@ export function CoachGamePage(): JSX.Element {
     }));
   }, [requestHint]);
 
-  // Takeback — always allowed
+  // Takeback — undo the last player move (and coach's reply if present)
   const handleTakeback = useCallback(() => {
-    // Undo both player and coach moves
-    game.undoMove(); // Undo coach's response
-    game.undoMove(); // Undo player's move
-    moveCountRef.current = Math.max(0, moveCountRef.current - 2);
+    const moves = gameState.moves;
+    const lastMove = moves.length > 0 ? moves[moves.length - 1] : undefined;
+    // If the last move was the coach's reply, undo both; otherwise just the player's move
+    const undoCount = lastMove?.isCoachMove ? 2 : 1;
+
+    for (let i = 0; i < undoCount; i++) {
+      game.undoMove();
+    }
+    moveCountRef.current = Math.max(0, moveCountRef.current - undoCount);
     resetHints();
     prevNudgeRef.current = null;
 
     setGameState((prev) => ({
       ...prev,
-      moves: prev.moves.slice(0, -2),
+      moves: prev.moves.slice(0, -undoCount),
       takebacksUsed: prev.takebacksUsed + 1,
     }));
 
     const msg = getScenarioTemplate('takeback_allowed');
     coachSay(msg);
-  }, [game, coachSay, resetHints]);
+  }, [game, coachSay, resetHints, gameState.moves]);
 
   // ─── Blunder Interception Handlers ──────────────────────────────────────
   const handleBlunderContinue = useCallback(() => {
@@ -1582,7 +1590,7 @@ export function CoachGamePage(): JSX.Element {
               />
               <button
                 onClick={handleTakeback}
-                disabled={gameState.moves.length < 2}
+                disabled={gameState.moves.length < 1}
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-theme-border text-sm font-medium text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors"
                 data-testid="takeback-btn"
               >
