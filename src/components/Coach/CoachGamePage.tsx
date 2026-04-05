@@ -387,15 +387,27 @@ export function CoachGamePage(): JSX.Element {
     }
   }, [hintState.nudgeText]);
 
+  // ─── Coach Tip Bubble (floating overlay near board) ─────────────────────────
+  const [tipBubbleText, setTipBubbleText] = useState<string | null>(null);
+  const tipBubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showTipBubble = useCallback((text: string) => {
+    if (tipBubbleTimerRef.current) clearTimeout(tipBubbleTimerRef.current);
+    setTipBubbleText(text);
+    tipBubbleTimerRef.current = setTimeout(() => setTipBubbleText(null), 6000);
+  }, []);
+
   // Proactive coach tips (positional awareness, tactics, key moments)
   const handleCoachTip = useCallback((tip: string) => {
     gameChatRef.current?.injectAssistantMessage(tip);
-  }, []);
+    showTipBubble(tip);
+  }, [showTipBubble]);
 
   // Missed tactic alert — coach tells player they missed a tactic and suggests takeback
   const handleMissedTactic = useCallback((message: string) => {
     gameChatRef.current?.injectAssistantMessage(message);
-  }, []);
+    showTipBubble(message);
+  }, [showTipBubble]);
 
   useCoachTips({
     fen: game.fen,
@@ -1515,6 +1527,29 @@ export function CoachGamePage(): JSX.Element {
                     >
                       Try {blunderPause.bestMoveSan}
                     </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* ─── Coach Tip Bubble (floating on board) ───────────────────── */}
+            <AnimatePresence>
+              {tipBubbleText && gameState.status !== 'blunder_pause' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="absolute top-2 left-2 right-2 z-10 rounded-xl backdrop-blur-md border border-blue-500/30 px-3 py-2.5 cursor-pointer"
+                  style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))' }}
+                  onClick={() => setTipBubbleText(null)}
+                  data-testid="coach-tip-bubble"
+                >
+                  <div className="flex items-start gap-2">
+                    <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
+                      {tipBubbleText}
+                    </p>
                   </div>
                 </motion.div>
               )}
