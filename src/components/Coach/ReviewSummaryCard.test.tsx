@@ -124,10 +124,16 @@ describe('ReviewSummaryCard', () => {
     expect(screen.queryByTestId('missed-opportunities-callout')).not.toBeInTheDocument();
   });
 
-  it('calls onStartReview when "Review Game" is clicked', () => {
+  it('calls onStartReview with "quick" when Quick Review is clicked', () => {
     const { onStartReview } = renderCard();
-    fireEvent.click(screen.getByTestId('start-review-btn'));
-    expect(onStartReview).toHaveBeenCalledOnce();
+    fireEvent.click(screen.getByTestId('start-review-quick-btn'));
+    expect(onStartReview).toHaveBeenCalledWith('quick');
+  });
+
+  it('calls onStartReview with "full" when Full Review is clicked', () => {
+    const { onStartReview } = renderCard();
+    fireEvent.click(screen.getByTestId('start-review-full-btn'));
+    expect(onStartReview).toHaveBeenCalledWith('full');
   });
 
   it('calls onPlayAgain when "Play Again" is clicked', () => {
