@@ -1411,7 +1411,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "In the King's Gambit, the Fischer Defense Refutation is a tactical pattern you should know. Fischer's 3...d6 is considered one of Black's best defenses. But White can play the energetic d4, h4, and Nc3-Nge2-Ng3 setup to maintain pressure. The knight on g3 targets f5, and after Bc4 and Be3, White's development lead is significant even though Black holds the extra pawn. Let's walk through how it works."
+          "annotation": "In the King's Gambit, the Fischer Defense Refutation is a tactical pattern you should know. Fischer's 3...d6 is considered one of Black's best defenses. But White can play the energetic d4, h4, and Nc3-Nge2-Ng3 setup to maintain pressure. The pawn on g3 targets f5, and after Bc4 and Be3, White's development lead is significant even though Black holds the extra pawn. Let's walk through how it works."
         },
         {
           "san": "e5",
@@ -1698,7 +1698,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "In the King's Gambit, the Allgaier Gambit Knight Sacrifice is a tactical pattern you should know. The Allgaier Gambit — White sacrifices the knight on f7 to drag the Black king forward. After Kxf7, the king is exposed and White develops with tempo using d4, Bxf4, and Bc4+. The open lines and development advantage provide more than enough compensation for the piece. Let's walk through how it works."
+          "annotation": "In the King's Gambit, the Allgaier Gambit Knight Sacrifice is a tactical pattern you should know. The Allgaier Gambit — White sacrifices the pawn on f7 to drag the Black king forward. After Kxf7, the king is exposed and White develops with tempo using d4, Bxf4, and Bc4+. The open lines and development advantage provide more than enough compensation for the piece. Let's walk through how it works."
         },
         {
           "san": "e5",

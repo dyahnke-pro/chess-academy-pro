@@ -666,7 +666,7 @@
         },
         {
           "san": "e4",
-          "annotation": "White establishes the ideal pawn center, creating a massive space advantage and controlling key central squares. This advance defines the Classical System of the King's Indian, where White builds maximum central control before Black can organize counterplay. The e4 pawn, supported by the knight on c3, creates a formidable pawn wedge that restricts Black's pieces.",
+          "annotation": "White establishes the ideal pawn center, creating a massive space advantage and controlling key central squares. This advance defines the Classical System of the King's Indian, where White builds maximum central control before Black can organize counterplay. The e4 pawn, supported by the pawn on c3, creates a formidable pawn wedge that restricts Black's pieces.",
           "pawnStructure": "White now has the classical pawn center with pawns on c4, d4, and e4, creating maximum space and control. This is the ideal setup White aims for in the King's Indian.",
           "plans": [
             "Complete development with Nf3 and Be2",

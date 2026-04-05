@@ -75,7 +75,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at our center with this typical pawn advance, challenging our future d2-d4 and creating immediate central tension. This move is the hallmark of the Chigorin Defense, where Black seeks active counterplay rather than passive defense. The pawn advance also opens the c-file for potential rook activity and supports Black's knight on a5 by giving it the c6 square as a retreat. By playing c5, Black transitions from a purely defensive setup to one with genuine counterplay, forcing us to calculate carefully before advancing our central pawns."
+      "annotation": "Black strikes at our center with this typical pawn advance, challenging our future d2-d4 and creating immediate central tension. This move is the hallmark of the Chigorin Defense, where Black seeks active counterplay rather than passive defense. The pawn advance also opens the c-file for potential rook activity and supports Black's pawn on a5 by giving it the c6 square as a retreat. By playing c5, Black transitions from a purely defensive setup to one with genuine counterplay, forcing us to calculate carefully before advancing our central pawns."
     },
     {
       "san": "d4",

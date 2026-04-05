@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black establishes a solid pawn structure by supporting the center and preparing for the key ...e5 pawn advance that defines the King's Indian Defense. This move also opens the c8-h3 diagonal for the light-squared bishop and provides additional support for the knight on f6. The d6 pawn creates a flexible pawn chain that can support either ...e5 or ...c5 depending on how we continue, and it's an essential part of Black's hypermodern strategy. We should recognize that Black is now prepared to challenge our center directly, and we need to be ready for the typical King's Indian pawn storm that often follows."
+      "annotation": "Black establishes a solid pawn structure by supporting the center and preparing for the key ...e5 pawn advance that defines the King's Indian Defense. This move also opens the c8-h3 diagonal for the light-squared bishop and provides additional support for the pawn on f6. The d6 pawn creates a flexible pawn chain that can support either ...e5 or ...c5 depending on how we continue, and it's an essential part of Black's hypermodern strategy. We should recognize that Black is now prepared to challenge our center directly, and we need to be ready for the typical King's Indian pawn storm that often follows."
     },
     {
       "san": "O-O",

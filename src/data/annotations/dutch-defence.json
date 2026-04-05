@@ -469,7 +469,7 @@
     },
     {
       "san": "a5",
-      "annotation": "Black plays a5, preventing White's b4 advance and securing the c5 knight's position. This is a very important prophylactic move — if White ever plays b4, Black can take en passant or the knight loses its outpost. By stopping b4, Black ensures the knight on c5 remains a permanent fixture while freeing up attention for the kingside attack.",
+      "annotation": "Black plays a5, preventing White's b4 advance and securing the c5 knight's position. This is a very important prophylactic move — if White ever plays b4, Black can take en passant or the knight loses its outpost. By stopping b4, Black ensures the pawn on c5 remains a permanent fixture while freeing up attention for the kingside attack.",
       "pawnStructure": "Black's a5 fixes White's queenside pawns and prevents b4, securing the c5 outpost permanently.",
       "plans": [
         "Secure the knight on c5 and shift focus to kingside",
@@ -887,7 +887,7 @@
         },
         {
           "san": "d5",
-          "annotation": "White strikes in the center with this space-gaining advance! This move fixes Black's pawn structure and limits the mobility of Black's pieces, particularly the knight on f6. By advancing d5, White also opens up possibilities for queenside expansion with moves like c4-c5, while the advanced pawn controls key squares like c6 and e6.",
+          "annotation": "White strikes in the center with this space-gaining advance! This move fixes Black's pawn structure and limits the mobility of Black's pieces, particularly the pawn on f6. By advancing d5, White also opens up possibilities for queenside expansion with moves like c4-c5, while the advanced pawn controls key squares like c6 and e6.",
           "pawnStructure": "White creates a powerful pawn duo on c4 and d5, gaining significant space and restricting Black's piece mobility while preparing queenside operations.",
           "plans": [
             "Expand on the queenside with moves like b2-b4",
@@ -1119,7 +1119,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "The Classical Dutch is an important variation of the Dutch Defence. The Classical Dutch with ...Be7 and ...d5 is more solid than the Leningrad. Black develops naturally and fights for the e4 square. The knight on e4 is the cornerstone of Black's position. Let's walk through the key ideas."
+          "annotation": "The Classical Dutch is an important variation of the Dutch Defence. The Classical Dutch with ...Be7 and ...d5 is more solid than the Leningrad. Black develops naturally and fights for the e4 square. The pawn on e4 is the cornerstone of Black's position. Let's walk through the key ideas."
         },
         {
           "san": "f5",
@@ -1685,7 +1685,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "In the Dutch Defence, the Stonewall Bind is a tactical pattern you should know. The Stonewall setup with ...d5, ...c6, ...Bd6 gives Black a rock-solid center. The knight on e4 is a powerful outpost and the dark-squared bishop eyes the kingside. White's Bg2 bites on the d5 pawn chain. Let's walk through how it works."
+          "annotation": "In the Dutch Defence, the Stonewall Bind is a tactical pattern you should know. The Stonewall setup with ...d5, ...c6, ...Bd6 gives Black a rock-solid center. The pawn on e4 is a powerful outpost and the dark-squared bishop eyes the kingside. White's Bg2 bites on the d5 pawn chain. Let's walk through how it works."
         },
         {
           "san": "f5",
@@ -1802,7 +1802,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "In the Dutch Defence, the Weak e5 Square is a dangerous line you must be aware of. If Black plays ...e5 without proper preparation, the d6 and e5 squares become weak. White can plant a knight on d5 or e5 and dominate the position. Always prepare ...e5 with proper piece coordination. Let's see why."
+          "annotation": "In the Dutch Defence, the Weak e5 Square is a dangerous line you must be aware of. If Black plays ...e5 without proper preparation, the d6 and e5 squares become weak. White can plant a pawn on d5 or e5 and dominate the position. Always prepare ...e5 with proper piece coordination. Let's see why."
         },
         {
           "san": "f5",

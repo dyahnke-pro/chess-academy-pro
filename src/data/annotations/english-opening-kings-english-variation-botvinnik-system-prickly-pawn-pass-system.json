@@ -35,7 +35,7 @@
     },
     {
       "san": "e4",
-      "annotation": "Now we strike in the center with e4, establishing the pawn on a strong square and seizing space. We've waited until after fianchettoing and developing pieces because now our g2 bishop supports the e4 pawn, and our knight on c3 is well-placed to maintain central control. This is a key moment where we transition from flexible setup to active central play—we control d5 with both c4 and the e4 pawn, giving us a spatial advantage that's typical of the Botvinnik System."
+      "annotation": "Now we strike in the center with e4, establishing the pawn on a strong square and seizing space. We've waited until after fianchettoing and developing pieces because now our g2 bishop supports the e4 pawn, and our pawn on c3 is well-placed to maintain central control. This is a key moment where we transition from flexible setup to active central play—we control d5 with both c4 and the e4 pawn, giving us a spatial advantage that's typical of the Botvinnik System."
     },
     {
       "san": "d6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black prepares to challenge our d4 square and supports potential future moves like d5 or a move toward the center. The pawn on c6 is typical in these positions—it's the prelude to Black's queenside counterplay and prevents us from easily posting a knight on d5. Notice Black is building a solid, flexible pawn structure (pawns on c6, d6, e5) that gives them room to maneuver and makes it harder for us to crack their position with a single break."
+      "annotation": "Black prepares to challenge our d4 square and supports potential future moves like d5 or a move toward the center. The pawn on c6 is typical in these positions—it's the prelude to Black's queenside counterplay and prevents us from easily posting a pawn on d5. Notice Black is building a solid, flexible pawn structure (pawns on c6, d6, e5) that gives them room to maneuver and makes it harder for us to crack their position with a single break."
     },
     {
       "san": "d3",

@@ -67,7 +67,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "We capture the central pawn, opening the c-file and creating immediate tension in the center while forcing Black to make important decisions about pawn structure. This capture also opens lines for our remaining pieces and prepares to challenge Black's knight on e4. The opening of the c-file gives our rook potential activity, and the central tension forces Black to commit to a specific pawn structure. By taking on d5, we're transforming the position from a closed, maneuvering game into a more open, tactical battle."
+      "annotation": "We capture the central pawn, opening the c-file and creating immediate tension in the center while forcing Black to make important decisions about pawn structure. This capture also opens lines for our remaining pieces and prepares to challenge Black's pawn on e4. The opening of the c-file gives our rook potential activity, and the central tension forces Black to commit to a specific pawn structure. By taking on d5, we're transforming the position from a closed, maneuvering game into a more open, tactical battle."
     },
     {
       "san": "Nxc3",

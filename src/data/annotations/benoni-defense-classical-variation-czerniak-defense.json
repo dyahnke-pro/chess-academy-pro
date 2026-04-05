@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent solidifies their position with this natural pawn move, supporting their knight on f6 while preparing to complete their kingside development with g6 and Bg7. This move is almost mandatory in the Benoni, as it prevents our knight from jumping to e5 while creating a solid foundation for Black's piece coordination. Black is also preparing to fianchetto their king's bishop, which will become a powerful attacking piece along the long diagonal, eyeing our kingside and supporting their central operations. The d6 pawn also controls important squares like c5 and e5, limiting some of our piece options while maintaining Black's defensive solidity."
+      "annotation": "Our opponent solidifies their position with this natural pawn move, supporting their pawn on f6 while preparing to complete their kingside development with g6 and Bg7. This move is almost mandatory in the Benoni, as it prevents our knight from jumping to e5 while creating a solid foundation for Black's piece coordination. Black is also preparing to fianchetto their king's bishop, which will become a powerful attacking piece along the long diagonal, eyeing our kingside and supporting their central operations. The d6 pawn also controls important squares like c5 and e5, limiting some of our piece options while maintaining Black's defensive solidity."
     },
     {
       "san": "Nc3",

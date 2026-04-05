@@ -27,7 +27,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We play the Kasparov-Petrosian Variation, a subtle but important move that prevents Black's light-squared bishop from reaching b4, where it could pin our knight and create tactical complications. This seemingly quiet move also prepares potential queenside expansion with b2-b4 and ensures our knight on c3 won't be harassed by checks or pins. The move fits into a long-term plan of maintaining maximum flexibility while slowly improving our position. Many strong players favor this approach because it avoids the sharper lines that arise when Black can immediately develop the bishop to b4."
+      "annotation": "We play the Kasparov-Petrosian Variation, a subtle but important move that prevents Black's light-squared bishop from reaching b4, where it could pin our knight and create tactical complications. This seemingly quiet move also prepares potential queenside expansion with b2-b4 and ensures our pawn on c3 won't be harassed by checks or pins. The move fits into a long-term plan of maintaining maximum flexibility while slowly improving our position. Many strong players favor this approach because it avoids the sharper lines that arise when Black can immediately develop the bishop to b4."
     },
     {
       "san": "Bb7",

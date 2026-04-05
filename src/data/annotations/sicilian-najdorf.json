@@ -1916,7 +1916,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "In the Sicilian: Najdorf, the d5 Weakness After Premature ...e5 is a dangerous line you must be aware of. After ...e5, the d5 square becomes weak. If White can plant a knight on d5, it's a dominant outpost. Black must be ready to trade it off or use ...f5 to challenge the center. Don't let White occupy d5 unchallenged. Let's see why."
+          "annotation": "In the Sicilian: Najdorf, the d5 Weakness After Premature ...e5 is a dangerous line you must be aware of. After ...e5, the d5 square becomes weak. If White can plant a pawn on d5, it's a dominant outpost. Black must be ready to trade it off or use ...f5 to challenge the center. Don't let White occupy d5 unchallenged. Let's see why."
         },
         {
           "san": "c5",

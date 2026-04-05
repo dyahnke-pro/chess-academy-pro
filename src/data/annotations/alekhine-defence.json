@@ -255,7 +255,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays ...e6, a subtle but important move. It reinforces the knight on d5, prepares ...Be7 for development, and keeps the position solid. The e6 pawn also supports a potential ...f6 break later to undermine e5. Black is building a compact, resilient structure rather than seeking immediate action.",
+      "annotation": "Black plays ...e6, a subtle but important move. It reinforces the pawn on d5, prepares ...Be7 for development, and keeps the position solid. The e6 pawn also supports a potential ...f6 break later to undermine e5. Black is building a compact, resilient structure rather than seeking immediate action.",
       "pawnStructure": "Black creates a solid e6-d6 chain. The light-squared bishop will need to come back inside the chain, but it's already done its job on g4.",
       "plans": [
         "Develop ...Be7 and castle kingside",
@@ -519,7 +519,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White continues the pawn storm, supporting the e5 pawn and controlling more central territory. This move prevents ...Nc3+ and prepares the advance c4, which will attack the knight on d5. The pawn chain e5-d4 looks imposing but requires constant support and creates potential weaknesses on the kingside light squares.",
+          "annotation": "White continues the pawn storm, supporting the e5 pawn and controlling more central territory. This move prevents ...Nc3+ and prepares the advance c4, which will attack the pawn on d5. The pawn chain e5-d4 looks imposing but requires constant support and creates potential weaknesses on the kingside light squares.",
           "pawnStructure": "White builds a classical pawn center with pawns on e5 and d4, controlling key central squares but committing to an aggressive, space-consuming strategy.",
           "plans": [
             "Play c4 to attack the centralized knight",
@@ -565,7 +565,7 @@
         },
         {
           "san": "c4",
-          "annotation": "The third pawn in White's aggressive advance! This move attacks the centralized knight on d5, forcing it to move again while gaining more space. White is now committed to the Four Pawns Attack strategy - a double-edged approach that gives maximum space but creates potential weaknesses. The pawns look intimidating but become targets for Black's pieces.",
+          "annotation": "The third pawn in White's aggressive advance! This move attacks the centralized pawn on d5, forcing it to move again while gaining more space. White is now committed to the Four Pawns Attack strategy - a double-edged approach that gives maximum space but creates potential weaknesses. The pawns look intimidating but become targets for Black's pieces.",
           "pawnStructure": "White's pawn chain now stretches from c4 to e5, controlling enormous space but becoming increasingly difficult to defend as it extends further from White's pieces.",
           "plans": [
             "Force the knight away with the pawn attack",

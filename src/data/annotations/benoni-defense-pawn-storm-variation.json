@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black develops the pawn to d6, solidifying the position while preparing to complete kingside development with moves like g6 and Bg7. This move controls important central squares like e5 and c5, preventing us from immediately advancing our pawns to dominate the center. The d6 pawn also opens a retreat square for Black's knight on f6 if we attack it, while supporting the eventual development of Black's light-squared bishop. However, this move does create a slightly cramped position for Black, and we should look to exploit our space advantage by developing actively and maintaining pressure on Black's somewhat passive setup."
+      "annotation": "Black develops the pawn to d6, solidifying the position while preparing to complete kingside development with moves like g6 and Bg7. This move controls important central squares like e5 and c5, preventing us from immediately advancing our pawns to dominate the center. The d6 pawn also opens a retreat square for Black's pawn on f6 if we attack it, while supporting the eventual development of Black's light-squared bishop. However, this move does create a slightly cramped position for Black, and we should look to exploit our space advantage by developing actively and maintaining pressure on Black's somewhat passive setup."
     },
     {
       "san": "e4",

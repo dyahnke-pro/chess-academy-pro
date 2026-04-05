@@ -1557,7 +1557,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "In the Benko Gambit, the Nc6 Fork Trick is a tactical pattern you should know. After White pushes e5 too aggressively, Black can exploit the weakened center. The exchange sacrifice followed by Nc5 and Na4 creates devastating threats. The knight on c3 forks multiple targets and Black's queenside majority becomes a decisive advantage. Let's walk through how it works."
+          "annotation": "In the Benko Gambit, the Nc6 Fork Trick is a tactical pattern you should know. After White pushes e5 too aggressively, Black can exploit the weakened center. The exchange sacrifice followed by Nc5 and Na4 creates devastating threats. The pawn on c3 forks multiple targets and Black's queenside majority becomes a decisive advantage. Let's walk through how it works."
         },
         {
           "san": "Nf6",

@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich openings in chess. This move immediately stakes a claim on the central d5 square while keeping our options completely open regarding pawn structure and piece development. Unlike 1.e4 or 1.d4, the English allows us to transpose into many different openings depending on how our opponent responds, giving us excellent practical chances to steer the game into positions we're comfortable with. The move also prepares potential expansion with d2-d4 later, and supports a future knight on c3, making it a truly multi-purpose first move."
+      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich openings in chess. This move immediately stakes a claim on the central d5 square while keeping our options completely open regarding pawn structure and piece development. Unlike 1.e4 or 1.d4, the English allows us to transpose into many different openings depending on how our opponent responds, giving us excellent practical chances to steer the game into positions we're comfortable with. The move also prepares potential expansion with d2-d4 later, and supports a future pawn on c3, making it a truly multi-purpose first move."
     },
     {
       "san": "Nf6",

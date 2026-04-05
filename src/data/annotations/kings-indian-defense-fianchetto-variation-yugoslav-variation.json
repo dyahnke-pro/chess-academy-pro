@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black establishes the characteristic King's Indian pawn structure, supporting the center and preparing the thematic ...e5 break that defines this opening. This move creates a solid foundation for Black's pieces while preparing to challenge our central control with either ...e5 or ...c5 depending on circumstances. The d6 pawn also opens up the possibility of ...Nc6 and ...Bd7 development, while supporting the knight on f6 which might need to retreat if we advance in the center. This is a key structural move that commits Black to the typical King's Indian middlegame plans."
+      "annotation": "Black establishes the characteristic King's Indian pawn structure, supporting the center and preparing the thematic ...e5 break that defines this opening. This move creates a solid foundation for Black's pieces while preparing to challenge our central control with either ...e5 or ...c5 depending on circumstances. The d6 pawn also opens up the possibility of ...Nc6 and ...Bd7 development, while supporting the pawn on f6 which might need to retreat if we advance in the center. This is a key structural move that commits Black to the typical King's Indian middlegame plans."
     },
     {
       "san": "O-O",

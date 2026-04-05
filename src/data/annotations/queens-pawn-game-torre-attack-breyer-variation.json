@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move sets up a wide range of positional systems, including the Torre Attack we're heading toward, which is characterized by an early Bg5 pinning the knight on f6. The d4 opening typically leads to slower, more strategic games compared to 1.e4, giving us excellent control over the center and flexible development options. Our plan is to build a solid pawn structure and coordinate our pieces harmoniously before launching any tactical operations."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move sets up a wide range of positional systems, including the Torre Attack we're heading toward, which is characterized by an early Bg5 pinning the pawn on f6. The d4 opening typically leads to slower, more strategic games compared to 1.e4, giving us excellent control over the center and flexible development options. Our plan is to build a solid pawn structure and coordinate our pieces harmoniously before launching any tactical operations."
     },
     {
       "san": "Nf6",

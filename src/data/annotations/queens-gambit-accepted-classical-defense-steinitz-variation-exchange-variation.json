@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black chooses the solid Classical Defense approach, supporting their knight on f6 and preparing to develop the light-squared bishop, likely to e7. This move prevents any annoying knight checks on g5 and prepares to complete kingside development with ...Be7 and ...O-O. Our opponent is prioritizing piece coordination and king safety over trying to hold the extra pawn at all costs, which is actually quite sound. The pawn on e6 does slightly limit Black's dark-squared bishop, but it creates a solid foundation for their position and prepares potential ...c5 or ...b6 pawn advances to challenge our center."
+      "annotation": "Black chooses the solid Classical Defense approach, supporting their pawn on f6 and preparing to develop the light-squared bishop, likely to e7. This move prevents any annoying knight checks on g5 and prepares to complete kingside development with ...Be7 and ...O-O. Our opponent is prioritizing piece coordination and king safety over trying to hold the extra pawn at all costs, which is actually quite sound. The pawn on e6 does slightly limit Black's dark-squared bishop, but it creates a solid foundation for their position and prepares potential ...c5 or ...b6 pawn advances to challenge our center."
     },
     {
       "san": "Bxc4",

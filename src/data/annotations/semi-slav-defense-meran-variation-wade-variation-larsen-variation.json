@@ -67,7 +67,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We advance in the center, staking a claim to more space and preparing to restrict Black's knight on f6. This central advance opens lines for our pieces and creates potential tactical opportunities in the center. The e4 push also supports a potential f2-f3 and g2-g4 kingside pawn storm in some variations. By advancing our e-pawn, we're signaling our intention to seize the initiative and create pressure against Black's increasingly cramped position."
+      "annotation": "We advance in the center, staking a claim to more space and preparing to restrict Black's pawn on f6. This central advance opens lines for our pieces and creates potential tactical opportunities in the center. The e4 push also supports a potential f2-f3 and g2-g4 kingside pawn storm in some variations. By advancing our e-pawn, we're signaling our intention to seize the initiative and create pressure against Black's increasingly cramped position."
     },
     {
       "san": "b4",
@@ -79,11 +79,11 @@
     },
     {
       "san": "c5",
-      "annotation": "Our opponent strikes in the center with this thematic pawn advance, challenging our d4 pawn and creating central counterplay. This move opens lines for Black's pieces and creates potential tactics in the center. Black is also preparing to potentially establish a knight on e5 or create pressure along the c-file. The c5 advance is consistent with the active, fighting spirit of the Semi-Slav Defense, where Black seeks counterplay rather than passive positions."
+      "annotation": "Our opponent strikes in the center with this thematic pawn advance, challenging our d4 pawn and creating central counterplay. This move opens lines for Black's pieces and creates potential tactics in the center. Black is also preparing to potentially establish a pawn on e5 or create pressure along the c-file. The c5 advance is consistent with the active, fighting spirit of the Semi-Slav Defense, where Black seeks counterplay rather than passive positions."
     },
     {
       "san": "e5",
-      "annotation": "We advance our e-pawn further, creating space and restricting Black's knight on f6 to less active squares. This aggressive move opens attacking lines and prepares potential kingside operations. Our central pawn duo now controls important squares and limits Black's piece mobility. The e5 advance also opens the e4 square for potential piece occupation and creates tactical possibilities in the position. We're seizing the initiative and forcing our opponent to respond to our central threats."
+      "annotation": "We advance our e-pawn further, creating space and restricting Black's pawn on f6 to less active squares. This aggressive move opens attacking lines and prepares potential kingside operations. Our central pawn duo now controls important squares and limits Black's piece mobility. The e5 advance also opens the e4 square for potential piece occupation and creates tactical possibilities in the position. We're seizing the initiative and forcing our opponent to respond to our central threats."
     },
     {
       "san": "Nd5",

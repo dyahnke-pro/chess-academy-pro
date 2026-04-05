@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays the classical move, supporting their knight on f6 and preparing to develop the light-squared bishop to e7 or d6. This solid approach creates a strong pawn chain and prepares castling, though it does slightly restrict the dark-squared bishop which will need to find an active diagonal. Our opponent is following the main line theory of the Queen's Gambit Accepted, building a solid position rather than trying to hold onto the extra c4 pawn at all costs. The e6 move also prepares potential central breaks with ...c5 or ...b5, giving Black good long-term prospects."
+      "annotation": "Black plays the classical move, supporting their pawn on f6 and preparing to develop the light-squared bishop to e7 or d6. This solid approach creates a strong pawn chain and prepares castling, though it does slightly restrict the dark-squared bishop which will need to find an active diagonal. Our opponent is following the main line theory of the Queen's Gambit Accepted, building a solid position rather than trying to hold onto the extra c4 pawn at all costs. The e6 move also prepares potential central breaks with ...c5 or ...b5, giving Black good long-term prospects."
     },
     {
       "san": "Bxc4",

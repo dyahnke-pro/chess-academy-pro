@@ -75,7 +75,7 @@
     },
     {
       "san": "h4",
-      "annotation": "We launch a direct kingside attack with this aggressive pawn advance, beginning the famous 'h4-h5' attacking scheme that's characteristic of many Queen's Gambit positions. This move serves multiple purposes: it prepares h5 to drive away Black's knight from f6 (removing a key defender of the king), creates attacking chances against Black's kingside, and potentially opens the h-file for our rook. The move is particularly strong here because Black's knight on d5 means fewer pieces are defending the kingside, making our attack more dangerous. This is the Janowski Variation - a sharp, aggressive approach that transforms the position from positional maneuvering into concrete tactical warfare where both sides must calculate precisely."
+      "annotation": "We launch a direct kingside attack with this aggressive pawn advance, beginning the famous 'h4-h5' attacking scheme that's characteristic of many Queen's Gambit positions. This move serves multiple purposes: it prepares h5 to drive away Black's knight from f6 (removing a key defender of the king), creates attacking chances against Black's kingside, and potentially opens the h-file for our rook. The move is particularly strong here because Black's pawn on d5 means fewer pieces are defending the kingside, making our attack more dangerous. This is the Janowski Variation - a sharp, aggressive approach that transforms the position from positional maneuvering into concrete tactical warfare where both sides must calculate precisely."
     }
   ]
 }

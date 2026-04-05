@@ -11,11 +11,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We're expanding our control over the center with the English Attack formation, specifically targeting the crucial d5 and e5 squares while preparing to support our d4 pawn. This move is the signature of the Queen's Gambit complex and immediately signals our intention to fight for space advantage in the center. The c4 pawn also opens the c-file for our rook eventually and gives our knight on b1 the excellent c3 square. Most importantly, this move invites Black into the Nimzo-Indian Defense if they choose 2...e6, as it prepares Nc3 which will allow the characteristic ...Bb4 pin."
+      "annotation": "We're expanding our control over the center with the English Attack formation, specifically targeting the crucial d5 and e5 squares while preparing to support our d4 pawn. This move is the signature of the Queen's Gambit complex and immediately signals our intention to fight for space advantage in the center. The c4 pawn also opens the c-file for our rook eventually and gives our pawn on b1 the excellent c3 square. Most importantly, this move invites Black into the Nimzo-Indian Defense if they choose 2...e6, as it prepares Nc3 which will allow the characteristic ...Bb4 pin."
     },
     {
       "san": "e6",
-      "annotation": "Black commits to the Nimzo-Indian Defense setup by preparing ...Bb4, which will pin our knight once we develop it to c3. This pawn move also supports the crucial d5 square and opens a diagonal for the light-squared bishop, though it does somewhat restrict the dark-squared bishop's development. The e6 move is more restrained than the King's Indian's ...g6, leading to positions where Black seeks counterplay through central breaks like ...c5 and ...d5 rather than kingside attacks. This solid approach gives Black excellent piece coordination and the famous Nimzo-Indian bishop pair potential after capturing on c3."
+      "annotation": "Black commits to the Nimzo-Indian Defense setup by preparing ...Bb4, which will pin our pawn once we develop it to c3. This pawn move also supports the crucial d5 square and opens a diagonal for the light-squared bishop, though it does somewhat restrict the dark-squared bishop's development. The e6 move is more restrained than the King's Indian's ...g6, leading to positions where Black seeks counterplay through central breaks like ...c5 and ...d5 rather than kingside attacks. This solid approach gives Black excellent piece coordination and the famous Nimzo-Indian bishop pair potential after capturing on c3."
     },
     {
       "san": "Nc3",

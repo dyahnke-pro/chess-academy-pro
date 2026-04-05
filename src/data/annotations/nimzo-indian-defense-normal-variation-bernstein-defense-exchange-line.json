@@ -47,7 +47,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black opens a second front in the center, attacking our d4 pawn and creating immediate tactical complications in the position. This move is very thematic in the Nimzo-Indian, as Black tries to undermine our pawn center before we can consolidate our advantage with moves like castling and Bb2. The c5 advance also opens the c-file for Black's rook and prepares to potentially establish a knight on the excellent d5 square after capturing on d4. By playing this sharp move, Black is accepting some risk (the c5 pawn might become weak) in exchange for immediate counterplay and the chance to destroy our central pawn duo before it becomes too powerful."
+      "annotation": "Black opens a second front in the center, attacking our d4 pawn and creating immediate tactical complications in the position. This move is very thematic in the Nimzo-Indian, as Black tries to undermine our pawn center before we can consolidate our advantage with moves like castling and Bb2. The c5 advance also opens the c-file for Black's rook and prepares to potentially establish a pawn on the excellent d5 square after capturing on d4. By playing this sharp move, Black is accepting some risk (the c5 pawn might become weak) in exchange for immediate counterplay and the chance to destroy our central pawn duo before it becomes too powerful."
     },
     {
       "san": "O-O",
@@ -59,7 +59,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We're finally addressing the annoying bishop on b4 by giving it an ultimatum - either retreat to a less active square or exchange itself for our knight on c3. This move gains tempo by attacking the bishop and forces Black to make a concrete decision about the piece, rather than keeping it on the strong b4 square indefinitely. While a3 might seem like a slow move, it's actually quite forcing because the bishop has limited good retreat squares, and most of them are less active than the current b4 post. This pawn advance also prepares potential queenside expansion with b4 later, and it eliminates any tactical tricks that Black might have based on the bishop remaining on b4."
+      "annotation": "We're finally addressing the annoying bishop on b4 by giving it an ultimatum - either retreat to a less active square or exchange itself for our pawn on c3. This move gains tempo by attacking the bishop and forces Black to make a concrete decision about the piece, rather than keeping it on the strong b4 square indefinitely. While a3 might seem like a slow move, it's actually quite forcing because the bishop has limited good retreat squares, and most of them are less active than the current b4 post. This pawn advance also prepares potential queenside expansion with b4 later, and it eliminates any tactical tricks that Black might have based on the bishop remaining on b4."
     },
     {
       "san": "Bxc3",

@@ -35,7 +35,7 @@
     },
     {
       "san": "h3",
-      "annotation": "We attack the awkwardly placed knight on g4, forcing it to make another move and lose more time in the opening. This simple pawn advance serves multiple purposes - it kicks the knight away from our kingside while also creating a flight square for our king on h2 if needed. The move doesn't directly improve our development, but it forces Black's knight to retreat to an even less active square. Sometimes in chess, making your opponent's pieces worse is just as valuable as improving your own, and this move exemplifies that principle perfectly."
+      "annotation": "We attack the awkwardly placed pawn on g4, forcing it to make another move and lose more time in the opening. This simple pawn advance serves multiple purposes - it kicks the knight away from our kingside while also creating a flight square for our king on h2 if needed. The move doesn't directly improve our development, but it forces Black's knight to retreat to an even less active square. Sometimes in chess, making your opponent's pieces worse is just as valuable as improving your own, and this move exemplifies that principle perfectly."
     },
     {
       "san": "Nh6",

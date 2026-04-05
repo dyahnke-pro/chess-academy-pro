@@ -27,11 +27,11 @@
     },
     {
       "san": "e4",
-      "annotation": "We're establishing the classical pawn center with our pawns on d4 and e4, creating maximum central control and space advantage. This move supports our knight on c3, controls the crucial f5 and d5 squares, and prepares for rapid piece development. The broad pawn center gives us more space to maneuver our pieces and restricts Black's central options significantly. However, we must be prepared for Black's typical counterplay with moves like ...d6, ...c5, or ...e5, as Black will try to challenge our central dominance and create pawn breaks for counterplay."
+      "annotation": "We're establishing the classical pawn center with our pawns on d4 and e4, creating maximum central control and space advantage. This move supports our pawn on c3, controls the crucial f5 and d5 squares, and prepares for rapid piece development. The broad pawn center gives us more space to maneuver our pieces and restricts Black's central options significantly. However, we must be prepared for Black's typical counterplay with moves like ...d6, ...c5, or ...e5, as Black will try to challenge our central dominance and create pawn breaks for counterplay."
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the kingside position and prepares the typical King's Indian pawn break ...e5, while also supporting the knight on f6. This move creates a solid foundation for Black's pieces and opens up the possibility of ...e5 to challenge our central pawn duo. The d6 pawn also supports potential expansion with ...c5, giving Black multiple ways to create counterplay against our space advantage. By playing ...d6, Black is committing to the classic King's Indian structure where the battle will revolve around our central space versus Black's piece activity and pawn breaks."
+      "annotation": "Black solidifies the kingside position and prepares the typical King's Indian pawn break ...e5, while also supporting the pawn on f6. This move creates a solid foundation for Black's pieces and opens up the possibility of ...e5 to challenge our central pawn duo. The d6 pawn also supports potential expansion with ...c5, giving Black multiple ways to create counterplay against our space advantage. By playing ...d6, Black is committing to the classic King's Indian structure where the battle will revolve around our central space versus Black's piece activity and pawn breaks."
     },
     {
       "san": "f3",

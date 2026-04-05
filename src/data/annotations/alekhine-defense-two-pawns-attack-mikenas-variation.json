@@ -27,7 +27,7 @@
     },
     {
       "san": "c5",
-      "annotation": "We're pushing even further with our pawn storm, attacking the knight once more and gaining maximum space on the queenside. This advance creates a powerful pawn duo on c5 and e5 that severely restricts Black's pieces and controls key central squares. The c5 pawn also supports potential expansion with moves like b4 or a4, and it prevents Black from easily playing d6 to challenge our center. However, we're now quite committed to this pawn structure, and our pieces are lagging in development - we'll need to bring out our bishops and knights soon to support these advanced pawns."
+      "annotation": "We're pushing even further with our pawn storm, attacking the pawn once more and gaining maximum space on the queenside. This advance creates a powerful pawn duo on c5 and e5 that severely restricts Black's pieces and controls key central squares. The c5 pawn also supports potential expansion with moves like b4 or a4, and it prevents Black from easily playing d6 to challenge our center. However, we're now quite committed to this pawn structure, and our pieces are lagging in development - we'll need to bring out our bishops and knights soon to support these advanced pawns."
     },
     {
       "san": "Nd5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays this solid pawn move to support the centralized knight on d5 and prepare for further development. The e6 pawn also opens a diagonal for Black's light-squared bishop, though it does block in the dark-squared bishop temporarily. This move is part of Black's plan to consolidate the position and prepare counterplay - the pawn supports key squares and makes it harder for us to maintain our advanced pawns. Black is also preparing potential pawn breaks like d6, which combined with the knight on d5, could start to challenge our impressive but potentially overextended pawn center."
+      "annotation": "Black plays this solid pawn move to support the centralized pawn on d5 and prepare for further development. The e6 pawn also opens a diagonal for Black's light-squared bishop, though it does block in the dark-squared bishop temporarily. This move is part of Black's plan to consolidate the position and prepare counterplay - the pawn supports key squares and makes it harder for us to maintain our advanced pawns. Black is also preparing potential pawn breaks like d6, which combined with the pawn on d5, could start to challenge our impressive but potentially overextended pawn center."
     },
     {
       "san": "Nc3",

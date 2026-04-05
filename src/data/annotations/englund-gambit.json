@@ -675,7 +675,7 @@
     },
     {
       "san": "e3",
-      "annotation": "White plays e3, blocking the queen's access to e2 and preparing to develop the bishop. This is the most solid defensive move — it creates a barrier and prepares Bd3 and castling. But White is still struggling with the trapped knight on a8.",
+      "annotation": "White plays e3, blocking the queen's access to e2 and preparing to develop the bishop. This is the most solid defensive move — it creates a barrier and prepares Bd3 and castling. But White is still struggling with the trapped pawn on a8.",
       "plans": [
         "Block the e-file threats",
         "Develop Bd3 and castle kingside",
@@ -1431,7 +1431,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "The Englund Gambit: Zilbermints with Nge7 is an important variation of the Englund Gambit. The Zilbermints Variation with Nge7-Ng6 recovers the pawn more slowly but with better piece placement. The knight on g6 targets e5 and Black can recapture without weakening the pawn structure. This is a more positional approach that avoids the worst tactical pitfalls. Let's walk through the key ideas."
+          "annotation": "The Englund Gambit: Zilbermints with Nge7 is an important variation of the Englund Gambit. The Zilbermints Variation with Nge7-Ng6 recovers the pawn more slowly but with better piece placement. The pawn on g6 targets e5 and Black can recapture without weakening the pawn structure. This is a more positional approach that avoids the worst tactical pitfalls. Let's walk through the key ideas."
         },
         {
           "san": "e5",
@@ -2907,7 +2907,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "In the Englund Gambit, the Bf4 Refutation: White Holds Easily is a dangerous line you must be aware of. When White plays Bd2 on the second try and then develops with Nc3 and Nd5, the position becomes very comfortable for White. The knight on d5 combined with Bc3 creates a powerful center. Black's queen is overworked and the position is clearly better for White. Let's see why."
+          "annotation": "In the Englund Gambit, the Bf4 Refutation: White Holds Easily is a dangerous line you must be aware of. When White plays Bd2 on the second try and then develops with Nc3 and Nd5, the position becomes very comfortable for White. The pawn on d5 combined with Bc3 creates a powerful center. Black's queen is overworked and the position is clearly better for White. Let's see why."
         },
         {
           "san": "e5",

@@ -665,7 +665,7 @@
         },
         {
           "san": "exd4",
-          "annotation": "Black accepts the pawn trade, opening the center and removing the tension. This capture leads to open lines and active piece play for both sides. By taking on d4, Black eliminates White's central pawn duo but also allows White's pieces to develop with tempo, as the knight on f3 will likely recapture.",
+          "annotation": "Black accepts the pawn trade, opening the center and removing the tension. This capture leads to open lines and active piece play for both sides. By taking on d4, Black eliminates White's central pawn duo but also allows White's pieces to develop with tempo, as the pawn on f3 will likely recapture.",
           "pawnStructure": "The center opens up with the pawn exchange, leaving only White's e4 pawn in the center.",
           "plans": [
             "Develop pieces quickly to contest the center",
@@ -806,7 +806,7 @@
         },
         {
           "san": "c3",
-          "annotation": "White solidifies the knight on d4 with pawn support while also controlling the important b4 and d4 squares. This move prevents Black from easily attacking the central knight and creates a solid foundation for White's central control. The c3 pawn also opens the c2 square for the queen if needed and supports a potential d4 advance later.",
+          "annotation": "White solidifies the pawn on d4 with pawn support while also controlling the important b4 and d4 squares. This move prevents Black from easily attacking the central knight and creates a solid foundation for White's central control. The c3 pawn also opens the c2 square for the queen if needed and supports a potential d4 advance later.",
           "pawnStructure": "White creates a solid pawn chain supporting the central knight on d4.",
           "plans": [
             "Complete kingside development with Bc4",

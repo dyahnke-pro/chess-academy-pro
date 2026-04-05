@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent plays the characteristic King's Indian pawn move, solidifying the center while preparing the crucial e7-e5 advance. This pawn supports the knight on f6 and creates a solid foundation for Black's position, though it does restrict the dark-squared bishop somewhat. The move also prepares various central breaks and gives Black flexibility in choosing when and how to challenge our central control. We should recognize that d6 is often a precursor to e7-e5, which will create the typical King's Indian pawn tension and lead to sharp middlegame positions."
+      "annotation": "Our opponent plays the characteristic King's Indian pawn move, solidifying the center while preparing the crucial e7-e5 advance. This pawn supports the pawn on f6 and creates a solid foundation for Black's position, though it does restrict the dark-squared bishop somewhat. The move also prepares various central breaks and gives Black flexibility in choosing when and how to challenge our central control. We should recognize that d6 is often a precursor to e7-e5, which will create the typical King's Indian pawn tension and lead to sharp middlegame positions."
     },
     {
       "san": "O-O",
@@ -59,7 +59,7 @@
     },
     {
       "san": "h3",
-      "annotation": "We're playing a useful prophylactic move that prevents Black pieces from occupying the g4 square, particularly stopping potential Bg4 pins against our knight on f3. This move also gives our king a bit more breathing room and prepares potential kingside expansion if the position calls for it. While it might seem slow, h3 is actually quite practical - it eliminates Black's tactical possibilities on the kingside and allows us to focus on central and queenside operations without worrying about annoying pins. The move also prepares potential g3-g4 advances in some lines, giving us more strategic flexibility."
+      "annotation": "We're playing a useful prophylactic move that prevents Black pieces from occupying the g4 square, particularly stopping potential Bg4 pins against our pawn on f3. This move also gives our king a bit more breathing room and prepares potential kingside expansion if the position calls for it. While it might seem slow, h3 is actually quite practical - it eliminates Black's tactical possibilities on the kingside and allows us to focus on central and queenside operations without worrying about annoying pins. The move also prepares potential g3-g4 advances in some lines, giving us more strategic flexibility."
     },
     {
       "san": "b5",

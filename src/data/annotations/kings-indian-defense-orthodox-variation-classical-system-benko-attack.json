@@ -27,7 +27,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We're establishing our ideal pawn center, creating a massive pawn duo on d4 and e4 that dominates the center of the board. This advance gives us significant space advantage and restricts Black's piece mobility, particularly limiting the knight on f6. Our pawn center also supports kingside attacking chances and makes it difficult for Black to achieve comfortable piece coordination. However, we must be aware that Black's entire King's Indian strategy revolves around undermining this impressive but potentially vulnerable pawn center."
+      "annotation": "We're establishing our ideal pawn center, creating a massive pawn duo on d4 and e4 that dominates the center of the board. This advance gives us significant space advantage and restricts Black's piece mobility, particularly limiting the pawn on f6. Our pawn center also supports kingside attacking chances and makes it difficult for Black to achieve comfortable piece coordination. However, we must be aware that Black's entire King's Indian strategy revolves around undermining this impressive but potentially vulnerable pawn center."
     },
     {
       "san": "d6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "d5",
-      "annotation": "We're accepting the challenge by advancing our pawn and creating a space-gaining pawn wedge in the center of the board. This advance gives us a significant space advantage and cramps Black's position, particularly limiting the mobility of the knight on f6. Our pawn on d5 also serves as a launching pad for potential queenside expansion with c4-c5 or kingside attacks with f2-f4. However, we must be careful because this pawn can become a target, and Black's pieces will focus on creating pressure against our advanced position."
+      "annotation": "We're accepting the challenge by advancing our pawn and creating a space-gaining pawn wedge in the center of the board. This advance gives us a significant space advantage and cramps Black's position, particularly limiting the mobility of the pawn on f6. Our pawn on d5 also serves as a launching pad for potential queenside expansion with c4-c5 or kingside attacks with f2-f4. However, we must be careful because this pawn can become a target, and Black's pieces will focus on creating pressure against our advanced position."
     },
     {
       "san": "Nc6",

@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, controlling the d5 square and preparing to build a broad pawn center with e4. This move also opens the c-file for potential future use and gives our queen more scope along the long diagonal. The c4 pawn supports a potential d5 advance later and prevents Black from easily establishing a knight on d5. This flexible approach allows us to transpose into various openings including the Queen's Gambit or King's Indian structures."
+      "annotation": "We're playing the English Opening move order, controlling the d5 square and preparing to build a broad pawn center with e4. This move also opens the c-file for potential future use and gives our queen more scope along the long diagonal. The c4 pawn supports a potential d5 advance later and prevents Black from easily establishing a pawn on d5. This flexible approach allows us to transpose into various openings including the Queen's Gambit or King's Indian structures."
     },
     {
       "san": "g6",

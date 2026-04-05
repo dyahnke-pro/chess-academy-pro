@@ -673,7 +673,7 @@
     },
     {
       "san": "exd5",
-      "annotation": "Black captures the knight, the most principled response. Leaving the knight on d5 would be intolerable. But taking opens the e-file and gives White's bishop on b3 a clear diagonal to the king. The position now transforms — White gets open lines and piece activity as compensation for the sacrificed pawn.",
+      "annotation": "Black captures the knight, the most principled response. Leaving the pawn on d5 would be intolerable. But taking opens the e-file and gives White's bishop on b3 a clear diagonal to the king. The position now transforms — White gets open lines and piece activity as compensation for the sacrificed pawn.",
       "plans": [
         "Eliminate the powerful knight",
         "Accept the structural consequences",
@@ -1029,7 +1029,7 @@
     },
     {
       "san": "h6",
-      "annotation": "Black kicks the knight with h6. This is a committal move — it weakens the g6 pawn and the dark squares, but the knight on g5 was too threatening to leave there. Black must make this concession to avoid immediate tactical problems.",
+      "annotation": "Black kicks the knight with h6. This is a committal move — it weakens the g6 pawn and the dark squares, but the pawn on g5 was too threatening to leave there. Black must make this concession to avoid immediate tactical problems.",
       "pawnStructure": "The h6 pawn weakens the g6 pawn (now lacking h7 support) and the dark squares around the king. But it was necessary to challenge the Ng5.",
       "plans": [
         "Kick the Ng5 away from the threatening square",

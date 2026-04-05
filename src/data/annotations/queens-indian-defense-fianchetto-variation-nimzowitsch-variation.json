@@ -15,7 +15,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black chooses the solid Queen's Indian setup, supporting the center with the e-pawn while keeping options open for various defensive systems. This move prepares ...d5 at the right moment and supports the knight on f6, while also opening a diagonal for the light-squared bishop to potentially go to d6 or c5. The pawn on e6 is characteristic of many hypermodern defenses where Black allows White to occupy the center initially, planning to challenge it later with pieces and pawn breaks. Black is avoiding the more committal ...d5 or ...g6, instead maintaining maximum flexibility in the pawn structure while completing essential development."
+      "annotation": "Black chooses the solid Queen's Indian setup, supporting the center with the e-pawn while keeping options open for various defensive systems. This move prepares ...d5 at the right moment and supports the pawn on f6, while also opening a diagonal for the light-squared bishop to potentially go to d6 or c5. The pawn on e6 is characteristic of many hypermodern defenses where Black allows White to occupy the center initially, planning to challenge it later with pieces and pawn breaks. Black is avoiding the more committal ...d5 or ...g6, instead maintaining maximum flexibility in the pawn structure while completing essential development."
     },
     {
       "san": "Nf3",

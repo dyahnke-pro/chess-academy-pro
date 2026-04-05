@@ -957,7 +957,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the knight to its natural square, supporting the center and preparing kingside castling. This move also controls important squares like e5 and g5, while keeping the central tension intact. The knight on f3 coordinates well with the queen on c3 and maintains White's central influence. By developing before committing to pawn captures, White maintains maximum flexibility.",
+          "annotation": "White develops the knight to its natural square, supporting the center and preparing kingside castling. This move also controls important squares like e5 and g5, while keeping the central tension intact. The knight on f3 coordinates well with the queen on c3 and maintains White's central influence. By developing before committing to knight captures, White maintains maximum flexibility.",
           "plans": [
             "Complete kingside development with Be2 and castling",
             "Maintain central tension"

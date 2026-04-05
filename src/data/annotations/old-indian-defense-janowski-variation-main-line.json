@@ -11,11 +11,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, grabbing more central space and preparing to support our d4 pawn. This move controls the important d5 and b5 squares, preventing Black from easily establishing a knight on d5 or advancing ...b5. The c4 advance is part of our plan to build a broad pawn center and gain a space advantage, while also preparing Nc3 to further support the center. This leads us toward typical Queen's Gambit or English Opening structures where we'll have excellent piece activity and central control."
+      "annotation": "We're playing the English Opening move order, grabbing more central space and preparing to support our d4 pawn. This move controls the important d5 and b5 squares, preventing Black from easily establishing a pawn on d5 or advancing ...b5. The c4 advance is part of our plan to build a broad pawn center and gain a space advantage, while also preparing Nc3 to further support the center. This leads us toward typical Queen's Gambit or English Opening structures where we'll have excellent piece activity and central control."
     },
     {
       "san": "d6",
-      "annotation": "Black chooses the Old Indian Defense setup, supporting the knight on f6 and preparing to develop the light-squared bishop to f5 or g4. This solid but somewhat passive move creates a flexible pawn structure that can transpose into various systems like the Pirc, King's Indian, or Philidor structures depending on how the game develops. Our opponent is prioritizing piece development and king safety over immediate central confrontation, which can lead to interesting middlegame positions where Black plays for counterplay rather than equality. The d6 move also prepares ...e5 at the right moment to challenge our central dominance."
+      "annotation": "Black chooses the Old Indian Defense setup, supporting the pawn on f6 and preparing to develop the light-squared bishop to f5 or g4. This solid but somewhat passive move creates a flexible pawn structure that can transpose into various systems like the Pirc, King's Indian, or Philidor structures depending on how the game develops. Our opponent is prioritizing piece development and king safety over immediate central confrontation, which can lead to interesting middlegame positions where Black plays for counterplay rather than equality. The d6 move also prepares ...e5 at the right moment to challenge our central dominance."
     },
     {
       "san": "Nc3",

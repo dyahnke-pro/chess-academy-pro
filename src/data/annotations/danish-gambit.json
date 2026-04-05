@@ -843,7 +843,7 @@
     },
     {
       "san": "axb3",
-      "annotation": "White recaptures with the a-pawn, opening the a-file for the rook. The a-file could become useful later, but the immediate threats are on the kingside. White still has a knight on g5 attacking f7 and the queen on g4 eyeing the whole kingside. The dark-squared bishop on b2 continues to dominate.",
+      "annotation": "White recaptures with the a-pawn, opening the a-file for the rook. The a-file could become useful later, but the immediate threats are on the kingside. White still has a pawn on g5 attacking f7 and the queen on g4 eyeing the whole kingside. The dark-squared bishop on b2 continues to dominate.",
       "pawnStructure": "White has the b3 pawn which supports c4 ideas later. The open a-file gives the rook a potential entry point. But the main battle is on the kingside.",
       "plans": [
         "Maintain the knight on g5 and the pressure on f7",
@@ -2603,7 +2603,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "In the Danish Gambit, the Bxf7+ Sacrifice Pattern is a tactical pattern you should know. The Bxf7+ sacrifice followed by Ng5+ tears the Black king out of safety. After Qxh5+ and Qh4, White's queen dominates the board while Black's king is stranded. The knight on e5 acts as a permanent thorn. This combination wins more games in the Danish than any other pattern. Let's walk through how it works."
+          "annotation": "In the Danish Gambit, the Bxf7+ Sacrifice Pattern is a tactical pattern you should know. The Bxf7+ sacrifice followed by Ng5+ tears the Black king out of safety. After Qxh5+ and Qh4, White's queen dominates the board while Black's king is stranded. The pawn on e5 acts as a permanent thorn. This combination wins more games in the Danish than any other pattern. Let's walk through how it works."
         },
         {
           "san": "e5",

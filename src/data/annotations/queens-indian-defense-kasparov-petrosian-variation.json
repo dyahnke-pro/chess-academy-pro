@@ -15,7 +15,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black chooses a solid, classical approach by supporting the important d5 square and preparing to develop the dark-squared bishop to e7 or d6. This move signals that our opponent is heading for either a Queen's Gambit Declined structure or one of the Indian Defense systems like the Nimzo-Indian or Queen's Indian. The pawn on e6 also opens a retreat square for the knight on f6 if we pressure it later with moves like Nh4 or e4-e5. Black's setup is flexible but slightly passive, giving us good chances to maintain our central space advantage."
+      "annotation": "Black chooses a solid, classical approach by supporting the important d5 square and preparing to develop the dark-squared bishop to e7 or d6. This move signals that our opponent is heading for either a Queen's Gambit Declined structure or one of the Indian Defense systems like the Nimzo-Indian or Queen's Indian. The pawn on e6 also opens a retreat square for the pawn on f6 if we pressure it later with moves like Nh4 or e4-e5. Black's setup is flexible but slightly passive, giving us good chances to maintain our central space advantage."
     },
     {
       "san": "Nf3",

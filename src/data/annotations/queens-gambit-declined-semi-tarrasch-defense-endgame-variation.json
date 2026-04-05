@@ -39,7 +39,7 @@
     },
     {
       "san": "cxd4",
-      "annotation": "Black recaptures our d4 pawn with their c-pawn, maintaining material equality while opening up the center dramatically. This capture creates an immediate tactical situation since our knight on c3 is now attacked by the new pawn on d4. Our opponent is following the natural recapture and likely preparing to continue with ...exd5 next, which would create a symmetrical pawn structure. This move leads to sharp, tactical play where both sides need to be very careful about piece coordination and king safety."
+      "annotation": "Black recaptures our d4 pawn with their c-pawn, maintaining material equality while opening up the center dramatically. This capture creates an immediate tactical situation since our pawn on c3 is now attacked by the new pawn on d4. Our opponent is following the natural recapture and likely preparing to continue with ...exd5 next, which would create a symmetrical pawn structure. This move leads to sharp, tactical play where both sides need to be very careful about piece coordination and king safety."
     },
     {
       "san": "Qxd4",

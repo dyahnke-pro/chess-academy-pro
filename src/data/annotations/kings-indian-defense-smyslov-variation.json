@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black establishes a solid pawn base while preparing the critical ...e5 pawn break that defines King's Indian strategy. This move supports the knight on f6 and prepares to challenge our central dominance, though it does concede space in the short term. The d6 pawn also opens the c8-h3 diagonal for Black's light-squared bishop, which will often go to e6 or f5 to support the kingside attack. While this looks passive, it's actually the necessary foundation for Black's counterattacking plans - the ...e5 break will come soon and transform the entire character of the position."
+      "annotation": "Black establishes a solid pawn base while preparing the critical ...e5 pawn break that defines King's Indian strategy. This move supports the pawn on f6 and prepares to challenge our central dominance, though it does concede space in the short term. The d6 pawn also opens the c8-h3 diagonal for Black's light-squared bishop, which will often go to e6 or f5 to support the kingside attack. While this looks passive, it's actually the necessary foundation for Black's counterattacking plans - the ...e5 break will come soon and transform the entire character of the position."
     },
     {
       "san": "Bg5",

@@ -7,7 +7,7 @@
     },
     {
       "san": "f5",
-      "annotation": "Our opponent plays the characteristic move of the Dutch Defense, immediately signaling their intention to control the e4 square and prepare a kingside attack. This aggressive pawn move has both strengths and weaknesses - it gives Black good control over light squares around our king, but it also weakens their own king position and the e6 square in particular. Black is hoping to build a solid pawn structure with pawns on d6, e6, and f5, then launch a kingside offensive with pieces like the knight on f6 and bishop on d6. We need to be ready to exploit the weakening of Black's kingside before they can organize their typical Dutch attacking formation."
+      "annotation": "Our opponent plays the characteristic move of the Dutch Defense, immediately signaling their intention to control the e4 square and prepare a kingside attack. This aggressive pawn move has both strengths and weaknesses - it gives Black good control over light squares around our king, but it also weakens their own king position and the e6 square in particular. Black is hoping to build a solid pawn structure with pawns on d6, e6, and f5, then launch a kingside offensive with pieces like the pawn on f6 and bishop on d6. We need to be ready to exploit the weakening of Black's kingside before they can organize their typical Dutch attacking formation."
     },
     {
       "san": "Qd3",

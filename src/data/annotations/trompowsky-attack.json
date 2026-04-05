@@ -156,7 +156,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black establishes a strong central pawn on d5, claiming space and providing a solid foundation. The knight on e4 is now well-supported by the d5 pawn. This is a classic response — Black aims for a sturdy center and will develop the dark-squared bishop next.",
+      "annotation": "Black establishes a strong central pawn on d5, claiming space and providing a solid foundation. The pawn on e4 is now well-supported by the d5 pawn. This is a classic response — Black aims for a sturdy center and will develop the dark-squared bishop next.",
       "pawnStructure": "Black's d5 pawn forms a solid central anchor. Combined with a future ...c5 or ...e6, Black will have a reliable pawn structure.",
       "plans": [
         "Anchor the center with ...d5 and develop naturally",

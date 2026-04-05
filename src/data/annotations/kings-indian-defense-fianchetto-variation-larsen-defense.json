@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black establishes a solid pawn chain and prepares the thematic ...e5 central break that's at the heart of King's Indian strategy. This move supports the knight on f6, controls the e5 square temporarily, and creates a solid foundation for Black's kingside development. While d6 might look passive, it's actually setting up one of the most dynamic pawn breaks in chess - once Black plays ...e5, the position can explode into sharp tactical complications. The d6 move also opens up the c8-h3 diagonal for Black's light-squared bishop, though that piece will typically need to find an active role via moves like ...Bd7 or sometimes ...Bf5 in certain variations."
+      "annotation": "Black establishes a solid pawn chain and prepares the thematic ...e5 central break that's at the heart of King's Indian strategy. This move supports the pawn on f6, controls the e5 square temporarily, and creates a solid foundation for Black's kingside development. While d6 might look passive, it's actually setting up one of the most dynamic pawn breaks in chess - once Black plays ...e5, the position can explode into sharp tactical complications. The d6 move also opens up the c8-h3 diagonal for Black's light-squared bishop, though that piece will typically need to find an active role via moves like ...Bd7 or sometimes ...Bf5 in certain variations."
     },
     {
       "san": "g3",

@@ -15,7 +15,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black chooses a solid, flexible pawn structure that supports the center without committing to any particular pawn break immediately. This move prepares ...e5, which would challenge our central pawn duo, while also opening a retreat square for the knight on f6 if it gets attacked. The d6 pawn also supports a potential ...c5 break later in the game, giving Black multiple ways to challenge our center. This setup is characteristic of the King's Indian Defense, where Black accepts a slightly cramped position in the opening in exchange for dynamic counterplay opportunities in the middlegame."
+      "annotation": "Black chooses a solid, flexible pawn structure that supports the center without committing to any particular pawn break immediately. This move prepares ...e5, which would challenge our central pawn duo, while also opening a retreat square for the pawn on f6 if it gets attacked. The d6 pawn also supports a potential ...c5 break later in the game, giving Black multiple ways to challenge our center. This setup is characteristic of the King's Indian Defense, where Black accepts a slightly cramped position in the opening in exchange for dynamic counterplay opportunities in the middlegame."
     },
     {
       "san": "Nc3",

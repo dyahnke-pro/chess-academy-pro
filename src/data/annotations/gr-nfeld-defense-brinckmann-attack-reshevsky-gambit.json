@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to fight for control of the center. This is one of the most principled responses to 1.d4, as it puts immediate pressure on our central stake and prepares various defensive setups like the King's Indian or Grünfeld Defense. The knight on f6 also supports a potential ...e6 or ...g6 pawn move, giving Black excellent flexibility in their setup. We need to decide how to support our d4 pawn - whether with pieces or by advancing c2-c4 to create a pawn center."
+      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to fight for control of the center. This is one of the most principled responses to 1.d4, as it puts immediate pressure on our central stake and prepares various defensive setups like the King's Indian or Grünfeld Defense. The knight on f6 also supports a potential ...e6 or ...g6 knight move, giving Black excellent flexibility in their setup. We need to decide how to support our d4 pawn - whether with pieces or by advancing c2-c4 to create a pawn center."
     },
     {
       "san": "c4",

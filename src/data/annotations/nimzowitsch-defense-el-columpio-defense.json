@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces rapidly. This move controls the crucial d5 and f5 squares, preventing Black from establishing a knight on these strong central outposts. The e4 pawn also opens diagonals for our bishop and queen, setting the stage for quick development. This is one of the most direct and aggressive first moves, immediately putting pressure on Black to respond to our central presence."
+      "annotation": "We're opening with the king's pawn, staking our claim to the center and preparing to develop our pieces rapidly. This move controls the crucial d5 and f5 squares, preventing Black from establishing a pawn on these strong central outposts. The e4 pawn also opens diagonals for our bishop and queen, setting the stage for quick development. This is one of the most direct and aggressive first moves, immediately putting pressure on Black to respond to our central presence."
     },
     {
       "san": "Nc6",

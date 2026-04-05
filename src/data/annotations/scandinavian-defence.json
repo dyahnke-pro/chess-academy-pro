@@ -153,7 +153,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White builds the ideal center with d4. Now White has the classical d4-e4 (well, e4 was traded) d4 pawn center and a knight on c3. The center is strong and White has a clear space advantage. This is textbook — develop with tempo, build the center, and prepare to attack.",
+      "annotation": "White builds the ideal center with d4. Now White has the classical d4-e4 (well, e4 was traded) d4 pawn center and a pawn on c3. The center is strong and White has a clear space advantage. This is textbook — develop with tempo, build the center, and prepare to attack.",
       "pawnStructure": "White has a strong d4 pawn supported by the c3 knight. Black needs to challenge this with ...c6 and eventually ...c5 or ...e5.",
       "plans": [
         "Complete development with Nf3, Bc4 or Bd3",

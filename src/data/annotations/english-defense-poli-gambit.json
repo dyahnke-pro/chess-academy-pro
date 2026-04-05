@@ -27,7 +27,7 @@
     },
     {
       "san": "f3",
-      "annotation": "We're reinforcing our e4 pawn with this somewhat committal move, ensuring our central stronghold remains secure against Black's pressure. While f3 does support our center, it also slightly weakens our kingside pawn structure and blocks the natural development square for our knight on g1. This move is part of the Poli Gambit system, where we're accepting some positional concessions in exchange for maintaining our pawn center and preparing for aggressive piece play. Black will likely try to exploit the slight weakening around our king with moves like ...f5, creating immediate tactical tensions."
+      "annotation": "We're reinforcing our e4 pawn with this somewhat committal move, ensuring our central stronghold remains secure against Black's pressure. While f3 does support our center, it also slightly weakens our kingside pawn structure and blocks the natural development square for our pawn on g1. This move is part of the Poli Gambit system, where we're accepting some positional concessions in exchange for maintaining our pawn center and preparing for aggressive piece play. Black will likely try to exploit the slight weakening around our king with moves like ...f5, creating immediate tactical tensions."
     },
     {
       "san": "f5",

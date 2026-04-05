@@ -51,7 +51,7 @@
     },
     {
       "san": "d5",
-      "annotation": "We're pushing our pawn forward aggressively, maintaining central control and cramping Black's position even further while preparing the spectacular Florentine Gambit. This advance closes the center temporarily but gives us tremendous space advantage and prepares tactical possibilities. The d5 pawn also restricts Black's pieces significantly, particularly the knight on f6 and the bishop on g7. By advancing rather than taking on c5, we're showing our aggressive intentions and setting up the dramatic pawn sacrifice that defines the Florentine Gambit variation."
+      "annotation": "We're pushing our pawn forward aggressively, maintaining central control and cramping Black's position even further while preparing the spectacular Florentine Gambit. This advance closes the center temporarily but gives us tremendous space advantage and prepares tactical possibilities. The d5 pawn also restricts Black's pieces significantly, particularly the pawn on f6 and the bishop on g7. By advancing rather than taking on c5, we're showing our aggressive intentions and setting up the dramatic pawn sacrifice that defines the Florentine Gambit variation."
     },
     {
       "san": "e6",
@@ -67,7 +67,7 @@
     },
     {
       "san": "e5",
-      "annotation": "We're launching the spectacular Florentine Gambit with this aggressive pawn sacrifice, offering material to smash open Black's kingside and create immediate threats against the enemy king. This move attacks Black's knight on f6, forces it to move, and opens devastating lines for our pieces to pour into the attack. The e5 advance is the signature move of this variation - we're sacrificing the pawn to gain tempo, open files, and create weaknesses around Black's king. Black must be extremely careful now, as accepting this gambit can lead to a ferocious attack that's difficult to defend against."
+      "annotation": "We're launching the spectacular Florentine Gambit with this aggressive pawn sacrifice, offering material to smash open Black's kingside and create immediate threats against the enemy king. This move attacks Black's pawn on f6, forces it to move, and opens devastating lines for our pieces to pour into the attack. The e5 advance is the signature move of this variation - we're sacrificing the pawn to gain tempo, open files, and create weaknesses around Black's king. Black must be extremely careful now, as accepting this gambit can lead to a ferocious attack that's difficult to defend against."
     }
   ]
 }

@@ -15,7 +15,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses a solid, classical response that supports a future ...d5 while preparing to fianchetto the light-squared bishop with ...b6 and ...Bb7. This move is the starting point of the Queen's Indian Defense, where Black avoids the main lines of the Queen's Gambit and Nimzo-Indian. The e6 pawn also opens a retreat square for the knight on f6 if we advance d5, and it controls important central squares like d5 and f5. Black is opting for a hypermodern setup that emphasizes piece activity over immediate central occupation."
+      "annotation": "Our opponent chooses a solid, classical response that supports a future ...d5 while preparing to fianchetto the light-squared bishop with ...b6 and ...Bb7. This move is the starting point of the Queen's Indian Defense, where Black avoids the main lines of the Queen's Gambit and Nimzo-Indian. The e6 pawn also opens a retreat square for the pawn on f6 if we advance d5, and it controls important central squares like d5 and f5. Black is opting for a hypermodern setup that emphasizes piece activity over immediate central occupation."
     },
     {
       "san": "Nf3",

@@ -369,7 +369,7 @@
     },
     {
       "san": "fxg1=N+",
-      "annotation": "The crown jewel of the Lasker Trap — an underpromotion to a knight with check! Promoting to a queen would not give check, but the knight on g1 forks the king and the rook on h1. This is one of the most beautiful tactical ideas in opening theory. Black wins the exchange and has a superior position.",
+      "annotation": "The crown jewel of the Lasker Trap — an underpromotion to a knight with check! Promoting to a queen would not give check, but the pawn on g1 forks the king and the rook on h1. This is one of the most beautiful tactical ideas in opening theory. Black wins the exchange and has a superior position.",
       "plans": [
         "Win the rook on h1 with the knight fork",
         "Maintain a winning material advantage",

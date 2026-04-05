@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent is preparing the central counterattack with ...e5, while also supporting the knight on f6 and creating a solid pawn foundation for the king's safety. This move is slightly passive but necessary in the King's Indian structure, as Black needs to prepare the ...e5 break carefully to avoid tactical disasters. The d6 pawn also opens a potential retreat square for the knight on f6 if it comes under attack, and connects Black's rooks along the back rank. While this seems slow, it's actually a key preparatory move that allows Black to challenge our center effectively on the next turn."
+      "annotation": "Our opponent is preparing the central counterattack with ...e5, while also supporting the pawn on f6 and creating a solid pawn foundation for the king's safety. This move is slightly passive but necessary in the King's Indian structure, as Black needs to prepare the ...e5 break carefully to avoid tactical disasters. The d6 pawn also opens a potential retreat square for the pawn on f6 if it comes under attack, and connects Black's rooks along the back rank. While this seems slow, it's actually a key preparatory move that allows Black to challenge our center effectively on the next turn."
     },
     {
       "san": "Nf3",

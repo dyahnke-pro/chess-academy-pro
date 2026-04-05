@@ -11,7 +11,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're playing a more restrained approach here, supporting a potential d4 advance while keeping our options open for piece development. This move also prepares to fianchetto our dark-squared bishop on f1-a6 diagonal or develop it more actively, and crucially supports the f4 advance that's coming next. The pawn on e3 provides a solid foundation for our kingside and prevents Black from establishing a knight on d4 later. While this looks modest, it's actually setting up a dynamic pawn storm with f4, which will challenge Black's central stronghold and potentially open lines for our pieces to create attacking chances."
+      "annotation": "We're playing a more restrained approach here, supporting a potential d4 advance while keeping our options open for piece development. This move also prepares to fianchetto our dark-squared bishop on f1-a6 diagonal or develop it more actively, and crucially supports the f4 advance that's coming next. The pawn on e3 provides a solid foundation for our kingside and prevents Black from establishing a pawn on d4 later. While this looks modest, it's actually setting up a dynamic pawn storm with f4, which will challenge Black's central stronghold and potentially open lines for our pieces to create attacking chances."
     },
     {
       "san": "Nf6",
