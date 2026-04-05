@@ -902,7 +902,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     return () => {
       if (guidedTimerRef.current) clearTimeout(guidedTimerRef.current);
     };
-  }, [guidedLessonActive, guidedStopped, guidedComplete, reviewState.currentMoveIndex, reviewState.mode, moves, pgn, playerColor, openingName, result, playerRating]);
+  }, [guidedLessonActive, guidedStopped, guidedComplete, reviewState.currentMoveIndex, reviewState.mode, moves, pgn, playerColor, openingName, result, playerRating, narrativeMoveData]);
 
   // Guided lesson: resume auto-advance
   const handleGuidedContinue = useCallback(() => {

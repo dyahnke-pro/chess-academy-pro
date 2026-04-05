@@ -850,8 +850,8 @@ export function CoachGamePage(): JSX.Element {
 
     const evalLoss = analysis && preMoveEval !== null
       ? Math.max(0, playerColor === 'white'
-          ? (preMoveEval as number) - analysis.evaluation
-          : analysis.evaluation - (preMoveEval as number))
+          ? preMoveEval - analysis.evaluation
+          : analysis.evaluation - preMoveEval)
       : 0;
 
     // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)
@@ -892,14 +892,14 @@ export function CoachGamePage(): JSX.Element {
     };
 
     // Flash the board based on classification (map to MoveQuality type)
-    const flashMap: Record<string, 'blunder' | 'inaccuracy' | 'good'> = {
-      blunder: 'blunder',
-      mistake: 'blunder',
-      inaccuracy: 'inaccuracy',
-      brilliant: 'good',
-      great: 'good',
-    };
-    const flash = flashMap[classification] ?? null;
+    const flashMap = new Map<string, 'blunder' | 'inaccuracy' | 'good'>([
+      ['blunder', 'blunder'],
+      ['mistake', 'blunder'],
+      ['inaccuracy', 'inaccuracy'],
+      ['brilliant', 'good'],
+      ['great', 'good'],
+    ]);
+    const flash = flashMap.get(classification);
     if (flash) {
       setMoveFlash(flash);
       setTimeout(() => setMoveFlash(null), 600);

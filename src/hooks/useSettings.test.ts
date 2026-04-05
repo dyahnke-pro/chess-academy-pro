@@ -17,7 +17,7 @@ describe('useSettings', () => {
     expect(result.current.settings.highlightLastMove).toBe(true);
     expect(result.current.settings.showLegalMoves).toBe(true);
     expect(result.current.settings.pieceAnimationSpeed).toBe('medium');
-    expect(result.current.settings.moveQualityFlash).toBe(false);
+    expect(result.current.settings.moveQualityFlash).toBe(true);
     expect(result.current.settings.masterAllOff).toBe(false);
     expect(result.current.raw).toBeNull();
   });
