@@ -708,5 +708,87 @@
       "Central pawn majority",
       "Active pieces convert to endgame advantage"
     ]
+  },
+  {
+    "id": "mp-jobava-e4",
+    "openingId": "pro-naroditsky-jobava-london",
+    "criticalPositionFen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/3BPN2/PPP2PPP/R2QK2R b KQ - 4 7",
+    "title": "Central e4 Break",
+    "overview": "The defining strategic ambition of the Jobava London is to establish a powerful pawn on e4. White develops with Nc3, Bf4, and Bd3 before pushing e4, after which Black's position becomes cramped and White's pieces flood into active squares.",
+    "pawnBreaks": [
+      {
+        "move": "e3-e4",
+        "explanation": "The key central break. When executed with full piece support, it grants White a lasting space advantage and activates every piece.",
+        "fen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/3BPN2/PPP2PPP/R2QK2R b KQ - 4 7"
+      },
+      {
+        "move": "f2-f3",
+        "explanation": "A preparatory pawn move that shores up the e4 advance. f3 also adds a second pawn to support the e4 chain and can later participate in a kingside advance with g4.",
+        "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-b5 or Nc3 supporting e4",
+        "explanation": "The c3 knight supports e4 directly and can leap to b5 to menace c7 and force the awkward Na6."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf1-d3",
+        "explanation": "Bd3 develops to an aggressive post aimed at the kingside. After e4, it becomes a serious attacking weapon targeting h7."
+      }
+    ],
+    "strategicThemes": [
+      "Central space advantage",
+      "Piece coordination before the break",
+      "Restricting Black's counterplay",
+      "Bishop pair activity after central opening"
+    ],
+    "endgameTransitions": [
+      "Superior minor pieces persist into simplified positions",
+      "Space advantage creates targets on d6 and c7"
+    ]
+  },
+  {
+    "id": "mp-jobava-h4",
+    "openingId": "pro-naroditsky-jobava-london",
+    "criticalPositionFen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
+    "title": "Kingside Pawn Storm vs Fianchetto",
+    "overview": "When Black plays g6 and Bg7, White pivots to h4-h5 to exploit the kingside. White often castles queenside and hurls pawns at the Black king, creating a sharp imbalanced game.",
+    "pawnBreaks": [
+      {
+        "move": "h4-h5",
+        "explanation": "The engine of the kingside attack. h5 challenges the g6 pawn and either forces gxh5 (opening the g-file) or h6 (creating a hook for g4-g5).",
+        "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5"
+      },
+      {
+        "move": "g4-g5",
+        "explanation": "Following h4-h5, g4-g5 drives the f6 knight from its best defensive square. Black's kingside becomes dangerously exposed.",
+        "fen": "rnbqk2r/ppp1ppbp/5np1/3p3P/3P1B1P/2N1P3/PPP2PP1/R2QKBNR b KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-e5",
+        "explanation": "The knight on e5 is a powerful outpost — centralized, aggressive, and difficult to evict. It supports the kingside attack and eyes g4."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-d2",
+        "explanation": "Qd2 prepares O-O-O for opposite-side castling, connects rooks, and supports h4-h5."
+      }
+    ],
+    "strategicThemes": [
+      "Opposite-side castling",
+      "Kingside pawn storm",
+      "Exploiting the g6 weakness",
+      "Ne5 outpost domination"
+    ],
+    "endgameTransitions": [
+      "Open h-file becomes a highway for rook invasion",
+      "Exposed Black king faces persistent threats even in simplified positions"
+    ]
   }
 ]

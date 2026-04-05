@@ -398,5 +398,25 @@
       "correctMove": "Bg4",
       "explanation": "c5 allows d5 closing the center in White's favor. Bg4 pins the knight and creates tension before White consolidates."
     }
+  ],
+  "pro-naroditsky-jobava-london": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+      "wrongMove": "e3",
+      "correctMove": "Nb5",
+      "explanation": "Playing the quiet e3 misses the key moment! After 3...e6, Black's c7 square is undefended and the knight can jump to b5 threatening Nc7+ fork. This is the signature Jobava tactic — don't miss it."
+    },
+    {
+      "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
+      "wrongMove": "Nf3",
+      "correctMove": "h4",
+      "explanation": "Nf3 is a normal developing move but misses the chance to exploit Black's fianchetto. After g6 and Bg7, the h4-h5 push creates an immediate kingside attack. The weakened dark squares around Black's king make h4 far stronger than routine development."
+    },
+    {
+      "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4",
+      "wrongMove": "e3",
+      "correctMove": "f3",
+      "explanation": "Playing e3 is the standard London move but it's passive here. When Black develops the bishop to f5, we have the unique opportunity to launch the bishop hunt with f3 followed by g4-h4. This aggressive pawn storm gains massive space and traps or displaces Black's bishop."
+    }
   ]
 }
