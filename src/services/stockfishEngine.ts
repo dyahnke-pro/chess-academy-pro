@@ -116,6 +116,7 @@ class StockfishEngine {
   async analyzePosition(
     fen: string,
     depth: number = 18,
+    options?: Record<string, string | number>,
   ): Promise<StockfishAnalysis> {
     await this.initialize();
 
@@ -148,6 +149,12 @@ class StockfishEngine {
       const readyHandler = (event: MessageEvent<string>): void => {
         if (event.data === 'readyok') {
           this.worker?.removeEventListener('message', readyHandler);
+          // Apply per-analysis options (e.g. Skill Level) after ucinewgame reset
+          if (options) {
+            for (const [key, value] of Object.entries(options)) {
+              this.send(`setoption name ${key} value ${value}`);
+            }
+          }
           this.send(`position fen ${fen}`);
           this.send(`go depth ${depth}`);
         }

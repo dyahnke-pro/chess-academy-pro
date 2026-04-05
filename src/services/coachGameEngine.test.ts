@@ -5,7 +5,6 @@ vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn(),
     initialize: vi.fn(),
-    send: vi.fn(),
     stop: vi.fn(),
   },
 }));
@@ -15,7 +14,6 @@ import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
 const analyzePositionMock = vi.mocked(stockfishEngine).analyzePosition;
-const sendMock = vi.mocked(stockfishEngine).send;
 
 const mockAnalysis: StockfishAnalysis = {
   bestMove: 'e2e4',
@@ -34,7 +32,6 @@ const mockAnalysis: StockfishAnalysis = {
 describe('coachGameEngine', () => {
   beforeEach(() => {
     analyzePositionMock.mockResolvedValue(mockAnalysis);
-    sendMock.mockClear();
   });
 
   describe('getAdaptiveMove', () => {
@@ -44,16 +41,21 @@ describe('coachGameEngine', () => {
       expect(result.analysis).toBe(mockAnalysis);
     });
 
-    it('sets Skill Level before analyzing', async () => {
+    it('passes Skill Level via options to analyzePosition', async () => {
       await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
-      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 11');
+      expect(analyzePositionMock).toHaveBeenCalledWith(
+        expect.any(String),
+        14,
+        { 'Skill Level': 11 },
+      );
     });
 
     it('calls stockfish with lower depth for lower ELO', async () => {
       await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 800);
       expect(analyzePositionMock).toHaveBeenCalledWith(
         expect.any(String),
-        10, // depth for 800 ELO
+        10,
+        { 'Skill Level': 5 },
       );
     });
 
@@ -61,14 +63,14 @@ describe('coachGameEngine', () => {
       await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1900);
       expect(analyzePositionMock).toHaveBeenCalledWith(
         expect.any(String),
-        18, // depth for 1900+ ELO
+        18,
+        { 'Skill Level': 18 },
       );
     });
 
     it('always returns the best move or 2nd-best move', async () => {
       for (let i = 0; i < 20; i++) {
         const result = await getAdaptiveMove('startfen', 1000);
-        // bestMove is always e2e4; 2nd-best d2d4 possible via variety chance
         expect(['e2e4', 'd2d4']).toContain(result.move);
       }
     });
@@ -77,76 +79,76 @@ describe('coachGameEngine', () => {
   describe('getAdaptiveMove — depth by ELO', () => {
     it('uses depth 10 for < 1000 ELO', async () => {
       await getAdaptiveMove('startfen', 900);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, expect.any(Object));
     });
 
     it('uses depth 12 for 1000-1199 ELO', async () => {
       await getAdaptiveMove('startfen', 1100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, expect.any(Object));
     });
 
     it('uses depth 14 for 1200-1499 ELO', async () => {
       await getAdaptiveMove('startfen', 1300);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 14);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 14, expect.any(Object));
     });
 
     it('uses depth 16 for 1500-1799 ELO', async () => {
       await getAdaptiveMove('startfen', 1600);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 16);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 16, expect.any(Object));
     });
 
     it('uses depth 18 for 1800+ ELO', async () => {
       await getAdaptiveMove('startfen', 2000);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 18);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 18, expect.any(Object));
     });
   });
 
   describe('getAdaptiveMove — Skill Level by ELO', () => {
     it('uses skill 2 for < 800 ELO', async () => {
       await getAdaptiveMove('startfen', 700);
-      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 2');
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 2 });
     });
 
     it('uses skill 5 for 800-999 ELO', async () => {
       await getAdaptiveMove('startfen', 900);
-      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 5');
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 5 });
     });
 
     it('uses skill 8 for 1000-1199 ELO', async () => {
       await getAdaptiveMove('startfen', 1100);
-      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 8');
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 8 });
     });
 
     it('uses skill 14 for 1400-1599 ELO', async () => {
       await getAdaptiveMove('startfen', 1500);
-      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 14');
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 14 });
     });
 
     it('uses skill 20 for 2000+ ELO', async () => {
       await getAdaptiveMove('startfen', 2100);
-      expect(sendMock).toHaveBeenCalledWith('setoption name Skill Level value 20');
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 20 });
     });
   });
 
   describe('getTargetStrength', () => {
-    it('returns player rating minus 100', () => {
-      expect(getTargetStrength(1420)).toBe(1320);
+    it('returns player rating for medium (matches strength)', () => {
+      expect(getTargetStrength(1420)).toBe(1420);
     });
 
     it('floors at 600', () => {
       expect(getTargetStrength(500)).toBe(600);
     });
 
-    it('handles high ratings', () => {
-      expect(getTargetStrength(2200)).toBe(2100);
+    it('returns player rating + 200 for hard', () => {
+      expect(getTargetStrength(1400, 'hard')).toBe(1600);
     });
 
-    it('returns exactly 600 for rating 700', () => {
-      expect(getTargetStrength(700)).toBe(600);
+    it('returns player rating - 300 for easy', () => {
+      expect(getTargetStrength(1400, 'easy')).toBe(1100);
     });
 
-    it('returns 600 for rating 600 (at the floor)', () => {
-      expect(getTargetStrength(600)).toBe(600);
+    it('returns 600 for low easy rating (at the floor)', () => {
+      expect(getTargetStrength(800, 'easy')).toBe(600);
     });
   });
 

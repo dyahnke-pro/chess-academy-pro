@@ -104,14 +104,10 @@ export async function getAdaptiveMove(
   const depth = getDepthForElo(targetElo);
   const skillLevel = getSkillLevelForElo(targetElo);
 
-  // Set Skill Level before analyzing — this makes the engine play
-  // naturally weaker without producing bizarre moves
-  stockfishEngine.send(`setoption name Skill Level value ${skillLevel}`);
-
   let analysis: StockfishAnalysis;
   try {
     analysis = await Promise.race([
-      stockfishEngine.analyzePosition(fen, depth),
+      stockfishEngine.analyzePosition(fen, depth, { 'Skill Level': skillLevel }),
       makeTimeoutPromise(COACH_MOVE_TIMEOUT_MS),
     ]);
   } catch (error) {
@@ -147,8 +143,8 @@ export async function getAdaptiveMove(
 /** ELO offset per difficulty level relative to the player rating. */
 const DIFFICULTY_OFFSET: Record<CoachDifficulty, number> = {
   easy: -300,
-  medium: -100,
-  hard: 100,
+  medium: 0,
+  hard: 200,
 };
 
 export function getTargetStrength(playerRating: number, difficulty: CoachDifficulty = 'medium'): number {
