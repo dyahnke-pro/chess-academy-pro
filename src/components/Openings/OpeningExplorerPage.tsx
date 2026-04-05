@@ -130,7 +130,7 @@ export function OpeningExplorerPage(): JSX.Element {
       {/* Tab toggle */}
       <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
-          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-common' },
+          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire' },
           { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro' },
           { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits' },
           { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all' },
@@ -159,32 +159,92 @@ export function OpeningExplorerPage(): JSX.Element {
         />
       </div>
 
-      {/* ─── Most Common tab ────────────────────────────────────────────── */}
+      {/* ─── Most Common / Repertoire tab ─────────────────────────────── */}
       {tab === 'common' && (
         <>
-          <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-3">
-            Most Common Openings
-          </h2>
-          <div className="space-y-2">
-            {displayCommon.map((opening, i) => (
-              <motion.div
-                key={opening.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.03, duration: 0.25 }}
-              >
-                <OpeningCard
-                  opening={opening}
-                  onClick={() => void navigate(`/openings/${opening.id}`)}
-                  onToggleFavorite={() => void handleToggleFavorite(opening.id)}
-                />
-              </motion.div>
-            ))}
-          </div>
-          {displayCommon.length === 0 && (
+          {displayCommon.length === 0 ? (
             <div className="flex flex-1 items-center justify-center text-theme-text-muted">
               No openings found.
             </div>
+          ) : (
+            <>
+              {/* Favorites section */}
+              {displayCommon.some((o) => o.isFavorite) && (
+                <>
+                  <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+                    Favorites
+                  </h2>
+                  <div className="space-y-2 mb-5">
+                    {displayCommon.filter((o) => o.isFavorite).map((opening, i) => (
+                      <motion.div
+                        key={opening.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.03, duration: 0.25 }}
+                      >
+                        <OpeningCard
+                          opening={opening}
+                          onClick={() => void navigate(`/openings/${opening.id}`)}
+                          onToggleFavorite={() => void handleToggleFavorite(opening.id)}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* White openings (excluding favorites) */}
+              {displayCommon.filter((o) => o.color === 'white' && !o.isFavorite).length > 0 && (
+                <>
+                  <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-white border border-theme-border" />
+                    My White Openings
+                  </h2>
+                  <div className="space-y-2 mb-5">
+                    {displayCommon.filter((o) => o.color === 'white' && !o.isFavorite).map((opening, i) => (
+                      <motion.div
+                        key={opening.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.03, duration: 0.25 }}
+                      >
+                        <OpeningCard
+                          opening={opening}
+                          onClick={() => void navigate(`/openings/${opening.id}`)}
+                          onToggleFavorite={() => void handleToggleFavorite(opening.id)}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Black openings (excluding favorites) */}
+              {displayCommon.filter((o) => o.color === 'black' && !o.isFavorite).length > 0 && (
+                <>
+                  <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-neutral-800 border border-theme-border" />
+                    My Black Openings
+                  </h2>
+                  <div className="space-y-2">
+                    {displayCommon.filter((o) => o.color === 'black' && !o.isFavorite).map((opening, i) => (
+                      <motion.div
+                        key={opening.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.03, duration: 0.25 }}
+                      >
+                        <OpeningCard
+                          opening={opening}
+                          onClick={() => void navigate(`/openings/${opening.id}`)}
+                          onToggleFavorite={() => void handleToggleFavorite(opening.id)}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
           )}
         </>
       )}

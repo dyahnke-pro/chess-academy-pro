@@ -199,14 +199,15 @@ export function AppLayout(): JSX.Element {
                 to={to}
                 end={to === '/'}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
                     isActive
-                      ? 'bg-theme-accent text-theme-bg'
+                      ? 'text-theme-accent bg-theme-accent/10'
                       : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
                   }`
                 }
                 style={({ isActive }) => isActive ? {
-                  boxShadow: '0 0 10px color-mix(in srgb, var(--color-accent) 40%, transparent)',
+                  borderBottom: '2px solid var(--color-accent)',
+                  boxShadow: '0 2px 8px color-mix(in srgb, var(--color-accent) 50%, transparent)',
                 } : undefined}
               >
                 <Icon size={16} />
@@ -262,13 +263,14 @@ export function AppLayout(): JSX.Element {
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-medium transition-colors min-w-0 ${
+              `flex flex-col items-center gap-0.5 px-2 py-1 text-xs font-medium transition-colors min-w-0 ${
                 isActive ? 'text-theme-accent' : 'text-theme-text-muted'
               }`
             }
             style={({ isActive }) => isActive ? {
+              borderTop: '2px solid var(--color-accent)',
               filter: 'drop-shadow(0 0 6px var(--color-accent))',
-            } : undefined}
+            } : { borderTop: '2px solid transparent' }}
           >
             <Icon size={22} />
             <span className="truncate w-full text-center leading-tight">{label}</span>
