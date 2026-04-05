@@ -1360,17 +1360,15 @@ export function CoachGamePage(): JSX.Element {
             </div>
 
             <div className="flex items-center gap-1 md:gap-2">
-              {difficulty !== 'hard' && (
-                <button
-                  onClick={handleTakeback}
-                  disabled={gameState.moves.length < 2}
-                  className="flex items-center gap-1 px-2 py-2 md:px-3 rounded-lg border border-theme-border text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
-                  data-testid="takeback-btn"
-                >
-                  <Undo2 size={14} />
-                  <span className="hidden md:inline">Takeback</span>
-                </button>
-              )}
+              <button
+                onClick={handleTakeback}
+                disabled={gameState.moves.length < 2}
+                className="flex items-center gap-1 px-2 py-2 md:px-3 rounded-lg border border-theme-border text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
+                data-testid="takeback-btn"
+              >
+                <Undo2 size={14} />
+                <span className="hidden md:inline">Takeback</span>
+              </button>
               <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
             </div>
           </div>
