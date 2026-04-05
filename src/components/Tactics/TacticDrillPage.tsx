@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Swords } from 'lucide-react';
-import { getPuzzlesByTheme } from '../../services/puzzleService';
+import { getPuzzlesByTheme, getPuzzlesInRatingBand } from '../../services/puzzleService';
 import { useAppStore } from '../../stores/appStore';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
 import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
@@ -58,7 +58,14 @@ export function TacticDrillPage(): JSX.Element {
       seen.add(p.id);
       return true;
     });
-    const shuffled = shuffleArray(unique).slice(0, DRILL_SIZE);
+    let shuffled = shuffleArray(unique).slice(0, DRILL_SIZE);
+
+    // Fallback: if no puzzles found for the theme, use rating-matched puzzles
+    if (shuffled.length === 0) {
+      const userRating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+      const fallback = await getPuzzlesInRatingBand(userRating, 300, DRILL_SIZE);
+      shuffled = shuffleArray(fallback).slice(0, DRILL_SIZE);
+    }
 
     if (shuffled.length === 0) {
       setPhase('summary');
