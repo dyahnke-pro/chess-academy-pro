@@ -37,6 +37,7 @@ import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
+import { voiceService } from '../../services/voiceService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty, MoveClassification, MoveAnnotation,
@@ -44,6 +45,14 @@ import type {
   GameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
+
+/** Mate eval threshold — Stockfish encodes checkmate as ±30000.
+ *  Any absolute eval ≥ this value is treated as a forced mate. */
+const MATE_EVAL_THRESHOLD = 20000;
+
+function isMateEval(evaluation: number): boolean {
+  return Math.abs(evaluation) >= MATE_EVAL_THRESHOLD;
+}
 
 function classifyMove(
   preMoveEval: number | null,
@@ -55,6 +64,24 @@ function classifyMove(
 ): MoveClassification {
   if (preMoveEval === null) return 'good';
   // Both evals are from White's perspective (normalized by stockfishEngine).
+
+  // If the player delivered checkmate or found a forced mate, it's brilliant/great
+  const postMoveGoodForPlayer = playerColor === 'white' ? postMoveEval > 0 : postMoveEval < 0;
+  if (isMateEval(postMoveEval) && postMoveGoodForPlayer) {
+    return isEngineBestMove ? 'brilliant' : 'great';
+  }
+
+  // If the player walked into a forced mate against them (was fine before), it's a blunder
+  const postMoveBadForPlayer = playerColor === 'white' ? postMoveEval < 0 : postMoveEval > 0;
+  if (isMateEval(postMoveEval) && postMoveBadForPlayer && !isMateEval(preMoveEval)) {
+    return 'blunder';
+  }
+
+  // If both pre and post are mate evals (e.g. forced mate was already on the board),
+  // the player maintained the line — classify as good unless they lost the mate
+  if (isMateEval(preMoveEval) && isMateEval(postMoveEval)) {
+    return 'good';
+  }
 
   // cpLostVsBest = how much worse the played move is vs the engine's best
   const cpLostVsBest = bestMoveEval !== null
@@ -87,14 +114,16 @@ function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
   const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
   if (evaluated.length < 2) return [];
 
-  // Find largest eval swings
+  // Find largest eval swings, clamping mate evals so they don't distort deltas
+  const clampEval = (e: number): number => Math.max(-3000, Math.min(3000, e));
+
   const swings: { index: number; delta: number; move: CoachGameMove }[] = [];
 
   for (let i = 1; i < evaluated.length; i++) {
     const prev = evaluated[i - 1];
     const curr = evaluated[i];
     if (prev.evaluation !== null && curr.evaluation !== null) {
-      const delta = Math.abs(curr.evaluation - prev.evaluation);
+      const delta = Math.abs(clampEval(curr.evaluation) - clampEval(prev.evaluation));
       swings.push({ index: i, delta, move: curr });
     }
   }
@@ -102,9 +131,12 @@ function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
   swings.sort((a, b) => b.delta - a.delta);
 
   return swings.slice(0, 5).map((s) => {
-    const type: KeyMoment['type'] = s.delta > 200
-      ? (s.move.classification === 'brilliant' || s.move.classification === 'great' ? 'brilliant' : 'blunder')
-      : 'turning_point';
+    const cls = s.move.classification;
+    const type: KeyMoment['type'] = cls === 'brilliant' || cls === 'great'
+      ? 'brilliant'
+      : cls === 'blunder' || cls === 'mistake'
+        ? 'blunder'
+        : s.delta > 200 ? 'turning_point' : 'turning_point';
 
     return {
       moveNumber: s.move.moveNumber,

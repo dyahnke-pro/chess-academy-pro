@@ -32,7 +32,26 @@ let _abortAnalysis = false;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function classifyCpLoss(cpLoss: number): MoveClassification {
+/** Mate eval threshold — Stockfish encodes checkmate as ±30000 */
+const MATE_EVAL_THRESHOLD = 20000;
+
+function classifyCpLoss(
+  cpLoss: number,
+  evalBefore?: number | null,
+  evalAfter?: number | null,
+  isPlayerWhiteMove?: boolean,
+): MoveClassification {
+  // Handle mate evals: if the player delivered/found checkmate, it's brilliant
+  if (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD) {
+    const goodForPlayer = isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0;
+    if (goodForPlayer) return 'brilliant';
+    // Walked into forced mate that wasn't there before
+    if (evalBefore !== undefined && evalBefore !== null && Math.abs(evalBefore) < MATE_EVAL_THRESHOLD) {
+      return 'blunder';
+    }
+    return 'good'; // Mate was already on the board
+  }
+
   if (cpLoss >= BLUNDER_CP) return 'blunder';
   if (cpLoss >= MISTAKE_CP) return 'mistake';
   if (cpLoss >= INACCURACY_CP) return 'inaccuracy';
@@ -212,8 +231,8 @@ async function analyzeGameOnWorker(
       const cpLoss = isWhiteMove
         ? evalBefore - evalAfter
         : evalAfter - evalBefore;
-      classification = classifyCpLoss(cpLoss);
-      if (cpLoss >= INACCURACY_CP) {
+      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove);
+      if (cpLoss >= INACCURACY_CP && classification !== 'brilliant' && classification !== 'great' && classification !== 'good') {
         mistakeIndices.push(moveIdx);
       }
     }
@@ -283,9 +302,9 @@ async function analyzeGamePositions(game: GameRecord): Promise<MoveAnnotation[] 
         ? evalBefore - evalAfter
         : evalAfter - evalBefore;
 
-      classification = classifyCpLoss(cpLoss);
+      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove);
 
-      if (cpLoss >= INACCURACY_CP) {
+      if (cpLoss >= INACCURACY_CP && classification !== 'brilliant' && classification !== 'great' && classification !== 'good') {
         try {
           const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
           bestMove = bestAnalysis.bestMove;
