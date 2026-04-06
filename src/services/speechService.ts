@@ -145,8 +145,8 @@ class SpeechService {
     this.synthesis.speak(warmup);
   }
 
-  speak(text: string, options: SpeechOptions = {}): void {
-    if (!this.synthesis || !this.enabled) return;
+  speak(text: string, options: SpeechOptions = {}): Promise<void> {
+    if (!this.synthesis || !this.enabled) return Promise.resolve();
 
     const synthesis = this.synthesis;
     synthesis.cancel();
@@ -161,27 +161,32 @@ class SpeechService {
       synthesis.speak(warmup);
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = options.rate ?? this.rate;
-    utterance.pitch = options.pitch ?? 0.78;
-    utterance.volume = options.volume ?? 1.0;
-    utterance.voice = options.voice ?? this.preferredVoice;
+    return new Promise<void>((resolve) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = options.rate ?? this.rate;
+      utterance.pitch = options.pitch ?? 0.78;
+      utterance.volume = options.volume ?? 1.0;
+      utterance.voice = options.voice ?? this.preferredVoice;
 
-    if (options.onBoundary) {
-      const handler = options.onBoundary;
-      utterance.addEventListener('boundary', (event: SpeechSynthesisEvent) => {
-        handler(event.charIndex, event.charLength || 0);
-      });
-    }
+      if (options.onBoundary) {
+        const handler = options.onBoundary;
+        utterance.addEventListener('boundary', (event: SpeechSynthesisEvent) => {
+          handler(event.charIndex, event.charLength || 0);
+        });
+      }
 
-    if (options.onEnd) {
-      const endHandler = options.onEnd;
-      utterance.addEventListener('end', () => endHandler());
-    }
+      if (options.onEnd) {
+        const endHandler = options.onEnd;
+        utterance.addEventListener('end', () => endHandler());
+      }
 
-    // On iOS, calling speak() synchronously after cancel() can silently drop
-    // the utterance. A minimal delay lets the cancel flush first.
-    setTimeout(() => { synthesis.speak(utterance); }, 0);
+      utterance.addEventListener('end', () => resolve());
+      utterance.addEventListener('error', () => resolve());
+
+      // On iOS, calling speak() synchronously after cancel() can silently drop
+      // the utterance. A minimal delay lets the cancel flush first.
+      setTimeout(() => { synthesis.speak(utterance); }, 0);
+    });
   }
 
   /** Queue an utterance without canceling current speech. Used for streaming sentence-by-sentence. */

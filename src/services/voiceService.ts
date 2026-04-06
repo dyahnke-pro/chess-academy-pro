@@ -3,6 +3,7 @@
 // Only this file may call TTS APIs.
 
 import { speechService } from './speechService';
+import { voicePackService } from './voicePackService';
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
 
@@ -146,7 +147,7 @@ class VoiceService {
     const prefs = await this.loadPrefs();
     if (!prefs) {
       this.speed = 0.95;
-      this.speakFallback(text);
+      await this.speakFallback(text);
       return;
     }
 
@@ -160,11 +161,17 @@ class VoiceService {
       if (success) return;
     }
 
-    // Tier 2: Web Speech API (with user's selected system voice)
+    // Tier 2: Offline voice packs (pre-rendered clips cached in IndexedDB)
+    if (voicePackService.isReady()) {
+      const played = await voicePackService.speak(text, this.speed);
+      if (played) return;
+    }
+
+    // Tier 3: Web Speech API (with user's selected system voice)
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }
-    this.speakFallback(text);
+    await this.speakFallback(text);
   }
 
   stop(): void {
@@ -215,8 +222,8 @@ class VoiceService {
     }
   }
 
-  private speakFallback(text: string): void {
-    speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
+  private async speakFallback(text: string): Promise<void> {
+    await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
   }
 
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {

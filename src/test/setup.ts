@@ -38,8 +38,23 @@ beforeAll(() => {
     voice: SpeechSynthesisVoice | null = null;
     onend: (() => void) | null = null;
     onerror: (() => void) | null = null;
+    private _listeners: Map<string, Array<(...args: unknown[]) => void>> = new Map();
     constructor(text?: string) {
       if (text) this.text = text;
+    }
+    addEventListener(event: string, handler: (...args: unknown[]) => void): void {
+      const list = this._listeners.get(event) ?? [];
+      list.push(handler);
+      this._listeners.set(event, list);
+    }
+    removeEventListener(event: string, handler: (...args: unknown[]) => void): void {
+      const list = this._listeners.get(event) ?? [];
+      this._listeners.set(event, list.filter(h => h !== handler));
+    }
+    dispatchEvent(event: Event): boolean {
+      const list = this._listeners.get(event.type) ?? [];
+      for (const h of list) h(event);
+      return true;
     }
   }
 
