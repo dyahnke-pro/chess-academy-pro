@@ -21,37 +21,37 @@ const SECTIONS: SectionItem[] = [
     label: 'Openings',
     icon: BookOpen,
     route: '/openings',
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-500/30',
-    glowColor: 'rgba(59, 130, 246, 0.35)',
+    color: 'text-cyan-400',
+    bgColor: 'bg-cyan-500/10',
+    borderColor: 'border-cyan-500/30',
+    glowColor: 'rgba(6, 182, 212, 0.4)',
   },
   {
     label: 'Play with Coach',
     icon: GraduationCap,
     route: '/coach/play',
-    color: 'text-red-400',
-    bgColor: 'bg-red-500/10',
-    borderColor: 'border-red-500/30',
-    glowColor: 'rgba(239, 68, 68, 0.4)',
+    color: 'text-rose-400',
+    bgColor: 'bg-rose-500/10',
+    borderColor: 'border-rose-500/30',
+    glowColor: 'rgba(251, 113, 133, 0.4)',
   },
   {
     label: 'Tactics',
     icon: Target,
     route: '/tactics',
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'border-green-500/30',
-    glowColor: 'rgba(34, 197, 94, 0.4)',
+    color: 'text-emerald-400',
+    bgColor: 'bg-emerald-500/10',
+    borderColor: 'border-emerald-500/30',
+    glowColor: 'rgba(52, 211, 153, 0.4)',
   },
   {
     label: 'Weaknesses',
     icon: AlertTriangle,
     route: '/weaknesses',
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/10',
-    borderColor: 'border-purple-500/30',
-    glowColor: 'rgba(168, 85, 247, 0.35)',
+    color: 'text-violet-400',
+    bgColor: 'bg-violet-500/10',
+    borderColor: 'border-violet-500/30',
+    glowColor: 'rgba(139, 92, 246, 0.4)',
   },
 ];
 
@@ -88,11 +88,12 @@ export function DashboardPage(): JSX.Element {
       <div className="max-w-lg mx-auto w-full">
         <button
           onClick={() => void navigate('/games/import')}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-cyan-500/30 bg-cyan-500/10 hover:opacity-80 transition-opacity"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-amber-500/30 bg-amber-500/10 hover:opacity-80 transition-opacity"
+          style={{ boxShadow: '0 0 8px rgba(245, 158, 11, 0.3)' }}
           data-testid="import-games-btn"
         >
-          <Upload size={18} className="text-cyan-400" />
-          <span className="text-sm font-semibold text-cyan-400">Import Games</span>
+          <Upload size={18} className="text-amber-400" />
+          <span className="text-sm font-semibold text-amber-400">Import Games</span>
         </button>
       </div>
 

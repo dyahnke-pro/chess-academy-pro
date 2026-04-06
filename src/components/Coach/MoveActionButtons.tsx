@@ -45,11 +45,12 @@ export function MoveActionButtons({
         >
           <button
             onClick={onShowBestMove}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-80"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 hover:opacity-80"
             style={{
               background: 'var(--color-surface)',
-              color: 'var(--color-text)',
-              border: '1px solid var(--color-border)',
+              color: 'rgb(52, 211, 153)',
+              border: '1px solid rgba(52, 211, 153, 0.3)',
+              boxShadow: '0 0 6px rgba(52, 211, 153, 0.2)',
             }}
             data-testid="show-best-btn"
           >
@@ -59,11 +60,12 @@ export function MoveActionButtons({
           {onShowBestLine && (
             <button
               onClick={onShowBestLine}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-80"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 hover:opacity-80"
               style={{
                 background: showingBestLine ? 'var(--color-accent)' : 'var(--color-surface)',
-                color: showingBestLine ? 'var(--color-bg)' : 'var(--color-text)',
-                border: `1px solid ${showingBestLine ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                color: showingBestLine ? 'var(--color-bg)' : 'rgb(139, 92, 246)',
+                border: `1px solid ${showingBestLine ? 'var(--color-accent)' : 'rgba(139, 92, 246, 0.3)'}`,
+                boxShadow: showingBestLine ? '0 0 10px rgba(139, 92, 246, 0.5)' : '0 0 6px rgba(139, 92, 246, 0.2)',
               }}
               data-testid="show-line-btn"
             >
@@ -73,11 +75,12 @@ export function MoveActionButtons({
           )}
           <button
             onClick={onRetryPosition}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-80"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 hover:opacity-80"
             style={{
               background: 'var(--color-surface)',
-              color: 'var(--color-text)',
-              border: '1px solid var(--color-border)',
+              color: 'rgb(251, 113, 133)',
+              border: '1px solid rgba(251, 113, 133, 0.3)',
+              boxShadow: '0 0 6px rgba(251, 113, 133, 0.2)',
             }}
             data-testid="retry-btn"
           >
