@@ -130,10 +130,10 @@ export function OpeningExplorerPage(): JSX.Element {
       {/* Tab toggle */}
       <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
-          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-500/20 text-blue-300', borderColor: 'border-blue-400/70 shadow-[0_0_6px_rgba(96,165,250,0.5),0_0_14px_rgba(96,165,250,0.3),0_0_24px_rgba(96,165,250,0.15)]' },
-          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-green-500/20 text-green-300', borderColor: 'border-green-400/70 shadow-[0_0_6px_rgba(74,222,128,0.5),0_0_14px_rgba(74,222,128,0.3),0_0_24px_rgba(74,222,128,0.15)]' },
-          { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-red-500/20 text-red-300', borderColor: 'border-red-400/70 shadow-[0_0_6px_rgba(248,113,113,0.5),0_0_14px_rgba(248,113,113,0.3),0_0_24px_rgba(248,113,113,0.15)]' },
-          { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-purple-500/20 text-purple-300', borderColor: 'border-purple-400/70 shadow-[0_0_6px_rgba(192,132,252,0.5),0_0_14px_rgba(192,132,252,0.3),0_0_24px_rgba(192,132,252,0.15)]' },
+          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-400/25 text-blue-200', borderColor: 'border-blue-300/80 shadow-[0_0_6px_rgba(147,197,253,0.6),0_0_14px_rgba(147,197,253,0.4),0_0_24px_rgba(147,197,253,0.2)]' },
+          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-green-400/25 text-green-200', borderColor: 'border-green-300/80 shadow-[0_0_6px_rgba(134,239,172,0.6),0_0_14px_rgba(134,239,172,0.4),0_0_24px_rgba(134,239,172,0.2)]' },
+          { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-red-400/25 text-red-200', borderColor: 'border-red-300/80 shadow-[0_0_6px_rgba(252,165,165,0.6),0_0_14px_rgba(252,165,165,0.4),0_0_24px_rgba(252,165,165,0.2)]' },
+          { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-purple-400/25 text-purple-200', borderColor: 'border-purple-300/80 shadow-[0_0_6px_rgba(216,180,254,0.6),0_0_14px_rgba(216,180,254,0.4),0_0_24px_rgba(216,180,254,0.2)]' },
         ]).map(({ id, label, icon: Icon, testId, activeClasses, borderColor }) => (
           <button
             key={id}
