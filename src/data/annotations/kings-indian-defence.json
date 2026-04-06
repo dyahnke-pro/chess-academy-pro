@@ -2081,6 +2081,240 @@
           "annotation": "Bh6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Hikaru: KID Classical (Nd3)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with 1.d4, the starting point for the King's Indian Defense. Black will allow White to build a broad center and then counterattack it with ...e5 or ...c5.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, the signature first move of the King's Indian. The knight controls e4 and d5 while Black waits to see White's setup before committing pawns."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, establishing the classical pawn duo. Together with d4, this controls the center and prepares Nc3 to reinforce the pawn structure."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black plays ...g6, entering the King's Indian setup. The fianchettoed bishop on g7 will be Black's most important piece, pressuring the center along the long diagonal.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3, reinforcing control of d5 and e4. This is the most natural developing move, preparing to build the full classical center with e4."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black completes the fianchetto, placing the bishop on the powerful long diagonal. The g7 bishop is the soul of Black's position in the KID, exerting constant pressure toward the center and queenside.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g7",
+              "to": "a1",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays e4, establishing the imposing classical center with pawns on c4, d4, and e4. This is the most principled approach, giving White massive space but also giving Black a clear target to attack.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays ...d6, supporting a future ...e5 advance. The pawn on d6 is a hallmark of the KID — it holds the center together and prepares the kingside counterattack.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the last minor piece, completing the Classical setup. The knight on f3 supports d4 and e5, and White is ready to castle and enter the middlegame."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, securing the king before the central clash. The king is safe behind the fianchettoed bishop, and the f8 rook will support the ...f5 pawn break."
+        },
+        {
+          "san": "Be2",
+          "annotation": "White develops the bishop to e2, a modest but solid square. The bishop supports castling and keeps options open — it can later move to f3 or d3 depending on the position."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plays the thematic ...e5, directly challenging White's center. This is the defining move of the Classical KID — Black fights for space in the center and prepares the kingside pawn storm with ...f5.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king to safety before the center closes. With ...e5 played, the center will likely lock after d5, and both sides will attack on opposite flanks."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, increasing pressure on d4. This is the Classical main line move — the knight supports ...e5 and forces White to make a decision about the center.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "White closes the center with d5, the critical moment of the Classical KID. This locks the pawn structure and commits both sides to opposite-flank attacks — White pushes on the queenside (c5, b4), Black storms the kingside (...f5, ...f4, ...g5).",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ne7",
+          "annotation": "The knight retreats to e7, heading for the kingside. From e7 it supports ...f5 and can reroute to g6 or f5 to join the attack. This is the standard regrouping in the Classical KID.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ne1",
+          "annotation": "White plays Ne1, the first step of the signature knight maneuver in this system. The knight leaves f3 to reroute to d3, where it will control c5 and support the b4 queenside advance.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e1",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "e1",
+              "to": "d3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black repositions the knight from f6 to d7, clearing the f-file for the ...f5 pawn break. The knight on d7 can later go to f6, c5, or f8 depending on how the position develops.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd3",
+          "annotation": "White completes the Ne1-d3 maneuver, placing the knight on an excellent square. From d3, it controls c5 (preventing Black's counterplay there), supports b4, and keeps an eye on f4 to slow Black's kingside expansion.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "d3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "c5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "b4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f5",
+          "annotation": "Black launches the kingside attack with ...f5, the signature KID break. This challenges White's e4 pawn and opens lines for the rooks. The race is on — whoever breaks through first on their respective flank wins.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "f5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f5",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f3",
+          "annotation": "White plays f3, bolstering the e4 pawn and keeping the center closed. This is a critical defensive resource — without f3, Black's ...f4 would rip open the kingside too easily.",
+          "arrows": [
+            {
+              "from": "f2",
+              "to": "f3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f4",
+          "annotation": "Black plays ...f4, locking the kingside pawn structure and preparing the pawn storm with ...g5-g4. This closes the center completely, giving Black a free hand on the kingside. The plan is ...g5, ...Ng6, ...Rf7, ...Bf8, ...Rg7, and finally ...g4 to crack open the h-file.",
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g6",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

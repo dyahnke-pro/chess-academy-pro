@@ -2182,6 +2182,756 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Berlin Defense: Carlsen Endgame",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Ruy Lopez begins with 1.e4, controlling the center and opening lines for development.",
+          "arrows": [
+            [
+              "e2",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black mirrors with 1...e5, staking an equal claim in the center."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to f3, attacking Black's e5 pawn immediately.",
+          "arrows": [
+            [
+              "f3",
+              "e5"
+            ]
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "The knight defends e5 naturally. This is the starting position for nearly all Ruy Lopez lines."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Ruy Lopez! The bishop pins the knight that defends e5, creating long-term pressure on Black's center.",
+          "arrows": [
+            [
+              "b5",
+              "c6"
+            ]
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "The Berlin Defense — Black develops the knight to f6 and challenges White's e4 pawn directly rather than playing ...a6.",
+          "arrows": [
+            [
+              "f6",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, maintaining the pin on Nc6 and preparing to exploit it. The main line now leads to the famous Berlin endgame."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black captures on e4. This is the critical moment — after the coming exchanges, the game transitions into the Berlin endgame."
+        },
+        {
+          "san": "d4",
+          "annotation": "White strikes in the center immediately. The point is to open the position while Black's knight is on e4.",
+          "arrows": [
+            [
+              "d2",
+              "d4"
+            ]
+          ]
+        },
+        {
+          "san": "Nd6",
+          "annotation": "The knight retreats to d6, hitting the Bb5. This forces an exchange on c6 that gives Black doubled pawns but the bishop pair."
+        },
+        {
+          "san": "Bxc6",
+          "annotation": "White exchanges on c6, doubling Black's pawns. This is the hallmark of the Berlin — structural damage in exchange for the bishop pair."
+        },
+        {
+          "san": "dxc6",
+          "annotation": "Black recaptures with the d-pawn, keeping a semi-open d-file and the two bishops as long-term compensation."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "White grabs the e5 pawn, emerging with an extra center pawn. But Black has the bishop pair and will target White's pawn structure."
+        },
+        {
+          "san": "Nf5",
+          "annotation": "The knight jumps to f5, an excellent outpost. It attacks the white queen and eyes key squares like d4 and e3.",
+          "arrows": [
+            [
+              "f5",
+              "d4"
+            ]
+          ]
+        },
+        {
+          "san": "Qxd8+",
+          "annotation": "White exchanges queens, entering the Berlin endgame. Without queens, Black's king will be displaced but the position remains highly complex."
+        },
+        {
+          "san": "Kxd8",
+          "annotation": "The king recaptures. Black's king is in the center but this is actually fine — with no queens, the king becomes an active piece."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Carlsen's preferred move! Instead of the common 9.h3, White develops the knight to c3 immediately, aiming for rapid piece activity.",
+          "arrows": [
+            [
+              "b1",
+              "c3"
+            ]
+          ]
+        },
+        {
+          "san": "Ke8",
+          "annotation": "Black centralizes the king. The plan is ...Be7, ...Be6, and eventually ...Kd7 to connect the rooks."
+        },
+        {
+          "san": "h3",
+          "annotation": "Now h3 is played, preventing ...Bg4 and giving the king luft. The move order matters — Nc3 first gave White more flexible development."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, preparing to castle by hand with ...Kd7 eventually."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "The bishop develops to an active diagonal, targeting the e5 pawn and controlling the d6 square.",
+          "arrows": [
+            [
+              "f4",
+              "d6"
+            ]
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black develops the last minor piece. The bishop on e6 is well-placed, supporting ...Nd4 ideas and watching key central squares."
+        },
+        {
+          "san": "Rad1",
+          "annotation": "White places the rook on the open d-file, creating pressure against Black's displaced king. A classic Berlin maneuver.",
+          "arrows": [
+            [
+              "a1",
+              "d1"
+            ]
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "Black prevents any Bg5 ideas and gives the king's rook a safe square on h7. This is a typical prophylactic move in the Berlin endgame."
+        }
+      ]
+    },
+    {
+      "name": "Caruana: Marshall Attack",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Ruy Lopez begins with 1.e4, controlling the center.",
+          "arrows": [
+            [
+              "e2",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black contests the center with 1...e5."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight, attacking e5."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5 with the knight."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Ruy Lopez bishop. White creates long-term pressure on Black's queenside."
+        },
+        {
+          "san": "a6",
+          "annotation": "The Morphy Defense — Black challenges the bishop immediately, asking it to declare its intentions."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "The bishop retreats to a4, maintaining the pin on the knight."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, pressuring e4."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, side-stepping any ...b5 ideas and connecting the rooks."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to a solid square, preparing to castle."
+        },
+        {
+          "san": "Re1",
+          "annotation": "The rook supports the e4 pawn, a standard Ruy Lopez maneuver.",
+          "arrows": [
+            [
+              "e1",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black expands on the queenside, pushing the bishop back and gaining space."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "The bishop retreats to b3, where it targets the f7 pawn diagonally.",
+          "arrows": [
+            [
+              "b3",
+              "f7"
+            ]
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. Now the critical moment — White must choose how to handle Black's next move."
+        },
+        {
+          "san": "c3",
+          "annotation": "White prepares d4, supporting the center. This allows Black to play the Marshall Attack."
+        },
+        {
+          "san": "d5",
+          "annotation": "The Marshall Attack! Black sacrifices a pawn with ...d5, blowing open the center for attacking chances against White's king.",
+          "arrows": [
+            [
+              "d7",
+              "d5"
+            ]
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "White accepts the pawn. Declining with d3 is safe but passive."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black recaptures with the knight, centralizing it powerfully."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White takes the e5 pawn, going two pawns up materially. But Black's compensation is enormous."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "Black recaptures, opening the e-file for the rook."
+        },
+        {
+          "san": "Rxe5",
+          "annotation": "White's rook occupies the open e-file."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black secures the Nd5 and prepares to develop the bishop with attacking ideas."
+        },
+        {
+          "san": "d4",
+          "annotation": "White pushes d4 to activate the pieces and challenge Black's center."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "The bishop develops aggressively to d6, targeting the h2 pawn and aiming at White's king.",
+          "arrows": [
+            [
+              "d6",
+              "h2"
+            ]
+          ]
+        },
+        {
+          "san": "Re1",
+          "annotation": "The rook retreats to e1, a key defensive move. White consolidates the extra pawns."
+        },
+        {
+          "san": "Qh4",
+          "annotation": "The queen comes to h4 with direct threats. Black's pieces coordinate beautifully for a kingside attack.",
+          "arrows": [
+            [
+              "h4",
+              "h2"
+            ]
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White creates luft and defends h2. This weakens the kingside but is necessary."
+        },
+        {
+          "san": "Qh3",
+          "annotation": "The queen slides to h3, maintaining pressure. Caruana's preparation goes deep in this critical line — White must navigate carefully to hold the extra material."
+        }
+      ]
+    },
+    {
+      "name": "Dubov: Anti-Marshall (h3 d3)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The game begins with 1.e4.",
+          "arrows": [
+            [
+              "e2",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds symmetrically."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Knight develops, attacking e5."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Ruy Lopez bishop creates long-term pressure."
+        },
+        {
+          "san": "a6",
+          "annotation": "The Morphy Defense."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "The bishop retreats, maintaining the tension."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops, pressuring e4."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black prepares to castle."
+        },
+        {
+          "san": "Re1",
+          "annotation": "The rook supports e4."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black expands on the queenside."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "The bishop settles on b3, targeting f7."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. The critical moment for the Anti-Marshall."
+        },
+        {
+          "san": "h3",
+          "annotation": "The Anti-Marshall move! By playing 8.h3 instead of 8.c3, White avoids the Marshall Attack entirely. Black cannot play ...d5 effectively here.",
+          "arrows": [
+            [
+              "h2",
+              "h3"
+            ]
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black develops the bishop to b7, a solid setup. Without the Marshall option, Black opts for a slower plan."
+        },
+        {
+          "san": "d3",
+          "annotation": "Dubov's approach — the quiet d3 setup instead of d4. This creates a slow positional battle where White maneuvers with Nbd2, a4, and c3.",
+          "arrows": [
+            [
+              "d2",
+              "d3"
+            ]
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays ...d6, solidifying the center. The position is closed and strategic."
+        },
+        {
+          "san": "a3",
+          "annotation": "White prevents ...Nb4 and prepares a slow queenside expansion with b4."
+        },
+        {
+          "san": "Na5",
+          "annotation": "Black reroutes the knight toward c4 via a5, targeting the weak b3 bishop.",
+          "arrows": [
+            [
+              "a5",
+              "c4"
+            ]
+          ]
+        },
+        {
+          "san": "Ba2",
+          "annotation": "The bishop retreats to a2, staying on the a2-g8 diagonal while giving the knight c4 access."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes in the center with ...c5, gaining space and challenging White's d3-e4 structure."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White develops the knight to d2, supporting e4 and preparing Nf1-g3 or Nf1-e3.",
+          "arrows": [
+            [
+              "b1",
+              "d2"
+            ]
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "The knight returns to c6, repositioning for central play. The position is rich and maneuvering-heavy — typical of Dubov's Anti-Marshall approach."
+        }
+      ]
+    },
+    {
+      "name": "Firouzja: Closed Ruy (Breyer-like)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Standard Ruy Lopez start.",
+          "arrows": [
+            [
+              "e2",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black contests the center."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Knight develops, attacking e5."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Ruy Lopez."
+        },
+        {
+          "san": "a6",
+          "annotation": "Morphy Defense."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "Bishop retreats."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black prepares castling."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Rook supports e4."
+        },
+        {
+          "san": "b5",
+          "annotation": "Queenside expansion."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "Bishop to b3."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays ...d6 before castling — the Closed Ruy Lopez move order. This flexible approach allows ...O-O next while keeping options open."
+        },
+        {
+          "san": "c3",
+          "annotation": "White prepares d4, the classic Closed Ruy plan. The c3-d4 pawn center is White's main strategic goal."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. Now the Closed Ruy Lopez tabiya is reached."
+        },
+        {
+          "san": "h3",
+          "annotation": "Preventing ...Bg4 and preparing Be3 or d4 without tactical issues."
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black fianchettoes the bishop. In the Breyer-like setup, the bishop on b7 supports ...d5 breaks and eyes the e4 pawn.",
+          "arrows": [
+            [
+              "b7",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "White pushes d4! The center opens and the game enters a critical phase. Firouzja loves these dynamic positions.",
+          "arrows": [
+            [
+              "d2",
+              "d4"
+            ]
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black places the rook on e8, supporting the e5 pawn and eyeing the e-file."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "The knight goes to d2, supporting e4 and preparing Nf1-g3 to pressure the kingside."
+        },
+        {
+          "san": "Bf8",
+          "annotation": "The bishop retreats to f8, a classic Breyer maneuver. It clears e7 for the knight and will redeploy to g7 or e7 later."
+        },
+        {
+          "san": "a4",
+          "annotation": "Firouzja strikes on the queenside! This targets b5 and opens lines on the a-file.",
+          "arrows": [
+            [
+              "a2",
+              "a4"
+            ]
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "Black plays ...h6, preventing Bg5 and giving the king escape squares. A useful prophylactic move."
+        },
+        {
+          "san": "Bc2",
+          "annotation": "The bishop redeploys to c2, where it targets the kingside along the b1-h7 diagonal. A classic Ruy Lopez maneuver.",
+          "arrows": [
+            [
+              "c2",
+              "h7"
+            ]
+          ]
+        },
+        {
+          "san": "exd4",
+          "annotation": "Black captures on d4, opening the center. The position becomes tactical."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "White recaptures with the c-pawn, maintaining the central pawn on d4."
+        },
+        {
+          "san": "Nb4",
+          "annotation": "Black jumps to b4, attacking the Bc2 and creating tactical threats. The knight on b4 is very active, targeting a2 and d3.",
+          "arrows": [
+            [
+              "b4",
+              "c2"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Praggnanandhaa: Closed Ruy Setup",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Ruy Lopez starts with 1.e4, controlling the center.",
+          "arrows": [
+            [
+              "e2",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds with 1...e5."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "The knight develops to f3, attacking the e5 pawn."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5 with the knight."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Ruy Lopez! The bishop puts indirect pressure on e5 through the Nc6."
+        },
+        {
+          "san": "a6",
+          "annotation": "The Morphy Defense — challenging the bishop."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "The bishop stays active on the a4-e8 diagonal."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops and pressures e4."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, connecting the rooks and preparing central action."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop, preparing to castle next move."
+        },
+        {
+          "san": "Re1",
+          "annotation": "The rook supports the e4 pawn. A standard Ruy Lopez setup move."
+        },
+        {
+          "san": "b5",
+          "annotation": "Black gains space on the queenside and pushes the bishop back."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "The bishop retreats to b3, maintaining its diagonal pressure toward f7.",
+          "arrows": [
+            [
+              "b3",
+              "f7"
+            ]
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. This is the Closed Ruy Lopez tabiya — the starting point for many deep theoretical lines. Praggnanandhaa's repertoire covers the key ideas from this position."
+        }
+      ]
+    },
+    {
+      "name": "Niemann: Anti-Marshall (exd5)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Standard Ruy Lopez opening.",
+          "arrows": [
+            [
+              "e2",
+              "e4"
+            ]
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black contests the center."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Knight develops, attacking e5."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Ruy Lopez bishop."
+        },
+        {
+          "san": "a6",
+          "annotation": "Morphy Defense."
+        },
+        {
+          "san": "Ba4",
+          "annotation": "Bishop retreats."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black prepares to castle."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Rook supports e4."
+        },
+        {
+          "san": "b5",
+          "annotation": "Queenside expansion."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "Bishop to b3."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles. Now the Anti-Marshall decision."
+        },
+        {
+          "san": "c3",
+          "annotation": "White plays c3, allowing the Marshall. But Niemann has a specific anti-Marshall weapon ready."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays the Marshall Attack with ...d5, sacrificing a pawn for initiative."
+        },
+        {
+          "san": "exd5",
+          "annotation": "Niemann's Anti-Marshall: taking on d5 immediately with 9.exd5 instead of the typical 9.d3 or 9.d4. This simplifies the position and reduces Black's attacking chances while keeping an extra pawn."
+        }
+      ]
     }
   ]
 }

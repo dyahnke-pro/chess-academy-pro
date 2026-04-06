@@ -1807,6 +1807,178 @@
           ]
         }
       ]
+    },
+    {
+      "name": "GothamChess: Fantasy Caro (3...dxe4)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "White opens with the king's pawn. In the Fantasy Variation with 3.f3, if Black captures dxe4, White recaptures fxe4 and obtains an open f-file and strong center. This line shows how to exploit that initiative."
+        },
+        {
+          "san": "c6",
+          "annotation": "The Caro-Kann. Black prepares ...d5 to challenge White's center with solid pawn support."
+        },
+        {
+          "san": "d4",
+          "annotation": "White builds the classical two-pawn center. The stage is set for the Fantasy Variation.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black challenges the center immediately. Now White chooses the aggressive Fantasy setup with f3."
+        },
+        {
+          "san": "f3",
+          "annotation": "The Fantasy Variation! White supports e4 with the f-pawn rather than a knight. This is aggressive — White wants to keep the full pawn center and is willing to weaken the kingside to do it.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black takes the e4 pawn. This is the main response — accepting the challenge. Black grabs material and opens the position."
+        },
+        {
+          "san": "fxe4",
+          "annotation": "White recaptures with the f-pawn, maintaining the strong e4-d4 center and opening the f-file for the rook. This is the key payoff of the Fantasy — the half-open f-file creates attacking chances.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "f8",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black strikes back in the center with ...e5! This is the critical counter — challenging d4 immediately before White can consolidate. Black aims for active piece play.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "d4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight naturally, defending d4 and preparing rapid kingside development. The knight also eyes e5 if Black exchanges on d4.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd4",
+          "annotation": "Black captures on d4, opening the position. This gives White a development lead but removes the central tension."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White develops the bishop to an aggressive square, targeting f7 and preparing to castle. The bishop on c4 is a powerhouse in these open positions.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight, attacking e4. A natural move, but White has a strong reply."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, connecting the rooks and placing the king in safety. The rook on f1 immediately pressures f7 down the open file. White's development lead is becoming dangerous.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black develops the bishop to a natural diagonal, defending d4 and eyeing the kingside. But Black is still behind in development."
+        },
+        {
+          "san": "e5",
+          "annotation": "White pushes the e-pawn forward with tempo, kicking the f6-knight and gaining space. This advance is the key to White's initiative — the pawn on e5 cramps Black's position.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "The knight retreats to d5, the only good square. From d5 it's centralized but blocking Black's own development."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White's queen enters the game, supporting the e5 pawn and preparing to coordinate with the rook. The queen on e2 also eyes the e-file and supports potential tactics.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles to get the king to safety. The position is sharp — White has a space advantage and initiative, but Black has an extra pawn on d4."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "White recaptures the d4 pawn with the knight, restoring material equality. The knight on d4 is beautifully centralized, and White's pieces are all actively placed.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "d4",
+              "to": "f5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nb6",
+          "annotation": "Black attacks the c4 bishop, trying to trade off White's strong piece. But White has a simple retreat that maintains the pressure."
+        },
+        {
+          "san": "Bb3",
+          "annotation": "White retreats the bishop to b3, keeping it on the dangerous a2-g8 diagonal aimed at f7. White has a strong initiative with active pieces, the e5 pawn cramping Black, and excellent attacking prospects on the kingside.",
+          "arrows": [
+            {
+              "from": "b3",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

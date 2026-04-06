@@ -2016,6 +2016,241 @@
           "annotation": "Be7. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Hikaru: Scotch (f4 System)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Opening with 1.e4, the king's pawn. The Scotch Game begins with an immediate fight for the center. In Hikaru's f4 System, White aims for a powerful pawn center after the early exchange on d4.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black mirrors with 1...e5, the symmetrical Open Game. Now White will open the center with d4."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Developing the knight and attacking e5. This is the standard prelude to the Scotch.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5 with the knight. The most natural response."
+        },
+        {
+          "san": "d4",
+          "annotation": "The Scotch! White immediately strikes at the center with d4, opening lines and challenging Black's e5 pawn. This is more aggressive than the quiet Italian or Ruy Lopez.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd4",
+          "annotation": "Black captures on d4. This is virtually forced — declining with ...d6 would give White too much central space."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "Recapturing with the knight, centralizing it on a powerful square. The knight eyes c6, and this sets up the key decision point.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, attacking e4. This is the Scotch Four Knights variation approach, putting immediate pressure on White's center."
+        },
+        {
+          "san": "Nxc6",
+          "annotation": "Hikaru's choice: capturing on c6 immediately. This gives Black the bishop pair but damages their pawn structure. The resulting positions favor White's central pawn majority.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "bxc6",
+          "annotation": "Black recaptures with the b-pawn, keeping pawns toward the center. The doubled c-pawns are a structural weakness but Black has the bishop pair as compensation.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Pushing e5, kicking the knight from f6 and seizing space. This is the key move in this system — White grabs a big central presence and forces Black to react.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black plays ...Qe7, pinning the e5 pawn to White's king and preparing to challenge it. The queen also connects to the king for potential castling queenside.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "We answer with Qe2, defending e5 and preparing to castle. The queens face each other on the e-file, and White keeps the space advantage.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "e2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "Black centralizes the knight on d5, a strong outpost. The knight is well-placed but White has concrete plans to build on the kingside.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "Kicking the knight from d5 and claiming more central space. White's pawn center with c4 and e5 is very imposing.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ba6",
+          "annotation": "Black pins the c4 pawn to the queen, pressuring White's extended center. The bishop is active here but slightly offside.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "b3",
+          "annotation": "Defending c4 with b3. This also prepares to fianchetto the bishop to b2 if needed, adding pressure to the long diagonal.",
+          "arrows": [
+            {
+              "from": "b2",
+              "to": "b3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black prepares to fianchetto the dark-squared bishop to g7, targeting the e5 pawn and the long diagonal. A flexible developing plan.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f4",
+          "annotation": "The signature move of Hikaru's system! f4 reinforces the e5 pawn and builds a massive central pawn chain. White now has pawns on c4, e5, and f4 — a dominant space advantage. Plans include Bb2, Nd2-f3, and a potential kingside attack.",
+          "arrows": [
+            {
+              "from": "f2",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c1",
+              "to": "b2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black fianchettoes the bishop to g7, targeting the e5 pawn and the long diagonal. The bishop is well-placed here, putting pressure on White's center.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ba3",
+          "annotation": "Developing the bishop to a3, preventing Black from castling kingside by controlling f8. This also eyes the a3-f8 diagonal, making it awkward for Black's king. Combined with the pawn center, White has a commanding position — this is the power of the f4 System.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "a3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a3",
+              "to": "f8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe6",
+          "annotation": "Black centralizes the queen on e6, connecting to the a6 bishop and keeping pressure on the e-file. This is the resulting position from Hikaru's f4 System — White has a huge space advantage with the c4-e5-f4 pawn chain, while Black struggles to find a safe haven for the king.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

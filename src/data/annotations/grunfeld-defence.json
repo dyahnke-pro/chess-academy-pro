@@ -2169,6 +2169,150 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Firouzja: Grunfeld Exchange (Rb1)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Grunfeld Defense starts with 1.d4."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight, a standard response."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, aiming for central dominance."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black prepares to fianchetto — the hallmark of the Grunfeld."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight, supporting the center."
+        },
+        {
+          "san": "d5",
+          "annotation": "The Grunfeld move! Black strikes at the center immediately rather than playing ...Bg7 first.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White captures on d5, accepting the challenge."
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black recaptures with the knight, centralizing it."
+        },
+        {
+          "san": "e4",
+          "annotation": "White pushes e4, building an imposing pawn center. This is the Exchange Variation.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc3",
+          "annotation": "Black exchanges the knight, doubling White's c-pawns? No — White recaptures with the b-pawn, gaining a massive center."
+        },
+        {
+          "san": "bxc3",
+          "annotation": "White's center is impressive: pawns on c3, d4, e4. But Black will target them with the Bg7 and ...c5."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "The Grunfeld bishop! On g7 it attacks d4 and the entire center. This is Black's primary strategic weapon.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to f3."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black immediately strikes at d4, the key Grunfeld break. The center must be challenged.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rb1",
+          "annotation": "Firouzja's move! The rook goes to b1 instead of the typical Be3. White prepares b4 and eyes the b-file for queenside pressure.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "b1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, completing development and connecting the rooks."
+        },
+        {
+          "san": "Be2",
+          "annotation": "White develops the bishop to e2, preparing to castle and keeping the position flexible."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black captures on d4, opening lines against White's center."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "White recaptures. The isolated d4 pawn is potentially weak but also controls key squares."
+        },
+        {
+          "san": "Qa5+",
+          "annotation": "Black checks with the queen, forcing White to block. This develops the queen actively."
+        },
+        {
+          "san": "Bd2",
+          "annotation": "White blocks the check with the bishop, which also develops a piece."
+        },
+        {
+          "san": "Qxa2",
+          "annotation": "Black grabs the a2 pawn! This is a critical decision — Black is material up but the queen is somewhat out of play."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, completing development. With active pieces and the center, White has excellent compensation for the pawn."
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black develops the last piece, pinning the Nf3 and putting pressure on White's position. Firouzja's line leads to a complex middlegame.",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(255, 170, 0, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

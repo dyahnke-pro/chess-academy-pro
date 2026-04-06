@@ -3506,6 +3506,163 @@
           "annotation": "Qc6+! This is the position you must avoid. White has a dangerous attack. Know this pattern so you can sidestep it earlier."
         }
       ]
+    },
+    {
+      "name": "GothamChess: Stafford Refutation (Nd2)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "White opens with the king's pawn, the standard starting move for the Stafford Gambit to arise.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds symmetrically, establishing a pawn in the center. The stage is set for the Italian or Petrov — or the Stafford Gambit."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight, attacking the e5 pawn. This is the most natural move.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "The Petrov Defence setup. Black counterattacks e4 instead of defending e5. This move order leads to the Stafford Gambit if White takes on e5."
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White accepts the pawn, entering the Stafford Gambit territory. This is objectively fine but requires precise play to avoid Black's tricks.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "The Stafford Gambit! Instead of the normal 3...d6, Black sacrifices the pawn and develops with tempo, attacking the knight on e5. Black is betting on tricks and rapid development."
+        },
+        {
+          "san": "Nxc6",
+          "annotation": "White takes the knight, the most principled response. White is now up a full pawn and has traded off a key attacking piece for Black.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxc6",
+          "annotation": "Black recaptures, opening the d-file for the queen and the diagonal for the dark-squared bishop. Black's compensation lies in rapid piece development and tactical threats."
+        },
+        {
+          "san": "d3",
+          "annotation": "GothamChess's recommended refutation begins with this solid move. White avoids d4 which allows more tactical complications, and instead develops modestly but safely. The pawn on d3 supports e4 and prepares Be2.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black develops the bishop aggressively, targeting f2. This is Black's most natural and dangerous-looking move."
+        },
+        {
+          "san": "Be2",
+          "annotation": "White develops the bishop to a solid square, preparing to castle. Be2 is modest but effective — it avoids any tactical tricks along the a7-g1 diagonal and prepares O-O quickly.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "h5",
+          "annotation": "Black pushes the h-pawn, trying to create kingside threats and open the h-file after ...h4-h3. This is an aggressive attempt to generate counterplay."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king to safety. The h5 push looks scary but White's solid structure with d3+Be2 neutralizes the threats.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ng4",
+          "annotation": "Black brings the knight to g4, threatening Qh4 and attacking h2 and f2. This looks very dangerous but White has a clean answer."
+        },
+        {
+          "san": "h3",
+          "annotation": "White challenges the knight immediately. The knight must be dealt with — either it retreats or gets captured. White is not afraid of opening the h-file because the position is solid.",
+          "arrows": [
+            {
+              "from": "h3",
+              "to": "g4",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Qd6",
+          "annotation": "Black brings the queen into the attack, threatening Qh2 mate and maintaining pressure on the kingside."
+        },
+        {
+          "san": "hxg4",
+          "annotation": "White captures the knight, winning a full piece. The h-file opens but White has everything under control.",
+          "arrows": [
+            {
+              "from": "h3",
+              "to": "g4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "hxg4",
+          "annotation": "Black recaptures, opening the h-file toward White's king. The h-file looks dangerous but White's next move neutralizes everything."
+        },
+        {
+          "san": "Nd2",
+          "annotation": "The key move in GothamChess's refutation! Nd2 blocks the d-file, defends f1, and prepares to reroute the knight to f3 to cover h2. White is up a full piece with a solid position. The Stafford is completely refuted — Black has no real compensation for the sacrificed material.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

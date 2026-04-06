@@ -1833,6 +1833,201 @@
           ]
         }
       ]
+    },
+    {
+      "name": "GothamChess: Scandinavian Qa5 (Qe2)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "White opens with the king's pawn. Against the Scandinavian, this pawn will be challenged immediately on the next move.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "The Scandinavian Defence! Black challenges e4 immediately, the most direct response possible. The downside is that Black's queen will be exposed after the exchange.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures, practically forced. Now Black must decide how to recapture — the queen recapture is the main line of the Scandinavian."
+        },
+        {
+          "san": "Qxd5",
+          "annotation": "Black takes back with the queen. The queen is exposed in the center, but Black has eliminated White's e4 pawn and will develop quickly.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops with tempo, attacking the queen and gaining time. The knight on c3 controls d5 and e4.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qa5",
+          "annotation": "The Qa5 variation! The queen retreats to a5 where it stays active on the queenside, pins the c3 knight along the a5-e1 diagonal, and avoids being pushed around further. This is the most popular Scandinavian line at club level.",
+          "arrows": [
+            {
+              "from": "a5",
+              "to": "e1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "White seizes the center with d4, establishing the ideal pawn duo. White plans rapid development and will try to exploit Black's early queen move.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to its best square, attacking e4 (now empty) and controlling d5. Solid, natural development.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the kingside knight, supporting d4 and preparing to castle. Classical development.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bf5",
+          "annotation": "Black develops the bishop outside the pawn chain before playing ...e6. This is a key advantage of the Scandinavian — the light-squared bishop is active, unlike in the French Defence.",
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "c2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White places the bishop on an aggressive diagonal, targeting f7 and controlling d5. The bishop is well-placed for kingside attacking chances.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black solidifies the center and prepares to develop the dark-squared bishop. The pawn on e6 supports d5 if Black needs to place a pawn there later.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Bd2",
+          "annotation": "White develops the bishop, connecting the queen to the a5-square and preparing to potentially harass Black's queen. The bishop also prepares queenside castling in some lines."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black reinforces control of d5 and prepares ...Bb4 to pin the knight. The c6 pawn creates a solid central structure and gives the queen escape squares.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White's queen moves to e2, supporting the e-file and preparing queenside castling. The queen on e2 can also support an e4-e5 push in some lines and keeps flexible options.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb4",
+          "annotation": "Black pins the c3 knight to the king, increasing pressure on White's center. This is a key move in the ...Qa5 Scandinavian — the pin on c3 restricts White's options.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "White castles queenside, getting the king to safety and connecting the rooks. With opposite-side castling possible, the position can become very sharp.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "d8",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the last minor piece, preparing to castle kingside and completing development. The knight on d7 supports key squares and can reroute to b6 or e5. Black has achieved a solid, well-developed position with active pieces and no weaknesses.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
