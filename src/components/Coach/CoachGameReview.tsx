@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo, type MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Home, Undo2, ArrowLeft, MessageCircle, Loader2, Play, Pause, Target, Crosshair, Zap, CheckCircle2, XCircle, GraduationCap, AlertTriangle, Sparkles, FastForward } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
@@ -201,7 +201,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       openingName,
       result,
       playerRating,
-      (chunk) => setNarrativeSummary((prev) => (prev ?? '') + chunk),
+      (chunk: string) => setNarrativeSummary((prev: string | null) => (prev ?? '') + chunk),
       narrativeMoveData,
     ).then((fullText) => {
       setNarrativeSummary(fullText);
@@ -418,7 +418,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
     void getCoachCommentary('interactive_review', ctx, (chunk) => {
       if (!cancelled) {
-        setAiCommentary((prev) => (prev ?? '') + chunk);
+        setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
       }
     }).then((fullText) => {
       if (!cancelled) {
@@ -481,7 +481,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
     void getCoachChatResponse(messages, POSITION_ANALYSIS_ADDITION, (chunk) => {
       if (!abortSignal.aborted) {
-        setAskResponse((prev) => (prev ?? '') + chunk);
+        setAskResponse((prev: string | null) => (prev ?? '') + chunk);
       }
     }).finally(() => {
       if (!abortSignal.aborted) {
@@ -501,7 +501,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const navigateMove = useCallback((direction: 'first' | 'prev' | 'next' | 'last') => {
     voiceService.stop();
-    setReviewState((prev) => {
+    setReviewState((prev: ReviewState) => {
       let newIndex = prev.currentMoveIndex;
       switch (direction) {
         case 'first': newIndex = -1; break;
@@ -514,7 +514,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [moves.length]);
 
   const handleMoveClick = useCallback((moveIndex: number) => {
-    setReviewState((prev) => ({
+    setReviewState((prev: ReviewState) => ({
       ...prev,
       mode: 'analysis',
       currentMoveIndex: moveIndex,
@@ -541,7 +541,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setBestLineBaseFen(null);
     }
 
-    setReviewState((prev) => ({
+    setReviewState((prev: ReviewState) => ({
       ...prev,
       mode: 'whatif',
       whatIfMoves: [...prev.whatIfMoves, moveResult.san],
@@ -583,7 +583,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const promotion = move.length > 4 ? move[4] : undefined;
         const sfResult = chess.move({ from, to, promotion });
 
-        setReviewState((prev) => ({
+        setReviewState((prev: ReviewState) => ({
           ...prev,
           whatIfMoves: [...prev.whatIfMoves, sfResult.san],
         }));
@@ -598,7 +598,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleBackToReview = useCallback(() => {
     if (abortRef.current) abortRef.current.abort();
-    setReviewState((prev) => ({
+    setReviewState((prev: ReviewState) => ({
       ...prev,
       mode: 'analysis',
       whatIfMoves: [],
@@ -614,7 +614,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setPracticeTarget(tactic);
     setPracticeResult('pending');
     setPracticeAttempts(0);
-    setReviewState((prev) => ({
+    setReviewState((prev: ReviewState) => ({
       ...prev,
       mode: 'practice',
       whatIfMoves: [],
@@ -761,7 +761,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setAutoReviewActive(true);
     setAutoReviewPaused(false);
     setAwaitingAiNarration(false);
-    setReviewState((prev) => ({
+    setReviewState((prev: ReviewState) => ({
       ...prev,
       mode: 'analysis',
       currentMoveIndex: -1,
@@ -784,7 +784,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, []);
 
   const handleToggleAutoReviewPause = useCallback(() => {
-    setAutoReviewPaused((prev) => {
+    setAutoReviewPaused((prev: boolean) => {
       if (!prev) voiceService.stop(); // Pause → stop speaking
       return !prev;
     });
@@ -823,12 +823,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         void voiceService.speak(narrationSegments.intro);
         const introDelay = Math.max(4000, narrationSegments.intro.length * 55);
         autoReviewTimerRef.current = setTimeout(() => {
-          setReviewState((prev) => ({ ...prev, currentMoveIndex: 0 }));
+          setReviewState((prev: ReviewState) => ({ ...prev, currentMoveIndex: 0 }));
         }, introDelay);
       } else {
         // Segments still loading — brief pause then start
         autoReviewTimerRef.current = setTimeout(() => {
-          setReviewState((prev) => ({ ...prev, currentMoveIndex: 0 }));
+          setReviewState((prev: ReviewState) => ({ ...prev, currentMoveIndex: 0 }));
         }, 1500);
       }
       return cleanup;
@@ -845,7 +845,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // Helper: schedule advancement to the next move
     const scheduleAdvance = (delay: number): void => {
       autoReviewTimerRef.current = setTimeout(() => {
-        setReviewState((prev) => ({
+        setReviewState((prev: ReviewState) => ({
           ...prev,
           currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
         }));
@@ -888,7 +888,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         };
 
         void getCoachCommentary('interactive_review', ctx, (chunk) => {
-          setAiCommentary((prev) => (prev ?? '') + chunk);
+          setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
         }).then((fullText) => {
           aiCommentaryCacheRef.current.set(moveIdx, fullText);
           setAiCommentary(fullText);
@@ -899,7 +899,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           autoReviewTimerRef.current = setTimeout(() => {
             setAwaitingAiNarration(false);
             // Advance immediately — don't re-enter this effect for the same move
-            setReviewState((prev) => ({
+            setReviewState((prev: ReviewState) => ({
               ...prev,
               currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
             }));
@@ -971,7 +971,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         openingName,
         result,
         playerRating,
-        (chunk) => setNarrativeSummary((prev) => (prev ?? '') + chunk),
+        (chunk: string) => setNarrativeSummary((prev: string | null) => (prev ?? '') + chunk),
         narrativeMoveData,
       ).then((fullText) => {
         setNarrativeSummary(fullText);
@@ -989,7 +989,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (cls === 'blunder' || cls === 'mistake' || cls === 'brilliant') {
         // Advance to the critical move, then stop and narrate
         guidedTimerRef.current = setTimeout(() => {
-          setReviewState((prev) => ({
+          setReviewState((prev: ReviewState) => ({
             ...prev,
             currentMoveIndex: nextIdx,
           }));
@@ -1015,7 +1015,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const guidedDelay = currentGuidedMove?.isCoachMove ? 1200 : GUIDED_ADVANCE_MS;
 
     guidedTimerRef.current = setTimeout(() => {
-      setReviewState((prev) => ({
+      setReviewState((prev: ReviewState) => ({
         ...prev,
         currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
       }));
@@ -1060,7 +1060,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setPracticeTarget(null);
     setPracticeResult(null);
     setPracticeAttempts(0);
-    setReviewState((prev) => ({
+    setReviewState((prev: ReviewState) => ({
       ...prev,
       mode: 'guided_lesson',
       whatIfMoves: [],
@@ -1075,7 +1075,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // ─── Practice In Chat Handler ─────────────────────────────────────────────
   const handlePracticeInChat = useCallback(() => {
-    const tacticTypes = [...new Set(missedTactics.map((t) => t.tacticType))];
+    const tacticTypes = [...new Set(missedTactics.map((t: MissedTactic) => t.tacticType))];
     const prompt = tacticTypes.length > 0
       ? `I want to practice the tactics I missed in my last game. I struggled with: ${tacticTypes.join(', ')}. Set up some practice positions for me.`
       : 'I want to practice tactics based on my recent game. Set up some practice positions for me.';
@@ -1087,7 +1087,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setReviewPhase('analysis');
     setReviewDepth(depth);
     // Start at the beginning and immediately kick off auto-review
-    setReviewState((prev) => ({
+    setReviewState((prev: ReviewState) => ({
       ...prev,
       currentMoveIndex: -1,
     }));
@@ -1294,7 +1294,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <MoveActionButtons
                   currentMove={currentMove}
                   onShowBestMove={() => {
-                    setBestMoveRevealed((prev) => !prev);
+                    setBestMoveRevealed((prev: boolean) => !prev);
                   }}
                   onRetryPosition={() => {
                     if (!currentMove || !currentMove.bestMove) return;
@@ -1341,7 +1341,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </button>
               <div className="flex-1 text-center text-[11px] font-mono overflow-hidden whitespace-nowrap" style={{ color: 'var(--color-text)' }}>
                 <span className="font-medium" style={{ color: 'var(--color-accent)' }}>Best: </span>
-                {bestLineSans.map((san, i) => (
+                {bestLineSans.map((san: string, i: number) => (
                   <span
                     key={i}
                     className={i < bestLineIndex ? 'opacity-40' : i === bestLineIndex ? 'font-bold' : 'opacity-60'}
@@ -1373,7 +1373,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
                 Variation:{' '}
               </span>
-              {reviewState.whatIfMoves.map((m, i) => (
+              {reviewState.whatIfMoves.map((m: string, i: number) => (
                 <span
                   key={i}
                   className="text-xs font-mono"
@@ -1571,7 +1571,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 </span>
               </div>
               <div className="space-y-1.5">
-                {missedTactics.map((tactic, i) => (
+                {missedTactics.map((tactic: MissedTactic, i: number) => (
                   <div
                     key={i}
                     className="flex items-center gap-2 p-1.5 rounded-md hover:bg-theme-surface transition-colors cursor-pointer"
@@ -1589,7 +1589,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       </span>
                     </div>
                     <button
-                      onClick={(e) => {
+                      onClick={(e: MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
                         handleStartPractice(tactic);
                       }}

@@ -2,6 +2,36 @@ import { ANNOTATION_MODULES } from '../data/annotations';
 import { Chess } from 'chess.js';
 import type { OpeningMoveAnnotation, OpeningAnnotations } from '../types';
 
+// Map pro repertoires to a specific sub-line instead of the main line.
+// Keyed by full opening ID first, then by suffix as fallback.
+const PRO_ID_TO_SUBLINE: Record<string, string> = {
+  'pro-naroditsky-scotch': 'variation-0',
+  'pro-hikaru-scotch': 'variation-1',
+  'pro-dubov-scotch': 'variation-3',
+  'pro-naroditsky-vienna': 'variation-5',
+  'pro-firouzja-vienna': 'variation-6',
+  'pro-gothamchess-london': 'variation-5',
+  'pro-hikaru-london': 'variation-6',
+  'pro-annacramling-london': 'variation-7',
+};
+
+const PRO_SUFFIX_TO_SUBLINE: Record<string, string> = {
+  'anti-berlin': 'variation-5',
+  'anti-sicilian': 'variation-5',
+  'berlin': 'variation-2',
+  'english': 'variation-0',
+  'fantasy-caro': 'variation-4',
+  'french': 'variation-5',
+  'kia': 'variation-0',
+  'milner-barry': 'variation-0',
+  'ponziani': 'variation-5',
+  'qgd': 'variation-5',
+  'rossolimo': 'variation-5',
+  'stafford-refute': 'variation-2',
+  'tarrasch-defense': 'variation-6',
+  'tarrasch-french': 'variation-3',
+};
+
 // Map pro-repertoire suffixes to base annotation IDs
 const PRO_SUFFIX_TO_BASE: Record<string, string> = {
   'alapin': 'sicilian-alapin',
@@ -78,6 +108,19 @@ async function loadModule(openingId: string): Promise<OpeningAnnotations | null>
 }
 
 export async function loadAnnotations(openingId: string): Promise<OpeningMoveAnnotation[] | null> {
+  // Check if this pro repertoire should use a sub-line instead of the main line
+  const fullIdSubLine = PRO_ID_TO_SUBLINE[openingId];
+  if (fullIdSubLine) {
+    return loadSubLineAnnotations(openingId, fullIdSubLine);
+  }
+  const proMatch = /^pro-[a-z]+-(.+)$/.exec(openingId);
+  if (proMatch) {
+    const subLineKey = PRO_SUFFIX_TO_SUBLINE[proMatch[1]];
+    if (subLineKey) {
+      return loadSubLineAnnotations(openingId, subLineKey);
+    }
+  }
+
   const data = await loadModule(openingId);
   return data?.moveAnnotations ?? null;
 }

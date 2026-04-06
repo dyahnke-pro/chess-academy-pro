@@ -1742,6 +1742,267 @@
           ]
         }
       ]
+    },
+    {
+      "name": "French Classical: Burn Variation",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Firouzja's weapon — the Burn Variation of the French Classical. White opens with e4, inviting the French Defence structure. This line leads to sharp play with opposite-side castling and unbalanced pawn structures.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays the French Defence. The e6 pawn supports ...d5 next, creating the classic central tension. The trade-off is the light-squared bishop gets locked behind the pawn chain.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "White builds the ideal e4+d4 pawn center. Now Black must challenge it or get squeezed.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black strikes at the center immediately. This creates the central tension that defines the French — White must decide how to handle the pawn clash on e4 vs d5.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to defend e4 and prepare the Classical system. From c3, the knight also puts pressure on d5.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, attacking the e4 pawn. This is the Classical French — Black puts direct pressure on the center rather than playing ...Bb4 (Winawer) or ...dxe4 (Rubinstein).",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "The key move that defines the Burn Variation! White pins the f6 knight against the queen. This creates a real threat — if Black isn't careful, White can capture on f6 and damage Black's pawn structure.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "d8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black captures on e4, entering the Burn Variation. Instead of breaking the pin with ...Be7 (which leads to the standard Classical), Black takes the pawn first, changing the character of the position entirely.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "White recaptures with the knight, placing it powerfully in the center. The knight on e4 is very strong — it attacks f6 and d6, and the pin on the f6 knight from Bg5 is still active.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, preparing to castle and asking White what they want to do about the pin. The bishop on e7 also gives the f6 knight an escape square after a potential Bxf6 exchange.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf6",
+          "annotation": "White captures the knight! This is the critical decision — White gives up the bishop pair but damages Black's pawn structure. The idea is that the doubled f-pawns will be a long-term weakness.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "gxf6",
+          "annotation": "Black recaptures with the g-pawn, doubling the f-pawns. This looks ugly, but Black gets the bishop pair as compensation. The open g-file can also become an attacking asset if Black castles queenside. The position is now unbalanced and sharp.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the second knight to its natural square. The knight supports d4 and prepares kingside castling. White's plan is straightforward development before launching an attack.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "Black fianchettoes the queenside bishop. This is the best way to activate the light-squared bishop — after ...Bb7, it controls the long diagonal and puts pressure on e4 and d5.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White places the bishop on the aggressive c4 square, targeting the f7 pawn and the a2-g8 diagonal. This is a natural developing move that also prepares queenside castling.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb7",
+          "annotation": "Black completes the fianchetto. The bishop on b7 is very active, controlling the long diagonal. It compensates for the doubled f-pawns by giving Black strong central influence.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White places the queen on e2, connecting the rooks and preparing to castle queenside. With O-O-O coming, White will have a rook on the d-file and can launch a kingside attack.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "c1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black develops the knight to d7, supporting the e5 and c5 squares. The knight might reroute to f8-g6 for kingside defense, or go to c5 to pressure White's center.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "White castles queenside! This is the hallmark of the Burn Variation — opposite-side castling leads to mutual attacks. White will storm the kingside with h4-h5, while Black will counterattack on the queenside with ...a5, ...c5, or ...Qa5.",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "h4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black immediately strikes at the center and opens lines toward White's king on the queenside. This is the key counter — by challenging d4, Black activates pieces and creates threats against the queenside. The position is now a race: both sides are attacking on opposite flanks.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "c1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

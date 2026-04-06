@@ -2373,6 +2373,240 @@
           "annotation": "Qd3. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Rossolimo with Bxc6",
+      "type": "variation",
+      "note": "Firouzja's trademark. 3.Bb5 followed by an early Bxc6 doubles Black's pawns but gives up the bishop pair. White aims for a slow positional squeeze targeting the weakened pawn structure.",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The king's pawn opening. We're heading into Firouzja's Rossolimo system — a positional weapon that avoids the complex Sveshnikov theory entirely.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "The Sicilian Defense. Black fights for d4 with the c-pawn, seeking an asymmetric struggle. But White has no intention of playing d4.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Developing the knight naturally. Black will likely play Nc6, walking into the Rossolimo.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to its most natural square. This is exactly what White wants to see for the Rossolimo."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Rossolimo! White puts the bishop on b5 to pressure c6 and sidestep all of Black's Open Sicilian preparation. Firouzja has made this his signature weapon at the highest level.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black fianchettoes, preparing to develop the bishop to g7. This is one of the main responses — the g7 bishop will be a monster on the long diagonal.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc6",
+          "annotation": "Firouzja's trademark — take on c6 immediately! White gives up the bishop pair but doubles Black's pawns. The resulting structure gives White long-term targets to attack. Simple chess, but very effective.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxc6",
+          "annotation": "Black recaptures with the d-pawn, keeping the center flexible. The doubled c-pawns are ugly, but Black gets the half-open d-file and the bishop pair. It's a classic structural trade-off.",
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White plays d3, setting up a solid structure. The plan is slow and positional — develop calmly, castle, and then squeeze Black's weak pawns. No need to rush.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black completes the fianchetto. The g7 bishop is powerful on the long diagonal, but White's pawn structure targets are permanent.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "a1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "h3",
+          "annotation": "A useful prophylactic move — White prevents Bg4 pin and creates a retreat square for the bishop on h2 if needed. Slow moves like this are the hallmark of the Rossolimo approach.",
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, attacking e4. A natural and strong developing move."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3, supporting e4 and preparing to castle. The knight also eyes d5, a potential outpost.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black reroutes the knight to d7, heading for e5 or b6. The knight was doing well on f6, but Black wants to reposition for better squares.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be3",
+          "annotation": "White develops the bishop to e3, where it controls d4 and supports a potential queenside expansion. Clean, purposeful development.",
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black pushes e5 to grab central space and shut down d4 for White's pieces. This is a committal move — the d5 and f5 squares become weak.",
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qd2",
+          "annotation": "White places the queen on d2, connecting the rooks and preparing to castle queenside. The queen also supports Bh6 to trade off Black's strong g7 bishop.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "h6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, getting the king to safety. Now the real battle begins — White will target the doubled c-pawns and weak dark squares."
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "White castles queenside! This creates opposite-side castling, which means both sides will attack each other's king. But White's plan is clearer — push the h-pawn and attack on the kingside while the doubled c-pawns remain a target.",
+          "arrows": [
+            {
+              "from": "h3",
+              "to": "h4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black launches a queenside pawn storm! With opposite-side castling, both sides race to attack. Black pushes b5 to open lines toward White's king. This is the critical moment — Firouzja's Rossolimo leads to exciting, strategically complex positions where White's superior structure often tells in the long run.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

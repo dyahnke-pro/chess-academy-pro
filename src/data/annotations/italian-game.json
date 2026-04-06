@@ -1778,6 +1778,228 @@
           "annotation": "Be6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Ponziani Opening",
+      "type": "variation",
+      "note": "GothamChess's surprise weapon. 3.c3 prepares d4 and leads to wild tactical complications. White gives up castling rights for a strong center and development lead.",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The standard king's pawn opening. We're heading into Ponziani territory — a tricky surprise weapon that most players at this level won't have prepared for.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds symmetrically, fighting for the center. So far, nothing unusual."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Developing the knight to its natural square, attacking e5 and preparing for the surprise on move 3.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5 with the knight. This is the most natural response — and exactly what we want to see."
+        },
+        {
+          "san": "c3",
+          "annotation": "Here's the Ponziani! Instead of Bc4 or Bb5, White plays c3 to prepare a big d4 push. It looks slow, but the idea is to build a strong pawn center quickly. Most opponents won't know the theory here.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight and counterattacks the e4 pawn. This is the most aggressive response to the Ponziani.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "Now White strikes in the center! This is the whole point of c3 — we get d4 in with full pawn support. The position opens up and tactics start flying.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black grabs the e4 pawn with the knight. This looks greedy, but it's actually the main line. The real question is whether Black can hold onto the material advantage.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "White pushes the pawn forward, kicking the c6 knight. This is the key move — White sacrifices the e-pawn to gain a tempo and seize space. The d5 pawn is a monster wedge in Black's position.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black develops the bishop actively, putting pressure on f2. The threat of Bxf2+ is real and White needs to deal with it carefully.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxc6",
+          "annotation": "White captures on c6, opening the position further. This recaptures a piece and creates a passed pawn threat. Black's position is getting messy.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf2+",
+          "annotation": "Black goes for the check! This is the critical moment — Black gives up the bishop to drag the White king out. It looks scary for White, but this is all part of the plan.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ke2",
+          "annotation": "White steps up with the king! Yes, we lose castling rights, but the king on e2 is surprisingly safe. White's development advantage and strong center compensate for the exposed king.",
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "bxc6",
+          "annotation": "Black recaptures on c6 with the b-pawn, restoring material balance but accepting doubled c-pawns. The pawn structure is damaged but Black has active pieces.",
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qd5",
+          "annotation": "A powerful queen centralization! The queen eyes both c6 and the kingside while dominating the center. From d5, the queen controls a massive number of squares.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "d5",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black protects e4 and prepares to connect the rooks. The queen on e7 also eyes the e-file pressure against White's king."
+        },
+        {
+          "san": "Kd1",
+          "annotation": "White tucks the king away to d1. It looks odd, but the king is actually quite safe here — away from the open files and behind the pawns. White is about to complete development with a big advantage.",
+          "highlights": [
+            {
+              "square": "d1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bb6",
+          "annotation": "Black retreats the bishop to a safer diagonal. The bishop on b6 still eyes f2 but is no longer in danger."
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White develops the knight toward the center, attacking the e4 knight. This also opens the c1-bishop's diagonal for development.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd2",
+          "annotation": "Black exchanges knights. After this trade, White gets to develop the bishop with tempo."
+        },
+        {
+          "san": "Bxd2",
+          "annotation": "White recaptures with the bishop, completing development. White has a strong center, better coordination, and the bishop pair. Despite the king on d1, White has a clear advantage — this is the power of the Ponziani surprise weapon.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "a5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

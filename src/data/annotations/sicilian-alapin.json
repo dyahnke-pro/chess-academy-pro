@@ -2174,6 +2174,235 @@
           "annotation": "Nd5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Rossolimo Variation (Anti-Sicilian)",
+      "type": "variation",
+      "note": "GothamChess avoids the Open Sicilian entirely with 3.Bb5, putting pressure on c6 and aiming for a positional edge. The Rossolimo is one of the most popular anti-Sicilian weapons.",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Standard king's pawn opening. We're heading into an Anti-Sicilian system — no Open Sicilian headaches today.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "The Sicilian Defense. Black plays c5 to fight for d4 asymmetrically. But instead of diving into the Open Sicilian with d4, White has a different plan.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Developing the knight naturally. Black will expect d4 next, but we have a surprise in store.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, which is the most natural move — and it walks right into the Rossolimo."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Rossolimo! Instead of d4, White pins the c6 knight. This is one of the best Anti-Sicilian weapons because it avoids all of Black's sharp Open Sicilian preparation. White gets a clean, positional game with easy play.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6, a solid response that supports d5 and keeps the position closed. This is the main line — Black doesn't want to allow Bxc6 doubling the pawns just yet.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles immediately. There's no rush to commit the pawn structure — just get the king safe and keep the tension.",
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nge7",
+          "annotation": "Black develops the knight to e7 instead of f6, keeping the option to recapture on c6 with the knight if White takes. This is a key idea in the Rossolimo."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White places the rook on the e-file, supporting the e4 pawn and preparing to open the center later. The rook eyes the e-file which could open up after a d5 break.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black asks the bishop an important question — where do you want to go? This is a key moment for White's strategy."
+        },
+        {
+          "san": "Bf1",
+          "annotation": "White retreats the bishop back to f1. This looks passive, but it's the modern approach — the bishop will find a better diagonal later, and White keeps all the structural advantages without allowing doubled pawns on c6.",
+          "highlights": [
+            {
+              "square": "f1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black strikes in the center! This is the natural break — Black needs counterplay and the d5 push challenges White's central grip.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures, opening the position. Now the center is fluid and piece play becomes critical.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black recaptures with the knight, placing it on a strong central outpost. The knight on d5 looks impressive but White has ways to challenge it."
+        },
+        {
+          "san": "d4",
+          "annotation": "Now White strikes with d4! This is the thematic break — opening the center when White is better developed. The position transforms from quiet to dynamic.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black captures, but this opens lines for White's pieces. The c-file and d-file are now both available."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "White recaptures with the knight, landing on the dominant d4 square. The knight centralizes beautifully and can jump in many directions.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "f5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "Black trades knights on d4, simplifying toward an endgame where White's superior structure will matter."
+        },
+        {
+          "san": "Qxd4",
+          "annotation": "White recaptures with the queen, maintaining central dominance. The queen on d4 is very active, pressuring b6, d7, and controlling the center.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop modestly. The position is solid but White has more space and easier play."
+        },
+        {
+          "san": "c4",
+          "annotation": "White grabs more space with c4, restricting Black's knight from d5 and controlling the center. This is classic Rossolimo strategy — a slow squeeze with positional pressure.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black retreats the knight to f6. The position is comfortable for White — better development, more space, and easy plans. This is exactly why the Rossolimo is such a powerful anti-Sicilian weapon."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the last minor piece, completing development with a harmonious setup. White has a clear positional edge with the space advantage and better pawn structure. The Rossolimo delivers exactly what it promises — a clean, risk-free advantage.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
