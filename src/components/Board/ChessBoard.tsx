@@ -203,15 +203,15 @@ export function ChessBoard({
     // Center squares — subtle persistent highlight (lowest priority, overridden by everything else)
     const centerSquares = ['e4', 'd4', 'e5', 'd5'];
     for (const sq of centerSquares) {
-      styles[sq] = { boxShadow: 'inset 0 0 8px 2px rgba(255, 215, 0, 0.15)' };
+      styles[sq] = { boxShadow: 'inset 0 0 8px 2px rgba(0, 229, 255, 0.08)' };
     }
 
-    // Last-move yellow highlight (internal or external)
+    // Last-move highlight (internal or external)
     if (showLastMoveHighlight) {
       const moveHighlight = lastMove ?? highlightSquares;
       if (moveHighlight) {
-        styles[moveHighlight.from] = { background: 'rgba(255, 255, 0, 0.4)' };
-        styles[moveHighlight.to] = { background: 'rgba(255, 255, 0, 0.4)' };
+        styles[moveHighlight.from] = { background: 'rgba(0, 229, 255, 0.2)' };
+        styles[moveHighlight.to] = { background: 'rgba(0, 229, 255, 0.25)' };
       }
     }
 
@@ -233,23 +233,23 @@ export function ChessBoard({
       };
     }
 
-    // Selected square — bright yellow
+    // Selected square — cyan glow
     if (selectedSquare) {
-      styles[selectedSquare] = { background: 'rgba(255, 255, 0, 0.65)' };
+      styles[selectedSquare] = { background: 'rgba(0, 229, 255, 0.35)', boxShadow: 'inset 0 0 8px rgba(0, 229, 255, 0.4)' };
     }
 
-    // Legal move targets — green dot (empty) or capture ring (occupied)
+    // Legal move targets — cyan dot (empty) or capture ring (occupied)
     for (const sq of legalMoves) {
       const hasPiece = getPiece(sq);
       if (hasPiece) {
         styles[sq] = {
           background:
-            'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0.18) 80%, rgba(0,0,0,0) 80%)',
+            'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0, 229, 255, 0.3) 60%, rgba(0, 229, 255, 0.3) 80%, rgba(0,0,0,0) 80%)',
           cursor: 'pointer',
         };
       } else {
         styles[sq] = {
-          background: 'radial-gradient(circle, rgba(0,0,0,0.18) 25%, transparent 25%)',
+          background: 'radial-gradient(circle, rgba(0, 229, 255, 0.3) 25%, transparent 25%)',
           cursor: 'pointer',
         };
       }
