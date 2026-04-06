@@ -6,6 +6,7 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useCoachTips } from '../../hooks/useCoachTips';
+import type { TacticLineData } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { VoiceChatMic } from '../Board/VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from '../Board/VoiceChatMic';
@@ -389,18 +390,26 @@ export function CoachGamePage(): JSX.Element {
 
   // ─── Coach Tip Bubble (floating overlay near board) ─────────────────────────
   const [tipBubbleText, setTipBubbleText] = useState<string | null>(null);
+  const [tipTacticLine, setTipTacticLine] = useState<TacticLineData | null>(null);
+  const [showingTacticLine, setShowingTacticLine] = useState(false);
   const tipBubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const showTipBubble = useCallback((text: string) => {
+  const showTipBubble = useCallback((text: string, tacticLine?: TacticLineData) => {
     if (tipBubbleTimerRef.current) clearTimeout(tipBubbleTimerRef.current);
     setTipBubbleText(text);
-    tipBubbleTimerRef.current = setTimeout(() => setTipBubbleText(null), 6000);
+    setTipTacticLine(tacticLine ?? null);
+    setShowingTacticLine(false);
+    tipBubbleTimerRef.current = setTimeout(() => {
+      setTipBubbleText(null);
+      setTipTacticLine(null);
+      setShowingTacticLine(false);
+    }, 10000);
   }, []);
 
   // Proactive coach tips (positional awareness, tactics, key moments)
-  const handleCoachTip = useCallback((tip: string) => {
+  const handleCoachTip = useCallback((tip: string, tacticLine?: TacticLineData) => {
     gameChatRef.current?.injectAssistantMessage(tip);
-    showTipBubble(tip);
+    showTipBubble(tip, tacticLine);
   }, [showTipBubble]);
 
   // Missed tactic alert — coach tells player they missed a tactic and suggests takeback
@@ -1548,16 +1557,52 @@ export function CoachGamePage(): JSX.Element {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.25 }}
-                  className="absolute top-2 left-2 right-2 z-10 rounded-xl backdrop-blur-md border border-blue-500/30 px-3 py-2.5 cursor-pointer"
+                  className="absolute top-2 left-2 right-2 z-10 rounded-xl backdrop-blur-md border border-blue-500/30 px-3 py-2.5"
                   style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))' }}
-                  onClick={() => setTipBubbleText(null)}
                   data-testid="coach-tip-bubble"
                 >
                   <div className="flex items-start gap-2">
                     <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
-                      {tipBubbleText}
-                    </p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
+                        {tipBubbleText}
+                      </p>
+                      {showingTacticLine && tipTacticLine && (
+                        <p className="text-xs font-mono mt-1.5 font-semibold text-emerald-400" data-testid="tactic-line-moves">
+                          {uciLinesToSan(tipTacticLine.uciMoves, tipTacticLine.fen, 6)}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    {tipTacticLine && !showingTacticLine && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setShowingTacticLine(true); }}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all duration-200"
+                        style={{
+                          background: 'rgba(52, 211, 153, 0.15)',
+                          color: 'rgb(52, 211, 153)',
+                          border: '1px solid rgba(52, 211, 153, 0.3)',
+                          boxShadow: '0 0 6px rgba(52, 211, 153, 0.2)',
+                        }}
+                        data-testid="show-tactic-line-btn"
+                      >
+                        <Eye size={12} />
+                        Show
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { setTipBubbleText(null); setTipTacticLine(null); setShowingTacticLine(false); }}
+                      className="px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-colors"
+                      style={{
+                        background: 'rgba(148, 163, 184, 0.1)',
+                        color: 'var(--color-text-muted)',
+                        border: '1px solid rgba(148, 163, 184, 0.2)',
+                      }}
+                      data-testid="dismiss-tip-btn"
+                    >
+                      Dismiss
+                    </button>
                   </div>
                 </motion.div>
               )}

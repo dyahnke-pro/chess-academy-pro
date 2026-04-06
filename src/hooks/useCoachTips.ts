@@ -11,6 +11,11 @@ import {
 } from '../services/tacticAlertService';
 import type { StockfishAnalysis, CoachGameMove, TacticType } from '../types';
 
+export interface TacticLineData {
+  uciMoves: string[];
+  fen: string;
+}
+
 export interface UseCoachTipsConfig {
   fen: string;
   playerColor: 'white' | 'black';
@@ -18,7 +23,7 @@ export interface UseCoachTipsConfig {
   enabled: boolean;
   moves: CoachGameMove[];
   playerRating: number;
-  onTip: (tip: string) => void;
+  onTip: (tip: string, tacticLine?: TacticLineData) => void;
   /** Called when the player missed a tactic on the previous move */
   onMissedTactic?: (message: string, tacticType: TacticType) => void;
   /** Per-feature toggles from settings */
@@ -282,7 +287,11 @@ export function useCoachTips({
             isWeakness,
           );
           lastTipFenRef.current = fen;
-          onTipRef.current(message);
+          const bestLine = analysis.topLines[0];
+          const tacticLine: TacticLineData | undefined = bestLine && bestLine.moves.length > 0
+            ? { uciMoves: bestLine.moves, fen }
+            : undefined;
+          onTipRef.current(message, tacticLine);
           return;
         }
 
