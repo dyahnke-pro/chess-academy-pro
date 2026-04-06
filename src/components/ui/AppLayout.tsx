@@ -202,16 +202,16 @@ export function AppLayout(): JSX.Element {
                 to={to}
                 end={to === '/'}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
+                  `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${
                     isActive
                       ? `${activeText} ${activeBg}`
                       : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
                   }`
                 }
                 style={({ isActive }) => isActive ? {
-                  borderBottom: `2px solid ${glowColor}`,
-                  boxShadow: `0 2px 8px ${glowColor}`,
-                } : undefined}
+                  borderLeft: `3px solid ${glowColor}`,
+                  boxShadow: `0 0 10px ${glowColor}, inset 2px 0 8px ${glowColor.replace('0.6)', '0.15)')}`,
+                } : { borderLeft: '3px solid transparent' }}
               >
                 <Icon size={16} />
                 {label}
