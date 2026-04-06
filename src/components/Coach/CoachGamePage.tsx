@@ -1591,7 +1591,8 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={handleTakeback}
                 disabled={gameState.moves.length < 1}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-theme-border text-sm font-medium text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
+                style={{ boxShadow: '0 0 6px rgba(245, 158, 11, 0.2)' }}
                 data-testid="takeback-btn"
               >
                 <Undo2 size={16} />
@@ -1620,7 +1621,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToFirstMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="First move"
                 data-testid="nav-first"
               >
@@ -1629,7 +1630,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToPrevMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Previous move"
                 data-testid="nav-prev"
               >
@@ -1638,7 +1639,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToNextMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Next move"
                 data-testid="nav-next"
               >
@@ -1647,7 +1648,7 @@ export function CoachGamePage(): JSX.Element {
               <button
                 onClick={goToLastMove}
                 disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                className="p-2 md:p-1.5 rounded-md text-theme-text-muted hover:text-theme-text hover:bg-theme-surface disabled:opacity-30 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Last move"
                 data-testid="nav-last"
               >
@@ -1664,10 +1665,11 @@ export function CoachGamePage(): JSX.Element {
         <>
           <button
             onClick={() => setMobileChatOpen(true)}
-            className="fixed z-30 flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-theme-accent text-white transition-transform hover:scale-105 active:scale-95"
+            className="fixed z-30 flex items-center justify-center w-12 h-12 rounded-full bg-theme-accent text-white transition-transform hover:scale-105 active:scale-95"
             style={{
               right: '1rem',
               bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
+              boxShadow: '0 0 12px rgba(6, 182, 212, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3)',
             }}
             aria-label="Open chat"
             data-testid="mobile-chat-toggle"

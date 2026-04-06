@@ -29,11 +29,11 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(234, 179, 8, 0.6)', activeText: 'text-yellow-400', activeBg: 'bg-yellow-500/10' },
-  { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(59, 130, 246, 0.6)', activeText: 'text-blue-400', activeBg: 'bg-blue-500/10' },
-  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(239, 68, 68, 0.6)', activeText: 'text-red-400', activeBg: 'bg-red-500/10' },
-  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(34, 197, 94, 0.6)', activeText: 'text-green-400', activeBg: 'bg-green-500/10' },
-  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(168, 85, 247, 0.6)', activeText: 'text-purple-400', activeBg: 'bg-purple-500/10' },
+  { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(250, 204, 21, 0.6)', activeText: 'text-yellow-400', activeBg: 'bg-yellow-500/10' },
+  { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(6, 182, 212, 0.6)', activeText: 'text-cyan-400', activeBg: 'bg-cyan-500/10' },
+  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(251, 113, 133, 0.6)', activeText: 'text-rose-400', activeBg: 'bg-rose-500/10' },
+  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(52, 211, 153, 0.6)', activeText: 'text-emerald-400', activeBg: 'bg-emerald-500/10' },
+  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(139, 92, 246, 0.6)', activeText: 'text-violet-400', activeBg: 'bg-violet-500/10' },
   { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)', activeText: 'text-orange-400', activeBg: 'bg-orange-500/10' },
   { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)', activeText: 'text-slate-400', activeBg: 'bg-slate-500/10' },
 ];
