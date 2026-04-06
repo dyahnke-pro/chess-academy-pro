@@ -128,7 +128,7 @@ export function OpeningExplorerPage(): JSX.Element {
       </div>
 
       {/* Tab toggle */}
-      <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
+      <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl border-l border-b border-amber-500/25 shadow-[0_2px_8px_rgba(0,0,0,0.3)]" data-testid="tab-toggle">
         {([
           { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-500/20 text-blue-400' },
           { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-green-500/20 text-green-400' },
