@@ -2102,6 +2102,520 @@
           "annotation": "Ba6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "QGD: Bf4 System",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "GothamChess recommends the Bf4 System as a quieter alternative to the classical QGD lines. White opens with d4, controlling the center and preparing c4.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black stakes a claim in the center with d5, directly challenging White's control. This is the classical response.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "The Queen's Gambit. White attacks d5 with the c-pawn, trying to undermine Black's central foothold. Black must decide: accept or decline?",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black declines the gambit and solidifies d5 with e6. This is the QGD — solid and reliable, but the light-squared bishop gets hemmed in behind the pawn chain.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to its natural square, controlling e5 and supporting d4. This flexible move order allows White to choose between several setups.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black mirrors the development, putting the knight on f6 to attack e4 and defend d5. Natural and strong.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the queenside knight, adding more pressure to d5 and controlling e4. The pieces are coordinating toward central dominance.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, preparing to castle kingside. A solid, classical choice that keeps the position flexible.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Here's the key idea! Instead of the classical Bg5 (which pins the knight and leads to sharper play), White places the bishop on f4. This is quieter and more positional — the bishop controls e5 and supports the center without creating immediate tension. White develops the bishop BEFORE playing e3, which would block it in.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, getting the king to safety. The position is solid and Black will look for ...c5 to challenge the center.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "Now White plays e3, completing the pawn structure. The bishop is already on f4 — if White had played e3 first, the bishop would be stuck behind the pawn wall. This move order is the whole point of the Bf4 system.",
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes at the center with ...c5, the standard QGD break. This challenges d4 and opens lines for Black's pieces. If White takes on c5, Black recaptures with the bishop.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxc5",
+          "annotation": "White captures on c5, opening the position. This releases the central tension and gives White a temporary extra pawn on c5, but Black can easily recover it.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc5",
+          "annotation": "Black recaptures with the bishop, which is now actively placed on c5 targeting f2. The bishop has found a great diagonal.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White places the queen on c2, connecting the rooks and controlling the c-file. The queen also eyes the kingside along the c2-h7 diagonal, which can become relevant in an attack.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "h7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the last minor piece, adding pressure to d4 (now e5 after the pawn exchange) and supporting the ...e5 push. The knight on c6 is well-placed for both offense and defense.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a3",
+          "annotation": "A useful prophylactic move. White prevents ...Nb4 jumping into c2, and prepares to expand on the queenside with b4 later. Small moves with big strategic impact.",
+          "arrows": [
+            {
+              "from": "b2",
+              "to": "b4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qa5",
+          "annotation": "Black activates the queen, eyeing the a5-e1 diagonal and putting indirect pressure on the queenside. The queen coordinates with the knight on c6 and bishop on c5.",
+          "arrows": [
+            {
+              "from": "a5",
+              "to": "e1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White seizes the open d-file with the rook. This is a natural move — the d-file is the main highway in QGD positions, and controlling it gives White long-term pressure.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black retreats the bishop to e7, a practical choice. The bishop was potentially vulnerable on c5, and from e7 it defends the kingside. The position is balanced with chances for both sides — a typical Bf4 System middlegame.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tarrasch Defense",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "Dubov's dynamic choice — the Tarrasch Defense. White opens with d4, beginning a classical queen's pawn game. Black will deviate early with ...c5, accepting an isolated d-pawn for active piece play.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays d5, establishing a strong central presence. In the Tarrasch, this pawn will eventually become isolated on d5 — but Dubov shows that the IQP (isolated queen's pawn) is a source of dynamic energy, not just a weakness.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "White offers the Queen's Gambit, challenging d5. In the Tarrasch, Black won't defend d5 with ...e6 in the traditional QGD way — instead, Black will strike with ...c5 to create immediate central tension.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays e6, supporting d5 and preparing development. This looks like a normal QGD, but Black's next move will reveal the Tarrasch plan.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight, adding more pressure to d5. This is the natural developing move that prepares to meet Black's central challenge.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "The defining move of the Tarrasch Defense! Instead of passively defending d5 with ...Nf6 and ...Be7, Black immediately strikes at the center with ...c5. This is aggressive — Black accepts that after the pawn exchanges, the d5 pawn will become isolated, but the open lines and active piece play compensate.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White captures on d5, beginning the exchange sequence that will create the isolated d-pawn. This is the main line — White tries to saddle Black with a structural weakness.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black recaptures with the e-pawn, creating the famous isolated queen's pawn (IQP) on d5. The pawn can't be defended by other pawns, which makes it a long-term target. But the upside is huge: Black gets open lines for every piece, especially the bishops.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "f5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops naturally, preparing to castle. The knight on f3 also keeps an eye on d4 — the square right in front of Black's isolated pawn. Controlling d4 is White's key strategic goal.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, where it supports the d4 push and pressures d4 from the other direction. This knight is very active in Tarrasch positions — it can jump to e5 or b4.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White fianchettoes the bishop, aiming to place it on g2 where it will stare down the long diagonal right at the isolated d5 pawn. This is the most principled approach — the bishop on g2 applies constant pressure.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the kingside knight, defending d5 and preparing to castle. The knight on f6 is well-placed — it supports d5, controls e4, and is ready for action.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White completes the fianchetto. The bishop on g2 is a sniper aimed at d5 — it puts permanent pressure on the isolated pawn and controls the long diagonal.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, a solid choice preparing to castle. In some lines Black plays ...Bd6 instead for a more aggressive setup, but Be7 is the reliable option.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside, completing development. The king is safe and the rook is ready to come to the center. White's plan is to blockade and eventually win the d5 pawn.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles too. Both sides are fully developed — now the middlegame battle begins. Black needs to use the IQP as a battering ram with ...d4, while White wants to blockade it and grind it down.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the f6 knight, the key defender of d5. This is a typical IQP strategy — attack the pieces that defend the isolated pawn. If the knight moves, d5 falls.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black exchanges pawns in the center, opening lines. With the center opening up, Black's pieces become very active. This is the dynamic approach — trade the structural weakness for piece activity.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "White recaptures with the knight, centralizing it powerfully on d4. The knight dominates the board from here, but Black's pieces are also very active on the open lines.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "Black kicks the bishop, asking the important question: will you take on f6 or retreat? This gains a tempo and gives Black more freedom to maneuver.",
+          "arrows": [
+            {
+              "from": "h6",
+              "to": "g5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be3",
+          "annotation": "White retreats the bishop to e3, maintaining its influence on the long diagonal. The bishop supports d4 and eyes the kingside. The position is dynamically balanced — the Tarrasch gives Black active play at the cost of the IQP.",
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black places the rook on the open e-file, targeting the e3 bishop and creating potential tactics along the file. This is the kind of active piece play that justifies the Tarrasch — every Black piece is working. Dubov shows that the IQP is not just a weakness to defend, but a springboard for dynamic play.",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "e3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

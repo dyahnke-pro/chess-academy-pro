@@ -1705,6 +1705,415 @@
           "annotation": "Bc5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Vienna Gambit (f4)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The starting move for the Vienna Gambit. White claims central space and sets the stage for an aggressive f4 push that defines this variation.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black stakes an equal claim in the center. This symmetrical response is what White is hoping for — it gives the f4 advance real bite."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "The Vienna move order. By developing the knight first instead of playing f4 immediately (the King's Gambit), White keeps f4 in reserve while supporting e4. This is the key difference between the Vienna Gambit and the King's Gambit.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f2",
+              "to": "f4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight and attacks e4. This is the most principled reply — it forces White to commit to the gambit now or defend the pawn."
+        },
+        {
+          "san": "f4",
+          "annotation": "Here it comes — the Vienna Gambit! White strikes at Black's e5 pawn, offering to trade the f-pawn for central dominance. The idea is that after the center opens up, White's lead in development (Nc3 is already out) will matter more than the pawn.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "The best response! Black counters in the center immediately rather than defending passively. This Falkbeer-style counterstrike opens lines for Black's pieces and challenges White to prove the gambit is sound. Capturing on e4 would be passive and let White build a dream center.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "fxe5",
+          "annotation": "White takes the e5 pawn, gaining a temporary extra pawn in the center. The position is now sharp — White has pawns on e4 and e5 but Black's d5 pawn is hammering the center. Whoever develops faster will seize the initiative.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black jumps into the center with the knight, recapturing a pawn and planting a powerful piece on e4. The knight is centralized and attacks c3, f2, and d2. This is the critical position of the Vienna Gambit — both sides have one pawn in the center and active pieces.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "e4",
+              "to": "f2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the kingside knight to its best square, guarding against Qh4+ ideas and preparing to castle. The knight also supports the e5 pawn. Development is key in gambit positions — White needs to get pieces out fast to justify the pawn investment.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black pins the f3 knight to the queen, increasing pressure on the position. This is a common motif — by pinning, Black makes it harder for White to maintain the e5 pawn and threatens to simplify favorably.",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White breaks the pin and defends the knight, while also placing the queen on a flexible square. From e2, the queen supports e5, eyes the e-file for future pressure, and keeps castling options open. A Naroditsky favorite — practical and multi-purpose.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc5",
+          "annotation": "The knight retreats to c5, an active outpost where it targets both d3 and e4. Black's idea is to keep the knight actively placed while avoiding exchanges on unfavorable terms. The c5 knight also supports a future b6 fianchetto structure.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d4",
+          "annotation": "White seizes the full center with d4, creating a powerful pawn duo on d4-e5. This is the dream setup in the Vienna Gambit — the central pawns restrict Black's pieces and give White a space advantage. The position is opening up, which favors the side with better development.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e5",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "Black trades the bishop for the knight, doubling White's pawns on the f-file. This is a concession — giving up the bishop pair — but it removes a key defender and damages White's structure. A practical decision in a sharp position."
+        },
+        {
+          "san": "Qxf3",
+          "annotation": "White recaptures with the queen, maintaining central control. The queen on f3 is actively placed, eyeing b7 and supporting the d4-e5 center. The doubled f-pawns are ugly on paper but the position is so dynamic that structure matters less than activity.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "b7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qh4+",
+          "annotation": "Black throws in a check to disrupt White's coordination. The queen harasses the king and gains a tempo. This is a critical moment — White must decide how to deal with the check while maintaining the initiative.",
+          "arrows": [
+            {
+              "from": "h4",
+              "to": "e1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "The only good response. White blocks with the g-pawn, which weakens the kingside slightly but forces the queen to make a decision. The key point is that White's central pawns and development advantage are worth more than the cosmetic kingside weakness.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "h4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe4+",
+          "annotation": "Black checks again on e4, forcing a queen trade. This might look like Black is bailing out, but the queens were actually helping White more — without queens, the damaged kingside is less of a liability for White. Objectively, Black should avoid this trade if possible."
+        },
+        {
+          "san": "Qxe4",
+          "annotation": "White happily trades queens. In the resulting endgame, White's powerful center (d4 + e5), bishop, and active rook placements give a lasting advantage. Without queens on the board, White can focus on converting the space advantage.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black recaptures with the knight, centralizing it again. But this time without queens, the knight on e4 is less threatening. White has a clear plan: develop the bishop, castle queenside, and use the central pawn majority."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White develops the bishop to its ideal square, supporting the e5 pawn and controlling key dark squares. This is the position Naroditsky highlights as slightly better for White — the d4-e5 center is rock solid, the bishop is active, and White will castle queenside with a comfortable advantage. A model Vienna Gambit position.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vienna Bc4 with f4",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "White opens with the king's pawn. In this variation, White will develop the bishop to c4 first before launching the f4 push — a more sophisticated approach than the immediate Vienna Gambit.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds symmetrically. This is the starting point for all Vienna Game systems."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "The Vienna move. White keeps the f-pawn free and develops a piece — the trademark of the Vienna Game."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight and pressures e4. A natural and strong reply that keeps the position balanced."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White develops the bishop to the aggressive c4 square before committing to f4. This is the Firouzja-inspired approach — by developing the bishop first, White gets a more harmonious setup where the bishop is already active when the center opens up.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black mirrors with an equally active bishop deployment, targeting the f2 square. This creates an Italian Game flavor within the Vienna structure. Both bishops are staring down at the opponent's weakest point.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White shores up the e4 pawn and prepares to develop calmly. The modest d3 is important — it keeps the center stable while White prepares the f4 break. Rushing f4 immediately would be premature with the bishop on c5 targeting f2.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black solidifies the center with d6, supporting the e5 pawn and opening the diagonal for the c8 bishop. A necessary structural move before Black can complete development."
+        },
+        {
+          "san": "f4",
+          "annotation": "Now White strikes! With the pieces developed and the center stable, f4 challenges Black's e5 pawn. This is the key idea of the Bc4 + f4 setup — White has delayed the pawn push until the position is ready for it. The tension in the center creates tactical opportunities.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to defend e5 and adds another piece to the fight. The knight on c6 is well-placed, supporting the center and keeping options for Nd4 or Na5 maneuvers later.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the last minor piece, adding pressure to e5 and controlling d4. The setup is now complete — White has Nc3, Bc4, Nf3, and the f4 pawn all coordinating against Black's center. This is a very natural and strong configuration.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black pins the f3 knight, creating tactical tension. The pin is annoying because it questions the support of both e5 pressure and the d4 square. White needs to address this pin before proceeding with the attack.",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Na4",
+          "annotation": "A subtle and strong move! Instead of reacting to the pin passively, White attacks the c5 bishop. The idea is to trade it off, removing Black's best minor piece and gaining the bishop pair. This Na4 maneuver is a key resource in positions where Black has a bishop on c5.",
+          "arrows": [
+            {
+              "from": "a4",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb6",
+          "annotation": "Black retreats the bishop to b6 to avoid the trade, but it's now on a less active diagonal. The bishop still has some scope along the a7-g1 diagonal, but it's no longer putting direct pressure on f2."
+        },
+        {
+          "san": "Nxb6",
+          "annotation": "White captures the bishop, eliminating Black's dark-squared bishop. This gives White the bishop pair and removes a key defensive piece. The doubled b-pawns for Black are also a slight structural weakness.",
+          "arrows": [
+            {
+              "from": "a4",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "axb6",
+          "annotation": "Black recaptures toward the a-file. The doubled b-pawns aren't ideal, but the open a-file gives Black's rook some activity. Still, losing the dark-squared bishop is a meaningful concession.",
+          "arrows": [
+            {
+              "from": "a8",
+              "to": "a1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "fxe5",
+          "annotation": "White opens the position by taking on e5. With the bishop pair, White benefits from open lines. The e5 pawn capture also creates targets in Black's camp and activates White's pieces for the middlegame.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black recaptures, maintaining material equality. But the position now slightly favors White — the bishop pair, the open f-file, and Black's doubled b-pawns all add up to a small but lasting advantage."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, connecting the rooks and placing the king in safety. The rook immediately lands on the half-open f-file, adding pressure. This is the Firouzja-style setup in action — a solid, well-coordinated position with long-term pressure.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles as well, reaching a middlegame where White has a slight edge thanks to the bishop pair and better pawn structure. The position is rich with ideas for both sides — White will look to exploit the open lines and the bishop pair, while Black needs to activate the rooks and find counterplay. A great position to understand the strategic themes of the Vienna."
+        }
+      ]
     }
   ]
 }

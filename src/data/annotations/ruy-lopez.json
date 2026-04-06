@@ -1951,6 +1951,237 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Anti-Berlin with d3",
+      "type": "variation",
+      "note": "Caruana's Anti-Berlin. Instead of the standard 4.O-O allowing the Berlin endgame, White plays 4.d3 for a quieter but strategically rich position. White aims to exploit the doubled c-pawns long-term.",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The king's pawn opening. We're heading into a Ruy Lopez, but with a twist — Caruana's Anti-Berlin system that avoids the dreaded Berlin endgame.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds symmetrically, claiming the center. The classical Open Game is on."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Developing the knight and attacking e5. Standard play heading toward the Ruy Lopez.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5 with the knight. We're in Ruy Lopez territory now."
+        },
+        {
+          "san": "Bb5",
+          "annotation": "The Ruy Lopez! White pins the knight that defends e5, creating long-term strategic pressure. This has been the cornerstone of 1.e4 play for over a century.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "The Berlin Defense! Black develops the knight and attacks e4. In top-level chess, this is known as the 'Berlin Wall' because it's almost impossible to break through. But Caruana found a way around it...",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "The Anti-Berlin! Instead of O-O (which allows the Berlin endgame after Nxe4 d4 Nd6 Bxc6 dxc6 dxe5), White plays d3 to keep the position complex. This is Caruana's specialty — White maintains the tension and avoids the simplified ending.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black develops the bishop to an active square, targeting f2 and controlling the a7-g1 diagonal. A logical developing move in the Anti-Berlin.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc6",
+          "annotation": "White captures the knight, doubling Black's c-pawns. This is the strategic idea — White gives up the bishop pair but saddles Black with a permanent structural weakness.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "dxc6",
+          "annotation": "Black recaptures with the d-pawn. The doubled c-pawns are a long-term weakness, but Black gets the half-open d-file and the bishop pair as compensation.",
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "White develops the knight to d2 rather than c3. This keeps the c-pawn free to advance and supports a future Nf1-g3 maneuver to control key squares.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black develops the bishop to e6, a natural square where it supports d5 and connects to the queenside. Solid play."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, getting the king to safety. Now White can focus on the middlegame plan of targeting the doubled c-pawns.",
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black repositions the bishop to d6, supporting e5 and keeping an eye on the kingside. The bishop is well-placed here defensively."
+        },
+        {
+          "san": "Nb3",
+          "annotation": "White reroutes the knight to b3, targeting the c5 and a5 squares. The knight on b3 can hop to c5 or a5 to pressure Black's weak queenside pawns.",
+          "arrows": [
+            {
+              "from": "b3",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b3",
+              "to": "a5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qe7",
+          "annotation": "Black connects the rooks and supports e5. The queen on e7 is flexible and can swing to the kingside if needed."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the f6 knight against the queen! This creates real pressure — if Black isn't careful, White can win the e5 pawn or force structural concessions.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black breaks the pin by retreating the knight. This is a bit passive but necessary to avoid the pin pressure."
+        },
+        {
+          "san": "Nh4",
+          "annotation": "White reroutes the knight to h4, heading for f5 — the dream square. A knight on f5 would dominate the position, pressuring d6, e7, and g7.",
+          "arrows": [
+            {
+              "from": "h4",
+              "to": "f5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "f6",
+          "annotation": "Black pushes f6 to kick the bishop and shore up e5. This weakens the kingside slightly but is necessary to keep the position together.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "g5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be3",
+          "annotation": "White retreats the bishop calmly. The bishop on e3 is still well-placed, supporting the knight's journey to f5 and keeping pressure on the dark squares.",
+          "arrows": [
+            {
+              "from": "e3",
+              "to": "a7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O-O",
+          "annotation": "Black castles queenside! This is a committal decision — the king goes to the queenside where the doubled c-pawns are. White now has clear targets on both sides of the board. This is exactly the kind of strategically rich position Caruana's Anti-Berlin aims for.",
+          "highlights": [
+            {
+              "square": "c8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

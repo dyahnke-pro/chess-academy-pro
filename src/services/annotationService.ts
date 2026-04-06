@@ -7,15 +7,27 @@ const PRO_ID_TO_SUBLINE: Record<string, string> = {
   'pro-naroditsky-scotch': 'variation-0',
   'pro-hikaru-scotch': 'variation-1',
   'pro-dubov-scotch': 'variation-3',
+  'pro-naroditsky-vienna': 'variation-5',
+  'pro-firouzja-vienna': 'variation-6',
+  'pro-gothamchess-london': 'variation-5',
+  'pro-hikaru-london': 'variation-6',
+  'pro-annacramling-london': 'variation-7',
 };
 
 const PRO_SUFFIX_TO_SUBLINE: Record<string, string> = {
+  'anti-berlin': 'variation-5',
+  'anti-sicilian': 'variation-5',
   'berlin': 'variation-2',
   'english': 'variation-0',
   'fantasy-caro': 'variation-4',
+  'french': 'variation-5',
   'kia': 'variation-0',
   'milner-barry': 'variation-0',
+  'ponziani': 'variation-5',
+  'qgd': 'variation-5',
+  'rossolimo': 'variation-5',
   'stafford-refute': 'variation-2',
+  'tarrasch-defense': 'variation-6',
   'tarrasch-french': 'variation-3',
 };
 
