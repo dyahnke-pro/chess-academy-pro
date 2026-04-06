@@ -128,17 +128,17 @@ export function OpeningExplorerPage(): JSX.Element {
       </div>
 
       {/* Tab toggle */}
-      <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl border-l border-b border-amber-500/25 shadow-[0_2px_8px_rgba(0,0,0,0.3)]" data-testid="tab-toggle">
+      <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
-          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-500/20 text-blue-400' },
-          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-green-500/20 text-green-400' },
-          { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-red-500/20 text-red-400' },
-          { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-purple-500/20 text-purple-400' },
-        ]).map(({ id, label, icon: Icon, testId, activeClasses }) => (
+          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-500/20 text-blue-400', borderColor: 'border-blue-500/30 shadow-[inset_0_-1px_4px_rgba(59,130,246,0.15)]' },
+          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-green-500/20 text-green-400', borderColor: 'border-green-500/30 shadow-[inset_0_-1px_4px_rgba(34,197,94,0.15)]' },
+          { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-red-500/20 text-red-400', borderColor: 'border-red-500/30 shadow-[inset_0_-1px_4px_rgba(239,68,68,0.15)]' },
+          { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-purple-500/20 text-purple-400', borderColor: 'border-purple-500/30 shadow-[inset_0_-1px_4px_rgba(168,85,247,0.15)]' },
+        ]).map(({ id, label, icon: Icon, testId, activeClasses, borderColor }) => (
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-colors ${
+            className={`flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg text-xs font-medium transition-all border-l-2 border-b-2 ${borderColor} ${
               tab === id
                 ? activeClasses
                 : 'text-theme-text-muted hover:text-theme-text'
