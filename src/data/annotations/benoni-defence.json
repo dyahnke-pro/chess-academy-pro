@@ -2355,6 +2355,209 @@
           "annotation": "Bd4. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Dubov: Modern Benoni (e4 System)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with 1.d4, the standard starting move for the Modern Benoni complex. Black will challenge this pawn with ...c5, provoking the central tension that defines the opening.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, controlling d5 and e4 while keeping the pawn structure flexible. This move order allows Black to commit to the Benoni only after White plays c4."
+        },
+        {
+          "san": "c4",
+          "annotation": "White establishes the c4-d4 pawn duo, controlling the center and preparing to meet ...c5 with d5, creating the characteristic Benoni pawn wedge."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes at d4 immediately, entering the Benoni complex. This pawn will anchor on c5 for the rest of the game, giving Black queenside counterplay and a half-open c-file.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "White advances d5, locking the center and gaining a space advantage. This creates the asymmetric pawn structure that is the hallmark of the Modern Benoni — White has a queenside space edge, Black aims for ...e6 and kingside counterplay.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "Black challenges the d5 pawn immediately with ...e6, the defining move of the Modern Benoni. After the exchange, Black will have a mobile e-pawn and open lines for the dark-squared bishop."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3, supporting the d5 pawn and preparing to recapture on d5. The knight also eyes the e4 square, which White will occupy with a pawn in this system."
+        },
+        {
+          "san": "exd5",
+          "annotation": "Black captures on d5, opening the e-file and creating the classic Benoni pawn structure. The resulting d5 vs. d6 pawn formation gives White space but Black dynamic piece play.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White recaptures with the c-pawn, maintaining the strong d5 outpost. This pawn cramps Black's position but also gives Black a target to attack and clear diagonals for the bishops."
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays ...d6, solidifying the pawn chain and preparing to fianchetto the dark-squared bishop. The pawn on d6 supports the ...e5 break that Black will aim for in many lines.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White plays 6.e4, the defining move of this system. Instead of the more common Nf3, White builds a massive pawn center with pawns on d5 and e4. This gives White tremendous central control but can become a target if Black achieves the ...b5 break.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black prepares to fianchetto the bishop on g7, where it will exert powerful pressure along the long diagonal. The bishop on g7 is Black's best piece in the Benoni, controlling key dark squares and supporting both ...e5 and ...b5 breaks."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to f3, completing the kingside development. The knight supports the e4 and d5 pawns and prepares to castle short."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black fianchettoes the dark-squared bishop, placing it on the powerful a1-h8 diagonal. This bishop is the cornerstone of Black's position, putting latent pressure on White's center and queenside.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g7",
+              "to": "a1",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be2",
+          "annotation": "White develops the bishop modestly to e2, prioritizing rapid castling over aggressive placement. The bishop is solid here and can later relocate to f3 or d3 if needed."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles kingside, securing the king and connecting the rooks. The rook on f8 will soon move to e8 to support the ...e5 or ...e6 pawn breaks."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, completing development. Both sides are now fully developed and the middlegame battle begins — White will push on the queenside, Black will aim for kingside and central counterplay."
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black places the rook on e8, a key move in the e4 Benoni system. The rook eyes the e4 pawn and supports a future ...e5 break. It also clears f8 for the knight maneuver ...Na6-c7.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "e8",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White plays Nd2, rerouting the knight from f3. The knight is heading to c4 via d2, where it will pressure d6 and support the b4 advance. This maneuver is the hallmark of White's plan in the e4 system.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d2",
+              "color": "rgba(0, 120, 255, 0.8)"
+            },
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Na6",
+          "annotation": "Black develops the knight to a6, heading for c7 where it will support the crucial ...b5 pawn break. The knight route ...Na6-c7 is the standard maneuver in the Modern Benoni to prepare queenside counterplay.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "a6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a6",
+              "to": "c7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f3",
+          "annotation": "White plays f3, reinforcing the e4 pawn and preventing any ...Ng4 ideas. This also prepares a potential Be3 and Qd2 setup, keeping the center rock-solid while White expands on the queenside.",
+          "arrows": [
+            {
+              "from": "f2",
+              "to": "f3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc7",
+          "annotation": "Black completes the ...Na6-c7 maneuver, placing the knight on the perfect square. From c7, the knight supports both ...b5 (the primary break) and ...a6 followed by ...Rb8. Black is now ready to launch queenside counterplay against White's space advantage.",
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "c7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

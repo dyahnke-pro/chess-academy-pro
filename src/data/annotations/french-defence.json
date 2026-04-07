@@ -2003,6 +2003,212 @@
           ]
         }
       ]
+    },
+    {
+      "name": "GothamChess: Milner-Barry Gambit (Bd3)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "White opens with the king's pawn, taking central space and preparing for the French Defence structure.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e6",
+          "annotation": "The French Defence. Black supports a future ...d5 push but locks in the light-squared bishop behind the pawn chain."
+        },
+        {
+          "san": "d4",
+          "annotation": "White builds the ideal two-pawn center. The d4-e4 duo controls the most important central squares.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black challenges the center immediately. This is the defining move of the French — creating tension against e4."
+        },
+        {
+          "san": "e5",
+          "annotation": "The Advance Variation! White pushes past and gains space. The pawn on e5 cramps Black's kingside development, especially the g8-knight.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black immediately strikes at the base of White's pawn chain. This is the standard counterplay — attacking d4 to undermine the e5 pawn.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "c3",
+          "annotation": "White supports the d4 pawn, keeping the center intact. This is the setup for the Milner-Barry Gambit — White will develop rapidly and may sacrifice d4 for initiative.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight and adds pressure to d4. Standard development in the Advance French."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight, further defending d4 and preparing for rapid kingside development.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qb6",
+          "annotation": "Black's queen attacks both d4 and b2, putting immediate pressure on White's center and queenside. This is the critical moment for the Milner-Barry.",
+          "arrows": [
+            {
+              "from": "b6",
+              "to": "d4",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "b6",
+              "to": "b2",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "The Milner-Barry Gambit with Bd3! White ignores the threats and develops aggressively. The bishop eyes the kingside and prepares castling. White is willing to sacrifice pawns for a lead in development.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black takes the d4 pawn, winning a central pawn. But this opens lines for White's pieces and accelerates White's development advantage."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "White recaptures, keeping a pawn on d4. The center remains open, which favors White's better-developed pieces.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bd7",
+          "annotation": "Black develops the bishop, preparing to bring the knight to e7 and castle. A solid but slightly passive choice."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, completing kingside development. The rook on f1 is now active, and White has a significant lead in development.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "f7",
+              "color": "rgba(220, 50, 50, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "Black captures the d4 pawn with the knight, winning another pawn. But White's development advantage is becoming critical."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "White recaptures with the knight. The knight on d4 is powerfully centralized, and White's pieces are all active while Black is still undeveloped.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            },
+            {
+              "from": "d4",
+              "to": "f5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Qxd4",
+          "annotation": "Black takes the knight with the queen, maintaining material advantage. But the queen in the center can become a target."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the last minor piece with tempo, attacking Black's queen. The knight on c3 also eyes d5, a powerful outpost.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays a prophylactic move, preventing Nb5 ideas and preparing to develop. But Black is still far behind in development."
+        },
+        {
+          "san": "Qe2",
+          "annotation": "White's queen enters the game, supporting the e5 pawn and eyeing the e-file. The queen coordinates with the bishop on d3 and prepares potential kingside attacks.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ne7",
+          "annotation": "Black develops the knight to e7, preparing to castle and bring pieces into the game. But Black is still cramped by the e5 pawn."
+        },
+        {
+          "san": "Kh1",
+          "annotation": "White tucks the king into the corner, removing it from any potential ...Bc5 pin or ...Qd4 check on the g1-a7 diagonal. This quiet move prepares f4, which will further support the e5 pawn and open the f-file for a devastating kingside attack. White has superb compensation for the sacrificed pawn.",
+          "arrows": [
+            {
+              "from": "f2",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

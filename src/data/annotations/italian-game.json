@@ -2000,6 +2000,382 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Caruana: Italian Giuoco Piano (Exchange)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "Opening with 1.e4. The Italian Game is one of the oldest and most respected openings, and Caruana's Exchange variation of the Giuoco Piano leads to rich strategic middlegames.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds symmetrically. The Open Game arises."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Developing and attacking e5. Standard Italian preparation.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Defending the e5 pawn with the knight. The game now heads toward the Italian."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "The Italian bishop! Developing to c4, targeting f7 — the weakest square in Black's position. This is the Italian Game.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black mirrors with ...Bc5, the Giuoco Piano (Quiet Game). Both bishops target the opponent's f-pawn. This is the main line of classical chess."
+        },
+        {
+          "san": "c3",
+          "annotation": "Preparing d4 to build a strong center. The c3 pawn will support d4 and also provide a retreat square for the bishop if needed.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, attacking e4. Now White must decide how to handle the center tension."
+        },
+        {
+          "san": "d4",
+          "annotation": "The central break! White opens the center with d4, challenging Black's bishop and seizing space. This is the critical moment in the Giuoco Piano.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd4",
+          "annotation": "Black captures on d4, the most natural response. The center opens up."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Recapturing with the c-pawn, maintaining a strong pawn center. The d4 pawn is now an isolated queen's pawn but it controls important central squares.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb4+",
+          "annotation": "Black checks with ...Bb4+, the main line of the Exchange variation. This forces White to deal with the check before continuing development.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "b4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bd2",
+          "annotation": "Blocking with the bishop on d2. This is Caruana's preferred approach — White offers to trade the dark-squared bishops, which simplifies but keeps a slight structural edge.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxd2+",
+          "annotation": "Black takes the trade, exchanging dark-squared bishops. This removes some tension but the resulting position still offers White chances."
+        },
+        {
+          "san": "Nbxd2",
+          "annotation": "Recapturing with the knight, developing the b1-knight to a useful square in one move. The knight on d2 supports e4 and can reroute to b3 or f1.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black strikes back in the center with ...d5, the equalizing break. This challenges White's e4 pawn and opens lines for Black's pieces.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "Capturing on d5. White accepts the exchange and will look to exploit the half-open e-file and the isolated pawn dynamics.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black recaptures with the knight, centralizing it on d5. The knight is well-placed but can be challenged by c4.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qb3",
+          "annotation": "Caruana's move! Qb3 attacks the Nd5 and the b7 pawn simultaneously. This forces Black to be precise. The queen is actively placed, pressuring the queenside.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "b3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b3",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "b3",
+              "to": "b7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nce7",
+          "annotation": "Black retreats the c6-knight to e7 to support the d5-knight. This is the most solid defense, keeping the central knight protected.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "We castle, completing development and connecting the rooks. The position is slightly better for White thanks to the active queen and the d4 pawn controlling key squares.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles as well. The opening phase is nearly complete."
+        },
+        {
+          "san": "Rfe1",
+          "annotation": "Placing the rook on the open e-file. This is the most natural move, seizing the file and potentially creating pressure against the e7-knight. White's position is very comfortable.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black plays ...c6, solidifying the d5-knight and preventing any Bb5 ideas. This is the typical resulting position from Caruana's Exchange line — White has a slight edge with better piece activity, the open e-file, and the d4 passer, but Black's position is solid. The key is to press slowly with moves like Ne4, a4, and Re5.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Firouzja: Italian (Nc3 Gambit)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Italian Game begins with 1.e4, controlling the center.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds with 1...e5, contesting the center."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to f3, attacking Black's e5 pawn."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black defends e5 naturally with the knight."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "The Italian Game — the bishop targets the f7 pawn, the weakest point in Black's position.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black mirrors with Bc5, creating the Giuoco Piano (\"quiet game\"). Both bishops aim at f-pawns."
+        },
+        {
+          "san": "c3",
+          "annotation": "White prepares d4 to build a strong pawn center. This is the main line Giuoco Piano."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, pressuring White's e4 pawn."
+        },
+        {
+          "san": "d4",
+          "annotation": "White pushes d4, opening the center. The game becomes sharp and tactical.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exd4",
+          "annotation": "Black captures on d4, opening the position."
+        },
+        {
+          "san": "cxd4",
+          "annotation": "White takes back, but the d4 pawn is now potentially vulnerable."
+        },
+        {
+          "san": "Bb4+",
+          "annotation": "Black checks with the bishop! This is the critical moment where the Nc3 gambit line diverges."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "Firouzja's gambit choice! Instead of the safe Bd2 or Kf1, White blocks with Nc3, offering the e4 pawn for rapid development and initiative.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black accepts the pawn sacrifice. The knight on e4 looks strong but White's development advantage is substantial."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, bringing the rook to e1 and completing development. The lead in development is White's primary compensation."
+        },
+        {
+          "san": "Bxc3",
+          "annotation": "Black captures the knight, doubling White's c-pawns but giving White the bishop pair and open lines."
+        },
+        {
+          "san": "bxc3",
+          "annotation": "White recaptures with the b-pawn. The doubled c-pawns look ugly but the open b-file and half-open e-file provide excellent attacking chances."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black pushes d5, trying to close the diagonal and solidify the position. But this allows White's bishop to become very active."
+        },
+        {
+          "san": "Ba3",
+          "annotation": "The bishop activates to a3, preventing Black from castling! This is the key idea — White's development advantage becomes overwhelming.",
+          "arrows": [
+            {
+              "from": "a3",
+              "to": "f8",
+              "color": "rgba(255, 0, 0, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black grabs another pawn, but the king remains stuck in the center."
+        },
+        {
+          "san": "Re1",
+          "annotation": "The rook enters the battle on the e-file, pinning or targeting the knight on e4.",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black tries to block the e-file with the bishop. Development is urgent."
+        },
+        {
+          "san": "Rxe4",
+          "annotation": "White captures the bishop on e4! The rook is powerfully centralized and Black's king is in serious danger. Firouzja's gambit has paid off with a massive lead in activity."
+        }
+      ]
     }
   ]
 }

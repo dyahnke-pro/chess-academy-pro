@@ -2245,6 +2245,259 @@
           "annotation": "Rfd8. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Naroditsky: Semi-Slav Moscow (Bxf6)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. In the Moscow Variation, White will play Bg5 early and then capture on f6 rather than retreating the bishop.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds symmetrically, establishing central presence. This commits to a Queen's Gambit structure.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "White offers the Queen's Gambit, attacking d5 and seeking central control."
+        },
+        {
+          "san": "c6",
+          "annotation": "The Slav pawn structure! Black supports d5 with a pawn rather than the bishop, keeping the c8 bishop's diagonal open. This is the defining move of the Slav/Semi-Slav complex.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight naturally. Playing Nf3 before Nc3 is the move order that leads to the Moscow Variation."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight, controlling e4 and d5.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White completes the knight development, putting maximum pressure on d5."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black enters the Semi-Slav with ...e6, reinforcing d5 a second time. The downside is the c8 bishop is now blocked, but the center is rock-solid.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "The Moscow Variation! White pins the Nf6, creating immediate pressure. Black must decide how to react — ...h6 is the most common response.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "Black asks the bishop the question: take or retreat? This is the critical moment that defines the Moscow subvariation.",
+          "arrows": [
+            {
+              "from": "h7",
+              "to": "h6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "h6",
+              "to": "g5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf6",
+          "annotation": "White captures! The Bxf6 line — instead of retreating to h4, White takes the knight immediately. This gives Black the bishop pair but White gets a solid center and faster development.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Qxf6",
+          "annotation": "Black recaptures with the queen, the best choice. The queen is actively placed on f6 and Black retains the bishop pair as long-term compensation.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White plays solidly, supporting d4 and preparing to develop the bishop. The pawn structure is stable and White aims for a positional edge.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Black develops the knight to d7, supporting the center and preparing to reroute. The knight can go to b6, f8, or e5 depending on the position.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White develops the bishop to its most active diagonal, pointing toward the kingside. The bishop eyes h7 and supports a potential e4 advance.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, opening the position and winning a tempo by attacking the bishop. This is Naroditsky's recommendation — trade the center pawn and fianchetto.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recaptures, placing the bishop on the active a2-g8 diagonal. White has smooth development and central control.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "The key idea! Black prepares to fianchetto the kingside bishop to g7. This is unusual in the Semi-Slav but makes perfect sense after ...Qxf6 — the dark-squared bishop will be powerful on the long diagonal.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g6",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, completing development. White has a harmonious position but Black's bishop pair provides long-term compensation."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black completes the fianchetto. The bishop on g7 is a monster on the long diagonal, controlling d4, e5, and the entire queenside. Combined with the queen on f6, Black has excellent dark-square control and the bishop pair gives lasting compensation for the slightly passive position.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "g7",
+              "to": "a1",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g7",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

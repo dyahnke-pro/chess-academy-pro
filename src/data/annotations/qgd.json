@@ -2616,6 +2616,477 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Carlsen: QGD Bf4 (Nf6 Move Order)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. In this Bf4 QGD, Black will play 1...Nf6 first rather than 1...d5, keeping maximum flexibility before committing the d-pawn."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight first, delaying ...d5. This move order can transpose into multiple QGD setups and keeps White guessing about Black's exact system.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays the standard Queen's Gambit advance, taking aim at d5 and preparing a broad pawn center."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black supports a future ...d5 push while opening the diagonal for the dark-squared bishop. This signals a QGD or Nimzo-Indian structure.",
+          "arrows": [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to its natural square, supporting the c4 pawn and controlling d5 and e4."
+        },
+        {
+          "san": "d5",
+          "annotation": "Now Black commits the d-pawn. With the knight already on f6 and e6 played, this transposes into QGD territory. The structure is solid and classical.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White completes the kingside knight development, preparing to castle and maintaining flexibility about the bishop deployment."
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop modestly to e7, characteristic of the QGD. The bishop supports castling and can later be activated via f6 or to support a ...b6 fianchetto plan.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "The Bf4 system! White develops the bishop outside the pawn chain before playing e3. This is more active than the classical Bg5 lines and has been a favorite of Carlsen's.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles immediately, getting the king to safety before engaging in the central battle."
+        },
+        {
+          "san": "e3",
+          "annotation": "White shores up the d4 pawn and completes a solid pawn chain. The bishop is already on f4, so e3 doesn't lock it in — a key point of this move order."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight behind the d5 pawn, a classic QGD setup. The knight supports ...c5 breaks and can reroute to f8-e6 or challenge the Bf4 via ...Nh5.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "f6",
+              "to": "h5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "White locks the queenside with c5, gaining space and restricting Black's ...c5 break. The plan shifts to a kingside or central squeeze.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nh5",
+          "annotation": "The key move! Black challenges the Bf4 directly. White must decide whether to allow the trade or retreat, and both options have drawbacks.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "h5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "h5",
+              "to": "f4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h5",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bd3",
+          "annotation": "White develops the bishop to d3, aiming at the kingside and preparing to castle. White is willing to accept doubled f-pawns after ...Nxf4.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxf4",
+          "annotation": "Black captures the bishop, giving White doubled f-pawns. This disrupts White's kingside pawn structure but White gains the half-open e-file and central control.",
+          "arrows": [
+            {
+              "from": "h5",
+              "to": "f4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exf4",
+          "annotation": "White recaptures with the e-pawn, accepting the doubled f-pawns. The f4 pawn controls e5 and the half-open e-file may become useful. The c5 space advantage compensates for the structural weakness.",
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(230, 170, 30, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "Black immediately undermines White's c5 pawn chain. The idea is to open the queenside and activate the light-squared bishop on the a6-f1 diagonal.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "b4",
+          "annotation": "White defends c5 with b4, trying to maintain the space advantage on the queenside. This creates a solid pawn chain but leaves a4 and the dark squares slightly weak.",
+          "arrows": [
+            {
+              "from": "b2",
+              "to": "b4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a5",
+          "annotation": "Black strikes at the b4 pawn, attempting to shatter White's queenside structure. This is the key counterplay — Black wants to open lines on the queenside where White is overextended.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "a5",
+              "to": "b4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a3",
+          "annotation": "White supports b4, keeping the queenside pawn chain intact for now. The position is tense — White has space but doubled pawns, while Black has counterplay on the a-file and queenside.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ba6",
+          "annotation": "Black develops the bishop to the ideal a6 square, pressuring the d3 bishop and targeting the weakened light squares. This is the payoff of ...b6 — the bishop is actively placed and makes it hard for White to castle safely.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "a6",
+              "to": "d3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Caruana: QGD Bf4 Classical",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. Caruana's line diverges from Carlsen's after the Bf4 — here White plays Be2 instead of c5, leading to a more classical middlegame."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight first, as in the Carlsen line. The 1...Nf6 move order is standard in modern QGD Bf4 practice.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "White offers the Queen's Gambit, continuing the standard development."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black prepares ...d5 while keeping the position flexible."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight, supporting c4 and controlling d5."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black commits to the QGD pawn structure with ...d5, establishing central tension.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops naturally, preparing to castle."
+        },
+        {
+          "san": "Be7",
+          "annotation": "The classical QGD bishop placement on e7, solid and reliable."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "Again the Bf4 system, developing the bishop actively before closing the diagonal with e3.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "f4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, getting the king safe before the central action begins."
+        },
+        {
+          "san": "e3",
+          "annotation": "White supports d4 and completes the pawn chain. The bishop is already outside on f4."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Standard QGD development. The knight on d7 supports ...c5 and can reroute to various squares.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be2",
+          "annotation": "Here Caruana's line diverges: White plays Be2 instead of c5. This is more restrained — White prepares to castle and keeps the center flexible rather than locking the queenside.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes in the center immediately! With White's bishop on e2 instead of d3, Black has time for this classical equalizing break. The idea is to dissolve the central tension and free Black's pieces.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "dxc5",
+          "annotation": "White captures, opening the position. This avoids the tension but gives Black a clear plan of recapturing and developing freely.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc5",
+          "annotation": "Black recaptures with the knight, placing it on the active c5 square where it eyes a4, b3, d3, and e4. The knight is beautifully centralized.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles, completing development. The position is open and roughly equal, but both sides have plans."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, winning a pawn temporarily and forcing White to recapture. This liquidates the center and simplifies toward equality.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc4",
+          "annotation": "White recaptures with the bishop, which is now actively placed on the a2-g8 diagonal pointing at Black's king. White has some initiative thanks to better piece coordination.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays ...a6, preparing ...b5 to kick the bishop and gain queenside space. This is a standard plan in these IQP-free positions.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "White prevents ...b5, keeping the bishop on c4 and maintaining pressure on f7. The a4 pawn may become a slight weakness later but it's worth it to keep the active bishop.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "Black plays ...b6, preparing to fianchetto the bishop or develop it to a6/b7. With ...b5 prevented, Black reroutes and aims for a harmonious setup. The position is balanced — Black has equalized in the center.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

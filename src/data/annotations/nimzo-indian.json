@@ -2191,6 +2191,503 @@
           "annotation": "Nd7. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Hikaru: Nimzo-Indian 4.Qc2",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with the queen's pawn. In the Qc2 Nimzo, White will avoid doubled c-pawns by playing Qc2 before Black can take on c3."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight, the standard start for all Indian defenses.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, establishing the Queen's Gambit pawn duo."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black prepares ...Bb4, the Nimzo-Indian idea. The e6 pawn supports d5 and opens the bishop's diagonal."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3 — and now Black can pin it with ...Bb4, entering the Nimzo-Indian.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bb4",
+          "annotation": "The Nimzo-Indian! Black pins the c3 knight, pressuring White's control of e4. This is one of the most respected defenses at every level.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "b4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Qc2",
+          "annotation": "The Qc2 variation! White moves the queen to c2 to avoid doubled c-pawns after ...Bxc3. The queen also eyes e4 and supports the c4 pawn.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles immediately. There's no rush to capture on c3 — Black keeps the tension and develops first."
+        },
+        {
+          "san": "a3",
+          "annotation": "White forces the issue, asking the bishop to declare its intentions. Black must either retreat or exchange on c3.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "a3",
+              "to": "b4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxc3+",
+          "annotation": "Black exchanges the bishop for the knight with check. Giving up the bishop pair is the Nimzo-Indian trade-off — Black gets a strong pawn structure and active piece play in return.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxc3",
+          "annotation": "White recaptures with the queen, keeping the pawn structure intact. This is exactly why White played Qc2 — no doubled pawns. The queen is actively placed on c3.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black occupies the center with ...d5, challenging White's c4 pawn and establishing a strong central presence.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the kingside knight naturally, supporting d4 and preparing to castle."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4, winning the pawn temporarily and opening the position. The idea is to develop the bishop to a6 targeting the c4 square.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxc4",
+          "annotation": "White recaptures, placing the queen on an active central square. But the queen is exposed here and can be targeted.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "b6",
+          "annotation": "Black prepares the key ...Ba6 maneuver. The bishop will target c4 and the weakened light squares on the queenside. This is the heart of Hikaru's approach.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the Nf6, creating pressure on the kingside and making it harder for Black to develop freely.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ba6",
+          "annotation": "The key move! The bishop lands on a6, attacking the queen on c4 and seizing control of the light squares. This is the payoff of ...b6.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "a6",
+              "to": "c4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a6",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White retreats the queen to c2, the safest square. The queen maintains influence on the c-file and e4.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight to d7, supporting ...c5 and preparing to reroute pieces. The position is harmonious — every Black piece has a job.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e3",
+          "annotation": "White solidifies the center and prepares to develop the bishop. The position is stable but Black has active counterplay.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c5",
+          "annotation": "Black strikes in the center with ...c5, the thematic break. This challenges d4 directly and opens lines for Black's actively placed pieces. The position is dynamically balanced with chances for both sides.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Caruana: Nimzo-Indian 4.Qc2 (c5)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with d4. Caruana's line follows the same Qc2 Nimzo framework but features an early ...c5 break instead of the ...b6/...Ba6 plan."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, controlling e4 and d5.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, the Queen's Gambit setup."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black prepares ...Bb4 and supports a future ...d5."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight, allowing the Nimzo-Indian pin."
+        },
+        {
+          "san": "Bb4",
+          "annotation": "The Nimzo-Indian pin, pressuring c3 and White's control of e4.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "b4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White plays Qc2 again, the same system. Both Hikaru's and Caruana's approaches start from this position.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, maintaining flexibility about the central pawn structure."
+        },
+        {
+          "san": "a3",
+          "annotation": "White forces the bishop to commit — exchange on c3 or retreat."
+        },
+        {
+          "san": "Bxc3+",
+          "annotation": "Black takes the knight, giving up the bishop pair for structural compensation and active play.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qxc3",
+          "annotation": "White recaptures with the queen, keeping pawns undoubled."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black plays ...d5, establishing a central strongpoint.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops naturally. The position looks identical to Hikaru's line — but the divergence comes next."
+        },
+        {
+          "san": "c5",
+          "annotation": "Here's Caruana's idea — an immediate ...c5 instead of ...dxc4 and ...b6. Black challenges d4 directly, aiming for sharp central play rather than the slow ...Ba6 plan.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "dxc5",
+          "annotation": "White captures on c5, opening the center. This changes the pawn structure significantly — now Black must decide how to recapture.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4 rather than immediately recapturing on c5. This creates a dynamic situation where both sides have captured a pawn — the position opens up for tactical play.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White develops with tempo, pinning the Nf6 and increasing pressure on the kingside. White still has the extra c5 pawn.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the knight, targeting the c5 pawn. The knight on d7 also unpins Nf6 by blocking the d-file.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(0, 100, 255, 0.7)"
+            }
+          ]
+        },
+        {
+          "san": "Rd1",
+          "annotation": "White seizes the open d-file with the rook, creating pressure against Black's position. This is an active developing move.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "d1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qa5",
+          "annotation": "Black plays ...Qa5, attacking the a3 pawn and the Bg5 indirectly. The queen is actively placed and puts pressure on White's queenside.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "a5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "a5",
+              "to": "a3",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a5",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White retreats the knight to d2, defending c4 and preparing to recapture. The knight also clears the f3 square for other pieces.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxc5",
+          "annotation": "Black wins back the c5 pawn with the knight, which is now beautifully placed on c5 controlling key squares. The position is sharp and double-edged — both sides have chances in this complex middlegame.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(50, 150, 220, 0.3)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

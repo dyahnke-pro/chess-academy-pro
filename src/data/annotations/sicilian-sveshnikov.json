@@ -2607,6 +2607,196 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Dubov: Sveshnikov c4 System",
+      "type": "variation",
+      "note": "Instead of the standard 11.c3, White plays 11.c4 directly, trying to maintain the Nd5 outpost. Black responds with ...b4 and ...a5, expanding on the queenside.",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "White opens with the king's pawn. We're heading into the Sveshnikov, but this time with Dubov's c4 system — a sharp alternative to the standard 11.c3."
+        },
+        {
+          "san": "c5",
+          "annotation": "The Sicilian Defense. Black fights for d4 and sets up the asymmetric pawn structure that defines the Sicilian."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight toward d4, preparing the Open Sicilian."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black develops the knight to c6, putting immediate pressure on d4. This commits to the Sveshnikov/Kalashnikov family of lines rather than the Najdorf."
+        },
+        {
+          "san": "d4",
+          "annotation": "White strikes in the center, opening the position for the Open Sicilian.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "cxd4",
+          "annotation": "Black captures, creating the open c-file and asymmetric pawn structure that gives the Sicilian its dynamic character."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "White recaptures with the knight, centralizing it on d4 where it controls key squares across the board."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops to f6, attacking e4. Combined with ...Nc6, this prepares the trademark Sveshnikov move ...e5."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White defends e4 and develops. Now Black will play the defining Sveshnikov move."
+        },
+        {
+          "san": "e5",
+          "annotation": "The Sveshnikov! Black boldly pushes ...e5, gaining central space at the cost of creating a hole on d5. This is the fundamental Sveshnikov bargain — activity and space versus a structural weakness.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ndb5",
+          "annotation": "White's knight leaps to b5, targeting the d6 and c7 squares. This is the main line — the knight eyes the weak d6 pawn and threatens to establish a powerful outpost.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "b5",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black defends with ...d6, supporting the e5 pawn and covering the c7 invasion square. The d6 pawn is a target but also a defender — this tension is at the heart of the Sveshnikov."
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White pins the Nf6 against the queen, increasing the pressure on d5. If Black doesn't handle this carefully, White will dominate the d5 outpost."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays ...a6, challenging the Nb5. White must decide where to place the knight — this move forces a critical decision in the position.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Na3",
+          "annotation": "The knight retreats to a3, a seemingly awkward square. However, it's heading for c2-e3 or will reroute via c4. The knight is temporarily offside but will find a good home.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black expands on the queenside with ...b5, gaining space and restricting the Na3. This pawn also prepares ...Bb7 development and keeps the a3 knight sidelined.",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "White plants the knight on the dream d5 outpost. This is White's strategic anchor — the Nd5 controls f4, f6, e3, c3, b4, b6, e7, and c7. The entire fight revolves around whether White can maintain this knight.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to e7, breaking the Bg5 pin on the Nf6. This is necessary before Black can challenge d5 with ...Nxd5 or play other moves without the pin causing problems."
+        },
+        {
+          "san": "Bxf6",
+          "annotation": "White captures on f6, exchanging the bishop for the knight. This damages Black's pawn structure but gives up the bishop pair. The resulting position depends on whether White can exploit the d5 outpost.",
+          "arrows": [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf6",
+          "annotation": "Black recaptures with the bishop, maintaining control of the dark squares. The bishop on f6 is a strong piece, supporting ...e5 and controlling the a1-h8 diagonal."
+        },
+        {
+          "san": "c4",
+          "annotation": "Dubov's move — White plays c4 directly instead of the standard c3. This immediately challenges Black's b5 pawn, tries to open lines on the queenside, and reinforces the Nd5 by securing the c4 square. It's a more dynamic approach than the usual slow c3 plan.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "b4",
+          "annotation": "Black pushes ...b4, advancing the queenside pawns and gaining space. This drives the Na3 further offside and opens potential lines toward White's queenside. The pawn on b4 also restricts White's pieces.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "b4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc2",
+          "annotation": "The knight reroutes to c2, heading for e3 where it will support the Nd5 and eye the f5 and d5 squares. The knight finally escapes the rim."
+        },
+        {
+          "san": "a5",
+          "annotation": "Black plays ...a5, continuing the queenside expansion. The a-pawn supports ...b4 and prepares ...a4, creating a dangerous passed pawn duo. Dubov's c4 system leads to sharp play where Black's queenside pawn majority is a major asset.",
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "a5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            },
+            {
+              "from": "a5",
+              "to": "a4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

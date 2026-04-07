@@ -2082,6 +2082,241 @@
           "annotation": "Nd2. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Dubov: Leningrad Dutch (Nc6)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "White opens with 1.d4, the standard starting move. Against the Dutch Defense, this pawn will be the primary target of Black's kingside pawn storm with ...f5.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f5",
+          "annotation": "Black plays 1...f5, the defining move of the Dutch Defense. This immediately stakes a claim on the e4 square and signals aggressive kingside intentions. The f-pawn will support a kingside buildup while the Leningrad setup adds the fianchettoed bishop.",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "f5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "f5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White fianchettoes the light-squared bishop, the most common and positional approach against the Dutch. The bishop on g2 will fight for control of the long diagonal and pressure Black's queenside."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, reinforcing control over e4 and d5. This natural developing move works in all Dutch setups and prepares the Leningrad formation with ...g6 and ...Bg7."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White completes the fianchetto, placing the bishop on the powerful a8-h1 diagonal. This bishop will exert long-term pressure on Black's queenside, especially if Black plays ...d6 leaving the long diagonal partially open."
+        },
+        {
+          "san": "g6",
+          "annotation": "Black plays ...g6, entering the Leningrad Dutch. This double fianchetto idea gives Black a powerful dark-squared bishop on g7 while keeping the pawn structure flexible. The Leningrad is the most aggressive and popular version of the Dutch.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight to f3, a natural square controlling e5 and d4. White keeps options open for c4 and Nc3 development."
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black fianchettoes the dark-squared bishop, completing the Leningrad setup. The bishop on g7 is a monster, controlling the long dark diagonal and supporting both ...e5 and central breaks.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "g7",
+              "to": "a1",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles kingside, completing development efficiently. The king is safe and the rook connects with the center."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles as well, securing the king. Both sides are now fully developed and the strategic battle begins — Black will aim for ...e5 or ...d6 with kingside play."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, establishing the full c4-d4 pawn center and preparing Nc3. This is the standard setup against the Leningrad, giving White queenside space and central control.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black plays ...d6, solidifying the center and preparing to develop actively. The pawn on d6 supports ...e5 and keeps the position flexible for the ...Nc6 idea that defines this variation.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3, completing the standard setup. The knight supports d5 and e4 advances, and White is ready to push for central and queenside expansion."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black plays ...Nc6, the key move of this Dubov-inspired system. Instead of the traditional ...Qe8 maneuver, the knight goes directly to c6 to pressure d4 and prepare ...e5. This is more aggressive and dynamic, immediately challenging White's center.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "White pushes d5, the natural reaction to ...Nc6. This gains space and forces the knight to move, but it also closes the center, which can benefit Black's kingside attacking plans.",
+          "arrows": [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ne5",
+          "annotation": "The knight retreats to e5, a powerful central outpost. From e5 the knight controls key squares and cannot easily be dislodged. Black is already centralizing aggressively and preparing ...e4 to seize space.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nxe5",
+          "annotation": "White captures the knight on e5, removing the powerful centralized piece. This is practically forced since the knight on e5 was too strong to leave unchallenged."
+        },
+        {
+          "san": "dxe5",
+          "annotation": "Black recaptures with the d-pawn, opening the d-file and establishing a strong pawn on e5. This pawn controls f4 and d4, restricting White's pieces and supporting Black's kingside ambitions.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Qb3",
+          "annotation": "White plays Qb3, a typical move pressuring b7 and the queenside. White tries to exploit the slightly weakened queenside after Black's pawn moved from d6."
+        },
+        {
+          "san": "Kh8",
+          "annotation": "Black tucks the king away to h8, a useful prophylactic move. This removes the king from the g1-a7 diagonal (avoiding any Bc5+ tactics) and prepares the aggressive ...e4 push without any back-rank concerns.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "h8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be3",
+          "annotation": "White develops the bishop to e3, eyeing the a7-g1 diagonal and supporting the c4-d5 pawn chain. The bishop also prepares potential queenside expansion with b4."
+        },
+        {
+          "san": "e4",
+          "annotation": "Black plays the powerful ...e4 advance, seizing space in the center and cramping White's pieces. This pawn pushes the fight into White's territory and opens lines for the g7 bishop.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "f3",
+          "annotation": "White challenges the e4 pawn with f3, trying to break up Black's central wedge. This is the critical moment of the variation — White must fight back against Black's space advantage.",
+          "arrows": [
+            {
+              "from": "f2",
+              "to": "f3",
+              "color": "rgba(0, 120, 255, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "exf3",
+          "annotation": "Black captures on f3, opening the e-file and exposing White's king position. The recapture Bxf3 weakens White's kingside pawn structure, and Black can now target the open lines with ...f4 and piece play.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bxf3",
+          "annotation": "White recaptures with the bishop, maintaining material equality but giving Black open lines. The bishop on f3 is solid but the kingside has been weakened."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black plays ...c6, undermining the d5 pawn and opening the c-file for counterplay. This thematic break challenges White's space advantage and activates Black's pieces. The position is dynamically balanced with chances for both sides.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

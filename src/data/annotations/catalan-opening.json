@@ -2026,6 +2026,239 @@
           "annotation": "Bd6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
         }
       ]
+    },
+    {
+      "name": "Carlsen: Catalan (a4 System)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Catalan Opening begins with 1.d4, establishing central control.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6, a flexible response."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, targeting d5 and preparing the Catalan fianchetto."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black plays ...e6, solidifying d5 and preparing ...d5 or ...Be7."
+        },
+        {
+          "san": "g3",
+          "annotation": "The Catalan! White fianchettoes the bishop to g2, creating long-term pressure on the light squares."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black stakes a claim in the center with ...d5."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The Catalan bishop develops to g2, a monster piece that dominates the long diagonal.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "a8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop to a safe square, preparing to castle."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White develops the knight, completing kingside development."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles, tucking the king to safety."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles. The Catalan structure is now established."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "Black captures on c4! This is the Open Catalan — Black takes the pawn and tries to hold it or use it as a lever."
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White plays Qc2 instead of immediately recapturing. The queen eyes c4 and supports a future a4 break.",
+          "arrows": [
+            {
+              "from": "c2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a6",
+          "annotation": "Black plays ...a6, defending the b5 square and preparing ...b5 to hold the extra pawn."
+        },
+        {
+          "san": "a4",
+          "annotation": "Carlsen's approach! Instead of the standard Qxc4, White plays a4, preventing ...b5 and opening the a-file. This is a more positional way to regain the pawn.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bd7",
+          "annotation": "Black develops the bishop to d7, a flexible square. It can go to c6 to challenge the Bg2."
+        },
+        {
+          "san": "Qxc4",
+          "annotation": "Now White recaptures on c4 with the queen, regaining the pawn with a superior position."
+        },
+        {
+          "san": "Bc6",
+          "annotation": "Black immediately challenges the Catalan bishop. If White allows the exchange, the light-square pressure disappears.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "g2",
+              "color": "rgba(255, 170, 0, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White develops the bishop to f4, controlling the e5 and d6 squares. The Bg2-Bc6 tension remains on the board."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Black develops the last minor piece. The knight on d7 supports ...c5 and ...Nb6 ideas."
+        }
+      ]
+    },
+    {
+      "name": "Caruana: Catalan (a4 Bf4)",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "d4",
+          "annotation": "The Catalan starts with 1.d4."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops flexibly."
+        },
+        {
+          "san": "c4",
+          "annotation": "White plays c4, entering Catalan territory."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black prepares ...d5."
+        },
+        {
+          "san": "g3",
+          "annotation": "The Catalan fianchetto."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black claims the center."
+        },
+        {
+          "san": "Bg2",
+          "annotation": "The Catalan bishop arrives on g2.",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "a8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black develops the bishop."
+        },
+        {
+          "san": "Nf3",
+          "annotation": "Knight to f3."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Black castles."
+        },
+        {
+          "san": "O-O",
+          "annotation": "White castles."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "The Open Catalan — Black takes on c4."
+        },
+        {
+          "san": "Qc2",
+          "annotation": "White's queen eyes c4."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black prevents the immediate recapture with Na3 ideas."
+        },
+        {
+          "san": "a4",
+          "annotation": "Caruana's a4 system — preventing ...b5 permanently.",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bd7",
+          "annotation": "Bishop to d7, flexible development."
+        },
+        {
+          "san": "Qxc4",
+          "annotation": "White regains the pawn."
+        },
+        {
+          "san": "Bc6",
+          "annotation": "Black challenges the Catalan bishop."
+        },
+        {
+          "san": "Bf4",
+          "annotation": "White develops the bishop to f4, controlling the diagonal."
+        },
+        {
+          "san": "Bd6",
+          "annotation": "Black develops the bishop aggressively to d6, challenging the Bf4 and eyeing the kingside."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3, supporting the center and e4 push."
+        },
+        {
+          "san": "Bxf4",
+          "annotation": "Black exchanges the dark-squared bishops, simplifying the position."
+        },
+        {
+          "san": "gxf4",
+          "annotation": "White recaptures with the g-pawn. The pawn structure is unusual but White has the f-file and central control."
+        }
+      ]
     }
   ]
 }
