@@ -89,7 +89,7 @@ export function DashboardPage(): JSX.Element {
         <button
           onClick={() => void navigate('/games/import')}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-amber-500/30 bg-amber-500/10 hover:opacity-80 transition-opacity"
-          style={{ boxShadow: '0 0 8px rgba(245, 158, 11, 0.3)' }}
+          style={{ boxShadow: '0 0 12px rgba(245, 158, 11, 0.35), 0 0 4px rgba(245, 158, 11, 0.2)' }}
           data-testid="import-games-btn"
         >
           <Upload size={18} className="text-amber-400" />
@@ -111,9 +111,9 @@ export function DashboardPage(): JSX.Element {
               key={section.route}
               onClick={() => void navigate(section.route)}
               className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200 aspect-square`}
-              style={{ boxShadow: `0 0 8px ${section.glowColor}` }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 18px ${section.glowColor}, 0 0 4px ${section.glowColor}`; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 8px ${section.glowColor}`; }}
+              style={{ boxShadow: `0 0 12px ${section.glowColor}, 0 0 4px ${section.glowColor}` }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 24px ${section.glowColor}, 0 0 8px ${section.glowColor}`; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 12px ${section.glowColor}, 0 0 4px ${section.glowColor}`; }}
               data-testid={`section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
               <Icon size={40} className={section.color} />

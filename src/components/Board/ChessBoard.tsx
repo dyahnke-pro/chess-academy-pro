@@ -294,7 +294,11 @@ export function ChessBoard({
           className="relative flex-1"
           data-testid="board-wrapper"
           style={boardColorScheme.borderGlow
-            ? { boxShadow: boardColorScheme.borderGlow, borderRadius: '4px' }
+            ? {
+                boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(0, 229, 255, 0.06)`,
+                borderRadius: '4px',
+                border: '1px solid rgba(0, 229, 255, 0.15)',
+              }
             : undefined
           }
         >

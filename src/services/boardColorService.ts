@@ -23,8 +23,8 @@ export const BOARD_COLORS: BoardColorScheme[] = [
   {
     id: 'neon',
     name: 'Neon',
-    lightSquare: '#2a2a3a',
-    darkSquare: '#1a1a2e',
+    lightSquare: '#3d3d50',
+    darkSquare: '#272738',
     borderGlow: '0 0 10px 1px rgba(0, 229, 255, 0.4), 0 0 25px 3px rgba(0, 229, 255, 0.15)',
     whitePieceFilter: 'drop-shadow(0 0 3px rgba(0, 255, 136, 0.6)) drop-shadow(0 0 1px rgba(0, 255, 136, 0.9))',
     blackPieceFilter: 'drop-shadow(0 0 3px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 1px rgba(168, 85, 247, 0.9))',
