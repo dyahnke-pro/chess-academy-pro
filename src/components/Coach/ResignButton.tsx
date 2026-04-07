@@ -53,8 +53,10 @@ export function ResignButton({ onResign, disabled = false }: ResignButtonProps):
     <button
       onClick={handleClick}
       disabled={disabled}
-      className="flex items-center gap-1 px-3 py-2 rounded-lg border text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
-      style={{ borderColor: 'var(--color-border)' }}
+      className="flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-red-500/30 text-sm text-red-400/70 hover:text-red-300 disabled:opacity-30 transition-all duration-200"
+      style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)' }}
+      onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(239, 68, 68, 0.4), 0 0 6px rgba(239, 68, 68, 0.2)'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)'; }}
       data-testid="resign-btn"
     >
       <Flag size={14} />

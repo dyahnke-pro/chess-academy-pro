@@ -23,7 +23,8 @@ export function AnalysisToggles({
 }: AnalysisTogglesProps): JSX.Element {
   return (
     <div
-      className="flex items-center gap-0.5 rounded-lg border border-theme-border p-0.5"
+      className="flex items-center gap-0.5 rounded-lg border-2 border-cyan-500/30 p-0.5"
+      style={{ boxShadow: '0 0 8px rgba(34, 211, 238, 0.2), 0 0 3px rgba(34, 211, 238, 0.1)' }}
       data-testid="analysis-toggles"
     >
       <button
