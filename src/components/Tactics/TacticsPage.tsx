@@ -63,9 +63,9 @@ export function TacticsPage(): JSX.Element {
         <button
           onClick={() => void navigate('/tactics/profile')}
           className="col-span-2 py-8 bg-amber-500/10 border-amber-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-all duration-200"
-          style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.3)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 20px rgba(245, 158, 11, 0.5)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(245, 158, 11, 0.3)'; }}
+          style={{ boxShadow: '0 0 14px rgba(245, 158, 11, 0.35), 0 0 4px rgba(245, 158, 11, 0.2)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 24px rgba(245, 158, 11, 0.5), 0 0 8px rgba(245, 158, 11, 0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 14px rgba(245, 158, 11, 0.35), 0 0 4px rgba(245, 158, 11, 0.2)'; }}
           data-testid="section-spot"
         >
           <Eye size={40} className="text-amber-400" />
@@ -76,9 +76,9 @@ export function TacticsPage(): JSX.Element {
         <button
           onClick={() => void navigate('/tactics/classic')}
           className="py-6 bg-violet-500/10 border-violet-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-2 hover:opacity-80 transition-all duration-200"
-          style={{ boxShadow: '0 0 8px rgba(139, 92, 246, 0.3)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(139, 92, 246, 0.5)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 8px rgba(139, 92, 246, 0.3)'; }}
+          style={{ boxShadow: '0 0 14px rgba(139, 92, 246, 0.35), 0 0 4px rgba(139, 92, 246, 0.2)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 24px rgba(139, 92, 246, 0.5), 0 0 8px rgba(139, 92, 246, 0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 14px rgba(139, 92, 246, 0.35), 0 0 4px rgba(139, 92, 246, 0.2)'; }}
           data-testid="section-daily"
         >
           <Trophy size={28} className="text-violet-400" />
@@ -87,9 +87,9 @@ export function TacticsPage(): JSX.Element {
         <button
           onClick={() => void navigate('/tactics/setup')}
           className="py-6 bg-teal-500/10 border-teal-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-2 hover:opacity-80 transition-all duration-200"
-          style={{ boxShadow: '0 0 8px rgba(45, 212, 191, 0.3)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(45, 212, 191, 0.5)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 8px rgba(45, 212, 191, 0.3)'; }}
+          style={{ boxShadow: '0 0 14px rgba(45, 212, 191, 0.35), 0 0 4px rgba(45, 212, 191, 0.2)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 24px rgba(45, 212, 191, 0.5), 0 0 8px rgba(45, 212, 191, 0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 14px rgba(45, 212, 191, 0.35), 0 0 4px rgba(45, 212, 191, 0.2)'; }}
           data-testid="section-setup"
         >
           <Wrench size={28} className="text-teal-400" />
@@ -100,9 +100,9 @@ export function TacticsPage(): JSX.Element {
         <button
           onClick={() => void navigate('/tactics/drill', { state: { filterThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'backRankMate', 'sacrifice', 'deflection'] } })}
           className="col-span-2 py-6 bg-emerald-500/10 border-emerald-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-all duration-200"
-          style={{ boxShadow: '0 0 8px rgba(52, 211, 153, 0.3)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(52, 211, 153, 0.5)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 8px rgba(52, 211, 153, 0.3)'; }}
+          style={{ boxShadow: '0 0 14px rgba(52, 211, 153, 0.35), 0 0 4px rgba(52, 211, 153, 0.2)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 24px rgba(52, 211, 153, 0.5), 0 0 8px rgba(52, 211, 153, 0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 14px rgba(52, 211, 153, 0.35), 0 0 4px rgba(52, 211, 153, 0.2)'; }}
           data-testid="section-random-mix"
         >
           <Shuffle size={32} className="text-emerald-400" />
@@ -115,9 +115,9 @@ export function TacticsPage(): JSX.Element {
             key={card.label}
             onClick={() => void navigate('/tactics/drill', { state: { filterThemes: card.themes } })}
             className={`${card.bgColor} ${card.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-2 hover:opacity-80 transition-all duration-200 aspect-square`}
-            style={{ boxShadow: `0 0 8px ${card.glowColor}` }}
-            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 18px ${card.glowColor.replace('0.3)', '0.55)')}`; }}
-            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 8px ${card.glowColor}`; }}
+            style={{ boxShadow: `0 0 14px ${card.glowColor.replace('0.3)', '0.35)')}, 0 0 4px ${card.glowColor.replace('0.3)', '0.2)')}` }}
+            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 24px ${card.glowColor.replace('0.3)', '0.5)')}, 0 0 8px ${card.glowColor.replace('0.3)', '0.3)')}`; }}
+            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 14px ${card.glowColor.replace('0.3)', '0.35)')}, 0 0 4px ${card.glowColor.replace('0.3)', '0.2)')}`; }}
             data-testid={`section-${card.label.toLowerCase()}`}
           >
             <span className="text-2xl">{card.emoji}</span>
@@ -129,9 +129,9 @@ export function TacticsPage(): JSX.Element {
         <button
           onClick={() => void navigate('/tactics/mistakes')}
           className="col-span-2 py-6 bg-red-500/10 border-red-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-all duration-200"
-          style={{ boxShadow: '0 0 8px rgba(239, 68, 68, 0.3)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(239, 68, 68, 0.5)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.3)'; }}
+          style={{ boxShadow: '0 0 14px rgba(239, 68, 68, 0.35), 0 0 4px rgba(239, 68, 68, 0.2)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 24px rgba(239, 68, 68, 0.5), 0 0 8px rgba(239, 68, 68, 0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 14px rgba(239, 68, 68, 0.35), 0 0 4px rgba(239, 68, 68, 0.2)'; }}
           data-testid="section-my mistakes"
         >
           <AlertTriangle size={32} className="text-red-400" />
