@@ -6,6 +6,7 @@ import { BoardPageLayout } from '../Board/BoardPageLayout';
 import { HintButton } from '../Coach/HintButton';
 import { GameCompleteCard } from './GameCompleteCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
+import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import {
@@ -63,7 +64,6 @@ export function OpeningChallenge({
   }, [opening.pgn]);
 
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
-  const [boardKey, setBoardKey] = useState(0);
   const [lineComplete, setLineComplete] = useState(false);
   const [totalMistakes, setTotalMistakes] = useState(0);
   const [takebacksUsed, setTakebacksUsed] = useState(0);
@@ -101,6 +101,9 @@ export function OpeningChallenge({
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
   const currentTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
+
+  // Game state owned at page level — ControlledChessBoard renders from this
+  const game = useChessGame(currentFen, opening.color);
 
   // Publish board context for global coach drawer
   useBoardContext(
@@ -156,12 +159,13 @@ export function OpeningChallenge({
 
     const opponentMove = expectedMoves[currentMoveIndex];
     const timer = setTimeout(() => {
+      const nextFen = fenAtIndex(currentMoveIndex + 1);
+      game.loadFen(nextFen);
       setComputerLastMove({ from: opponentMove.from, to: opponentMove.to });
       setCurrentMoveIndex((prev) => prev + 1);
-      setBoardKey((k) => k + 1);
     }, 500);
     return () => clearTimeout(timer);
-  }, [currentMoveIndex, expectedMoves, isPlayerTurn, lineComplete]);
+  }, [currentMoveIndex, expectedMoves, isPlayerTurn, lineComplete, fenAtIndex, game]);
 
   // Check for line completion
   useEffect(() => {
@@ -192,7 +196,7 @@ export function OpeningChallenge({
 
       const expected = expectedMoves[currentMoveIndex];
       if (result.from === expected.from && result.to === expected.to) {
-        // Correct move
+        // Correct move — game FEN is already at the post-move position
         setComputerLastMove(null);
         setShowCorrectFlash(true);
         resetHints();
@@ -200,17 +204,16 @@ export function OpeningChallenge({
         wrongMoveCountRef.current = 0;
         setTimeout(() => setShowCorrectFlash(false), 400);
         setCurrentMoveIndex((prev) => prev + 1);
-        setBoardKey((k) => k + 1);
 
         // Occasional coach encouragement (every 3 correct moves)
         if (currentMoveIndex > 0 && currentMoveIndex % 3 === 0) {
           chatRef.current?.injectAssistantMessage(getCorrectMoveMessage());
         }
       } else {
-        // Wrong move — reset board, coach encourages
+        // Wrong move — reset board to pre-move position, coach encourages
         setTotalMistakes((prev) => prev + 1);
         wrongMoveCountRef.current += 1;
-        setBoardKey((k) => k + 1);
+        game.loadFen(currentFen);
 
         const msg = getWrongMoveMessage(opening, wrongMoveCountRef.current);
         chatRef.current?.injectAssistantMessage(msg);
@@ -221,7 +224,7 @@ export function OpeningChallenge({
         }
       }
     },
-    [currentMoveIndex, expectedMoves, lineComplete, opening, hintState.level, requestHint, resetHints],
+    [currentMoveIndex, expectedMoves, lineComplete, opening, hintState.level, requestHint, resetHints, game, currentFen],
   );
 
   // Takeback system
@@ -234,15 +237,15 @@ export function OpeningChallenge({
       newIndex -= 1;
     }
 
+    game.loadFen(fenAtIndex(newIndex));
     setCurrentMoveIndex(newIndex);
-    setBoardKey((k) => k + 1);
     resetHints();
     prevNudgeRef.current = null;
     setTakebacksUsed((prev) => prev + 1);
     wrongMoveCountRef.current = 0;
 
     chatRef.current?.injectAssistantMessage('No worries! Let\'s try that move again.');
-  }, [currentMoveIndex, isPlayerTurn, resetHints]);
+  }, [currentMoveIndex, isPlayerTurn, resetHints, game, fenAtIndex]);
 
   // Board annotations from coach chat
   const handleBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]): void => {
@@ -258,8 +261,8 @@ export function OpeningChallenge({
 
   // Reset for replay
   const handlePlayAgain = useCallback((): void => {
+    game.loadFen(fenAtIndex(0));
     setCurrentMoveIndex(0);
-    setBoardKey((k) => k + 1);
     setLineComplete(false);
     setTotalMistakes(0);
     setTakebacksUsed(0);
@@ -270,7 +273,7 @@ export function OpeningChallenge({
     wrongMoveCountRef.current = 0;
     startTimeRef.current = Date.now();
     welcomeSentRef.current = false;
-  }, [resetHints]);
+  }, [resetHints, game, fenAtIndex]);
 
   const progress = expectedMoves.length > 0
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
@@ -370,21 +373,20 @@ export function OpeningChallenge({
           )}
         </>
       }
+      game={game}
       boardFen={currentFen}
-      boardOrientation={opening.color}
       boardInteractive={isPlayerTurn(currentMoveIndex) && !lineComplete}
-      boardKey={boardKey}
       onBoardMove={handleMove}
       showEvalBar={false}
       highlightSquares={computerLastMove}
       arrows={allArrows}
       ghostMove={hintState.ghostMove}
       chat={{
-        fen: currentFen,
+        fen: game.fen,
         pgn: pgnUpToCurrent,
         moveNumber: Math.floor(currentMoveIndex / 2) + 1,
         playerColor: opening.color,
-        turn: currentTurn,
+        turn: game.turn,
         isGameOver: lineComplete,
         gameResult: lineComplete ? 'Complete' : '',
         onBoardAnnotation: handleBoardAnnotation,

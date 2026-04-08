@@ -27,6 +27,55 @@ vi.mock('../Board/ChessBoard', () => ({
   ),
 }));
 
+vi.mock('../Board/ControlledChessBoard', () => ({
+  ControlledChessBoard: (props: Record<string, unknown>) => {
+    const game = props.game as { fen?: string; boardOrientation?: string } | undefined;
+    const interactive = props.interactive as boolean | undefined;
+    return (
+      <div
+        data-testid="chess-board"
+        data-fen={game?.fen ?? ''}
+        data-orientation={game?.boardOrientation ?? 'white'}
+        data-interactive={String(interactive ?? true)}
+      >
+        Board
+      </div>
+    );
+  },
+}));
+
+vi.mock('../../hooks/useChessGame', () => ({
+  useChessGame: (_initialFen?: string, initialOrientation: 'white' | 'black' = 'white') => ({
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    turn: 'w',
+    inCheck: false,
+    isCheck: false,
+    checkSquare: null,
+    isGameOver: false,
+    isCheckmate: false,
+    isStalemate: false,
+    isDraw: false,
+    lastMove: null,
+    history: [],
+    selectedSquare: null,
+    legalMoves: [],
+    boardOrientation: initialOrientation,
+    makeMove: vi.fn().mockReturnValue(null),
+    onDrop: vi.fn().mockReturnValue(null),
+    onSquareClick: vi.fn().mockReturnValue(null),
+    flipBoard: vi.fn(),
+    setOrientation: vi.fn(),
+    undoMove: vi.fn(),
+    resetGame: vi.fn(),
+    clearSelection: vi.fn(),
+    getLegalMoves: vi.fn().mockReturnValue([]),
+    getPiece: vi.fn().mockReturnValue(null),
+    reset: vi.fn(),
+    loadFen: vi.fn().mockReturnValue(true),
+  }),
+}));
+
 vi.mock('../../hooks/usePieceSound', () => ({
   usePieceSound: () => ({
     playMoveSound: vi.fn(),

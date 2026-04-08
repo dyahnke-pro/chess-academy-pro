@@ -1,12 +1,13 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { BoardControls } from '../Board/BoardControls';
 import { ExplanationCard } from './ExplanationCard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
@@ -62,7 +63,6 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
 
   const playerColor = opening.color;
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
-  const [boardKey, setBoardKey] = useState(0);
   const [showWrongMove, setShowWrongMove] = useState(false);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
@@ -147,6 +147,9 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
 
+  // Central game hook — syncs automatically when currentFen changes
+  const game = useChessGame(currentFen, playerColor);
+
   // Publish board context for global coach drawer
   const trainTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
   useBoardContext(currentFen, currentLine.pgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, trainTurn);
@@ -161,7 +164,6 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
     const timer = setTimeout(() => {
       setComputerLastMove({ from: opponentMove.from, to: opponentMove.to });
       setCurrentMoveIndex((prev) => prev + 1);
-      setBoardKey((k) => k + 1);
     }, 500);
     return () => clearTimeout(timer);
   }, [currentMoveIndex, expectedMoves, isPlayerTurn, lineComplete, showWrongMove]);
@@ -196,7 +198,6 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
         }
         setTimeout(() => setShowCorrectFlash(false), 400);
         setCurrentMoveIndex((prev) => prev + 1);
-        setBoardKey((k) => k + 1);
       } else {
         // Wrong — reset to start of line after undo
         setWrongSquare(result.to);
@@ -206,7 +207,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
           setTimeout(() => setMoveFlash(null), 600);
         }
         playEncouragement();
-        setBoardKey((k) => k + 1);
+        game.loadFen(currentFen);
         // Record weak spot
         void recordWeakSpot(
           opening.id,
@@ -217,7 +218,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
         );
       }
     },
-    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash, opening.id, opening.name, currentFen],
+    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash, opening.id, opening.name, currentFen, game],
   );
 
   const handleUndo = useCallback((): void => {
@@ -227,7 +228,6 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
     setComputerLastMove(null);
     setShowHintAfterUndo(true);
     setCurrentMoveIndex(0);
-    setBoardKey((k) => k + 1);
   }, []);
 
   // Analyze position when it changes
@@ -275,7 +275,6 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
 
   const handleRetry = useCallback((): void => {
     setCurrentMoveIndex(0);
-    setBoardKey((k) => k + 1);
     setShowWrongMove(false);
     setShowCorrectFlash(false);
     setShowHintAfterUndo(false);
@@ -432,10 +431,8 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
           <div className="relative">
-            <ChessBoard
-              key={boardKey}
-              initialFen={currentFen}
-              orientation={playerColor}
+            <ControlledChessBoard
+              game={game}
               interactive={isPlayerTurn(currentMoveIndex) && !showWrongMove}
               showFlipButton={true}
               showUndoButton={false}
@@ -496,10 +493,10 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       {/* Move navigation */}
       <div className="px-4">
         <BoardControls
-          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
-          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
-          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
-          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
+          onFirst={() => { setCurrentMoveIndex(0); setComputerLastMove(null); }}
+          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setComputerLastMove(null); } }}
+          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); } }}
+          onLast={() => { setCurrentMoveIndex(expectedMoves.length); }}
           canGoPrev={currentMoveIndex > 0}
           canGoNext={currentMoveIndex < expectedMoves.length}
         />

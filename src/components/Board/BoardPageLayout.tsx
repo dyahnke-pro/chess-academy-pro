@@ -1,12 +1,13 @@
 import { useState, type ReactNode, type RefObject } from 'react';
 import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { ChessBoard } from './ChessBoard';
+import { ControlledChessBoard } from './ControlledChessBoard';
 import { GameChatPanel } from '../Coach/GameChatPanel';
 import type { GameChatPanelHandle } from '../Coach/GameChatPanel';
 import { MobileChatDrawer } from '../Coach/MobileChatDrawer';
 import { useResizableDivider } from '../../hooks/useResizableDivider';
 import { useIsMobile } from '../../hooks/useIsMobile';
-import type { MoveResult } from '../../hooks/useChessGame';
+import type { UseChessGameReturn, MoveResult } from '../../hooks/useChessGame';
 import type { BoardArrow, BoardHighlight, BoardAnnotationCommand, GhostMoveData } from '../../types';
 import type { MoveQuality } from './ChessBoard';
 
@@ -41,6 +42,12 @@ interface BoardPageLayoutProps {
   belowBoard?: ReactNode;
   boardOverlay?: ReactNode;
   customBoard?: ReactNode;
+  /**
+   * When provided, renders ControlledChessBoard using this game object as the
+   * single source of truth. The parent owns the game state via useChessGame().
+   * When omitted, falls back to the legacy ChessBoard with boardFen syncing.
+   */
+  game?: UseChessGameReturn;
   boardFen: string;
   boardOrientation?: 'white' | 'black';
   boardInteractive?: boolean;
@@ -69,6 +76,7 @@ export function BoardPageLayout({
   belowBoard,
   boardOverlay,
   customBoard,
+  game,
   boardFen,
   boardOrientation = 'white',
   boardInteractive = true,
@@ -151,26 +159,48 @@ export function BoardPageLayout({
           <div className="w-full md:max-w-[420px] relative">
             {customBoard ?? (
               <>
-                <ChessBoard
-                  key={boardKey}
-                  initialFen={boardFen}
-                  orientation={boardOrientation}
-                  interactive={boardInteractive}
-                  showEvalBar={showEvalBar}
-                  evaluation={evalBar?.evaluation ?? 0}
-                  isMate={evalBar?.isMate ?? false}
-                  mateIn={evalBar?.mateIn ?? null}
-                  onMove={onBoardMove}
-                  showFlipButton={showFlipButton}
-                  showUndoButton={false}
-                  showResetButton={false}
-                  highlightSquares={highlightSquares}
-                  showLastMoveHighlight={showLastMoveHighlight}
-                  moveQualityFlash={moveQualityFlash}
-                  arrows={arrows}
-                  annotationHighlights={annotationHighlights}
-                  ghostMove={ghostMove}
-                />
+                {game ? (
+                  <ControlledChessBoard
+                    key={boardKey}
+                    game={game}
+                    interactive={boardInteractive}
+                    showEvalBar={showEvalBar}
+                    evaluation={evalBar?.evaluation ?? 0}
+                    isMate={evalBar?.isMate ?? false}
+                    mateIn={evalBar?.mateIn ?? null}
+                    onMove={onBoardMove}
+                    showFlipButton={showFlipButton}
+                    showUndoButton={false}
+                    showResetButton={false}
+                    highlightSquares={highlightSquares}
+                    showLastMoveHighlight={showLastMoveHighlight}
+                    moveQualityFlash={moveQualityFlash}
+                    arrows={arrows}
+                    annotationHighlights={annotationHighlights}
+                    ghostMove={ghostMove}
+                  />
+                ) : (
+                  <ChessBoard
+                    key={boardKey}
+                    initialFen={boardFen}
+                    orientation={boardOrientation}
+                    interactive={boardInteractive}
+                    showEvalBar={showEvalBar}
+                    evaluation={evalBar?.evaluation ?? 0}
+                    isMate={evalBar?.isMate ?? false}
+                    mateIn={evalBar?.mateIn ?? null}
+                    onMove={onBoardMove}
+                    showFlipButton={showFlipButton}
+                    showUndoButton={false}
+                    showResetButton={false}
+                    highlightSquares={highlightSquares}
+                    showLastMoveHighlight={showLastMoveHighlight}
+                    moveQualityFlash={moveQualityFlash}
+                    arrows={arrows}
+                    annotationHighlights={annotationHighlights}
+                    ghostMove={ghostMove}
+                  />
+                )}
                 {boardOverlay}
               </>
             )}

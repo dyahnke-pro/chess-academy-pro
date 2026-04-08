@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { MoveTree } from '../Openings/MoveTree';
 import { ArrowLeft, ArrowRight, ChevronsLeft, ChevronsRight, Download, Bot, Loader2 } from 'lucide-react';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -12,6 +13,7 @@ interface GameViewerProps {
 }
 
 export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
+  const chessGame = useChessGame();
   const moves = parsePgnMoves(game.pgn);
   const [moveIdx, setMoveIdx] = useState(-1);
   const [coachAnalysis, setCoachAnalysis] = useState(game.coachAnalysis);
@@ -106,8 +108,9 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
       </div>
 
       <div className="w-full md:max-w-[420px] mx-auto">
-        <ChessBoard
-          initialFen={currentFen}
+        <ControlledChessBoard
+          game={chessGame}
+          positionOverride={currentFen}
           interactive={false}
           showFlipButton
           showUndoButton={false}

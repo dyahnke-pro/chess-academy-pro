@@ -51,8 +51,42 @@ vi.mock('../Board/ChessBoard', () => ({
   ),
 }));
 
+vi.mock('../Board/ControlledChessBoard', () => ({
+  ControlledChessBoard: (props: Record<string, unknown>) => {
+    const game = props.game as { fen?: string; boardOrientation?: string } | undefined;
+    const interactive = props.interactive as boolean | undefined;
+    const onMove = props.onMove as ((result: { from: string; to: string; san: string; fen: string }) => void) | undefined;
+    return (
+      <div
+        data-testid="chess-board"
+        data-fen={game?.fen ?? ''}
+        data-orientation={game?.boardOrientation ?? 'white'}
+        data-interactive={String(interactive ?? true)}
+      >
+        Board
+        {interactive && onMove && (
+          <>
+            <button
+              data-testid="play-correct-move"
+              onClick={() => onMove({ from: 'e2', to: 'e4', san: 'e4', fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1' })}
+            >
+              Correct
+            </button>
+            <button
+              data-testid="play-wrong-move"
+              onClick={() => onMove({ from: 'd2', to: 'd4', san: 'd4', fen: 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1' })}
+            >
+              Wrong
+            </button>
+          </>
+        )}
+      </div>
+    );
+  },
+}));
+
 vi.mock('../../hooks/useChessGame', () => ({
-  useChessGame: () => ({
+  useChessGame: (_initialFen?: string, initialOrientation: 'white' | 'black' = 'white') => ({
     fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     turn: 'w',
@@ -64,7 +98,7 @@ vi.mock('../../hooks/useChessGame', () => ({
     history: [],
     selectedSquare: null,
     legalMoves: [],
-    boardOrientation: 'white' as const,
+    boardOrientation: initialOrientation,
     makeMove: vi.fn().mockReturnValue({ from: 'e7', to: 'e5', san: 'e5', fen: '' }),
     onDrop: vi.fn(),
     onSquareClick: vi.fn(),

@@ -45,6 +45,74 @@ vi.mock('../Board/ChessBoard', () => ({
   ),
 }));
 
+vi.mock('../Board/ControlledChessBoard', () => ({
+  ControlledChessBoard: (props: Record<string, unknown>) => {
+    const game = props.game as { fen?: string; boardOrientation?: string } | undefined;
+    const interactive = props.interactive as boolean | undefined;
+    const onMove = props.onMove as ((result: { from: string; to: string; san: string; fen: string }) => void) | undefined;
+    const highlightSquares = props.highlightSquares as { from: string; to: string } | null | undefined;
+    return (
+      <div
+        data-testid="chess-board"
+        data-fen={game?.fen ?? ''}
+        data-orientation={game?.boardOrientation ?? 'white'}
+        data-interactive={String(interactive ?? true)}
+        data-highlight={highlightSquares ? `${highlightSquares.from}-${highlightSquares.to}` : ''}
+      >
+        Board
+        {interactive && onMove && (
+          <>
+            <button
+              data-testid="make-correct-move"
+              onClick={() => onMove({ from: 'e2', to: 'e4', san: 'e4', fen: '' })}
+            >
+              Correct
+            </button>
+            <button
+              data-testid="make-wrong-move"
+              onClick={() => onMove({ from: 'a2', to: 'a3', san: 'a3', fen: '' })}
+            >
+              Wrong
+            </button>
+          </>
+        )}
+      </div>
+    );
+  },
+}));
+
+vi.mock('../../hooks/useChessGame', () => ({
+  useChessGame: (_initialFen?: string, initialOrientation: 'white' | 'black' = 'white') => ({
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    turn: 'w',
+    inCheck: false,
+    isCheck: false,
+    checkSquare: null,
+    isGameOver: false,
+    isCheckmate: false,
+    isStalemate: false,
+    isDraw: false,
+    lastMove: null,
+    history: [],
+    selectedSquare: null,
+    legalMoves: [],
+    boardOrientation: initialOrientation,
+    makeMove: vi.fn().mockReturnValue(null),
+    onDrop: vi.fn().mockReturnValue(null),
+    onSquareClick: vi.fn().mockReturnValue(null),
+    flipBoard: vi.fn(),
+    setOrientation: vi.fn(),
+    undoMove: vi.fn(),
+    resetGame: vi.fn(),
+    clearSelection: vi.fn(),
+    getLegalMoves: vi.fn().mockReturnValue([]),
+    getPiece: vi.fn().mockReturnValue(null),
+    reset: vi.fn(),
+    loadFen: vi.fn().mockReturnValue(true),
+  }),
+}));
+
 vi.mock('../../hooks/usePieceSound', () => ({
   usePieceSound: () => ({
     playMoveSound: vi.fn(),
