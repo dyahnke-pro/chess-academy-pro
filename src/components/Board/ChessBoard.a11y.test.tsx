@@ -76,7 +76,7 @@ describe('ChessBoard a11y', () => {
   });
 
   it('controls section only renders when at least one control is enabled', () => {
-    const { container } = render(<ChessBoard showFlipButton={false} showUndoButton={false} showResetButton={false} />);
+    const { container } = render(<ChessBoard showFlipButton={false} showUndoButton={false} showResetButton={false} showVoiceMic={false} />);
     expect(container.querySelector('[data-testid="board-controls"]')).toBeNull();
   });
 

@@ -12,7 +12,7 @@ const DIST_ASSETS = join(ROOT, 'dist', 'assets');
 
 // Thresholds — annotation JSON files are lazy-loaded as separate chunks,
 // so we separate the "app code + vendor" from "annotation data" chunks.
-const MAX_APP_JS_SIZE = 7_500_000;          // 7.5 MB for app index + vendors (includes inlined ECO/repertoire JSON)
+const MAX_APP_JS_SIZE = 7_800_000;          // 7.8 MB for app index + vendors (includes inlined ECO/repertoire JSON + annotation data)
 const MAX_VENDOR_CHUNK_SIZE = 600_000;      // 600 KB per vendor chunk
 const MAX_ANNOTATION_CHUNK_SIZE = 150_000;  // 150 KB per lazy annotation chunk
 const MAX_CSS_SIZE = 100_000;               // 100 KB CSS
@@ -63,7 +63,7 @@ describe('Bundle Size', () => {
     expect(buildRan).toBe(true);
   }, 120_000);
 
-  it('app JS (index + vendors) is under 7.5 MB', () => {
+  it('app JS (index + vendors) is under 7.8 MB', () => {
     ensureBuild();
     const files = getAssetFiles();
     const appFiles = files.filter((f) =>

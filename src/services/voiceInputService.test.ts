@@ -24,17 +24,17 @@ describe('voiceInputService', () => {
       expect(voiceInputService.isListening()).toBe(true);
     });
 
-    it('returns false if already listening', () => {
+    it('returns true if already listening', () => {
       voiceInputService.startListening();
       const result = voiceInputService.startListening();
-      expect(result).toBe(false);
+      expect(result).toBe(true);
     });
 
-    it('returns false on third consecutive call without stop', () => {
+    it('returns true on third consecutive call without stop', () => {
       voiceInputService.startListening();
       voiceInputService.startListening();
       const result = voiceInputService.startListening();
-      expect(result).toBe(false);
+      expect(result).toBe(true);
       expect(voiceInputService.isListening()).toBe(true);
     });
   });

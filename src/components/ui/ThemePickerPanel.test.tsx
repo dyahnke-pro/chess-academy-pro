@@ -21,7 +21,7 @@ describe('ThemePickerPanel', () => {
     useAppStore.getState().reset();
   });
 
-  it('renders all 7 theme cards', () => {
+  it('renders all 8 theme cards', () => {
     render(<ThemePickerPanel />);
     expect(screen.getByTestId('theme-picker-panel')).toBeInTheDocument();
 
@@ -84,6 +84,6 @@ describe('ThemePickerPanel', () => {
     render(<ThemePickerPanel />);
     // Each card has 5 swatch circles
     const cards = screen.getAllByTestId(/^theme-card-/);
-    expect(cards).toHaveLength(7);
+    expect(cards).toHaveLength(8);
   });
 });

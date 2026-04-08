@@ -42,8 +42,8 @@ describe('AppLayout a11y', () => {
 
   it('nav links have accessible text', () => {
     render(<AppLayout />);
-    const dashboardLinks = screen.getAllByText('Dashboard');
-    expect(dashboardLinks.length).toBeGreaterThanOrEqual(1);
+    const homeLinks = screen.getAllByText('Home');
+    expect(homeLinks.length).toBeGreaterThanOrEqual(1);
   });
 
   it('desktop sidebar contains nav element', () => {
@@ -54,7 +54,7 @@ describe('AppLayout a11y', () => {
 
   it('all nav links render with text labels', () => {
     render(<AppLayout />);
-    const expectedLabels = ['Dashboard', 'Openings', 'Coach', 'Weaknesses', 'Play', 'Games', 'Analysis', 'Stats', 'Settings', 'Kids Mode'];
+    const expectedLabels = ['Home', 'Openings', 'Coach', 'Tactics', 'Weaknesses', 'Kids Mode', 'Settings'];
     for (const label of expectedLabels) {
       const links = screen.getAllByText(label);
       expect(links.length).toBeGreaterThanOrEqual(1);
