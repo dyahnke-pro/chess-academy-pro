@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeX, Loader } from 'lucide-react';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { HintButton } from '../Coach/HintButton';
 import { StarDisplay } from './StarDisplay';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -40,7 +41,6 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
   const [puzzleIndex, setPuzzleIndex] = useState(0);
   const [puzzlesCorrect, setPuzzlesCorrect] = useState(0);
   const [puzzleFeedback, setPuzzleFeedback] = useState<'correct' | 'wrong' | null>(null);
-  const [boardKey, setBoardKey] = useState(0);
   const [voiceOn, setVoiceOn] = useState(true);
   const [aiPuzzles, setAiPuzzles] = useState<JourneyPuzzle[] | null>(null);
   const [puzzlesLoading, setPuzzlesLoading] = useState(false);
@@ -72,6 +72,33 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
     () => aiPuzzles ?? chapter?.puzzles ?? [],
     [aiPuzzles, chapter?.puzzles],
   );
+
+  // Game objects for lesson and puzzle boards
+  const lessonGame = useChessGame(
+    chapter?.lessons[lessonIndex]?.fen,
+    'white',
+  );
+  const puzzleGame = useChessGame(
+    activePuzzles[puzzleIndex]?.fen ?? undefined,
+    'white',
+  );
+
+  // Sync lesson board FEN when lessonIndex changes
+  useEffect(() => {
+    const fen = chapter?.lessons[lessonIndex]?.fen;
+    if (fen) {
+      lessonGame.loadFen(fen);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- loadFen is stable; including lessonGame would cause infinite re-renders
+  }, [lessonIndex, chapter?.lessons, lessonGame.loadFen]);
+
+  // Sync puzzle board FEN when puzzleIndex or activePuzzles changes
+  useEffect(() => {
+    const fen = activePuzzles[puzzleIndex]?.fen;
+    if (fen) {
+      puzzleGame.loadFen(fen);
+    }
+  }, [puzzleIndex, activePuzzles, puzzleGame.loadFen]);
 
   // Publish board context for global coach drawer
   const currentFen = chapter
@@ -194,7 +221,6 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
       setPhase('reward');
     } else {
       setPuzzleIndex(nextPuzzle);
-      setBoardKey((prev) => prev + 1);
     }
   }, [chapter, puzzleIndex, activePuzzles.length, config.gameId, config.chapterOrder]);
 
@@ -279,7 +305,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
         feedbackTimeoutRef.current = setTimeout(() => {
           setPuzzleFeedback(null);
-          setBoardKey((prev) => prev + 1);
+          puzzleGame.loadFen(currentPuzzle.fen);
         }, 1200);
       })();
       return;
@@ -292,9 +318,9 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
     feedbackTimeoutRef.current = setTimeout(() => {
       setPuzzleFeedback(null);
-      setBoardKey((prev) => prev + 1);
+      puzzleGame.loadFen(currentPuzzle.fen);
     }, 1200);
-  }, [chapter, puzzleIndex, puzzleFeedback, kidSpeak, config.gameId, config.chapterOrder, activePuzzles, advancePuzzle, resetHints]);
+  }, [chapter, puzzleIndex, puzzleFeedback, kidSpeak, config.gameId, config.chapterOrder, activePuzzles, advancePuzzle, resetHints, puzzleGame.loadFen]);
 
   const handleHint = useCallback((): void => {
     requestHint();
@@ -416,8 +442,8 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
               </p>
 
               <div className="w-full md:max-w-[420px] mx-auto">
-                <ChessBoard
-                  initialFen={chapter.lessons[lessonIndex].fen}
+                <ControlledChessBoard
+                  game={lessonGame}
                   interactive={false}
                   showFlipButton={false}
                   showUndoButton={false}
@@ -485,9 +511,8 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
               </h3>
 
               <div className="w-full md:max-w-[420px] mx-auto">
-                <ChessBoard
-                  key={boardKey}
-                  initialFen={activePuzzles[puzzleIndex].fen}
+                <ControlledChessBoard
+                  game={puzzleGame}
                   interactive={true}
                   showFlipButton={false}
                   showUndoButton={false}

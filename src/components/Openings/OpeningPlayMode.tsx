@@ -5,7 +5,7 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useCoachTips } from '../../hooks/useCoachTips';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
@@ -54,7 +54,6 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const [voiceOn, setVoiceOn] = useState(true);
   const [deviationCard, setDeviationCard] = useState<string | null>(null);
   const [result, setResult] = useState<OpeningPlayResult | null>(null);
-  const [boardKey, setBoardKey] = useState(0);
   const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
   const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
   const isComputerThinking = useRef(false);
@@ -353,7 +352,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           setComputerLastMove({ from: expected.from, to: expected.to });
           setMoveHistory((prev) => [...prev, { fen: moveResult.fen, from: expected.from, to: expected.to }]);
           moveCountRef.current += 1;
-          setBoardKey((k) => k + 1);
+          
           if (moveCountRef.current >= openingPhaseLength) {
             setPlayPhase('middlegame');
           }
@@ -374,7 +373,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             const r = result;
             setMoveHistory((prev) => [...prev, { fen: r.fen, from: r.from, to: r.to }]);
             moveCountRef.current += 1;
-            setBoardKey((k) => k + 1);
+            
           }
         } catch {
           if (isCancelled()) return;
@@ -385,7 +384,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
               setComputerLastMove({ from: fallback.from, to: fallback.to });
               setMoveHistory((prev) => [...prev, { fen: fallback.fen, from: fallback.from, to: fallback.to }]);
               moveCountRef.current += 1;
-              setBoardKey((k) => k + 1);
+              
             }
           }
         }
@@ -506,7 +505,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
                 setLatestIsMate(false);
                 setLatestMateIn(null);
                 setPlayPhase('pregame');
-                setBoardKey((k) => k + 1);
+                
               }}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
               data-testid="play-again"
@@ -590,10 +589,9 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
-          <ChessBoard
-            key={boardKey}
-            initialFen={displayFen}
-            orientation={playerColor}
+          <ControlledChessBoard
+            game={game}
+            positionOverride={viewedMoveIndex !== null ? displayFen : undefined}
             interactive={
               viewedMoveIndex === null &&
               (playPhase === 'opening' || playPhase === 'middlegame') &&

@@ -51,6 +51,52 @@ vi.mock('../Board/ChessBoard', () => ({
   ),
 }));
 
+vi.mock('../Board/ControlledChessBoard', () => ({
+  ControlledChessBoard: (props: Record<string, unknown>) => {
+    const game = props.game as { fen?: string; boardOrientation?: string } | undefined;
+    const onMove = props.onMove as ((move: unknown) => void) | undefined;
+    return (
+      <div data-testid="chess-board" data-fen={game?.fen ?? ''}>
+        <button data-testid="mock-move-btn" onClick={() => onMove?.({ from: 'e2', to: 'e4', san: 'e4', fen: '4k3/8/8/8/4P3/8/8/4K3 b - e3 0 1' })}>
+          Move
+        </button>
+      </div>
+    );
+  },
+}));
+
+vi.mock('../../hooks/useChessGame', () => ({
+  useChessGame: (_initialFen?: string, initialOrientation: 'white' | 'black' = 'white') => ({
+    fen: _initialFen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    position: _initialFen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    turn: 'w',
+    inCheck: false,
+    isCheck: false,
+    checkSquare: null,
+    isGameOver: false,
+    isCheckmate: false,
+    isStalemate: false,
+    isDraw: false,
+    lastMove: null,
+    history: [],
+    selectedSquare: null,
+    legalMoves: [],
+    boardOrientation: initialOrientation,
+    makeMove: vi.fn().mockReturnValue(null),
+    onDrop: vi.fn().mockReturnValue(null),
+    onSquareClick: vi.fn().mockReturnValue(null),
+    flipBoard: vi.fn(),
+    setOrientation: vi.fn(),
+    undoMove: vi.fn(),
+    resetGame: vi.fn(),
+    clearSelection: vi.fn(),
+    getLegalMoves: vi.fn().mockReturnValue([]),
+    getPiece: vi.fn().mockReturnValue(null),
+    reset: vi.fn(),
+    loadFen: vi.fn().mockReturnValue(true),
+  }),
+}));
+
 vi.mock('./StarDisplay', () => ({
   StarDisplay: ({ earned, total }: { earned: number; total: number }) => (
     <div data-testid="star-display">

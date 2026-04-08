@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
@@ -70,7 +71,6 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
   const playerColor = opening.color;
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
-  const [boardKey, setBoardKey] = useState(0);
   const [showWrongMove, setShowWrongMove] = useState(false);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
@@ -162,6 +162,8 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
 
+  const game = useChessGame(currentFen, playerColor);
+
   // Publish board context for global coach drawer
   const practiceTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
   useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, practiceTurn);
@@ -194,7 +196,6 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
     const timer = setTimeout(() => {
       setComputerLastMove({ from: opponentMove.from, to: opponentMove.to });
       setCurrentMoveIndex((prev) => prev + 1);
-      setBoardKey((k) => k + 1);
     }, 500);
     return () => clearTimeout(timer);
   }, [currentMoveIndex, expectedMoves, isPlayerTurn, lineComplete, showWrongMove]);
@@ -246,7 +247,6 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
         }
         setTimeout(() => setShowCorrectFlash(false), 400);
         setCurrentMoveIndex((prev) => prev + 1);
-        setBoardKey((k) => k + 1);
       } else {
         // Wrong
         setTotalMistakes((prev) => prev + 1);
@@ -257,7 +257,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
           setTimeout(() => setMoveFlash(null), 600);
         }
         playEncouragement();
-        setBoardKey((k) => k + 1);
+        game.loadFen(currentFen);
         // Record weak spot
         void recordWeakSpot(
           opening.id,
@@ -268,15 +268,15 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
         );
       }
     },
-    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash, resetHints, opening.id, opening.name, currentFen],
+    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash, resetHints, opening.id, opening.name, currentFen, game],
   );
 
   const handleUndo = useCallback((): void => {
     setShowWrongMove(false);
     setWrongSquare(null);
     resetHints();
-    setBoardKey((k) => k + 1);
-  }, [resetHints]);
+    game.loadFen(currentFen);
+  }, [resetHints, game, currentFen]);
 
   // Analyze position when it changes
   useEffect(() => {
@@ -323,7 +323,6 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
   const handleRetry = useCallback((): void => {
     setCurrentMoveIndex(0);
-    setBoardKey((k) => k + 1);
     setShowWrongMove(false);
     setShowCorrectFlash(false);
     setWrongSquare(null);
@@ -442,10 +441,8 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
           <div className="relative">
-            <ChessBoard
-              key={boardKey}
-              initialFen={currentFen}
-              orientation={playerColor}
+            <ControlledChessBoard
+              game={game}
               interactive={isPlayerTurn(currentMoveIndex) && !showWrongMove}
               showFlipButton={true}
               showUndoButton={false}
@@ -508,10 +505,10 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       {/* Move navigation */}
       <div className="px-4">
         <BoardControls
-          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
-          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
-          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
-          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
+          onFirst={() => { setCurrentMoveIndex(0); setComputerLastMove(null); }}
+          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setComputerLastMove(null); } }}
+          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); } }}
+          onLast={() => { setCurrentMoveIndex(expectedMoves.length); }}
           canGoPrev={currentMoveIndex > 0}
           canGoNext={currentMoveIndex < expectedMoves.length}
         />

@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
+import { useChessGame } from '../../hooks/useChessGame';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { Eye } from 'lucide-react';
@@ -55,9 +56,7 @@ export function PuzzleBoard({
 }: PuzzleBoardProps): JSX.Element {
   const [state, setState] = useState<PuzzleState>('loading');
   const [moveIndex, setMoveIndex] = useState(0);
-  const [fen, setFen] = useState(puzzle.fen);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
-  const [boardKey, setBoardKey] = useState(0);
   const [flashClass, setFlashClass] = useState<string>('');
   const hasMadeMistakeRef = useRef(false);
   const wrongAttemptsRef = useRef(0);
@@ -65,7 +64,6 @@ export function PuzzleBoard({
   const showedSolutionRef = useRef(false);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const solveStartRef = useRef<number>(Date.now());
-  const chessRef = useRef(new Chess(puzzle.fen));
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playErrorPing, playSuccessChime } = usePieceSound();
   const { settings } = useSettings();
@@ -77,8 +75,11 @@ export function PuzzleBoard({
   const fenTurn = puzzle.fen.split(' ')[1];
   const userColor: 'white' | 'black' = fenTurn === 'w' ? 'black' : 'white';
 
+  // Game state owned at page level — ControlledChessBoard renders from this
+  const game = useChessGame(puzzle.fen, userColor);
+
   // Publish board context for global coach drawer
-  useBoardContext(fen, '', 0, userColor, fen.split(' ')[1] === 'b' ? 'b' : 'w');
+  useBoardContext(game.fen, '', 0, userColor, game.turn);
 
   // Use Lichess curated themes for tactic type (more accurate than pattern matching)
   const tacticType = useMemo(() => getTacticTypeFromThemes(puzzle.themes), [puzzle.themes]);
@@ -108,18 +109,18 @@ export function PuzzleBoard({
 
     // Get the SAN for the expected move
     try {
-      const chess = new Chess(fen);
+      const chess = new Chess(game.fen);
       const result = chess.move({ from: expected.from, to: expected.to, promotion: expected.promotion });
       chess.undo();
       return { from: expected.from, to: expected.to, san: result.san };
     } catch {
       return { from: expected.from, to: expected.to, san: '' };
     }
-  }, [state, moveIndex, fen]);
+  }, [state, moveIndex, game.fen]);
 
   // Hint system
   const { hintState, requestHint, resetHints } = useHintSystem({
-    fen,
+    fen: game.fen,
     playerColor: userColor,
     enabled: settings.showHints && state === 'playing',
     knownMove,
@@ -143,13 +144,11 @@ export function PuzzleBoard({
 
   // Reset state when puzzle changes
   useEffect(() => {
-    const chess = new Chess(puzzle.fen);
-    chessRef.current = chess;
+    game.loadFen(puzzle.fen);
+    game.setOrientation(userColor);
     movesRef.current = parseUciMoves(puzzle.moves);
     setMoveIndex(0);
-    setFen(puzzle.fen);
     setLastMoveHighlight(null);
-    setBoardKey((k) => k + 1);
     setFlashClass('');
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
@@ -167,14 +166,10 @@ export function PuzzleBoard({
       const moves = movesRef.current;
       const firstMove = moves.length > 0 ? moves[0] : undefined;
       if (firstMove) {
-        try {
-          const result = chess.move({ from: firstMove.from, to: firstMove.to, promotion: firstMove.promotion });
+        const result = game.makeMove(firstMove.from, firstMove.to, firstMove.promotion);
+        if (result) {
           playMoveSound(result.san);
-          setFen(chess.fen());
           setLastMoveHighlight({ from: firstMove.from, to: firstMove.to });
-          setBoardKey((k) => k + 1);
-        } catch {
-          // Invalid move in puzzle data - skip
         }
       }
       setMoveIndex(1);
@@ -190,6 +185,7 @@ export function PuzzleBoard({
       }
       voiceService.stop();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzle, playMoveSound, resetHints, resetStruggle]);
 
   // Voice feedback on correct solve (respects user voice setting)
@@ -247,18 +243,10 @@ export function PuzzleBoard({
       if (nextIndex < allMoves.length) {
         const opponentMove = allMoves[nextIndex];
         setTimeout(() => {
-          try {
-            const result = chessRef.current.move({
-              from: opponentMove.from,
-              to: opponentMove.to,
-              promotion: opponentMove.promotion,
-            });
+          const result = game.makeMove(opponentMove.from, opponentMove.to, opponentMove.promotion);
+          if (result) {
             playMoveSound(result.san);
             setLastMoveHighlight({ from: opponentMove.from, to: opponentMove.to });
-            setFen(chessRef.current.fen());
-            setBoardKey((k) => k + 1);
-          } catch {
-            // skip
           }
           setMoveIndex(nextIndex + 1);
         }, 400);
@@ -268,9 +256,7 @@ export function PuzzleBoard({
       hasMadeMistakeRef.current = true;
       wrongAttemptsRef.current += 1;
       setWrongAttemptCount((c) => c + 1);
-      chessRef.current.undo();
-      setFen(chessRef.current.fen());
-      setBoardKey((k) => k + 1);
+      game.undoMove();
       triggerFlash('board-flash-error');
       playErrorPing();
 
@@ -289,7 +275,7 @@ export function PuzzleBoard({
           puzzle.themes,
           expected.from,
           expected.to,
-          chessRef.current,
+          new Chess(game.fen),
         );
         void voiceService.speak(hint);
       }
@@ -299,16 +285,10 @@ export function PuzzleBoard({
         setState('playing');
       }, 1000);
     }
-  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes]);
+  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, game]);
 
-  const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
-    try {
-      chessRef.current.move({ from: moveResult.from, to: moveResult.to, promotion: moveResult.promotion });
-    } catch {
-      // Move already applied or invalid — ignore
-    }
-    handleMove(moveResult);
-  }, [handleMove]);
+  // With ControlledChessBoard, the move is already applied to the game object
+  const handleChessBoardMove = handleMove;
 
   // Show Solution: auto-play remaining moves and mark as failed
   const handleShowSolution = useCallback((): void => {
@@ -318,7 +298,6 @@ export function PuzzleBoard({
     // Play remaining moves in sequence
     const allMoves = movesRef.current;
     let currentIndex = moveIndex;
-    const chess = chessRef.current;
 
     const playNextMove = (): void => {
       if (currentIndex >= allMoves.length) {
@@ -330,14 +309,10 @@ export function PuzzleBoard({
       }
 
       const move = allMoves[currentIndex];
-      try {
-        const result = chess.move({ from: move.from, to: move.to, promotion: move.promotion });
+      const result = game.makeMove(move.from, move.to, move.promotion);
+      if (result) {
         playMoveSound(result.san);
         setLastMoveHighlight({ from: move.from, to: move.to });
-        setFen(chess.fen());
-        setBoardKey((k) => k + 1);
-      } catch {
-        // skip
       }
       currentIndex += 1;
       setMoveIndex(currentIndex);
@@ -354,7 +329,7 @@ export function PuzzleBoard({
 
     setState('loading'); // Disable interaction during solution playback
     playNextMove();
-  }, [state, moveIndex, completePuzzle, playMoveSound]);
+  }, [state, moveIndex, completePuzzle, playMoveSound, game]);
 
   return (
     <div className="space-y-3" data-testid="puzzle-board">
@@ -368,10 +343,8 @@ export function PuzzleBoard({
         </h2>
       )}
       <div className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${flashClass}`} data-testid="board-wrapper">
-        <ChessBoard
-          initialFen={fen}
-          key={boardKey}
-          orientation={userColor}
+        <ControlledChessBoard
+          game={game}
           interactive={state === 'playing' && !disabled}
           showFlipButton
           showUndoButton={false}

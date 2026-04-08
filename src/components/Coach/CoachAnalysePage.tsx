@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search, Loader } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { ChatInput } from './ChatInput';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -157,8 +157,8 @@ export function CoachAnalysePage(): JSX.Element {
       {/* Board */}
       <div className="px-2 py-1 flex justify-center">
         <div className="w-full md:max-w-[420px]">
-          <ChessBoard
-            initialFen={game.fen}
+          <ControlledChessBoard
+            game={game}
             interactive
             showEvalBar={!!analysis}
             evaluation={analysis?.evaluation}

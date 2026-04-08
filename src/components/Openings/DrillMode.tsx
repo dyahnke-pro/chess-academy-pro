@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
@@ -67,7 +68,6 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   const playerColor = opening.color;
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
-  const [boardKey, setBoardKey] = useState(0);
   const [showWrongMove, setShowWrongMove] = useState(false);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
   const [correctSquare, setCorrectSquare] = useState<string | null>(null);
@@ -160,6 +160,16 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
 
+  // Controlled board game object
+  const game = useChessGame(currentFen, playerColor);
+
+  // Sync game object whenever the computed FEN changes
+  useEffect(() => {
+    if (game.fen !== currentFen) {
+      game.loadFen(currentFen);
+    }
+  }, [currentFen, game]);
+
   // Publish board context for global coach drawer
   const drillTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
   useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, drillTurn);
@@ -246,7 +256,6 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
     const timer = setTimeout(() => {
       setComputerLastMove({ from: opponentMove.from, to: opponentMove.to });
       setCurrentMoveIndex((prev) => prev + 1);
-      setBoardKey((k) => k + 1);
     }, 500);
     return () => clearTimeout(timer);
   }, [currentMoveIndex, expectedMoves, isPlayerTurn, lineComplete, showWrongMove]);
@@ -300,14 +309,13 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
           setCorrectSquare(null);
         }, 400);
         setCurrentMoveIndex((prev) => prev + 1);
-        setBoardKey((k) => k + 1);
       } else {
-        // Wrong move
+        // Wrong move — revert game state to current position
+        game.loadFen(currentFen);
         setTotalMistakes((prev) => prev + 1);
         setWrongSquare(result.to);
         setShowWrongMove(true);
         playEncouragement();
-        setBoardKey((k) => k + 1);
         // Record weak spot for this position
         void recordWeakSpot(
           opening.id,
@@ -318,14 +326,14 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
         );
       }
     },
-    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, opening.id, opening.name, currentFen],
+    [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, opening.id, opening.name, currentFen, game],
   );
 
   const handleUndo = useCallback((): void => {
     setShowWrongMove(false);
     setWrongSquare(null);
-    setBoardKey((k) => k + 1);
-  }, []);
+    game.loadFen(currentFen);
+  }, [game, currentFen]);
 
   // Auto-takeback: revert wrong move after brief delay
   useEffect(() => {
@@ -338,7 +346,6 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   const handleRetry = useCallback((): void => {
     setCurrentMoveIndex(0);
-    setBoardKey((k) => k + 1);
     setShowWrongMove(false);
     setShowCorrectFlash(false);
     setCorrectSquare(null);
@@ -348,7 +355,8 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
     setTotalMistakes(0);
     startTimeRef.current = Date.now();
     voiceService.stop();
-  }, []);
+    game.loadFen(fenAtIndex(0));
+  }, [game, fenAtIndex]);
 
   const progress = expectedMoves.length > 0
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
@@ -452,10 +460,8 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
       <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
           <div className="relative">
-            <ChessBoard
-              key={boardKey}
-              initialFen={currentFen}
-              orientation={playerColor}
+            <ControlledChessBoard
+              game={game}
               interactive={isPlayerTurn(currentMoveIndex) && !showWrongMove}
               showFlipButton={true}
               showUndoButton={false}
@@ -514,10 +520,10 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
       {/* Move navigation */}
       <div className="px-4">
         <BoardControls
-          onFirst={() => { setCurrentMoveIndex(0); setBoardKey((k) => k + 1); setComputerLastMove(null); }}
-          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setBoardKey((k) => k + 1); setComputerLastMove(null); } }}
-          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); setBoardKey((k) => k + 1); } }}
-          onLast={() => { setCurrentMoveIndex(expectedMoves.length); setBoardKey((k) => k + 1); }}
+          onFirst={() => { setCurrentMoveIndex(0); setComputerLastMove(null); }}
+          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setComputerLastMove(null); } }}
+          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); } }}
+          onLast={() => { setCurrentMoveIndex(expectedMoves.length); }}
           canGoPrev={currentMoveIndex > 0}
           canGoNext={currentMoveIndex < expectedMoves.length}
         />

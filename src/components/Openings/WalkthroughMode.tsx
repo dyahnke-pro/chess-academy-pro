@@ -2,7 +2,8 @@ import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
@@ -122,7 +123,6 @@ export function WalkthroughMode({
   }, [activePgn]);
 
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
-  const [boardKey, setBoardKey] = useState(0);
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
 
   // Ref for TTS boundary callback — updated per annotation
@@ -177,6 +177,16 @@ export function WalkthroughMode({
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
+
+  // Controlled chess game for the board
+  const game = useChessGame(currentFen, opening.color);
+
+  // Sync game position whenever the derived FEN changes (move navigation / auto-play)
+  useEffect(() => {
+    if (game.fen !== currentFen) {
+      game.loadFen(currentFen);
+    }
+  }, [currentFen, game]);
 
   // Publish board context for global coach drawer
   const turn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
@@ -473,7 +483,6 @@ export function WalkthroughMode({
         autoPlayRef.current = setTimeout(advanceToNext, delay);
       }
 
-      setBoardKey((k) => k + 1);
       return nextIndex;
     });
   }, [expectedMoves.length, annotations, autoPlaySpeed, voiceEnabled, postNarrationDelay]);
@@ -549,7 +558,6 @@ export function WalkthroughMode({
     setIsAutoPlaying(false);
     voiceService.stop();
     setCurrentMoveIndex(idx);
-    setBoardKey((k) => k + 1);
   }, []);
 
   const handleFirst = useCallback(() => goToMove(0), [goToMove]);
@@ -558,13 +566,11 @@ export function WalkthroughMode({
     voiceService.stop();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.max(0, prev - 1));
-    setBoardKey((k) => k + 1);
   }, []);
   const handleNext = useCallback(() => {
     unlockAudioContext();
     setIsAutoPlaying(false);
     setCurrentMoveIndex((prev) => Math.min(expectedMoves.length, prev + 1));
-    setBoardKey((k) => k + 1);
   }, [expectedMoves.length]);
   const handleLast = useCallback(() => goToMove(expectedMoves.length), [goToMove, expectedMoves.length]);
 
@@ -585,7 +591,6 @@ export function WalkthroughMode({
       // Starting — reset if at end
       if (currentMoveIndex >= expectedMoves.length) {
         setCurrentMoveIndex(0);
-        setBoardKey((k) => k + 1);
       }
       isAutoPlayingRef.current = true;
       return true;
@@ -645,10 +650,8 @@ export function WalkthroughMode({
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
-          <ChessBoard
-            key={boardKey}
-            initialFen={currentFen}
-            orientation={opening.color}
+          <ControlledChessBoard
+            game={game}
             interactive={false}
             showFlipButton={true}
             showUndoButton={false}

@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import type { ChessPiece } from '../../types';
@@ -29,6 +30,9 @@ export function KidPiecePage(): JSX.Element {
   const navigate = useNavigate();
   const [speaking, setSpeaking] = useState(false);
   const [voiceOn, setVoiceOn] = useState(true);
+
+  const pieceFenForGame = piece && VALID_PIECES.has(piece) ? PIECE_CONFIG[piece as ChessPiece].fen : undefined;
+  const game = useChessGame(pieceFenForGame, 'white', 'b');
 
   // Publish board context for global coach drawer
   const pieceFen = piece && VALID_PIECES.has(piece) ? PIECE_CONFIG[piece as ChessPiece].fen : '';
@@ -139,10 +143,9 @@ export function KidPiecePage(): JSX.Element {
       </div>
 
       <div className="w-full md:max-w-[420px] mx-auto">
-        <ChessBoard
-          initialFen={config.fen}
+        <ControlledChessBoard
+          game={game}
           interactive
-          computerColor="b"
           showFlipButton={false}
           showUndoButton={false}
           showResetButton={false}

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { BoardPageLayout } from '../Board/BoardPageLayout';
 import { usePieceSound } from '../../hooks/usePieceSound';
+import { useChessGame } from '../../hooks/useChessGame';
 import {
   getGuessPositions,
   type GuessPosition,
@@ -55,11 +56,22 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [lastGrade, setLastGrade] = useState<GuessGrade | null>(null);
-  const [boardKey, setBoardKey] = useState(0);
 
   const { playCelebration } = usePieceSound();
 
   const current = positions[currentIdx] as GuessPosition | undefined;
+
+  // Game state owned at page level — ControlledChessBoard renders from this
+  const game = useChessGame(current?.fen);
+
+  // Sync orientation and FEN when position changes
+  useEffect(() => {
+    if (current) {
+      game.loadFen(current.fen);
+      game.setOrientation(current.color);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdx]);
 
   // Load positions
   useEffect(() => {
@@ -154,7 +166,8 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
       };
       chatRef.current?.injectAssistantMessage(feedbackMessages[grade]);
 
-      setBoardKey((k) => k + 1);
+      // Reset board to original position after evaluation
+      game.loadFen(current.fen);
     },
     [phase, current, evaluateGuess],
   );
@@ -169,7 +182,6 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
     setCurrentIdx((prev) => prev + 1);
     setPhase('guessing');
     setLastGrade(null);
-    setBoardKey((k) => k + 1);
   }, [currentIdx, positions.length, playCelebration]);
 
   const handleBoardAnnotation = useCallback(
@@ -264,11 +276,16 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
                 setMaxStreak(0);
                 setLastGrade(null);
                 setPhase('loading');
-                setBoardKey((k) => k + 1);
                 // Reload positions
                 void getGuessPositions(20).then((pos) => {
                   setPositions(pos);
-                  if (pos.length > 0) setPhase('guessing');
+                  if (pos.length > 0) {
+                    setPhase('guessing');
+                    if (pos[0]) {
+                      game.loadFen(pos[0].fen);
+                      game.setOrientation(pos[0].color);
+                    }
+                  }
                 });
               }}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
@@ -340,18 +357,17 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
           </div>
         )
       }
+      game={game}
       boardFen={current?.fen ?? 'start'}
-      boardOrientation={current?.color ?? 'white'}
       boardInteractive={phase === 'guessing'}
-      boardKey={boardKey}
       onBoardMove={handleMove}
       showEvalBar={false}
       chat={{
-        fen: current?.fen ?? 'start',
+        fen: game.fen,
         pgn: '',
         moveNumber: current?.moveNumber ?? 1,
         playerColor: current?.color ?? 'white',
-        turn: current?.color === 'white' ? 'w' : 'b',
+        turn: game.turn,
         isGameOver: false,
         gameResult: '',
         onBoardAnnotation: handleBoardAnnotation,

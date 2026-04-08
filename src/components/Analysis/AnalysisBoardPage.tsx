@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChessBoard } from '../Board/ChessBoard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { ArrowLeft, Play, Square, BarChart3, Zap, BookOpen, Database } from 'lucide-react';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -17,11 +18,11 @@ type AnalysisPanel = 'engine' | 'explorer' | 'tablebase';
 
 export function AnalysisBoardPage(): JSX.Element {
   const navigate = useNavigate();
-  const [fen, setFen] = useState(DEFAULT_FEN);
+  const game = useChessGame();
 
   // Publish board context for global coach drawer
-  const turn = fen.split(' ')[1] === 'b' ? 'b' : 'w';
-  useBoardContext(fen, '', 0, 'white', turn);
+  const turn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(game.fen, '', 0, 'white', turn);
 
   const [depth, setDepth] = useState(DEFAULT_DEPTH);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -60,26 +61,26 @@ export function AnalysisBoardPage(): JSX.Element {
 
   const handleMove = useCallback(
     (move: MoveResult): void => {
-      setFen(move.fen);
+      game.loadFen(move.fen);
       void startAnalysis(move.fen);
     },
-    [startAnalysis],
+    [game, startAnalysis],
   );
 
   const handleLoadFen = useCallback((): void => {
     const trimmed = fenInput.trim();
     if (trimmed) {
-      setFen(trimmed);
+      game.loadFen(trimmed);
       void startAnalysis(trimmed);
     }
-  }, [fenInput, startAnalysis]);
+  }, [game, fenInput, startAnalysis]);
 
   const handleReset = useCallback((): void => {
-    setFen(DEFAULT_FEN);
+    game.loadFen(DEFAULT_FEN);
     setAnalysis(null);
     stockfishEngine.stop();
     setIsAnalyzing(false);
-  }, []);
+  }, [game]);
 
   return (
     <div className="flex flex-col gap-4 p-6 flex-1 overflow-y-auto pb-20 md:pb-6" data-testid="analysis-board">
@@ -124,8 +125,8 @@ export function AnalysisBoardPage(): JSX.Element {
       {/* Board */}
       <div className="flex justify-center">
         <div className="w-full md:max-w-[420px]">
-          <ChessBoard
-            initialFen={fen}
+          <ControlledChessBoard
+            game={game}
             interactive={true}
             showFlipButton={true}
             showUndoButton={true}
@@ -163,7 +164,7 @@ export function AnalysisBoardPage(): JSX.Element {
           </button>
         ) : (
           <button
-            onClick={() => void startAnalysis(fen)}
+            onClick={() => void startAnalysis(game.fen)}
             className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm bg-theme-accent text-theme-bg font-medium"
             data-testid="analyze-btn"
           >
@@ -209,7 +210,7 @@ export function AnalysisBoardPage(): JSX.Element {
           data-testid="panel-tab-tablebase"
         >
           <Database size={12} />
-          {countPieces(fen) <= 7 ? 'Tablebase' : 'TB'}
+          {countPieces(game.fen) <= 7 ? 'Tablebase' : 'TB'}
         </button>
       </div>
 
@@ -261,14 +262,14 @@ export function AnalysisBoardPage(): JSX.Element {
       {/* Explorer panel */}
       {panel === 'explorer' && (
         <div className="bg-theme-surface rounded-lg p-4 border border-theme-border">
-          <OpeningExplorerPanel fen={fen} />
+          <OpeningExplorerPanel fen={game.fen} />
         </div>
       )}
 
       {/* Tablebase panel */}
       {panel === 'tablebase' && (
         <div className="bg-theme-surface rounded-lg p-4 border border-theme-border" data-testid="tablebase-container">
-          <TablebasePanel fen={fen} />
+          <TablebasePanel fen={game.fen} />
         </div>
       )}
     </div>
