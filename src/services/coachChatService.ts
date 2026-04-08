@@ -306,6 +306,8 @@ export interface GameContext {
   turn: string;
   isGameOver: boolean;
   gameResult: string;
+  lastMove?: { from: string; to: string; san: string } | null;
+  history?: string[];
   engineData?: EngineData;
 }
 
@@ -345,10 +347,19 @@ export function buildGameChatMessages(
         ),
       ].join('\n')
     : '';
+  const lastMoveLabel = gameContext.lastMove
+    ? `Last move: ${gameContext.lastMove.san} (${gameContext.lastMove.from}-${gameContext.lastMove.to})`
+    : '';
+  const historyLabel = gameContext.history && gameContext.history.length > 0
+    ? `Full SAN: ${gameContext.history.join(' ')}`
+    : '';
+
   const gameContextBlock = [
     '[Game Context]',
     `FEN: ${gameContext.fen}`,
     `PGN: ${truncatePgn(gameContext.pgn)}`,
+    lastMoveLabel,
+    historyLabel,
     `Move: ${gameContext.moveNumber}, Turn: ${turnLabel}`,
     `Player plays: ${gameContext.playerColor}`,
     gameContext.isGameOver ? `Game over — Result: ${gameContext.gameResult}` : '',
@@ -401,7 +412,9 @@ export function getGameSystemPromptAddition(): string {
 CHAT DURING GAME:
 - Keep responses under 3 sentences during active play
 - Be more detailed when the game is over or the student asks for analysis
-- Reference the current position naturally — you have the FEN and PGN
+- ALWAYS base your analysis on the exact FEN provided in the [Game Context] block — it is the single source of truth for the current board state
+- When the game context includes "Last move:", reference it explicitly (e.g., "After ...Nf6") to confirm you are analyzing the correct position
+- Reference the current position naturally — you have the FEN, PGN, last move, and full SAN history
 - If the student asks "what should I do?" give a hint, not the answer
 
 ENGINE DATA:

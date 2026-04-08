@@ -47,6 +47,9 @@ interface AppState {
     moveNumber: number;
     playerColor: string;
     turn: string;
+    lastMove: { from: string; to: string; san: string } | null;
+    history: string[];
+    timestamp: number;
   } | null;
   globalPracticePosition: { fen: string; label: string } | null;
 }

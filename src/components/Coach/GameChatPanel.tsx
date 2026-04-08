@@ -21,6 +21,8 @@ interface GameChatPanelProps {
   turn: 'w' | 'b';
   isGameOver: boolean;
   gameResult: string;
+  lastMove?: { from: string; to: string; san: string } | null;
+  history?: string[];
   className?: string;
   onBoardAnnotation?: (commands: BoardAnnotationCommand[]) => void;
   /** If set, auto-sends this message on mount (e.g., from post-game practice bridge) */
@@ -41,6 +43,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       turn,
       isGameOver,
       gameResult,
+      lastMove,
+      history,
       className,
       onBoardAnnotation,
       initialPrompt,
@@ -117,7 +121,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         }
       }
 
-      // Build game context
+      // Build game context — includes lastMove and history so the LLM
+      // always knows what was just played and the full move sequence
       const gameContext = {
         fen,
         pgn,
@@ -126,6 +131,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         turn,
         isGameOver,
         gameResult,
+        lastMove,
+        history,
         engineData,
       };
 
@@ -192,7 +199,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
       setIsStreaming(false);
       setStreamingContent('');
-    }, [activeProfile, messages, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, flushSpeechBuffer, onBoardAnnotation]);
+    }, [activeProfile, messages, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, flushSpeechBuffer, onBoardAnnotation]);
 
     // Auto-send initial prompt (from post-game practice bridge)
     useEffect(() => {
