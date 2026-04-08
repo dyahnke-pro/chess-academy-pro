@@ -3025,53 +3025,73 @@
     ],
     "variations": [
       {
-        "name": "Benko Gambit: Fianchetto Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 O-O Nf3 Nbd7",
-        "explanation": "White delays Nc3 and fianchettoes the king's bishop. This is one of the most popular systems where White tries to consolidate the extra pawn. Black gets excellent compensation with open files and the powerful g7 bishop."
+        "name": "Fianchetto Variation",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Qc2 Rfb8",
+        "explanation": "The main line where White fianchettoes the king's bishop. After Kxf1 and Kg2, White has a solid center. Black gets the open a- and b-files with permanent queenside pressure that doesn't fade even into the endgame."
       },
       {
-        "name": "Benko Gambit: King Walk Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Qa5",
-        "explanation": "The main line where White's king takes the scenic route via f1-g2. Black immediately targets the queenside with ...Qa5 and ...Rfb8, building up that classic Benko pressure on the a- and b-files."
+        "name": "King Walk Variation",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Re1 Rfb8 Qc2 Ne8 Nd2 Nc7",
+        "explanation": "White's king walks via f1-g2 to safety. After Re1 and Qc2, White aims to consolidate the extra pawn. Black builds the classic Benko pressure with ...Qa5, ...Rfb8 and ...Ne8-c7 supporting ...Nb5 infiltration."
       },
       {
         "name": "Benko Declined: Nf3 System",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Nc3 g6 e4 d6 Bxc4 Bg7 O-O O-O",
-        "explanation": "White declines the gambit by playing Nf3 instead of taking on b5. This avoids the typical Benko structure but Black still gets a playable game with the fianchettoed bishop and central counterplay."
+        "pgn": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Nc3 g6 e4 d6 Bxc4 Bg7 O-O O-O h3 Nbd7 Re1 Nb6 Bf1 a5 a4 Ba6 Bg5 Qc7",
+        "explanation": "White declines with Nf3 instead of taking on b5. This avoids the typical Benko structure. Black still gets active play with the fianchettoed bishop and ...a5, but without the open a- and b-files the pressure is less automatic."
       },
       {
-        "name": "Benko Gambit: Zaitsev Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Nf3 Bg7 O-O O-O",
-        "explanation": "White pushes e4 immediately and plays Nb5 after ...b4. This aggressive approach fights for the initiative, but Black's fianchettoed bishop and queenside pressure still provide full compensation."
+        "name": "Zaitsev Variation",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Nf3 Bg7 O-O O-O Bf4 Na6 Qe2 Nc7 Nxc7 Qxc7 a3 Rb8",
+        "explanation": "White plays e4 immediately and Nb5 after ...b4. This aggressive approach fights for the initiative. Black's fianchettoed bishop and rook pressure on the b-file still provide full compensation for the sacrificed pawn."
       },
       {
-        "name": "Benko Gambit: Half-Accepted",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 e3 axb5 Bxb5 Qa5+ Nc3 Bb7 Nge2 Nxd5 O-O Nxc3 Nxc3 Be4",
-        "explanation": "White takes on b5 but plays e3 instead of bxa6, only half-accepting the gambit. Black gets active piece play with ...Qa5+ and ...Bb7 pressuring the long diagonal."
+        "name": "Half-Accepted",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 e3 axb5 Bxb5 Qa5+ Nc3 Bb7 Nge2 Nxd5 O-O Nxc3 Nxc3 Be4 Bd3 Bxd3 Qxd3 g6 Bd2 Qd8 Rfd1 Bg7",
+        "explanation": "White takes on b5 but plays e3, only half-accepting. Black gets active play with ...Qa5+ and ...Bb7 pressuring the long diagonal. The position is less forced than the fully accepted lines but Black's piece activity compensates."
+      },
+      {
+        "name": "Fully Accepted: Main Line",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Qc2 Rfb8 Bd2 Ng4 h3 Nge5",
+        "explanation": "The fully accepted main line with a6 Bxa6. Black exchanges the light-squared bishop for White's — a key strategic idea. The resulting pressure on the a- and b-files combined with the Bg7 gives Black long-lasting positional compensation that persists into the endgame."
+      },
+      {
+        "name": "Modern 5.f3 System",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7 Nge2 Nb6 a4 Nc4 Re1 Qa5 Nd4 Rfb8",
+        "explanation": "The f3 system gives White extra central support but slows the development. The f3 pawn weakens the kingside and blocks the Nf3 square. Black gets even more time for queenside pressure with the rooks on a8/b8 and the queen on a5."
       }
     ],
     "trapLines": [
       {
         "name": "Queenside Bind Trap",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Bd2 Rfb8 Qc2 Ne8",
-        "explanation": "Black builds a classic Benko bind with ...Qa5, ...Rfb8 and ...Ne8-c7. White's a4 pawn push actually weakens the b3 square, and Black's pressure on the a- and b-files becomes overwhelming."
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Bd2 Rfb8 Qc2 Ne8 Nd1 Nc7 Ne3 Nb5",
+        "explanation": "Black builds the classic bind with ...Qa5, ...Rfb8 and the knight maneuver ...Ne8-c7-b5. The a4 pawn push weakens b3. Black's pressure on the a- and b-files becomes overwhelming once the knight lands on b5."
       },
       {
         "name": "f3 Delay Exploitation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7",
-        "explanation": "When White plays the slow f3, Black gets extra time. The f3 pawn weakens the kingside and blocks the natural Nf3 square, giving Black even more queenside pressure than the main line."
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7 Nge2 Nb6 a4 Nc4 Qc2 Qa5 Nd1 Rfb8",
+        "explanation": "When White plays the slow f3, the knight can't go to f3 and development is slower. Black gets extra time for building pressure — the rooks double on the b-file while the knight on c4 pressures both a3 and e3."
+      },
+      {
+        "name": "Exchange Sacrifice on b2",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Qa5 Qc2 Rfb8 a3 Rb3 Nd2 Rxb2",
+        "explanation": "The exchange sacrifice ...Rxb2 is a key Benko resource when the queen and rook are well-placed. After ...Rxb2, Black's queen and remaining rook dominate the open files while White struggles to coordinate. The Bg7 supports the invasion along the long diagonal."
       }
     ],
     "warningLines": [
       {
         "name": "Premature e5 Break",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 e5 dxe5 Nxe5",
-        "explanation": "If Black provokes or allows e5, White can open the center where the extra pawn matters more. Keep the position closed on the queenside where your rook pressure dominates."
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Ne5 Nxe5 dxe5",
+        "explanation": "Playing ...e5 abandons the d6 pawn and gives White a protected passed pawn on d5. Black's strength lies on the queenside, not in the center. Keep the pressure with rooks on the open files."
       },
       {
         "name": "Delayed Fianchetto",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 Nbd7 Nf3 g6 g3 Bg7 Kg2 O-O",
-        "explanation": "Playing ...Nbd7 before ...g6 and ...Bg7 gives White extra time to consolidate. The bishop on g7 is the heart of Black's compensation — fianchetto it as quickly as possible."
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 Nbd7 Nf3 g6 g3 Bg7 Kg2 O-O Re1 Qa5 h3 Rfb8",
+        "explanation": "Playing ...Nbd7 before ...g6 and ...Bg7 gives White extra time to consolidate. The Bg7 is the heart of Black's compensation — fianchetto it as quickly as possible to maintain pressure on the long diagonal."
+      },
+      {
+        "name": "Ignoring the Open Files",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 e6 dxe6 fxe6 e5 dxe5 Nxe5",
+        "explanation": "Playing ...e6 instead of utilizing the a- and b-files wastes the Benko's strategic concept entirely. After dxe6 fxe6, Black has structural weaknesses and hasn't used the open files. The whole point of the gambit is queenside file pressure."
       }
     ]
   },
