@@ -46,6 +46,20 @@ export interface HangingPiece {
   color: 'w' | 'b';
 }
 
+/** A tactic detected ahead of the current position by scanning Stockfish PV lines. */
+export interface UpcomingTactic {
+  /** Which side benefits: the student or the opponent */
+  beneficiary: 'player' | 'opponent';
+  /** How many half-moves ahead the tactic appears */
+  depthAhead: number;
+  /** The tactic pattern detected */
+  pattern: TacticPattern;
+  /** FEN of the position where the tactic occurs */
+  fen: string;
+  /** The SAN sequence leading to the tactic */
+  line: string[];
+}
+
 /** Piece name lookup for human-readable descriptions */
 export const PIECE_NAMES: Record<string, string> = {
   p: 'pawn',

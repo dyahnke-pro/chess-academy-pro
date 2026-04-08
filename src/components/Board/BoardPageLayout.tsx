@@ -32,6 +32,9 @@ interface ChatPanelConfig {
   turn: 'w' | 'b';
   isGameOver: boolean;
   gameResult: string;
+  lastMove?: { from: string; to: string; san: string } | null;
+  history?: string[];
+  previousFen?: string | null;
   onBoardAnnotation?: (commands: BoardAnnotationCommand[]) => void;
   initialPrompt?: string | null;
 }
@@ -114,6 +117,9 @@ export function BoardPageLayout({
       turn={chat.turn}
       isGameOver={chat.isGameOver}
       gameResult={chat.gameResult}
+      lastMove={chat.lastMove}
+      history={chat.history}
+      previousFen={chat.previousFen}
       onBoardAnnotation={chat.onBoardAnnotation}
       initialPrompt={chat.initialPrompt}
       className="h-full"

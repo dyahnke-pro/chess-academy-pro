@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { buildGameChatMessages, getGameSystemPromptAddition, parseAllTags } from '../../services/coachChatService';
-import type { EngineData } from '../../services/coachChatService';
+import type { EngineData, TacticAnalysisContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -21,6 +22,10 @@ interface GameChatPanelProps {
   turn: 'w' | 'b';
   isGameOver: boolean;
   gameResult: string;
+  lastMove?: { from: string; to: string; san: string } | null;
+  history?: string[];
+  /** FEN of the position before the last move (for tactic classification) */
+  previousFen?: string | null;
   className?: string;
   onBoardAnnotation?: (commands: BoardAnnotationCommand[]) => void;
   /** If set, auto-sends this message on mount (e.g., from post-game practice bridge) */
@@ -41,6 +46,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       turn,
       isGameOver,
       gameResult,
+      lastMove,
+      history,
+      previousFen,
       className,
       onBoardAnnotation,
       initialPrompt,
@@ -117,7 +125,49 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         }
       }
 
-      // Build game context
+      // Run tactic classification on the last move + scan for upcoming tactics
+      let tacticAnalysis: TacticAnalysisContext | undefined;
+      if (!isGameOver && lastMove && previousFen && engineData) {
+        try {
+          const playerColorCode = playerColor === 'white' ? 'w' : 'b';
+          const classification = classifyPosition(
+            previousFen,
+            fen,
+            lastMove.san,
+            engineData.evaluation,
+            engineData.evaluation,
+          );
+
+          const upcoming = scanUpcomingTactics(
+            fen,
+            engineData.topLines,
+            playerColorCode,
+          );
+
+          tacticAnalysis = {
+            moveQuality: classification.moveQuality,
+            evalSwing: classification.evalSwing,
+            hangingPieces: classification.hangingPieces.map((p) => ({
+              square: p.square,
+              piece: p.piece,
+              color: p.color,
+            })),
+            currentTactics: classification.tactics
+              .filter((t) => t.type !== 'none')
+              .map((t) => t.description),
+            upcomingForPlayer: upcoming
+              .filter((u) => u.beneficiary === 'player')
+              .map((u) => `In ${u.depthAhead} move${u.depthAhead > 1 ? 's' : ''}: ${u.pattern.description} (after ${u.line.join(' ')})`),
+            upcomingForOpponent: upcoming
+              .filter((u) => u.beneficiary === 'opponent')
+              .map((u) => `In ${u.depthAhead} move${u.depthAhead > 1 ? 's' : ''}: ${u.pattern.description} (after ${u.line.join(' ')})`),
+          };
+        } catch {
+          // Tactic analysis failed, continue without it
+        }
+      }
+
+      // Build game context with lastMove, history, and tactic analysis
       const gameContext = {
         fen,
         pgn,
@@ -126,7 +176,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         turn,
         isGameOver,
         gameResult,
+        lastMove,
+        history,
         engineData,
+        tacticAnalysis,
       };
 
       // Clear previous annotations when a new message is sent
@@ -192,7 +245,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
       setIsStreaming(false);
       setStreamingContent('');
-    }, [activeProfile, messages, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, flushSpeechBuffer, onBoardAnnotation]);
+    }, [activeProfile, messages, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation]);
 
     // Auto-send initial prompt (from post-game practice bridge)
     useEffect(() => {

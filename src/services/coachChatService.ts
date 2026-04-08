@@ -306,7 +306,19 @@ export interface GameContext {
   turn: string;
   isGameOver: boolean;
   gameResult: string;
+  lastMove?: { from: string; to: string; san: string } | null;
+  history?: string[];
   engineData?: EngineData;
+  tacticAnalysis?: TacticAnalysisContext;
+}
+
+export interface TacticAnalysisContext {
+  moveQuality?: string;
+  evalSwing?: number;
+  hangingPieces?: Array<{ square: string; piece: string; color: string }>;
+  currentTactics?: string[];
+  upcomingForPlayer?: string[];
+  upcomingForOpponent?: string[];
 }
 
 function truncatePgn(pgn: string): string {
@@ -345,14 +357,46 @@ export function buildGameChatMessages(
         ),
       ].join('\n')
     : '';
+  const lastMoveLabel = gameContext.lastMove
+    ? `Last move: ${gameContext.lastMove.san} (${gameContext.lastMove.from}-${gameContext.lastMove.to})`
+    : '';
+  const historyLabel = gameContext.history && gameContext.history.length > 0
+    ? `Full SAN: ${gameContext.history.join(' ')}`
+    : '';
+
+  // Tactic analysis block (deterministic, from Stockfish + classifier)
+  const tacticBlock = gameContext.tacticAnalysis
+    ? [
+        '[Tactic Analysis — TRUST THIS DATA]',
+        gameContext.tacticAnalysis.moveQuality
+          ? `Move quality: ${gameContext.tacticAnalysis.moveQuality}${gameContext.tacticAnalysis.evalSwing !== undefined ? ` (eval swing: ${gameContext.tacticAnalysis.evalSwing > 0 ? '+' : ''}${gameContext.tacticAnalysis.evalSwing}cp)` : ''}`
+          : '',
+        gameContext.tacticAnalysis.hangingPieces && gameContext.tacticAnalysis.hangingPieces.length > 0
+          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`).join(', ')}`
+          : '',
+        gameContext.tacticAnalysis.currentTactics && gameContext.tacticAnalysis.currentTactics.length > 0
+          ? `Current tactics: ${gameContext.tacticAnalysis.currentTactics.join('; ')}`
+          : '',
+        gameContext.tacticAnalysis.upcomingForPlayer && gameContext.tacticAnalysis.upcomingForPlayer.length > 0
+          ? `FOR PLAYER (opportunity): ${gameContext.tacticAnalysis.upcomingForPlayer.join('; ')}`
+          : '',
+        gameContext.tacticAnalysis.upcomingForOpponent && gameContext.tacticAnalysis.upcomingForOpponent.length > 0
+          ? `AGAINST PLAYER (threat): ${gameContext.tacticAnalysis.upcomingForOpponent.join('; ')}`
+          : '',
+      ].filter(Boolean).join('\n')
+    : '';
+
   const gameContextBlock = [
     '[Game Context]',
     `FEN: ${gameContext.fen}`,
     `PGN: ${truncatePgn(gameContext.pgn)}`,
+    lastMoveLabel,
+    historyLabel,
     `Move: ${gameContext.moveNumber}, Turn: ${turnLabel}`,
     `Player plays: ${gameContext.playerColor}`,
     gameContext.isGameOver ? `Game over — Result: ${gameContext.gameResult}` : '',
     engineBlock,
+    tacticBlock,
   ].filter(Boolean).join('\n');
 
   const messages: { role: 'user' | 'assistant'; content: string }[] = [];
@@ -401,8 +445,18 @@ export function getGameSystemPromptAddition(): string {
 CHAT DURING GAME:
 - Keep responses under 3 sentences during active play
 - Be more detailed when the game is over or the student asks for analysis
-- Reference the current position naturally — you have the FEN and PGN
+- ALWAYS base your analysis on the exact FEN provided in the [Game Context] block — it is the single source of truth for the current board state
+- When the game context includes "Last move:", reference it explicitly (e.g., "After ...Nf6") to confirm you are analyzing the correct position
+- Reference the current position naturally — you have the FEN, PGN, last move, and full SAN history
 - If the student asks "what should I do?" give a hint, not the answer
+
+TACTIC ANALYSIS:
+The game context may include a [Tactic Analysis] block with deterministic, Stockfish-verified tactic detection.
+CRITICAL: Trust this data completely. NEVER identify tactics from your own chess knowledge — use the labels provided.
+- "FOR PLAYER (opportunity)" = tactics the student can exploit. Hint at them based on coaching style.
+- "AGAINST PLAYER (threat)" = tactics the opponent threatens. Warn the student proportionally.
+- "Hanging pieces" = undefended pieces under attack. Flag these clearly.
+- When describing a tactic, use the description from the analysis block verbatim.
 
 ENGINE DATA:
 The game context includes Stockfish analysis with the best move and top lines.

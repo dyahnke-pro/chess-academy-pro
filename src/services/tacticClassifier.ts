@@ -4,6 +4,7 @@ import type {
   TacticPattern,
   MoveQuality,
   HangingPiece,
+  UpcomingTactic,
 } from '../types/tacticTypes';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
@@ -680,6 +681,130 @@ export function classifyPosition(
       hangingPieces: [],
     };
   }
+}
+
+// ─── Upcoming Tactic Scanner ───────────────────────────────────────────────
+
+/**
+ * Scan Stockfish PV lines 2-4 moves deep to find tactics before they happen.
+ * Returns tactics tagged with whether the player or opponent benefits.
+ *
+ * @param fen - Current position FEN
+ * @param topLines - Stockfish top PV lines (UCI move arrays + eval)
+ * @param playerColor - Which color the student plays ('w' | 'b')
+ * @param maxDepth - How many half-moves deep to scan (default 4)
+ */
+export function scanUpcomingTactics(
+  fen: string,
+  topLines: Array<{ moves: string[]; evaluation: number; mate: number | null }>,
+  playerColor: 'w' | 'b',
+  maxDepth: number = 4,
+): UpcomingTactic[] {
+  const upcoming: UpcomingTactic[] = [];
+  const seenDescriptions = new Set<string>();
+
+  for (const line of topLines) {
+    if (line.moves.length < 2) continue;
+
+    try {
+      const chess = new Chess(fen);
+      const lineDepth = Math.min(line.moves.length, maxDepth);
+      const sanLine: string[] = [];
+
+      for (let i = 0; i < lineDepth; i++) {
+        const uci = line.moves[i];
+        const from = uci.slice(0, 2);
+        const to = uci.slice(2, 4);
+        const promotion = uci.length > 4 ? uci[4] : undefined;
+
+        const fenBefore = chess.fen();
+        let moveResult;
+        try {
+          moveResult = chess.move({ from: from as Square, to: to as Square, promotion });
+        } catch {
+          break;
+        }
+        if (!moveResult) break;
+
+        sanLine.push(moveResult.san);
+        const fenAfter = chess.fen();
+        const movingColor = moveResult.color;
+
+        // Run tactic detectors on this step
+        const stepTactics = detectTacticsAtStep(
+          fenBefore,
+          fenAfter,
+          moveResult.from as Square,
+          moveResult.to as Square,
+          movingColor,
+        );
+
+        for (const pattern of stepTactics) {
+          if (seenDescriptions.has(pattern.description)) continue;
+          seenDescriptions.add(pattern.description);
+
+          const beneficiary = movingColor === playerColor ? 'player' : 'opponent';
+          upcoming.push({
+            beneficiary,
+            depthAhead: i + 1,
+            pattern,
+            fen: fenAfter,
+            line: [...sanLine],
+          });
+        }
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return upcoming;
+}
+
+/**
+ * Run all tactic detectors on a single move step without eval classification.
+ */
+function detectTacticsAtStep(
+  fenBefore: string,
+  fenAfter: string,
+  fromSquare: Square,
+  toSquare: Square,
+  movingColor: Color,
+): TacticPattern[] {
+  const tactics: TacticPattern[] = [];
+
+  try {
+    const chessBefore = new Chess(fenBefore);
+    const chessAfter = new Chess(fenAfter);
+
+    const doubleCheck = detectDoubleCheck(chessAfter, movingColor);
+    if (doubleCheck) tactics.push(doubleCheck);
+
+    const backRank = detectBackRank(chessAfter, toSquare, movingColor);
+    if (backRank) tactics.push(backRank);
+
+    const fork = detectFork(chessAfter, toSquare, movingColor);
+    if (fork) tactics.push(fork);
+
+    const pin = detectPin(chessAfter, toSquare, movingColor);
+    if (pin) tactics.push(pin);
+
+    const skewer = detectSkewer(chessAfter, toSquare, movingColor);
+    if (skewer) tactics.push(skewer);
+
+    const discovery = detectDiscovery(chessAfter, fromSquare, toSquare, movingColor);
+    if (discovery) tactics.push(discovery);
+
+    const captured = chessBefore.get(toSquare);
+    if (captured && captured.color !== movingColor) {
+      const removalOfGuard = detectRemovalOfGuard(chessBefore, chessAfter, toSquare, movingColor);
+      if (removalOfGuard) tactics.push(removalOfGuard);
+    }
+  } catch {
+    // Invalid position — skip
+  }
+
+  return tactics;
 }
 
 // ─── Utility ────────────────────────────────────────────────────────────────
