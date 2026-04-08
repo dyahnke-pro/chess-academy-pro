@@ -22,7 +22,9 @@ export function CoachAnalysePage(): JSX.Element {
 
   // Publish board context for global coach drawer
   const turn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
-  useBoardContext(game.fen, '', 0, 'white', turn);
+  const lastSan = game.history.length > 0 ? game.history[game.history.length - 1] : undefined;
+  const ctxLastMove = game.lastMove && lastSan ? { ...game.lastMove, san: lastSan } : undefined;
+  useBoardContext(game.fen, '', 0, 'white', turn, ctxLastMove, game.history);
 
   const [fenInput, setFenInput] = useState('');
   const [analysis, setAnalysis] = useState<StockfishAnalysis | null>(null);

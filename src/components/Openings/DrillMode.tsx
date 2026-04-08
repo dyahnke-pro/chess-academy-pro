@@ -162,7 +162,10 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   // Publish board context for global coach drawer
   const drillTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
-  useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, drillTurn);
+  const prevMove = currentMoveIndex > 0 ? expectedMoves[currentMoveIndex - 1] : undefined;
+  const ctxLastMove = prevMove ? { from: prevMove.from, to: prevMove.to, san: prevMove.san } : undefined;
+  const ctxHistory = expectedMoves.slice(0, currentMoveIndex).map((m) => m.san);
+  useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, drillTurn, ctxLastMove, ctxHistory);
 
   // Analyze position when it changes
   useEffect(() => {

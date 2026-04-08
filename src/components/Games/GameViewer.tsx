@@ -23,7 +23,8 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
 
   // Publish board context for global coach drawer
   const turn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
-  useBoardContext(currentFen, game.pgn, Math.max(0, moveIdx + 1), 'white', turn);
+  const viewerHistory = moves.slice(0, Math.max(0, moveIdx + 1)).map((m) => m.san);
+  useBoardContext(currentFen, game.pgn, Math.max(0, moveIdx + 1), 'white', turn, undefined, viewerHistory);
 
   const handleKeyDown = useCallback((e: KeyboardEvent): void => {
     if (e.key === 'ArrowRight') {

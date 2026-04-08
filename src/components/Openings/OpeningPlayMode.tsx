@@ -48,7 +48,9 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
   // Publish board context for global coach drawer
   const playTurn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
-  useBoardContext(game.fen, activePgn, game.history.length, playerColor, playTurn);
+  const lastSan = game.history.length > 0 ? game.history[game.history.length - 1] : undefined;
+  const ctxLastMove = game.lastMove && lastSan ? { ...game.lastMove, san: lastSan } : undefined;
+  useBoardContext(game.fen, activePgn, game.history.length, playerColor, playTurn, ctxLastMove, game.history);
 
   const [playPhase, setPlayPhase] = useState<PlayPhase>(startFen ? 'middlegame' : 'pregame');
   const [voiceOn, setVoiceOn] = useState(true);
