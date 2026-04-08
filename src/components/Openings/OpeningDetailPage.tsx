@@ -45,7 +45,6 @@ import {
   Crosshair,
   Heart,
   PlayCircle,
-  Lock,
 } from 'lucide-react';
 
 type ViewMode =
@@ -101,6 +100,7 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [quizPlayFen, setQuizPlayFen] = useState<string | null>(null);
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
@@ -131,8 +131,14 @@ export function OpeningDetailPage(): JSX.Element {
     setActiveWarningLineIndex(-1);
     setActiveModelGame(null);
     setActiveMiddlegamePlan(null);
+    setQuizPlayFen(null);
     void loadOpening();
   }, [loadOpening]);
+
+  const handleQuizPlayPosition = useCallback((fen: string): void => {
+    setQuizPlayFen(fen);
+    setViewMode('play');
+  }, []);
 
   const handleSelectModelGame = useCallback((game: ModelGame): void => {
     setActiveModelGame(game);
@@ -342,11 +348,12 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Play mode (main line)
+  // Play mode (main line, or from quiz position)
   if (viewMode === 'play') {
     return (
       <OpeningPlayMode
         opening={opening}
+        startFen={quizPlayFen ?? undefined}
         onExit={handleExit}
       />
     );
@@ -438,8 +445,6 @@ export function OpeningDetailPage(): JSX.Element {
   const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
   const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
   const currentQuiz: CheckpointQuizItem | null = quizzes[quizIndex] as CheckpointQuizItem | undefined ?? null;
-  const hasCompletedMainLine = opening.drillAttempts > 0;
-  const isAdvancedUnlocked = hasCompletedMainLine || mastery > 0;
 
   const NarrationButton = ({ sectionId, text }: { sectionId: string; text: string }): JSX.Element => {
     const isNarrating = narratingSection === sectionId;
@@ -582,40 +587,21 @@ export function OpeningDetailPage(): JSX.Element {
               setQuizCompleted(true);
             }
           }}
+          onPlayPosition={handleQuizPlayPosition}
         />
       )}
 
-      {/* Middlegame Plans — gated behind first drill */}
-      {isAdvancedUnlocked ? (
-        <MiddlegamePlansSection
-          openingId={opening.id}
-          onSelectPlan={handleSelectMiddlegamePlan}
-        />
-      ) : (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="plans-locked">
-          <div className="flex items-center gap-2">
-            <Lock size={14} className="text-theme-text-muted" />
-            <h3 className="text-sm font-semibold text-theme-text">Middlegame Plans</h3>
-          </div>
-          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock middlegame plans.</p>
-        </div>
-      )}
+      {/* Middlegame Plans */}
+      <MiddlegamePlansSection
+        openingId={opening.id}
+        onSelectPlan={handleSelectMiddlegamePlan}
+      />
 
-      {/* Model Games — gated behind first drill */}
-      {isAdvancedUnlocked ? (
-        <ModelGamesSection
-          openingId={opening.id}
-          onSelectGame={handleSelectModelGame}
-        />
-      ) : (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4 opacity-60" data-testid="games-locked">
-          <div className="flex items-center gap-2">
-            <Lock size={14} className="text-theme-text-muted" />
-            <h3 className="text-sm font-semibold text-theme-text">Model Games</h3>
-          </div>
-          <p className="text-xs text-theme-text-muted mt-1">Complete the main line drill to unlock model games.</p>
-        </div>
-      )}
+      {/* Model Games */}
+      <ModelGamesSection
+        openingId={opening.id}
+        onSelectGame={handleSelectModelGame}
+      />
 
       {/* Common Mistakes */}
       {mistakes.length > 0 && (

@@ -2,13 +2,14 @@ import { useState, useCallback } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
-import { CheckCircle, XCircle, HelpCircle } from 'lucide-react';
+import { CheckCircle, XCircle, HelpCircle, Swords } from 'lucide-react';
 import type { CheckpointQuizItem } from '../../types';
 
 interface CheckpointQuizProps {
   quiz: CheckpointQuizItem;
   boardOrientation: 'white' | 'black';
   onComplete: (correct: boolean) => void;
+  onPlayPosition?: (fen: string) => void;
 }
 
 type QuizState = 'waiting' | 'correct' | 'incorrect';
@@ -17,6 +18,7 @@ export function CheckpointQuiz({
   quiz,
   boardOrientation,
   onComplete,
+  onPlayPosition,
 }: CheckpointQuizProps): JSX.Element {
   const [state, setState] = useState<QuizState>('waiting');
   const [showHint, setShowHint] = useState(false);
@@ -158,6 +160,17 @@ export function CheckpointQuiz({
             The answer is: {quiz.choices[quiz.correctIndex]}. {quiz.hint}
           </span>
         </div>
+      )}
+
+      {state !== 'waiting' && onPlayPosition && (
+        <button
+          onClick={() => onPlayPosition(quiz.fen)}
+          className="mt-3 flex items-center gap-2 text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors"
+          data-testid="quiz-play-position"
+        >
+          <Swords size={14} />
+          Play from this position
+        </button>
       )}
     </div>
   );

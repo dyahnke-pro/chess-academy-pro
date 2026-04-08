@@ -28,12 +28,13 @@ import type { MoveQuality } from '../Board/ChessBoard';
 interface OpeningPlayModeProps {
   opening: OpeningRecord;
   customLine?: OpeningVariation;
+  startFen?: string;
   onExit: () => void;
 }
 
 type PlayPhase = 'pregame' | 'opening' | 'middlegame' | 'postgame';
 
-export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayModeProps): JSX.Element {
+export function OpeningPlayMode({ opening, customLine, startFen, onExit }: OpeningPlayModeProps): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const { settings } = useSettings();
   const playerRating = activeProfile?.currentRating ?? 1420;
@@ -43,13 +44,13 @@ export function OpeningPlayMode({ opening, customLine, onExit }: OpeningPlayMode
   const activePgn = customLine ? customLine.pgn : opening.pgn;
   const displayName = customLine ? `${opening.name}: ${customLine.name}` : opening.name;
 
-  const game = useChessGame(undefined, playerColor);
+  const game = useChessGame(startFen, playerColor);
 
   // Publish board context for global coach drawer
   const playTurn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
   useBoardContext(game.fen, activePgn, game.history.length, playerColor, playTurn);
 
-  const [playPhase, setPlayPhase] = useState<PlayPhase>('pregame');
+  const [playPhase, setPlayPhase] = useState<PlayPhase>(startFen ? 'middlegame' : 'pregame');
   const [voiceOn, setVoiceOn] = useState(true);
   const [deviationCard, setDeviationCard] = useState<string | null>(null);
   const [result, setResult] = useState<OpeningPlayResult | null>(null);
