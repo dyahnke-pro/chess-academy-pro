@@ -3742,6 +3742,21 @@
         "name": "KIA: Fischer Attack",
         "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 c5 g3 Nc6 Bg2 Be7 O-O O-O Re1 b5 e5 Nd7",
         "explanation": "Fischer's signature variation. After e5, the knight retreats and White builds a powerful kingside attack with Nf1-h4, Bf4, and Qg4. This is one of the most dangerous attacking setups in chess."
+      },
+      {
+        "name": "KIA vs QGD-Style Response",
+        "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O Nf6 d3 e6 Nbd2 Be7 e4 O-O Re1 b6 e5 Nd7 Nf1 Bb7 Bf4 Qc7 h4 Nd4 Nxd4 cxd4 Nd2 Nc5 Nf3",
+        "explanation": "When Black responds with a QGD-style setup featuring ...d5 and ...c5, White still follows the standard KIA development scheme but adapts by pushing e5 to cramp Black's position. The knight reroutes via f1 to support the e5 wedge and prepare kingside expansion with h4 and Bf4. Black's light-squared bishop finds a natural home on b7 but the long diagonal is blocked by the e5 pawn. White maintains a spatial advantage and builds a slow kingside attack while Black must find counterplay on the queenside before the pressure mounts."
+      },
+      {
+        "name": "KIA vs KID-Style Response",
+        "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 e5 e4 Nc6 a4 a5 Nc4 Nd7 c3 Nc5 Re1 Ne6 Be3",
+        "explanation": "Against Black's King's Indian-style setup with ...g6 and ...Bg7, White develops normally with the KIA scheme and clamps down with e4. The a4 move prevents Black's typical ...b5 expansion and the Nc4 reroute pressures d6 while eyeing e3 and a5. White aims to control the center and restrict Black's typical kingside counterplay by keeping the position closed. The bishop on g2 dominates the long diagonal once the center stabilizes, and White can choose between a slow buildup or a timely d4 break to open lines favorably."
+      },
+      {
+        "name": "KIA: e5 Wedge System",
+        "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 dxe4 dxe4 Bc5 Bg2 O-O O-O a5 Qe2 Qe7 e5 Nd5 Nb3 Ba7 Bg5 f6 exf6 Qxf6 Be3 Nxe3 fxe3 Bd7 Nbd4",
+        "explanation": "The e5 Wedge System arises when White pushes e5 after the initial e4 break, clamping down on the center and creating a space advantage. The pawn on e5 restricts Black's knight and carves out outposts on d4 and f4 for White's pieces. After Nb3 and Bg5, White develops rapid initiative against Black's somewhat cramped position. The knight reroutes to d4 where it becomes a dominant centralized piece supported by the e3 pawn. Black must play precisely to equalize or risk being slowly squeezed on both flanks."
       }
     ],
     "trapLines": [
@@ -3771,6 +3786,11 @@
         "name": "Queenside Collapse",
         "pgn": "e4 e6 d3 d5 Nd2 c5 Ngf3 Nc6 g3 Nf6 Bg2 Be7 O-O O-O Re1 b5 e5 Nd7 Nf1 a5",
         "explanation": "If White focuses only on the kingside and ignores Black's queenside expansion, ...b5-b4-a5-a4 can create serious problems. Balance your attack with defensive awareness."
+      },
+      {
+        "name": "Stale Kingside Without Follow-Up",
+        "pgn": "Nf3 d5 g3 Nf6 Bg2 g6 O-O Bg7 d3 O-O Nbd2 Nc6 e4 dxe4 dxe4 e5 Nc4 Be6 Ne3 Qd7 a3 Nd4 Nxd4 exd4 Nd5 Bxd5 exd5",
+        "explanation": "When Black fianchettoes and plays ...e5 locking the center, White's typical e5 push is unavailable and the kingside attack stalls without a clear pawn lever. The Bg2 becomes blocked by the e4 pawn and White's pieces lack active targets. Without the ability to open the position through e5 or f4, the KIA structure becomes passive and Black can slowly improve on both flanks. In these closed positions, White must find alternative breaks like c3 and d4 or risk being outplayed strategically by Black's space and piece activity."
       }
     ]
   },
@@ -4014,6 +4034,21 @@
         "name": "Evans Gambit: Lasker Defence",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 O-O Bb6 dxe5 dxe5 Qb3 Qf6 Bg5 Qg6 Bd5 Nge7",
         "explanation": "Lasker's Defence with ...d6 is one of the most reliable responses. Black maintains a solid structure and returns the pawn to complete development. The position often leads to a complex middlegame."
+      },
+      {
+        "name": "Evans Gambit: Morphy Attack",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Ne7 Bd3 O-O Nbd2 Ng6 Nc4 Nxc4 Bxc4",
+        "explanation": "The Morphy Attack prioritizes rapid development with O-O followed by Bb2 and Nbd2, aiming for a kingside assault. White drives the knight away with d5 and builds a powerful center while every piece finds an active square. The bishop pair and open lines give White lasting pressure against Black's cramped position, often culminating in a direct attack on the king."
+      },
+      {
+        "name": "Evans Gambit: Anderssen Variation",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6 cxd4 d6 Nc3 Nf6 a4 a6 a5 Ba7 d5 Ne5 Nxe5 dxe5 Be2",
+        "explanation": "The Anderssen Variation features the aggressive a4-a5 pawn advance to chase the bishop from the a7-g1 diagonal and create queenside space. White combines central control with flank expansion, often reaching positions where the a5 pawn restricts Black's queenside counterplay. After d5 followed by Nxe5 and Be2, White has a stable center and lasting positional pressure on both sides of the board."
+      },
+      {
+        "name": "Evans Gambit: Main Line with Qb3",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 Bb6 exd6 Na5 Qa4",
+        "explanation": "The Main Line with Qb3 applies immediate pressure on f7 and forces Black to make concessions in the center. After dxe5 Bb6 exd6, White trades queens but retains a superior minor piece configuration and open lines. The endgame-oriented approach with Nbd2-Nb3 and Rd1 gives White a small but persistent edge where the better development and active rooks outweigh the sacrificed pawn."
       }
     ],
     "trapLines": [
@@ -4058,6 +4093,11 @@
         "name": "Evans Declined Preparation",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Nxe5 Nxc4 Nxc4 d5 exd5 Qxd5 Ne3 Qd8",
         "explanation": "If Black finds accurate defensive moves, White's initiative can fizzle. Don't rely on tricks alone — have a solid positional plan with the open center and piece activity as backup."
+      },
+      {
+        "name": "d3 Counter Holding the Pawn",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Re1 Nge7 Ba3 b5 Bxb5 Rb8 Qa4 O-O Nbd2",
+        "explanation": "Black's ...d3 counter blockade holds the extra pawn and clogs White's center. If White doesn't maintain relentless pressure, Black consolidates with ...Nge7, ...O-O, and eventually ...d2 advancing the pawn further. This line shows how Black can survive the tactical storm and reach an endgame where the extra pawn becomes decisive. White must avoid exchanging pieces and keep the initiative alive at all costs."
       }
     ]
   }
