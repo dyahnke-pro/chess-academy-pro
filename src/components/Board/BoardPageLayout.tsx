@@ -1,4 +1,4 @@
-import { useState, type ReactNode, type RefObject } from 'react';
+import { useState, useMemo, type ReactNode, type RefObject } from 'react';
 import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { ChessBoard } from './ChessBoard';
 import { ControlledChessBoard } from './ControlledChessBoard';
@@ -11,6 +11,7 @@ import { useBoardContext } from '../../hooks/useBoardContext';
 import type { UseChessGameReturn, MoveResult } from '../../hooks/useChessGame';
 import type { BoardArrow, BoardHighlight, BoardAnnotationCommand, GhostMoveData } from '../../types';
 import type { MoveQuality } from './ChessBoard';
+import { detectTactics } from '../../services/tacticsDetector';
 
 interface BoardPageHeader {
   title: string;
@@ -119,6 +120,14 @@ export function BoardPageLayout({
 
   const showDivider = rightPanelTop !== undefined;
 
+  // Deterministic tactics detection — runs after every move (FEN change)
+  const tacticsResult = useMemo(() => detectTactics(boardFen), [boardFen]);
+  const mergedHighlights = useMemo(() => {
+    const tacticHL = tacticsResult.highlights;
+    if (!annotationHighlights?.length && !tacticHL.length) return undefined;
+    return [...(annotationHighlights ?? []), ...tacticHL];
+  }, [annotationHighlights, tacticsResult.highlights]);
+
   const chatPanel = (
     <GameChatPanel
       ref={chatRef}
@@ -194,7 +203,7 @@ export function BoardPageLayout({
                     showLastMoveHighlight={showLastMoveHighlight}
                     moveQualityFlash={moveQualityFlash}
                     arrows={arrows}
-                    annotationHighlights={annotationHighlights}
+                    annotationHighlights={mergedHighlights}
                     ghostMove={ghostMove}
                   />
                 ) : (
@@ -215,7 +224,7 @@ export function BoardPageLayout({
                     showLastMoveHighlight={showLastMoveHighlight}
                     moveQualityFlash={moveQualityFlash}
                     arrows={arrows}
-                    annotationHighlights={annotationHighlights}
+                    annotationHighlights={mergedHighlights}
                     ghostMove={ghostMove}
                   />
                 )}
