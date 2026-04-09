@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle, Trophy, Wrench } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { THEME_MAP } from '../../services/puzzleService';
@@ -124,6 +124,19 @@ export function TacticsPage(): JSX.Element {
             <span className={`text-sm font-bold ${card.color} text-center px-2 leading-tight`}>{card.label}</span>
           </button>
         ))}
+
+        {/* My Weaknesses — spans full width */}
+        <button
+          onClick={() => void navigate('/tactics/weakness-themes')}
+          className="col-span-2 py-6 bg-rose-500/10 border-rose-500/30 border-2 rounded-2xl flex flex-col items-center justify-center gap-3 hover:opacity-80 transition-all duration-200"
+          style={{ boxShadow: '0 0 14px rgba(244, 63, 94, 0.35), 0 0 4px rgba(244, 63, 94, 0.2)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 24px rgba(244, 63, 94, 0.5), 0 0 8px rgba(244, 63, 94, 0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 14px rgba(244, 63, 94, 0.35), 0 0 4px rgba(244, 63, 94, 0.2)'; }}
+          data-testid="section-my-weaknesses"
+        >
+          <Crosshair size={32} className="text-rose-400" />
+          <span className="text-base font-bold text-rose-400">My Weaknesses</span>
+        </button>
 
         {/* My Mistakes — spans full width at bottom */}
         <button
