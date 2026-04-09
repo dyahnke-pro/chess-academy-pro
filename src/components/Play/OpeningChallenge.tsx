@@ -7,7 +7,7 @@ import { HintButton } from '../Coach/HintButton';
 import { GameCompleteCard } from './GameCompleteCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useChessGame } from '../../hooks/useChessGame';
-import { useBoardContext } from '../../hooks/useBoardContext';
+
 import { useHintSystem } from '../../hooks/useHintSystem';
 import {
   recordDrillAttempt,
@@ -105,19 +105,11 @@ export function OpeningChallenge({
   // Game state owned at page level — ControlledChessBoard renders from this
   const game = useChessGame(currentFen, opening.color);
 
-  // Publish board context for global coach drawer
+  // Board context is published by BoardPageLayout via chat prop
+
   const prevMove = currentMoveIndex > 0 ? expectedMoves[currentMoveIndex - 1] : undefined;
   const ctxLastMove = prevMove ? { from: prevMove.from, to: prevMove.to, san: prevMove.san } : undefined;
   const ctxHistory = expectedMoves.slice(0, currentMoveIndex).map((m) => m.san);
-  useBoardContext(
-    currentFen,
-    opening.pgn,
-    Math.floor(currentMoveIndex / 2) + 1,
-    opening.color,
-    currentTurn,
-    ctxLastMove,
-    ctxHistory,
-  );
 
   // Hint system
   const currentExpected = currentMoveIndex < expectedMoves.length ? expectedMoves[currentMoveIndex] : undefined;

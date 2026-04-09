@@ -7,6 +7,7 @@ import type { GameChatPanelHandle } from '../Coach/GameChatPanel';
 import { MobileChatDrawer } from '../Coach/MobileChatDrawer';
 import { useResizableDivider } from '../../hooks/useResizableDivider';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { UseChessGameReturn, MoveResult } from '../../hooks/useChessGame';
 import type { BoardArrow, BoardHighlight, BoardAnnotationCommand, GhostMoveData } from '../../types';
 import type { MoveQuality } from './ChessBoard';
@@ -104,6 +105,17 @@ export function BoardPageLayout({
   const isMobile = useIsMobile();
   const { chatPercent, rightColumnRef, dividerProps } = useResizableDivider(initialChatPercent);
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
+
+  // Publish board state to Zustand so the coach always sees the current position
+  useBoardContext(
+    chat.fen,
+    chat.pgn,
+    chat.moveNumber,
+    chat.playerColor,
+    chat.turn,
+    chat.lastMove,
+    chat.history,
+  );
 
   const showDivider = rightPanelTop !== undefined;
 
