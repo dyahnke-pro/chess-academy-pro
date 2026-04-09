@@ -149,7 +149,12 @@ class SpeechService {
     if (!this.synthesis || !this.enabled) return Promise.resolve();
 
     const synthesis = this.synthesis;
-    synthesis.cancel();
+
+    // Only cancel if something is actively speaking — avoids the costly
+    // cancel()-induced delay (0.5-2s on iOS/Safari) when the queue is empty.
+    if (synthesis.speaking || synthesis.pending) {
+      synthesis.cancel();
+    }
 
     // Lazy warm-up fallback: fires if warmupInGestureContext() was never called
     // (e.g. on desktop where the restriction doesn't apply).
@@ -183,9 +188,7 @@ class SpeechService {
       utterance.addEventListener('end', () => resolve());
       utterance.addEventListener('error', () => resolve());
 
-      // On iOS, calling speak() synchronously after cancel() can silently drop
-      // the utterance. A minimal delay lets the cancel flush first.
-      setTimeout(() => { synthesis.speak(utterance); }, 0);
+      synthesis.speak(utterance);
     });
   }
 
@@ -226,6 +229,10 @@ class SpeechService {
 
   get speed(): number {
     return this.rate;
+  }
+
+  get isSpeaking(): boolean {
+    return this.synthesis?.speaking ?? false;
   }
 }
 

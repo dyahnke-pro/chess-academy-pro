@@ -44,13 +44,23 @@ describe('speechService', () => {
     beforeEach(() => { vi.useFakeTimers(); });
     afterEach(() => { vi.useRealTimers(); });
 
-    it('calls cancel then speak with correct options', () => {
+    it('speaks without cancel when nothing is playing', () => {
       const { speechService } = SpeechServiceModule;
       speechService.speak('Hello world');
-      vi.runAllTimers();
+
+      expect(window.speechSynthesis.cancel).not.toHaveBeenCalled();
+      expect(window.speechSynthesis.speak).toHaveBeenCalled();
+    });
+
+    it('calls cancel before speak when speech is active', () => {
+      const { speechService } = SpeechServiceModule;
+      const synth = window.speechSynthesis as unknown as Record<string, unknown>;
+      synth.speaking = true;
+      speechService.speak('Hello world');
 
       expect(window.speechSynthesis.cancel).toHaveBeenCalled();
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
+      synth.speaking = false;
     });
 
     it('does not speak when disabled', () => {

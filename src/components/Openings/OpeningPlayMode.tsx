@@ -130,7 +130,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // Speak helper
   const say = useCallback((text: string): void => {
     if (voiceOn) {
-      void voiceService.speak(text);
+      void voiceService.speakFast(text);
     }
   }, [voiceOn]);
 

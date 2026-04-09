@@ -221,9 +221,9 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
       const lineName = variation ? variation.name : opening.name;
       if (perfect) {
-        void voiceService.speak(`Line perfected! You know the ${lineName} by heart.`);
+        void voiceService.speakFast(`Line perfected! You know the ${lineName} by heart.`);
       } else {
-        void voiceService.speak(`Good attempt on the ${lineName}. ${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}.`);
+        void voiceService.speakFast(`Good attempt on the ${lineName}. ${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}.`);
       }
       onComplete(perfect);
     }

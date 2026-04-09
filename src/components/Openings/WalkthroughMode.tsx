@@ -537,7 +537,7 @@ export function WalkthroughMode({
       ? trimAnnotation(ann.annotation)
       : ann.annotation;
 
-    void voiceService.speak(spokenText).then(() => {
+    void voiceService.speakFast(spokenText).then(() => {
       if (!cancelled) {
         ttsFinishedRef.current?.();
       }

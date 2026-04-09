@@ -53,7 +53,7 @@ class VoiceService {
     voiceSpeed: number;
   } | null = null;
   private prefsCacheTime = 0;
-  private static CACHE_TTL = 30_000; // 30s
+  private static CACHE_TTL = 300_000; // 5 min — settings rarely change mid-session
 
   setSpeed(rate: number): void {
     this.speed = Math.max(0.5, Math.min(2.0, rate));
@@ -126,6 +126,23 @@ class VoiceService {
     return this.speakInternal(text, false);
   }
 
+  /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
+   *  Uses cached preferences (from warmup) and goes straight to Web Speech API. */
+  async speakFast(text: string): Promise<void> {
+    if (this.cachedPrefs && !this.cachedPrefs.voiceEnabled) return;
+
+    // Stop any in-flight speech without going through the full stop() chain
+    if (speechService.isSpeaking) {
+      speechService.stop();
+    }
+
+    const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
+    if (this.cachedPrefs?.systemVoiceURI) {
+      speechService.setVoice(this.cachedPrefs.systemVoiceURI);
+    }
+    await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: speed });
+  }
+
   /** Speak regardless of the voiceEnabled preference.
    *  Used by the voice-chat mic where the user explicitly opted into voice. */
   async speakForced(text: string): Promise<void> {
@@ -189,7 +206,11 @@ class VoiceService {
       this.currentSource = null;
     }
     this.playing = false;
-    speechService.stop();
+    // Only call cancel() when something is actually speaking — avoids the
+    // costly cancel()-induced delay on iOS/Safari when the queue is empty.
+    if (speechService.isSpeaking) {
+      speechService.stop();
+    }
   }
 
   isPlaying(): boolean {

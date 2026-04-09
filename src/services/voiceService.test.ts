@@ -166,7 +166,14 @@ describe('voiceService', () => {
       expect(voiceService.isPlaying()).toBe(false);
     });
 
-    it('calls speechService.stop on stop', () => {
+    it('skips speechService.stop when nothing is speaking', () => {
+      vi.spyOn(speechService, 'isSpeaking', 'get').mockReturnValue(false);
+      voiceService.stop();
+      expect(speechService.stop).not.toHaveBeenCalled();
+    });
+
+    it('calls speechService.stop when speech is active', () => {
+      vi.spyOn(speechService, 'isSpeaking', 'get').mockReturnValue(true);
       voiceService.stop();
       expect(speechService.stop).toHaveBeenCalled();
     });
@@ -176,7 +183,6 @@ describe('voiceService', () => {
       voiceService.stop();
       voiceService.stop();
       expect(voiceService.isPlaying()).toBe(false);
-      expect(speechService.stop).toHaveBeenCalledTimes(3);
     });
   });
 });
