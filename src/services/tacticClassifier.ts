@@ -554,7 +554,7 @@ function detectRemovalOfGuard(
 /**
  * Find all hanging pieces (attacked with no defender) for both sides.
  */
-function findHangingPieces(chess: Chess): HangingPiece[] {
+export function findHangingPieces(chess: Chess): HangingPiece[] {
   const hanging: HangingPiece[] = [];
   const board = chess.board();
 

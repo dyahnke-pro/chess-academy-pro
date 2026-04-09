@@ -25,6 +25,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
+import { scanUpcomingTactics } from '../../services/tacticClassifier';
 import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
@@ -242,6 +243,7 @@ export function CoachGamePage(): JSX.Element {
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
 
   const [coachLastMove, setCoachLastMove] = useState<{ from: string; to: string } | null>(null);
+  const previousFenRef = useRef<string | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
 
@@ -777,12 +779,29 @@ export function CoachGamePage(): JSX.Element {
 
         const postCoachEval = postCoachAnalysis?.evaluation ?? analysis.evaluation;
         applyCoachMove(result, postCoachEval, analysis.evaluation, analysis.bestMove);
+        // Track previous FEN for tactic classification
+        previousFenRef.current = result.fen;
         // Use POST-move analysis for eval bar + engine lines — these are for the
         // player's turn, which is what voice chat needs when answering "what should I play?"
         setLatestEval(postCoachEval);
         setLatestIsMate(postCoachAnalysis?.isMate ?? analysis.isMate);
         setLatestMateIn(postCoachAnalysis?.mateIn ?? analysis.mateIn);
         setLatestTopLines(postCoachAnalysis?.topLines ?? analysis.topLines);
+
+        // Proactive warning: scan for opponent threats after coach's move
+        if (postCoachAnalysis && !isCancelled()) {
+          const playerColorCode = playerColor === 'white' ? 'w' : 'b';
+          const upcoming = scanUpcomingTactics(
+            result.fen,
+            postCoachAnalysis.topLines.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })),
+            playerColorCode,
+          );
+          const threats = upcoming.filter((u) => u.beneficiary === 'opponent' && u.depthAhead <= 2);
+          if (threats.length > 0) {
+            const warning = `Be careful — ${threats[0].pattern.description}.`;
+            gameChatRef.current?.injectAssistantMessage(warning);
+          }
+        }
       } catch (error) {
         if (isCancelled()) return;
         console.error('[CoachGame] Coach move failed, attempting random fallback:', error);
@@ -828,6 +847,7 @@ export function CoachGamePage(): JSX.Element {
 
     // Capture pre-move FEN before making the move
     const preFen = game.fen;
+    previousFenRef.current = preFen;
 
     // NOTE: We intentionally defer game.makeMove() until after analysis.
     // Calling it here would flip game.turn to the coach's color, and because
@@ -1734,6 +1754,9 @@ export function CoachGamePage(): JSX.Element {
               turn={game.turn}
               isGameOver={game.isGameOver}
               gameResult={gameState.result}
+              lastMove={game.lastMove && game.history.length > 0 ? { ...game.lastMove, san: game.history[game.history.length - 1] } : undefined}
+              history={game.history}
+              previousFen={previousFenRef.current}
               onBoardAnnotation={handleBoardAnnotation}
               initialPrompt={pendingChatPrompt}
               className="h-full"
@@ -1783,6 +1806,9 @@ export function CoachGamePage(): JSX.Element {
               turn={game.turn}
               isGameOver={game.isGameOver}
               gameResult={gameState.result}
+              lastMove={game.lastMove && game.history.length > 0 ? { ...game.lastMove, san: game.history[game.history.length - 1] } : undefined}
+              history={game.history}
+              previousFen={previousFenRef.current}
               onBoardAnnotation={handleBoardAnnotation}
               initialPrompt={pendingChatPrompt}
             />

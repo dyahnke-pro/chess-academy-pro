@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { buildGameChatMessages, getGameSystemPromptAddition, parseAllTags } from '../../services/coachChatService';
-import type { EngineData, TacticAnalysisContext } from '../../services/coachChatService';
+import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
+import { assessPosition } from '../../services/positionAssessor';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -62,6 +63,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');
     const speechBufferRef = useRef('');
+    const prevEvalRef = useRef<number>(0);
 
     // Expose method for parent to inject assistant messages (hints, takeback msgs)
     useImperativeHandle(ref, () => ({
@@ -130,11 +132,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       if (!isGameOver && lastMove && previousFen && engineData) {
         try {
           const playerColorCode = playerColor === 'white' ? 'w' : 'b';
+          // Use cached previous eval for accurate eval swing (fix #1)
+          const evalBefore = prevEvalRef.current;
           const classification = classifyPosition(
             previousFen,
             fen,
             lastMove.san,
-            engineData.evaluation,
+            evalBefore,
             engineData.evaluation,
           );
 
@@ -167,7 +171,23 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         }
       }
 
-      // Build game context with lastMove, history, and tactic analysis
+      // Cache current eval for next move's eval swing calculation
+      if (engineData) {
+        prevEvalRef.current = engineData.evaluation;
+      }
+
+      // Run position assessment (pawn structure, king safety, piece activity)
+      let positionAssessment: PositionAssessmentContext | undefined;
+      if (!isGameOver) {
+        try {
+          const assessment = assessPosition(fen);
+          positionAssessment = { summary: assessment.summary };
+        } catch {
+          // Position assessment failed, continue without it
+        }
+      }
+
+      // Build game context with lastMove, history, tactic analysis, and position assessment
       const gameContext = {
         fen,
         pgn,
@@ -180,6 +200,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         history,
         engineData,
         tacticAnalysis,
+        positionAssessment,
       };
 
       // Clear previous annotations when a new message is sent

@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { Chess } from 'chess.js';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { useChessGame } from '../../hooks/useChessGame';
 import { MoveTree } from '../Openings/MoveTree';
@@ -186,7 +187,6 @@ function stripPgnHeaders(pgn: string): string {
 }
 
 function parsePgnMoves(pgn: string): ParsedMove[] {
-  // Simple PGN move extraction — strip headers and result
   const moveText = pgn
     .replace(/\[.*?\]/g, '')
     .replace(/\{.*?\}/g, '')
@@ -197,9 +197,17 @@ function parsePgnMoves(pgn: string): ParsedMove[] {
   if (!moveText) return [];
 
   const tokens = moveText.split(/\s+/).filter((t) => !t.match(/^\d+\.+$/));
-  // Return tokens as moves with placeholder FENs (real FEN requires chess.js replay)
-  return tokens.map((san) => ({
-    san,
-    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-  }));
+
+  // Replay through chess.js to get correct FEN at each move
+  const chess = new Chess();
+  const moves: ParsedMove[] = [];
+  for (const san of tokens) {
+    try {
+      chess.move(san);
+      moves.push({ san, fen: chess.fen() });
+    } catch {
+      break;
+    }
+  }
+  return moves;
 }
