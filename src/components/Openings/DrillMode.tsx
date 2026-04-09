@@ -277,7 +277,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
       }
 
       const lineName = variation ? variation.name : opening.name;
-      void voiceService.speakFast(`Line discovered! You've learned the ${lineName}.`);
+      void voiceService.speak(`Line discovered! You've learned the ${lineName}.`);
       onComplete(totalMistakes === 0);
     }
   }, [currentMoveIndex, expectedMoves.length, lineComplete, totalMistakes, opening.id, isVariation, variationIndex, variation, opening.name, playCelebration, onComplete]);
@@ -289,7 +289,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
     if (currentExplanation) {
       // Strip the italic markers for speech
       const speechText = currentExplanation.replace(/\*/g, '');
-      void voiceService.speakFast(speechText);
+      void voiceService.speak(speechText);
     }
   }, [currentMoveIndex, currentExplanation, isPlayerTurn, lineComplete, showWrongMove]);
 

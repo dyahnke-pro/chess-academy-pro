@@ -177,7 +177,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       setLineComplete(true);
       playCelebration();
       completedLinesRef.current.add(currentLineIndex);
-      void voiceService.speakFast(`Well done! You've completed the ${currentLine.name} line.`);
+      void voiceService.speak(`Well done! You've completed the ${currentLine.name} line.`);
     }
   }, [currentMoveIndex, expectedMoves.length, lineComplete, currentLineIndex, currentLine.name, playCelebration]);
 
