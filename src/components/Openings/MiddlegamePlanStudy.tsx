@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
+import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -10,9 +11,11 @@ import {
   Swords,
   GitBranch,
   Flag,
+  PlayCircle,
 } from 'lucide-react';
 import type {
   MiddlegamePlan,
+  PlayableMiddlegameLine,
   AnnotationArrow,
   AnnotationHighlight,
   PawnBreak,
@@ -25,7 +28,7 @@ interface MiddlegamePlanStudyProps {
   onExit: () => void;
 }
 
-type PlanSection = 'overview' | 'pawnBreaks' | 'maneuvers' | 'themes' | 'endgames';
+type PlanSection = 'overview' | 'pawnBreaks' | 'maneuvers' | 'themes' | 'endgames' | 'playLines';
 
 const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'overview', label: 'Overview', icon: Compass },
@@ -33,6 +36,7 @@ const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'maneuvers', label: 'Maneuvers', icon: GitBranch },
   { key: 'themes', label: 'Themes', icon: Compass },
   { key: 'endgames', label: 'Endgames', icon: Flag },
+  { key: 'playLines', label: 'Play Lines', icon: PlayCircle },
 ];
 
 function arrowsToBoard(arrows: AnnotationArrow[] | undefined): Array<{ startSquare: string; endSquare: string; color: string }> {
@@ -57,6 +61,9 @@ export function MiddlegamePlanStudy({
   const [activeSection, setActiveSection] = useState<PlanSection>('overview');
   const [pawnBreakIndex, setPawnBreakIndex] = useState(0);
   const [maneuverIndex, setManeuverIndex] = useState(0);
+  const [activePlayableLine, setActivePlayableLine] = useState<PlayableMiddlegameLine | null>(null);
+
+  const playableLines = plan.playableLines ?? [];
 
   // Determine which FEN and arrows to show based on active section
   const { displayFen, displayArrows, displayHighlights } = useMemo(() => {
@@ -98,6 +105,18 @@ export function MiddlegamePlanStudy({
   const nextManeuver = useCallback((): void => {
     setManeuverIndex((i) => Math.min(plan.pieceManeuvers.length - 1, i + 1));
   }, [plan.pieceManeuvers.length]);
+
+  // If a playable line is active, render the full-screen player
+  if (activePlayableLine) {
+    return (
+      <PlayableLinePlayer
+        line={activePlayableLine}
+        boardOrientation={boardOrientation}
+        onComplete={() => setActivePlayableLine(null)}
+        onExit={() => setActivePlayableLine(null)}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden" data-testid="middlegame-plan-study">
@@ -303,6 +322,42 @@ export function MiddlegamePlanStudy({
                 </ul>
               ) : (
                 <p className="text-sm text-theme-text-muted">No endgame transitions documented.</p>
+              )}
+            </motion.div>
+          )}
+
+          {activeSection === 'playLines' && (
+            <motion.div
+              key="playLines"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="space-y-2"
+              data-testid="plan-play-lines"
+            >
+              {playableLines.length > 0 ? (
+                playableLines.map((line, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActivePlayableLine(line)}
+                    className="w-full flex items-center gap-3 p-3 rounded-2xl bg-theme-surface/90 border border-white/15 hover:bg-theme-border/50 transition-colors text-left"
+                    data-testid={`playable-line-${i}`}
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-theme-accent/20 flex items-center justify-center shrink-0">
+                      <PlayCircle size={16} className="text-theme-accent" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium text-theme-text">{line.title}</span>
+                      <p className="text-xs text-theme-text-muted mt-0.5">
+                        {line.moves.length} moves — Watch &amp; practice
+                      </p>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-4">
+                  <p className="text-sm text-theme-text-muted">No playable lines available for this plan yet.</p>
+                </div>
               )}
             </motion.div>
           )}
