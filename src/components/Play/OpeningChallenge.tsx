@@ -7,7 +7,6 @@ import { HintButton } from '../Coach/HintButton';
 import { GameCompleteCard } from './GameCompleteCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useChessGame } from '../../hooks/useChessGame';
-
 import { useHintSystem } from '../../hooks/useHintSystem';
 import {
   recordDrillAttempt,
@@ -100,7 +99,6 @@ export function OpeningChallenge({
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);
-  const currentTurn = currentFen.split(' ')[1] === 'b' ? 'b' : 'w';
 
   // Game state owned at page level — ControlledChessBoard renders from this
   const game = useChessGame(currentFen, opening.color);
