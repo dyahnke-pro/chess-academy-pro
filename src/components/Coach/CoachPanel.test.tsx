@@ -19,20 +19,6 @@ vi.mock('../../services/coachApi', () => ({
   getCoachCommentary: vi.fn().mockResolvedValue('Great move! You found the fork.'),
 }));
 
-vi.mock('../../stores/appStore', () => ({
-  useAppStore: vi.fn((selector: (s: Record<string, unknown>) => unknown) =>
-    selector({
-      activeProfile: {
-        id: 'main',
-        name: 'Test User',
-        currentRating: 1200,
-        badHabits: [],
-        preferences: { apiKeyEncrypted: 'test-key' },
-      },
-    }),
-  ),
-}));
-
 vi.mock('../../services/voiceService', () => ({
   voiceService: { speak: vi.fn().mockResolvedValue(undefined), stop: vi.fn(), isPlaying: vi.fn().mockReturnValue(false) },
 }));

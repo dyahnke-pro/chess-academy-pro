@@ -75,27 +75,12 @@ describe('SettingsPage a11y', () => {
     expect(screen.getByTestId('name-input')).toBeInTheDocument();
   });
 
-  it('coach tab renders with correct form elements', () => {
+  it('coach tab renders with provider toggle and no API key input', () => {
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
     expect(screen.getByTestId('coach-tab')).toBeInTheDocument();
-    expect(screen.getByTestId('api-key-input')).toBeInTheDocument();
-  });
-
-  it('api key input has password type by default', () => {
-    render(<SettingsPage />);
-    fireEvent.click(screen.getByTestId('tab-coach'));
-    const input = screen.getByTestId('api-key-input');
-    expect(input).toHaveAttribute('type', 'password');
-  });
-
-  it('show/hide toggle changes input type', () => {
-    render(<SettingsPage />);
-    fireEvent.click(screen.getByTestId('tab-coach'));
-    const showBtn = screen.getByText('Show');
-    fireEvent.click(showBtn);
-    const input = screen.getByTestId('api-key-input');
-    expect(input).toHaveAttribute('type', 'text');
+    expect(screen.getByTestId('provider-toggle')).toBeInTheDocument();
+    expect(screen.queryByTestId('api-key-input')).not.toBeInTheDocument();
   });
 
   it('board tab has checkbox toggles with labels', () => {

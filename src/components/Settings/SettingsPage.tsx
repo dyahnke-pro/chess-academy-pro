@@ -10,7 +10,6 @@ import { exportUserData } from '../../services/dbService';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
-import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
 
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
@@ -559,20 +558,14 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Tab ───────────────────────────────────────────────────────────────
 
 function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
-  const [apiKey, setApiKey] = useState('');
-  const [showKey, setShowKey] = useState(false);
   const [provider, setProvider] = useState<'deepseek' | 'anthropic'>(profile.preferences.aiProvider);
   const [budgetCap, setBudgetCap] = useState<number | null>(profile.preferences.monthlyBudgetCap);
   const [commentaryModel, setCommentaryModel] = useState(profile.preferences.preferredModel.commentary);
   const [analysisModel, setAnalysisModel] = useState(profile.preferences.preferredModel.analysis);
   const [reportsModel, setReportsModel] = useState(profile.preferences.preferredModel.reports);
   const [status, setStatus] = useState<string | null>(null);
-  const [keySaved, setKeySaved] = useState(false);
 
   const isAnthropic = provider === 'anthropic';
-  const hasExistingKey = isAnthropic
-    ? Boolean(profile.preferences.anthropicApiKeyEncrypted)
-    : Boolean(profile.preferences.apiKeyEncrypted);
 
   const modelOptions = isAnthropic
     ? [
@@ -590,30 +583,6 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
     const updatedPrefs = { ...profile.preferences, aiProvider: newProvider };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
-    setApiKey('');
-    setShowKey(false);
-  };
-
-  const handleSaveApiKey = async (): Promise<void> => {
-    if (!apiKey.trim()) return;
-    try {
-      const { encrypted, iv } = await encryptApiKey(apiKey.trim());
-      // Always write aiProvider atomically with the key so the coach never reads
-      // a mismatched provider/key pair after a rapid toggle-then-save sequence.
-      const updatedPrefs = isAnthropic
-        ? { ...profile.preferences, aiProvider: 'anthropic' as const, anthropicApiKeyEncrypted: encrypted, anthropicApiKeyIv: iv }
-        : { ...profile.preferences, aiProvider: 'deepseek' as const, apiKeyEncrypted: encrypted, apiKeyIv: iv };
-      await db.profiles.update(profile.id, { preferences: updatedPrefs });
-      setProfile({ ...profile, preferences: updatedPrefs });
-      setApiKey('');
-      setKeySaved(true);
-      setStatus('API key saved ✓');
-      setTimeout(() => setKeySaved(false), 4000);
-    } catch (err) {
-      console.error('[Settings] Failed to save API key:', err);
-      setStatus('Error saving key');
-    }
-    setTimeout(() => setStatus(null), 4000);
   };
 
   const handleSaveCoachSettings = async (): Promise<void> => {
@@ -636,7 +605,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
     <div className="space-y-4" data-testid="coach-tab">
       <div>
         <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-          AI Provider
+          Preferred Provider
         </label>
         <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--color-border)' }} data-testid="provider-toggle">
           {(['deepseek', 'anthropic'] as const).map((p) => (
@@ -654,40 +623,8 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
             </button>
           ))}
         </div>
-      </div>
-
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-          {isAnthropic ? 'Anthropic' : 'DeepSeek'} API Key {hasExistingKey && '(saved)'}
-        </label>
-        <div className="flex gap-2">
-          <input
-            type={showKey ? 'text' : 'password'}
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder={hasExistingKey ? '••••••••' : (isAnthropic ? 'sk-ant-...' : 'sk-...')}
-            className="flex-1 px-3 py-2 rounded-lg border text-sm"
-            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="api-key-input"
-          />
-          <button onClick={() => setShowKey((s) => !s)} className="px-3 py-2 rounded-lg border text-xs" style={{ borderColor: 'var(--color-border)' }}>
-            {showKey ? 'Hide' : 'Show'}
-          </button>
-          <button
-            onClick={() => void handleSaveApiKey()}
-            className="px-4 py-2 rounded-lg text-sm font-medium"
-            style={{
-              background: keySaved ? '#16a34a' : 'var(--color-accent)',
-              color: 'var(--color-bg)',
-              transition: 'background 0.3s',
-            }}
-            data-testid="save-api-key-btn"
-          >
-            {keySaved ? 'Saved ✓' : 'Save'}
-          </button>
-        </div>
         <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-          {isAnthropic ? 'Get a key at console.anthropic.com' : 'Get a key at platform.deepseek.com'}
+          API keys are managed via server environment variables.
         </p>
       </div>
 

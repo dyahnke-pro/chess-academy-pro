@@ -5,10 +5,6 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import type { UserProfile } from '../../types';
 
-vi.mock('../../services/cryptoService', () => ({
-  encryptApiKey: vi.fn().mockResolvedValue({ encrypted: 'enc', iv: 'iv' }),
-}));
-
 function createProfile(): UserProfile {
   return {
     id: 'main',
@@ -80,38 +76,42 @@ describe('OnboardingPage', () => {
     expect(screen.getByTestId('get-started-btn')).toBeInTheDocument();
   });
 
-  it('advances to step 2 on Get Started click', () => {
+  it('advances to step 2 with provider preference selector', () => {
     useAppStore.getState().setActiveProfile(createProfile());
     render(<OnboardingPage />);
     fireEvent.click(screen.getByTestId('get-started-btn'));
-    expect(screen.getByTestId('onboarding-api-key')).toBeInTheDocument();
-    expect(screen.getByText('API Key Setup')).toBeInTheDocument();
+    expect(screen.getByTestId('onboarding-provider-toggle')).toBeInTheDocument();
+    expect(screen.getByText('Preferred Provider')).toBeInTheDocument();
   });
 
-  it('shows skip button on step 2', () => {
+  it('step 2 does not show API key input', () => {
     useAppStore.getState().setActiveProfile(createProfile());
     render(<OnboardingPage />);
     fireEvent.click(screen.getByTestId('get-started-btn'));
-    expect(screen.getByTestId('skip-api-key-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('onboarding-api-key')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('skip-api-key-btn')).not.toBeInTheDocument();
   });
 
-  it('skipping advances to step 3', async () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+  it('continue on step 2 advances to step 3', async () => {
+    const profile = createProfile();
+    useAppStore.getState().setActiveProfile(profile);
+    await db.profiles.put(profile);
     render(<OnboardingPage />);
     fireEvent.click(screen.getByTestId('get-started-btn'));
-    fireEvent.click(screen.getByTestId('skip-api-key-btn'));
+    fireEvent.click(screen.getByTestId('save-onboarding-provider-btn'));
 
-    // Wait for async meta write, then check step 3
     await vi.waitFor(() => {
       expect(screen.getByTestId('onboarding-name')).toBeInTheDocument();
     });
   });
 
-  it('step 3 shows profile fields and coach selector', async () => {
-    useAppStore.getState().setActiveProfile(createProfile());
+  it('step 3 shows profile fields', async () => {
+    const profile = createProfile();
+    useAppStore.getState().setActiveProfile(profile);
+    await db.profiles.put(profile);
     render(<OnboardingPage />);
     fireEvent.click(screen.getByTestId('get-started-btn'));
-    fireEvent.click(screen.getByTestId('skip-api-key-btn'));
+    fireEvent.click(screen.getByTestId('save-onboarding-provider-btn'));
 
     await vi.waitFor(() => {
       expect(screen.getByTestId('onboarding-name')).toBeInTheDocument();

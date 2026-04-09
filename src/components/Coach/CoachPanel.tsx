@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { useAppStore } from '../../stores/appStore';
 import { getCoachCommentary } from '../../services/coachApi';
 import { MessageSquare, Loader, X, Volume2 } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
@@ -11,7 +10,6 @@ interface CoachPanelProps {
 }
 
 export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProps): JSX.Element {
-  const activeProfile = useAppStore((s) => s.activeProfile);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -19,16 +17,6 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
   const handleAsk = useCallback(async (): Promise<void> => {
     setVisible(true);
     setMessage('');
-
-    const provider = activeProfile?.preferences.aiProvider ?? 'deepseek';
-    const hasKey = provider === 'anthropic'
-      ? Boolean(activeProfile?.preferences.anthropicApiKeyEncrypted)
-      : Boolean(activeProfile?.preferences.apiKeyEncrypted);
-    if (!hasKey) {
-      setMessage('To enable AI coaching, add your API key in Settings → Coach tab. The coach will respond once your key is saved.');
-      return;
-    }
-
     setLoading(true);
 
     const result = await getCoachCommentary(task, context, (chunk) => {
@@ -37,7 +25,7 @@ export function CoachPanel({ context, task = 'move_commentary' }: CoachPanelProp
 
     setMessage(result);
     setLoading(false);
-  }, [task, context, activeProfile]);
+  }, [task, context]);
 
   const handleSpeak = useCallback((): void => {
     if (message) {

@@ -10,10 +10,6 @@ vi.mock('../../services/themeService', async () => {
   return { ...actual, applyTheme: vi.fn() };
 });
 
-vi.mock('../../services/cryptoService', () => ({
-  encryptApiKey: vi.fn().mockResolvedValue({ encrypted: 'enc', iv: 'iv' }),
-}));
-
 describe('SettingsPage', () => {
   beforeEach(async () => {
     await db.delete();
@@ -58,7 +54,15 @@ describe('SettingsPage', () => {
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
     expect(screen.getByTestId('coach-tab')).toBeInTheDocument();
-    expect(screen.getByTestId('api-key-input')).toBeInTheDocument();
+    expect(screen.getByTestId('provider-toggle')).toBeInTheDocument();
+  });
+
+  it('coach tab does not show API key input', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile());
+    render(<SettingsPage />);
+    fireEvent.click(screen.getByTestId('tab-coach'));
+    expect(screen.queryByTestId('api-key-input')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('save-api-key-btn')).not.toBeInTheDocument();
   });
 
   it('switches to appearance tab on click', () => {

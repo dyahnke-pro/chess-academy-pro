@@ -70,73 +70,64 @@ interface ProviderConfig {
   apiKey: string;
 }
 
-// Embedded keys (split + reversed) — assembled at runtime as fallback
-const _P = ['AAg3tjc6-QloxqPVoiya_sIlFe1BjOsVJGQz', 'vBBV66KIx6FbPmIuCxO1TLStej-Kt44jL5DD', 'UB9cvx5Mx30pFR0x3xVYmg8-30ipa-tna-ks'];
-const _Q = ['ef9cdc72a407', 'f919f60457b8', 'd75abe29-ks'];
-function _r(c: string[]): string { return c.join('').split('').reverse().join(''); }
-
+// Keys are loaded exclusively from environment variables (set in Vercel).
+// No API keys are ever stored in the browser (IndexedDB, localStorage, etc.).
 function getAnthropicKey(): string | undefined {
-  return (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_KEY || __ANTHROPIC_KEY__) as string || _r(_P) || undefined;
+  const key = (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_KEY || __ANTHROPIC_KEY__) as string;
+  return key || undefined;
 }
 
 function getDeepseekKey(): string | undefined {
-  return (import.meta.env.VITE_DEEPSEEK_API_KEY || import.meta.env.DEEPSEEK_KEY || __DEEPSEEK_KEY__) as string || _r(_Q) || undefined;
+  const key = (import.meta.env.VITE_DEEPSEEK_API_KEY || import.meta.env.DEEPSEEK_KEY || __DEEPSEEK_KEY__) as string;
+  return key || undefined;
 }
 
 async function getProviderConfig(): Promise<ProviderConfig | null> {
+  const deepseekKey = getDeepseekKey();
+  const anthropicKey = getAnthropicKey();
+
+  // Read only the provider preference from the profile — never read keys from the DB
+  let preferredProvider: AiProvider = 'deepseek';
   try {
-    const anthropicEnvKey = getAnthropicKey();
-    const deepseekEnvKey = getDeepseekKey();
-
     const profile = await db.profiles.get('main');
-    const provider: AiProvider = profile?.preferences.aiProvider ?? (anthropicEnvKey ? 'anthropic' : 'deepseek');
-
-    if (provider === 'anthropic') {
-      if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey };
-      if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
-        if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey };
-        return null;
-      }
-      const { decryptApiKey } = await import('./cryptoService');
-      const apiKey = await decryptApiKey(
-        profile.preferences.anthropicApiKeyEncrypted,
-        profile.preferences.anthropicApiKeyIv,
-      );
-      return { provider, apiKey };
-    } else {
-      if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey };
-      if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
-        if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey };
-        return null;
-      }
-      const { decryptApiKey } = await import('./cryptoService');
-      const apiKey = await decryptApiKey(
-        profile.preferences.apiKeyEncrypted,
-        profile.preferences.apiKeyIv,
-      );
-      return { provider, apiKey };
+    if (profile?.preferences.aiProvider) {
+      preferredProvider = profile.preferences.aiProvider;
     }
   } catch {
-    return null;
+    // If DB read fails, fall through to default preference
   }
+
+  // Try the preferred provider first, then fall back to the other
+  if (preferredProvider === 'anthropic') {
+    if (anthropicKey) return { provider: 'anthropic', apiKey: anthropicKey };
+    if (deepseekKey) {
+      console.warn('[CoachAPI] Anthropic key not available, falling back to DeepSeek');
+      return { provider: 'deepseek', apiKey: deepseekKey };
+    }
+  } else {
+    if (deepseekKey) return { provider: 'deepseek', apiKey: deepseekKey };
+    if (anthropicKey) {
+      console.warn('[CoachAPI] DeepSeek key not available, falling back to Anthropic');
+      return { provider: 'anthropic', apiKey: anthropicKey };
+    }
+  }
+
+  console.error('[CoachAPI] No API keys configured. Set VITE_DEEPSEEK_API_KEY or VITE_ANTHROPIC_API_KEY in environment variables.');
+  return null;
 }
 
 /** Get a fallback config using the OTHER provider. Returns null if no alternate key available. */
 function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
-  try {
-    const anthropicEnvKey = getAnthropicKey();
-    const deepseekEnvKey = getDeepseekKey();
+  const anthropicKey = getAnthropicKey();
+  const deepseekKey = getDeepseekKey();
 
-    if (failedProvider === 'anthropic' && deepseekEnvKey) {
-      return { provider: 'deepseek', apiKey: deepseekEnvKey };
-    }
-    if (failedProvider === 'deepseek' && anthropicEnvKey) {
-      return { provider: 'anthropic', apiKey: anthropicEnvKey };
-    }
-    return null;
-  } catch {
-    return null;
+  if (failedProvider === 'anthropic' && deepseekKey) {
+    return { provider: 'deepseek', apiKey: deepseekKey };
   }
+  if (failedProvider === 'deepseek' && anthropicKey) {
+    return { provider: 'anthropic', apiKey: anthropicKey };
+  }
+  return null;
 }
 
 function getModel(task: CoachTask, provider: AiProvider): string {
@@ -304,7 +295,7 @@ export async function getCoachChatResponse(
   maxTokens: number = 1024,
 ): Promise<string> {
   const config = await getProviderConfig();
-  if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
+  if (!config) return '⚠️ No API key configured. Please set VITE_DEEPSEEK_API_KEY or VITE_ANTHROPIC_API_KEY in the server environment.';
 
   const systemPrompt = SYSTEM_PROMPT + '\n\n' + systemPromptAddition;
 
@@ -317,11 +308,12 @@ export async function getCoachChatResponse(
       try {
         return await callChatWithConfig(fallback, messages, systemPrompt, onStream, task, maxTokens);
       } catch (fallbackError) {
-        console.error('[CoachAPI] Fallback also failed:', fallbackError);
+        console.error('[CoachAPI] Both providers failed. Primary:', error, 'Fallback:', fallbackError);
         const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
         return `⚠️ Coach error: ${errMsg}`;
       }
     }
+    console.error('[CoachAPI] Primary provider failed and no fallback available:', error);
     const errMsg = error instanceof Error ? error.message : String(error);
     return `⚠️ Coach error: ${errMsg}`;
   }
@@ -373,10 +365,11 @@ export async function getCoachCommentary(
       try {
         return await callCommentaryWithConfig(fallback, task, userMessage, onStream);
       } catch (fallbackError) {
-        console.error('[CoachAPI] Fallback also failed:', fallbackError);
+        console.error(`[CoachAPI] Both providers failed for ${task}. Primary:`, error, 'Fallback:', fallbackError);
         return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
       }
     }
+    console.error(`[CoachAPI] Primary provider failed for ${task} and no fallback available:`, error);
     return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
   }
 }
