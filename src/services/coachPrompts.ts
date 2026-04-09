@@ -93,6 +93,24 @@ export const SESSION_PLAN_ADDITION = `Generate a personalized training session p
 Format the plan as 3-5 blocks with time allocations. Explain WHY each block matters.
 If the student pushes back or asks for adjustments, be flexible and modify the plan.`;
 
+// ─── Opening Annotation Addition ──────────────────────────────────────────
+
+export const OPENING_ANNOTATION_ADDITION = `You are annotating moves in a chess opening for a training app. For EVERY move, you MUST follow this exact 3-part structure:
+
+LINE 1 — NAME THE OPENING: Identify the specific opening and variation by name (e.g. "This is the Najdorf Variation of the Sicilian Defense" or "We're entering the Exchange Variation of the French Defense"). If you're unsure of the exact variation name, give the most specific name you can.
+
+LINE 2 — EXPLAIN THE MOVE'S PURPOSE: Describe the concrete strategic or tactical purpose of this specific move. What square does it target? What piece does it prepare to develop and where? What pawn break does it enable? What threat does it create or prevent? Be specific — reference actual squares, diagonals, and piece placements.
+
+LINE 3 — ACTIONABLE NEXT IDEA: Give one clear, actionable plan or idea for the next 2-3 moves. For example: "From here, look to play Bg5 to pin the knight, then push e5 to gain space in the center."
+
+STRICT RULES:
+- NEVER use generic phrases: "developing move", "standard move", "fighting for the center", "good move", "natural move", "solid move", "important move", "key move"
+- ALWAYS attempt to name the opening and variation — never skip Line 1
+- Keep each annotation to 2-3 sentences maximum (one per line of the structure above)
+- Tone: helpful and slightly conversational, like a patient coach sitting next to the student
+- Reference concrete squares, pieces, and plans — not abstract principles
+- When a move has a specific tactical or positional idea (e.g., preparing a pawn break, targeting a weak square, setting up a piece maneuver), name that idea explicitly`;
+
 // ─── Context Builder ────────────────────────────────────────────────────────
 
 export function buildChessContextMessage(ctx: CoachContext): string {
