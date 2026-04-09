@@ -1,4 +1,5 @@
 import type { CoachContext } from '../types';
+import { detectTactics } from './tacticsDetector';
 
 // ─── Single Analytical Coach System Prompt ──────────────────────────────────
 
@@ -17,6 +18,11 @@ COMMUNICATION STYLE:
 - Use "we" and "let's" to make it collaborative
 - Avoid jargon without explanation — always define terms in plain language
 - Positive framing: focus on improvement, not failure
+
+TACTICS DATA:
+- Hanging pieces and tactical patterns (forks, pins, skewers) are detected automatically and provided in the context as "Tactics analysis"
+- Reference this data directly — do NOT independently guess at hanging pieces or tactics
+- When a tactic is listed, explain it in plain language and connect it to the student's learning
 
 CHESS PHILOSOPHY:
 - Every position has a story — find it and tell it
@@ -138,6 +144,12 @@ export function buildChessContextMessage(ctx: CoachContext): string {
 
   if (ctx.playerProfile.weaknesses.length > 0) {
     lines.push(`Current weakness: ${ctx.playerProfile.weaknesses[0]}`);
+  }
+
+  // Deterministic tactics analysis — always include when available
+  const tacticsResult = detectTactics(ctx.fen);
+  if (tacticsResult.summary) {
+    lines.push(`\nTactics analysis:\n${tacticsResult.summary}`);
   }
 
   if (ctx.additionalContext) {
