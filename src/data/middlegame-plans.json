@@ -890,16 +890,16 @@
     "openingId": "caro-kann",
     "criticalPositionFen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
     "title": "e5 Space Advantage",
-    "overview": "In the Advance Caro-Kann, White pushes e5 to gain space and restrict Black's pieces. The plan involves building on the kingside while Black struggles with the cramped position.",
+    "overview": "This is the Space Advantage plan in the Advance Caro-Kann. White pushes e4-e5 to gain a significant space edge, restricting Black's piece development and particularly preventing the Nf6 from reaching its natural square. White then builds on the kingside with f4, Ng3, and Bd3 while Black struggles to untangle in the cramped position.",
     "pawnBreaks": [
       {
         "move": "e4-e5",
-        "explanation": "Gains central space and restricts Black's f6 knight development. White's plan is to use the space advantage for a kingside attack.",
+        "explanation": "The e5 advance in the Caro-Kann Advance restricts Black's most important developing move — Nf6. Without the knight on f6, Black's kingside development is severely hampered, and White gains a lasting space advantage that can be used for a kingside attack with f4-f5.",
         "fen": "rn1qkbnr/pp2pppp/2p5/3p1b2/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4"
       },
       {
         "move": "f2-f4",
-        "explanation": "Supports e5 and prepares f5 to further cramp Black. This solidifies White's space advantage.",
+        "explanation": "The f4 push reinforces the e5 pawn and prepares a potential f4-f5 advance to attack Black's e6 pawn. This cements White's space advantage and creates the possibility of opening the f-file for a direct kingside assault.",
         "fen": "rn1qkb1r/pp2pppp/2p2n2/3pPb2/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5"
       }
     ],
@@ -907,18 +907,18 @@
       {
         "piece": "Bishop",
         "route": "Bf1-e2-d3 (trading Black's good bishop)",
-        "explanation": "Bd3 challenges Black's light-squared bishop, which is Black's best piece in the Caro-Kann."
+        "explanation": "The bishop develops to d3, directly challenging Black's light-squared bishop on f5 or g6. In the Caro-Kann, the light-squared bishop is Black's best piece — trading it off or forcing it to retreat removes Black's most active defender and leaves the kingside vulnerable."
       }
     ],
     "strategicThemes": [
-      "Space advantage",
-      "Restricting Black's development",
-      "Kingside attack behind e5 pawn",
-      "Trading Black's good bishop"
+      "The e5 pawn gives White a commanding space advantage that cramps Black's entire position. Black's knights lack natural squares, the Bf8 struggles to develop, and the overall coordination suffers — White's space controls the tempo of the game.",
+      "With the e5 pawn blocking Nf6, Black faces serious development problems. The knight must go to d7 (blocking the Bc8), e7 (passive), or h6 (unstable). Each option leaves Black with an awkward, uncoordinated setup.",
+      "Behind the e5 pawn, White has a natural platform for a kingside attack. The Ng3 eyes f5 and h5, the Bd3 targets h7, and the f4-f5 advance can blow open lines — all while Black's cramped pieces can barely defend.",
+      "Trading Black's light-squared bishop (Bf5 or Bg6) is a critical strategic goal. This bishop is Black's best piece in the Caro-Kann — it's the one piece that escaped before playing ...e6. Without it, Black's dark-squared weaknesses become permanent."
     ],
     "endgameTransitions": [
-      "Passed e-pawn if center opens",
-      "Better minor pieces in closed positions"
+      "If the center opens through exchanges, White's e5 pawn can become a powerful passed pawn. In the endgame, this pawn marches forward while Black's pieces are tied to stopping it, giving White a winning advantage.",
+      "In closed positions that simplify, White's minor pieces are typically superior. The knight on g3/f5 has active outposts, while Black's pieces remain cramped by the e5 pawn — this structural imbalance persists into the endgame."
     ],
     "playableLines": [
       {
@@ -934,14 +934,14 @@
           "Be7"
         ],
         "annotations": [
-          "White develops the knight to e2 instead of f3, keeping the f-file clear for the pawn advance",
-          "Black solidifies the center with e6",
-          "White reroutes the knight to g3, attacking the h5 square and supporting f4-f5",
-          "Black retreats the bishop to g6, the standard Caro-Kann defensive post",
-          "White pushes f4, reinforcing e5 and preparing the f5 advance",
-          "Black develops the knight to d7, preparing to challenge e5 later",
-          "White develops the bishop to e2, completing development",
-          "Black develops the dark-squared bishop, preparing to castle"
+          "This is the Advance Caro-Kann space plan. White develops the knight to e2 instead of f3, deliberately keeping the f-file clear for the f2-f4-f5 pawn advance. The Ne2 will reroute to g3 where it supports the kingside attack.",
+          "Black solidifies the center with e6, creating the d5-e6 pawn chain. While solid, this locks in the light-squared bishop and commits Black to a defensive setup where White's space advantage dictates the play.",
+          "White reroutes the knight from e2 to g3, an active square that controls both f5 and h5. From g3, the knight supports the f4-f5 advance and can jump to f5 to create direct threats against Black's king.",
+          "Black retreats the bishop to g6, the standard defensive post in the Caro-Kann Advance. On g6, the bishop is safe but passive — it watches the h7-b1 diagonal but can be challenged by White's Bd3.",
+          "White pushes f4, reinforcing the e5 pawn and preparing the critical f5 advance. The f4 pawn creates a solid e5-f4 chain and frees the f1 rook to participate in the attack once the f-file opens.",
+          "Black develops the knight to d7, the only reasonable square since e5 blocks Nf6. The Nd7 prepares to challenge e5 with ...f6 later, but it also blocks the Bc8, creating further coordination problems for Black.",
+          "White develops the bishop to e2, completing kingside development and preparing to castle. The Be2 keeps options open — it can later go to d3 to challenge Black's Bg6, or stay on e2 to support a quick kingside attack.",
+          "Black develops the dark-squared bishop to e7, preparing to castle. The Be7 is a modest but necessary move — it gets the bishop off f8 and allows the king to reach safety before White's kingside attack becomes too dangerous."
         ],
         "arrows": [
           [
@@ -1006,16 +1006,16 @@
     "openingId": "caro-kann",
     "criticalPositionFen": "r2q1rk1/pp1nbppp/2p1pn2/8/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8",
     "title": "Queenside Minority Attack",
-    "overview": "After exchanging on d5, White advances b4-b5 to undermine Black's queenside pawns. This creates weak pawns on c6 or an isolated c-pawn that White can target.",
+    "overview": "This is the Queenside Minority Attack in the Caro-Kann Exchange Variation. After exchanging pawns on d5, White advances b2-b4-b5 to undermine Black's queenside pawn structure. The b5 break forces either a backward c-pawn on c6 or an isolated a-pawn, giving White a clear long-term target to attack with pieces and rooks on the b-file.",
     "pawnBreaks": [
       {
         "move": "b2-b4",
-        "explanation": "Begins the minority attack. The plan is b4-b5 to force cxb5, creating a weak backward c-pawn or isolated a-pawn for Black.",
+        "explanation": "The b4 push begins the minority attack — White's fewer queenside pawns (a2+b2) advance against Black's more numerous (a7+b7+c6). The plan is b4-b5 to force cxb5, after which Black is left with a backward c-pawn on c6 that becomes a permanent target for White's pieces.",
         "fen": "r2q1rk1/pp1nbppp/2p1pn2/8/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8"
       },
       {
         "move": "b4-b5",
-        "explanation": "The key break. After cxb5, Black has a backward c-pawn. After c5, White has a protected passed pawn or targets b5 and d5.",
+        "explanation": "The b5 advance is the key break in the minority attack. After cxb5, Black is left with a backward c-pawn on an open file that White can target with Rc1 and Qa4. If instead Black plays ...c5, White gets a protected passed pawn on d5 or strong pressure on the b5 and d5 squares.",
         "fen": "r2q1rk1/p2nbppp/2p1pn2/8/1PPP4/2N2N2/P3BPPP/R1BQ1RK1 w - - 0 9"
       }
     ],
@@ -1023,23 +1023,23 @@
       {
         "piece": "Rook",
         "route": "Ra1-b1 (supporting b-pawn advance)",
-        "explanation": "The rook supports the b-pawn's advance and later pressures the b-file."
+        "explanation": "The rook moves to b1 to support the b-pawn's advance from behind. After b4-b5 and the exchange on b5, the Rb1 sits on the open b-file, pressuring b7 and creating threats to infiltrate Black's position via the seventh rank."
       },
       {
         "piece": "Queen",
         "route": "Qd1-b3 or Qd1-a4",
-        "explanation": "The queen supports the queenside pressure and eyes the weak c6/a7 pawns."
+        "explanation": "The queen moves to b3 or a4 to support the queenside pressure from a distance. On b3, it adds pressure to b7 and d5 simultaneously. On a4, it targets the a7 pawn and the weak c6 square, creating multi-pronged threats that are difficult for Black to address."
       }
     ],
     "strategicThemes": [
-      "Minority attack creating structural weakness",
-      "Targeting backward c-pawn",
-      "Rook pressure on b-file",
-      "Positional squeeze"
+      "The minority attack (b4-b5) uses White's fewer queenside pawns to create permanent structural weaknesses in Black's position. By exchanging on c6, White leaves Black with a backward c-pawn or isolated a-pawn that becomes a lifelong target.",
+      "After b5 and cxb5, the c6 pawn becomes backward on the open c-file. White targets it with Rc1, Qa4, and minor pieces — Black must dedicate resources to defending this weak pawn, leaving the rest of the position passive.",
+      "The open b-file after bxc6 or axb5 gives White's rook a powerful file to operate on. Doubling rooks on the b-file creates irresistible pressure against b7, and the rook can infiltrate to b7 or b8 to dominate Black's position.",
+      "The minority attack is a classic positional squeeze — White creates a weakness, targets it, and gradually tightens the grip. Black's pieces become passive defenders while White's pieces become increasingly active, leading to a slow but decisive advantage."
     ],
     "endgameTransitions": [
-      "Winning weak pawn in endgame",
-      "Rook endgame with better pawn structure"
+      "In the endgame, the weak c6 pawn (or isolated a-pawn) becomes even harder to defend. With fewer pieces on the board, Black can't maintain the multi-point defense needed, and White wins the weak pawn to convert the material advantage.",
+      "Rook endgames arising from the minority attack heavily favor White. The better pawn structure (no weaknesses) combined with active rook placement on the open b-file gives White a textbook winning endgame."
     ],
     "playableLines": [
       {
@@ -1054,13 +1054,13 @@
           "Rxb5"
         ],
         "annotations": [
-          "White places the rook on b1, supporting the upcoming b-pawn advance",
-          "Black centralizes the queen on c7, covering b7 and the c-file",
-          "White pushes b4, beginning the minority attack",
-          "Black plays a6, trying to hold the queenside structure together",
-          "White advances b5, the key break that undermines Black's c6 pawn",
-          "Black captures on b5, but now the c6 pawn becomes backward and weak",
-          "White recaptures with the rook, pressuring the a6 pawn and the b-file"
+          "This is the Caro-Kann Minority Attack. White places the rook on b1, getting behind the b-pawn to support its advance. The Rb1 will become the key attacking piece once the b-file opens after b4-b5.",
+          "Black centralizes the queen on c7, covering the b7 pawn and the c-file. The Qc7 also prepares potential ...c5 counterplay, but White's minority attack usually arrives before Black can organize this break.",
+          "White pushes b4, beginning the minority attack in earnest. The b-pawn advances toward b5 where it will challenge Black's c6 pawn — the foundation of Black's queenside structure. This is the core of White's long-term plan.",
+          "Black plays a6, trying to hold the queenside structure together by preventing an immediate b5. However, this move weakens the b6 square and doesn't stop the advance for long — White can continue with a4 and then b5.",
+          "White advances b5, the decisive break that undermines Black's queenside. After axb5 or cxb5, Black will be left with a structural weakness — either a backward c-pawn on an open file or an isolated a-pawn.",
+          "Black captures cxb5, and now the c6 square and the c-pawn's former location leave Black with a backward, indefensible pawn structure. The c-file is open for White's rook to target the weakness.",
+          "White recaptures Rxb5, placing the rook on an active square that pressures the a6 pawn. The rook on the fifth rank is powerfully placed, and White can bring the second rook to b1 to dominate the open b-file."
         ],
         "arrows": [
           [
@@ -1189,16 +1189,16 @@
     "openingId": "qgd",
     "criticalPositionFen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N1PN2/PPQ1BPPP/R1B2RK1 w - - 0 8",
     "title": "Minority Attack with b4-b5",
-    "overview": "The classic QGD plan for White. Advance the b-pawn to b5 to attack Black's queenside pawn structure, creating a weak c6 pawn or isolated a-pawn.",
+    "overview": "This is the classic Minority Attack in the Queen's Gambit Declined Exchange Variation. White advances b2-b4-b5 to attack Black's c6 pawn with fewer pawns, creating either a backward c-pawn on the open c-file or an isolated a-pawn after axb5. This is one of chess's most important positional plans — a strategic squeeze that gives White long-term pressure.",
     "pawnBreaks": [
       {
         "move": "b2-b4",
-        "explanation": "Prepares b5 to attack Black's c6 pawn. This is the fundamental minority attack idea in the QGD Exchange.",
+        "explanation": "The b4 push prepares the decisive b5 advance to attack Black's c6 pawn. This is the fundamental minority attack idea in the QGD Exchange — using White's two queenside pawns (a2+b2) to damage Black's three (a7+b7+c6), creating a permanent structural weakness.",
         "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N1PN2/PPQ1BPPP/R1B2RK1 w - - 0 8"
       },
       {
         "move": "b4-b5",
-        "explanation": "Forces Black to make a structural concession. After cxb5, the c-pawn becomes weak. After c5, White blockades on d4.",
+        "explanation": "The b5 advance forces Black into an unpleasant structural concession. After cxb5 axb5, Black's c-pawn becomes backward on the open c-file — a permanent target. If instead Black pushes ...c5, White blockades on d4 with a knight and gains a dominant central outpost.",
         "fen": "r1bq1rk1/p2nbppp/2p1pn2/3p4/1PPP4/2N1PN2/P1Q1BPPP/R1B2RK1 w - - 0 9"
       }
     ],
@@ -1206,23 +1206,23 @@
       {
         "piece": "Rook",
         "route": "Ra1-b1-b3 (tripling on b-file)",
-        "explanation": "Rooks double or triple on the b-file to maximize pressure after b5 exchange."
+        "explanation": "After the b5 exchange opens the b-file, White aims to double or even triple major pieces on it. Ra1-b1 gets behind the b-pawn, and after the exchange, Rb3 lifts the rook to the third rank where it can swing to a3 or c3 for additional pressure."
       },
       {
         "piece": "Bishop",
         "route": "Bc1-a3 (pressuring e7-d6)",
-        "explanation": "After cxd5 exchange, Ba3 targets the dark squares and restricts Black's bishop."
+        "explanation": "After the cxd5 exchange, the Ba3 development targets Black's dark-squared weaknesses, particularly the e7 bishop and the d6 square. The Ba3 restricts Black's bishop to passive defense and creates threats along the a3-f8 diagonal."
       }
     ],
     "strategicThemes": [
-      "Minority attack",
-      "Creating structural weaknesses",
-      "Rook pressure on open b-file",
-      "Targeting backward c-pawn"
+      "The QGD minority attack is the textbook example of using fewer pawns to damage an opponent's structure. White's b4-b5 creates a permanent weakness in Black's queenside that defines the rest of the game — every piece placement revolves around attacking or defending the weak c-pawn.",
+      "The structural weakness created by b5 is permanent. Whether Black gets a backward c-pawn on c6, an isolated a-pawn, or allows a knight blockade on d4, the damage to Black's pawn structure gives White a clear long-term plan.",
+      "After the b-file opens, White's rooks become dominant. Doubling on the b-file, infiltrating to b7, or swinging to the c-file to target the weak c-pawn gives White's major pieces active, purposeful positions while Black defends passively.",
+      "The backward c-pawn on c6 is the primary target. White piles pieces on it — Rc1, Qa4 or Qb3, and a knight on a5 or d4 — creating irresistible pressure that eventually wins the pawn or forces Black into further concessions."
     ],
     "endgameTransitions": [
-      "Winning the weak c-pawn in endgame",
-      "Superior rook activity on open files"
+      "In the endgame, the weak c-pawn (or isolated a-pawn) becomes decisive. With fewer pieces on the board, Black can't maintain adequate defense of the weakness, and White wins it to gain a winning material advantage.",
+      "White's superior rook activity on the open b-file and c-file translates directly into endgame dominance. Active rooks on the seventh rank combined with a healthy pawn structure create a textbook winning endgame."
     ],
     "playableLines": [
       {
@@ -1237,13 +1237,13 @@
           "b5"
         ],
         "annotations": [
-          "White positions the rook behind the b-pawn for the minority attack",
-          "Black centralizes the queen, watching the queenside and c-file",
-          "White plays a4, preparing b4-b5 with extra support",
-          "Black improves the rook, connecting to the e-file",
-          "White advances b4, the minority attack is underway",
-          "Black repositions the bishop to a more active diagonal",
-          "White breaks with b5, forcing concessions in Black's queenside structure"
+          "This is the QGD Exchange Minority Attack. White positions the rook on b1, getting behind the b-pawn to support its advance. The Rb1 will become White's most important piece once the b-file opens after b4-b5.",
+          "Black centralizes the queen on c7, watching both the b7 pawn and the c-file. The Qc7 is the standard defensive setup — it protects b7, connects to the c-file, and stays flexible to support either queenside defense or central counterplay.",
+          "White plays a4, adding extra support to the b4-b5 plan. The a4 pawn ensures that after b5 cxb5, White can recapture with axb5, maintaining pawn structure and keeping the a-file closed to deny Black counterplay.",
+          "Black improves the rook to e8, connecting to the e-file and preparing potential ...e5 central counterplay. This is Black's best defensive strategy — create central activity to distract from White's queenside pressure.",
+          "White advances b4, and the minority attack is officially underway. The b-pawn now threatens b5, which will create the structural damage that White has been building toward since the opening.",
+          "Black repositions the bishop to d6, a more active diagonal where it eyes the kingside and supports potential ...e5 counterplay. The Bd6 also defends against ideas like Ba3 exchanging the dark-squared bishops.",
+          "White breaks with b5, forcing decisive concessions in Black's queenside structure. After cxb5 axb5, Black has a backward c-pawn; after ...c5, White gets a dominant knight on d4. Either way, White's plan has succeeded."
         ],
         "arrows": [
           [
@@ -1302,11 +1302,11 @@
     "openingId": "qgd",
     "criticalPositionFen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 8",
     "title": "Central Break with e4",
-    "overview": "White prepares e3-e4 to challenge Black's d5 pawn directly. This opens the center and activates White's pieces, especially the light-squared bishop.",
+    "overview": "This is the Central Break plan in the Queen's Gambit Declined. White prepares e3-e4 to challenge Black's d5 pawn directly, opening the center at a moment when White's pieces are better coordinated. After dxe4 Nxe4, White gains a powerfully centralized knight and open diagonals for both bishops, creating kingside pressure.",
     "pawnBreaks": [
       {
         "move": "e3-e4",
-        "explanation": "The direct central challenge. After dxe4, Nxe4 gives White active centralized pieces. If Black doesn't take, tension favors White.",
+        "explanation": "The e3-e4 break directly challenges Black's d5 pawn — the foundation of Black's QGD structure. After dxe4, Nxe4 gives White a powerfully centralized knight that controls d6, f6, c5, and g5. If Black maintains tension, White's pieces are already better placed to exploit the open lines.",
         "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 8"
       }
     ],
@@ -1314,23 +1314,23 @@
       {
         "piece": "Bishop",
         "route": "Bd3 (eyeing h7 after e4)",
-        "explanation": "After e4 and the center opens, Bd3 targets h7 and supports the kingside attack."
+        "explanation": "After e4 opens the center, the Bd3 becomes a lethal attacking piece. It targets the h7 pawn — the standard sacrificial target in the QGD — and supports potential Qc2 batteries along the b1-h7 diagonal that can lead to devastating kingside attacks."
       },
       {
         "piece": "Knight",
         "route": "Nf3-e5 (central dominance)",
-        "explanation": "Ne5 is a powerful outpost controlling d7, f7, and supporting the e4 push."
+        "explanation": "The knight on e5 is a powerhouse outpost in the QGD. It controls d7, f7, c6, and g4 — critical squares in Black's position. The Ne5 supports the e4 push and can't easily be challenged since Black has already exchanged the c-pawn."
       }
     ],
     "strategicThemes": [
-      "Central pawn break",
-      "Piece activation",
-      "Open diagonals for bishops",
-      "Kingside pressure after center opens"
+      "The e3-e4 central break is the most direct plan in the QGD. By challenging d5, White forces the position open at a moment when White's pieces are already on ideal squares — this timing advantage is crucial to the plan's success.",
+      "After dxe4 Nxe4, all of White's pieces spring to life. The Nf3 reaches e5 or e4, the Bd3 targets h7, the Bc1 finds open diagonals, and the rooks use the open e-file and d-file. Black's pieces can't match this sudden surge of activity.",
+      "The open center after e4 creates powerful diagonals for both of White's bishops. The Bd3 targets h7 for kingside attacks, while the dark-squared bishop can reach g5 to pin the Nf6 or f4 to control the e5 square.",
+      "Once the center opens, White's better piece coordination naturally creates kingside pressure. The Bd3-h7 battery, Ne5 controlling f7, and potential Qc2 or Qh5 create concrete threats against Black's castled king."
     ],
     "endgameTransitions": [
-      "Central pawn majority",
-      "Active pieces in open position"
+      "If the center remains open through exchanges, White's central pawn on d4 (or a resulting passed pawn) gives a structural edge in the endgame. The extra central space allows White's king to be more active in the transition.",
+      "The piece activity generated by the e4 break persists into simplified positions. White's actively placed minor pieces and rooks on open files convert into concrete endgame advantages — better-placed pieces win pawns."
     ],
     "playableLines": [
       {
@@ -1345,13 +1345,13 @@
           "Bc2"
         ],
         "annotations": [
-          "White breaks in the center with e4, the key thematic advance",
-          "Black captures, opening the position",
-          "White recaptures with the knight, centralizing powerfully",
-          "Black trades knights to reduce White's central dominance",
-          "White recaptures with the bishop, maintaining central control on the e4 square",
-          "Black develops the knight to f6, attacking the centralized bishop",
-          "White retreats to c2, keeping the bishop on a useful diagonal aiming at h7"
+          "This is the QGD Central Break. White plays e4, challenging Black's d5 pawn at the moment when White's pieces are optimally placed. The Bd3 is ready to target h7, and the Nf3 supports the central advance.",
+          "Black captures dxe4, accepting the central exchange. The position opens, which is exactly what White wanted — but Black hopes that trading pawns will relieve the pressure and simplify toward equality.",
+          "White recaptures Nxe4, centralizing the knight powerfully on e4. The Ne4 controls d6, f6, c5, and g5 — sitting in the heart of the board where it radiates influence in all directions.",
+          "Black trades knights with Nxe4 to reduce White's central dominance. The exchange removes the powerful Ne4 but opens the question of how White recaptures — each option has different strategic implications.",
+          "White recaptures Bxe4, placing the bishop on e4 where it controls the long diagonal and targets both h7 and a8. The centralized bishop is a powerful piece that supports both kingside attacks and queenside pressure.",
+          "Black develops the knight to f6, attacking the centralized Be4 and forcing it to declare its intentions. The Nf6 is Black's most natural developing move, challenging White's central influence.",
+          "White retreats the bishop to c2, maintaining the b1-h7 diagonal aim. From c2, the bishop creates a battery with a potential Qd3 targeting h7, a classic attacking motif in the QGD that has led to many brilliancies."
         ],
         "arrows": [
           [
