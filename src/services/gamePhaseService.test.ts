@@ -60,7 +60,7 @@ describe('getPhaseBreakdown', () => {
       classification: 'good',
       expanded: false,
       bestMove: 'e2e4',
-      bestMoveEval: 25,
+      bestMoveEval: null,
       preMoveEval: 0,
       ...o,
     }));

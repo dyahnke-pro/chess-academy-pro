@@ -183,13 +183,22 @@ export async function generateNarrativeSummary(
 ): Promise<string> {
   // Build engine analysis context for the LLM so it doesn't guess
   let analysisContext = '';
+  let blunderCount = 0;
+  let mistakeCount = 0;
+  let inaccuracyCount = 0;
   if (moveData && moveData.length > 0) {
     const keyMoves = moveData.filter((m) =>
       !m.isCoachMove && m.classification &&
       m.classification !== 'good' && m.classification !== 'book',
     );
+    for (const m of keyMoves) {
+      if (m.classification === 'blunder') blunderCount++;
+      else if (m.classification === 'mistake') mistakeCount++;
+      else if (m.classification === 'inaccuracy') inaccuracyCount++;
+    }
     if (keyMoves.length > 0) {
       analysisContext = '\n\nEngine analysis of key moments (USE THIS DATA, do not guess):\n' +
+        `Blunders: ${blunderCount}, Mistakes: ${mistakeCount}, Inaccuracies: ${inaccuracyCount}\n` +
         keyMoves.map((m) => {
           const evalText = m.evaluation !== null ? ` (eval: ${(m.evaluation / 100).toFixed(1)})` : '';
           const bestText = m.bestMove ? `, best was ${m.bestMove}` : '';
@@ -197,6 +206,13 @@ export async function generateNarrativeSummary(
         }).join('\n');
     }
   }
+
+  const totalErrors = blunderCount + mistakeCount + inaccuracyCount;
+  const toneGuide = totalErrors === 0
+    ? 'The player played cleanly — praise their accuracy.'
+    : totalErrors <= 2
+      ? 'Mostly solid play with a couple areas to improve. Be constructive.'
+      : `The player made ${totalErrors} errors (${blunderCount} blunders, ${mistakeCount} mistakes). Be honest about what went wrong — do NOT call the game "excellent" or "great". Focus on the specific mistakes and what to learn from them.`;
 
   const context: CoachContext = {
     fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -211,7 +227,7 @@ export async function generateNarrativeSummary(
       rating: playerRating,
       weaknesses: [],
     },
-    additionalContext: `Player color: ${playerColor}. Game result: ${result}. Please write a narrative summary of this game: describe the key moments, what went well, what to improve, and the overall story of the game in an encouraging coaching tone.${analysisContext}`,
+    additionalContext: `Player color: ${playerColor}. Game result: ${result}. ${toneGuide} Write a narrative summary describing the key moments, what went well, what to improve, and the overall story of the game.${analysisContext}`,
   };
 
   return getCoachCommentary('game_narrative_summary', context, onStream);

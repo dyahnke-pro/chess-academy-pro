@@ -46,7 +46,10 @@ export function reconstructMovesFromGame(game: GameRecord): CoachGameMove[] {
     const chessMoveNumber = Math.ceil(moveNumber / 2);
     const annotation = annotationMap.get(`${chessMoveNumber}-${color}`);
 
-    const evaluation = annotation?.evaluation ?? null;
+    // Annotations store evaluations in pawns (eval / 100). Convert back to
+    // centipawns so every consumer (accuracy, eval graph, move list) gets
+    // consistent units matching the live-game path.
+    const evaluation = annotation?.evaluation != null ? annotation.evaluation * 100 : null;
     const bestMove = annotation?.bestMove ?? null;
     const classification = annotation?.classification ?? null;
     const comment = annotation?.comment ?? '';

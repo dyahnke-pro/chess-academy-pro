@@ -76,6 +76,15 @@ vi.mock('../../services/accuracyService', () => ({
   getClassificationCounts: vi.fn().mockReturnValue({
     brilliant: 0, great: 2, good: 8, book: 0, inaccuracy: 1, mistake: 0, blunder: 0,
   }),
+  capEval: (evalCp: number) => {
+    if (evalCp >= 20000) return 1500;
+    if (evalCp <= -20000) return -1500;
+    return evalCp;
+  },
+  cpLossToAccuracy: (cpLoss: number) => {
+    const raw = 103.1668 * Math.exp(-0.009 * cpLoss) - 3.1668;
+    return Math.max(0, Math.min(100, raw));
+  },
 }));
 
 vi.mock('../../services/gamePhaseService', () => ({
