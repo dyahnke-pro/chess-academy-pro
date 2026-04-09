@@ -1,4 +1,5 @@
 import type { CoachGameMove, GamePhase, PhaseAccuracy } from '../types';
+import { capEval, cpLossToAccuracy } from './accuracyService';
 
 /**
  * Piece material values for endgame detection.
@@ -59,15 +60,8 @@ export function classifyPhase(fen: string, moveNumber: number): GamePhase {
 }
 
 /**
- * Win probability from centipawn evaluation (logistic model).
- * Duplicated from accuracyService to avoid circular deps.
- */
-function evalToWinProb(evalCp: number): number {
-  return 1 / (1 + Math.pow(10, -evalCp / 400));
-}
-
-/**
  * Compute accuracy + mistake counts per game phase for a given player color.
+ * Uses the same centipawn-loss formula as accuracyService.
  */
 export function getPhaseBreakdown(
   moves: CoachGameMove[],
@@ -90,26 +84,19 @@ export function getPhaseBreakdown(
     }
 
     // Need evaluations for accuracy
-    if (move.evaluation === null || move.bestMoveEval === null || move.preMoveEval === null) {
+    if (move.evaluation === null || move.preMoveEval === null) {
       continue;
     }
 
     const phase = classifyPhase(move.fen, move.moveNumber);
     const bucket = phases[phase];
 
-    // Compute per-move accuracy (same formula as accuracyService)
-    const signForSide = isWhiteMove ? 1 : -1;
-    const winProbBefore = evalToWinProb(move.preMoveEval * signForSide);
-    const winProbBest = evalToWinProb(move.bestMoveEval * signForSide);
-    const winProbAfter = evalToWinProb(move.evaluation * signForSide);
-
-    let moveAccuracy: number;
-    if (winProbBest <= 0.001) {
-      moveAccuracy = 100;
-    } else {
-      const bestDelta = Math.abs(winProbBest - winProbAfter);
-      moveAccuracy = Math.max(0, Math.min(100, 100 * (1 - bestDelta / Math.max(winProbBefore, 0.001))));
-    }
+    // Compute centipawn loss and per-move accuracy (same as accuracyService)
+    const sign = isWhiteMove ? 1 : -1;
+    const evalBefore = capEval(move.preMoveEval) * sign;
+    const evalAfter = capEval(move.evaluation) * sign;
+    const cpLoss = Math.max(0, evalBefore - evalAfter);
+    const moveAccuracy = cpLossToAccuracy(cpLoss);
 
     bucket.accuracySum += moveAccuracy;
     bucket.count++;

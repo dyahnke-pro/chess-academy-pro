@@ -28,11 +28,11 @@ export function getAccuracyColor(accuracy: number): string {
 }
 
 export function getPhaseGrade(accuracy: number): string {
-  if (accuracy >= 95) return 'A+';
-  if (accuracy >= 90) return 'A';
-  if (accuracy >= 80) return 'B';
-  if (accuracy >= 70) return 'C';
-  if (accuracy >= 60) return 'D';
+  if (accuracy >= 90) return 'A+';
+  if (accuracy >= 80) return 'A';
+  if (accuracy >= 70) return 'B';
+  if (accuracy >= 55) return 'C';
+  if (accuracy >= 40) return 'D';
   return 'F';
 }
 

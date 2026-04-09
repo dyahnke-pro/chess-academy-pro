@@ -65,13 +65,13 @@ function buildReviewPrompt(
     `Approximately ${moveCount} moves.`,
   ];
 
+  const blunders = annotations ? annotations.filter(a => a.classification === 'blunder') : [];
+  const mistakes = annotations ? annotations.filter(a => a.classification === 'mistake') : [];
+  const inaccuracies = annotations ? annotations.filter(a => a.classification === 'inaccuracy') : [];
+
   if (annotations && annotations.length > 0) {
     lines.push('');
     lines.push('Engine analysis (Stockfish depth 12-18):');
-
-    const blunders = annotations.filter(a => a.classification === 'blunder');
-    const mistakes = annotations.filter(a => a.classification === 'mistake');
-    const inaccuracies = annotations.filter(a => a.classification === 'inaccuracy');
 
     lines.push(`Blunders: ${blunders.length}, Mistakes: ${mistakes.length}, Inaccuracies: ${inaccuracies.length}`);
     lines.push('');
@@ -91,6 +91,10 @@ function buildReviewPrompt(
     lines.push('');
   }
 
+  const totalErrors = blunders.length + mistakes.length + inaccuracies.length;
+  lines.push(`Total errors: ${totalErrors} (${blunders.length} blunders, ${mistakes.length} mistakes, ${inaccuracies.length} inaccuracies)`);
+  lines.push('');
+
   lines.push(
     'Please provide a comprehensive game review covering:',
     '1. Opening assessment — how well were the opening principles followed?',
@@ -98,6 +102,11 @@ function buildReviewPrompt(
     '3. For each blunder/mistake, explain WHY it was bad and what the better move achieves.',
     '4. Endgame assessment (if applicable).',
     '5. Top 2-3 lessons to take away from this game.',
+    '',
+    'IMPORTANT: Be honest and specific. If there were blunders, call them out directly.',
+    'Do NOT say the game was "excellent" or "well-played" if there were multiple mistakes.',
+    `This game had ${blunders.length} blunder(s) and ${mistakes.length} mistake(s) — calibrate your assessment accordingly.`,
+    'A game with 0 blunders and 0-1 mistakes is good. 2+ blunders means significant issues to address.',
     'Be specific and refer to moves by number. Keep it under 400 words.',
   );
 

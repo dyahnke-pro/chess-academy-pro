@@ -1,30 +1,51 @@
 import type { CoachGameMove, GameAccuracy, MoveClassificationCounts } from '../types';
 
+/** Threshold above which Stockfish encodes checkmate */
+const MATE_THRESHOLD = 20000;
+
 /**
- * Convert centipawn evaluation to win probability (0 to 1).
- * Uses the logistic model: winProb = 1 / (1 + 10^(-eval/400))
+ * Cap extreme evaluations (mate scores) to a fixed ceiling so that
+ * centipawn-loss calculations stay meaningful. Mate scores (±30000)
+ * are capped to ±1500 — any loss above ~500 cp already floors accuracy.
  */
-function evalToWinProb(evalCp: number): number {
-  return 1 / (1 + Math.pow(10, -evalCp / 400));
+export function capEval(evalCp: number): number {
+  if (evalCp >= MATE_THRESHOLD) return 1500;
+  if (evalCp <= -MATE_THRESHOLD) return -1500;
+  return evalCp;
 }
 
 /**
- * Convert a win-probability delta (0–1) into a per-move accuracy score (0–100).
- * Uses an exponential decay model: small losses score high, large losses drop fast.
- * Calibrated so that a perfect move ≈ 100 and a full collapse ≈ 0.
+ * Convert centipawn loss into a per-move accuracy score (0–100).
+ *
+ * Uses an exponential decay: accuracy = 103.1668 · e^(−0.009 · cpLoss) − 3.1668
+ *
+ * Calibration (per-move):
+ *   cpLoss   0 → 100%    (perfect move)
+ *   cpLoss  10 →  91%    (slight inaccuracy)
+ *   cpLoss  25 →  79%    (inaccuracy)
+ *   cpLoss  50 →  62%    (significant inaccuracy)
+ *   cpLoss 100 →  38%    (mistake)
+ *   cpLoss 200 →  14%    (big mistake)
+ *   cpLoss 300 →   4%    (blunder)
+ *
+ * This produces realistic game averages:
+ *   Strong play  → 80–95%
+ *   Good play    → 70–85%
+ *   Intermediate → 55–75%
+ *   Beginner     → 35–60%
  */
-function wpDeltaToAccuracy(wpDelta: number): number {
-  // 103.1668 * e^(-0.04354 * delta_pct) - 3.1668
-  // where delta_pct = wpDelta * 100 (convert 0-1 scale to 0-100 scale)
-  const raw = 103.1668 * Math.exp(-0.04354 * wpDelta * 100) - 3.1668;
+export function cpLossToAccuracy(cpLoss: number): number {
+  const raw = 103.1668 * Math.exp(-0.009 * cpLoss) - 3.1668;
   return Math.max(0, Math.min(100, raw));
 }
 
 /**
- * Calculate accuracy scores for both players.
- * Uses a win-probability delta approach similar to chess.com's CAPS.
- * The delta model penalizes centipawn losses proportionally regardless
- * of the absolute evaluation, fixing inflated scores in winning positions.
+ * Calculate accuracy scores for both players using centipawn loss.
+ *
+ * For each move, computes how many centipawns the player lost compared
+ * to the position before their move. This penalizes inaccurate play
+ * equally regardless of whether the position is winning or equal —
+ * a 100 cp loss is a 100 cp loss whether you're +5 or ±0.
  */
 export function calculateAccuracy(moves: CoachGameMove[]): GameAccuracy {
   let whiteAccuracySum = 0;
@@ -35,22 +56,20 @@ export function calculateAccuracy(moves: CoachGameMove[]): GameAccuracy {
   for (const move of moves) {
     // Skip book moves and moves with missing eval data
     if (move.classification === 'book') continue;
-    if (move.evaluation === null || move.bestMoveEval === null) continue;
-    if (move.preMoveEval === null) continue;
+    if (move.evaluation === null || move.preMoveEval === null) continue;
 
     // Determine which color this move is
     // Odd moveNumber = white's move (1=white, 2=black, 3=white...)
     const isWhiteMove = move.moveNumber % 2 === 1;
 
-    // Win probability before and after the move, from the moving side's perspective
-    const signForSide = isWhiteMove ? 1 : -1;
-    const winProbBefore = evalToWinProb(move.preMoveEval * signForSide);
-    const winProbAfter = evalToWinProb(move.evaluation * signForSide);
+    // Compute centipawn loss from the moving side's perspective.
+    // Evals are always from white's perspective, so for black we flip the sign.
+    const sign = isWhiteMove ? 1 : -1;
+    const evalBefore = capEval(move.preMoveEval) * sign;
+    const evalAfter = capEval(move.evaluation) * sign;
+    const cpLoss = Math.max(0, evalBefore - evalAfter);
 
-    // How much win probability was lost by this move?
-    const wpDelta = Math.max(0, winProbBefore - winProbAfter);
-
-    const moveAccuracy = wpDeltaToAccuracy(wpDelta);
+    const moveAccuracy = cpLossToAccuracy(cpLoss);
 
     if (isWhiteMove) {
       whiteAccuracySum += moveAccuracy;
