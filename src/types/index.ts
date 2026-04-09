@@ -190,6 +190,14 @@ export interface PieceManeuver {
   arrows?: AnnotationArrow[];
 }
 
+export interface PlayableMiddlegameLine {
+  fen: string;
+  moves: string[];
+  annotations: string[];
+  arrows: AnnotationArrow[][];
+  title: string;
+}
+
 export interface MiddlegamePlan {
   id: string;
   openingId: string;
@@ -202,6 +210,7 @@ export interface MiddlegamePlan {
   endgameTransitions: string[];
   arrows?: AnnotationArrow[];
   highlights?: AnnotationHighlight[];
+  playableLines?: PlayableMiddlegameLine[];
 }
 
 // ─── Content Generation (LLM Pipeline) ─────────────────────────────────────

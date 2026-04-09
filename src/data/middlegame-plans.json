@@ -38,6 +38,140 @@
     "endgameTransitions": [
       "Favorable pawn structure after central exchange",
       "Bishop pair advantage in open position"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 8",
+        "moves": [
+          "d4",
+          "exd4",
+          "cxd4",
+          "Bb6",
+          "Nc3",
+          "Bg4",
+          "Be3"
+        ],
+        "annotations": [
+          "White strikes in the center with the prepared d4 push",
+          "Black captures toward the center",
+          "White recaptures with the c-pawn, establishing a strong d4-e4 duo",
+          "Black retreats the bishop to b6, maintaining pressure on d4",
+          "White develops the knight, reinforcing the center",
+          "Black pins the f3 knight, challenging White's coordination",
+          "White develops the bishop to e3, defending d4 and eyeing the a7-g1 diagonal"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d3",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "e5",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "c3",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "b6"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "g4"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "e3"
+            }
+          ]
+        ],
+        "title": "d4 Central Break: Open Center"
+      },
+      {
+        "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 8",
+        "moves": [
+          "d4",
+          "Bb6",
+          "d5",
+          "Ne7",
+          "Nbd2",
+          "Ng6",
+          "Nb3"
+        ],
+        "annotations": [
+          "White pushes d4, challenging the center",
+          "Black retreats the bishop rather than capturing",
+          "White advances d5, locking the center and gaining space",
+          "Black reroutes the knight toward the kingside via e7",
+          "White develops the knight to d2, heading for b3 or f1",
+          "Black repositions to g6, targeting f4 and h4 squares",
+          "White reaches b3, pressuring the a5 and c5 squares"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d3",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "b6"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "g6"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "b3"
+            }
+          ]
+        ],
+        "title": "d4-d5 Advance: Closed Center"
+      }
     ]
   },
   {
@@ -67,6 +201,86 @@
     ],
     "endgameTransitions": [
       "Active rooks on open files if attack doesn't mate"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1PP2/2NP1N2/PPP3PP/R1BQ1RK1 b - - 0 8",
+        "moves": [
+          "exf4",
+          "d4",
+          "Bb4",
+          "Bxf4",
+          "d5",
+          "Qe1",
+          "Nd7",
+          "Qg3"
+        ],
+        "annotations": [
+          "Black captures on f4, opening the e-file but giving White the bishop recapture",
+          "White plays d4 immediately, blocking the check from the c5 bishop",
+          "Black retreats the bishop to b4, stepping off the a7-g1 diagonal",
+          "White recaptures on f4, gaining an active bishop and open f-file",
+          "Black counter-strikes in the center with d5",
+          "White reroutes the queen to e1, preparing a kingside swing",
+          "Black repositions the knight to support the center",
+          "White brings the queen to g3, aiming directly at the black king"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e5",
+              "to": "f4"
+            }
+          ],
+          [
+            {
+              "from": "d3",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "f4"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g3"
+            },
+            {
+              "from": "g3",
+              "to": "g7"
+            }
+          ]
+        ],
+        "title": "f4 Recapture and Queen Swing"
+      }
     ]
   },
   {
@@ -108,6 +322,140 @@
     "endgameTransitions": [
       "Passed e-pawn in endgame",
       "Superior minor piece if Black's bad bishop remains"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+        "moves": [
+          "e5",
+          "Nfd7",
+          "f4",
+          "Nc5",
+          "Be3",
+          "e6",
+          "Qf3"
+        ],
+        "annotations": [
+          "White advances e5, seizing space and attacking the f6 knight",
+          "The knight retreats to d7, avoiding capture",
+          "White supports the e5 pawn with f4, building a strong center",
+          "Black maneuvers the knight to c5, eyeing d3 and e4",
+          "White develops the bishop to e3, defending against Nc5 ideas",
+          "Black solidifies with e6, preparing to develop the dark-squared bishop",
+          "White brings the queen to f3, supporting the center and eyeing the kingside"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "f2",
+              "to": "f4"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "c5"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "f3"
+            }
+          ]
+        ],
+        "title": "e5 Space Clamp"
+      },
+      {
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+        "moves": [
+          "e5",
+          "dxe5",
+          "Nf5",
+          "g6",
+          "Qf3",
+          "gxf5",
+          "Nd5"
+        ],
+        "annotations": [
+          "White pushes e5, directly challenging the center",
+          "Black captures the e5 pawn, opening the position",
+          "White leaps to f5 with the knight, threatening Nd6+ and attacking g7",
+          "Black tries to chase the knight with g6",
+          "White activates the queen to f3, adding pressure on f5 and the a8 diagonal",
+          "Black captures the f5 knight, but weakens the kingside structure",
+          "White centralizes the remaining knight on d5, dominating the position"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "f5"
+            }
+          ],
+          [
+            {
+              "from": "g7",
+              "to": "g6"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "g6",
+              "to": "f5"
+            }
+          ],
+          [
+            {
+              "from": "c3",
+              "to": "d5"
+            }
+          ]
+        ],
+        "title": "e5 Sacrifice: Knight Centralization"
+      }
     ]
   },
   {
@@ -143,6 +491,86 @@
     ],
     "endgameTransitions": [
       "Rarely reaches endgame — attack decides the game"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NPP2/2N5/PPP3PP/R1BQKB1R b KQkq - 0 6",
+        "moves": [
+          "e6",
+          "Be3",
+          "Be7",
+          "Qd2",
+          "O-O",
+          "O-O-O",
+          "b5",
+          "g4"
+        ],
+        "annotations": [
+          "Black plays the flexible e6, preparing to develop the dark-squared bishop",
+          "White develops Be3, a key piece in the English Attack setup",
+          "Black completes development of the kingside bishop",
+          "White places the queen on d2, preparing queenside castling and Bh6 ideas",
+          "Black castles kingside, committing the king",
+          "White castles queenside, setting up the classic opposite-side castling battle",
+          "Black begins queenside counterplay with b5, racing against White's kingside attack",
+          "White launches the kingside pawn storm with g4, aiming to open lines against the black king"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e7",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "c1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "g2",
+              "to": "g4"
+            },
+            {
+              "from": "g4",
+              "to": "g5"
+            }
+          ]
+        ],
+        "title": "English Attack: g4 Pawn Storm"
+      }
     ]
   },
   {
@@ -178,6 +606,176 @@
     "endgameTransitions": [
       "Passed e-pawn after exchanges",
       "Good knight vs bad bishop"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/ppp1bppp/2n1pn2/3pP3/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+        "moves": [
+          "Bd3",
+          "Nd7",
+          "O-O",
+          "O-O",
+          "Ne1",
+          "b6",
+          "f4",
+          "Bb7",
+          "f5"
+        ],
+        "annotations": [
+          "White develops the bishop to d3, targeting h7 and supporting a future f4-f5",
+          "Black reroutes the knight from f6 to prepare f6 counterplay later",
+          "White castles, connecting the rooks",
+          "Black castles kingside",
+          "White retreats the f3 knight to e1, clearing the f-file for the pawn advance",
+          "Black prepares to fianchetto the light-squared bishop",
+          "White pushes f4, supporting e5 and preparing the f5 break",
+          "Black completes the fianchetto, pressuring the long diagonal",
+          "White advances f5, attacking the e6 base of Black's pawn chain"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f1",
+              "to": "d3"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b6"
+            }
+          ],
+          [
+            {
+              "from": "f2",
+              "to": "f4"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "b7"
+            }
+          ],
+          [
+            {
+              "from": "f4",
+              "to": "f5"
+            },
+            {
+              "from": "f5",
+              "to": "e6"
+            }
+          ]
+        ],
+        "title": "f4-f5 Pawn Storm"
+      },
+      {
+        "fen": "r1bqk2r/ppp1bppp/2n1pn2/3pP3/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+        "moves": [
+          "Bd3",
+          "Nd7",
+          "Ng5",
+          "Bxg5",
+          "Bxg5",
+          "Qe7",
+          "Qh5",
+          "h6"
+        ],
+        "annotations": [
+          "White develops the bishop, aiming at the kingside",
+          "Black repositions the knight to clear f6 and prepare counterplay",
+          "White jumps to g5, threatening Bxh7+ and Qh5 ideas",
+          "Black is forced to capture the aggressive knight",
+          "White recaptures with the bishop, maintaining kingside pressure",
+          "Black defends with the queen, covering e7 and g5",
+          "White brings the queen to h5, creating direct threats against h7 and f7",
+          "Black weakens the kingside slightly but kicks the bishop"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f1",
+              "to": "d3"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "g5"
+            },
+            {
+              "from": "g5",
+              "to": "h7"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "g5"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "g5"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "h5"
+            },
+            {
+              "from": "h5",
+              "to": "f7"
+            }
+          ],
+          [
+            {
+              "from": "h7",
+              "to": "h6"
+            }
+          ]
+        ],
+        "title": "Ng5 Kingside Attack"
+      }
     ]
   },
   {
@@ -213,6 +811,78 @@
     "endgameTransitions": [
       "Queenside pawn majority in endgame",
       "Knight outpost on c5"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/pp2bppp/1qn1pn2/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 0 7",
+        "moves": [
+          "a3",
+          "O-O",
+          "b4",
+          "cxb4",
+          "axb4",
+          "Bd7",
+          "Nb3"
+        ],
+        "annotations": [
+          "White prepares b4 with a3, a patient queenside expansion move",
+          "Black castles to safety",
+          "White advances b4, gaining queenside space and challenging Black's c5 pawn",
+          "Black captures on b4, opening the a-file",
+          "White recaptures, maintaining the queenside pawn majority",
+          "Black develops the bishop, connecting the rooks",
+          "White brings the knight to b3, heading for the powerful c5 outpost"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a2",
+              "to": "a3"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "b2",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "a3",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "b3"
+            },
+            {
+              "from": "b3",
+              "to": "c5"
+            }
+          ]
+        ],
+        "title": "a3-b4 Queenside Expansion"
+      }
     ]
   },
   {
@@ -249,6 +919,86 @@
     "endgameTransitions": [
       "Passed e-pawn if center opens",
       "Better minor pieces in closed positions"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+        "moves": [
+          "Nge2",
+          "e6",
+          "Ng3",
+          "Bg6",
+          "f4",
+          "Nd7",
+          "Be2",
+          "Be7"
+        ],
+        "annotations": [
+          "White develops the knight to e2 instead of f3, keeping the f-file clear for the pawn advance",
+          "Black solidifies the center with e6",
+          "White reroutes the knight to g3, attacking the h5 square and supporting f4-f5",
+          "Black retreats the bishop to g6, the standard Caro-Kann defensive post",
+          "White pushes f4, reinforcing e5 and preparing the f5 advance",
+          "Black develops the knight to d7, preparing to challenge e5 later",
+          "White develops the bishop to e2, completing development",
+          "Black develops the dark-squared bishop, preparing to castle"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "g1",
+              "to": "e2"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "e2",
+              "to": "g3"
+            }
+          ],
+          [
+            {
+              "from": "f5",
+              "to": "g6"
+            }
+          ],
+          [
+            {
+              "from": "f2",
+              "to": "f4"
+            },
+            {
+              "from": "f4",
+              "to": "f5"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "e2"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ]
+        ],
+        "title": "Nge2-g3 with f4 Buildup"
+      }
     ]
   },
   {
@@ -290,6 +1040,148 @@
     "endgameTransitions": [
       "Winning weak pawn in endgame",
       "Rook endgame with better pawn structure"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/pp1nbppp/2p1pn2/8/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8",
+        "moves": [
+          "Rb1",
+          "Qc7",
+          "b4",
+          "a6",
+          "b5",
+          "cxb5",
+          "Rxb5"
+        ],
+        "annotations": [
+          "White places the rook on b1, supporting the upcoming b-pawn advance",
+          "Black centralizes the queen on c7, covering b7 and the c-file",
+          "White pushes b4, beginning the minority attack",
+          "Black plays a6, trying to hold the queenside structure together",
+          "White advances b5, the key break that undermines Black's c6 pawn",
+          "Black captures on b5, but now the c6 pawn becomes backward and weak",
+          "White recaptures with the rook, pressuring the a6 pawn and the b-file"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a1",
+              "to": "b1"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "c7"
+            }
+          ],
+          [
+            {
+              "from": "b2",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a6"
+            }
+          ],
+          [
+            {
+              "from": "b4",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "b5"
+            }
+          ]
+        ],
+        "title": "b4-b5 Break: Weak c-Pawn"
+      },
+      {
+        "fen": "r2q1rk1/pp1nbppp/2p1pn2/8/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8",
+        "moves": [
+          "Rb1",
+          "Qc7",
+          "b4",
+          "a6",
+          "b5",
+          "c5",
+          "dxc5",
+          "Nxc5"
+        ],
+        "annotations": [
+          "White activates the rook to support the b-pawn advance",
+          "Black places the queen on c7, watching the queenside",
+          "White continues the minority attack with b4",
+          "Black prepares to hold with a6",
+          "White breaks with b5, forcing Black to make a structural decision",
+          "Black pushes c5 instead of capturing, trying to keep the structure intact",
+          "White captures on c5, creating an isolated d-pawn for Black or winning material",
+          "Black recaptures with the knight, reaching the c5 outpost"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a1",
+              "to": "b1"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "c7"
+            }
+          ],
+          [
+            {
+              "from": "b2",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a6"
+            }
+          ],
+          [
+            {
+              "from": "b4",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "c5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "c5"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "c5"
+            }
+          ]
+        ],
+        "title": "b4-b5 Break: Black Plays c5"
+      }
     ]
   },
   {
@@ -331,6 +1223,78 @@
     "endgameTransitions": [
       "Winning the weak c-pawn in endgame",
       "Superior rook activity on open files"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N1PN2/PPQ1BPPP/R1B2RK1 w - - 0 8",
+        "moves": [
+          "Rb1",
+          "Qc7",
+          "a4",
+          "Re8",
+          "b4",
+          "Bd6",
+          "b5"
+        ],
+        "annotations": [
+          "White positions the rook behind the b-pawn for the minority attack",
+          "Black centralizes the queen, watching the queenside and c-file",
+          "White plays a4, preparing b4-b5 with extra support",
+          "Black improves the rook, connecting to the e-file",
+          "White advances b4, the minority attack is underway",
+          "Black repositions the bishop to a more active diagonal",
+          "White breaks with b5, forcing concessions in Black's queenside structure"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a1",
+              "to": "b1"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "c7"
+            }
+          ],
+          [
+            {
+              "from": "a2",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e8"
+            }
+          ],
+          [
+            {
+              "from": "b2",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "d6"
+            }
+          ],
+          [
+            {
+              "from": "b4",
+              "to": "b5"
+            },
+            {
+              "from": "b5",
+              "to": "c6"
+            }
+          ]
+        ],
+        "title": "Rb1-b4-b5 Minority Attack"
+      }
     ]
   },
   {
@@ -367,6 +1331,78 @@
     "endgameTransitions": [
       "Central pawn majority",
       "Active pieces in open position"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 8",
+        "moves": [
+          "e4",
+          "dxe4",
+          "Nxe4",
+          "Nxe4",
+          "Bxe4",
+          "Nf6",
+          "Bc2"
+        ],
+        "annotations": [
+          "White breaks in the center with e4, the key thematic advance",
+          "Black captures, opening the position",
+          "White recaptures with the knight, centralizing powerfully",
+          "Black trades knights to reduce White's central dominance",
+          "White recaptures with the bishop, maintaining central control on the e4 square",
+          "Black develops the knight to f6, attacking the centralized bishop",
+          "White retreats to c2, keeping the bishop on a useful diagonal aiming at h7"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e3",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "d5",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "c3",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "d3",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "e4",
+              "to": "c2"
+            },
+            {
+              "from": "c2",
+              "to": "h7"
+            }
+          ]
+        ],
+        "title": "e4 Central Break: Active Pieces"
+      }
     ]
   },
   {
@@ -407,6 +1443,152 @@
     ],
     "endgameTransitions": [
       "Rarely reaches endgame — attack is decisive"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7",
+        "moves": [
+          "Nh5",
+          "d5",
+          "f5",
+          "exf5",
+          "gxf5",
+          "Ng5",
+          "Nf4"
+        ],
+        "annotations": [
+          "Black moves the knight to h5, clearing the f-file for the pawn and eyeing f4",
+          "White closes the center with d5, committing to a kingside vs queenside battle",
+          "Black strikes with f5, the signature King's Indian break",
+          "White captures on f5, opening the g-file for Black",
+          "Black recaptures with the g-pawn, opening the g-file for a rook attack",
+          "White counter-attacks with Ng5, targeting e6 and the weakened light squares",
+          "Black lands the knight on the powerful f4 outpost, pressuring White's kingside"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "f7",
+              "to": "f5"
+            }
+          ],
+          [
+            {
+              "from": "e4",
+              "to": "f5"
+            }
+          ],
+          [
+            {
+              "from": "g6",
+              "to": "f5"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "g5"
+            }
+          ],
+          [
+            {
+              "from": "h5",
+              "to": "f4"
+            }
+          ]
+        ],
+        "title": "f5 Break: Open g-File Attack"
+      },
+      {
+        "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7",
+        "moves": [
+          "Nh5",
+          "d5",
+          "f5",
+          "Nd2",
+          "Ndf6",
+          "g3",
+          "g5",
+          "Kg2"
+        ],
+        "annotations": [
+          "Black clears the knight from f6, preparing the f-pawn advance",
+          "White locks the center, choosing a positional approach",
+          "Black pushes f5, beginning the kingside pawn storm",
+          "White reroutes the f3 knight to d2, heading for c4 or e3",
+          "Black brings the d7 knight to f6, reinforcing the kingside",
+          "White plays g3, shoring up the kingside and preparing Kg2",
+          "Black advances g5, continuing the pawn storm toward g4",
+          "White tucks the king to g2, preparing for the coming storm"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "f7",
+              "to": "f5"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "g2",
+              "to": "g3"
+            }
+          ],
+          [
+            {
+              "from": "g6",
+              "to": "g5"
+            },
+            {
+              "from": "g5",
+              "to": "g4"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "g2"
+            }
+          ]
+        ],
+        "title": "f5-g5-g4 Pawn Storm"
+      }
     ]
   },
   {
@@ -436,6 +1618,79 @@
     ],
     "endgameTransitions": [
       "Blocked center leads to complex maneuvering endgames"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7",
+        "moves": [
+          "e5",
+          "d5",
+          "Ne7",
+          "Nd2",
+          "Nh5",
+          "g3",
+          "f5"
+        ],
+        "annotations": [
+          "Black strikes the center with e5, challenging White's d4 pawn",
+          "White closes the center with d5, locking the pawn structure for opposite-flank play",
+          "The knight retreats from c6 to e7, preparing to reroute via g6 or f5",
+          "White begins the queenside maneuver, rerouting the knight toward c4 or b3",
+          "The knight leaps to h5, eyeing f4 and supporting the upcoming f5 advance",
+          "White prepares to control the f4 square and keep Black's knight out",
+          "Black launches the thematic kingside pawn storm with f5, attacking White's e4 base"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "g2",
+              "to": "g3"
+            }
+          ],
+          [
+            {
+              "from": "f7",
+              "to": "f5"
+            },
+            {
+              "from": "f5",
+              "to": "e4",
+              "color": "red"
+            }
+          ]
+        ],
+        "title": "e5 Central Counter: Closed Center"
+      }
     ]
   },
   {
@@ -467,6 +1722,87 @@
     "endgameTransitions": [
       "Central pawn majority",
       "Good bishop on long diagonal"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/pppppppp/5n2/8/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+        "moves": [
+          "d4",
+          "e6",
+          "g3",
+          "d5",
+          "Bg2",
+          "Be7",
+          "Nf3",
+          "O-O"
+        ],
+        "annotations": [
+          "White plays d4, establishing the classical c4+d4 pawn center for a Catalan-style setup",
+          "Black responds with e6, solidifying the d5 square",
+          "White fianchettoes with g3, preparing to place the bishop on the powerful g2 diagonal",
+          "Black stakes a claim in the center with d5, challenging White's c4 pawn",
+          "The bishop lands on g2, exerting pressure along the long diagonal toward d5",
+          "Black develops the bishop to e7, a solid and flexible placement",
+          "White completes kingside development, ready to castle and apply central pressure",
+          "Black castles, and the Catalan structure is fully established"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "g2",
+              "to": "g3"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "g2"
+            },
+            {
+              "from": "g2",
+              "to": "d5",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ]
+        ],
+        "title": "d4 Catalan Transposition"
+      }
     ]
   },
   {
@@ -497,6 +1833,84 @@
     "endgameTransitions": [
       "Queenside pawn majority",
       "Active rooks on open files"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+        "moves": [
+          "b4",
+          "cxb4",
+          "Nd5",
+          "Nf6",
+          "Rb1",
+          "a5",
+          "e4"
+        ],
+        "annotations": [
+          "White gambits the b-pawn with b4, challenging Black's c5 and seizing queenside initiative",
+          "Black accepts the pawn, opening the b-file for White's rook",
+          "The knight jumps to the dominant d5 outpost, pressuring c7 and controlling key squares",
+          "Black develops the knight to f6, contesting the center and eyeing d5",
+          "White places the rook on the b-file, targeting the b4 pawn",
+          "Black pushes a5 to secure the extra b4 pawn",
+          "White seizes the center with e4, gaining space and activating the light-squared bishop"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "b2",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "c3",
+              "to": "d5"
+            },
+            {
+              "from": "d5",
+              "to": "c7",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "from": "g8",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "a1",
+              "to": "b1"
+            },
+            {
+              "from": "b1",
+              "to": "b4",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a5"
+            }
+          ],
+          [
+            {
+              "from": "e2",
+              "to": "e4"
+            }
+          ]
+        ],
+        "title": "b4 Queenside Gambit"
+      }
     ]
   },
   {
@@ -533,6 +1947,166 @@
     "endgameTransitions": [
       "Central pawn majority",
       "Bishop pair in open position"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
+        "moves": [
+          "d4",
+          "exd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4",
+          "d6",
+          "Nc3",
+          "Be6"
+        ],
+        "annotations": [
+          "White strikes with d4, the key central break leveraging superior piece coordination",
+          "Black captures, opening the center but also the d-file for White's pieces",
+          "White recaptures with the knight, centralizing on d4",
+          "Black exchanges knights to relieve pressure on the c6 square",
+          "The queen recaptures on d4, occupying a powerful central post",
+          "Black plays d6 to solidify, but the center is now open for White",
+          "White develops the last minor piece, completing development with a strong center",
+          "Black develops the bishop to e6, but White has a clear advantage in piece activity"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "e5",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d6"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "e6"
+            }
+          ]
+        ],
+        "title": "Immediate d4 Central Break"
+      },
+      {
+        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
+        "moves": [
+          "d3",
+          "d6",
+          "Nbd2",
+          "Be6",
+          "Re1",
+          "Nd7",
+          "Nf1",
+          "Nc5"
+        ],
+        "annotations": [
+          "White plays d3, a quiet preparatory move keeping options flexible for the knight maneuver",
+          "Black solidifies with d6, maintaining the closed center",
+          "The knight heads to d2, the first step of the famous Ruy Lopez maneuver Nb1-d2-f1-g3",
+          "Black develops the bishop to e6, challenging the b3 bishop",
+          "White moves the rook to e1, freeing the f1 square for the knight",
+          "Black reroutes the f6 knight to d7, preparing to bring it to c5 or f8",
+          "The knight arrives on f1, one step from the ideal g3 outpost",
+          "Black places the knight on c5, pressuring the b3 bishop and controlling d3"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d2",
+              "to": "d3"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d6"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "f1"
+            },
+            {
+              "from": "f1",
+              "to": "g3",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "c5"
+            },
+            {
+              "from": "c5",
+              "to": "b3",
+              "color": "red"
+            }
+          ]
+        ],
+        "title": "Slow Maneuver: Nbd2-f1-g3"
+      }
     ]
   },
   {
@@ -569,6 +2143,92 @@
     "endgameTransitions": [
       "Active pieces in open center",
       "Central pawn majority"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 3",
+        "moves": [
+          "e3",
+          "e6",
+          "Bd3",
+          "c5",
+          "Nbd2",
+          "Nc6",
+          "e4",
+          "dxe4"
+        ],
+        "annotations": [
+          "White plays e3, preparing to develop the bishop and later push e4",
+          "Black plays e6, reinforcing d5 and preparing bishop development",
+          "The bishop develops to d3, aiming at h7 and supporting the e4 push",
+          "Black challenges the center with c5, striking at White's d4 pawn",
+          "White develops the knight to d2, supporting the e4 break",
+          "Black develops the knight to c6, adding pressure to d4 and e5",
+          "The key e4 break arrives — White challenges d5 directly and opens the position",
+          "Black captures on e4, and after Nxe4 White has a powerfully centralized knight"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "d3"
+            },
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "c7",
+              "to": "c5"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            },
+            {
+              "from": "d2",
+              "to": "e4",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "e3",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "d5",
+              "to": "e4"
+            }
+          ]
+        ],
+        "title": "e4 Central Breakthrough"
+      }
     ]
   },
   {
@@ -600,6 +2260,84 @@
     "endgameTransitions": [
       "Queenside pawn majority after cxd5",
       "Open c-file for rooks"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP1B2/5N2/PP2PPPP/RN1QKB1R b KQkq - 0 3",
+        "moves": [
+          "e6",
+          "Nc3",
+          "Be7",
+          "Qb3",
+          "c6",
+          "e3",
+          "Nbd7"
+        ],
+        "annotations": [
+          "Black plays e6, solidifying the d5 pawn and preparing kingside development",
+          "White develops the knight to c3, adding pressure to d5",
+          "Black develops the bishop to e7, preparing to castle",
+          "White plays Qb3, the key move attacking both b7 and d5 simultaneously",
+          "Black defends with c6, shoring up d5 but leaving b6 and d6 slightly weak",
+          "White plays e3, completing the pawn structure and preparing Bd3",
+          "Black develops the knight to d7, connecting pieces but remaining cramped"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e7",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "b3"
+            },
+            {
+              "from": "b3",
+              "to": "b7",
+              "color": "red"
+            },
+            {
+              "from": "b3",
+              "to": "d5",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "from": "c7",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "e2",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "d7"
+            }
+          ]
+        ],
+        "title": "c4 with Qb3 Pressure"
+      }
     ]
   },
   {
@@ -640,6 +2378,184 @@
     ],
     "endgameTransitions": [
       "Usually decisive in middlegame — endgame rare"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R w KQkq - 0 7",
+        "moves": [
+          "O-O-O",
+          "Bg7",
+          "h4",
+          "O-O",
+          "h5",
+          "gxh5",
+          "Bxh5",
+          "Nxh5"
+        ],
+        "annotations": [
+          "White castles queenside, getting the king safe and preparing the h-pawn storm",
+          "Black fianchettoes the bishop to g7, the heart of the Dragon formation",
+          "White begins the assault with h4, threatening to rip open the h-file",
+          "Black castles into the storm, but the kingside fianchetto demands this",
+          "h5 arrives, forcing Black to decide about the g6 pawn",
+          "Black captures gxh5, opening the h-file for White's devastating attack",
+          "White recaptures with the bishop on h5, threatening f7",
+          "Black takes the bishop, but the open h-file gives White a winning attack"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e1",
+              "to": "c1"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "g7"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h4"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "h4",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "g6",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "e2",
+              "to": "h5"
+            },
+            {
+              "from": "h5",
+              "to": "f7",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            },
+            {
+              "from": "h1",
+              "to": "h5",
+              "color": "yellow"
+            }
+          ]
+        ],
+        "title": "h4-h5: Opening the h-File"
+      },
+      {
+        "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R w KQkq - 0 7",
+        "moves": [
+          "O-O-O",
+          "Bg7",
+          "h4",
+          "O-O",
+          "h5",
+          "Nxh5",
+          "g4",
+          "Nf6",
+          "Nd5"
+        ],
+        "annotations": [
+          "White castles queenside, setting the stage for the opposite-side attack",
+          "Black completes the Dragon bishop fianchetto on g7",
+          "White pushes h4, beginning the kingside pawn storm",
+          "Black castles, entering the critical racing phase of the Dragon",
+          "h5 strikes at the g6 pawn, the cornerstone of Black's fianchetto",
+          "Black captures with the knight, avoiding the open g-file but displacing the knight",
+          "White pushes g4, kicking the knight and gaining more kingside space",
+          "The knight retreats to f6, but White has achieved significant kingside space",
+          "The knight jumps to the dominant d5 outpost, threatening Nxe7+ and controlling the board"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e1",
+              "to": "c1"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "g7"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h4"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "h4",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "g2",
+              "to": "g4"
+            },
+            {
+              "from": "g4",
+              "to": "h5",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "from": "h5",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "c3",
+              "to": "d5"
+            },
+            {
+              "from": "d5",
+              "to": "e7",
+              "color": "red"
+            }
+          ]
+        ],
+        "title": "h4 with Nd5 Jump"
+      }
     ]
   },
   {
@@ -671,6 +2587,97 @@
     "endgameTransitions": [
       "Active rooks in open position",
       "Bishop pair if dark-squared bishop is traded"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4PP2/1BN2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
+        "moves": [
+          "exf4",
+          "d3",
+          "d5",
+          "Bxf4",
+          "Nd7",
+          "Qe1",
+          "Nc5",
+          "Qg3"
+        ],
+        "annotations": [
+          "Black captures on f4, opening the f-file which White will exploit",
+          "White plays d3, clearing the c1-f4 diagonal for the bishop recapture",
+          "Black pushes d5, counterattacking in the center while the position is fluid",
+          "White recaptures with the bishop on f4, activating the dark-squared bishop",
+          "Black reroutes the knight to d7, heading for c5",
+          "White lifts the queen to e1, preparing to swing to the kingside via g3",
+          "Black places the knight on c5, an active square attacking b3",
+          "The queen arrives on g3, creating kingside threats along the g-file"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e5",
+              "to": "f4"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d3"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "f4"
+            },
+            {
+              "from": "f1",
+              "to": "f7",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "e1"
+            },
+            {
+              "from": "e1",
+              "to": "g3",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "c5"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g3"
+            },
+            {
+              "from": "g3",
+              "to": "g7",
+              "color": "red"
+            }
+          ]
+        ],
+        "title": "f4 Exchange: Open f-File Attack"
+      }
     ]
   },
   {
@@ -707,6 +2714,92 @@
     "endgameTransitions": [
       "Central pawn majority",
       "Active pieces convert to endgame advantage"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+        "moves": [
+          "d4",
+          "exd4",
+          "Nxd4",
+          "Nf6",
+          "Nxc6",
+          "bxc6",
+          "Bd3",
+          "d5"
+        ],
+        "annotations": [
+          "White opens the center with d4, the defining move of the Scotch Game",
+          "Black captures on d4, accepting the central exchange",
+          "White recaptures with the knight, placing it on a dominant central square",
+          "Black develops the knight to f6, attacking e4 and developing rapidly",
+          "White captures on c6, damaging Black's pawn structure on the queenside",
+          "Black recaptures with the b-pawn, keeping the center but creating doubled c-pawns",
+          "White develops the bishop to d3, eyeing h7 and supporting the center",
+          "Black strikes back with d5, challenging White's e4 pawn"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "e5",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "g8",
+              "to": "f6"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "d3"
+            },
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d5"
+            }
+          ]
+        ],
+        "title": "Open Center: Rapid Development"
+      }
     ]
   },
   {
@@ -748,6 +2841,165 @@
     "endgameTransitions": [
       "Superior minor pieces persist into simplified positions",
       "Space advantage creates targets on d6 and c7"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/3BPN2/PPP2PPP/R2QK2R b KQ - 4 7",
+        "moves": [
+          "c6",
+          "Na3",
+          "Nac7",
+          "O-O",
+          "b5",
+          "e4"
+        ],
+        "annotations": [
+          "Black plays c6, kicking the knight from its powerful b5 outpost",
+          "White retreats the knight to a3, heading for c4",
+          "Black reroutes the awkward a6 knight to c7, consolidating",
+          "White castles kingside, completing development and connecting the rooks",
+          "Black expands on the queenside with b5, gaining space",
+          "White strikes with the thematic e4 break, seizing the center and activating the Bd3"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c7",
+              "to": "c6"
+            },
+            {
+              "from": "c6",
+              "to": "b5",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "a3"
+            },
+            {
+              "from": "a3",
+              "to": "c4",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "a6",
+              "to": "c7"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "e3",
+              "to": "e4"
+            },
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "red"
+            }
+          ]
+        ],
+        "title": "e4 Break After ...c6"
+      },
+      {
+        "fen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/3BPN2/PPP2PPP/R2QK2R b KQ - 4 7",
+        "moves": [
+          "c6",
+          "Na3",
+          "Nac7",
+          "O-O",
+          "b6",
+          "Nc4",
+          "Bb7",
+          "e4"
+        ],
+        "annotations": [
+          "Black plays c6, challenging the b5 knight's dominance",
+          "White retreats to a3, keeping the knight actively placed for Nc4",
+          "Black repositions the knight from a6 to c7, untangling",
+          "White castles, completing development before the central break",
+          "Black plays b6, preparing to fianchetto the bishop",
+          "The knight hops to c4, an ideal square pressuring e5, d6, and b6",
+          "Black fianchettoes with Bb7, aiming at the center",
+          "White plays e4, the central break that activates every piece and claims space"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c7",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "a3"
+            }
+          ],
+          [
+            {
+              "from": "a6",
+              "to": "c7"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b6"
+            }
+          ],
+          [
+            {
+              "from": "a3",
+              "to": "c4"
+            },
+            {
+              "from": "c4",
+              "to": "e5",
+              "color": "yellow"
+            },
+            {
+              "from": "c4",
+              "to": "d6",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "b7"
+            }
+          ],
+          [
+            {
+              "from": "e3",
+              "to": "e4"
+            }
+          ]
+        ],
+        "title": "Space Squeeze: Nc4 + e4"
+      }
     ]
   },
   {
@@ -789,6 +3041,89 @@
     "endgameTransitions": [
       "Open h-file becomes a highway for rook invasion",
       "Exposed Black king faces persistent threats even in simplified positions"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
+        "moves": [
+          "h4",
+          "O-O",
+          "h5",
+          "Nxh5",
+          "Qd2",
+          "Nf6",
+          "O-O-O"
+        ],
+        "annotations": [
+          "White launches h4, beginning the aggressive kingside pawn storm against Black's fianchetto",
+          "Black castles into the storm, but delaying would leave the king in the center",
+          "h5 arrives, directly challenging the g6 pawn that anchors Black's kingside",
+          "Black captures with the knight, avoiding the immediate opening of the g-file",
+          "White plays Qd2, connecting rooks, preparing O-O-O, and supporting Bh6",
+          "The knight returns to f6, but White has gained significant kingside momentum",
+          "White castles queenside, completing the opposite-side attack setup"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "h2",
+              "to": "h4"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "h4",
+              "to": "h5"
+            },
+            {
+              "from": "h5",
+              "to": "g6",
+              "color": "red"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d2"
+            },
+            {
+              "from": "d2",
+              "to": "h6",
+              "color": "yellow"
+            }
+          ],
+          [
+            {
+              "from": "h5",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "c1"
+            },
+            {
+              "from": "d1",
+              "to": "h1",
+              "color": "yellow"
+            }
+          ]
+        ],
+        "title": "h4-h5 Pawn Storm: O-O-O Plan"
+      }
     ]
   }
 ]

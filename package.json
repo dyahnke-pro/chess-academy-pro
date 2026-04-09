@@ -23,6 +23,7 @@
     "test:perf:bundle": "vitest run src/test/benchmarks/bundle.perf.test.ts"
   },
   "dependencies": {
+    "@adobe/css-tools": "^4.4.1",
     "@anthropic-ai/sdk": "^0.78.0",
     "@aws-sdk/client-polly": "^3.1019.0",
     "@capacitor/core": "8.1.0",
