@@ -2525,8 +2525,8 @@
       },
       {
         "name": "Early ...dxc4 Without Development",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 e4 Nxe4 Nxe4",
-        "explanation": "Grabbing the c4 pawn too early with ...dxc4 before developing other pieces allows White to play e4 with a huge center. After Nxe4, Black is lured into exchanges that seem to win material but actually lead to a lost endgame. White's superior development and Black's weakened queenside pawns create a structurally lost position. The lesson is clear: in the Slav, always develop the light-squared bishop to f5 before capturing on c4, and never rush material grabs at the expense of development."
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 e4 b5 e5 Nd5 a4 e6 axb5 Nxc3 bxc3 cxb5 Ng5 Be7 Qh5 O-O Bxc4 bxc4",
+        "explanation": "Grabbing the c4 pawn too early with ...dxc4 and trying to hold it with ...b5 is a classic mistake in the Slav. White responds with e4 and e5, seizing a massive central space advantage and driving Black's knight away. After a4 undermines the b5 pawn chain, White recovers the material with interest while maintaining a crushing center. The Ng5 and Qh5 combination creates direct threats against f7 and the kingside, leaving Black struggling to survive despite nominally equal material. The lesson: never play ...dxc4 and ...b5 without first developing the light-squared bishop."
       }
     ]
   },
