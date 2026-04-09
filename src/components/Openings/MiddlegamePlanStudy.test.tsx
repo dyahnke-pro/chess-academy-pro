@@ -1,14 +1,65 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MotionConfig } from 'framer-motion';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { buildMiddlegamePlan } from '../../test/factories';
 
-vi.mock('react-chessboard', () => ({
-  Chessboard: ({ position }: { position: string }) => (
-    <div data-testid="chessboard" data-position={position} />
-  ),
+vi.mock('../Board/ControlledChessBoard', () => ({
+  ControlledChessBoard: (props: Record<string, unknown>) => {
+    const game = props.game as { fen?: string; boardOrientation?: string } | undefined;
+    return (
+      <div
+        data-testid="chess-board"
+        data-fen={game?.fen ?? ''}
+        data-interactive={String(props.interactive ?? false)}
+      >
+        Board
+      </div>
+    );
+  },
+}));
+
+vi.mock('../../hooks/useChessGame', () => ({
+  useChessGame: (initialFen?: string, initialOrientation: 'white' | 'black' = 'white') => ({
+    fen: initialFen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    position: initialFen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    turn: 'w' as const,
+    inCheck: false,
+    isCheck: false,
+    checkSquare: null,
+    isGameOver: false,
+    isCheckmate: false,
+    isStalemate: false,
+    isDraw: false,
+    lastMove: null,
+    history: [],
+    selectedSquare: null,
+    legalMoves: [],
+    boardOrientation: initialOrientation,
+    makeMove: vi.fn(),
+    onDrop: vi.fn(),
+    onSquareClick: vi.fn(),
+    flipBoard: vi.fn(),
+    setOrientation: vi.fn(),
+    undoMove: vi.fn(),
+    resetGame: vi.fn(),
+    clearSelection: vi.fn(),
+    getLegalMoves: vi.fn().mockReturnValue([]),
+    getPiece: vi.fn().mockReturnValue(null),
+    reset: vi.fn(),
+    loadFen: vi.fn().mockReturnValue(true),
+  }),
+}));
+
+vi.mock('../../services/speechService', () => ({
+  speechService: {
+    speak: vi.fn().mockResolvedValue(undefined),
+    stop: vi.fn(),
+    setEnabled: vi.fn(),
+    isEnabled: true,
+    isSpeaking: false,
+  },
 }));
 
 function renderStudy(
@@ -41,11 +92,20 @@ function renderStudy(
 }
 
 describe('MiddlegamePlanStudy', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders the plan title and overview', () => {
     renderStudy();
     expect(screen.getByText('Central Push')).toBeInTheDocument();
     expect(screen.getByTestId('plan-overview')).toBeInTheDocument();
     expect(screen.getByText('White plays d4 to open the center.')).toBeInTheDocument();
+  });
+
+  it('renders the board using ControlledChessBoard', () => {
+    renderStudy();
+    expect(screen.getByTestId('chess-board')).toBeInTheDocument();
   });
 
   it('shows pawn breaks when tab is clicked', async () => {
@@ -98,5 +158,64 @@ describe('MiddlegamePlanStudy', () => {
     renderStudy({ onExit });
     await userEvent.click(screen.getByTestId('plan-study-back'));
     expect(onExit).toHaveBeenCalled();
+  });
+
+  it('shows Practice This Position button on study tabs', () => {
+    renderStudy();
+    expect(screen.getByTestId('practice-position-btn')).toBeInTheDocument();
+    expect(screen.getByText('Practice This Position')).toBeInTheDocument();
+  });
+
+  it('toggles practice mode and updates board interactivity', async () => {
+    renderStudy();
+    const board = screen.getByTestId('chess-board');
+    expect(board).toHaveAttribute('data-interactive', 'false');
+
+    await userEvent.click(screen.getByTestId('practice-position-btn'));
+    expect(screen.getByText('Back to Study')).toBeInTheDocument();
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'true');
+
+    await userEvent.click(screen.getByTestId('practice-position-btn'));
+    expect(screen.getByText('Practice This Position')).toBeInTheDocument();
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'false');
+  });
+
+  it('shows narration toggle button', () => {
+    renderStudy();
+    expect(screen.getByTestId('narration-toggle')).toBeInTheDocument();
+    expect(screen.getByLabelText('Read aloud')).toBeInTheDocument();
+  });
+
+  it('calls speechService.speak when narration is toggled on', async () => {
+    const { speechService } = await import('../../services/speechService');
+    renderStudy();
+    await userEvent.click(screen.getByTestId('narration-toggle'));
+    expect(speechService.speak).toHaveBeenCalledWith(
+      expect.stringContaining('White plays d4'),
+      expect.objectContaining({ onEnd: expect.any(Function) }),
+    );
+  });
+
+  it('calls speechService.stop when narration is toggled off', async () => {
+    const { speechService } = await import('../../services/speechService');
+    renderStudy();
+    // Toggle on
+    await userEvent.click(screen.getByTestId('narration-toggle'));
+    // Toggle off
+    await userEvent.click(screen.getByTestId('narration-toggle'));
+    expect(speechService.stop).toHaveBeenCalled();
+  });
+
+  it('hides bottom bar on Play Lines tab', async () => {
+    renderStudy();
+    await userEvent.click(screen.getByTestId('plan-tab-playLines'));
+    expect(screen.queryByTestId('plan-bottom-bar')).not.toBeInTheDocument();
+  });
+
+  it('has a scrollable content area', () => {
+    renderStudy();
+    const scrollArea = screen.getByTestId('plan-content-scroll');
+    expect(scrollArea).toBeInTheDocument();
+    expect(scrollArea.className).toContain('overflow-y-auto');
   });
 });

@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo } from 'react';
-import { Chessboard } from 'react-chessboard';
-import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame } from '../../hooks/useChessGame';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
+import { speechService } from '../../services/speechService';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -12,6 +13,10 @@ import {
   GitBranch,
   Flag,
   PlayCircle,
+  Volume2,
+  VolumeX,
+  Dumbbell,
+  BookOpen,
 } from 'lucide-react';
 import type {
   MiddlegamePlan,
@@ -39,18 +44,58 @@ const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'playLines', label: 'Play Lines', icon: PlayCircle },
 ];
 
-function arrowsToBoard(arrows: AnnotationArrow[] | undefined): Array<{ startSquare: string; endSquare: string; color: string }> {
+function arrowsToBoard(
+  arrows: AnnotationArrow[] | undefined,
+): Array<{ startSquare: string; endSquare: string; color: string }> {
   if (!arrows) return [];
-  return arrows.map((a) => ({ startSquare: a.from, endSquare: a.to, color: a.color ?? 'rgba(0, 128, 0, 0.8)' }));
+  return arrows.map((a) => ({
+    startSquare: a.from,
+    endSquare: a.to,
+    color: a.color ?? 'rgba(0, 128, 0, 0.8)',
+  }));
 }
 
-function highlightsToSquareStyles(highlights: AnnotationHighlight[] | undefined): Record<string, { backgroundColor: string }> {
-  if (!highlights) return {};
-  const styles: Record<string, { backgroundColor: string }> = {};
-  for (const h of highlights) {
-    styles[h.square] = { backgroundColor: h.color ?? 'rgba(255, 255, 0, 0.4)' };
+function highlightsToBoard(
+  highlights: AnnotationHighlight[] | undefined,
+): Array<{ square: string; color: string }> {
+  if (!highlights) return [];
+  return highlights.map((h) => ({
+    square: h.square,
+    color: h.color ?? 'rgba(255, 255, 0, 0.4)',
+  }));
+}
+
+/** Build the narration text for the active section. */
+function getSectionText(
+  plan: MiddlegamePlan,
+  section: PlanSection,
+  pawnBreakIndex: number,
+  maneuverIndex: number,
+): string {
+  switch (section) {
+    case 'overview':
+      return plan.overview;
+    case 'pawnBreaks': {
+      if (plan.pawnBreaks.length === 0) return 'No pawn breaks documented for this plan.';
+      const pb = plan.pawnBreaks[pawnBreakIndex];
+      return `${pb.move}. ${pb.explanation}`;
+    }
+    case 'maneuvers': {
+      if (plan.pieceManeuvers.length === 0) return 'No piece maneuvers documented for this plan.';
+      const m = plan.pieceManeuvers[maneuverIndex];
+      return `${m.piece}, route ${m.route}. ${m.explanation}`;
+    }
+    case 'themes':
+      return plan.strategicThemes.length > 0
+        ? `Strategic themes. ${plan.strategicThemes.join('. ')}.`
+        : 'No strategic themes documented.';
+    case 'endgames':
+      return plan.endgameTransitions.length > 0
+        ? `Favorable endgame transitions. ${plan.endgameTransitions.join('. ')}.`
+        : 'No endgame transitions documented.';
+    case 'playLines':
+      return '';
   }
-  return styles;
 }
 
 export function MiddlegamePlanStudy({
@@ -62,6 +107,9 @@ export function MiddlegamePlanStudy({
   const [pawnBreakIndex, setPawnBreakIndex] = useState(0);
   const [maneuverIndex, setManeuverIndex] = useState(0);
   const [activePlayableLine, setActivePlayableLine] = useState<PlayableMiddlegameLine | null>(null);
+  const [isPracticing, setIsPracticing] = useState(false);
+  const [isNarrating, setIsNarrating] = useState(false);
+  const narrationActiveRef = useRef(false);
 
   const playableLines = plan.playableLines ?? [];
 
@@ -72,7 +120,7 @@ export function MiddlegamePlanStudy({
       return {
         displayFen: pb.fen || plan.criticalPositionFen,
         displayArrows: arrowsToBoard(pb.arrows),
-        displayHighlights: {} as Record<string, { backgroundColor: string }>,
+        displayHighlights: [] as Array<{ square: string; color: string }>,
       };
     }
     if (activeSection === 'maneuvers' && plan.pieceManeuvers.length > 0) {
@@ -80,15 +128,76 @@ export function MiddlegamePlanStudy({
       return {
         displayFen: plan.criticalPositionFen,
         displayArrows: arrowsToBoard(m.arrows),
-        displayHighlights: {} as Record<string, { backgroundColor: string }>,
+        displayHighlights: [] as Array<{ square: string; color: string }>,
       };
     }
     return {
       displayFen: plan.criticalPositionFen,
       displayArrows: arrowsToBoard(plan.arrows),
-      displayHighlights: highlightsToSquareStyles(plan.highlights),
+      displayHighlights: highlightsToBoard(plan.highlights),
     };
   }, [activeSection, pawnBreakIndex, maneuverIndex, plan]);
+
+  // Chess game for the board — parent owns the game object
+  const game = useChessGame(displayFen, boardOrientation);
+
+  // Sync game position when displayFen changes (tab/carousel navigation)
+  useEffect(() => {
+    if (game.fen !== displayFen) {
+      game.loadFen(displayFen);
+    }
+  }, [displayFen, game]);
+
+  // Exit practice mode when switching tabs or carousel items
+  useEffect(() => {
+    setIsPracticing(false);
+  }, [activeSection, pawnBreakIndex, maneuverIndex]);
+
+  // Stop narration on tab/carousel change or unmount
+  useEffect(() => {
+    speechService.stop();
+    setIsNarrating(false);
+    narrationActiveRef.current = false;
+  }, [activeSection, pawnBreakIndex, maneuverIndex]);
+
+  useEffect(() => {
+    return () => {
+      speechService.stop();
+    };
+  }, []);
+
+  // Narration toggle
+  const toggleNarration = useCallback((): void => {
+    if (isNarrating) {
+      speechService.stop();
+      setIsNarrating(false);
+      narrationActiveRef.current = false;
+    } else {
+      const text = getSectionText(plan, activeSection, pawnBreakIndex, maneuverIndex);
+      if (!text) return;
+      setIsNarrating(true);
+      narrationActiveRef.current = true;
+      void speechService.speak(text, {
+        onEnd: () => {
+          if (narrationActiveRef.current) {
+            setIsNarrating(false);
+            narrationActiveRef.current = false;
+          }
+        },
+      });
+    }
+  }, [isNarrating, plan, activeSection, pawnBreakIndex, maneuverIndex]);
+
+  // Practice mode toggle
+  const togglePractice = useCallback((): void => {
+    setIsPracticing((prev) => {
+      if (prev) {
+        // Exiting practice: reset board to the study position
+        game.loadFen(displayFen);
+      }
+      return !prev;
+    });
+  }, [game, displayFen]);
 
   const prevPawnBreak = useCallback((): void => {
     setPawnBreakIndex((i) => Math.max(0, i - 1));
@@ -106,7 +215,7 @@ export function MiddlegamePlanStudy({
     setManeuverIndex((i) => Math.min(plan.pieceManeuvers.length - 1, i + 1));
   }, [plan.pieceManeuvers.length]);
 
-  // If a playable line is active, render the full-screen player
+  // Full-screen playable line player
   if (activePlayableLine) {
     return (
       <PlayableLinePlayer
@@ -118,13 +227,15 @@ export function MiddlegamePlanStudy({
     );
   }
 
+  const showBottomBar = activeSection !== 'playLines';
+
   return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="middlegame-plan-study">
+    <div className="flex flex-col h-full overflow-hidden" data-testid="middlegame-plan-study">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 pb-2">
+      <div className="flex items-center gap-3 p-4 pb-2 flex-shrink-0">
         <button
           onClick={onExit}
-          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
+          className="p-2 rounded-lg hover:bg-theme-surface transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           aria-label="Back"
           data-testid="plan-study-back"
         >
@@ -139,7 +250,7 @@ export function MiddlegamePlanStudy({
       </div>
 
       {/* Section tabs */}
-      <div className="flex gap-1 px-4 overflow-x-auto pb-2">
+      <div className="flex gap-1 px-4 overflow-x-auto pb-2 flex-shrink-0">
         {SECTIONS.map(({ key, label }) => (
           <button
             key={key}
@@ -157,25 +268,25 @@ export function MiddlegamePlanStudy({
       </div>
 
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4 gap-3">
-        <BoardVoiceOverlay fen={displayFen} className="w-full max-w-[400px] aspect-square">
-          <Chessboard
-            options={{
-              position: displayFen,
-              boardOrientation: boardOrientation,
-              allowDragging: false,
-              arrows: displayArrows,
-              squareStyles: displayHighlights,
-              animationDurationInMs: 200,
-              darkSquareStyle: { backgroundColor: '#779952' },
-              lightSquareStyle: { backgroundColor: '#edeed1' },
-            }}
+      <div className="px-2 flex justify-center flex-shrink-0">
+        <div className="w-full max-w-[400px]">
+          <ControlledChessBoard
+            game={game}
+            interactive={isPracticing}
+            showFlipButton={true}
+            showUndoButton={isPracticing}
+            showResetButton={false}
+            showEvalBar={false}
+            showVoiceMic={false}
+            arrows={!isPracticing ? displayArrows : undefined}
+            annotationHighlights={!isPracticing ? displayHighlights : undefined}
+            showLastMoveHighlight={isPracticing}
           />
-        </BoardVoiceOverlay>
+        </div>
       </div>
 
-      {/* Content panel */}
-      <div className="px-4 pb-4 max-h-[280px] overflow-y-auto">
+      {/* Scrollable content */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3" data-testid="plan-content-scroll">
         <AnimatePresence mode="wait">
           {activeSection === 'overview' && (
             <motion.div
@@ -186,6 +297,9 @@ export function MiddlegamePlanStudy({
               className="rounded-2xl bg-theme-surface/90 border border-white/15 p-4"
               data-testid="plan-overview"
             >
+              <p className="text-xs font-semibold text-theme-text-muted uppercase tracking-wide mb-2">
+                Position Overview
+              </p>
               <p className="text-sm text-theme-text leading-relaxed">
                 {plan.overview}
               </p>
@@ -349,7 +463,7 @@ export function MiddlegamePlanStudy({
                     <div className="flex-1 min-w-0">
                       <span className="text-sm font-medium text-theme-text">{line.title}</span>
                       <p className="text-xs text-theme-text-muted mt-0.5">
-                        {line.moves.length} moves — Watch &amp; practice
+                        {line.moves.length} moves &mdash; Watch &amp; practice
                       </p>
                     </div>
                   </button>
@@ -363,6 +477,48 @@ export function MiddlegamePlanStudy({
           )}
         </AnimatePresence>
       </div>
+
+      {/* Bottom bar: Practice This Position + Speaker toggle */}
+      {showBottomBar && (
+        <div
+          className="flex items-center gap-3 px-4 py-3 border-t border-theme-border flex-shrink-0 pb-safe-4"
+          data-testid="plan-bottom-bar"
+        >
+          <button
+            onClick={togglePractice}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-medium text-sm transition-colors ${
+              isPracticing
+                ? 'bg-theme-accent text-white'
+                : 'bg-theme-surface text-theme-text hover:bg-theme-border/50'
+            }`}
+            data-testid="practice-position-btn"
+          >
+            {isPracticing ? (
+              <>
+                <BookOpen size={16} />
+                Back to Study
+              </>
+            ) : (
+              <>
+                <Dumbbell size={16} />
+                Practice This Position
+              </>
+            )}
+          </button>
+          <button
+            onClick={toggleNarration}
+            className={`p-3 rounded-xl transition-colors ${
+              isNarrating
+                ? 'bg-theme-accent text-white'
+                : 'bg-theme-surface text-theme-text-muted hover:bg-theme-border/50'
+            }`}
+            aria-label={isNarrating ? 'Stop narration' : 'Read aloud'}
+            data-testid="narration-toggle"
+          >
+            {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
