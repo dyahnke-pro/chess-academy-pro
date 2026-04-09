@@ -1,4 +1,4 @@
-import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
+import { Chess, type Square, type Color } from 'chess.js';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -242,7 +242,7 @@ function analyzePieceActivity(chess: Chess): PieceActivityInfo {
 // ─── Summary Builder ───────────────────────────────────────────────────────
 
 function buildSummary(
-  material: MaterialCount,
+  _material: MaterialCount,
   advantage: number,
   pawnStructure: PawnStructureInfo,
   kingSafety: KingSafetyInfo,
