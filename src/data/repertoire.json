@@ -94,6 +94,21 @@
         "name": "Italian: Legal's Mate Pattern",
         "pgn": "e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5 Bxd1 Bxf7+ Ke7 Nd5",
         "explanation": "Legal's Mate pattern arises when Black pins the f3 knight with ...Bg4 too early. White sacrifices the queen with Nxe5!, and after Bxd1, the devastating Bxf7+ Ke7 Nd5# is checkmate. Even if Black avoids the mate, White wins back the queen with interest. Always look for this pattern when Black plays ...Bg4 prematurely."
+      },
+      {
+        "name": "Jerome Gambit",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 Bxf7+ Kxf7 Nxe5+ Nxe5 Qh5+ Ke6 Qf5+ Kd6 f4 Nc6 Qd5+ Ke7 Qxc5+ d6 Qc4 Nf6 d3 Rf8 O-O Bg4 Nc3 Nd4 Qd5 c6 Qa5",
+        "explanation": "The Jerome Gambit sacrifices two minor pieces with Bxf7+ and Nxe5+ to drag Black's king into the open. After Kxf7 Nxe5+ Nxe5 Qh5+, the king is driven to d6 where it becomes a target. White recovers material with Qxc5+ and Qc4, maintaining pressure against the exposed king. Although objectively dubious, the Jerome Gambit is a deadly practical weapon at club level because Black's king never finds safety."
+      },
+      {
+        "name": "Lolli Attack",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 d4 exd4 O-O Be7 Nxf7 Kxf7 Qf3+ Ke6 Nc3 dxc3 Re1+ Ne5 Bf4 Bf6 Bxe5 Bxe5 Rxe5+ Kd6 Qe4 cxb2 Rb1 Qf6",
+        "explanation": "The Lolli Attack features the spectacular Nxf7 sacrifice after Ng5 d5 exd5 Nxd5 d4. After Kxf7 Qf3+, Black's king is chased to e6 where it sits in the center of the crossfire. Nc3 sacrifices another piece to open the e-file, and after Re1+ Ne5, the devastating Bf4 pins everything. White's attack crashes through with Bxe5+ Bxe5 Rxe5+ and the king on d6 faces threats from every direction."
+      },
+      {
+        "name": "Giuoco Piano Queen Trap",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 Nxe4 d5 Nxd2 Qb3 Ne4 Qxb7 Nxf2 Qxa8 Nxh1 dxc6 dxc6 Qxa7 O-O Bb5 Qd6",
+        "explanation": "In the Giuoco Piano, if Black greedily takes on e4 with the knight, White's d5 push attacks the c6 knight while Qb3 targets b7 and f7. After Qxb7 wins the pawn, Black's knight on d2 looks active but White's queen rampages through the queenside. The Qxa8 wins the exchange, and after dxc6 the queen escapes via a7. White ends up with a rook and pawns vs two knights, with the Bb5 pinning and restricting Black's counterplay."
       }
     ],
     "warningLines": [
@@ -326,6 +341,16 @@
         "name": "Goring Gambit Kingside Storm",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 Nf6 O-O Bxc3 bxc3 Nxe4 Qb3 d5 Bb5 O-O Ba3 Re8 Rae1 Nd6 Bxc6 bxc6 Bxd6 cxd6 Rxe8+ Qxe8 Re1",
         "explanation": "In the Goring Gambit, Black often grabs the e4 pawn thinking it is free, but White's lead in development creates concrete threats. After Qb3 targets b7 and d5 simultaneously, forcing Black into defensive contortions. The Ba3 pin immobilizes the rook, and Rae1 piles pressure on the e-file. The exchange sacrifice sequence with Bxc6, Bxd6, and Rxe8+ leaves White with a dominant rook on the open e-file and Black's pawn structure in ruins. The weak isolated d-pawn becomes a permanent target."
+      },
+      {
+        "name": "Scotch Gambit Bxf7+ Sacrifice",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 Bxf7+ Kxf7 Nxd4+ d5 O-O Nf6 f3 Re8 Nc3 Rxe4 fxe4 dxe4 Bg5 Be7 Rxf6+ Bxf6 Qf1+ Kg8",
+        "explanation": "The Scotch Gambit's Bxf7+ sacrifice drags Black's king into the open. After Kxf7 Nxd4+, White regains material while Black's king is exposed in the center. The f3 push prepares to recapture on e4 and open the f-file. After Nc3 develops with tempo and Bg5 pins the knight, the Rxf6+ exchange sacrifice rips apart Black's kingside pawn cover. Even after Kg8, Black's king remains vulnerable with shattered pawns and White's pieces dominating."
+      },
+      {
+        "name": "4...Qh4 Refutation",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2 Kd8 O-O a6 N5c3 Qg6 Nd5 Nf6 Bg5 Be7 Nxe7 Kxe7 Nc3 d5 Nxd5+ Kf8 Nxf6 gxf6 Bh6+ Kg8 Bf3 Qf5 Bxc6 bxc6 Qd4",
+        "explanation": "When Black tries the aggressive 4...Qh4 in the Scotch, White refutes it with the precise Nb5 threatening Nc7+. After Qxe4+ Be2, Black must move the king as ...Kd8 is forced. White develops smoothly with O-O and N5c3 while Black's queen is pushed around. The devastating Nd5+ fork wins material, and after Nxf6 gxf6 Bh6+, Black's kingside is completely destroyed. White's queen centralizes on d4 with a winning attack against the exposed king."
       }
     ],
     "warningLines": [
@@ -427,6 +452,21 @@
         "name": "f4 Gambit Endgame Trick",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5",
         "explanation": "In the Vienna Gambit endgame, White's superior development and active pieces create surprisingly dangerous threats. After the queen exchange, White's pieces flood the center with Nxe5, Bxf4, and O-O-O. The key move is Nd5 attacking the e7 bishop and threatening Nc7, forking the rooks. Black's king is stuck in the center and the rook on h8 is trapped. White's initiative in this queenless position is worth more than the pawn deficit."
+      },
+      {
+        "name": "Copycat Qg4 Kingside Attack",
+        "pgn": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Na5 Qf3 Nxc4 dxc4 Bc5 Bg5 d6 Nd5 Be6 Nxf6+ gxf6 Bh6 Rg8 O-O-O Qe7 Nh3 O-O-O Nf4 Bg4 Qg3 Bxd1 Rxd1 d5",
+        "explanation": "White plays Qf3 targeting f7 and develops aggressively with Bg5 and Nd5. After the powerful Nd5 jump hits both f6 and e7, Black must accept a weakened kingside with ...gxf6. The Bh6 prevents castling kingside, and after O-O-O White's rook immediately pressures the d-file. The Nf4 lands on a dominant square eyeing g6 and e6, creating a crushing bind on Black's position."
+      },
+      {
+        "name": "Pierce Gambit King Hunt",
+        "pgn": "e4 e5 Nc3 Nc6 f4 exf4 d4 Qh4+ Ke2 d5 exd5 Bg4+ Nf3 O-O-O dxc6 Bc5 cxb7+ Kb8 Bxf4 Nf6 Nd5 Rhe8+ Kd3 Bf5+ Kc4 Be6",
+        "explanation": "The Pierce Gambit sacrifices castling rights with Ke2 to maintain the initiative. After d5 opens the center, Black tries ...Bg4+ but White blocks with Nf3 and pushes dxc6-cxb7+ winning a pawn. The Bxf4 recapture develops with tempo, and Nd5 creates a dominant centralized knight. Although White's king looks exposed on c4, the centralized pieces and passed b7 pawn create confusion. Black's ...Be6 threatens the king but White has escaped to safety."
+      },
+      {
+        "name": "Nd5 Fork Setup",
+        "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 O-O f4 d6 Nf3 Nc6 Na4 Bg4 Nxc5 dxc5 fxe5 Nd7 Bg5 Qe7 O-O Ndxe5 Nxe5 Nxe5 Bb5 f6 Bh4 c6 Ba4 f5",
+        "explanation": "White maneuvers the knight to a4 to exchange Black's strong dark-squared bishop with Nxc5. After dxc5, Black's pawn structure is weakened and the d5 square becomes available. The Bg5 pin creates tactical pressure, and after Bb5 pins the knight, White establishes a strong positional grip. Black's ...f5 push is forced to gain counterplay but further weakens the e6 and g6 squares for White to exploit."
       }
     ],
     "warningLines": [
@@ -537,6 +577,21 @@
         "name": "Muzio: Total Development Lead",
         "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3 Qf6 e5 Qxe5 Bxf7+ Kxf7 d4 Qf5 Qd3 Qxd3 cxd3 d5 Bxf4 Nf6 Nc3 c6 Rae1 Be6",
         "explanation": "The Muzio sacrifice leads to positions where White's development advantage is worth more than the piece. After Bxf7+, the Black king loses castling rights permanently. Even in the simplified position after queen trades, White's coordinated pieces and Black's awkward king create lasting pressure. The Rae1 adds the final rook to the attack, making Black's defensive task nearly impossible."
+      },
+      {
+        "name": "Cunningham Defense Refutation",
+        "pgn": "e4 e5 f4 exf4 Nf3 Be7 Bc4 Bh4+ g3 fxg3 O-O gxh2+ Kh1 d5 Bxd5 Nf6 Nc3 Nxd5 Nxd5 c6 Nf4 Bg3 Nxh2 Bf2 d4 Bg4 Qd3 Bf3+ Qxf3 Qh4",
+        "explanation": "The Cunningham Defense with ...Be7 and ...Bh4+ looks tricky, but White refutes it with precise play. After g3 fxg3 O-O gxh2+ Kh1, White sacrifices the h-pawn for rapid development. The Bxd5 and Nc3 bring all pieces into the attack while Black struggles to develop the queenside. The Nf4 knight dominates from the center, and after Nxh2 recovers material, White has a powerful initiative with all pieces active and Black's king stuck in the center."
+      },
+      {
+        "name": "Bishop's Gambit f7 Attack",
+        "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Bg4 Bxf4 Nc6 Nc3 Nf6 Nd5 Nxd5 Bxd5 O-O-O h3 Be6 Bxe6+ fxe6 Qd3 d5 exd5 exd5 Re1 Bd6",
+        "explanation": "The Bishop's Gambit with 3.Bc4 targets f7 immediately. After ...Qh4+ Kf1, White accepts the king displacement but gains a powerful center. The d4 and e4 pawns control the board while Bxf4 recovers the gambit pawn. Nd5 is the key move, establishing a dominant knight that forces exchanges. After Bxe6+ fxe6, Black's pawn structure is shattered and the e-file becomes a highway for White's rooks."
+      },
+      {
+        "name": "h4 Kingside Storm",
+        "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 d6 Nxg4 Nf6 Nxf6+ Qxf6 Nc3 Nc6 d4 Bg7 Bxf4 Qg6 Qd2 Be6 O-O-O O-O-O Bd3 Qg4 Be2 Qf5 d5 Nb4 a3 Nd3+ Bxd3 Qxf4",
+        "explanation": "In the Kieseritzky with h4, White rips open the h-file for a devastating kingside attack. After Ne5 grabs the g4 pawn, Nxf6+ eliminates Black's best defender. White develops rapidly with Nc3, d4, and Bxf4 while Black's pieces are still tangled. After O-O-O, both sides castle queenside but White's h-file initiative and superior piece coordination create lasting pressure. The d5 push attacks the knight and opens lines for White's bishops."
       }
     ],
     "warningLines": [
@@ -740,6 +795,16 @@
         "name": "Najdorf: Knight Sacrifice on d5",
         "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 Bd3 b5 Rhe1 Bb7 Nd5 exd5 exd5 Bxd5 Qh3 Bf3 gxf3 O-O Nf5 Nc5 Nxe7+ Kh8 Bc4",
         "explanation": "The knight sacrifice Nd5 is one of White's most dangerous attacking ideas in the 6.Bg5 Najdorf. After ...exd5 exd5, White rips open the e-file against Black's king and the d5 pawn acts as a battering ram splitting Black's position. If Black captures with ...Bxd5, the queen lifts to h3 with devastating threats along the h3-c8 diagonal. Black must respond with extreme precision: ...Bf3 gives back material to blunt the attack, but after Nf5 targeting e7 and g7, White often maintains a ferocious initiative with pieces swarming the kingside."
+      },
+      {
+        "name": "Najdorf: Poisoned Pawn Survival",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Rb1 Qa3 e5 dxe5 fxe5 Nfd7 Bc4 Bb4 Rd1 Bxc3 Qxc3 Qxc3+ Bd2 Qa1+ Ke2 O-O",
+        "explanation": "The Poisoned Pawn variation is the most critical test of the Najdorf. Black grabs the b2 pawn with ...Qxb2 and must navigate a minefield of tactical threats. After e5 opens the center, White builds massive pressure with Bc4 targeting f7. However, Black's ...Bb4 pin and ...Bxc3 exchange simplify the position. The queen exchange with ...Qxc3+ defuses White's attack, and after ...Qa1+ Ke2 O-O, Black castles into safety with an extra pawn and a winning endgame."
+      },
+      {
+        "name": "Najdorf: English Attack Nd5 Counter",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 O-O-O b5 g4 b4 Na4 Nb6 Nxb6 Qxb6 Na5 Rc8 Kb1 O-O Nc4 Qc7 g5 Nh5 Nxd6 Bxd6 Qxd6 Qxd6 Rxd6 Nf4",
+        "explanation": "Against the English Attack with Be3 and f3, Black times the queenside counterattack with ...b5-b4 to evict the c3 knight. After the knight exchange on b6, Black redirects play with ...Rc8 pressuring the c-file. When White commits with Nxd6, Black exchanges down to a favorable endgame where the knight on f4 dominates from its outpost. The ...Nf4 knight attacks both e2 and g2, giving Black a clear advantage in the resulting position."
       }
     ],
     "warningLines": [
@@ -1257,6 +1322,16 @@
         "name": "Panov IQP Exploitation",
         "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 e6 Nf3 Bb4 cxd5 Nxd5 Bd2 Nc6 Bd3 O-O O-O Be7 Nxd5 exd5 Qb3 Na5 Qc2 Bg4",
         "explanation": "In the Panov, Black establishes a knight on d5 blockading White's isolated d4 pawn. If White trades with Nxd5, Black recaptures with ...exd5, now giving White the IQP while Black has a symmetrical but slightly superior structure. After ...Na5 and ...Bg4, Black's pieces are actively placed targeting d4, and the pin on f3 creates tactical pressure. White's IQP becomes a clear weakness in the middlegame and especially the endgame."
+      },
+      {
+        "name": "Fantasy Variation Refutation",
+        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 e5 Nd5 O-O Be7 Nxd4 O-O c3 Nd7 Nd2 Nc5 N2f3 a5 Qc2 Be6 Bd3 Nxd3 Qxd3 Bg4",
+        "explanation": "The Fantasy Variation with 3.f3 weakens White's kingside significantly. After ...dxe4 fxe4 e5, Black immediately challenges the center. The ...Nf6 and ...Nd5 setup exploits the weakened e3 and g3 squares. After castling, Black develops smoothly with ...Nd7-c5 targeting d3 and e4. The ...Bg4 pin at the end creates concrete tactical threats, and White's weakened king position from f3 becomes a permanent liability."
+      },
+      {
+        "name": "Hillbilly Attack Refutation",
+        "pgn": "e4 c6 d4 d5 Bc4 dxe4 Nc3 Nf6 f3 exf3 Nxf3 Bg4 h3 Bxf3 Qxf3 e6 Be3 Nd5 O-O-O Be7 Bd3 O-O Qh5 g6 Qh6 Bf6 Ne4 Bg7",
+        "explanation": "The Hillbilly Attack with 3.Bc4 looks aggressive but is theoretically dubious. After ...dxe4 and ...Nf6, Black develops naturally while White sacrifices a pawn with f3. Black calmly takes the pawn and exchanges bishops with ...Bg4xf3. The ...Nd5 centralization is rock-solid, and after castling Black plays ...g6 and ...Bf6-g7 to neutralize White's kingside threats. The Bg7 defends perfectly while Black enjoys an extra pawn and superior structure."
       }
     ],
     "warningLines": [
@@ -1450,6 +1525,11 @@
         "name": "Nf6 c4 Counter",
         "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb4 Qa4+ N8c6 d5",
         "explanation": "In the Nf6 line, if White gets greedy with c4, Black's knight jumps to b4 with tempo hitting c2. After Qa4+ N8c6, the knight on d4 creates a devastating fork threat. The sacrifice sequence leads to Black winning the exchange and establishing a dominant position with active bishops and rooks. White's king is stuck in the center without castling rights, making this a practical nightmare to defend."
+      },
+      {
+        "name": "Blackmar-Diemer Style e5 Refutation",
+        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nc3 e5 d5 Bc5 Be2 O-O Nf3 e4 Ng5 Bf5 O-O h6 Nh3 Re8 Nf4 g5 Nh5 e3 Bxe3 Bxe3 fxe3 Rxe3",
+        "explanation": "When White plays d4 and c4 trying to build a big center like in the Blackmar-Diemer, Black strikes with ...e5 to challenge immediately. After d5 creates a closed center, ...Bc5 develops with tempo and ...e4 pushes the knight away. The key combination is ...g5 chasing the knight, then ...e3 sacrificing the pawn to blow open White's kingside. After Bxe3 Bxe3 fxe3 Rxe3, Black dominates the open e-file with the rook infiltrating White's position."
       }
     ],
     "warningLines": [
@@ -1930,6 +2010,21 @@
         "name": "e5 Central Blunder Trap",
         "pgn": "d4 d5 Bf4 Nf6 e3 c5 Nf3 Nc6 c3 e6 Nbd2 Bd6 Bg3 O-O Bd3 Bxg3 hxg3 Qd6 Qe2 e5 dxe5 Nxe5 Nxe5 Qxe5 Nf3 Qd6 e4 dxe4 Bxe4 Nxe4 Qxe4",
         "explanation": "When Black plays ...e5 without full preparation, the central exchange opens the position in White's favor. After dxe5 Nxe5 Nxe5, the resulting pawn structure gives White the e4 break for free. The bishop on d3 and queen on e2 form a battery that exploits the opened e-file, and Black's isolated c5 pawn becomes a permanent weakness."
+      },
+      {
+        "name": "Jobava Nb5 Fork Combo",
+        "pgn": "d4 Nf6 Nc3 d5 Bf4 c5 e3 cxd4 exd4 a6 Nf3 Nc6 Ne5 e6 Nb5 axb5 Bxb5 Bd7 Nxd7 Qxd7 Bxc6 bxc6 O-O Be7 Re1 O-O c3 Ne4 Qc2 f5 Qd3 Bf6 Qxe4 fxe4 Rxe4",
+        "explanation": "In the Jobava London with Nc3, White plays Ne5 to dominate the center and then unleashes the devastating Nb5 fork targeting c7 and a7. After axb5 Bxb5, the pin on c6 forces material concessions. The Nxd7 exchange eliminates Black's bishop pair, and White's centralized pieces create lasting pressure. The rook lift Rxe4 wins back material with interest while maintaining complete control of the position."
+      },
+      {
+        "name": "Oh No My Queen Trap",
+        "pgn": "d4 d5 Bf4 Nf6 e3 c5 Nf3 Nc6 c3 Qb6 Qb3 c4 Qc2 Nh5 Bd6 exd6 Nbd2 Be7 g4 Nf6 g5 Nd7 h4 f6 gxf6 Nxf6 Bd3 O-O O-O-O Bd7",
+        "explanation": "When Black tries ...Qb6 to target b2, White plays Qb3 to trade queens. After ...c4 Qc2 Nh5, it looks like Black has trapped White's bishop on f4, but the stunning Bd6 sacrifice gives up the bishop to permanently wreck Black's pawn structure. After exd6, Black has an ugly isolated d6 pawn and weakened dark squares. White follows with g4-g5-h4 launching a kingside pawn storm while castling queenside for safety."
+      },
+      {
+        "name": "Jobava Kingside Pawn Storm",
+        "pgn": "d4 Nf6 Nc3 d5 Bf4 e6 e3 Bd6 Bxd6 Qxd6 Bd3 Nbd7 Nf3 e5 dxe5 Nxe5 Nxe5 Qxe5 Qf3 O-O O-O-O c6 g4 Nd7 h4 Nc5 g5 Nxd3+ Rxd3 Be6 h5 Qf5 Qg3 Rad8 h6 g6 Ne4 dxe4 Rxd8 Rxd8 Qc7",
+        "explanation": "In the Jobava system, White trades dark-squared bishops early then launches a ferocious kingside pawn storm with g4-g5-h4-h5. After castling queenside, White's pawns roll forward relentlessly. The h6 pawn wedge severely weakens Black's kingside and creates a permanent hook for the attack. Ne4 sacrifices the knight to open lines, and after Rxd8 the queen invades on c7 with devastating threats against Black's back rank and the exposed king."
       }
     ],
     "warningLines": [
@@ -2541,6 +2636,16 @@
         "name": "Central Exchange Tactic",
         "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 dxe5 dxe5 Qxd8 Rxd8 Nxe5 Nxe4 Nxe4 Bxe5 Bf3 Nc6 Be3 Bf5 Nd2 Nd4",
         "explanation": "If White captures on e5 in the exchange variation, Black gets active piece play. The Bg7 becomes a monster and Black's pieces coordinate beautifully. The endgame is easy to play for Black."
+      },
+      {
+        "name": "Bayonet Attack Counter-Trap",
+        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 b4 Nh5 g3 f5 Ng5 Nf6 f3 f4 b5 h6 Ne6 Bxe6 dxe6 fxg3 hxg3 Nh5",
+        "explanation": "In the Bayonet Attack with b4, White pushes for queenside space but Black counters with ...Nh5 and ...f5 to build a devastating kingside attack. After ...a5 is not needed here — Black strikes directly with ...f4 to break open the kingside. When White commits the knight to e6, Black captures and opens the f-file with ...fxg3 hxg3 Nh5, targeting the weakened g3 pawn and creating mating threats on the kingside."
+      },
+      {
+        "name": "Classical f4 Breakthrough",
+        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4 Bf2 g5 Nd3 Ng6 c5 Nf6 cxd6 cxd6 Rc1 g4",
+        "explanation": "The Classical King's Indian sees Black lock the center with ...f5 and ...f4, then launch a kingside pawn storm with ...g5. White tries to counter on the queenside with c5, but Black reroutes knights to g6 and f6 to support the g5-g4 break. After cxd6 cxd6, Black's kingside attack arrives faster than White's queenside play because the g4 pawn advance cracks open lines directly toward White's king."
       }
     ],
     "variations": [
@@ -2649,6 +2754,16 @@
         "name": "e4 Block After Bxc3",
         "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 cxd4 exd4 b6 Bg5 Bb7 Re1 Nbd7 Rc1 Rc8 Qb3 Be7",
         "explanation": "In the Rubinstein, Black plays ...c5 challenging White's center. After ...dxc4 and ...cxd4, White gets an isolated d-pawn. Black blockades on d5 and targets the weak pawn in the endgame."
+      },
+      {
+        "name": "Saemisch c5 Pawn Storm",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 O-O Na5 Ng3 Ba6 e4 d6 f4 Rc8",
+        "explanation": "After 4.a3 Bxc3+ 5.bxc3, White has the bishop pair but a shattered pawn structure. Black plays ...c5 and ...Nc6 to target the weak c3 and d4 pawns. The knight reroutes via a5 to pressure c4, while ...Ba6 exchanges the light-squared bishops to expose holes around White's king. With ...Rc8 targeting the c-file, Black has concrete queenside pressure and can prepare ...d5 or ...f5 breaks while White struggles to coordinate."
+      },
+      {
+        "name": "4.f3 Central Counter",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 O-O Bd3 b6 Ne2 Ba6 O-O Bxd3 Qxd3 Nc6",
+        "explanation": "After the aggressive 4.f3, White aims for a big center with e4 but weakens the kingside. Black strikes with ...d5 and ...c5 to challenge the center before White consolidates. The key idea is ...Ba6 exchanging the light-squared bishops, which exposes the weakened light squares created by f3. After ...Nc6, Black has a harmonious setup with superior development and pressure against White's doubled c-pawns and weakened king position."
       }
     ],
     "variations": [
@@ -2757,6 +2872,16 @@
         "name": "Russian System Nc6 Pressure",
         "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 Qb3 dxc4 Qxc4 O-O e4 Nc6 Be2 e5 d5 Nd4 Nxd4 exd4 Nb5 c5 dxc6 bxc6 Nc3 Be6 Qa4 d3 Bf3 Rb8 O-O c5",
         "explanation": "In the Russian System with Qb3, Black plays ...Nc6 and ...e5, striking at the center. After ...Nd4, Black gets powerful piece play and the d4 pawn becomes a strong passed pawn."
+      },
+      {
+        "name": "Exchange Qa5 Infiltration",
+        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 Rd8 d5 e6 Be2 exd5 exd5 b5 O-O Nd7",
+        "explanation": "In the Exchange Grünfeld, Black targets the vulnerable c3 pawn with ...Qa5 and ...c5, forcing White into difficult defensive choices. After simplifying the center with ...e6 and ...exd5, Black develops the knight to d7 heading for e5 or b6 with active piece play. The Bg7 dominates the long diagonal and Black's pieces coordinate to blockade and eventually win the isolated d5 pawn. White's doubled c-pawns remain a permanent structural weakness."
+      },
+      {
+        "name": "d5 Passed Pawn Blockade Break",
+        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O Bg4 f3 Na5 Bd3 cxd4 cxd4 Be6",
+        "explanation": "White pushes d5 to create a passed pawn, but Black methodically blockades and undermines it. The key is ...Bg4 pinning against the queen and forcing f3 which weakens the kingside. After ...Na5 targets the bishop, and ...cxd4 cxd4 isolates White's center pawn. The critical ...Be6 establishes a blockade on the light squares while the Bg7 rakes across the board. Black's superior piece coordination makes the d4 pawn a liability rather than an asset."
       }
     ],
     "variations": [
@@ -2959,6 +3084,11 @@
         "name": "Knight Outpost on e5",
         "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4 Nd7 Nc4 Ne5 Nxe5 Bxe5 Bf3 Bd7 a5 Rb8 Bd2 b5 axb6 Rxb6",
         "explanation": "The knight maneuver ...Nd7-e5 is a key Benoni idea. The knight on e5 is magnificently placed, controlling key squares and supporting the ...f5 break. White must react or face growing pressure."
+      },
+      {
+        "name": "Kingside f5 Breakthrough",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Nh5 a4 f5 exf5 gxf5 f4 Nd7 Nf3 Ne5",
+        "explanation": "The ...f5 break is the thematic Benoni kingside counterpunch. Black prepares it carefully with ...Re8 and ...Nh5 removing the knight from f6 where it blocked the f-pawn. When Black strikes with ...f5, the kingside opens and the e5 square becomes available for the knight. After exf5 gxf5, Black has an open g-file and the powerful knight maneuver ...Ne5 establishes a dominant outpost. White's center begins to crumble under the combined pressure of Black's active pieces."
       }
     ],
     "variations": [
@@ -3154,6 +3284,11 @@
         "name": "Early d5 Strike",
         "pgn": "d4 Nf6 c4 e6 Nf3 b6 e3 Bb7 Bd3 Bb4+ Nbd2 O-O O-O d5 a3 Bd6 b4 Nbd7",
         "explanation": "Against the e3 system, Black strikes with ...d5 to challenge the center immediately. After ...Bd6, Black has a harmonious setup and the bishop pair can become very powerful."
+      },
+      {
+        "name": "Ne4 Central Domination",
+        "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Qc2 Nxc3 Qxc3 c5 Rd1 d6 d5 e5 e4 Nd7 Be3 Bf6 Qc2 a5",
+        "explanation": "Black plays ...Ne4 to exchange White's best defensive minor piece on c3, then follows up with ...c5 and ...d6 seizing kingside space. The bishop redeploys to f6 where it controls the dark squares and eyes the weakened d4 pawn. After ...Nd7 and ...a5, Black builds queenside counterplay while maintaining a flexible position. The Bb7 fires down the long diagonal creating latent threats against White's center and king."
       }
     ],
     "warningLines": [
@@ -3411,6 +3546,11 @@
         "name": "Queenside Expansion",
         "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e3 d6 Nge2 Nf6 O-O O-O d4 exd4 Nxd4 Nxd4 exd4 Re8",
         "explanation": "White times d4 perfectly after full development. The central break opens lines favorably for White, and the g2 bishop becomes extremely powerful on the long diagonal."
+      },
+      {
+        "name": "Botvinnik System e5 Wedge",
+        "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 e4 f5 Nge2 Nf6 O-O O-O f4 exf4 Nxf4 Be6 Nfd5 Nxd5 cxd5 Bxd5 exd5 Nd4",
+        "explanation": "The Botvinnik System features the powerful e4+f4 pawn center. After f4 opens the f-file, White exchanges to reach a favorable structure with Nfd5 establishing a dominant knight. The cxd5 and exd5 captures create a powerful passed d-pawn and open lines for White's pieces. Although Black gets counterplay with ...Nd4, White's bishop pair and central passed pawn provide a lasting positional advantage."
       }
     ],
     "warningLines": [
@@ -3584,6 +3724,11 @@
         "name": "French Structure Squeeze",
         "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 Be7 Bg2 O-O O-O b6 Re1 Bb7 e5 Nd7 Nf1 f6",
         "explanation": "Against the French structure, e5 creates a vice grip. Black struggles to find counterplay while White slowly builds up on the kingside. The f1 knight heads to g3-f5."
+      },
+      {
+        "name": "Fischer's Kingside Buildup",
+        "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O Nh4 Re8 Nf5 Bf8 Nc4 b5 Nce3 Qc7",
+        "explanation": "The classic Fischer KIA buildup features the knight maneuver Nh4-f5, which is the cornerstone of White's kingside attack. After e4 opens the position, White gains space and redirects pieces kingward. The knight on f5 is extremely powerful, eyeing g7, h6, d6, and e3. Combined with g4 chasing the bishop and Nce3 reinforcing f5, White builds an iron grip on the light squares. Black's bishop retreats passively to f8 and White's attack practically plays itself."
       }
     ],
     "warningLines": [
@@ -3658,6 +3803,11 @@
         "name": "From's Gambit Refutation",
         "pgn": "f4 e5 fxe5 d6 exd6 Bxd6 Nf3 Nf6 d4 Nc6 Bg5 h6 Bh4 g5 Bg3 Ne4 Bxd6 Qxd6",
         "explanation": "After taking the From's Gambit pawn, precise play with d4 and Bg5 neutralizes Black's initiative. White emerges with a healthy extra pawn if Black doesn't find the best moves."
+      },
+      {
+        "name": "Stonewall Kingside Attack",
+        "pgn": "f4 d5 Nf3 Nf6 e3 e6 d4 c5 c3 Nc6 Bd3 Bd6 O-O O-O Nbd2 Qc7 Ne5 cxd4 exd4 Nd7 Ndf3 f6 Nxd7 Bxd7 Qe1 Rae8 Qh4 Be7 f5 e5",
+        "explanation": "White builds a Stonewall formation with f4, d4, e3, and Bd3, then reroutes the queen via Qe1-h4 to target the kingside. The knight goes to e5 establishing a powerful outpost before exchanging. After Qh4 creates threats on the h-file and the dark squares, White strikes with f5 to break open the kingside. If Black plays ...e5 to block, White has dxe5 fxe5 with a massive attack down the f-file and the h4-d8 diagonal aimed at the exposed king."
       }
     ],
     "warningLines": [
@@ -3737,6 +3887,11 @@
         "name": "d4 Counter-Sacrifice",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Nxd4 Nxd4",
         "explanation": "After 4.d4, Black can play ...Nxe4 grabbing a central pawn. White gets active play with Re1 but Black's solid position with ...d5 and ...Be6 holds comfortably."
+      },
+      {
+        "name": "Ulvestad Variation Counter-Gambit",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 b5 Bf1 Nd4 c3 Nxd5 cxd4 Qxg5 Bxb5+ Kd8 Qf3 Rb8 Bc4 Nf4 O-O Bb7",
+        "explanation": "The Ulvestad Variation with 5...b5 is a sharp counter-gambit where Black sacrifices a pawn to seize the initiative with ...Nd4 and ...Qxg5. After White captures the knight, Black recaptures with the queen and gets active piece play. The ...Rb8 and ...Bb7 develop with tempo against White's exposed bishop, and the ...Nf4 knight creates threats against g2 and e2. Despite being down a pawn, Black's piece activity and White's awkward king position give Black excellent practical chances."
       }
     ],
     "warningLines": [
@@ -3811,6 +3966,26 @@
         "name": "Slow Evans Pressure",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 Bb6 exd6 Na5 Qa4 Nxc4",
         "explanation": "In the Slow Evans, Qb3 creates dual threats on f7 and d5. If Black isn't precise, White wins material or gets a crushing attack. The queen and bishop battery is very hard to handle."
+      },
+      {
+        "name": "Double Pawn Sacrifice",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O Nd5 Nxd5 Bxd5 Bb6 Rae1 d6 exd6 Be6 Bxe6 fxe6 Rxe6",
+        "explanation": "The double pawn sacrifice with d4 and c3 gives White staggering development after O-O. Black grabs both pawns but White's pieces explode into action with Qb3 targeting f7, e5 driving back the queen, and Nxc3 completing development. After Nd5 and Ba3, every White piece is firing on all cylinders. The Bxd5 centralizes the bishop while Rae1 and the eventual Rxe6 blows open Black's position with a crushing attack."
+      },
+      {
+        "name": "Qb3 f7 Battery",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 e5 d5 exf6 dxc4 Qe2+ Be6 fxg7 Rg8 cxd4 Rxg7 Bg5 Qd5 Nc3 Qf5 d5 Nd8 dxe6 Nxe6 Bf4 Kf8 Rad1 Bb6 Nd5",
+        "explanation": "White's Qb3-Qe2+ battery targets f7 relentlessly after sacrificing the bishop with exf6 and fxg7. Black wins material but White's initiative is overwhelming as every piece enters with tempo. The Bg5 pin paralyzes Black's development, and after d5 dislodges the knight, the passed e6 pawn becomes a battering ram. Nd5 lands with decisive threats, and Black's king stuck on f8 can't find safety anywhere on the board."
+      },
+      {
+        "name": "Anderssen Attack",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4 Qa4 Bd7 Qb3 Na5 Bxf7+ Kf8 Qa3 Bxd4 Nxd4 Qf6 Be3 Ne7 Rad1 c5 Be6",
+        "explanation": "The Anderssen Attack ramps up pressure with Nc3, Qa4, and Qb3 creating dual threats against f7 and b7. When Black tries to defend with Bd7 and Na5, the devastating Bxf7+ sacrifice rips open the king position. After Kf8, the queen retreats to a3 pinning the d6 pawn to the king, and every piece joins the attack. Be6 at the end cuts off Black's coordination entirely, leaving the king stranded on f8 with no counterplay."
+      },
+      {
+        "name": "Knight Fork Counter",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Bxd3 Nge7 Ba3 O-O Nbd2 Bb6 Rae1 d6 exd6 cxd6 Ne4 Be6 Qd1 d5 Neg5 Bd7 Bd6 Rfe8 Bxe7 Rxe7 Rxe7 Nxe7",
+        "explanation": "When Black tries the tricky ...d3 counter-gambit to disrupt White's center, White calmly recaptures with the bishop and develops with tempo via Ba3 and Nbd2. The knight reroutes to e4 establishing a powerful outpost, then jumps to g5 creating dual threats. After Bd6 seizes the dark squares and forces the exchange of Black's rook, White emerges with superior piece activity and a lasting initiative against Black's weakened structure."
       }
     ],
     "warningLines": [
