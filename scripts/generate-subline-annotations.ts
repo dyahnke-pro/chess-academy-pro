@@ -15,6 +15,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { OPENING_ANNOTATION_ADDITION } from '../src/services/coachPrompts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -77,11 +78,10 @@ interface Opening {
 
 const SYSTEM_PROMPT = `You are an expert chess instructor creating detailed move-by-move annotations for chess openings. Your annotations will be displayed in a training app alongside an interactive chessboard.
 
+${OPENING_ANNOTATION_ADDITION}
+
 For EACH move in the PGN, provide:
-1. **annotation**: A rich explanation (2-4 sentences) covering:
-   - WHY this specific move (not just "develops the knight" — explain the strategic reasoning)
-   - What it controls, threatens, or prepares
-   - How it fits into the broader plan
+1. **annotation**: Follow the 3-part structure above (name the opening/variation, explain the move's concrete purpose, give one actionable next idea). Keep to 2-3 sentences.
 2. **pawnStructure** (optional): If the move changes or defines the pawn structure, explain what it looks like and its implications
 3. **plans** (optional): 1-2 bullet points about what comes next strategically
 4. **alternatives** (optional): 1-2 notable alternative moves and why they lead to different positions
@@ -103,7 +103,6 @@ CRITICAL RULES:
 - Arrow squares MUST be valid for the CURRENT board position (after the move is played)
 - Track piece positions mentally as you go through the PGN
 - The "from" and "to" in arrows must reference squares where pieces actually are, or squares being controlled/targeted
-- Keep annotations instructive and conversational, like a coach explaining to an intermediate player
 - Don't be generic — reference specific squares, pieces, and concrete plans
 
 Return ONLY valid JSON matching this exact structure:
@@ -141,6 +140,17 @@ async function generateAnnotations(
 ): Promise<MoveAnnotation[]> {
   const moves = parsePgnMoves(pgn);
 
+  // Build per-move context: move number, whose turn, and the last 4 moves in SAN
+  const moveContextLines: string[] = [];
+  for (let i = 0; i < moves.length; i++) {
+    const fullMoveNum = Math.floor(i / 2) + 1;
+    const isWhite = i % 2 === 0;
+    const turn = isWhite ? 'White' : 'Black';
+    const last4Start = Math.max(0, i - 3);
+    const last4 = moves.slice(last4Start, i + 1).join(' ');
+    moveContextLines.push(`  Move ${i + 1}: ${moves[i]} (${turn}, move ${fullMoveNum}) — recent moves: ${last4}`);
+  }
+
   const userPrompt = `Annotate every move in this chess opening variation:
 
 Opening: ${openingName}
@@ -149,9 +159,15 @@ PGN: ${pgn}
 ${explanation ? `Context: ${explanation}` : ''}
 
 There are ${moves.length} moves. You must return exactly ${moves.length} annotations, one per move, in order.
-The moves are: ${moves.join(', ')}
 
-Remember: track the board position as you annotate. Arrows must reference valid squares for the current position.`;
+Per-move context (use this to track whose turn it is and recent move history):
+${moveContextLines.join('\n')}
+
+IMPORTANT REMINDERS:
+- For each annotation, ALWAYS start by naming "${openingName}" and the "${variationName}" variation
+- Explain what THIS specific move accomplishes tactically or strategically (no generic phrases)
+- End with one concrete, actionable idea for the next 2-3 moves
+- Track the board position as you annotate. Arrows must reference valid squares for the current position.`;
 
   const response = await client.messages.create({
     model,
