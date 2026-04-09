@@ -1,6 +1,14 @@
-import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useChessGame, type MoveResult } from './useChessGame';
+
+vi.mock('../services/stockfishEngine', () => ({
+  stockfishEngine: {
+    getBestMove: vi.fn(),
+  },
+}));
+
+import { stockfishEngine } from '../services/stockfishEngine';
 
 // Fool's mate: white king on e1 is checkmated
 const FOOLS_MATE_FEN = 'rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3';
@@ -9,6 +17,15 @@ const FOOLS_MATE_FEN = 'rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq 
 const CHECK_FEN = 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4';
 
 describe('useChessGame', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe('initial state', () => {
     it('starts with the standard opening position', () => {
       const { result } = renderHook(() => useChessGame());
@@ -510,6 +527,121 @@ describe('useChessGame', () => {
 
       expect(result.current.selectedSquare).toBeNull();
       expect(result.current.legalMoves).toHaveLength(0);
+    });
+  });
+
+  describe('computer opponent (Stockfish)', () => {
+    it('calls Stockfish getBestMove when it is the computer turn', async () => {
+      // Computer plays black — after white moves, Stockfish should be called
+      const getBestMoveMock = vi.mocked(stockfishEngine.getBestMove);
+      getBestMoveMock.mockResolvedValueOnce('e7e5');
+
+      const { result } = renderHook(() => useChessGame(undefined, 'white', 'b'));
+
+      // White makes a move
+      act(() => {
+        result.current.makeMove('e2', 'e4');
+      });
+
+      // Advance past the 500ms delay
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await vi.runAllTimersAsync();
+      });
+
+      expect(getBestMoveMock).toHaveBeenCalledTimes(1);
+      // Should have been called with the FEN after e4
+      expect(getBestMoveMock.mock.calls[0][0]).toContain('rnbqkbnr/pppppppp/8/8/4P3');
+    });
+
+    it('executes the Stockfish move on the board', async () => {
+      const getBestMoveMock = vi.mocked(stockfishEngine.getBestMove);
+      getBestMoveMock.mockResolvedValueOnce('e7e5');
+
+      const { result } = renderHook(() => useChessGame(undefined, 'white', 'b'));
+
+      act(() => {
+        result.current.makeMove('e2', 'e4');
+      });
+
+      // Advance past the 500ms delay and flush the resolved promise
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await Promise.resolve();
+      });
+
+      expect(result.current.turn).toBe('w');
+      expect(result.current.history).toEqual(['e4', 'e5']);
+    });
+
+    it('does not call Stockfish when computerColor is not set', () => {
+      const getBestMoveMock = vi.mocked(stockfishEngine.getBestMove);
+
+      const { result } = renderHook(() => useChessGame());
+
+      act(() => {
+        result.current.makeMove('e2', 'e4');
+      });
+
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      expect(getBestMoveMock).not.toHaveBeenCalled();
+    });
+
+    it('does not call Stockfish when it is not the computer turn', () => {
+      const getBestMoveMock = vi.mocked(stockfishEngine.getBestMove);
+
+      // Computer is white, but white has not moved yet — it IS the computer's turn at start
+      // Use a position where it's black's turn instead
+      renderHook(() => useChessGame(undefined, 'white', 'b'));
+
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // At start, it's white's turn but computer is black — should not call
+      expect(getBestMoveMock).not.toHaveBeenCalled();
+    });
+
+    it('falls back to random move when Stockfish fails', async () => {
+      const getBestMoveMock = vi.mocked(stockfishEngine.getBestMove);
+      getBestMoveMock.mockRejectedValueOnce(new Error('Stockfish failed'));
+
+      const { result } = renderHook(() => useChessGame(undefined, 'white', 'b'));
+
+      act(() => {
+        result.current.makeMove('e2', 'e4');
+      });
+
+      // Advance past delay and flush the rejected promise + catch handler
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await Promise.resolve();
+        await Promise.resolve();
+      });
+
+      // Should still have made a move (random fallback)
+      expect(result.current.turn).toBe('w');
+      expect(result.current.history).toHaveLength(2);
+    });
+
+    it('handles UCI promotion moves', async () => {
+      // White pawn on e7, black king on h8, computer plays white — should promote
+      const promotionFen = '7k/4P3/8/8/8/8/8/4K3 w - - 0 1';
+      const getBestMoveMock = vi.mocked(stockfishEngine.getBestMove);
+      getBestMoveMock.mockResolvedValueOnce('e7e8q');
+
+      const { result } = renderHook(() => useChessGame(promotionFen, 'black', 'w'));
+
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await Promise.resolve();
+      });
+
+      expect(result.current.turn).toBe('b');
+      expect(result.current.history).toHaveLength(1);
     });
   });
 });
