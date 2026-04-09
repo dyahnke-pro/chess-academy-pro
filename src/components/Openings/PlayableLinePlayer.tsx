@@ -117,10 +117,13 @@ export function PlayableLinePlayer({
     return '';
   }, [phase, demoMoveIndex, line.annotations]);
 
-  // Pre-warm voice service
+  // Pre-warm voice service + prefetch audio for all annotations
   useEffect(() => {
     void voiceService.warmup();
-  }, []);
+    if (line.annotations.length > 0) {
+      void voiceService.prefetchAudio(line.annotations);
+    }
+  }, [line.annotations]);
 
   // ─── Demonstration Phase: Auto-play logic ────────────────────────────────
 

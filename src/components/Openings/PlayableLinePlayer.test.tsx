@@ -57,6 +57,7 @@ vi.mock('../../services/voiceService', () => ({
     speakFast: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
     warmup: vi.fn().mockResolvedValue(undefined),
+    prefetchAudio: vi.fn().mockResolvedValue(undefined),
   },
 }));
 

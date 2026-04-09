@@ -44,6 +44,9 @@ class VoiceService {
    *  Starts false since the Vercel Polly endpoint is not currently deployed. */
   private pollyAvailable = false;
 
+  /** In-memory cache of Polly audio buffers keyed by "voice:text" */
+  private audioCache = new Map<string, ArrayBuffer>();
+
   // Cached preferences to avoid DB read on every speak() call
   private cachedPrefs: {
     voiceEnabled: boolean;
@@ -217,19 +220,30 @@ class VoiceService {
     return this.playing;
   }
 
+  private pollyKey(text: string, voice: string): string {
+    return `${voice}:${text}`;
+  }
+
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
-      this.abortController = new AbortController();
-      const url = getTtsUrl(text, voice);
-      const response = await fetch(url, { signal: this.abortController.signal });
-      if (!response.ok) {
-        console.warn('[VoiceService] Polly API error:', response.status, '— disabling for session');
-        this.pollyAvailable = false;
-        return false;
+      const key = this.pollyKey(text, voice);
+      let arrayBuffer = this.audioCache.get(key);
+
+      if (!arrayBuffer) {
+        this.abortController = new AbortController();
+        const url = getTtsUrl(text, voice);
+        const response = await fetch(url, { signal: this.abortController.signal });
+        if (!response.ok) {
+          console.warn('[VoiceService] Polly API error:', response.status, '— disabling for session');
+          this.pollyAvailable = false;
+          return false;
+        }
+        arrayBuffer = await response.arrayBuffer();
+        this.abortController = null;
+        this.audioCache.set(key, arrayBuffer);
       }
-      const arrayBuffer = await response.arrayBuffer();
-      this.abortController = null;
-      await this.playAudioBuffer(arrayBuffer);
+
+      await this.playAudioBuffer(arrayBuffer.slice(0));
       return true;
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
@@ -240,6 +254,36 @@ class VoiceService {
       this.playing = false;
       this.currentSource = null;
       return false;
+    }
+  }
+
+  /** Pre-fetch Polly audio for a list of texts. Call on mount when all
+   *  annotations are known so playback is instant later. */
+  async prefetchAudio(texts: string[]): Promise<void> {
+    const prefs = await this.loadPrefs();
+    if (!prefs?.pollyEnabled || !this.pollyAvailable || !prefs.voiceEnabled) return;
+
+    const voice = prefs.pollyVoice;
+    const uncached = texts.filter(t => t && !this.audioCache.has(this.pollyKey(t, voice)));
+    if (uncached.length === 0) return;
+
+    // Fetch in parallel, 4 at a time to avoid overwhelming the server
+    const BATCH = 4;
+    for (let i = 0; i < uncached.length; i += BATCH) {
+      const batch = uncached.slice(i, i + BATCH);
+      await Promise.allSettled(
+        batch.map(async (text) => {
+          try {
+            const url = getTtsUrl(text, voice);
+            const res = await fetch(url);
+            if (res.ok) {
+              this.audioCache.set(this.pollyKey(text, voice), await res.arrayBuffer());
+            }
+          } catch {
+            // Prefetch failure is non-fatal
+          }
+        }),
+      );
     }
   }
 

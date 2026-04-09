@@ -113,7 +113,12 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
       const data = subKey
         ? await loadSubLineAnnotations(opening.id, subKey)
         : await loadAnnotations(opening.id);
-      if (!guard.cancelled) setAnnotations(data);
+      if (!guard.cancelled) {
+        setAnnotations(data);
+        if (data) {
+          void voiceService.prefetchAudio(data.map(a => a.annotation));
+        }
+      }
     })();
     return () => { guard.cancelled = true; };
   }, [opening.id, customLine, isVariation, variationIndex]);

@@ -211,6 +211,10 @@ export function WalkthroughMode({
       }
       if (!guard.cancelled) {
         setAnnotations(data);
+        // Pre-fetch Polly audio for all annotations so playback is instant
+        if (data) {
+          void voiceService.prefetchAudio(data.map(a => a.annotation));
+        }
       }
     })();
     return () => { guard.cancelled = true; };
