@@ -14,7 +14,7 @@ const DIST_ASSETS = join(ROOT, 'dist', 'assets');
 // so we separate the "app code + vendor" from "annotation data" chunks.
 const MAX_APP_JS_SIZE = 7_800_000;          // 7.8 MB for app index + vendors (includes inlined ECO/repertoire JSON + annotation data)
 const MAX_VENDOR_CHUNK_SIZE = 600_000;      // 600 KB per vendor chunk
-const MAX_ANNOTATION_CHUNK_SIZE = 150_000;  // 150 KB per lazy annotation chunk
+const MAX_ANNOTATION_CHUNK_SIZE = 300_000;  // 300 KB per lazy annotation chunk (raised for deepened variation annotations)
 const MAX_CSS_SIZE = 100_000;               // 100 KB CSS
 const EXPECTED_VENDOR_CHUNKS = ['react-vendor', 'chess-vendor', 'ui-vendor', 'data-vendor'];
 

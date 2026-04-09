@@ -953,87 +953,518 @@
       "moveAnnotations": [
         {
           "san": "c4",
-          "annotation": "The English: Symmetrical Variation is an important variation of the English Opening. Both sides fianchetto and develop symmetrically. White's extra tempo means the symmetry slightly favors White. Look for ways to break the symmetry with Rb1 and b4 on the queenside. Let's walk through the key ideas."
+          "annotation": "White stakes a claim on c4. This move contributes to White's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
-          "annotation": "Black replies with c5. This is the defining move of the English: Symmetrical Variation — it shapes the pawn structure and determines the resulting plans."
+          "annotation": "Black stakes a claim on c5. This move contributes to Black's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "c7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": "White brings the knight to its natural square on c3. The knight on c3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": "Black deploys the knight to c6. The knight on c6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "g3",
-          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "White moves forward to g3. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "g6",
-          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "Black moves forward to g6. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g6",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Bg2",
-          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+          "annotation": "White develops the bishop to g2. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Bg7",
-          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+          "annotation": "Black deploys the bishop to g7. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g7",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": "White deploys the knight to f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "alternatives": [
+            "A different knight move was possible, but f3 offers the best combination of activity and control."
+          ]
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": "Black brings the knight to its natural square on f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": "Castles to safety, connecting the rooks and tucking the king away.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "d3",
-          "annotation": "d3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": "White pushes the pawn to d3. White improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position. We're reaching the critical position of this variation.",
+          "annotation": "Black pushes the pawn to d6. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d7",
-              "to": "d6",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "from": "d6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
             }
-          ]
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
         },
         {
           "san": "a3",
-          "annotation": "a3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Notice how the pieces coordinate in this position.",
+          "annotation": "White advances to a3. A flank pawn advance, creating space on the queenside.",
           "arrows": [
             {
-              "from": "a2",
-              "to": "a3",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "from": "a3",
+              "to": "a2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2."
+        },
+        {
+          "san": "a6",
+          "annotation": "Black expands with the pawn to a6. A flank pawn advance, creating space on the queenside.",
+          "arrows": [
+            {
+              "from": "a6",
+              "to": "a7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
+        },
+        {
+          "san": "Rb1",
+          "annotation": "White moves the rook to b1. The rook is activated on b1, adding to White's piece coordination.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "b1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "White had other options here, but this move best maintains the initiative."
+          ]
+        },
+        {
+          "san": "Rb8",
+          "annotation": "Black moves the rook to b8. The rook is activated on b8, adding to Black's piece coordination.",
+          "arrows": [
+            {
+              "from": "a8",
+              "to": "b8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b8",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
         {
-          "san": "a6",
-          "annotation": "a6. This is the typical position arising from the English: Symmetrical Variation. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "san": "b4",
+          "annotation": "White pushes the pawn to b4. A flank pawn advance, creating space on the queenside.",
           "arrows": [
             {
-              "from": "a7",
-              "to": "a6",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "from": "b4",
+              "to": "b2",
+              "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "cxb4",
+          "annotation": "Black captures the pawn on b4. Black improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6, doubled pawns on the b-file."
+        },
+        {
+          "san": "axb4",
+          "annotation": "White captures the pawn on b4. A thematic move in this position, maintaining White's initiative.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "a3",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "b5",
+          "annotation": "Black moves forward to b5. A flank pawn advance, creating space on the queenside.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "b7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "cxb5",
+          "annotation": "White captures the pawn on b5. A thematic move in this position, maintaining White's initiative.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2, doubled pawns on the b-file, isolated pawn on b and b."
+        },
+        {
+          "san": "axb5",
+          "annotation": "Black captures the pawn on b5. A thematic move in this position, maintaining Black's initiative.",
+          "arrows": [
+            {
+              "from": "b5",
+              "to": "a6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6, isolated pawn on b."
+        },
+        {
+          "san": "Bd2",
+          "annotation": "White moves the bishop to d2. The bishop on d2 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2, isolated pawn on b.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but d2 maximizes its influence on the key diagonals."
+          ]
+        },
+        {
+          "san": "Bd7",
+          "annotation": "Black moves the bishop to d7. The bishop on d7 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "White moves the knight to d5. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black takes on d5, removing White's knight. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         }
       ]
@@ -1044,101 +1475,478 @@
       "moveAnnotations": [
         {
           "san": "c4",
-          "annotation": "The English: Four Knights Variation is an important variation of the English Opening. A sharp variation where White plays e3 and Qc2. The knight jump to d5 creates immediate tactical threats, and if Black isn't careful, White gets a strong initiative. Let's walk through the key ideas."
+          "annotation": "White stakes a claim on c4. This move contributes to White's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "e5",
-          "annotation": "Black responds with e5, contesting the center. This is the move that defines the English: Four Knights Variation."
+          "annotation": "Black moves forward to e5. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": "White deploys the knight to c3. The knight on c3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": "Black deploys the knight to f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": "White activates the knight on f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "alternatives": [
+            "A different knight move was possible, but f3 offers the best combination of activity and control."
+          ]
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": "Black deploys the knight to c6. The knight on c6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
-          "san": "e3",
-          "annotation": "e3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "san": "g3",
+          "annotation": "White pushes the pawn to g3. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Bb4",
-          "annotation": "Bb4 brings the bishop into the game. Development with purpose — the bishop on b4 eyes important squares."
-        },
-        {
-          "san": "Qc2",
-          "annotation": "Qc2 brings the queen into the game. Development with purpose — the queen on c2 eyes important squares."
-        },
-        {
-          "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
-        },
-        {
-          "san": "Nd5",
-          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position."
-        },
-        {
-          "san": "Re8",
-          "annotation": "Re8 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files."
-        },
-        {
-          "san": "Qf5",
-          "annotation": "Qf5 activates the queen. From f5, the queen has maximum influence across multiple diagonals and files."
-        },
-        {
-          "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
-        },
-        {
-          "san": "Nxb4",
-          "annotation": "Nxb4 captures the bishop. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "annotation": "Black brings the bishop to its natural square on b4. The bishop on b4 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "d5",
+              "from": "f8",
               "to": "b4",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b4",
+              "color": "rgba(0, 180, 80, 0.3)"
             }
           ]
         },
         {
-          "san": "Nxb4",
-          "annotation": "Nxb4 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material. We're reaching the critical position of this variation.",
+          "san": "Bg2",
+          "annotation": "White activates the bishop on g2. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "b4",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
             }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but g2 maximizes its influence on the key diagonals."
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Castles to safety, connecting the rooks and tucking the king away.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "Black advances to e4. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e4."
+        },
+        {
+          "san": "d3",
+          "annotation": "White moves forward to d3. White improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black stakes a claim on d6. Black improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e4."
+        },
+        {
+          "san": "Nd5",
+          "annotation": "White activates the knight on d5. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": "Black places the bishop on the active c5 square. The bishop on c5 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
+        },
+        {
+          "san": "Bg5",
+          "annotation": "White moves the bishop to g5. The bishop on g5 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "g5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but g5 maximizes its influence on the key diagonals."
+          ]
+        },
+        {
+          "san": "h6",
+          "annotation": "Black expands with the pawn to h6. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "h6",
+              "to": "h7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e4."
+        },
+        {
+          "san": "Bxf6",
+          "annotation": "White takes on f6, removing Black's knight. The bishop on f6 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "g5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "Qxf6",
+          "annotation": "Black wins the piece on f6, removing White's bishop. The queen takes up an influential position on f6, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d8",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nd2",
+          "annotation": "White moves the knight to d2. The knight on d2 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "A different knight move was possible, but d2 offers the best combination of activity and control."
+          ]
+        },
+        {
+          "san": "Qg6",
+          "annotation": "Black moves the queen to g6. The queen takes up an influential position on g6, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "g6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
           "san": "a3",
-          "annotation": "a3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Notice how the pieces coordinate in this position.",
+          "annotation": "White stakes a claim on a3. A flank pawn advance, creating space on the queenside.",
           "arrows": [
             {
-              "from": "a2",
-              "to": "a3",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "from": "a3",
+              "to": "a2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2."
+        },
+        {
+          "san": "Bh3",
+          "annotation": "Black moves the bishop to h3. The bishop on h3 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "h3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h3",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         },
         {
-          "san": "Nc6",
-          "annotation": "Nc6. This is the typical position arising from the English: Four Knights Variation. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "san": "b4",
+          "annotation": "White expands with the pawn to b4. A flank pawn advance, creating space on the queenside.",
           "arrows": [
             {
               "from": "b4",
-              "to": "c6",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "to": "b2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "Bb6",
+          "annotation": "Black moves the bishop to b6. The bishop on b6 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
         }
@@ -1150,88 +1958,480 @@
       "moveAnnotations": [
         {
           "san": "c4",
-          "annotation": "The English: Botvinnik System is an important variation of the English Opening. The Botvinnik System with e4 and d3 creates a powerful pawn center. White's setup is extremely solid and provides long-term pressure. The pawn on e2 reroutes to g3 or c3. Let's walk through the key ideas."
+          "annotation": "White pushes the pawn to c4. This move contributes to White's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "e5",
-          "annotation": "Black responds with e5, contesting the center. This is the move that defines the English: Botvinnik System."
+          "annotation": "Black expands with the pawn to e5. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": "White develops the knight to c3. The knight on c3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": "Black places the knight on the active c6 square. The knight on c6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "g3",
-          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "White advances to g3. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "g6",
-          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "Black advances to g6. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g6",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Bg2",
-          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+          "annotation": "White activates the bishop on g2. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Bg7",
-          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+          "annotation": "Black develops the bishop to g7. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g7",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White pushes the pawn to e4. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": "Black stakes a claim on d6. This move contributes to Black's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Nge2",
-          "annotation": "Nge2 brings the knight into the game. Development with purpose — the knight on e2 eyes important squares."
+          "annotation": "White activates the knight on e2. The knight on e2 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "e2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
         },
         {
           "san": "f5",
-          "annotation": "f5 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "Black stakes a claim on f5. An aggressive pawn advance, signaling kingside intentions and opening lines.",
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "f7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5."
         },
         {
           "san": "d3",
-          "annotation": "d3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": "White expands with the pawn to d3. White improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d3.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares. We're reaching the critical position of this variation.",
+          "annotation": "Black deploys the knight to f6. The knight on f6 improves Black's piece coordination and flexibility.",
           "arrows": [
             {
               "from": "g8",
               "to": "f6",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
             }
           ]
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. Notice how the pieces coordinate in this position.",
+          "annotation": "Castles, completing king safety and activating the rook.",
           "arrows": [
             {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "from": "g1",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
             }
           ]
         },
         {
           "san": "O-O",
-          "annotation": "O-O. This is the typical position arising from the English: Botvinnik System. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "annotation": "Castles, completing king safety and activating the rook.",
           "arrows": [
             {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(50, 150, 220, 0.8)"
+              "from": "g8",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
+        },
+        {
+          "san": "Nd5",
+          "annotation": "White moves the knight to d5. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "A different knight move was possible, but d5 offers the best combination of activity and control."
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black takes on d5, removing White's knight. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White captures the knight on d5. White improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d5 and e4 and d3, doubled pawns on the d-file.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "Ne7",
+          "annotation": "Black moves the knight to e7. The knight on e7 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "f4",
+          "annotation": "White pushes the pawn to f4. An aggressive pawn advance, signaling kingside intentions and opening lines.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "f2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d5 and e4 and d3, doubled pawns on the d-file.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "exf4",
+          "annotation": "Black captures the pawn on f4. An aggressive pawn advance, signaling kingside intentions and opening lines.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "Black has a central pawn on d6, doubled pawns on the f-file.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "Nxf4",
+          "annotation": "White wins the piece on f4, removing Black's pawn. The knight reaches a powerful central outpost on f4, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black expands with the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "c7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a central pawn on d6."
+        },
+        {
+          "san": "dxc6",
+          "annotation": "White captures the pawn on c6. This pawn move supports a future d-pawn advance, a key central plan.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d3.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "bxc6",
+          "annotation": "Black captures the pawn on c6. This pawn move supports a future d-pawn advance, a key central plan.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "b7",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "Black has a central pawn on d6, isolated pawn on a."
         }
       ]
     },
@@ -1693,6 +2893,992 @@
         {
           "san": "Qe8",
           "annotation": "Qe8. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+        }
+      ]
+    },
+    {
+      "name": "English: Reversed Sicilian",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "c4",
+          "annotation": "White stakes a claim on c4. This move contributes to White's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black expands with the pawn to e5. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3. The knight on c3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black brings the knight to its natural square on f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White deploys the knight to f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "alternatives": [
+            "A different knight move was possible, but f3 offers the best combination of activity and control."
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black activates the knight on c6. The knight on c6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White advances to g3. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "Black stakes a claim on d5. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d5 and e5."
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White captures the pawn on d5. This move contributes to White's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d5 and d2 and e2, doubled pawns on the d-file.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black wins the piece on d5, removing White's pawn. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White activates the bishop on g2. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nb6",
+          "annotation": "Black deploys the knight to b6. The knight on b6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "b6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
+          "alternatives": [
+            "White had other options here, but this move best maintains the initiative."
+          ]
+        },
+        {
+          "san": "Be7",
+          "annotation": "Black brings the bishop to its natural square on e7. The bishop on e7 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e7",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White expands with the pawn to d3. White improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2."
+        },
+        {
+          "san": "O-O",
+          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
+        },
+        {
+          "san": "Be3",
+          "annotation": "White moves the bishop to e3. The bishop on e3 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c1",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but e3 maximizes its influence on the key diagonals."
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black moves the bishop to e6. The bishop on e6 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Rc1",
+          "annotation": "White moves the rook to c1. The rook is activated on c1, adding to White's piece coordination.",
+          "arrows": [
+            {
+              "from": "a1",
+              "to": "c1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "f6",
+          "annotation": "Black moves forward to f6. Black improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "f7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a central pawn on e5."
+        },
+        {
+          "san": "Na4",
+          "annotation": "White moves the knight to a4. The knight on a4 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "a4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "A different knight move was possible, but a4 offers the best combination of activity and control."
+          ]
+        },
+        {
+          "san": "Nxa4",
+          "annotation": "Black wins the piece on a4, removing White's knight. The knight on a4 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "a4",
+              "to": "b6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "Qxa4",
+          "annotation": "White takes on a4, removing Black's knight. The queen takes up an influential position on a4, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "a4",
+              "to": "d1",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qd7",
+          "annotation": "Black moves the queen to d7. The queen takes up an influential position on d7, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Rfd1",
+          "annotation": "White moves the rook to d1. The rook takes up a powerful position on the d-file, pressuring Black's position.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
+          "alternatives": [
+            "White had other options here, but this move best maintains the initiative."
+          ]
+        },
+        {
+          "san": "Rad8",
+          "annotation": "Black moves the rook to d8. The rook takes up a powerful position on the d-file, pressuring White's position.",
+          "arrows": [
+            {
+              "from": "a8",
+              "to": "d8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Botvinnik System e5 Wedge",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "c4",
+          "annotation": "White pushes the pawn to c4. This move contributes to White's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "c2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black advances to e5. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White places the knight on the active c3 square. The knight on c3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black places the knight on the active c6 square. The knight on c6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "White advances to g3. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g3",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "g6",
+          "annotation": "Black expands with the pawn to g6. A flank pawn advance, creating space on the kingside.",
+          "arrows": [
+            {
+              "from": "g6",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "White develops the bishop to g2. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Black deploys the bishop to g7. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g7",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "d3",
+          "annotation": "White expands with the pawn to d3. This move contributes to White's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "d6",
+          "annotation": "Black expands with the pawn to d6. This move contributes to Black's opening development and fight for central control.",
+          "arrows": [
+            {
+              "from": "d6",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
+        },
+        {
+          "san": "e4",
+          "annotation": "White pushes the pawn to e4. This central advance fights for space and control of key squares.",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d3."
+        },
+        {
+          "san": "f5",
+          "annotation": "Black advances to f5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "f5",
+              "to": "f7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5."
+        },
+        {
+          "san": "Nge2",
+          "annotation": "White develops the knight to e2. The knight on e2 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "e2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d3.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ],
+          "alternatives": [
+            "A different knight move was possible, but e2 offers the best combination of activity and control."
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Castles, completing king safety and activating the rook.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "Castles to safety, connecting the rooks and tucking the king away.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
+        },
+        {
+          "san": "f4",
+          "annotation": "White stakes a claim on f4. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "f2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d3.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "exf4",
+          "annotation": "Black captures the pawn on f4. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "Black has a central pawn on d6, doubled pawns on the f-file."
+        },
+        {
+          "san": "Nxf4",
+          "annotation": "White wins the piece on f4, removing Black's pawn. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "e2",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d3.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black moves the bishop to e6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Nfd5",
+          "annotation": "White moves the knight to d5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "f4",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "A different knight move was possible, but d5 offers the best combination of activity and control."
+          ]
+        },
+        {
+          "san": "Nxd5",
+          "annotation": "Black takes on d5, removing White's knight. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "f6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
+        },
+        {
+          "san": "cxd5",
+          "annotation": "White captures the knight on d5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d5 and e4 and d3, doubled pawns on the d-file."
+        },
+        {
+          "san": "Bxd5",
+          "annotation": "Black takes on d5, removing White's pawn. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e6",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "exd5",
+          "annotation": "White captures the bishop on d5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d5 and d3, doubled pawns on the d-file, isolated pawn on d and d.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
+        },
+        {
+          "san": "Nd4",
+          "annotation": "Black moves the knight to d4. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
         }
       ]
     }
