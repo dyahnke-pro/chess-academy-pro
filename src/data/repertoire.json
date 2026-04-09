@@ -2498,17 +2498,17 @@
       },
       {
         "name": "Schlechter Variation (...g6 Fianchetto)",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 g6 e3 Bg7 Bd3 O-O O-O Bg4 h3 Bxf3 Qxf3 e6 Qe2 Nbd7 Rd1 Re8 e4 dxe4 Nxe4 Nxe4 Bxe4 Nf6 Bc2 Qc7",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 g6 e3 Bg7 Bd3 O-O O-O Bg4 h3 Bxf3 Qxf3 e6 Qe2 Nbd7",
         "explanation": "The Schlechter Variation features an unusual fianchetto setup with ...g6 and ...Bg7, giving the Slav a King's Indian flavor. Black delays ...dxc4 and instead develops the dark-squared bishop to its most active diagonal. After ...Bg4 and ...Bxf3, Black concedes the bishop pair but gains a rock-solid structure with the g7 bishop controlling key dark squares. The resulting positions are strategically rich, with Black aiming for ...e5 or ...c5 breaks while the fianchettoed bishop provides lasting pressure on the queenside."
       },
       {
         "name": "Winawer Countergambit (...e5!?)",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e5 dxe5 d4 Ne4 Nxe4 Qxd4 Qxd4 Nxd4 Nd6 e6 Bxe6 Nxe6 fxe6 e3 Nc4 Bxc4",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e5 dxe5 d4 Ne4 Nxe4 Qxd4 Qxd4 Nxd4 Nd6 e6 Bxe6",
         "explanation": "The Winawer Countergambit with ...e5!? is a sharp and provocative choice that immediately challenges White's center. Black sacrifices a pawn to open lines and seize the initiative before White can consolidate. After dxe5 d4, the advanced pawn disrupts White's coordination and creates tactical complications. The resulting positions are unbalanced with Black relying on active piece play and central control to compensate for the material deficit."
       },
       {
         "name": "Modern Qc2/Qb3 Line",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5 g3 e6 Bg2 Nbd7 O-O Be7 Nc3 O-O e4 Bg6 Re1 a5 a4 Qb6 Qb3 Qxb3",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5 g3 e6 Bg2 Nbd7 O-O Be7 Nc3 O-O e4 Bg6",
         "explanation": "The Modern Qc2 line is a sophisticated system where White recovers the c4 pawn with the queen and aims for a rapid e4 advance. After Qxc4 Bf5, Black has already solved the light-squared bishop problem, which is the hallmark of the Slav. White pushes e4 to gain central space, but Black's well-placed bishop on g6 and solid structure with ...Nbd7 and ...Be7 provide excellent defensive resources. The queen exchange after ...Qb6 leads to a balanced endgame where Black's active minor pieces and queenside pawn majority offer comfortable equality."
       }
     ],
@@ -3597,17 +3597,17 @@
       },
       {
         "name": "Mikenas Attack",
-        "pgn": "c4 Nf6 Nc3 e6 e4 d5 e5 d4 exf6 dxc3 bxc3 Qxf6 d4 e5 Nf3 exd4 Bg5 Qe6+ Be2 Be7 Bxe7 Qxe7 cxd4 O-O O-O Nc6 Re1 Qf6 d5 Ne5",
+        "pgn": "c4 Nf6 Nc3 e6 e4 d5 e5 d4 exf6 dxc3 bxc3 Qxf6 d4 e5 Nf3 exd4 Bg5 Qe6+ Be2 Be7",
         "explanation": "The Mikenas Attack with 3.e4 is an aggressive system where White immediately seizes central space in a way that catches many English Opening players off guard. After e5 d4, the position transforms into a sharp tactical battle where both sides must calculate accurately. White gets the bishop pair and open lines after the pawn exchanges, while Black relies on active piece play and the d-file pressure. The resulting middlegame features asymmetric pawn structures that favor the player with better piece coordination."
       },
       {
         "name": "Bremen System",
-        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 a3 O-O b4 Be6 d3 f6 Bb2 a5 b5 Nd4 Nd2 Qd7 e3 Nf5 Nde4 Rad8",
+        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 a3 O-O b4 Be6 d3 f6",
         "explanation": "The Bremen System arises from the Reversed Sicilian where White fianchettoes and expands on the queenside with a3 and b4. The b4-b5 advance gains space and restricts Black's knight from the c6 square, while the g2 bishop exerts long-range pressure on the center. White's plan involves slow positional build-up with Bb2, d3, and eventually e3-e4 to challenge Black's central grip. The position rewards patient maneuvering, with White's extra tempo from the reversed structure providing a subtle but persistent edge."
       },
       {
         "name": "Ultra-Symmetrical Variation",
-        "pgn": "c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6 Rb1 Rb8 b4 cxb4 axb4 b5 cxb5 axb5 Bd2 Bd7 Nd5 Nxd5",
+        "pgn": "c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6 Rb1 Rb8 b4 cxb4",
         "explanation": "The Ultra-Symmetrical Variation features both sides mirroring each other's fianchetto development, creating a tense positional battle where the first player to break the symmetry gains the advantage. White's extra tempo means the Rb1 and b4 expansion comes first, forcing Black to react. After the queenside pawn exchanges, White gets active rook play on the a and b files while the Nd5 jump disrupts Black's coordination. The key concept is that symmetry favors the player with the extra move, and White should aggressively seek to break the mirror image before Black can equalize."
       }
     ],
