@@ -156,7 +156,7 @@ export function PlayableLinePlayer({
 
     const annotation = line.annotations[demoMoveIndex];
     if (annotation) {
-      void voiceService.speak(annotation);
+      void voiceService.speakFast(annotation);
     }
   }, [phase, demoMoveIndex, line.annotations]);
 
@@ -247,7 +247,7 @@ export function PlayableLinePlayer({
             setMemoryMoveIndex(nextIndex);
             setMemoryComplete(true);
             playCelebration();
-            void voiceService.speak('Excellent! You remembered the entire line.');
+            void voiceService.speakFast('Excellent! You remembered the entire line.');
             onComplete();
             return;
           }

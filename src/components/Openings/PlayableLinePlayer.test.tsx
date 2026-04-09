@@ -54,6 +54,7 @@ vi.mock('react-chessboard', () => ({
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: vi.fn().mockResolvedValue(undefined),
+    speakFast: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
     warmup: vi.fn().mockResolvedValue(undefined),
   },
