@@ -25,7 +25,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
-import { scanUpcomingTactics } from '../../services/tacticClassifier';
+import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
@@ -918,12 +918,38 @@ export function CoachGamePage(): JSX.Element {
       classification = 'good';
     }
 
+    // Run deterministic tactic classifier on the move
+    let tacticSuffix = '';
+    if (analysis) {
+      try {
+        const tacticResult = classifyPosition(
+          preFen,
+          moveResult.fen,
+          moveResult.san,
+          preMoveEval ?? 0,
+          analysis.evaluation,
+        );
+        const realTactics = tacticResult.tactics.filter((t) => t.type !== 'none');
+        if (realTactics.length > 0) {
+          tacticSuffix = ` (${realTactics.map((t) => t.description).join('; ')})`;
+        }
+        if (tacticResult.hangingPieces.length > 0) {
+          const hangingDescs = tacticResult.hangingPieces.map(
+            (p) => `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`,
+          );
+          tacticSuffix += ` Hanging: ${hangingDescs.join(', ')}.`;
+        }
+      } catch {
+        // Tactic classification failed, continue without it
+      }
+    }
+
     const vars = {
       playerMove: moveResult.san,
       bestMove: engineBestMoveSan,
       evalDelta: String(evalLoss),
     };
-    const commentary = getMoveCommentaryTemplate(classification, vars);
+    const commentary = getMoveCommentaryTemplate(classification, vars) + tacticSuffix;
 
     const playerMove: CoachGameMove = {
       moveNumber: moveCountRef.current,

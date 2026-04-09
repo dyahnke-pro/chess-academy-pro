@@ -394,6 +394,9 @@ export function OpeningChallenge({
         turn: game.turn,
         isGameOver: lineComplete,
         gameResult: lineComplete ? 'Complete' : '',
+        lastMove: ctxLastMove,
+        history: ctxHistory,
+        previousFen: currentMoveIndex > 0 ? fenAtIndex(currentMoveIndex - 1) : null,
         onBoardAnnotation: handleBoardAnnotation,
       }}
       chatRef={chatRef}

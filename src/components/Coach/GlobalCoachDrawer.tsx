@@ -104,6 +104,8 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   const moveNumber = boardCtx?.moveNumber ?? 1;
   const playerColor: 'white' | 'black' = boardCtx?.playerColor === 'black' ? 'black' : 'white';
   const turn: 'w' | 'b' = boardCtx?.turn === 'b' ? 'b' : 'w';
+  const ctxLastMove = boardCtx?.lastMove ?? undefined;
+  const ctxHistory = boardCtx?.history ?? undefined;
 
   // Show inline board when there's a practice position but no external board context
   const showInlineBoard = (practicePosition || temporaryFen) && !boardCtx;
@@ -201,6 +203,8 @@ export function GlobalCoachDrawer(): JSX.Element | null {
             turn={turn}
             isGameOver={false}
             gameResult=""
+            lastMove={ctxLastMove}
+            history={ctxHistory}
             onBoardAnnotation={handleBoardAnnotation}
             className="h-full"
           />
