@@ -370,6 +370,8 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
         turn: game.turn,
         isGameOver: false,
         gameResult: '',
+        lastMove: game.lastMove ? { ...game.lastMove, san: game.history[game.history.length - 1] ?? '' } : null,
+        history: game.history,
         onBoardAnnotation: handleBoardAnnotation,
       }}
       chatRef={chatRef}
