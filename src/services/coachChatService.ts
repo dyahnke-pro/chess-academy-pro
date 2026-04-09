@@ -310,6 +310,7 @@ export interface GameContext {
   history?: string[];
   engineData?: EngineData;
   tacticAnalysis?: TacticAnalysisContext;
+  positionAssessment?: PositionAssessmentContext;
 }
 
 export interface TacticAnalysisContext {
@@ -319,6 +320,10 @@ export interface TacticAnalysisContext {
   currentTactics?: string[];
   upcomingForPlayer?: string[];
   upcomingForOpponent?: string[];
+}
+
+export interface PositionAssessmentContext {
+  summary: string;
 }
 
 function truncatePgn(pgn: string): string {
@@ -386,6 +391,10 @@ export function buildGameChatMessages(
       ].filter(Boolean).join('\n')
     : '';
 
+  const positionBlock = gameContext.positionAssessment
+    ? `[Position Assessment — TRUST THIS DATA]\n${gameContext.positionAssessment.summary}`
+    : '';
+
   const gameContextBlock = [
     '[Game Context]',
     `FEN: ${gameContext.fen}`,
@@ -397,6 +406,7 @@ export function buildGameChatMessages(
     gameContext.isGameOver ? `Game over — Result: ${gameContext.gameResult}` : '',
     engineBlock,
     tacticBlock,
+    positionBlock,
   ].filter(Boolean).join('\n');
 
   const messages: { role: 'user' | 'assistant'; content: string }[] = [];

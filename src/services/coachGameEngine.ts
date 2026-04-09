@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { getNextOpeningBookMove } from './openingDetectionService';
+import { findHangingPieces } from './tacticClassifier';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 
 const COACH_MOVE_TIMEOUT_MS = 5000;
@@ -59,8 +60,21 @@ export function getRandomLegalMove(fen: string): string | null {
     const chess = new Chess(fen);
     const moves = chess.moves({ verbose: true });
     if (moves.length === 0) return null;
-    const move = moves[Math.floor(Math.random() * moves.length)];
-    return `${move.from}${move.to}${move.promotion ?? ''}`;
+
+    // Score each move by how many own pieces it leaves hanging
+    const scored = moves.map((m) => {
+      const test = new Chess(fen);
+      test.move({ from: m.from, to: m.to, promotion: m.promotion });
+      const hanging = findHangingPieces(test).filter((p) => p.color === chess.turn());
+      return { move: m, hangingCount: hanging.length };
+    });
+
+    // Prefer moves with fewest hanging pieces
+    scored.sort((a, b) => a.hangingCount - b.hangingCount);
+    const bestScore = scored[0].hangingCount;
+    const candidates = scored.filter((s) => s.hangingCount === bestScore);
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+    return `${chosen.move.from}${chosen.move.to}${chosen.move.promotion ?? ''}`;
   } catch {
     return null;
   }
