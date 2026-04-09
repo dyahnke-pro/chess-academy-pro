@@ -331,6 +331,32 @@ async function analyzeGamePositions(game: GameRecord): Promise<MoveAnnotation[] 
 // ─── Public API ─────────────────────────────────────────────────────────────
 
 /**
+ * Analyze a single game and store the results. Returns existing annotations
+ * if the game is already fully analyzed, otherwise runs Stockfish analysis.
+ */
+export async function analyzeSingleGame(
+  gameId: string,
+  onProgress?: (phase: string) => void,
+): Promise<MoveAnnotation[] | null> {
+  const game = await db.games.get(gameId);
+  if (!game) return null;
+
+  // Already analyzed — return existing annotations
+  if (!gameNeedsAnalysis(game)) {
+    return game.annotations ?? null;
+  }
+
+  onProgress?.('Analyzing positions with Stockfish…');
+  const annotations = await analyzeGamePositions(game);
+  if (!annotations) return null;
+
+  // Store back to DB
+  await db.games.update(gameId, { annotations });
+
+  return annotations;
+}
+
+/**
  * Check if a game needs (re-)analysis.
  * Games with no annotations or only partial annotations (from detectBlunders,
  * which only records mistakes, not every move) need full Stockfish analysis.
