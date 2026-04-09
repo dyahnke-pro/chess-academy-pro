@@ -693,6 +693,15 @@ export interface CoachContext {
   additionalContext?: string;
 }
 
+export interface OpeningAnnotationContext {
+  fen: string;
+  moveNumber: number;
+  openingName: string | null;
+  lastMoves: string[];
+  currentMoveSan: string | null;
+  additionalContext?: string;
+}
+
 // ─── Weakness Analysis ──────────────────────────────────────────────────────
 
 export type WeaknessCategory =
