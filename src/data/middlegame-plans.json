@@ -2236,30 +2236,30 @@
     "openingId": "london-system",
     "criticalPositionFen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP1B2/5N2/PP2PPPP/RN1QKB1R b KQkq - 0 3",
     "title": "c4 Queenside Play",
-    "overview": "White plays c4 early to challenge d5 and gain queenside space. This can transpose into Queen's Gambit structures with the bishop already developed.",
+    "overview": "This is the Queenside Play variation of the English Opening. White plays an early c4 to immediately challenge Black's central control and prepare queenside expansion. The main plan is to follow up with b4-b5 to create pawn weaknesses in Black's structure.",
     "pawnBreaks": [
       {
-        "move": "c2-c4",
-        "explanation": "Attacks d5 and gains queenside space. The London bishop is already out, giving White a flexible position.",
+        "move": "This is the Queenside Play in the English Opening. The move c2-c4 immediately challenges Black's control of d5 and prepares to gain space on the queenside. White's main plan is to support this structure with moves like Nc3, Qb3, and eventually b4-b5.",
+        "explanation": "By playing c4, White attacks the d5 square and prepares to grab space on the queenside. This setup often transposes into a favorable version of the London System where the bishop on f4 becomes very active against Black's queenside.",
         "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 3"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Queen",
-        "route": "Qd1-b3 (pressure on b7 and d5)",
-        "explanation": "Qb3 attacks b7 and d5 simultaneously, creating immediate tactical pressure."
+        "route": "White often plays Qd1-b3 to put immediate pressure on both b7 and d5. This move forces Black to defend carefully and prepares to bring the rooks to the c-file, increasing the pressure on Black's queenside.",
+        "explanation": "Placing the queen on b3 creates double pressure on b7 and d5. This is a key maneuver in this system that restricts Black's development and prepares for a queenside breakthrough with b4-b5."
       }
     ],
     "strategicThemes": [
-      "Queenside space",
-      "Pressure on d5",
-      "Flexible transpositions",
-      "Active bishop placement"
+      "White's main strategic idea in this variation is to expand on the queenside. With pawns already on c4 and d4, White prepares the b4-b5 push to create weaknesses in Black's pawn structure and open lines for the rooks.",
+      "White has established a strong central presence with pawns on c4 and d4. This gives White a space advantage and provides a solid foundation for operations on both the queenside and in the center.",
+      "This structure can easily transpose into a favorable London System setup for White. The bishop on f4 becomes a powerful piece, putting pressure on Black's queenside while White maintains strong central control with the c4-d4 pawn duo.",
+      "The bishop on f4 is excellently placed in this system. It controls the e5 square, eyes the b8-h2 diagonal, and makes it very difficult for Black to play ...e5 or comfortably develop the light-squared bishop."
     ],
     "endgameTransitions": [
-      "Queenside pawn majority after cxd5",
-      "Open c-file for rooks"
+      "White's long-term plan is often a minority attack with b4-b5. This creates a weak pawn on c6 for Black and gives White clear targets to attack on the queenside.",
+      "Controlling the c-file is a major theme in this setup. White typically develops the queen to b3 or c2 and brings the rooks to c1 and c2, putting heavy pressure on Black's queenside development."
     ],
     "playableLines": [
       {
@@ -2274,13 +2274,13 @@
           "Nbd7"
         ],
         "annotations": [
-          "Black plays e6, solidifying the d5 pawn and preparing kingside development",
-          "White develops the knight to c3, adding pressure to d5",
-          "Black develops the bishop to e7, preparing to castle",
-          "White plays Qb3, the key move attacking both b7 and d5 simultaneously",
-          "Black defends with c6, shoring up d5 but leaving b6 and d6 slightly weak",
-          "White plays e3, completing the pawn structure and preparing Bd3",
-          "Black develops the knight to d7, connecting pieces but remaining cramped"
+          "Black maintains a solid pawn structure with pawns on d5 and e6. While solid, this structure can become passive if White successfully carries out the queenside minority attack.",
+          "White develops the dark-squared bishop to f4 in this system. The bishop exerts pressure along the h2-b8 diagonal and helps control the key e5 square, making it difficult for Black to comfortably push ...e5.",
+          "Black's knight on f6 is a strong defensive piece, but White can often challenge it later with moves like h3 and g4, or by putting pressure on d5 to force the knight to move.",
+          "This setup focuses on queenside expansion. White's pawn structure with c4 and d4 combined with the bishop on f4 prepares a minority attack on the queenside, aiming to create a weak pawn on c6 or b7 for Black.",
+          "The knight on f3 is well-placed, supporting the d4 pawn and controlling the e5 square. It also prepares for potential kingside expansion or to jump into e5 if Black allows it.",
+          "Both sides have developed most of their minor pieces. White's next priority is connecting the rooks and deciding whether to push on the queenside or increase central pressure.",
+          "A key idea for White is to prepare the b4 push. This move gains even more space on the queenside and prepares the b4-b5 advance that is central to White's strategy in this opening."
         ],
         "arrows": [
           [
