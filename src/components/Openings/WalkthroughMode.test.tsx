@@ -144,6 +144,7 @@ vi.mock('../../services/annotationService', () => {
     loadAnnotationsForPgn: vi.fn().mockResolvedValue(annotations),
     loadSubLineAnnotations: vi.fn().mockResolvedValue(null),
     clearAnnotationCache: vi.fn(),
+    enhanceWithNarration: vi.fn().mockImplementation(async (ann: unknown) => ann),
   };
 });
 
