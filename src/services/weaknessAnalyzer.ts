@@ -1,13 +1,19 @@
+import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getThemeSkills } from './puzzleService';
 import { getRepertoireOpenings } from './openingService';
+import { detectTactics } from './tacticsDetector';
 import type {
   WeaknessProfile,
   WeaknessItem,
   WeaknessCategory,
   StrengthItem,
+  WeaknessTheme,
+  WeaknessDrillItem,
+  WeaknessDrillSession,
   UserProfile,
   GameRecord,
+  MoveAnnotation,
   SessionRecord,
   OpeningRecord,
   FlashcardRecord,
@@ -1008,6 +1014,392 @@ export function filterWeaknessesByCategory(
   return profile.items.filter((item) => item.category === category);
 }
 
+// ─── Weakness-to-Drill: analyzeGameMistakes ────────────────────────────────
+
+interface GameMistake {
+  fen: string;
+  moveNumber: number;
+  san: string;
+  bestMove: string | null;
+  cpLoss: number;
+  classification: 'inaccuracy' | 'mistake' | 'blunder';
+  gamePhase: 'opening' | 'middlegame' | 'endgame';
+  openingName: string | null;
+  hasTactics: boolean;
+  tacticTypes: string[];
+}
+
+function classifyPhase(moveIndex: number, totalMoves: number): 'opening' | 'middlegame' | 'endgame' {
+  if (moveIndex < 15) return 'opening';
+  if (moveIndex >= totalMoves - 20) return 'endgame';
+  return 'middlegame';
+}
+
+/**
+ * Extracts classified mistakes from a single GameRecord.
+ * Works with both imported PGNs (Chess.com, Lichess) and in-app coach games
+ * that have annotations attached.
+ */
+export function analyzeGameMistakes(game: GameRecord): GameMistake[] {
+  if (!game.annotations || game.annotations.length === 0) return [];
+
+  const totalMoves = game.annotations.length;
+  const mistakes: GameMistake[] = [];
+
+  // Build FEN list from annotations — annotations are in move order
+  // We use evaluation deltas to compute cpLoss
+  for (let i = 0; i < totalMoves; i++) {
+    const ann: MoveAnnotation = game.annotations[i];
+    if (
+      ann.classification !== 'inaccuracy' &&
+      ann.classification !== 'mistake' &&
+      ann.classification !== 'blunder'
+    ) {
+      continue;
+    }
+
+    // Compute centipawn loss from adjacent evaluations
+    let cpLoss = 0;
+    if (ann.evaluation !== null && i > 0) {
+      const prevAnn = game.annotations[i - 1];
+      if (prevAnn.evaluation !== null) {
+        cpLoss = Math.abs(ann.evaluation - prevAnn.evaluation);
+      }
+    }
+
+    // Default cpLoss estimates when evaluations are missing
+    if (cpLoss === 0) {
+      switch (ann.classification) {
+        case 'inaccuracy': cpLoss = 60; break;
+        case 'mistake': cpLoss = 150; break;
+        case 'blunder': cpLoss = 350; break;
+      }
+    }
+
+    const phase = classifyPhase(i, totalMoves);
+
+    // Build a synthetic FEN for tactic detection from the annotation
+    // We need a position FEN — try to reconstruct from the annotation data
+    // If no FEN is available directly, use the move number as a stand-in
+    const positionFen = buildFenFromAnnotationIndex(game, i);
+    const tacticsResult = positionFen ? detectTactics(positionFen) : null;
+    const tacticTypes = tacticsResult
+      ? tacticsResult.tactics.map((t) => t.type)
+      : [];
+
+    mistakes.push({
+      fen: positionFen ?? '',
+      moveNumber: ann.moveNumber,
+      san: ann.san,
+      bestMove: ann.bestMove,
+      cpLoss,
+      classification: ann.classification,
+      gamePhase: phase,
+      openingName: game.openingId,
+      hasTactics: tacticTypes.length > 0,
+      tacticTypes,
+    });
+  }
+
+  return mistakes;
+}
+
+/**
+ * Rebuild a FEN at a given annotation index by replaying the game PGN.
+ * Returns null if the PGN can't be replayed.
+ */
+function buildFenFromAnnotationIndex(game: GameRecord, index: number): string | null {
+  try {
+    const chess = new Chess();
+    chess.loadPgn(game.pgn);
+    const history = chess.history();
+    chess.reset();
+
+    // Replay up to the move at `index` (the position BEFORE the mistake move)
+    for (let i = 0; i < index && i < history.length; i++) {
+      chess.move(history[i]);
+    }
+    return chess.fen();
+  } catch {
+    return null;
+  }
+}
+
+// ─── Weakness-to-Drill: detectWeaknessThemes ───────────────────────────────
+
+/**
+ * Groups an array of mistake puzzles into weakness themes with frequency,
+ * sample FENs, and average centipawn loss.
+ *
+ * Themes are derived from:
+ * 1. Tactic type (fork, pin, etc.) via tacticsDetector
+ * 2. Game phase (opening blunders, endgame collapses)
+ * 3. Piece-related patterns (hanging pieces)
+ */
+export function detectWeaknessThemes(mistakes: MistakePuzzle[]): WeaknessTheme[] {
+  if (mistakes.length === 0) return [];
+
+  const themeMap = new Map<string, {
+    pattern: string;
+    fens: string[];
+    cpLosses: number[];
+  }>();
+
+  function addToTheme(key: string, pattern: string, fen: string, cpLoss: number): void {
+    const existing = themeMap.get(key);
+    if (existing) {
+      if (existing.fens.length < 5) existing.fens.push(fen);
+      existing.cpLosses.push(cpLoss);
+    } else {
+      themeMap.set(key, { pattern, fens: [fen], cpLosses: [cpLoss] });
+    }
+  }
+
+  for (const mp of mistakes) {
+    // 1. Classify by tactic type if available
+    if (mp.tacticType) {
+      const label = TACTIC_THEME_LABELS[mp.tacticType] ?? mp.tacticType;
+      addToTheme(
+        `tactic:${mp.tacticType}`,
+        `Missed ${label.toLowerCase()} patterns`,
+        mp.fen,
+        mp.cpLoss,
+      );
+    }
+
+    // 2. Detect tactics from FEN using the deterministic detector
+    const detected = detectTactics(mp.fen);
+    for (const tactic of detected.tactics) {
+      const tacticKey = `tactic:${tactic.type}`;
+      if (!themeMap.has(tacticKey)) {
+        const label = TACTIC_THEME_LABELS[tactic.type] ?? tactic.type;
+        addToTheme(tacticKey, `Missed ${label.toLowerCase()} patterns`, mp.fen, mp.cpLoss);
+      }
+    }
+    if (detected.hangingPieces.length > 0) {
+      addToTheme('hanging_pieces', 'Left pieces undefended', mp.fen, mp.cpLoss);
+    }
+
+    // 3. Classify by game phase
+    if (mp.gamePhase === 'opening') {
+      addToTheme('phase:opening', 'Errors in the opening phase', mp.fen, mp.cpLoss);
+    } else if (mp.gamePhase === 'endgame') {
+      addToTheme('phase:endgame', 'Errors in endgame positions', mp.fen, mp.cpLoss);
+    }
+
+    // 4. Classify by severity
+    if (mp.classification === 'blunder') {
+      addToTheme('severity:blunder', 'Severe miscalculations (300+ cp)', mp.fen, mp.cpLoss);
+    }
+  }
+
+  // Convert to WeaknessTheme array sorted by frequency
+  const themes: WeaknessTheme[] = [];
+  for (const [key, data] of themeMap) {
+    const themeName = THEME_DISPLAY_NAMES[key] ?? key.replace(/^(tactic|phase|severity):/, '');
+    themes.push({
+      theme: themeName,
+      specificPattern: data.pattern,
+      frequency: data.cpLosses.length,
+      sampleFens: data.fens,
+      avgCentipawnLoss: Math.round(
+        data.cpLosses.reduce((sum, v) => sum + v, 0) / data.cpLosses.length,
+      ),
+    });
+  }
+
+  themes.sort((a, b) => b.frequency - a.frequency);
+  return themes;
+}
+
+const TACTIC_THEME_LABELS: Record<string, string> = {
+  fork: 'Fork',
+  pin: 'Pin',
+  skewer: 'Skewer',
+  discovered_attack: 'Discovered Attack',
+  back_rank: 'Back Rank',
+  hanging_piece: 'Hanging Piece',
+  promotion: 'Promotion',
+  deflection: 'Deflection',
+  overloaded_piece: 'Overloaded Piece',
+  trapped_piece: 'Trapped Piece',
+  clearance: 'Clearance',
+  interference: 'Interference',
+  zwischenzug: 'Zwischenzug',
+  x_ray: 'X-Ray',
+  double_check: 'Double Check',
+  tactical_sequence: 'Tactical Sequence',
+};
+
+const THEME_DISPLAY_NAMES: Record<string, string> = {
+  'tactic:fork': 'Forks',
+  'tactic:pin': 'Pins',
+  'tactic:skewer': 'Skewers',
+  'tactic:discovered_attack': 'Discovered Attacks',
+  'tactic:back_rank': 'Back Rank Threats',
+  'tactic:hanging_piece': 'Hanging Pieces',
+  'tactic:promotion': 'Promotion Tactics',
+  'tactic:deflection': 'Deflection',
+  'tactic:overloaded_piece': 'Overloaded Pieces',
+  'tactic:trapped_piece': 'Trapped Pieces',
+  'tactic:clearance': 'Clearance Sacrifices',
+  'tactic:interference': 'Interference',
+  'tactic:zwischenzug': 'Zwischenzug',
+  'tactic:x_ray': 'X-Ray Attacks',
+  'tactic:double_check': 'Double Check',
+  'tactic:tactical_sequence': 'Tactical Sequences',
+  'hanging_pieces': 'Hanging Pieces',
+  'phase:opening': 'Opening Blunders',
+  'phase:endgame': 'Endgame Errors',
+  'severity:blunder': 'Severe Blunders',
+};
+
+// ─── Weakness-to-Drill: generatePersonalizedDrill ──────────────────────────
+
+/**
+ * Generates a personalized drill session from the user's past mistakes,
+ * grouped by weakness theme. If a specific theme is provided, the drill
+ * focuses on that theme; otherwise it creates a mixed session across all
+ * weakness themes.
+ *
+ * Returns drill items referencing real MistakePuzzle records from the
+ * user's own games.
+ */
+export async function generatePersonalizedDrill(
+  themeFilter?: string,
+  maxItems: number = 20,
+): Promise<WeaknessDrillSession> {
+  const allMistakes = await db.mistakePuzzles.toArray();
+  const nonMastered = allMistakes.filter((mp) => mp.status !== 'mastered');
+
+  // Detect themes from all mistakes
+  const themes = detectWeaknessThemes(nonMastered);
+
+  // Build drill items
+  let candidates: MistakePuzzle[];
+
+  if (themeFilter) {
+    // Filter mistakes relevant to the requested theme
+    candidates = filterMistakesByTheme(nonMastered, themeFilter);
+  } else {
+    // Mixed training: round-robin across themes
+    candidates = buildMixedQueue(nonMastered, themes, maxItems);
+  }
+
+  // Prioritize: SRS-due first, then unsolved, then by cpLoss desc
+  const today = new Date().toISOString().split('T')[0];
+  candidates.sort((a, b) => {
+    // Due items first
+    const aDue = a.srsDueDate <= today ? 0 : 1;
+    const bDue = b.srsDueDate <= today ? 0 : 1;
+    if (aDue !== bDue) return aDue - bDue;
+    // Unsolved before solved
+    const aStatus = a.status === 'unsolved' ? 0 : 1;
+    const bStatus = b.status === 'unsolved' ? 0 : 1;
+    if (aStatus !== bStatus) return aStatus - bStatus;
+    // Higher cp loss first
+    return b.cpLoss - a.cpLoss;
+  });
+
+  const selected = candidates.slice(0, maxItems);
+
+  const drillItems: WeaknessDrillItem[] = selected.map((mp) => ({
+    mistakePuzzle: mp,
+    themeKey: resolveThemeKey(mp),
+  }));
+
+  return {
+    themes: themeFilter ? themes.filter((t) => t.theme === themeFilter) : themes,
+    drillItems,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+function filterMistakesByTheme(mistakes: MistakePuzzle[], theme: string): MistakePuzzle[] {
+  // Reverse-lookup: find which internal key maps to the display name
+  const internalKey = Object.entries(THEME_DISPLAY_NAMES).find(
+    ([, name]) => name === theme,
+  )?.[0];
+
+  return mistakes.filter((mp) => {
+    // Check tactic type match
+    if (internalKey?.startsWith('tactic:')) {
+      const tacticType = internalKey.replace('tactic:', '');
+      if (mp.tacticType === tacticType) return true;
+      // Also check via detector
+      const detected = detectTactics(mp.fen);
+      if (detected.tactics.some((t) => t.type === tacticType)) return true;
+    }
+
+    // Check hanging pieces
+    if (internalKey === 'hanging_pieces' || theme === 'Hanging Pieces') {
+      const detected = detectTactics(mp.fen);
+      if (detected.hangingPieces.length > 0) return true;
+    }
+
+    // Check phase-based themes
+    if (internalKey === 'phase:opening' || theme === 'Opening Blunders') {
+      return mp.gamePhase === 'opening';
+    }
+    if (internalKey === 'phase:endgame' || theme === 'Endgame Errors') {
+      return mp.gamePhase === 'endgame';
+    }
+
+    // Check severity
+    if (internalKey === 'severity:blunder' || theme === 'Severe Blunders') {
+      return mp.classification === 'blunder';
+    }
+
+    return false;
+  });
+}
+
+function buildMixedQueue(
+  mistakes: MistakePuzzle[],
+  themes: WeaknessTheme[],
+  maxItems: number,
+): MistakePuzzle[] {
+  if (themes.length === 0) return mistakes.slice(0, maxItems);
+
+  const result: MistakePuzzle[] = [];
+  const usedIds = new Set<string>();
+  const perTheme = Math.max(2, Math.ceil(maxItems / themes.length));
+
+  for (const theme of themes) {
+    const themeItems = filterMistakesByTheme(mistakes, theme.theme);
+    let added = 0;
+    for (const mp of themeItems) {
+      if (added >= perTheme || result.length >= maxItems) break;
+      if (usedIds.has(mp.id)) continue;
+      result.push(mp);
+      usedIds.add(mp.id);
+      added++;
+    }
+  }
+
+  // Backfill if we didn't reach maxItems
+  if (result.length < maxItems) {
+    for (const mp of mistakes) {
+      if (result.length >= maxItems) break;
+      if (usedIds.has(mp.id)) continue;
+      result.push(mp);
+      usedIds.add(mp.id);
+    }
+  }
+
+  return result;
+}
+
+function resolveThemeKey(mp: MistakePuzzle): string {
+  if (mp.tacticType) {
+    return THEME_DISPLAY_NAMES[`tactic:${mp.tacticType}`] ?? mp.tacticType;
+  }
+  if (mp.gamePhase === 'opening') return 'Opening Blunders';
+  if (mp.gamePhase === 'endgame') return 'Endgame Errors';
+  if (mp.classification === 'blunder') return 'Severe Blunders';
+  return 'Tactical Oversights';
+}
+
 // Export analyzers for testing
 export const _testing = {
   analyzeTactics,
@@ -1020,4 +1412,8 @@ export const _testing = {
   analyzeMistakePuzzles,
   generateOverallAssessment,
   computeSkillRadar,
+  classifyPhase,
+  filterMistakesByTheme,
+  buildMixedQueue,
+  resolveThemeKey,
 };

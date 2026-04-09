@@ -722,6 +722,27 @@ export interface WeaknessProfile {
   overallAssessment: string;
 }
 
+// ─── Weakness-to-Drill System ───────────────────────────────────────────────
+
+export interface WeaknessTheme {
+  theme: string;
+  specificPattern: string;
+  frequency: number;
+  sampleFens: string[];
+  avgCentipawnLoss: number;
+}
+
+export interface WeaknessDrillItem {
+  mistakePuzzle: MistakePuzzle;
+  themeKey: string;
+}
+
+export interface WeaknessDrillSession {
+  themes: WeaknessTheme[];
+  drillItems: WeaknessDrillItem[];
+  generatedAt: string;
+}
+
 export type ReviewMode = 'analysis' | 'whatif' | 'practice' | 'guided_lesson';
 
 // ─── Opening Weak Spots ─────────────────────────────────────────────────────

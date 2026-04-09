@@ -1,7 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { _testing, computeWeaknessProfile, getStoredWeaknessProfile, filterWeaknessesByCategory } from './weaknessAnalyzer';
+import {
+  _testing,
+  computeWeaknessProfile,
+  getStoredWeaknessProfile,
+  filterWeaknessesByCategory,
+  analyzeGameMistakes,
+  detectWeaknessThemes,
+  generatePersonalizedDrill,
+} from './weaknessAnalyzer';
 import { db } from '../db/schema';
-import { buildUserProfile } from '../test/factories';
+import { buildUserProfile, buildMistakePuzzle, buildGameRecord } from '../test/factories';
 import type {
   GameRecord,
   SessionRecord,
@@ -724,6 +732,233 @@ describe('weaknessAnalyzer', () => {
 
       const openings = filterWeaknessesByCategory(wp, 'openings');
       expect(openings).toHaveLength(1);
+    });
+  });
+
+  // ─── analyzeGameMistakes ──────────────────────────────────────────────────
+
+  describe('analyzeGameMistakes', () => {
+    it('returns empty array for game without annotations', () => {
+      const game = buildGameRecord({ annotations: null });
+      expect(analyzeGameMistakes(game)).toEqual([]);
+    });
+
+    it('returns empty array for empty annotations', () => {
+      const game = buildGameRecord({ annotations: [] });
+      expect(analyzeGameMistakes(game)).toEqual([]);
+    });
+
+    it('extracts mistakes from annotated game', () => {
+      const annotations: MoveAnnotation[] = [
+        createAnnotation(1, 'good'),
+        createAnnotation(2, 'good'),
+        createAnnotation(3, 'blunder'),
+        createAnnotation(4, 'good'),
+        createAnnotation(5, 'mistake'),
+      ];
+      const game = buildGameRecord({
+        pgn: '1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 5.O-O Be7 1-0',
+        annotations,
+      });
+
+      const mistakes = analyzeGameMistakes(game);
+      expect(mistakes).toHaveLength(2);
+      expect(mistakes[0].classification).toBe('blunder');
+      expect(mistakes[1].classification).toBe('mistake');
+    });
+
+    it('classifies phases correctly', () => {
+      // Create 50 annotations so phase boundaries are clear:
+      // opening < 15, middlegame = 15..29, endgame >= 30 (last 20 of 50)
+      const annotations: MoveAnnotation[] = [];
+      for (let i = 0; i < 50; i++) {
+        annotations.push(createAnnotation(i + 1, 'good'));
+      }
+      // Place a blunder at index 20 (middlegame: >= 15 and < 30)
+      annotations[20] = createAnnotation(11, 'blunder');
+
+      const game = buildGameRecord({
+        pgn: '1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 5.O-O Be7 6.Re1 b5 7.Bb3 d6 8.c3 O-O 9.h3 Nb8 10.d4 Nbd7 11.Nbd2 Bb7 12.Bc2 c5 13.d5 Nc4 14.Nf1 a5 15.Ng3 Ba6 16.a4 bxa4 17.Bxa4 Bd3 18.Nd2 Nxd2 19.Bxd2 Bc4 20.Re2 Nd7 21.Be3 Nb6 22.Bc2 f5 23.f3 Bf6 24.Qe1 g6 25.Qf2 Bg7 1-0',
+        annotations,
+      });
+
+      const mistakes = analyzeGameMistakes(game);
+      expect(mistakes).toHaveLength(1);
+      expect(mistakes[0].gamePhase).toBe('middlegame');
+    });
+
+    it('computes cpLoss from adjacent evaluations', () => {
+      const annotations: MoveAnnotation[] = [
+        { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: 'e4', classification: 'good', comment: null },
+        { moveNumber: 1, color: 'black', san: 'e5', evaluation: 0.3, bestMove: 'e5', classification: 'good', comment: null },
+        { moveNumber: 2, color: 'white', san: 'Qh5', evaluation: -1.2, bestMove: 'Nf3', classification: 'mistake', comment: null },
+      ];
+      const game = buildGameRecord({
+        pgn: '1.e4 e5 2.Qh5 1-0',
+        annotations,
+      });
+
+      const mistakes = analyzeGameMistakes(game);
+      expect(mistakes).toHaveLength(1);
+      // cpLoss = |(-1.2) - 0.3| = 1.5
+      expect(mistakes[0].cpLoss).toBe(1.5);
+    });
+  });
+
+  // ─── detectWeaknessThemes ─────────────────────────────────────────────────
+
+  describe('detectWeaknessThemes', () => {
+    it('returns empty array for empty mistakes', () => {
+      expect(detectWeaknessThemes([])).toEqual([]);
+    });
+
+    it('groups mistakes by tactic type', () => {
+      const mistakes: MistakePuzzle[] = [
+        buildMistakePuzzle({ id: 'm1', tacticType: 'fork', cpLoss: 200 }),
+        buildMistakePuzzle({ id: 'm2', tacticType: 'fork', cpLoss: 300 }),
+        buildMistakePuzzle({ id: 'm3', tacticType: 'pin', cpLoss: 150 }),
+      ];
+
+      const themes = detectWeaknessThemes(mistakes);
+      const forkTheme = themes.find((t) => t.theme === 'Forks');
+      expect(forkTheme).toBeDefined();
+      expect(forkTheme!.frequency).toBeGreaterThanOrEqual(2);
+      expect(forkTheme!.avgCentipawnLoss).toBe(250);
+    });
+
+    it('groups mistakes by game phase', () => {
+      const mistakes: MistakePuzzle[] = [
+        buildMistakePuzzle({ id: 'm1', gamePhase: 'opening', tacticType: null, cpLoss: 100 }),
+        buildMistakePuzzle({ id: 'm2', gamePhase: 'opening', tacticType: null, cpLoss: 200 }),
+      ];
+
+      const themes = detectWeaknessThemes(mistakes);
+      const openingTheme = themes.find((t) => t.theme === 'Opening Blunders');
+      expect(openingTheme).toBeDefined();
+      expect(openingTheme!.frequency).toBe(2);
+    });
+
+    it('groups blunders into severity theme', () => {
+      const mistakes: MistakePuzzle[] = [
+        buildMistakePuzzle({ id: 'm1', classification: 'blunder', tacticType: null, cpLoss: 400 }),
+        buildMistakePuzzle({ id: 'm2', classification: 'blunder', tacticType: null, cpLoss: 500 }),
+      ];
+
+      const themes = detectWeaknessThemes(mistakes);
+      const blunderTheme = themes.find((t) => t.theme === 'Severe Blunders');
+      expect(blunderTheme).toBeDefined();
+      expect(blunderTheme!.avgCentipawnLoss).toBe(450);
+    });
+
+    it('sorts themes by frequency descending', () => {
+      const mistakes: MistakePuzzle[] = [
+        buildMistakePuzzle({ id: 'm1', tacticType: 'fork', cpLoss: 100 }),
+        buildMistakePuzzle({ id: 'm2', tacticType: 'fork', cpLoss: 100 }),
+        buildMistakePuzzle({ id: 'm3', tacticType: 'fork', cpLoss: 100 }),
+        buildMistakePuzzle({ id: 'm4', tacticType: 'pin', cpLoss: 100 }),
+      ];
+
+      const themes = detectWeaknessThemes(mistakes);
+      // First theme should have higher or equal frequency than second
+      if (themes.length >= 2) {
+        expect(themes[0].frequency).toBeGreaterThanOrEqual(themes[1].frequency);
+      }
+    });
+
+    it('limits sampleFens to 5 per theme', () => {
+      const mistakes: MistakePuzzle[] = Array.from({ length: 10 }, (_, i) =>
+        buildMistakePuzzle({
+          id: `m${i}`,
+          tacticType: 'fork',
+          cpLoss: 100 + i * 10,
+          fen: `fen_${i}`,
+        }),
+      );
+
+      const themes = detectWeaknessThemes(mistakes);
+      const forkTheme = themes.find((t) => t.theme === 'Forks');
+      expect(forkTheme).toBeDefined();
+      expect(forkTheme!.sampleFens.length).toBeLessThanOrEqual(5);
+    });
+  });
+
+  // ─── generatePersonalizedDrill ────────────────────────────────────────────
+
+  describe('generatePersonalizedDrill', () => {
+    beforeEach(async () => {
+      await db.delete();
+      await db.open();
+    });
+
+    it('returns empty session when no mistakes exist', async () => {
+      const session = await generatePersonalizedDrill();
+      expect(session.drillItems).toHaveLength(0);
+      expect(session.themes).toHaveLength(0);
+    });
+
+    it('returns drill items from stored mistakes', async () => {
+      const mistakes = [
+        buildMistakePuzzle({ id: 'mp1', status: 'unsolved', tacticType: 'fork', cpLoss: 200 }),
+        buildMistakePuzzle({ id: 'mp2', status: 'unsolved', tacticType: 'pin', cpLoss: 150 }),
+        buildMistakePuzzle({ id: 'mp3', status: 'solved', tacticType: 'fork', cpLoss: 300 }),
+      ];
+      await db.mistakePuzzles.bulkAdd(mistakes);
+
+      const session = await generatePersonalizedDrill();
+      expect(session.drillItems.length).toBeGreaterThan(0);
+      expect(session.themes.length).toBeGreaterThan(0);
+      expect(session.generatedAt).toBeTruthy();
+    });
+
+    it('filters by theme when themeFilter is provided', async () => {
+      const mistakes = [
+        buildMistakePuzzle({ id: 'mp1', tacticType: 'fork', cpLoss: 200, status: 'unsolved' }),
+        buildMistakePuzzle({ id: 'mp2', tacticType: 'pin', cpLoss: 150, status: 'unsolved' }),
+      ];
+      await db.mistakePuzzles.bulkAdd(mistakes);
+
+      const session = await generatePersonalizedDrill('Forks');
+      // All drill items should be fork-related
+      for (const item of session.drillItems) {
+        expect(item.mistakePuzzle.tacticType).toBe('fork');
+      }
+    });
+
+    it('excludes mastered mistakes', async () => {
+      const mistakes = [
+        buildMistakePuzzle({ id: 'mp1', status: 'mastered', tacticType: 'fork', cpLoss: 200 }),
+        buildMistakePuzzle({ id: 'mp2', status: 'unsolved', tacticType: 'pin', cpLoss: 150 }),
+      ];
+      await db.mistakePuzzles.bulkAdd(mistakes);
+
+      const session = await generatePersonalizedDrill();
+      const ids = session.drillItems.map((d) => d.mistakePuzzle.id);
+      expect(ids).not.toContain('mp1');
+    });
+
+    it('prioritizes SRS-due items', async () => {
+      const pastDate = '2020-01-01';
+      const futureDate = '2099-01-01';
+      const mistakes = [
+        buildMistakePuzzle({ id: 'mp1', srsDueDate: futureDate, cpLoss: 500, status: 'solved' }),
+        buildMistakePuzzle({ id: 'mp2', srsDueDate: pastDate, cpLoss: 100, status: 'solved' }),
+      ];
+      await db.mistakePuzzles.bulkAdd(mistakes);
+
+      const session = await generatePersonalizedDrill(undefined, 2);
+      expect(session.drillItems.length).toBe(2);
+      // Due item should come first
+      expect(session.drillItems[0].mistakePuzzle.id).toBe('mp2');
+    });
+
+    it('respects maxItems limit', async () => {
+      const mistakes = Array.from({ length: 10 }, (_, i) =>
+        buildMistakePuzzle({ id: `mp${i}`, status: 'unsolved', cpLoss: 100 + i * 10 }),
+      );
+      await db.mistakePuzzles.bulkAdd(mistakes);
+
+      const session = await generatePersonalizedDrill(undefined, 3);
+      expect(session.drillItems.length).toBeLessThanOrEqual(3);
     });
   });
 });
