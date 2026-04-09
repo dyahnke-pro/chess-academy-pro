@@ -7,6 +7,7 @@ import proRepertoireData from '../data/pro-repertoires.json';
 import gambitData from '../data/gambits.json';
 import modelGamesData from '../data/model-games.json';
 import middlegamePlansData from '../data/middlegame-plans.json';
+import { CURATED_NARRATIONS } from '../data/opening-narrations';
 import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan } from '../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -86,7 +87,7 @@ function slugify(name: string): string {
 
 // ─── Seeding State ────────────────────────────────────────────────────────────
 
-const SEED_KEY = 'db_seeded_v11';
+const SEED_KEY = 'db_seeded_v12';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
   const record = await db.meta.get(SEED_KEY);
@@ -371,6 +372,12 @@ function generateFlashcardsForOpening(opening: OpeningRecord): Promise<void> {
   return db.flashcards.bulkAdd(cards).then(() => undefined);
 }
 
+// ─── Opening Narrations ──────────────────────────────────────────────────────
+
+async function loadOpeningNarrations(): Promise<void> {
+  await db.openingNarrations.bulkPut(CURATED_NARRATIONS);
+}
+
 // ─── Main Entry Point ─────────────────────────────────────────────────────────
 
 /**
@@ -387,5 +394,6 @@ export async function seedDatabase(): Promise<void> {
   await loadModelGamesData();
   await loadMiddlegamePlansData();
   await seedFlashcardsForRepertoire();
+  await loadOpeningNarrations();
   await markDatabaseSeeded();
 }

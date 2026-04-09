@@ -58,6 +58,12 @@ vi.mock('../../services/stockfishEngine', () => ({
   },
 }));
 
+vi.mock('../../services/openingNarrationService', () => ({
+  getBestNarration: vi.fn().mockResolvedValue(null),
+  shouldUseClaudeFallback: vi.fn().mockReturnValue(true),
+  pickNarration: vi.fn().mockReturnValue(''),
+}));
+
 vi.mock('../../db/schema', () => ({
   db: {
     profiles: {

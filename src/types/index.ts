@@ -213,6 +213,18 @@ export interface MiddlegamePlan {
   playableLines?: PlayableMiddlegameLine[];
 }
 
+// ─── Opening Narrations (DB-Driven Hybrid System) ─────────────────────────
+
+export interface OpeningNarration {
+  id: string;
+  openingName: string;
+  variation: string;
+  moveSan: string;
+  fen: string | null;
+  narrations: string[];
+  approved: boolean;
+}
+
 // ─── Content Generation (LLM Pipeline) ─────────────────────────────────────
 
 export type GeneratedContentType =

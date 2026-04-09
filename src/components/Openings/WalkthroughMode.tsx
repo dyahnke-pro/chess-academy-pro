@@ -14,7 +14,7 @@ import { voiceService } from '../../services/voiceService';
 import { unlockAudioContext } from '../../services/audioContextManager';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
-import { loadSubLineAnnotations, loadAnnotationsForPgn } from '../../services/annotationService';
+import { loadSubLineAnnotations, loadAnnotationsForPgn, enhanceWithNarration } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowRight, Play, Pause } from 'lucide-react';
@@ -253,13 +253,28 @@ export function WalkthroughMode({
     return () => { cancelled = true; };
   }, [currentFen, showLichessEffective]);
 
-  // Current annotation for the move that was just played
-  const currentAnnotation = useMemo((): OpeningMoveAnnotation | null => {
+  // Current annotation for the move that was just played — enhanced with DB narrations
+  const baseAnnotation = useMemo((): OpeningMoveAnnotation | null => {
     if (!annotations) return null;
     if (currentMoveIndex === 0) return null;
     const idx = currentMoveIndex - 1;
     return annotations[idx] ?? null;
   }, [annotations, currentMoveIndex]);
+
+  const [currentAnnotation, setCurrentAnnotation] = useState<OpeningMoveAnnotation | null>(null);
+
+  useEffect(() => {
+    if (!baseAnnotation) {
+      setCurrentAnnotation(null);
+      return;
+    }
+    let cancelled = false;
+    const moveHistory = expectedMoves.slice(0, currentMoveIndex).map((m) => m.san);
+    void enhanceWithNarration(baseAnnotation, currentFen, moveHistory, opening.name).then((enhanced) => {
+      if (!cancelled) setCurrentAnnotation(enhanced);
+    });
+    return () => { cancelled = true; };
+  }, [baseAnnotation, currentFen, currentMoveIndex, expectedMoves, opening.name]);
 
   // ─── Real-time arrow/highlight reveal via TTS boundary events ────────────
 

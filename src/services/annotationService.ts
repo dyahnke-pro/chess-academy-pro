@@ -1,5 +1,6 @@
 import { ANNOTATION_MODULES } from '../data/annotations';
 import { Chess } from 'chess.js';
+import { getBestNarration, shouldUseClaudeFallback, pickNarration } from './openingNarrationService';
 import type { OpeningMoveAnnotation, OpeningAnnotations } from '../types';
 
 // Map pro repertoires to a specific sub-line instead of the main line.
@@ -251,6 +252,33 @@ export async function loadSubLineAnnotations(
   // variation-N → direct index. trap/warning → not available.
   if (type !== 'variation') return null;
   return data.subLines[localIdx]?.moveAnnotations ?? null;
+}
+
+/**
+ * Enhance a static annotation with a DB-driven narration if a good match
+ * exists. Returns the original annotation with the `annotation` text
+ * replaced by the curated narration when appropriate; all other fields
+ * (arrows, highlights, plans, etc.) are preserved from the static JSON.
+ *
+ * This is the "hybrid" integration point: DB narrations for text quality,
+ * static JSON for visual elements.
+ */
+export async function enhanceWithNarration(
+  annotation: OpeningMoveAnnotation,
+  fen: string,
+  moveHistory: string[],
+  openingName?: string,
+): Promise<OpeningMoveAnnotation> {
+  const match = await getBestNarration(fen, moveHistory, openingName);
+
+  if (!match || shouldUseClaudeFallback(match)) {
+    return annotation;
+  }
+
+  const narrationText = pickNarration(match.narration);
+  if (!narrationText) return annotation;
+
+  return { ...annotation, annotation: narrationText };
 }
 
 export function clearAnnotationCache(): void {
