@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White opens with the king's pawn, claiming central space and opening lines for the bishop and queen. This leads to open games where tactical play and development speed matter most.",
+      "annotation": "This is the Four Knights Game, a classical opening where both sides develop all four knights before committing to a specific plan. White plays 1.e4, claiming central space and opening diagonals for the queen and light-squared bishop.",
       "plans": [
         "Control the center",
         "Develop pieces quickly toward the kingside"
@@ -32,7 +32,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black mirrors the central claim, creating a balanced center. The symmetrical e4-e5 structure means that piece development and tactical alertness will determine who gets the advantage.",
+      "annotation": "Black mirrors with 1...e5, creating a symmetrical center. In the Four Knights, the symmetry continues for several moves as both sides develop naturally — the fight for an advantage requires subtle move-order choices.",
       "plans": [
         "Maintain central balance",
         "Develop knights to active squares"
@@ -55,7 +55,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight and attacks e5 in one move. The f3 knight is the backbone of White's opening strategy, controlling d4, supporting a future d4 push, and preparing to castle.",
+      "annotation": "White develops the knight to f3, attacking e5 and controlling the d4 square. The Nf3 is a standard developing move that prepares both Nc3 (Four Knights) and Bc4/Bb5 (Italian/Ruy Lopez).",
       "plans": [
         "Attack e5 to force Black to defend",
         "Prepare castling and d4"
@@ -78,7 +78,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends e5 with the most active move. The knight on c6 also pressures d4, making it harder for White to seize the full center. This sets the stage for the Four Knights Game.",
+      "annotation": "Black defends e5 with the knight on c6, developing to its most active square. The Nc6 controls d4 and creates the symmetrical setup that will become the Four Knights after White's Nc3.",
       "plans": [
         "Defend e5 and control d4",
         "Prepare Nf6 for a symmetrical setup"
@@ -107,7 +107,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the second knight, entering Four Knights territory. The Nc3 move supports e4 and controls d5, but it also signals White's intent for a quiet, solid game rather than the aggressive d4.",
+      "annotation": "White plays Nc3, entering the Four Knights Game. The Nc3 supports e4 and controls the critical d5 square, but it also signals a more symmetrical, positional approach compared to the Italian (Bc4) or Ruy Lopez (Bb5).",
       "plans": [
         "Build a stable center with Nc3 supporting e4",
         "Develop bishops next with Bb5 or Bc4"
@@ -136,7 +136,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black completes the four-knight formation! All four knights are developed to their ideal squares. The knight on f6 attacks e4, creating immediate central tension.",
+      "annotation": "Black completes the Four Knights formation with ...Nf6, attacking e4 and mirroring White's development. All four knights are now on their ideal squares — f3, c3, c6, and f6. The position is balanced, and the next moves will determine which direction the game takes.",
       "plans": [
         "Attack e4 to force White to commit",
         "Develop bishops and castle quickly"
@@ -159,7 +159,7 @@
     },
     {
       "san": "Bb5",
-      "annotation": "White plays the Spanish Four Knights, putting pressure on the c6 knight that defends e5. This is the most principled continuation — the pin on Nc6 creates subtle pressure that Black must address.",
+      "annotation": "White plays Bb5, the Spanish Four Knights variation. The bishop pins the Nc6 that defends e5, creating the same strategic pressure as the Ruy Lopez. This is the most ambitious continuation — the pin on Nc6 forces Black to react and breaks the comfortable symmetry.",
       "plans": [
         "Pressure the Nc6 to undermine e5 defense",
         "Prepare d4 once the position is ripe"
@@ -183,7 +183,7 @@
     },
     {
       "san": "Bb4",
-      "annotation": "Black responds symmetrically, pinning White's Nc3 against the queen just as White pinned Nc6. This is the most logical reply — it creates a balanced tension where both sides have analogous pins.",
+      "annotation": "Black responds with Bb4, the Symmetrical Variation — pinning White's Nc3 against the queen just as White pinned Nc6. This maintains the balance and creates a complex position where the dual pins cancel each other out. The resulting play revolves around how each side resolves their pin.",
       "plans": [
         "Mirror White's pressure by pinning Nc3",
         "Castle quickly and look for ways to break the symmetry favorably"
@@ -207,7 +207,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles first, gaining king safety and putting the rook on f1 where it supports the f-pawn and eyes the f-file.",
+      "annotation": "White castles kingside first, gaining king safety and activating the Rf1 on the f-file. Getting castled before the pins are resolved is important — the king needs to be safe before tactical skirmishes begin.",
       "plans": [
         "Gain a tempo in the race for king safety",
         "Prepare d3 and central expansion"
@@ -225,7 +225,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles as well, restoring the symmetry. Both kings are safe and the rooks are connected. The position is highly equal, and the next few moves will determine the character of the middlegame.",
+      "annotation": "Black castles as well, restoring full symmetry. Both kings are safe, all minor pieces are developed, and the position is equal. Breaking this symmetry will require a concrete plan from one side.",
       "plans": [
         "Complete development and prepare central play"
       ],
@@ -242,7 +242,7 @@
     },
     {
       "san": "d3",
-      "annotation": "White reinforces e4 and opens the diagonal for the c1 bishop. The move d3 rather than d4 is typical of the Four Knights — White maintains a solid center and avoids early simplifications.",
+      "annotation": "White plays d3, reinforcing the e4 pawn and opening the c1-h6 diagonal for the bishop. The d3 approach is solid — White maintains the center and waits for Black to commit before choosing a plan. The alternative d4 is more aggressive but also riskier.",
       "pawnStructure": "The e4-d3 structure is compact and hard to attack.",
       "plans": [
         "Develop the dark-squared bishop to g5 or e3",
@@ -272,7 +272,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black mirrors with d6, solidifying e5 and opening a path for the c8 bishop. The symmetry continues, making it hard for either side to claim an advantage.",
+      "annotation": "Black mirrors with d6, solidifying e5 and opening the c8-h3 diagonal for the bishop. The symmetry continues — both sides have identical pawn structures and piece placements. The first player to break this symmetry with a concrete idea gets the initiative.",
       "pawnStructure": "Both sides have the same e-pawn + d-pawn structure.",
       "plans": [
         "Develop the c8 bishop",
@@ -302,7 +302,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "White breaks the symmetry with a concrete threat! The bishop pins the f6 knight against the queen, and since the knight defends e5 (indirectly through the Nc6), this creates real pressure.",
+      "annotation": "White breaks the symmetry with Bg5, pinning the Nf6 to the queen. This concrete threat forces Black to react — the Nf6 is a critical defender of both e4 (it attacks it) and the kingside. The Bg5 pin creates real problems because if the Nf6 moves, the e5 pawn loses indirect support.",
       "plans": [
         "Pin the f6 knight to create tactical threats",
         "Prepare Nd5 jump when the knight is immobilized"
@@ -331,7 +331,7 @@
     },
     {
       "san": "Bxc3",
-      "annotation": "Black captures the c3 knight, breaking the symmetry decisively! This gives White doubled c-pawns but Black gains the bishop pair and damages White's pawn structure.",
+      "annotation": "Black captures Bxc3, breaking the symmetry decisively. This trade gives White doubled c-pawns but Black gains the bishop pair — a significant long-term advantage in open positions. The capture also removes White's control over d5 and weakens the queenside pawn structure.",
       "pawnStructure": "White gets doubled c-pawns (c2 and c3) after bxc3.",
       "plans": [
         "Gain the bishop pair while damaging White's structure",
@@ -356,7 +356,7 @@
     },
     {
       "san": "bxc3",
-      "annotation": "White recaptures toward the center, which is the standard approach. The doubled c-pawns control d4 and d5, and the b-file opens for the rook.",
+      "annotation": "White recaptures bxc3, taking toward the center. The doubled c-pawns control d4 and d5, which provides central influence. The open b-file gives the Ra1 potential activity, and the pawn structure, while damaged, has some dynamic value.",
       "pawnStructure": "Doubled c-pawns on c2-c3 are a long-term weakness, but they control the d4 square firmly.",
       "plans": [
         "Use the open b-file for rook pressure",
@@ -381,7 +381,7 @@
     },
     {
       "san": "Qe7",
-      "annotation": "Black unpins the knight by moving the queen to e7, where it also supports e5 and keeps an eye on the entire board.",
+      "annotation": "Black plays Qe7, unpinning the Nf6 and defending e5 from a flexible central square. The Qe7 also keeps an eye on the kingside (potential ...Qe6-h3 ideas) and supports a future ...Nd8-e6 maneuver to improve the knight.",
       "plans": [
         "Unpin the f6 knight",
         "Prepare Nd8-Ne6 or Rd8 maneuvers"
@@ -405,7 +405,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "White places the rook on the central e-file, supporting the e4 pawn and preparing for the eventual d4 break.",
+      "annotation": "White places the rook on e1, supporting the e4 pawn and controlling the central e-file. The Re1 prepares for the eventual d4 break and keeps the e-file under White's control for future tactical operations.",
       "plans": [
         "Support e4 and prepare d4 central advance",
         "Create latent pressure on the e-file against the queen"
@@ -428,7 +428,7 @@
     },
     {
       "san": "Nd8",
-      "annotation": "The knight retreats to d8 — an unusual-looking but strategically deep move! The knight heads for e6 where it will be powerfully placed, attacking d4, supporting f4 and g5, and blockading the e-file.",
+      "annotation": "Black retreats the knight to d8, an unusual-looking but strategically deep maneuver. The Nd8 heads for e6, where it will be powerfully placed — attacking d4, c5, f4, and g5. This rerouting is a hallmark of the Four Knights, improving the worst-placed piece.",
       "plans": [
         "Reroute the knight to e6, a dominant central outpost",
         "From e6, the knight pressures d4, c5, f4, and g5"
@@ -452,7 +452,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White finally strikes in the center! With the knight retreated to d8, Black's control over d4 is weakened, making this the perfect moment.",
+      "annotation": "White strikes with d4, the central break that opens the position. With the Nd8 retreated from c6, Black's control over d4 is weakened, making this the perfect moment. After d4, the center opens and White's pieces become more active.",
       "pawnStructure": "After d4, the center is contested. If exd4 cxd4, White gets a strong pawn duo on d4-e4.",
       "plans": [
         "Open the center to activate the bishop pair",

@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "King's pawn to e4 -- the most popular first move in chess history for good reason. We grab central space, open diagonals for both the queen and the f1 bishop, and set the stage for active piece play. In the Italian Game family that we're heading toward, e4 is the foundation of everything. Control the center, develop fast, attack.",
+      "annotation": "This is the Two Knights Defence, a sharp and aggressive response to the Italian Game. White plays 1.e4, claiming central space and opening diagonals. The Two Knights leads to more tactical positions than the Giuoco Piano, with both sides fighting for the initiative.",
       "plans": [
         "Develop quickly: Nf3, Bc4, O-O",
         "Fight for central control and open lines for pieces"
@@ -26,7 +26,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black mirrors with e5, creating a symmetric center. This is the Open Game -- both sides have a pawn in the center and open diagonals for their bishops. Black stakes an equal claim to the center and prepares to develop the knights. It's the most principled and combative response to 1.e4.",
+      "annotation": "Black responds with 1...e5, establishing symmetrical central control. In the Two Knights, the e5 pawn will be at the center of tactical storms — particularly if White chooses the aggressive Ng5 attack targeting f7.",
       "alternatives": [
         "c5 - the Sicilian, the most popular response at top level",
         "e6 - the French Defence, more solid"
@@ -46,7 +46,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop the knight to f3, attacking the e5 pawn immediately. This forces Black to deal with the threat, which shapes the entire opening. Nf3 also controls d4, prepares kingside castling, and is the most active move. Almost every e4 e5 game goes through Nf3 at some point -- it's that fundamental.",
+      "annotation": "White develops the knight to f3, attacking Black's e5 pawn and controlling the d4 square. The Nf3 prepares both Bc4 (Italian Game) and the subsequent choice between quiet d3 setups and the sharp Ng5 attacking lines.",
       "plans": [
         "Follow with Bc4 for the Italian Game",
         "Castle kingside quickly"
@@ -69,7 +69,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends e5 with the knight, which is the most natural response. Nc6 develops a piece while protecting the center -- two jobs with one move. From c6, the knight influences d4 and e5 and prepares for various setups. This is the starting position for most classical e4 e5 openings.",
+      "annotation": "Black defends e5 with the knight on c6, developing to an active square that also controls d4. The Nc6 is the natural complement to the coming ...Nf6 that defines the Two Knights Defence.",
       "alternatives": [
         "Nf6 - the Petrov Defence, solid but less combative",
         "d6 - the Philidor, more passive"
@@ -89,7 +89,7 @@
     },
     {
       "san": "Bc4",
-      "annotation": "The bishop comes to c4, the Italian Bishop! This is one of the oldest and most dangerous setups in chess. The bishop attacks the f7 square, which is Black's weakest point (only defended by the king). From c4 the bishop also controls the critical d5 square and supports future central play. We're playing the Italian Game now, aiming for a slow positional buildup rather than the sharp Ruy Lopez.",
+      "annotation": "White plays Bc4, placing the bishop on the a2-g8 diagonal where it targets f7 — the weakest square in Black's camp. From c4, the bishop supports both the quiet Giuoco Piano (after ...Bc5) and the sharp Two Knights (after ...Nf6).",
       "plans": [
         "Target f7 indirectly while building position",
         "d3, O-O, and prepare c3 + d4 central expansion"
@@ -118,7 +118,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "This is the Two Knights Defence! Instead of the quieter Be7 (the Giuoco Piano), Black develops the knight aggressively to f6, counter-attacking the e4 pawn. Black is saying 'I'm not going to sit back and defend -- I'm going to create my own threats.' The Two Knights is one of the most combative responses to the Italian and leads to rich, tactical positions. It does have a risk though: the f7 square is exposed.",
+      "annotation": "This is the Two Knights Defence! Black plays ...Nf6 instead of the quieter ...Bc5 (Giuoco Piano), immediately counter-attacking White's e4 pawn. The Nf6 is more aggressive — it develops with a threat and invites the sharp Ng5 attack where White tries to exploit f7.",
       "plans": [
         "Counter-attack e4 while developing",
         "Prepare to castle kingside"
@@ -147,7 +147,7 @@
     },
     {
       "san": "d3",
-      "annotation": "We play d3, entering the Giuoco Pianissimo ('very quiet game') variation of the Italian. Instead of the aggressive d4 or the sharp Ng5 attacking f7, we play solidly. d3 defends e4, opens the diagonal for the c1 bishop, and keeps the position closed for now. This is the modern approach to the Italian -- build up slowly, prepare c3 and d4 at the right moment, and keep all the tension. It's become hugely popular at the top level because the positions are rich and long-lasting.",
+      "annotation": "White plays d3, entering the Giuoco Pianissimo (\"very quiet game\") variation. Instead of the aggressive Ng5 attacking f7 directly, White chooses a solid positional approach — building a strong center with d3, preparing c3, and keeping long-term pressure. This is the modern preference at top levels.",
       "pawnStructure": "The e4-d3 structure is solid and flexible, preparing a future c3-d4 central expansion.",
       "plans": [
         "O-O, then c3 and d4 to expand in the center",
@@ -172,7 +172,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop to the modest but solid e7 square. This might look passive compared to Bc5, but it's actually very practical -- the bishop supports kingside castling, doesn't create any targets, and keeps Black's position flexible. From e7, the bishop can later go to f6 or d6 depending on the pawn structure. It's the most popular choice in the modern Giuoco Pianissimo.",
+      "annotation": "Black develops the bishop to e7, a modest but flexible placement. The Be7 prepares immediate castling and avoids the tactical complications of ...Bc5. From e7, the bishop can later reroute to f6 or d8-c7 depending on the needs of the position.",
       "plans": [
         "Castle kingside",
         "Play d6 to solidify the center"
@@ -191,7 +191,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Castle immediately. We've developed our minor pieces to good squares, and now we tuck the king away. In the Italian, early castling is essential because we want to bring the rook to e1 to support e4 and prepare the central expansion. The king is perfectly safe behind the f2-g2-h2 pawns, and we're ready to enter the middlegame buildup.",
+      "annotation": "White castles kingside, getting the king to safety and placing the Rf1 on the f-file. In the Giuoco Pianissimo, early castling is essential because the closed center means the fight will develop slowly — king safety comes first.",
       "plans": [
         "Re1 to support e4 and prepare central play",
         "c3 and d4 expansion when ready"
@@ -206,7 +206,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black also castles, completing basic development. Both kings are safe, and now the strategic battle begins. In these Italian structures, the fight is about who executes their central plan more effectively. White wants c3-d4, Black wants d5 or d6 with piece pressure. The position is roughly equal but with plenty of play for both sides.",
+      "annotation": "Black also castles, completing basic development. Both kings are secure, the rooks are connected, and the strategic battle over the center begins. The key question is how White will execute the c3-d4 central break.",
       "plans": [
         "Play d6 followed by potential d5 break",
         "Develop the c8 bishop and connect the rooks"
@@ -221,7 +221,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "The rook comes to e1, bolstering the e4 pawn and preparing the c3-d4 advance. This is the key rook placement in the Italian -- on e1, the rook supports the entire central structure. If we play d4 and the center opens, the rook will be perfectly placed on the e-file. It also prevents any tricks with Black playing d5 and trying to win the e4 pawn.",
+      "annotation": "White plays Re1, bolstering the e4 pawn and preparing the c3-d4 central advance. The Re1 is the key rook placement in the Italian — it supports e4, prevents ...Nxe4 tactics, and will become very active once the center opens after d4.",
       "plans": [
         "Prepare c3 and d4 central break",
         "Support e4 and keep central tension"
@@ -245,7 +245,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays d6, solidifying the e5 pawn and giving the c8 bishop a way out. This is the most common and solid setup. The d6 pawn creates a strong center alongside e5 and prepares ideas like Be6 or Bg4. It's not glamorous, but it's rock solid. Black is saying 'I'll hold this center and wait for you to overextend.'",
+      "annotation": "Black plays d6, solidifying the e5 pawn and creating the typical Italian Game pawn chain on e5-d6. The d6 move also opens a diagonal for the Bc8 to develop and establishes a stable central structure.",
       "pawnStructure": "The d6-e5 pawn chain is a fortress -- hard to break down but slightly passive.",
       "plans": [
         "Develop the c8 bishop to e6 or g4",
@@ -269,7 +269,7 @@
     },
     {
       "san": "a4",
-      "annotation": "a4 is a key positional move in the Italian. It prevents Black from playing b5, which would be an annoying queenside expansion and might hit our bishop on c4. The a4 pawn grabs space on the queenside and takes away the b5 square from Black's pieces. In the long run, it might support a5 to cramp Black further. This is modern Italian strategy -- every tempo matters, and preventing your opponent's plans is just as important as executing your own.",
+      "annotation": "White plays a4, a key positional move that prevents Black's ...b5 queenside expansion. Without a4, Black could play ...b5 hitting the Bc4 and gaining queenside space. The a4 pawn also prepares potential a5 advances to restrict Black's queenside completely.",
       "plans": [
         "Prevent b5 and limit Black's queenside play",
         "Prepare Nbd2 and c3-d4 central break"
@@ -294,7 +294,7 @@
     },
     {
       "san": "Na5",
-      "annotation": "Black plays the aggressive Na5, attacking the bishop on c4. This is a thematic idea in the Italian -- the knight goes to the rim to chase the bishop away from its strong diagonal. While 'a knight on the rim is dim' is the old saying, here Na5 has a specific purpose: after the bishop retreats, the knight can reroute to c4 or c6. It also prepares c5 to challenge White's center from the flank.",
+      "annotation": "Black plays Na5, the thematic maneuver targeting the Bc4. The knight goes to the rim to chase the bishop — a well-known Italian Game idea. After ...Nxc4 dxc4, Black would eliminate White's best attacking piece at the cost of a slightly offside knight.",
       "plans": [
         "Chase the Bc4 away and reroute the knight",
         "Play c5 to challenge the center"
@@ -318,7 +318,7 @@
     },
     {
       "san": "Ba2",
-      "annotation": "The bishop retreats to a2, which looks odd but is actually the best square. On a2, the bishop is completely safe, still eyes f7 through the diagonal, and most importantly isn't blocking any of our other plans. The bishop is out of the way but still participating. It's like a sniper -- hidden but lethal. From a2 it can never be harassed again, and if the position opens up, it'll be a monster.",
+      "annotation": "White retreats the bishop to a2, which looks unusual but is actually the ideal square. On a2, the bishop is completely safe from further harassment, still targets f7 through the diagonal, and supports a future d4-d5 central advance. The bishop on a2 is a long-term strategic asset.",
       "plans": [
         "The bishop stays on the a2-f7 diagonal long-term",
         "Focus on c3-d4 central play now that the bishop is settled"
@@ -342,7 +342,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black plays c5, establishing a grip on d4 and gaining queenside space. This is the logical follow-up to Na5 -- Black creates a strong pawn structure on c5-d6-e5 that controls a lot of central squares. The pawn on a5 now has access to c6 via the retreat, and Black's position is solid and flexible. The downside is the d5 square is slightly weakened, but Black's pieces can cover it.",
+      "annotation": "Black plays c5, establishing a grip on the d4 square and gaining queenside space. This is the logical follow-up to Na5 — Black creates a strong pawn chain on c5-d6-e5 that controls the center and prepares ...Nc6 to bring the knight back to a useful square.",
       "pawnStructure": "Black's c5-d6-e5 formation is a formidable central wall but leaves d5 potentially weak.",
       "plans": [
         "Bring the knight back to c6",
@@ -372,7 +372,7 @@
     },
     {
       "san": "c3",
-      "annotation": "Now we play c3, preparing the critical d4 advance. With the bishop safely on a2 and the rook on e1, everything is aligned for d4. c3 also gives the queen access to a4 or b3 and controls the d4 square firmly. This is the moment we've been building toward -- once d4 comes, the center will open and our pieces will spring to life. The Italian Game rewards patience.",
+      "annotation": "White plays c3, preparing the critical d4 central break. With the bishop safely on a2 and the rook on e1, all pieces are aligned for d4. The c3 pawn will recapture on d4 after the exchange, maintaining White's central pawn presence.",
       "plans": [
         "Play d4 to open the center",
         "If dxe5, recapture and dominate the open position"
@@ -400,7 +400,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "The knight returns to c6, a much better square than a5. The mission is accomplished -- the bishop was chased to a2, and now the knight comes back to its natural post where it controls d4 and e5. From c6 the knight is a strong defensive piece supporting Black's central pawns. Black has a solid, well-organized position ready to meet White's d4 break. The position is rich with possibilities for both sides.",
+      "annotation": "The knight returns to c6, completing its mission. The Bc4 was chased to a2, and now the knight comes back to its ideal central square where it controls d4, e5, and supports Black's pawn structure. The temporary detour was worth the strategic gain.",
       "plans": [
         "Defend the center against White's d4 break",
         "Look for counterplay with a5, Be6, or f5 depending on the position"

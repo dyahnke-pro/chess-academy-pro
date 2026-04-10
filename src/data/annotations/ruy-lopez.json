@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "The king's pawn opens lines for both the queen and the light-squared bishop while staking a claim in the center.",
+      "annotation": "This is the Ruy Lopez, one of the oldest and most respected openings in chess. White plays 1.e4, placing a pawn on e4 to control d5 and f5 while opening the f1-a6 diagonal for the bishop. The entire Ruy Lopez strategy begins with this move.",
       "pawnStructure": "A single center pawn on e4 creates an ideal launching pad.",
       "plans": [
         "Develop kingside pieces quickly",
@@ -33,7 +33,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black mirrors White's central strategy, occupying e5 to contest the d4 and f4 squares. This is the most classical response, leading to open games with piece play taking center stage.",
+      "annotation": "Black responds with 1...e5, claiming symmetrical central space and controlling d4 and f4. This classical response leads to the Open Game — a direct fight for central control where piece activity and development speed are paramount.",
       "pawnStructure": "Symmetrical e4-e5 structure. Both sides have equal central presence, so the battle shifts to who d.",
       "plans": [
         "Develop knights to f6 and c6 to pressure the center",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "The knight develops to its ideal square, attacking the e5 pawn immediately and preparing to castle kingside.",
+      "annotation": "White develops the knight to f3, attacking Black's e5 pawn and controlling the critical d4 square. The Nf3 prepares kingside castling and is the natural precursor to the Ruy Lopez's Bb5, which will come next.",
       "plans": [
         "Threaten to win the e5 pawn",
         "Castle kingside quickly"
@@ -92,7 +92,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "The most natural defense of the e5 pawn. The knight develops to an active square where it eyes d4 and pressures the center. Unlike d6, this move doesn't block Black's dark-squared bishop.",
+      "annotation": "Black defends e5 with the knight on c6, developing to an active central square. The Nc6 also controls d4, making it harder for White to achieve the central break. This is preferred over ...d6 because it doesn't block the dark-squared bishop.",
       "plans": [
         "Maintain the e5 strongpoint",
         "Develop the kingside pieces next"
@@ -121,7 +121,7 @@
     },
     {
       "san": "Bb5",
-      "annotation": "The Ruy Lopez move! Instead of targeting f7 with Bc4, the bishop pins the knight that defends e5.",
+      "annotation": "This is the defining move of the Ruy Lopez. White places the bishop on b5, pinning the Nc6 that defends e5. Unlike the Italian Game's Bc4 (which targets f7 directly), the Bb5 puts long-term strategic pressure on Black's center by threatening to remove the e5 pawn's key defender.",
       "pawnStructure": "No structural change, but the bishop aims to destabilize Black's control of e5 by threatening the.",
       "plans": [
         "Maintain pressure on the c6-e5 chain",
@@ -151,7 +151,7 @@
     },
     {
       "san": "a6",
-      "annotation": "The Morphy Defense — Black asks the bishop an important question: where do you want to go? This gains time and space on the queenside while preparing b5 to kick the bishop further.",
+      "annotation": "Black plays 3...a6, the Morphy Defense — the most popular response to the Ruy Lopez. This forces the bishop to declare its intentions immediately: retreat, exchange on c6, or stay on b5. The a6 pawn also gains queenside space and prepares a future ...b5 advance.",
       "pawnStructure": "The a6 pawn prepares the b5 advance, which will expand on the queenside.",
       "plans": [
         "Follow up with b5 to gain queenside space",
@@ -176,7 +176,7 @@
     },
     {
       "san": "Ba4",
-      "annotation": "The bishop retreats but maintains its diagonal pressure on c6 and indirectly on e5.",
+      "annotation": "White retreats the bishop to a4, maintaining the pin on the Nc6 along the a4-e8 diagonal. From a4, the bishop keeps long-term pressure on the knight and indirectly on the e5 pawn, while staying safe from the ...b5 advance for now.",
       "plans": [
         "Preserve the bishop's pressure on the c6 knight",
         "After O-O and Re1, the pin becomes more meaningful"
@@ -195,7 +195,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its best square, attacking e4 and completing kingside development preparation.",
+      "annotation": "Black develops the knight to f6, attacking White's e4 pawn and preparing kingside castling. The Nf6 creates immediate tactical tension — White must decide how to handle the threat to e4. This move also completes Black's kingside minor piece development.",
       "plans": [
         "Attack e4 to force White to address the center",
         "Prepare Be7 and O-O for quick castling"
@@ -219,7 +219,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles into safety while connecting the rooks. A key subtlety: White doesn't defend e4 with d3 yet, because after O-O the rook on f1 is ready to go to e1, and the e4 pawn is offered as a temp.",
+      "annotation": "White castles kingside, prioritizing king safety over defending e4 directly. This is a subtle and important concept — the e4 pawn is temporarily offered because after ...Nxe4, White can play d4 with a strong initiative, and Re1 will win the pawn back with interest. The Rf1 on the f-file also supports future f4 ideas.",
       "plans": [
         "Play Re1 to defend e4 and add pressure to the e-file",
         "Build a center with d4 at the right moment"
@@ -238,7 +238,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "The bishop develops modestly to e7 rather than the more aggressive c5 or b4. On e7 it supports castling, prepares to contest the d6-f6 squares, and stays flexible — it can later reroute to f6 or d8.",
+      "annotation": "Black develops the bishop to e7, a modest but flexible placement. The Be7 prepares castling, supports the d6 pawn, and keeps options open — it can later reroute to f6 to support the center or to d8-c7 for queenside play. This is more solid than the aggressive ...Bc5 or ...Bb4.",
       "plans": [
         "Castle kingside immediately",
         "Keep options open for the bishop's future diagonal"
@@ -257,7 +257,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "The rook comes to e1, solidifying e4 and preparing for the central battle. Now the e4 pawn is truly defended, and White is ready to play d4.",
+      "annotation": "White plays Re1, placing the rook on the open e-file to solidify the e4 pawn. Now e4 is genuinely defended, and White is ready to execute the c3-d4 central break. The Re1 also prevents any ...Nxe4 tricks and creates latent pressure down the e-file.",
       "plans": [
         "Prepare d4 to open the center",
         "The e-file becomes a key battleground after d4 exd4"
@@ -286,7 +286,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black finally executes the plan prepared by a6, gaining queenside space and forcing the bishop to make a final decision. The b5 pawn grab space and prepares potential Na5 or Bb7 ideas.",
+      "annotation": "Black pushes b5, executing the plan prepared by a6. The b5 advance gains queenside space, forces the Ba4 to its final destination, and prepares ideas like ...Na5 to exchange the Ruy Lopez bishop or ...Bb7 to develop the light-squared bishop to the long diagonal.",
       "pawnStructure": "Black's queenside pawns on a6-b5 grab space but can become targets later.",
       "plans": [
         "Prepare Bb7 to develop the bishop and contest the long diagonal",
@@ -311,7 +311,7 @@
     },
     {
       "san": "Bb3",
-      "annotation": "The bishop settles on its best diagonal, eyeing the f7 pawn. From b3, the bishop is extremely well-placed — it's safe from further pawn attacks, targets the sensitive f7 square, and supports future.",
+      "annotation": "The bishop retreats to b3, settling on its best diagonal — the a2-g8 line targeting the sensitive f7 square. From b3, the bishop is safe from further pawn attacks, exerts permanent pressure on f7 (Black's weakest point), and supports a potential d4-d5 central advance.",
       "plans": [
         "Target f7 from the a2-g8 diagonal",
         "Support d4 central advance"
@@ -340,7 +340,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the e5 pawn and opens a diagonal for the c8 bishop. This is a key structural move — d6 creates the famous Ruy Lopez pawn chain (e5-d6) that defines Black's central strategy.",
+      "annotation": "Black plays d6, solidifying the e5 pawn and creating the famous Ruy Lopez pawn chain on e5-d6. The d6 pawn also opens a route for the Bc8 to develop. This is the structural foundation of Black's position — the e5-d6 chain provides stability but commits Black to a slightly passive setup.",
       "pawnStructure": "The e5-d6 chain is solid but commits Black to a specific structure.",
       "plans": [
         "Complete development with O-O",
@@ -365,7 +365,7 @@
     },
     {
       "san": "c3",
-      "annotation": "A critical preparatory move! White supports the d4 advance — without c3, after d4 exd4 Nxd4, Black can play Nxd4 with a comfortable position.",
+      "annotation": "White plays c3, the critical preparatory move for the d4 central break. Without c3, after d4 exd4 Nxd4 Nxd4, Black exchanges pieces comfortably. With c3, after d4 exd4 cxd4, White maintains the powerful e4+d4 pawn center — the dream setup in the Ruy Lopez.",
       "pawnStructure": "c3 prepares an ideal pawn center with d4.",
       "plans": [
         "Play d4 with strong central control",
@@ -395,7 +395,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles to safety, completing the first phase of development. The king is secure and the rook is connected.",
+      "annotation": "Black castles kingside, completing development and getting the king to safety. The first phase of the opening is over — both sides are now developed, castled, and ready for the middlegame. The critical question is when and how White will execute the d4 break.",
       "plans": [
         "Prepare to meet d4 with appropriate central strategy",
         "Consider Re8 to add support to the e-file"
@@ -414,7 +414,7 @@
     },
     {
       "san": "h3",
-      "annotation": "A prophylactic masterpiece! This little pawn move prevents Bg4 pinning the f3 knight, which would undermine White's control of d4.",
+      "annotation": "White plays h3, a prophylactic masterpiece that prevents ...Bg4 pinning the Nf3. If Black could play ...Bg4, it would undermine White's control of d4 by threatening to exchange the knight. The h3 move also creates a safe retreat square on h2 for the bishop and prepares potential g4 kingside expansion.",
       "plans": [
         "Prevent Bg4 pin on the f3 knight",
         "Complete preparation for d4"
@@ -438,7 +438,7 @@
     },
     {
       "san": "Nb8",
-      "annotation": "The Breyer maneuver — one of the most famous retreats in chess! The knight goes backward to reroute via d7 to better squares.",
+      "annotation": "Black retreats the knight with Nb8, the famous Breyer Maneuver — one of the most celebrated retreats in all of chess. The knight goes backward to reroute via d7 to better squares: d7-f8-g6 for kingside defense, or d7-b6 for queenside counterplay. This patient regrouping is the hallmark of modern Ruy Lopez play.",
       "pawnStructure": "No structural change, but the knight retreat prepares structural flexibility — c5 or d5 breaks bec.",
       "plans": [
         "Reroute the knight via Nbd7 to f8 or e6",
