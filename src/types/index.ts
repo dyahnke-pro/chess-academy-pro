@@ -675,7 +675,8 @@ export type CoachTask =
   | 'model_game_annotation'
   | 'middlegame_plan_generation'
   | 'sideline_explanation'
-  | 'smart_search';
+  | 'smart_search'
+  | 'explore_reaction';
 
 export interface CoachContext {
   fen: string;

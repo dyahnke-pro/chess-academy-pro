@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap, Compass } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess } from 'chess.js';
 import { useChessGame } from '../../hooks/useChessGame';
@@ -28,6 +28,8 @@ import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/coachTemplates';
+import { getCoachChatResponse } from '../../services/coachApi';
+import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
@@ -398,6 +400,21 @@ export function CoachGamePage(): JSX.Element {
   const tipBubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tacticAnimTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
+  // ─── Show Mode Step Navigation ─────────────────────────────────────────────
+  const [showFens, setShowFens] = useState<string[]>([]);
+  const [showIndex, setShowIndex] = useState<number>(-1);
+
+  // ─── Explore Ahead Mode ────────────────────────────────────────────────────
+  const [isExploreMode, setIsExploreMode] = useState(false);
+  const [exploreFen, setExploreFen] = useState<string | null>(null);
+  const [exploreMessages, setExploreMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
+  const [isExploreReacting, setIsExploreReacting] = useState(false);
+  const [exploreEval, setExploreEval] = useState<number | null>(null);
+  const [exploreIsMate, setExploreIsMate] = useState(false);
+  const [exploreMateIn, setExploreMateIn] = useState<number | null>(null);
+  const [exploreTopLines, setExploreTopLines] = useState<AnalysisLine[]>([]);
+  const exploreChatRef = useRef<HTMLDivElement>(null);
+
   const clearTacticAnimation = useCallback(() => {
     tacticAnimTimersRef.current.forEach(clearTimeout);
     tacticAnimTimersRef.current = [];
@@ -416,7 +433,7 @@ export function CoachGamePage(): JSX.Element {
     }, 12000);
   }, [clearTacticAnimation]);
 
-  /** Show button: animate the tactic moves on the board */
+  /** Show button: build FEN array for step-through navigation */
   const handleShowTactic = useCallback(() => {
     if (!tipTacticLine) return;
     // Cancel auto-dismiss — user is actively viewing
@@ -438,15 +455,100 @@ export function CoachGamePage(): JSX.Element {
         fens.push(chess.fen());
       }
 
+      setShowFens(fens);
+      setShowIndex(0);
+      setTemporaryFen(fens[0]);
       setTemporaryLabel('Tactic preview');
-      fens.forEach((f, i) => {
-        const timer = setTimeout(() => setTemporaryFen(f), (i + 1) * 800);
-        tacticAnimTimersRef.current.push(timer);
-      });
     } catch {
       // Fallback: just show the text notation
     }
   }, [tipTacticLine, clearTacticAnimation]);
+
+  /** Step backward in the shown tactic line */
+  const handleShowPrev = useCallback(() => {
+    if (showIndex <= 0 || showFens.length === 0) return;
+    const newIndex = showIndex - 1;
+    setShowIndex(newIndex);
+    setTemporaryFen(showFens[newIndex]);
+  }, [showIndex, showFens]);
+
+  /** Step forward in the shown tactic line */
+  const handleShowNext = useCallback(() => {
+    if (showIndex >= showFens.length - 1) return;
+    const newIndex = showIndex + 1;
+    setShowIndex(newIndex);
+    setTemporaryFen(showFens[newIndex]);
+  }, [showIndex, showFens]);
+
+  /** Enter Explore Ahead mode from the current shown position */
+  const handleEnterExplore = useCallback(() => {
+    if (showFens.length === 0 || showIndex < 0) return;
+    setIsExploreMode(true);
+    const currentShowFen = showFens[showIndex];
+    setExploreFen(currentShowFen);
+    setExploreMessages([]);
+    setExploreEval(null);
+    setExploreIsMate(false);
+    setExploreMateIn(null);
+    setExploreTopLines([]);
+    // Run initial engine analysis on the explore position
+    void stockfishEngine.queueAnalysis(currentShowFen, 16).then((analysis) => {
+      setExploreEval(analysis.evaluation);
+      setExploreIsMate(analysis.isMate);
+      setExploreMateIn(analysis.mateIn);
+      setExploreTopLines(analysis.topLines);
+    }).catch(() => { /* engine may be busy */ });
+  }, [showFens, showIndex]);
+
+  /** Handle a move made during Explore Ahead mode */
+  const handleExploreMove = useCallback((moveResult: MoveResult) => {
+    const newFen = moveResult.fen;
+    setExploreFen(newFen);
+    setTemporaryFen(newFen);
+
+    // Run engine analysis on the new position
+    void stockfishEngine.queueAnalysis(newFen, 16).then((analysis) => {
+      setExploreEval(analysis.evaluation);
+      setExploreIsMate(analysis.isMate);
+      setExploreMateIn(analysis.mateIn);
+      setExploreTopLines(analysis.topLines);
+
+      // Fetch coach reaction with engine context
+      setIsExploreReacting(true);
+      const evalText = analysis.isMate
+        ? `Mate in ${analysis.mateIn}`
+        : `${analysis.evaluation > 0 ? '+' : ''}${(analysis.evaluation / 100).toFixed(1)}`;
+      const bestMoveSan = analysis.topLines[0]?.moves[0] ?? 'unknown';
+
+      const userMsg = `Position FEN: ${newFen}\nMove played: ${moveResult.san}\nStockfish eval after move: ${evalText}\nEngine best move: ${bestMoveSan}\nReact to this move in 1-2 sentences.`;
+
+      const msgHistory: { role: 'user' | 'assistant'; content: string }[] = [
+        ...exploreMessages,
+        { role: 'user' as const, content: userMsg },
+      ];
+
+      void getCoachChatResponse(
+        msgHistory,
+        EXPLORE_REACTION_ADDITION,
+        undefined,
+        'explore_reaction',
+        256,
+      ).then((reaction) => {
+        setExploreMessages((prev) => [
+          ...prev,
+          { role: 'user', content: userMsg },
+          { role: 'assistant', content: reaction },
+        ]);
+        setIsExploreReacting(false);
+        // Auto-scroll to latest message
+        setTimeout(() => {
+          exploreChatRef.current?.scrollTo({ top: exploreChatRef.current.scrollHeight, behavior: 'smooth' });
+        }, 50);
+      }).catch(() => {
+        setIsExploreReacting(false);
+      });
+    }).catch(() => { /* engine may be busy */ });
+  }, [exploreMessages]);
 
   /** Dismiss tip and snap board back to the live position */
   const handleDismissTip = useCallback(() => {
@@ -460,6 +562,18 @@ export function CoachGamePage(): JSX.Element {
     setShowingTacticLine(false);
     setTemporaryFen(null);
     setTemporaryLabel(null);
+    // Reset show step state
+    setShowFens([]);
+    setShowIndex(-1);
+    // Reset explore state
+    setIsExploreMode(false);
+    setExploreFen(null);
+    setExploreMessages([]);
+    setIsExploreReacting(false);
+    setExploreEval(null);
+    setExploreIsMate(false);
+    setExploreMateIn(null);
+    setExploreTopLines([]);
   }, [clearTacticAnimation]);
 
   // Proactive coach tips (positional awareness, tactics, key moments)
@@ -1079,14 +1193,16 @@ export function CoachGamePage(): JSX.Element {
     coachSay(result.message);
   }, [evaluatePracticeMove, coachSay]);
 
-  // Handle board move routing — practice mode or normal gameplay
+  // Handle board move routing — explore mode, practice mode, or normal gameplay
   const handleBoardMoveRouted = useCallback((moveResult: MoveResult) => {
-    if (practicePosition) {
+    if (isExploreMode) {
+      handleExploreMove(moveResult);
+    } else if (practicePosition) {
       void handlePracticeMove(moveResult);
     } else {
       void handlePlayerMove(moveResult);
     }
-  }, [practicePosition, handlePracticeMove, handlePlayerMove]);
+  }, [isExploreMode, handleExploreMove, practicePosition, handlePracticeMove, handlePlayerMove]);
 
   // Handle practice-in-chat from post-game review
   const handlePracticeInChat = useCallback((prompt: string) => {
@@ -1579,34 +1695,117 @@ export function CoachGamePage(): JSX.Element {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
               className={`mx-2 mb-1 rounded-xl backdrop-blur-md border px-3 py-2.5 flex-shrink-0 ${
-                tipTacticLine && !tipTacticLine.forPlayer
-                  ? 'border-red-500/30'
-                  : 'border-blue-500/30'
+                isExploreMode
+                  ? 'border-purple-500/30'
+                  : tipTacticLine && !tipTacticLine.forPlayer
+                    ? 'border-red-500/30'
+                    : 'border-blue-500/30'
               }`}
               style={{
-                background: tipTacticLine && !tipTacticLine.forPlayer
-                  ? 'color-mix(in srgb, var(--color-bg) 85%, rgba(239, 68, 68, 0.3))'
-                  : 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))',
+                background: isExploreMode
+                  ? 'color-mix(in srgb, var(--color-bg) 85%, rgba(168, 85, 247, 0.3))'
+                  : tipTacticLine && !tipTacticLine.forPlayer
+                    ? 'color-mix(in srgb, var(--color-bg) 85%, rgba(239, 68, 68, 0.3))'
+                    : 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))',
               }}
               data-testid="coach-tip-bubble"
             >
+              {/* Header: icon + tip text */}
               <div className="flex items-start gap-2">
-                {tipTacticLine && !tipTacticLine.forPlayer
-                  ? <AlertTriangle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
-                  : <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                {isExploreMode
+                  ? <Compass size={16} className="text-purple-400 flex-shrink-0 mt-0.5" />
+                  : tipTacticLine && !tipTacticLine.forPlayer
+                    ? <AlertTriangle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
+                    : <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
                 }
                 <div className="flex-1 min-w-0">
                   <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
-                    {tipBubbleText}
+                    {isExploreMode ? 'Explore Ahead — make moves freely and get coach reactions' : tipBubbleText}
                   </p>
-                  {showingTacticLine && tipTacticLine && (
+                  {showingTacticLine && tipTacticLine && !isExploreMode && (
                     <p className="text-xs font-mono mt-1.5 font-semibold text-emerald-400" data-testid="tactic-line-moves">
                       {uciLinesToSan(tipTacticLine.uciMoves, tipTacticLine.fen, 6)}
                     </p>
                   )}
                 </div>
               </div>
+
+              {/* Show Mode: step navigation arrows */}
+              {showingTacticLine && showFens.length > 0 && !isExploreMode && (
+                <div className="flex items-center justify-center gap-3 mt-2" data-testid="show-step-nav">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleShowPrev(); }}
+                    disabled={showIndex <= 0}
+                    className="p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
+                    aria-label="Previous show move"
+                    data-testid="show-prev-btn"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <span className="text-[10px] font-medium" style={{ color: 'var(--color-text-muted)' }} data-testid="show-step-counter">
+                    Move {showIndex + 1} of {showFens.length}
+                  </span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleShowNext(); }}
+                    disabled={showIndex >= showFens.length - 1}
+                    className="p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
+                    aria-label="Next show move"
+                    data-testid="show-next-btn"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
+
+              {/* Explore Mode: engine eval + scrollable coach reaction history */}
+              {isExploreMode && (
+                <div className="mt-2">
+                  {/* Engine analysis bar */}
+                  {exploreEval !== null && (
+                    <div className="flex items-center gap-2 mb-2 px-1" data-testid="explore-engine-eval">
+                      <span className="text-[10px] font-mono font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+                        Eval:
+                      </span>
+                      <span className={`text-[10px] font-mono font-bold ${
+                        exploreIsMate
+                          ? (exploreMateIn !== null && exploreMateIn > 0 ? 'text-emerald-400' : 'text-red-400')
+                          : exploreEval > 50 ? 'text-emerald-400' : exploreEval < -50 ? 'text-red-400' : 'text-gray-400'
+                      }`}>
+                        {exploreIsMate ? `M${exploreMateIn}` : `${exploreEval > 0 ? '+' : ''}${(exploreEval / 100).toFixed(1)}`}
+                      </span>
+                      {exploreTopLines.length > 0 && exploreTopLines[0].moves.length > 0 && (
+                        <span className="text-[10px] font-mono" style={{ color: 'var(--color-text-muted)' }}>
+                          Best: {(() => {
+                            try { return uciMoveToSan(exploreTopLines[0].moves[0], exploreFen ?? ''); } catch { return exploreTopLines[0].moves[0]; }
+                          })()}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {/* Scrollable reaction messages */}
+                  <div
+                    ref={exploreChatRef}
+                    className="max-h-24 overflow-y-auto space-y-1.5 scrollbar-thin"
+                    data-testid="explore-messages"
+                  >
+                    {exploreMessages.filter((m) => m.role === 'assistant').map((msg, i) => (
+                      <p key={i} className="text-xs leading-relaxed px-1" style={{ color: 'var(--color-text)' }}>
+                        {msg.content}
+                      </p>
+                    ))}
+                    {isExploreReacting && (
+                      <div className="flex items-center gap-1.5 px-1">
+                        <Loader2 size={10} className="animate-spin text-purple-400" />
+                        <span className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>Thinking...</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Action buttons */}
               <div className="flex items-center gap-2 mt-2">
+                {/* Show button — only when tactic line is available and not yet showing */}
                 {tipTacticLine && !showingTacticLine && (
                   <button
                     onClick={(e) => { e.stopPropagation(); handleShowTactic(); }}
@@ -1623,6 +1822,24 @@ export function CoachGamePage(): JSX.Element {
                     Show
                   </button>
                 )}
+                {/* Explore from here button — available during show mode, not during explore */}
+                {showingTacticLine && showIndex >= 0 && !isExploreMode && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleEnterExplore(); }}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all duration-200"
+                    style={{
+                      background: 'rgba(168, 85, 247, 0.15)',
+                      color: 'rgb(168, 85, 247)',
+                      border: '1px solid rgba(168, 85, 247, 0.3)',
+                      boxShadow: '0 0 6px rgba(168, 85, 247, 0.2)',
+                    }}
+                    data-testid="explore-from-here-btn"
+                  >
+                    <Compass size={12} />
+                    Explore from here
+                  </button>
+                )}
+                {/* Dismiss button — always visible */}
                 <button
                   onClick={handleDismissTip}
                   className="px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-colors"
@@ -1644,15 +1861,15 @@ export function CoachGamePage(): JSX.Element {
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
           <div className="w-full md:max-w-[420px] relative">
             <ChessBoard
-              key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}`}
+              key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}-${exploreFen ?? ''}`}
               initialFen={displayFen}
               orientation={playerColor}
-              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition}
+              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition || isExploreMode}
               onMove={handleBoardMoveRouted}
-              showEvalBar={showEvalBarEffective}
-              evaluation={latestEval}
-              isMate={latestIsMate}
-              mateIn={latestMateIn}
+              showEvalBar={showEvalBarEffective || isExploreMode}
+              evaluation={isExploreMode && exploreEval !== null ? exploreEval : latestEval}
+              isMate={isExploreMode ? exploreIsMate : latestIsMate}
+              mateIn={isExploreMode ? exploreMateIn : latestMateIn}
               moveQualityFlash={moveFlash}
               showFlipButton={false}
               showVoiceMic={false}
@@ -1720,7 +1937,10 @@ export function CoachGamePage(): JSX.Element {
             </AnimatePresence>
 
           </div>
-          {showEngineLinesEffective && latestTopLines.length > 0 && (
+          {isExploreMode && exploreTopLines.length > 0 && (
+            <EngineLines lines={exploreTopLines} fen={exploreFen ?? ''} className="mt-1" />
+          )}
+          {!isExploreMode && showEngineLinesEffective && latestTopLines.length > 0 && (
             <EngineLines lines={latestTopLines} fen={game.fen} className="mt-1" />
           )}
         </div>

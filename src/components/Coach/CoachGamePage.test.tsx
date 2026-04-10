@@ -31,6 +31,15 @@ vi.mock('../../services/stockfishEngine', () => ({
       topLines: [{ rank: 1, evaluation: 30, moves: ['e2e4'], mate: null }],
       nodesPerSecond: 1000000,
     }),
+    queueAnalysis: vi.fn().mockResolvedValue({
+      bestMove: 'e2e4',
+      evaluation: 30,
+      isMate: false,
+      mateIn: null,
+      depth: 16,
+      topLines: [{ rank: 1, evaluation: 30, moves: ['e2e4'], mate: null }],
+      nodesPerSecond: 1000000,
+    }),
     initialize: vi.fn().mockResolvedValue(undefined),
   },
 }));
@@ -62,8 +71,15 @@ vi.mock('../../services/coachTemplates', () => ({
   getMoveCommentaryTemplate: vi.fn().mockReturnValue('Solid choice.'),
 }));
 
+vi.mock('../../services/coachPrompts', () => ({
+  EXPLORE_REACTION_ADDITION: 'Test explore reaction prompt',
+  SYSTEM_PROMPT: 'Test system prompt',
+  buildChessContextMessage: vi.fn().mockReturnValue('test context'),
+}));
+
 vi.mock('../../services/openingDetectionService', () => ({
   detectOpening: vi.fn().mockReturnValue(null),
+  getOpeningMoves: vi.fn().mockReturnValue(null),
 }));
 
 vi.mock('../../services/boardUtils', () => ({
@@ -219,5 +235,32 @@ describe('CoachGamePage', () => {
     // This tests that the type system supports the intermediate gameover state
     const status: import('../../types').CoachGameStatus = 'gameover';
     expect(status).toBe('gameover');
+  });
+
+  // ─── Show Mode Step Navigation Tests ────────────────────────────────────────
+
+  it('does not show step navigation when no tip bubble is present', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('show-step-nav')).not.toBeInTheDocument();
+  });
+
+  it('does not show explore button when no tip bubble is present', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('explore-from-here-btn')).not.toBeInTheDocument();
+  });
+
+  it('does not show coach tip bubble initially', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('coach-tip-bubble')).not.toBeInTheDocument();
+  });
+
+  it('does not show explore messages area initially', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('explore-messages')).not.toBeInTheDocument();
+  });
+
+  it('does not show explore engine eval initially', () => {
+    render(<CoachGamePage />);
+    expect(screen.queryByTestId('explore-engine-eval')).not.toBeInTheDocument();
   });
 });
