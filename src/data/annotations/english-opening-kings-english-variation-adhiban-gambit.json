@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square where it supports our c4 pawn and eyes the central d5 and e4 squares. This is the signature move of the King's English Variation, and it's far more flexible than the immediate d3 which would block our dark-squared bishop. From c3, our knight can later jump to d5 (if Black allows it) or retreat to e2 if Black advances with e4, and it also keeps the option of playing d4 to challenge Black's central pawn directly. The knight on c3 also prepares potential pawn breaks with b4 or d4, giving us multiple strategic plans to choose from depending on how Black continues."
+      "annotation": "We're developing our knight to its ideal square where it supports our c4 pawn and eyes the central d5 and e4 squares. This is the signature move of the King's English Variation, and it's far more flexible than the immediate d3 which would block our dark-squared bishop. From c3, our knight can later jump to d5 (if Black allows it) or retreat to e2 if Black advances with e4, and it also keeps the option of playing d4 to challenge Black's central pawn directly. The knight on c3 also prepares potential pawn breaks with b4 or d4, giving us multiple strategic plans to choose from depending on how Black continues."
     },
     {
       "san": "Nf6",

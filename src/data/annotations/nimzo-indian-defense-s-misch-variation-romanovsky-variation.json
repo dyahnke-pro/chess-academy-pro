@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our central pawn and preparing to contest the center. This is one of the most flexible responses to d4, as the knight can later jump to various squares depending on how we continue. Black is keeping options open for different defensive setups - the knight supports both ...e6 and ...d5 advances while putting immediate pressure on our center. This move is the starting point for many of Black's most reliable defenses against d4."
+      "annotation": "Black develops the knight to its ideal square, attacking our central pawn and preparing to contest the center. This is one of the most flexible responses to d4, as the knight can later jump to various squares depending on how we continue. Black is keeping options open for different defensive setups - the knight supports both ...e6 and ...d5 advances while putting immediate pressure on our center. This move is the starting point for many of Black's most reliable defenses against d4."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting our central pawns and preparing to meet Black's likely ...d5 advance. The knight on c3 also eyes the important e4 and d5 squares while keeping our options open for various pawn structures. This natural developing move puts pressure on Black to commit to a specific defense, as we're now threatening to expand further with e4. From c3, our knight supports multiple strategic plans and maintains maximum flexibility in our position."
+      "annotation": "We develop our knight to its most active square, supporting our central pawns and preparing to meet Black's likely ...d5 advance. The knight on c3 also eyes the important e4 and d5 squares while keeping our options open for various pawn structures. This active move puts pressure on Black to commit to a specific defense, as we're now threatening to expand further with e4. From c3, our knight supports multiple strategic plans and maintains maximum flexibility in our position."
     },
     {
       "san": "Bb4",

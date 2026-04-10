@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting a future d4 advance while controlling the important e5 and g5 squares. This move is more flexible than the immediate c3, as it keeps our options open between the Open Sicilian (after d4) and the Alapin Variation. The knight on f3 also prepares kingside castling and prevents any early ...e5 ideas from Black. From f3, our knight can later jump to d4, e5, or g5 depending on how the position develops, making this a highly principled developing move."
+      "annotation": "We develop our knight to its ideal square, supporting a future d4 advance while controlling the important e5 and g5 squares. This move is more flexible than the immediate c3, as it keeps our options open between the Open Sicilian (after d4) and the Alapin Variation. The knight on f3 also prepares kingside castling and prevents any early ...e5 ideas from Black. From f3, our knight can later jump to d4, e5, or g5 depending on how the position develops, making this a highly principled developing choice."
     },
     {
       "san": "e6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, attacking our d4 pawn while preparing to castle kingside. This natural developing move also increases the pressure on our center and gives Black more piece activity. The knight on f6 supports Black's central play and can later jump to squares like e4 or d5 if the opportunity arises. By developing rather than immediately dealing with our d4 pawn, Black is showing good opening judgment - piece development should generally take priority over immediate knight captures in the opening phase."
+      "annotation": "Black develops the knight to its most active square, attacking our d4 pawn while preparing to castle kingside. This active move also increases the pressure on our center and gives Black more piece activity. The knight on f6 supports Black's central play and can later jump to squares like e4 or d5 if the opportunity arises. By developing rather than immediately dealing with our d4 pawn, Black is showing good opening judgment - piece development should generally take priority over immediate knight captures in the opening phase."
     }
   ]
 }

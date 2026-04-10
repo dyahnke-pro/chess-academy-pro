@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, attacking the e5 square and preparing to support our central expansion with e4 later. This move also begins our systematic piece development while keeping pressure on Black to deal with our growing activity. The knight on f3 supports a potential e4 advance and can later redeploy to more active squares like e5 or g5 depending on how the position develops. By developing with tempo and purpose, we're already starting to demonstrate the compensation for our sacrificed pawn through superior piece coordination and central influence."
+      "annotation": "We're developing our knight to its ideal square, attacking the e5 square and preparing to support our central expansion with e4 later. This move also begins our systematic piece development while keeping pressure on Black to deal with our growing activity. The knight on f3 supports a potential e4 advance and can later redeploy to more active squares like e5 or g5 depending on how the position develops. By developing with tempo and purpose, we're already starting to demonstrate the compensation for our sacrificed pawn through superior piece coordination and central influence."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most active square, mirroring our development while supporting their own central ambitions and preparing to contest the e4 square. This natural developing move shows Black wants to complete their development quickly rather than trying to hold onto the extra pawn with moves like b5. Our opponent's knight on f6 also supports potential central breaks with e6-e5 later in the game. This is a sound, classical approach that prioritizes piece development and central control over material considerations, which is often the best practical choice in gambit positions."
+      "annotation": "Black develops their knight to its most active square, mirroring our development while supporting their own central ambitions and preparing to contest the e4 square. This active move shows Black wants to complete their development quickly rather than trying to hold onto the extra pawn with moves like b5. Our opponent's knight on f6 also supports potential central breaks with e6-e5 later in the game. This is a sound, classical approach that prioritizes piece development and central control over material considerations, which is often the best practical choice in gambit positions."
     },
     {
       "san": "e3",

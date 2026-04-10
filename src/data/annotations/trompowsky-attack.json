@@ -25,7 +25,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking the e4 square and preparing kingside development.",
+      "annotation": "Black develops the king's knight to its ideal square, attacking the e4 square and preparing kingside development.",
       "plans": [
         "Control e4 and prepare ...d5 or ...g6",
         "Develop naturally toward kingside castling"

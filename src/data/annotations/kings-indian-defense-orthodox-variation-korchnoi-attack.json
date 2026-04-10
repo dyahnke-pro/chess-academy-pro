@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e4 to complete our ideal pawn center. This knight also eyes important central squares like e4, d5, and b5, and supports our strategic plan of controlling space in the center. The knight on c3 is perfectly placed for the middlegame battles ahead, where it can support pawn advances, reroute to attack Black's kingside, or defend our position as needed. This is the most flexible continuation, keeping all our options open while maintaining pressure on Black's setup."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e4 to complete our ideal pawn center. This knight also eyes important central squares like e4, d5, and b5, and supports our strategic plan of controlling space in the center. The knight on c3 is perfectly placed for the middlegame battles ahead, where it can support pawn advances, reroute to attack Black's kingside, or defend our position as needed. This is the most flexible continuation, keeping all our options open while maintaining pressure on Black's setup."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, where it supports our e4 pawn, controls important central squares like e5 and d4, and prepares for potential kingside castling. This knight placement also prevents Black from immediately playing ...e5, since we could capture and damage their pawn structure. The knight on f3 is perfectly coordinated with our pawn center, ready to support advances like f4-f5 in a kingside attack or to reroute to more active squares like d2-c4 or g5. This natural developing move maintains all our strategic options while keeping maximum pressure on Black's position."
+      "annotation": "We're developing our knight to its optimal square, where it supports our e4 pawn, controls important central squares like e5 and d4, and prepares for potential kingside castling. This knight placement also prevents Black from immediately playing ...e5, since we could capture and damage their pawn structure. The knight on f3 is perfectly coordinated with our pawn center, ready to support advances like f4-f5 in a kingside attack or to reroute to more active squares like d2-c4 or g5. This active move maintains all our strategic options while keeping maximum pressure on Black's position."
     },
     {
       "san": "O-O",

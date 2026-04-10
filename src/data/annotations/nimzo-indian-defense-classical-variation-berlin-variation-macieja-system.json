@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square while immediately putting pressure on our central pawn. This move controls the important e4 and d5 squares, preventing us from easily advancing our pawns there. The knight on f6 is perfectly placed to support Black's own central ambitions, particularly the advance ...e6 and ...d5. This flexible development move keeps all of Black's options open while starting to contest our central influence right away."
+      "annotation": "Black develops the knight to its ideal square while immediately putting pressure on our central pawn. This move controls the important e4 and d5 squares, preventing us from easily advancing our pawns there. The knight on f6 is perfectly placed to support Black's own central ambitions, particularly the advance ...e6 and ...d5. This flexible development move keeps all of Black's options open while starting to contest our central influence right away."
     },
     {
       "san": "c4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by bringing the knight to its optimal square, from where it controls key central squares e5 and d4. This natural developing move also prepares to castle kingside, bringing our king to safety. The knight on f3 supports our center and can later jump to more active squares like e5 or d4 if the opportunity arises. Additionally, this development clears the first rank and prepares to connect our rooks, which is essential for completing our development efficiently."
+      "annotation": "We complete our kingside development by bringing the knight to its optimal square, from where it controls key central squares e5 and d4. This active move also prepares to castle kingside, bringing our king to safety. The knight on f3 supports our center and can later jump to more active squares like e5 or d4 if the opportunity arises. Additionally, this development clears the first rank and prepares to connect our rooks, which is essential for completing our development efficiently."
     },
     {
       "san": "b6",

@@ -15,15 +15,15 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent declines the Queen's Gambit by supporting the d5 pawn with the e-pawn, leading us into the Queen's Gambit Declined complex. This solid move maintains Black's central pawn on d5 while preparing to develop the light-squared bishop to e7 or d6. However, Black has also slightly restricted their own light-squared bishop, which will need to find activity along the b1-h7 diagonal or through eventual pawn breaks. This setup gives Black a solid but somewhat passive position, and we should look to exploit our slight space advantage and better piece coordination."
+      "annotation": "Our opponent declines the Queen's Gambit by supporting the d5 pawn with the e-pawn, leading us into the Queen's Gambit Declined complex. this stabilizing move maintains Black's central pawn on d5 while preparing to develop the light-squared bishop to e7 or d6. However, Black has also slightly restricted their own light-squared bishop, which will need to find activity along the b1-h7 diagonal or through eventual pawn breaks. This setup gives Black a solid but somewhat passive position, and we should look to exploit our slight space advantage and better piece coordination."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, where it supports our central advance with e4 and adds pressure to Black's d5 pawn. This natural developing move also prepares various strategic ideas including the advance e4 (if Black's d-pawn moves), or supporting a future f2-f3 and e4 pawn storm in some variations. The knight on c3 works harmoniously with our other pieces and keeps maximum flexibility in our position. From c3, our knight controls important central squares and can potentially redeploy to e4 or b5 depending on how the position develops."
+      "annotation": "We're developing our knight to its most active square, where it supports our central advance with e4 and adds pressure to Black's d5 pawn. This active move also prepares various strategic ideas including the advance e4 (if Black's d-pawn moves), or supporting a future f2-f3 and e4 pawn storm in some variations. The knight on c3 works harmoniously with our other pieces and keeps maximum flexibility in our position. From c3, our knight controls important central squares and can potentially redeploy to e4 or b5 depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, attacking our e4 square and preventing us from advancing e2-e4 immediately. This is excellent development that brings a piece toward the center while creating concrete threats that we must address. The knight on f6 also supports Black's central pawn structure and prepares castling kingside, following sound opening principles. Our opponent is showing they understand the importance of piece activity and central control, making this a principled continuation that fits perfectly with the Queen's Gambit Declined setup."
+      "annotation": "Black develops their knight to its ideal square, attacking our e4 square and preventing us from advancing e2-e4 immediately. This is excellent development that brings a piece toward the center while creating concrete threats that we must address. The knight on f6 also supports Black's central pawn structure and prepares castling kingside, following sound opening principles. Our opponent is showing they understand the importance of piece activity and central control, making this a principled continuation that fits perfectly with the Queen's Gambit Declined setup."
     },
     {
       "san": "Bg5",
@@ -35,11 +35,11 @@
     },
     {
       "san": "e3",
-      "annotation": "We're supporting our center and preparing to complete our kingside development with moves like Bd3 and potentially short castling. This solid move also opens the diagonal for our light-squared bishop while maintaining the central tension and keeping all our pieces well-coordinated. The move e3 is particularly good here because it supports our d4 pawn, prepares Bd3 with pressure on Black's kingside, and keeps our position flexible for various pawn breaks later. We're building a harmonious position where all our pieces work together effectively, maintaining the slight advantage typical of the white pieces."
+      "annotation": "We're supporting our center and preparing to complete our kingside development with moves like Bd3 and potentially short castling. this stabilizing move also opens the diagonal for our light-squared bishop while maintaining the central tension and keeping all our pieces well-coordinated. The move e3 is particularly good here because it supports our d4 pawn, prepares Bd3 with pressure on Black's kingside, and keeps our position flexible for various pawn breaks later. We're building a harmonious position where all our pieces work together effectively, maintaining the slight advantage typical of the white pieces."
     },
     {
       "san": "Bb4",
-      "annotation": "Black plays the key move of the Manhattan Variation, pinning our knight to the king and creating immediate counterplay against our position. This active bishop move challenges our central knight and forces us to make decisions about how to handle the pin - we might play a3 to challenge the bishop, or Qc2 to support the knight, or even accept doubled pawns after a future Bxc3. The bishop on b4 also prevents us from castling queenside easily and creates tactical possibilities for Black. This is a principled way for Black to seek active piece play and counterchances in what could otherwise become a passive position, showing that our opponent understands the need for piece activity even in slightly inferior positions."
+      "annotation": "Black plays the central idea of the Manhattan Variation, pinning our knight to the king and creating immediate counterplay against our position. This active bishop move challenges our central knight and forces us to make decisions about how to handle the pin - we might play a3 to challenge the bishop, or Qc2 to support the knight, or even accept doubled pawns after a future Bxc3. The bishop on b4 also prevents us from castling queenside easily and creates tactical possibilities for Black. This is a principled way for Black to seek active piece play and counterchances in what could otherwise become a passive position, showing that our opponent understands the need for piece activity even in slightly inferior positions."
     }
   ]
 }

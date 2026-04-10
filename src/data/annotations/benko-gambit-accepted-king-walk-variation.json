@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preparing to contest the center. This move is incredibly flexible, keeping options open for the King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or more aggressive setups like the Benoni systems. The knight on f6 also supports a potential ...e5 advance and doesn't commit to any particular pawn structure yet. From f6, the knight can later jump to e4, d5, or retreat to d7 or h5 depending on how the position develops."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to contest the center. This move is incredibly flexible, keeping options open for the King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or more aggressive setups like the Benoni systems. The knight on f6 also supports a potential ...e5 advance and doesn't commit to any particular pawn structure yet. From f6, the knight can later jump to e4, d5, or retreat to d7 or h5 depending on how the position develops."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d5 pawn and preparing to contest the center. The knight on c3 also eyes the important e4 and b5 squares, potentially supporting future pawn advances or piece maneuvers. This move is part of our natural development plan, but we need to be careful about Black's growing pressure on the queenside. The knight will also help defend against Black's potential tactics along the a-file and long diagonal, making this a both offensive and defensive move."
+      "annotation": "We're developing our knight to its ideal square, supporting the d5 pawn and preparing to contest the center. The knight on c3 also eyes the important e4 and b5 squares, potentially supporting future pawn advances or piece maneuvers. This move is part of our natural development plan, but we need to be careful about Black's growing pressure on the queenside. The knight will also help defend against Black's potential tactics along the a-file and long diagonal, making this a both offensive and defensive move."
     },
     {
       "san": "Bxa6",

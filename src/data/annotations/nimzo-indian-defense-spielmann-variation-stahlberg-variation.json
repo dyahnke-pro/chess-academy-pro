@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, attacking our central pawn immediately and preparing to contest the center. This knight move is incredibly flexible - it supports a future ...e5 advance, prepares kingside castling, and keeps all of Black's main defensive systems available (King's Indian, Nimzo-Indian, Queen's Gambit Declined, etc.). The knight on f6 also eyes important central squares like e4 and d5, making it harder for us to establish a dominant pawn center. Black is essentially saying 'prove that your d4 pawn is better than my active piece development' - a principled approach that has stood the test of time."
+      "annotation": "Black responds with the most active move, attacking our central pawn immediately and preparing to contest the center. This knight move is incredibly flexible - it supports a future ...e5 advance, prepares kingside castling, and keeps all of Black's main defensive systems available (King's Indian, Nimzo-Indian, Queen's Gambit Declined, etc.). The knight on f6 also eyes important central squares like e4 and d5, making it harder for us to establish a dominant pawn center. Black is essentially saying 'prove that your d4 pawn is better than my active piece development' - a principled approach that has stood the test of time."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding extra pressure to the d5 square and preparing to meet Black's likely ...d5 with even more central tension. This knight placement is incredibly flexible - it supports our d4 pawn, eyes important central and queenside squares, and keeps all our major opening systems available. The knight on c3 also prepares potential advances like e4 or f3, depending on how Black continues. We're following the classical opening principle of developing pieces before committing to a specific pawn structure, and this knight will likely play an important role in any middlegame battles that arise."
+      "annotation": "We're developing our knight to its ideal square, adding extra pressure to the d5 square and preparing to meet Black's likely ...d5 with even more central tension. This knight placement is incredibly flexible - it supports our d4 pawn, eyes important central and queenside squares, and keeps all our major opening systems available. The knight on c3 also prepares potential advances like e4 or f3, depending on how Black continues. We're following the classical opening principle of developing pieces before committing to a specific pawn structure, and this knight will likely play an important role in any middlegame battles that arise."
     },
     {
       "san": "Bb4",

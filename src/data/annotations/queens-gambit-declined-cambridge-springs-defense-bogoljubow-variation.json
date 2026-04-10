@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the important central e5 and d4 squares while preparing to castle kingside. This move is extremely flexible, supporting our d4 pawn and preparing various pawn breaks like e4 or f3 depending on how the position develops. The knight on f3 also prevents Black from playing an immediate ...Bf5 followed by ...e6 and ...Bd6, as we'd have tactical shots with Ne5. By developing pieces before committing to any particular pawn structure, we're following classical opening principles and keeping maximum options open."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the important central e5 and d4 squares while preparing to castle kingside. This move is extremely flexible, supporting our d4 pawn and preparing various pawn breaks like e4 or f3 depending on how the position develops. The knight on f3 also prevents Black from playing an immediate ...Bf5 followed by ...e6 and ...Bd6, as we'd have tactical shots with Ne5. By developing pieces before committing to any particular pawn structure, we're following classical opening principles and keeping maximum options open."
     },
     {
       "san": "Nf6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops their queenside knight to d7, breaking the pin on the f6 knight and preparing to challenge our central setup with moves like ...c5 or support their kingside development. This is a natural developing move that also prepares potential pawn breaks while avoiding the more passive ...Be7 immediately. The knight on d7 can later reroute to more active squares like b6 or c5, and it also supports the idea of playing ...c5 at the right moment to challenge our center. Black is following sound developmental principles while maintaining flexibility in their pawn structure, though the knight on d7 is somewhat less active than it would be on c6."
+      "annotation": "Black develops their queenside knight to d7, breaking the pin on the f6 knight and preparing to challenge our central setup with moves like ...c5 or support their kingside development. This is a active move that also prepares potential pawn breaks while avoiding the more passive ...Be7 immediately. The knight on d7 can later reroute to more active squares like b6 or c5, and it also supports the idea of playing ...c5 at the right moment to challenge our center. Black is following sound developmental principles while maintaining flexibility in their pawn structure, though the knight on d7 is somewhat less active than it would be on c6."
     },
     {
       "san": "e3",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Qc2",
-      "annotation": "We're developing our queen to c2, where it breaks the pin on our d2 knight while supporting our c4 pawn and preparing to castle queenside if the position calls for it. This move also puts our queen on the same file as Black's exposed king, potentially creating long-term tactical opportunities. The queen on c2 connects our rooks and gives us more flexibility in our piece coordination, while also preparing moves like a3 to challenge Black's bishop on b4. This is the key move of the Bogoljubow Variation, maintaining the tension while improving our piece placement and keeping Black's pieces under pressure, setting up a complex middlegame where both sides will need to navigate carefully between tactical threats and positional considerations."
+      "annotation": "We're developing our queen to c2, where it breaks the pin on our d2 knight while supporting our c4 pawn and preparing to castle queenside if the position calls for it. This move also puts our queen on the same file as Black's exposed king, potentially creating long-term tactical opportunities. The queen on c2 connects our rooks and gives us more flexibility in our piece coordination, while also preparing moves like a3 to challenge Black's bishop on b4. This is the central idea of the Bogoljubow Variation, maintaining the tension while improving our piece placement and keeping Black's pieces under pressure, setting up a complex middlegame where both sides will need to navigate carefully between tactical threats and positional considerations."
     }
   ]
 }

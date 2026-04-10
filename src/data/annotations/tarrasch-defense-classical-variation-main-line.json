@@ -23,7 +23,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Our opponent strikes back in the center with this thematic pawn break, challenging our d4 pawn and creating counterplay on the queenside. This is the key move of the Tarrasch Defense, where Black accepts some structural weaknesses (particularly the isolated d-pawn that often results) in exchange for active piece play and central tension. Black is following the classical principle of meeting a wing attack with a central counter-attack. We need to decide whether to maintain the tension or resolve it immediately, as both approaches lead to different types of positions."
+      "annotation": "Our opponent strikes back in the center with this thematic pawn break, challenging our d4 pawn and creating counterplay on the queenside. This is the central idea of the Tarrasch Defense, where Black accepts some structural weaknesses (particularly the isolated d-pawn that often results) in exchange for active piece play and central tension. Black is following the classical principle of meeting a wing attack with a central counter-attack. We need to decide whether to maintain the tension or resolve it immediately, as both approaches lead to different types of positions."
     },
     {
       "san": "cxd5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent develops the queenside knight to its most natural square, where it supports the isolated d-pawn and prepares to challenge our control of the center. This knight is well-placed to support the advance d5-d4 when the opportunity arises, and it also eyes the important e5 and b4 squares. Black is following sound development principles while maintaining pressure in the center. We should note that this knight might later move to e5 or a5, depending on how the middlegame unfolds."
+      "annotation": "Our opponent develops the queenside knight to its ideal square, where it supports the isolated d-pawn and prepares to challenge our control of the center. This knight is well-placed to support the advance d5-d4 when the opportunity arises, and it also eyes the important e5 and b4 squares. Black is following sound development principles while maintaining pressure in the center. We should note that this knight might later move to e5 or a5, depending on how the middlegame unfolds."
     },
     {
       "san": "g3",

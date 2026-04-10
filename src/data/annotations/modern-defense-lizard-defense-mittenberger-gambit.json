@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle queenside or support a kingside attack depending on how the position develops. This move also prepares potential advances like f4-f5 or supports the e4 pawn if Black tries to undermine it with moves like ...c5. The knight from c3 can later jump to useful squares like e2, d5, or b5 depending on the tactical requirements. Against the Modern Defense, we're building up our position methodically while maintaining maximum flexibility for our pieces."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle queenside or support a kingside attack depending on how the position develops. This move also prepares potential advances like f4-f5 or supports the e4 pawn if Black tries to undermine it with moves like ...c5. The knight from c3 can later jump to useful squares like e2, d5, or b5 depending on the tactical requirements. Against the Modern Defense, we're building up our position methodically while maintaining maximum flexibility for our pieces."
     },
     {
       "san": "d5",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight while simultaneously attacking the Black queen, forcing it to move again and gaining tempo in the process. This is a key principle when facing the Scandinavian - every developing move should put pressure on Black's exposed queen if possible. The knight on c3 also supports our future d4 advance and contests the important e4 and d5 squares. By attacking the queen immediately, we're following the opening principle of not allowing our opponent to consolidate their unusual setup without a fight."
+      "annotation": "We develop our knight while simultaneously attacking the Black queen, forcing it to move again and gaining tempo in the process. This is a key principle when facing the Scandinavian - every developing choice should put pressure on Black's exposed queen if possible. The knight on c3 also supports our future d4 advance and contests the important e4 and d5 squares. By attacking the queen immediately, we're following the opening principle of not allowing our opponent to consolidate their unusual setup without a fight."
     },
     {
       "san": "Qa5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "d4",
-      "annotation": "We strike in the center with d4, immediately challenging Black's next natural move and taking space in the middle of the board. This move opens lines for our dark-squared bishop and queen while establishing a strong pawn center that Black will need to respect. The advance also supports our pawn on c3 and prepares to complete our development smoothly. In the Scandinavian, controlling the center with pawns is crucial since Black's pieces alone cannot match our central pawn presence."
+      "annotation": "We strike in the center with d4, immediately challenging Black's next logical choice and taking space in the middle of the board. This move opens lines for our dark-squared bishop and queen while establishing a strong pawn center that Black will need to respect. The advance also supports our pawn on c3 and prepares to complete our development smoothly. In the Scandinavian, controlling the center with pawns is crucial since Black's pieces alone cannot match our central pawn presence."
     },
     {
       "san": "e5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, where it supports our d4 pawn and prepares to castle short. The knight on f3 also attacks Black's advanced e5 pawn, putting immediate pressure on Black's aggressive pawn structure. This move continues our systematic development while maintaining all our advantages - better central control, safer king position, and more harmonious piece coordination. From f3, our knight can later jump to strong squares like e5 or g5 depending on how the tactics unfold, and we're ready to complete our kingside development with Be2 and 0-0."
+      "annotation": "We develop our kingside knight to its ideal square, where it supports our d4 pawn and prepares to castle short. The knight on f3 also attacks Black's advanced e5 pawn, putting immediate pressure on Black's aggressive pawn structure. This move continues our systematic development while maintaining all our advantages - better central control, safer king position, and more harmonious piece coordination. From f3, our knight can later jump to strong squares like e5 or g5 depending on how the tactics unfold, and we're ready to complete our kingside development with Be2 and 0-0."
     }
   ]
 }

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn and preparing to meet ...d5 with increased pressure on that central square. This natural developing move also opens up potential tactics and keeps our options open for various continuations. However, we're also walking into the possibility of the Nimzo-Indian Defense, where Black can pin our knight with ...Bb4. The knight on c3 fights for control of the important e4 and e5 squares while maintaining flexibility in our setup."
+      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn and preparing to meet ...d5 with increased pressure on that central square. This active move also opens up potential tactics and keeps our options open for various continuations. However, we're also walking into the possibility of the Nimzo-Indian Defense, where Black can pin our knight with ...Bb4. The knight on c3 fights for control of the important e4 and e5 squares while maintaining flexibility in our setup."
     },
     {
       "san": "Bb4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black safely tucks their king away, completing the most urgent part of their development and preparing to increase central pressure. This natural move allows Black to potentially support ...d5 with ...Re8 or create kingside play with moves like ...Re8 and ...Bf8. Our opponent is also keeping the pin on our knight active while improving their king safety before the position becomes more complex. The castling move maintains maximum flexibility for Black's future plans while securing their most important piece."
+      "annotation": "Black safely tucks their king away, completing the most urgent part of their development and preparing to increase central pressure. this move allows Black to potentially support ...d5 with ...Re8 or create kingside play with moves like ...Re8 and ...Bf8. Our opponent is also keeping the pin on our knight active while improving their king safety before the position becomes more complex. The castling move maintains maximum flexibility for Black's future plans while securing their most important piece."
     },
     {
       "san": "Bd3",

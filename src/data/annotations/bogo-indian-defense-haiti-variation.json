@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn, controls the important e5 and h4 squares, and prepares kingside castling. This move fits perfectly with our strategic plan of completing development before committing to any particular pawn structure or attacking scheme. The knight on f3 also prevents any immediate ...Ng4 ideas from Black and maintains maximum flexibility in our setup - we can still play systems with g3 and Bg2, or more classical development with Be2. By developing this knight before committing our light-squared bishop, we're keeping our opponent guessing about our exact intentions while maintaining all our positional advantages."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our d4 pawn, controls the important e5 and h4 squares, and prepares kingside castling. This move fits perfectly with our strategic plan of completing development before committing to any particular pawn structure or attacking scheme. The knight on f3 also prevents any immediate ...Ng4 ideas from Black and maintains maximum flexibility in our setup - we can still play systems with g3 and Bg2, or more classical development with Be2. By developing this knight before committing our light-squared bishop, we're keeping our opponent guessing about our exact intentions while maintaining all our positional advantages."
     },
     {
       "san": "Bb4+",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bd2",
-      "annotation": "We're choosing the most principled response to the check, developing our dark-squared bishop while maintaining our pawn structure and keeping maximum flexibility in our position. This move allows Black to trade bishops if desired, which would give us the two-bishop advantage but also eliminate one of our key defensive pieces and potentially weaken our kingside dark squares. By playing Bd2, we're showing that we're not afraid of the bishop trade and we're preparing to recapture with the bishop if Black takes, maintaining our development advantage and central control. This natural developing move also prepares queenside castling as an alternative to kingside castling, giving us additional strategic options as the game progresses."
+      "annotation": "We're choosing the most principled response to the check, developing our dark-squared bishop while maintaining our pawn structure and keeping maximum flexibility in our position. This move allows Black to trade bishops if desired, which would give us the two-bishop advantage but also eliminate one of our key defensive pieces and potentially weaken our kingside dark squares. By playing Bd2, we're showing that we're not afraid of the bishop trade and we're preparing to recapture with the bishop if Black takes, maintaining our development advantage and central control. This active move also prepares queenside castling as an alternative to kingside castling, giving us additional strategic options as the game progresses."
     },
     {
       "san": "Nc6",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it supports our d4 pawn and controls important central squares like e5 and d5. This move also prepares kingside castling while maintaining flexibility in our pawn structure - we haven't committed to any particular setup yet. The knight on f3 is perfectly placed for most Queen's Pawn openings, and it keeps our options open for systems with g3 and Bg2, or more classical development with Be2. We're following sound opening principles by developing pieces before committing to specific pawn advances."
+      "annotation": "We're developing our king's knight to its ideal square, where it supports our d4 pawn and controls important central squares like e5 and d5. This move also prepares kingside castling while maintaining flexibility in our pawn structure - we haven't committed to any particular setup yet. The knight on f3 is perfectly placed for most Queen's Pawn openings, and it keeps our options open for systems with g3 and Bg2, or more classical development with Be2. We're following sound opening principles by developing pieces before committing to specific pawn advances."
     },
     {
       "san": "b6",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nd2",
-      "annotation": "We develop our knight to d2, supporting the attacked e4 pawn while keeping our options open for how to recapture after the coming dxe4. This knight placement is more flexible than Nc3 because it doesn't block the c-pawn and allows us to recapture on e4 with the knight, maintaining pieces on the board for attacking chances. The Nd2 also prepares potential ideas like f2-f3 to support the center, and it doesn't interfere with our light-squared bishop's development. This is the key move that defines the Karpov Variation, where we're willing to accept a slightly less active piece placement in exchange for maintaining central tension and keeping more pieces on the board."
+      "annotation": "We develop our knight to d2, supporting the attacked e4 pawn while keeping our options open for how to recapture after the coming dxe4. This knight placement is more flexible than Nc3 because it doesn't block the c-pawn and allows us to recapture on e4 with the knight, maintaining pieces on the board for attacking chances. The Nd2 also prepares potential ideas like f2-f3 to support the center, and it doesn't interfere with our light-squared bishop's development. This is the defining move of the Karpov Variation, where we're willing to accept a slightly less active piece placement in exchange for maintaining central tension and keeping more pieces on the board."
     },
     {
       "san": "dxe4",

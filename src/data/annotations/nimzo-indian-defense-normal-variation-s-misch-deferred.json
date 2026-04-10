@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn while preparing to advance e4 and complete our ideal pawn center. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us more influence over the position's key areas. This move is almost automatic in queen's pawn openings, as the knight supports our central strategy while maintaining maximum flexibility. However, we should be aware that placing the knight here does give Black the option of pinning it with ...Bb4, leading to the Nimzo-Indian Defense where Black can create structural imbalances."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn while preparing to advance e4 and complete our ideal pawn center. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us more influence over the position's key areas. This move is almost automatic in queen's pawn openings, as the knight supports our central strategy while maintaining maximum flexibility. However, we should be aware that placing the knight here does give Black the option of pinning it with ...Bb4, leading to the Nimzo-Indian Defense where Black can create structural imbalances."
     },
     {
       "san": "Bb4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its optimal square, supporting our e3 pawn while preparing our own kingside castling and eyeing the important e5 and d4 squares. The knight on f3 is perfectly placed in most pawn structures, and in the Nimzo-Indian it helps control key central squares while maintaining flexibility in our setup. This natural developing move also prepares ideas like Bd3 and castling, following sound opening principles. Additionally, the knight supports potential advances like e4 (once properly prepared) and helps defend against Black's potential ...e5 break."
+      "annotation": "We develop our kingside knight to its optimal square, supporting our e3 pawn while preparing our own kingside castling and eyeing the important e5 and d4 squares. The knight on f3 is perfectly placed in most pawn structures, and in the Nimzo-Indian it helps control key central squares while maintaining flexibility in our setup. This active move also prepares ideas like Bd3 and castling, following sound opening principles. Additionally, the knight supports potential advances like e4 (once properly prepared) and helps defend against Black's potential ...e5 break."
     },
     {
       "san": "d5",

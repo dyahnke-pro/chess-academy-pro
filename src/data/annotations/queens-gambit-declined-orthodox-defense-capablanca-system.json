@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central foothold. This solid move prevents us from simply expanding with e2-e4 next move, forcing us to make concrete decisions about how to proceed. Black's d5 is the hallmark of classical defensive systems - rather than allowing White a free hand in the center, Black contests it immediately. This move sets up the potential for various pawn structures depending on whether and how the central tension gets resolved, making it a principled and flexible choice."
+      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central foothold. this stabilizing move prevents us from simply expanding with e2-e4 next move, forcing us to make concrete decisions about how to proceed. Black's d5 is the hallmark of classical defensive systems - rather than allowing White a free hand in the center, Black contests it immediately. This move sets up the potential for various pawn structures depending on whether and how the central tension gets resolved, making it a principled and flexible choice."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central advance while adding pressure to Black's d5 pawn. This knight perfectly complements our Queen's Gambit strategy - it attacks d5 again, potentially allowing us to recapture with the knight if Black exchanges on c4. The knight from c3 also controls important central squares like e4 and can later support advances like d4-d5 or participate in kingside attacks. This development follows classical principles while maintaining maximum flexibility in our pawn structure, as we haven't yet committed to any particular formation."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central advance while adding pressure to Black's d5 pawn. This knight perfectly complements our Queen's Gambit strategy - it attacks d5 again, potentially allowing us to recapture with the knight if Black exchanges on c4. The knight from c3 also controls important central squares like e4 and can later support advances like d4-d5 or participate in kingside attacks. This development follows classical principles while maintaining maximum flexibility in our pawn structure, as we haven't yet committed to any particular formation."
     },
     {
       "san": "Nf6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black breaks the annoying pin with the most natural developing move, preparing to castle kingside while keeping their position solid and flexible. This bishop development is the defining move of the Orthodox Defense - Black doesn't challenge our bishop with ...h6 or create complications with ...Nbd7, but instead develops calmly and maintains their structural integrity. The bishop on e7 also prepares potential ...Nd5 ideas, where the knight can centralize while being protected by the bishop. This calm approach shows Black is willing to accept a slightly passive position in return for solid piece coordination and no structural weaknesses."
+      "annotation": "Black breaks the annoying pin with the most active move, preparing to castle kingside while keeping their position solid and flexible. This bishop development is the defining move of the Orthodox Defense - Black doesn't challenge our bishop with ...h6 or create complications with ...Nbd7, but instead develops calmly and maintains their structural integrity. The bishop on e7 also prepares potential ...Nd5 ideas, where the knight can centralize while being protected by the bishop. This calm approach shows Black is willing to accept a slightly passive position in return for solid piece coordination and no structural weaknesses."
     },
     {
       "san": "e3",

@@ -88,7 +88,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square. The knight on f6 controls e4 and d5, two critical central squares. It also prepares for kingside castling. This is solid, classical development — you can't go wrong putting a knight on f6 in almost any opening.",
+      "annotation": "Black develops the kingside knight to its ideal square. The knight on f6 controls e4 and d5, two critical central squares. It also prepares for kingside castling. This is solid, classical development — you can't go wrong putting a knight on f6 in almost any opening.",
       "pawnStructure": "No change. Black's d5 pawn is now supported by the Nf6 controlling e4.",
       "plans": [
         "Continue development with ...c6 to reinforce d5, then develop the bishops",
@@ -299,7 +299,7 @@
     },
     {
       "san": "Nbd2",
-      "annotation": "White develops the second knight to d2, which is THE key move in the KIA setup. The knight on d2 serves one primary purpose: supporting e4. It doesn't look impressive on d2, but after e4, it can reroute to f1-e3 or even c4 depending on the position. This is the moment White is fully ready to execute the central break.",
+      "annotation": "White develops the second knight to d2, which is the critical advance in the KIA setup. The knight on d2 serves one primary purpose: supporting e4. It doesn't look impressive on d2, but after e4, it can reroute to f1-e3 or even c4 depending on the position. This is the moment White is fully ready to execute the central break.",
       "pawnStructure": "No pawn changes. The Nbd2 completes the piece setup behind d3, fully preparing e4.",
       "plans": [
         "Play e4 immediately — the central break is ready with Nf3, Nd2, and d3 all supporting it",

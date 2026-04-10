@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting a future d2-d4 push and maintaining flexibility in our setup. This is the starting point of the Closed Sicilian system, where we avoid the main theoretical lines and instead focus on kingside development and a slower, more positional approach. The knight on c3 also eyes the important e4 square and can later support pawn advances on either flank. By choosing this system, we're signaling that we want to avoid the sharp theoretical battles of the Open Sicilian (2.Nf3 and 3.d4)."
+      "annotation": "We're developing our knight to its ideal square, supporting a future d2-d4 push and maintaining flexibility in our setup. This is the starting point of the Closed Sicilian system, where we avoid the main theoretical lines and instead focus on kingside development and a slower, more positional approach. The knight on c3 also eyes the important e4 square and can later support pawn advances on either flank. By choosing this system, we're signaling that we want to avoid the sharp theoretical battles of the Open Sicilian (2.Nf3 and 3.d4)."
     },
     {
       "san": "Nc6",

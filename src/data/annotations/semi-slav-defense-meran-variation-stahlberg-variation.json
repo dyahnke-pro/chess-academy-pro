@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding another attacker to Black's d5 pawn and preparing to complete our development harmoniously. This knight supports our central ambitions and can later jump to e4 or b5 depending on how the position evolves. We're following classical opening principles by developing pieces toward the center while maintaining pressure on Black's position. The knight on c3 also supports a potential d4-d5 advance if circumstances allow, giving us flexibility in our central strategy."
+      "annotation": "We develop our knight to its ideal square, adding another attacker to Black's d5 pawn and preparing to complete our development harmoniously. This knight supports our central ambitions and can later jump to e4 or b5 depending on how the position evolves. We're following classical opening principles by developing pieces toward the center while maintaining pressure on Black's position. The knight on c3 also supports a potential d4-d5 advance if circumstances allow, giving us flexibility in our central strategy."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to f6, defending against potential threats while putting their own pressure on our central pawns. This natural developing move attacks our e4 square (if we were to advance the e-pawn) and prepares to complete kingside development with Be7 and 0-0. Our opponent is following sound opening principles while maintaining the flexibility to choose between various Slav Defense setups. The knight on f6 is ideally placed and will be a key piece in Black's middlegame plans."
+      "annotation": "Black develops their knight to f6, defending against potential threats while putting their own pressure on our central pawns. This active move attacks our e4 square (if we were to advance the e-pawn) and prepares to complete kingside development with Be7 and 0-0. Our opponent is following sound opening principles while maintaining the flexibility to choose between various Slav Defense setups. The knight on f6 is ideally placed and will be a key piece in Black's middlegame plans."
     },
     {
       "san": "e3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by placing the knight on its ideal square, where it controls important central squares and supports our overall piece coordination. This natural developing move prepares castling while maintaining flexibility in our setup - we can still choose between Bd3, Be2, or even Bd2 depending on how Black continues. The knight on f3 is perfectly placed to support central advances or jump to e5 if the opportunity arises. We're following the principle of developing pieces before committing to a specific pawn structure."
+      "annotation": "We complete our kingside development by placing the knight on its ideal square, where it controls important central squares and supports our overall piece coordination. This active move prepares castling while maintaining flexibility in our setup - we can still choose between Bd3, Be2, or even Bd2 depending on how Black continues. The knight on f3 is perfectly placed to support central advances or jump to e5 if the opportunity arises. We're following the principle of developing pieces before committing to a specific pawn structure."
     },
     {
       "san": "Nbd7",

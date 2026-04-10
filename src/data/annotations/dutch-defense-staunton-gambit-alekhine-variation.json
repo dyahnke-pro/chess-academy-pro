@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, defending the e4 pawn while preparing to castle and complete development. This knight placement also attacks our d4 pawn and prevents us from simply advancing d4-d5 without preparation. However, by placing the knight on f6, Black is also walking into our main tactical idea in the Staunton Gambit - the knight becomes a target for our upcoming Bg5, creating potential pins and tactical complications. The knight on f6 also blocks the f-file, which could become important if we later move our rook to f1 or if Black needs to defend along that file."
+      "annotation": "Black develops the kingside knight to its ideal square, defending the e4 pawn while preparing to castle and complete development. This knight placement also attacks our d4 pawn and prevents us from simply advancing d4-d5 without preparation. However, by placing the knight on f6, Black is also walking into our main tactical idea in the Staunton Gambit - the knight becomes a target for our upcoming Bg5, creating potential pins and tactical complications. The knight on f6 also blocks the f-file, which could become important if we later move our rook to f1 or if Black needs to defend along that file."
     },
     {
       "san": "Bg5",

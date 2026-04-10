@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing to build an even stronger central presence with e4. This knight placement is flexible and supports multiple plans - it controls important squares like e4, d5, and b5 while keeping our options open for various pawn advances. The knight also supports a potential e4 advance, which would give us the ideal pawn center that the King's Indian Defense is designed to challenge. From c3, our knight is well-placed to support both central operations and potential queenside expansion with moves like a4 or b4 later in the game."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing to build an even stronger central presence with e4. This knight placement is flexible and supports multiple plans - it controls important squares like e4, d5, and b5 while keeping our options open for various pawn advances. The knight also supports a potential e4 advance, which would give us the ideal pawn center that the King's Indian Defense is designed to challenge. From c3, our knight is well-placed to support both central operations and potential queenside expansion with moves like a4 or b4 later in the game."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, supporting our e4 pawn while maintaining maximum flexibility in our piece coordination. This knight development is crucial because it allows us to complete our kingside development with Be2 and castle, achieving safety for our king while maintaining our central advantage. The knight on f3 also controls important squares like e5 and d4, while keeping the option open to reroute to other squares like d2 or h4 depending on the position's demands. This natural developing move follows classical opening principles while preparing to complete our basic development and consolidate our space advantage."
+      "annotation": "We're developing our knight to its optimal square, supporting our e4 pawn while maintaining maximum flexibility in our piece coordination. This knight development is crucial because it allows us to complete our kingside development with Be2 and castle, achieving safety for our king while maintaining our central advantage. The knight on f3 also controls important squares like e5 and d4, while keeping the option open to reroute to other squares like d2 or h4 depending on the position's demands. This active move follows classical opening principles while preparing to complete our basic development and consolidate our space advantage."
     },
     {
       "san": "O-O",

@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn while controlling the central d4 and e5 squares. This move exemplifies opening principles: develop with a threat, control the center, and prepare castling. The knight on f3 also supports a future d2-d4 advance and guards against potential tactics involving Black's queen coming to h4. By attacking the e5 pawn immediately, we force Black to make a decision about how to defend it, steering the game toward the classical Spanish opening patterns we want."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn while controlling the central d4 and e5 squares. This move exemplifies opening principles: develop with a threat, control the center, and prepare castling. The knight on f3 also supports a future d2-d4 advance and guards against potential tactics involving Black's queen coming to h4. By attacking the e5 pawn immediately, we force Black to make a decision about how to defend it, steering the game toward the classical Spanish opening patterns we want."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to an active central square where it eyes the important d4 and b4 squares. This knight development is logical because it defends e5 while simultaneously developing a piece and preparing further development with moves like Nf6 or f5. The knight on c6 will become a long-term target in many Ruy Lopez variations, as we'll often try to eliminate it or force it to a worse square. Black's move follows sound opening principles but walks into the theoretical labyrinth of the Spanish Opening, where White has centuries of analysis on their side."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to an active central square where it eyes the important d4 and b4 squares. This knight development is logical because it defends e5 while simultaneously developing a piece and preparing further development with moves like Nf6 or f5. The knight on c6 will become a long-term target in many Ruy Lopez variations, as we'll often try to eliminate it or force it to a worse square. Black's move follows sound opening principles but walks into the theoretical labyrinth of the Spanish Opening, where White has centuries of analysis on their side."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn while simultaneously preparing kingside castling and adding another defender to the e5 pawn. This natural developing move follows the principle of developing knights before bishops and creates a solid defensive setup in the center. The knight on f6 also prepares tactical possibilities like Nd4, which could become available if we're not careful with our piece coordination. However, this knight placement also walks into our main strategic plan, as we're often looking to advance d2-d4 and create central tension where this knight might become awkwardly placed."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn while simultaneously preparing kingside castling and adding another defender to the e5 pawn. This active move follows the principle of developing knights before bishops and creates a solid defensive setup in the center. The knight on f6 also prepares tactical possibilities like Nd4, which could become available if we're not careful with our piece coordination. However, this knight placement also walks into our main strategic plan, as we're often looking to advance d2-d4 and create central tension where this knight might become awkwardly placed."
     },
     {
       "san": "O-O",

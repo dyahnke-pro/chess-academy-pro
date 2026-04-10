@@ -15,11 +15,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, where it attacks our e4 pawn and prepares to support the central break ...e5. This is a key move in the Pirc Defense system, as the knight on f6 will often serve as an anchor point for Black's counterplay. From f6, the knight controls important central squares like d5 and e4, while also preparing to support Black's kingside development. Black is following the hypermodern principle of attacking our center with pieces rather than occupying it immediately with pawns."
+      "annotation": "Black develops the knight to its most active square, where it attacks our e4 pawn and prepares to support the central break ...e5. This is a critical move in the Pirc Defense system, as the knight on f6 will often serve as an anchor point for Black's counterplay. From f6, the knight controls important central squares like d5 and e4, while also preparing to support Black's kingside development. Black is following the hypermodern principle of attacking our center with pieces rather than occupying it immediately with pawns."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn and preparing to support our central advance. The knight on c3 eyes important squares like d5 and e4, while also keeping options open for future expansion with moves like f4-f5. This move is flexible and allows us to maintain our space advantage while developing harmoniously. From c3, our knight can potentially jump to d5 or support a kingside attack, depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, defending the e4 pawn and preparing to support our central advance. The knight on c3 eyes important squares like d5 and e4, while also keeping options open for future expansion with moves like f4-f5. This move is flexible and allows us to maintain our space advantage while developing harmoniously. From c3, our knight can potentially jump to d5 or support a kingside attack, depending on how the position develops."
     },
     {
       "san": "g6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "We develop our bishop to a solid, flexible square where it supports our central pawns and prepares castling. While Be2 might look passive compared to more aggressive options like Bc4 or Bb5, it's actually a key move in many anti-Pirc systems because it prepares the aggressive h4-h5 pawn storm. The bishop on e2 also keeps the f1-a6 diagonal clear for potential tactical ideas and maintains connection between our rooks. This modest-looking development actually sets up one of the most dangerous attacking formations against the Pirc Defense."
+      "annotation": "We develop our bishop to a solid, flexible square where it supports our central pawns and prepares castling. While Be2 might look passive compared to more aggressive options like Bc4 or Bb5, it's actually a critical move in many anti-Pirc systems because it prepares the aggressive h4-h5 pawn storm. The bishop on e2 also keeps the f1-a6 diagonal clear for potential tactical ideas and maintains connection between our rooks. This modest-looking development actually sets up one of the most dangerous attacking formations against the Pirc Defense."
     },
     {
       "san": "Bg7",

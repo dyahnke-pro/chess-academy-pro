@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding extra pressure to Black's d5 pawn, creating our first minor threat in the position. This move defines the Chigorin Variation of the Queen's Pawn Game, where we prioritize piece development and central pressure over immediate pawn advances like c4 or Nf3. The knight on c3 also prepares potential ideas like e4 (if Black's d-pawn moves) or supports a future f2-f3 and e2-e4 pawn storm. From c3, our knight controls important central squares like e4 and d5, while keeping our options open for various pawn structures depending on how Black continues."
+      "annotation": "We're developing our knight to its ideal square while adding extra pressure to Black's d5 pawn, creating our first minor threat in the position. This move defines the Chigorin Variation of the Queen's Pawn Game, where we prioritize piece development and central pressure over immediate pawn advances like c4 or Nf3. The knight on c3 also prepares potential ideas like e4 (if Black's d-pawn moves) or supports a future f2-f3 and e2-e4 pawn storm. From c3, our knight controls important central squares like e4 and d5, while keeping our options open for various pawn structures depending on how Black continues."
     },
     {
       "san": "h5",

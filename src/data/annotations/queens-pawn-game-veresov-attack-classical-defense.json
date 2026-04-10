@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this natural developing move, putting pressure on d4 while developing the kingside knight to its most active square. This is one of the most principled responses to d4, as it contests the center right away rather than allowing us to build a big pawn center unopposed. The knight on f6 also prepares to support a future ...e6 or ...d5, giving Black flexibility in choosing their pawn structure. From f6, this knight can later jump to e4, d5, or even h5 in some tactical situations, making it a key piece in Black's opening development."
+      "annotation": "Black immediately challenges our central pawn with this active move, putting pressure on d4 while developing the kingside knight to its most active square. This is one of the most principled responses to d4, as it contests the center right away rather than allowing us to build a big pawn center unopposed. The knight on f6 also prepares to support a future ...e6 or ...d5, giving Black flexibility in choosing their pawn structure. From f6, this knight can later jump to e4, d5, or even h5 in some tactical situations, making it a key piece in Black's opening development."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn and prepares for kingside castling. This move is the starting point of the Veresov Attack system, though it looks like many other openings at this stage - that's the beauty of this move order, as it keeps our opponent guessing about our exact intentions. The knight on f3 also controls the important e5 and h4 squares, preventing Black from establishing pieces there easily. By developing this knight before committing to a specific pawn structure, we maintain maximum flexibility while improving our position with tempo."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our d4 pawn and prepares for kingside castling. This move is the starting point of the Veresov Attack system, though it looks like many other openings at this stage - that's the beauty of this move order, as it keeps our opponent guessing about our exact intentions. The knight on f3 also controls the important e5 and h4 squares, preventing Black from establishing pieces there easily. By developing this knight before committing to a specific pawn structure, we maintain maximum flexibility while improving our position with tempo."
     },
     {
       "san": "e6",

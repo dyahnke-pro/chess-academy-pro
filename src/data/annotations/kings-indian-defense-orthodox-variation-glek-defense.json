@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, adding support to our d4 pawn and preparing the advance e2-e4. This knight placement is classical and flexible, as it doesn't commit us to any particular pawn structure yet while maintaining maximum options. The knight on c3 also eyes the important e4 and b5 squares, and later might support advances like b2-b4 or even jump to d5 in some variations. Against the King's Indian, this development is almost automatic as we build our ideal pawn center and prepare to castle kingside."
+      "annotation": "We're developing our queen's knight to its ideal square, adding support to our d4 pawn and preparing the advance e2-e4. This knight placement is classical and flexible, as it doesn't commit us to any particular pawn structure yet while maintaining maximum options. The knight on c3 also eyes the important e4 and b5 squares, and later might support advances like b2-b4 or even jump to d5 in some variations. Against the King's Indian, this development is almost automatic as we build our ideal pawn center and prepare to castle kingside."
     },
     {
       "san": "Bg7",

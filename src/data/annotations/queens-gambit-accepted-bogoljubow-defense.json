@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important e5 and h4 squares while supporting a future e4 advance. This move follows classical opening principles by developing toward the center and preparing to castle kingside for safety. Our knight also eyes the d4 square, potentially supporting our central pawn, and can later jump to more aggressive squares like e5 or g5 depending on how the position evolves. By developing quickly rather than immediately chasing the c4 pawn, we're prioritizing piece activity and central control over material recovery."
+      "annotation": "We develop our knight to its ideal square, controlling the important e5 and h4 squares while supporting a future e4 advance. This move follows classical opening principles by developing toward the center and preparing to castle kingside for safety. Our knight also eyes the d4 square, potentially supporting our central pawn, and can later jump to more aggressive squares like e5 or g5 depending on how the position evolves. By developing quickly rather than immediately chasing the c4 pawn, we're prioritizing piece activity and central control over material recovery."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight symmetrically, contesting our control of the central squares and preparing their own kingside development. This natural developing move attacks our e4 square, making it more difficult for us to establish the ideal pawn center immediately. The knight on f6 also supports a potential ...e6 or ...g6 setup, giving Black flexibility in their pawn structure and piece coordination. However, by developing the knight here, Black is also placing it where it might become a target for future pawn advances or piece attacks."
+      "annotation": "Black develops their knight symmetrically, contesting our control of the central squares and preparing their own kingside development. This active move attacks our e4 square, making it more difficult for us to establish the ideal pawn center immediately. The knight on f6 also supports a potential ...e6 or ...g6 setup, giving Black flexibility in their pawn structure and piece coordination. However, by developing the knight here, Black is also placing it where it might become a target for future pawn advances or piece attacks."
     },
     {
       "san": "Nc3",

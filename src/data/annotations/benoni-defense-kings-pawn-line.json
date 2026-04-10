@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible and sound responses to d4, as the knight on f6 supports central advances like ...e5 or ...c5 while maintaining excellent piece coordination. Our opponent is following classical development principles by bringing out pieces before pawns, and this knight will be well-placed in virtually any pawn structure that arises. We need to be ready to defend our central pawn or advance it further to maintain our space advantage."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible and sound responses to d4, as the knight on f6 supports central advances like ...e5 or ...c5 while maintaining excellent piece coordination. Our opponent is following classical development principles by bringing out pieces before pawns, and this knight will be well-placed in virtually any pawn structure that arises. We need to be ready to defend our central pawn or advance it further to maintain our space advantage."
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Attack setup, expanding our control over the center and preparing to build a powerful pawn chain. This move supports our d4 pawn indirectly and stakes out territory on the queenside, while also preparing to develop our knight to c3. The c4 pawn controls the crucial b5 and d5 squares, limiting Black's counterplay options and setting up potential pawn advances later in the game. This is a key move in many 1.d4 systems, as it gives us more space and flexibility in our development while putting immediate pressure on Black's position."
+      "annotation": "We're playing the English Attack setup, expanding our control over the center and preparing to build a powerful pawn chain. This move supports our d4 pawn indirectly and stakes out territory on the queenside, while also preparing to develop our knight to c3. The c4 pawn controls the crucial b5 and d5 squares, limiting Black's counterplay options and setting up potential pawn advances later in the game. This is a critical move in many 1.d4 systems, as it gives us more space and flexibility in our development while putting immediate pressure on Black's position."
     },
     {
       "san": "g6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our powerful pawn center and preparing to castle queenside or continue with aggressive development. This knight on c3 adds crucial support to our d5 pawn while also preparing potential advances like f4-f5 or piece maneuvers to more active squares. The knight also eyes important squares like b5 and d5, giving us additional tactical possibilities as the game develops. Our development is proceeding smoothly, and we're maintaining our significant space advantage while keeping all our options open for the middlegame."
+      "annotation": "We're developing our knight to its ideal square, supporting our powerful pawn center and preparing to castle queenside or continue with aggressive development. This knight on c3 adds crucial support to our d5 pawn while also preparing potential advances like f4-f5 or piece maneuvers to more active squares. The knight also eyes important squares like b5 and d5, giving us additional tactical possibilities as the game develops. Our development is proceeding smoothly, and we're maintaining our significant space advantage while keeping all our options open for the middlegame."
     },
     {
       "san": "e6",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Qd2",
-      "annotation": "We're developing our queen to a flexible square that supports our position in multiple ways: it prepares long castling, supports the Be3, and keeps options open for future piece coordination. This queen placement also prepares potential tactical ideas like Bh6 to trade Black's important fianchettoed bishop, while maintaining pressure on Black's cramped position. The queen on d2 can quickly redeploy to the kingside for an attack or support operations on the queenside as needed. This is a typical developing move in such positions, maintaining our development advantage while keeping maximum flexibility in our piece placement."
+      "annotation": "We're developing our queen to a flexible square that supports our position in multiple ways: it prepares long castling, supports the Be3, and keeps options open for future piece coordination. This queen placement also prepares potential tactical ideas like Bh6 to trade Black's important fianchettoed bishop, while maintaining pressure on Black's cramped position. The queen on d2 can quickly redeploy to the kingside for an attack or support operations on the queenside as needed. This is a purposeful move in such positions, maintaining our development advantage while keeping maximum flexibility in our piece placement."
     },
     {
       "san": "exd5",

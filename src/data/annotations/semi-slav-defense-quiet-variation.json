@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our center. This move is completely principled - we're following opening fundamentals by developing pieces toward the center and preparing to castle kingside. The knight on f3 also prevents any potential tactics involving Black's queen coming to h4, and it doesn't commit us to any particular pawn structure yet. From f3, our knight maintains flexibility and can later jump to e5, g5, or even retreat to support other plans depending on how the position develops."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our center. This move is completely principled - we're following opening fundamentals by developing pieces toward the center and preparing to castle kingside. The knight on f3 also prevents any potential tactics involving Black's queen coming to h4, and it doesn't commit us to any particular pawn structure yet. From f3, our knight maintains flexibility and can later jump to e5, g5, or even retreat to support other plans depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development by bringing their kingside knight to f6, where it performs similar functions - controlling central squares (particularly e4 and d5) and preparing to castle. This is the most natural developing move that also puts additional pressure on our c4 pawn, creating a subtle tactical point that we need to be aware of. Our opponent is following sound opening principles while maintaining the tension in the center, not rushing to resolve the pawn structure immediately. The knight on f6 also supports potential central breaks like e6-e5 later in the game."
+      "annotation": "Black mirrors our development by bringing their kingside knight to f6, where it performs similar functions - controlling central squares (particularly e4 and d5) and preparing to castle. This is the most active move that also puts additional pressure on our c4 pawn, creating a subtle tactical point that we need to be aware of. Our opponent is following sound opening principles while maintaining the tension in the center, not rushing to resolve the pawn structure immediately. The knight on f6 also supports potential central breaks like e6-e5 later in the game."
     },
     {
       "san": "e3",

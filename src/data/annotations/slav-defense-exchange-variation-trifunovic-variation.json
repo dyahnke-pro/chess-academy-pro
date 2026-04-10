@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 square and supporting our central control. This move follows the principle of developing knights before bishops, and the f3 knight will be perfectly placed to support either e4 or a kingside attack later. The knight from f3 also eyes the important d4 and h4 squares, giving us flexibility in our future plans. Additionally, this development prepares castling kingside and keeps all our strategic options open in this complex pawn structure."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 square and supporting our central control. This move follows the principle of developing knights before bishops, and the f3 knight will be perfectly placed to support either e4 or a kingside attack later. The knight from f3 also eyes the important d4 and h4 squares, giving us flexibility in our future plans. Additionally, this development prepares castling kingside and keeps all our strategic options open in this complex pawn structure."
     },
     {
       "san": "Nf6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We play this solid developing move to support our d4 pawn and prepare to complete our kingside development with Bd3 and castling. This move also prevents any immediate tactics involving Black's pieces on the light squares and ensures our king's safety. While e3 is less ambitious than e4, it maintains our slight edge by keeping the position under control and preparing a sound piece setup. The pawn on e3 also provides a potential escape square for our bishop if it gets attacked and supports a future f4 advance if we want to gain more space."
+      "annotation": "We play this solid developing choice to support our d4 pawn and prepare to complete our kingside development with Bd3 and castling. This move also prevents any immediate tactics involving Black's pieces on the light squares and ensures our king's safety. While e3 is less ambitious than e4, it maintains our slight edge by keeping the position under control and preparing a sound piece setup. The pawn on e3 also provides a potential escape square for our bishop if it gets attacked and supports a future f4 advance if we want to gain more space."
     },
     {
       "san": "e6",

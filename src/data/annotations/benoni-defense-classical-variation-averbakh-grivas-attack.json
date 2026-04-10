@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our central pawn and preparing to contest the center from the kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet. The knight on f6 also prepares kingside castling and supports potential central advances like ...e5 or ...c5. From f6, the knight controls important central squares like e4 and d5, making it harder for us to establish a dominant pawn center."
+      "annotation": "Black develops the knight to its ideal square, attacking our central pawn and preparing to contest the center from the kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet. The knight on f6 also prepares kingside castling and supports potential central advances like ...e5 or ...c5. From f6, the knight controls important central squares like e4 and d5, making it harder for us to establish a dominant pawn center."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, controlling the center and preparing to support our pawn advances with piece play. The knight on f3 attacks the e5 square, making it harder for Black to establish a classical pawn center with ...e5. This natural developing move also prepares kingside castling and keeps our options open for different pawn structures. From f3, our knight can later jump to powerful outposts like e5 or g5, depending on how the position develops."
+      "annotation": "We develop our knight to its optimal square, controlling the center and preparing to support our pawn advances with piece play. The knight on f3 attacks the e5 square, making it harder for Black to establish a classical pawn center with ...e5. This active move also prepares kingside castling and keeps our options open for different pawn structures. From f3, our knight can later jump to powerful outposts like e5 or g5, depending on how the position develops."
     },
     {
       "san": "c5",

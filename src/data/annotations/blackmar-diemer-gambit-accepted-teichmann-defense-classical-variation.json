@@ -23,11 +23,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending against potential threats and preparing to complete their kingside development. This is considered one of the most solid responses in the Blackmar-Diemer, as it develops a piece while maintaining the extra pawn. Our opponent is following the classical principle of developing knights before bishops, and this knight controls important central squares like e4 and d5. However, this knight will soon become a target for our aggressive pawn advances, and Black must be prepared for the tactical complications that follow."
+      "annotation": "Black develops their knight to its ideal square, defending against potential threats and preparing to complete their kingside development. This is considered one of the most solid responses in the Blackmar-Diemer, as it develops a piece while maintaining the extra pawn. Our opponent is following the classical principle of developing knights before bishops, and this knight controls important central squares like e4 and d5. However, this knight will soon become a target for our aggressive pawn advances, and Black must be prepared for the tactical complications that follow."
     },
     {
       "san": "f3",
-      "annotation": "This is the key move that defines the Blackmar-Diemer Gambit's character—we're immediately challenging the e4 pawn and preparing to open lines regardless of material cost. The f3 advance might look weakening to our king position, but in gambit play we prioritize piece activity over structural concerns. We're essentially offering another pawn to blast open the center completely, and if Black captures, we'll have the f-file and excellent piece coordination. This move also prepares to develop our light-squared bishop to c4 or d3 with maximum effect, creating immediate threats against Black's kingside."
+      "annotation": "This is the defining move of the Blackmar-Diemer Gambit's character—we're immediately challenging the e4 pawn and preparing to open lines regardless of material cost. The f3 advance might look weakening to our king position, but in gambit play we prioritize piece activity over structural concerns. We're essentially offering another pawn to blast open the center completely, and if Black captures, we'll have the f-file and excellent piece coordination. This move also prepares to develop our light-squared bishop to c4 or d3 with maximum effect, creating immediate threats against Black's kingside."
     },
     {
       "san": "exf3",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a solid move, controlling the important d5 square and preparing to potentially challenge our pieces with moves like b5 or support their center with moves like Qb6. This move also prepares to fianchetto their light-squared bishop via b6 and Bb7, or develop their queen's knight to d7. However, this move doesn't address the immediate tactical threats we're creating, and Black is still dangerously behind in development. Our opponent is trying to play solidly, but in the Blackmar-Diemer, passive moves often allow us to build up an overwhelming attack before Black can coordinate their pieces."
+      "annotation": "Black plays a well-grounded move, controlling the important d5 square and preparing to potentially challenge our pieces with moves like b5 or support their center with moves like Qb6. This move also prepares to fianchetto their light-squared bishop via b6 and Bb7, or develop their queen's knight to d7. However, this move doesn't address the immediate tactical threats we're creating, and Black is still dangerously behind in development. Our opponent is trying to play solidly, but in the Blackmar-Diemer, passive moves often allow us to build up an overwhelming attack before Black can coordinate their pieces."
     },
     {
       "san": "Be3",

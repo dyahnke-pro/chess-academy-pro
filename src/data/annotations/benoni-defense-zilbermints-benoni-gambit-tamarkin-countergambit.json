@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to recapture on d4 with the knight if needed. This move keeps our options open - we can still transpose to various systems depending on how Black continues. The knight on f3 also prevents Black from playing ...e5 followed by ...e4, which would give Black a strong central advance. Most importantly, Nf3 maintains flexibility while developing a piece toward the center, following the fundamental opening principle of rapid development."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to recapture on d4 with the knight if needed. This move keeps our options open - we can still transpose to various systems depending on how Black continues. The knight on f3 also prevents Black from playing ...e5 followed by ...e4, which would give Black a strong central advance. Most importantly, Nf3 maintains flexibility while developing a piece toward the center, following the fundamental opening principle of rapid development."
     },
     {
       "san": "cxd4",

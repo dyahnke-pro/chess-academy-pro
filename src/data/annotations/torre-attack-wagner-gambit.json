@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our central pawn and preparing to contest the center with moves like e6 or d5. This is one of the most flexible responses to d4, as it keeps Black's options open for various pawn structures and piece arrangements. Our opponent is following sound opening principles by developing pieces quickly while putting immediate pressure on our center. From f6, the knight also eyes important central squares like e4 and d5, which will be key battlegrounds in the middlegame."
+      "annotation": "Black develops the knight to its ideal square, attacking our central pawn and preparing to contest the center with moves like e6 or d5. This is one of the most flexible responses to d4, as it keeps Black's options open for various pawn structures and piece arrangements. Our opponent is following sound opening principles by developing pieces quickly while putting immediate pressure on our center. From f6, the knight also eyes important central squares like e4 and d5, which will be key battlegrounds in the middlegame."
     },
     {
       "san": "Nf3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We develop our dark-squared bishop to an aggressive square, pinning Black's knight against the queen - this is the signature move of the Torre Attack. This pin creates immediate tactical tension because if Black moves the knight, we can capture the queen, so our opponent must be careful about how to break this pin. The bishop on g5 also supports our planned e4 advance by adding pressure to Black's position and making it harder for Black to play natural developing moves. This move exemplifies the Torre's philosophy: quick development with concrete threats that put our opponent on the defensive from the very beginning."
+      "annotation": "We develop our dark-squared bishop to an aggressive square, pinning Black's knight against the queen - this is the signature move of the Torre Attack. This pin creates immediate tactical tension because if Black moves the knight, we can capture the queen, so our opponent must be careful about how to break this pin. The bishop on g5 also supports our planned e4 advance by adding pressure to Black's position and making it harder for Black to play active moves. This move exemplifies the Torre's philosophy: quick development with concrete threats that put our opponent on the defensive from the very beginning."
     },
     {
       "san": "c5",

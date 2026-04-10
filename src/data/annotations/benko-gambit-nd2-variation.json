@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This is one of the most principled responses to d4, as it immediately puts pressure on our central pawn and prepares ...e6 or ...g6 depending on Black's chosen setup. The knight on f6 also supports potential central advances like ...e5 or ...c5, giving Black multiple strategic options. We need to be ready for various Indian defenses or more direct central confrontations."
+      "annotation": "Black develops the king's knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This is one of the most principled responses to d4, as it immediately puts pressure on our central pawn and prepares ...e6 or ...g6 depending on Black's chosen setup. The knight on f6 also supports potential central advances like ...e5 or ...c5, giving Black multiple strategic options. We need to be ready for various Indian defenses or more direct central confrontations."
     },
     {
       "san": "c4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "a6",
-      "annotation": "Black immediately follows up with the key move of the Benko Gambit, attacking our advanced b5 pawn and preparing to open even more lines. This move threatens to win back the pawn immediately while maintaining all the positional benefits of the gambit. Our opponent is not just playing for material equality - they want to keep the files open and maintain pressure on our position. We're now forced into a critical decision about how to handle this pawn, as each option leads to different types of positions with varying degrees of Black compensation."
+      "annotation": "Black immediately follows up with the central idea of the Benko Gambit, attacking our advanced b5 pawn and preparing to open even more lines. This move threatens to win back the pawn immediately while maintaining all the positional benefits of the gambit. Our opponent is not just playing for material equality - they want to keep the files open and maintain pressure on our position. We're now forced into a critical decision about how to handle this pawn, as each option leads to different types of positions with varying degrees of Black compensation."
     },
     {
       "san": "bxa6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, protecting our attacked pieces and preparing to castle kingside for safety. This move also prepares potential jumps to b5 or d4, where our knight could be very well-placed to support our extra pawns. The knight on c3 helps control important central squares and keeps our development on track, though we must be mindful that Black's pressure is mounting. We're essentially playing a double-edged game where we need to complete our development quickly while Black builds their initiative."
+      "annotation": "We're developing our knight to its ideal square, protecting our attacked pieces and preparing to castle kingside for safety. This move also prepares potential jumps to b5 or d4, where our knight could be very well-placed to support our extra pawns. The knight on c3 helps control important central squares and keeps our development on track, though we must be mindful that Black's pressure is mounting. We're essentially playing a double-edged game where we need to complete our development quickly while Black builds their initiative."
     },
     {
       "san": "d6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its ideal square, supporting our central control and preparing to castle kingside for safety. This natural developing move also prepares potential advances like e4, which would give us even more central space and support our pawn majority. The knight on f3 controls important squares like e5 and g5, potentially limiting Black's piece activity in some variations. However, we must be aware that our development is somewhat slower than Black's, and we need to be ready for their coming initiative on the queenside."
+      "annotation": "We're developing our king's knight to its ideal square, supporting our central control and preparing to castle kingside for safety. This active move also prepares potential advances like e4, which would give us even more central space and support our pawn majority. The knight on f3 controls important squares like e5 and g5, potentially limiting Black's piece activity in some variations. However, we must be aware that our development is somewhat slower than Black's, and we need to be ready for their coming initiative on the queenside."
     },
     {
       "san": "g6",

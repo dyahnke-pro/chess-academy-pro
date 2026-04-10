@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to recapture on d4 with the knight if needed. This move increases our control over the central dark squares, particularly e4 and d5, while keeping maximum flexibility in our pawn structure. By playing Nc3 before Nf3, we're signaling that we're comfortable entering the Nimzo-Indian Defense if Black plays ...Bb4. This knight placement is crucial for many of our typical plans, including e4 advances, kingside attacks, or central pawn storms."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to recapture on d4 with the knight if needed. This move increases our control over the central dark squares, particularly e4 and d5, while keeping maximum flexibility in our pawn structure. By playing Nc3 before Nf3, we're signaling that we're comfortable entering the Nimzo-Indian Defense if Black plays ...Bb4. This knight placement is crucial for many of our typical plans, including e4 advances, kingside attacks, or central pawn storms."
     },
     {
       "san": "Bb4",

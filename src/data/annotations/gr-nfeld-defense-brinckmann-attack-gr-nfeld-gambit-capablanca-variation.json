@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the d4 pawn and prepares to recapture on d5 if Black plays that central break. The knight on c3 also eyes important central squares like e4 and d5, and can potentially jump to other effective squares like e4 or b5 depending on how the position develops. This move is almost automatic in most Queen's Gambit and Indian Defense setups, as the knight is perfectly placed to support our central ambitions. From c3, our knight also maintains flexibility for various pawn structures that might arise."
+      "annotation": "We're developing our knight to its ideal square, where it supports the d4 pawn and prepares to recapture on d5 if Black plays that central break. The knight on c3 also eyes important central squares like e4 and d5, and can potentially jump to other effective squares like e4 or b5 depending on how the position develops. This move is almost automatic in most Queen's Gambit and Indian Defense setups, as the knight is perfectly placed to support our central ambitions. From c3, our knight also maintains flexibility for various pawn structures that might arise."
     },
     {
       "san": "d5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Rc1",
-      "annotation": "We're placing our rook on the c-file proactively, anticipating that this file may become open or semi-open after the inevitable ...dxc4 or cxd5 exchanges. This move also supports our c4 pawn indirectly and prepares for various tactical ideas involving pressure down the c-file. The rook on c1 is particularly well-placed if Black plays ...dxc4, as we can often follow up with moves like Bxc4 and maintain pressure on Black's position. This is a subtle but important move that improves our piece coordination and prepares for the complex middlegame positions that characterize this variation of the Grünfeld Defense."
+      "annotation": "We're placing our rook on the c-file proactively, anticipating that this file may become open or semi-open after the inevitable ...dxc4 or cxd5 exchanges. This move also supports our c4 pawn indirectly and prepares for various tactical ideas involving pressure down the c-file. The rook on c1 is particularly well-placed if Black plays ...dxc4, as we can often follow up with moves like Bxc4 and maintain pressure on Black's position. This is a subtle but purposeful move that improves our piece coordination and prepares for the complex middlegame positions that characterize this variation of the Grünfeld Defense."
     }
   ]
 }

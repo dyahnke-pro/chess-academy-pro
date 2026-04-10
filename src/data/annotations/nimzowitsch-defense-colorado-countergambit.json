@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while preparing to castle kingside. This move follows the principle of developing pieces before moving pawns twice, and the knight on f3 controls the important central squares d4 and e5. From f3, our knight also supports a potential d4 advance later in the game, which would give us a strong pawn center. The knight development is flexible and doesn't commit us to any particular pawn structure, allowing us to respond appropriately to Black's next moves."
+      "annotation": "We develop our knight to its ideal square, defending the e4 pawn while preparing to castle kingside. This move follows the principle of developing pieces before moving pawns twice, and the knight on f3 controls the important central squares d4 and e5. From f3, our knight also supports a potential d4 advance later in the game, which would give us a strong pawn center. The knight development is flexible and doesn't commit us to any particular pawn structure, allowing us to respond appropriately to Black's next moves."
     },
     {
       "san": "f5",

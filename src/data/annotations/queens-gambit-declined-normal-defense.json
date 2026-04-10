@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically by occupying the center with their own queen's pawn, directly challenging our control of the e4 square. This solid move maintains the balance in the center and prepares Black's pieces for natural development - the dark-squared bishop can eye the long diagonal, and the queen's knight will have a natural square on d7 or c6. By playing d5, Black is indicating they want to contest the center directly rather than allow us a free hand with moves like e4. This sets up the fundamental tension that will define the middlegame: who will be able to advance their central pawns effectively and gain space."
+      "annotation": "Black responds symmetrically by occupying the center with their own queen's pawn, directly challenging our control of the e4 square. this stabilizing move maintains the balance in the center and prepares Black's pieces for natural development - the dark-squared bishop can eye the long diagonal, and the queen's knight will have a natural square on d7 or c6. By playing d5, Black is indicating they want to contest the center directly rather than allow us a free hand with moves like e4. This sets up the fundamental tension that will define the middlegame: who will be able to advance their central pawns effectively and gain space."
     },
     {
       "san": "c4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most natural square, adding additional pressure to Black's d5 pawn and preparing for our strategic goals in this opening. From c3, the knight supports a future e4 advance (once we've prepared it properly) and maintains flexibility - it can later jump to e4, b5, or even d5 in some positions. This move is also preparing our light-squared bishop's development to f4 or g5, as we'll want to challenge Black's solid pawn structure with active piece play. The knight on c3 is a key piece in many Queen's Gambit plans, often supporting central advances and putting pressure on Black's queenside."
+      "annotation": "We develop our queen's knight to its ideal square, adding additional pressure to Black's d5 pawn and preparing for our strategic goals in this opening. From c3, the knight supports a future e4 advance (once we've prepared it properly) and maintains flexibility - it can later jump to e4, b5, or even d5 in some positions. This move is also preparing our light-squared bishop's development to f4 or g5, as we'll want to challenge Black's solid pawn structure with active piece play. The knight on c3 is a key piece in many Queen's Gambit plans, often supporting central advances and putting pressure on Black's queenside."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their king's knight to its ideal square, where it not only aids in kingside development but also adds crucial support to the d5 pawn, making our central pressure more difficult to maintain. The knight on f6 attacks our e4 square, making it harder for us to achieve the ideal central advance e2-e4 without proper preparation. This move also prepares Black's kingside castling and keeps options open for the dark-squared bishop, which might go to e7, d6, or even b4 in some lines. From f6, the knight is actively placed and can potentially jump to e4 or g4 later, making it a multi-purpose developing move that fits perfectly with Black's solid but active defensive setup."
+      "annotation": "Black develops their king's knight to its ideal square, where it not only aids in kingside development but also adds crucial support to the d5 pawn, making our central pressure more difficult to maintain. The knight on f6 attacks our e4 square, making it harder for us to achieve the ideal central advance e2-e4 without proper preparation. This move also prepares Black's kingside castling and keeps options open for the dark-squared bishop, which might go to e7, d6, or even b4 in some lines. From f6, the knight is actively placed and can potentially jump to e4 or g4 later, making it a multi-purpose developing choice that fits perfectly with Black's solid but active defensive setup."
     }
   ]
 }

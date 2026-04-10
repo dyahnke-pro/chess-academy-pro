@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible responses to 1.d4, as it keeps Black's options open for various setups including the King's Indian, Grünfeld, Nimzo-Indian, or Queen's Gambit Declined depending on how we continue. The knight on f6 also supports a future ...e5 advance and prepares kingside castling. We'll need to decide whether to defend the d4 pawn or allow it to be traded off."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible responses to 1.d4, as it keeps Black's options open for various setups including the King's Indian, Grünfeld, Nimzo-Indian, or Queen's Gambit Declined depending on how we continue. The knight on f6 also supports a future ...e5 advance and prepares kingside castling. We'll need to decide whether to defend the d4 pawn or allow it to be traded off."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing kingside castling. This natural developing move also prevents Black from playing ...e5 immediately, as our knight would capture it. The knight on f3 fits perfectly with our system - it can later support e2-e4 if we want to grab more central space, or it can reroute via d2 to support other plans. This move keeps maximum flexibility while making solid, principled development."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing kingside castling. This active move also prevents Black from playing ...e5 immediately, as our knight would capture it. The knight on f3 fits perfectly with our system - it can later support e2-e4 if we want to grab more central space, or it can reroute via d2 to support other plans. This move keeps maximum flexibility while making solid, principled development."
     },
     {
       "san": "Bg7",
@@ -43,7 +43,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside, completing our development and ensuring king safety before the central tension escalates. This natural move also connects our rooks and prepares us to meet Black's coming central break. With both sides safely castled, the real strategic battle is about to begin as Black will likely play ...d5 next, leading to the characteristic Grünfeld pawn tensions. Our solid setup with the fianchettoed bishop and well-placed pieces gives us excellent prospects in the coming middlegame."
+      "annotation": "We castle kingside, completing our development and ensuring king safety before the central tension escalates. this move also connects our rooks and prepares us to meet Black's coming central break. With both sides safely castled, the real strategic battle is about to begin as Black will likely play ...d5 next, leading to the characteristic Grünfeld pawn tensions. Our solid setup with the fianchettoed bishop and well-placed pieces gives us excellent prospects in the coming middlegame."
     },
     {
       "san": "d5",

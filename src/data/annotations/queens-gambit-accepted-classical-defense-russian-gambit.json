@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square immediately. This move creates a central pawn tension that will define the character of the game - either the pawns will be exchanged or one side will advance to gain space. Our opponent is following sound opening principles by fighting for the center rather than allowing us to establish a strong pawn duo with d4-e4. Black's move also opens lines for the dark-squared bishop and queen, mirroring our development possibilities while maintaining equality in the center."
+      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square immediately. This move creates a central pawn tension that will define the character of the game - either the pawns will be exchanged or one side will advance to gain space. Our opponent is following sound opening principles by contesting central control rather than allowing us to establish a strong pawn duo with d4-e4. Black's move also opens lines for the dark-squared bishop and queen, mirroring our development possibilities while maintaining equality in the center."
     },
     {
       "san": "c4",
@@ -23,11 +23,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our future e4 advance while preparing to castle kingside. This is one of the most principled moves in the Queen's Gambit Accepted, as Black prioritizes rapid development over trying to hold the extra c4 pawn at all costs. The knight on f6 also supports Black's potential central advance with ...e5, which would challenge our pawn center and create counterplay. By developing pieces quickly, Black is following the key principle that in gambit positions, the player who has accepted material should focus on completing development and consolidating rather than grabbing more pawns."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our future e4 advance while preparing to castle kingside. This is one of the most principled moves in the Queen's Gambit Accepted, as Black prioritizes rapid development over trying to hold the extra c4 pawn at all costs. The knight on f6 also supports Black's potential central advance with ...e5, which would challenge our pawn center and create counterplay. By developing pieces quickly, Black is following the key principle that in gambit positions, the player who has accepted material should focus on completing development and consolidating rather than grabbing more pawns."
     },
     {
       "san": "Bxc4",
-      "annotation": "We recapture our gambit pawn while developing our light-squared bishop to an excellent central square. From c4, our bishop eyes the important f7 square (a common weakness in Black's position) and controls the long diagonal, potentially creating future tactical opportunities. This natural developing move also prepares kingside castling and keeps our pieces actively placed. The bishop on c4 is perfectly placed to support our central ambitions - it can retreat to d3 or e2 if attacked, or sometimes advance to d5 in favorable circumstances. We've now completed the basic idea of the Queen's Gambit: we've regained our pawn while achieving superior development and piece activity."
+      "annotation": "We recapture our gambit pawn while developing our light-squared bishop to an excellent central square. From c4, our bishop eyes the important f7 square (a common weakness in Black's position) and controls the long diagonal, potentially creating future tactical opportunities. This active move also prepares kingside castling and keeps our pieces actively placed. The bishop on c4 is perfectly placed to support our central ambitions - it can retreat to d3 or e2 if attacked, or sometimes advance to d5 in favorable circumstances. We've now completed the basic idea of the Queen's Gambit: we've regained our pawn while achieving superior development and piece activity."
     },
     {
       "san": "e6",

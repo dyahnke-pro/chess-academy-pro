@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside. This move is the hallmark of the Colle System - a solid, systematic approach where we'll typically follow up with e3, Bd3, and 0-0 regardless of what Black does. The beauty of this system is its simplicity and reliability: we don't need to memorize tons of theory because we're following the same setup pattern. Our knight on f3 also prevents Black from playing ...e5 immediately, giving us time to complete our development peacefully."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside. This move is the hallmark of the Colle System - a solid, systematic approach where we'll typically follow up with e3, Bd3, and 0-0 regardless of what Black does. The beauty of this system is its simplicity and reliability: we don't need to memorize tons of theory because we're following the same setup pattern. Our knight on f3 also prevents Black from playing ...e5 immediately, giving us time to complete our development peacefully."
     },
     {
       "san": "g6",

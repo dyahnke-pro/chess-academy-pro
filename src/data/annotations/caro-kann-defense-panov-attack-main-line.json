@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking our d4 pawn and preparing to castle kingside. This move also puts pressure on our position by forcing us to defend the d4 pawn or make further commitments in the center. Our opponent is following classical development principles while maintaining the central tension, and this knight placement supports Black's overall strategy of solid development and central control."
+      "annotation": "Black develops the king's knight to its ideal square, attacking our d4 pawn and preparing to castle kingside. This move also puts pressure on our position by forcing us to defend the d4 pawn or make further commitments in the center. Our opponent is following classical development principles while maintaining the central tension, and this knight placement supports Black's overall strategy of solid development and central control."
     },
     {
       "san": "Nc3",
@@ -39,11 +39,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays this solid move to support the d5 pawn and prepare harmonious piece development, though it does restrict the dark-squared bishop to the c8-h3 diagonal. This move is characteristic of the Main Line of the Panov Attack, where Black chooses solid development over more aggressive alternatives like g6 or Bg4. Our opponent is prioritizing piece coordination and central stability, accepting a somewhat passive but very sound position."
+      "annotation": "Black plays this stabilizing move to support the d5 pawn and prepare harmonious piece development, though it does restrict the dark-squared bishop to the c8-h3 diagonal. This move is characteristic of the Main Line of the Panov Attack, where Black chooses solid development over more aggressive alternatives like g6 or Bg4. Our opponent is prioritizing piece coordination and central stability, accepting a somewhat passive but very sound position."
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development by placing the knight on its ideal central square, where it controls the important e5 and d4 squares while preparing to castle. This natural developing move maintains all of our strategic options and supports our central pawn structure perfectly. The knight on f3 also prepares potential attacking ideas on the kingside and keeps Black's pieces under observation, maintaining the dynamic tension that characterizes the Panov Attack."
+      "annotation": "We're completing our kingside development by placing the knight on its ideal central square, where it controls the important e5 and d4 squares while preparing to castle. This active move maintains all of our strategic options and supports our central pawn structure perfectly. The knight on f3 also prepares potential attacking ideas on the kingside and keeps Black's pieces under observation, maintaining the dynamic tension that characterizes the Panov Attack."
     },
     {
       "san": "Bb4",

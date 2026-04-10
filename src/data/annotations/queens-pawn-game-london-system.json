@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4 while preparing to castle kingside. This move keeps all our options open - we haven't committed to any specific pawn structure yet and can still transpose into various systems. The knight on f3 is also perfectly placed to support a future e4 pawn advance if the position allows it, and it adds an extra defender to our kingside. This flexible development is exactly what we want in the opening phase, improving our position without revealing our full strategic intentions too early."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while preparing to castle kingside. This move keeps all our options open - we haven't committed to any specific pawn structure yet and can still transpose into various systems. The knight on f3 is also perfectly placed to support a future e4 pawn advance if the position allows it, and it adds an extra defender to our kingside. This flexible development is exactly what we want in the opening phase, improving our position without revealing our full strategic intentions too early."
     },
     {
       "san": "Nf6",

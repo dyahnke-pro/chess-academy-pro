@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds by occupying the center with their own pawn, directly challenging our control of the e4 square and establishing a solid central presence. This is the most natural and principled response, as it follows classical opening principles of fighting for the center immediately. Our opponent is likely expecting a quiet positional game typical of most 1.d4 openings, but they're about to be surprised by our gambit intentions. This move also opens lines for Black's dark-squared bishop and queen, mirroring our development possibilities."
+      "annotation": "Black responds by occupying the center with their own pawn, directly challenging our control of the e4 square and establishing a solid central presence. This is the most natural and principled response, as it follows classical opening principles of contesting central control immediately. Our opponent is likely expecting a quiet positional game typical of most 1.d4 openings, but they're about to be surprised by our gambit intentions. This move also opens lines for Black's dark-squared bishop and queen, mirroring our development possibilities."
     },
     {
       "san": "e4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight with tempo, attacking the e4 pawn and forcing Black to make another decision about how to defend their extra material. This knight placement is absolutely critical to the BDG, as it supports our central control and prepares to recapture on e4 if needed, while also eyeing important central squares like e4, d5, and b5. The knight on c3 also supports our upcoming f2-f3 pawn advance, which is the key move that defines the Blackmar-Diemer Gambit proper. We're building pressure against Black's temporary material advantage while rapidly improving our piece coordination."
+      "annotation": "We develop our knight with tempo, attacking the e4 pawn and forcing Black to make another decision about how to defend their extra material. This knight placement is absolutely critical to the BDG, as it supports our central control and prepares to recapture on e4 if needed, while also eyeing important central squares like e4, d5, and b5. The knight on c3 also supports our upcoming f2-f3 pawn advance, which is the critical advance that defines the Blackmar-Diemer Gambit proper. We're building pressure against Black's temporary material advantage while rapidly improving our piece coordination."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending against potential threats and preparing to castle kingside while maintaining their extra pawn. This is a solid, principled move that develops a piece toward the center and prepares to support their pawn structure. Our opponent is likely trying to consolidate their material advantage while completing development, which is a reasonable practical approach. However, this knight placement also blocks the f7 square temporarily and can become a target for our advancing pieces, particularly if we can create threats along the f-file or against the kingside."
+      "annotation": "Black develops their knight to its ideal square, defending against potential threats and preparing to castle kingside while maintaining their extra pawn. This is a solid, principled move that develops a piece toward the center and prepares to support their pawn structure. Our opponent is likely trying to consolidate their material advantage while completing development, which is a reasonable practical approach. However, this knight placement also blocks the f7 square temporarily and can become a target for our advancing pieces, particularly if we can create threats along the f-file or against the kingside."
     },
     {
       "san": "f3",

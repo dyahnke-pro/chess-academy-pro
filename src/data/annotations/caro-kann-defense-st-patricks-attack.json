@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our e4 pawn and controls important central squares like d5 and b5. This is the starting move of several aggressive systems against the Caro-Kann, including the Panov-Botvinnik Attack if Black exchanges on e4. Our knight on c3 also prepares potential advances like f4-f5 in some variations, supporting kingside attacking chances. By developing the knight before the bishop, we're keeping our options open for various pawn structures while maintaining maximum pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, where it supports our e4 pawn and controls important central squares like d5 and b5. This is the starting move of several aggressive systems against the Caro-Kann, including the Panov-Botvinnik Attack if Black exchanges on e4. Our knight on c3 also prepares potential advances like f4-f5 in some variations, supporting kingside attacking chances. By developing the knight before the bishop, we're keeping our options open for various pawn structures while maintaining maximum pressure on Black's position."
     },
     {
       "san": "d5",

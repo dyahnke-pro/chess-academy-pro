@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn, prepares potential central advances like e4, and increases our control over important central squares. This move also completes our basic piece development and maintains maximum flexibility for our pawn structure - we can still advance e4 to build a big center or maintain our current setup. The knight on c3 works harmoniously with our fianchettoed bishop and supports various tactical ideas in the center. From c3, our knight can potentially jump to e4, d5, or b5 depending on how Black continues, giving us excellent strategic options."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn, prepares potential central advances like e4, and increases our control over important central squares. This move also completes our basic piece development and maintains maximum flexibility for our pawn structure - we can still advance e4 to build a big center or maintain our current setup. The knight on c3 works harmoniously with our fianchettoed bishop and supports various tactical ideas in the center. From c3, our knight can potentially jump to e4, d5, or b5 depending on how Black continues, giving us excellent strategic options."
     },
     {
       "san": "Ne4",

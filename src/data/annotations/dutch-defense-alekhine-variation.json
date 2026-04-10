@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, attacking our d4 pawn while preparing to castle kingside quickly. The knight on f6 also supports the advance e6-e5, which would be Black's ideal central break in many Dutch Defense setups. This piece development fits perfectly with Black's strategic goals of rapid kingside development and potential kingside attack. However, the knight placement also means Black must be careful about potential tactics involving our c4 pawn and future piece pressure."
+      "annotation": "Black develops their kingside knight to its ideal square, attacking our d4 pawn while preparing to castle kingside quickly. The knight on f6 also supports the advance e6-e5, which would be Black's ideal central break in many Dutch Defense setups. This piece development fits perfectly with Black's strategic goals of rapid kingside development and potential kingside attack. However, the knight placement also means Black must be careful about potential tactics involving our c4 pawn and future piece pressure."
     },
     {
       "san": "g3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, supporting our d4 pawn while preparing to castle kingside safely. The knight on f3 also eyes the important e5 square and can potentially jump to other strong outposts like e5 or g5 in the future. This move completes our essential kingside development and maintains maximum flexibility in our setup. The knight placement also supports potential central advances and can coordinate well with our other pieces for both attacking and defensive purposes."
+      "annotation": "We develop our kingside knight to its ideal square, supporting our d4 pawn while preparing to castle kingside safely. The knight on f3 also eyes the important e5 square and can potentially jump to other strong outposts like e5 or g5 in the future. This move completes our essential kingside development and maintains maximum flexibility in our setup. The knight placement also supports potential central advances and can coordinate well with our other pieces for both attacking and defensive purposes."
     },
     {
       "san": "O-O",

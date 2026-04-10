@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our central pawn structure while keeping our options open for kingside development. This move defends the e5 square, prevents any potential ...e5 breaks from Black, and prepares for castling kingside after developing our light-squared bishop. The knight on f3 also eyes the d4 pawn indirectly and can potentially jump to e5 or g5 in tactical sequences. By developing this piece naturally, we're maintaining our central advantage while preparing to complete our kingside development efficiently."
+      "annotation": "We're developing our knight to its ideal square, supporting our central pawn structure while keeping our options open for kingside development. This move defends the e5 square, prevents any potential ...e5 breaks from Black, and prepares for castling kingside after developing our light-squared bishop. The knight on f3 also eyes the d4 pawn indirectly and can potentially jump to e5 or g5 in tactical sequences. By developing this piece naturally, we're maintaining our central advantage while preparing to complete our kingside development efficiently."
     },
     {
       "san": "Bb7",

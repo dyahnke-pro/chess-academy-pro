@@ -27,11 +27,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our advanced e5 pawn while preparing to contest Black's central space advantage. From f3, our knight eyes the important d4 pawn (potentially supporting a future e3 advance to undermine it) and maintains flexible development options. This move also prepares kingside castling and keeps our pieces coordinated despite the cramped position created by Black's d4 pawn. However, we must be careful about tactical shots involving ...d3, which could potentially disrupt our pawn structure and create further complications in Black's favor."
+      "annotation": "We develop our knight to its ideal square, where it supports our advanced e5 pawn while preparing to contest Black's central space advantage. From f3, our knight eyes the important d4 pawn (potentially supporting a future e3 advance to undermine it) and maintains flexible development options. This move also prepares kingside castling and keeps our pieces coordinated despite the cramped position created by Black's d4 pawn. However, we must be careful about tactical shots involving ...d3, which could potentially disrupt our pawn structure and create further complications in Black's favor."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight with tempo, attacking our advanced e5 pawn and forcing us to make a decision about how to maintain our material advantage. This natural developing move also prepares to support the central d4 pawn and increases Black's piece activity in the center. Our opponent is following the typical Albin plan of rapid piece development combined with pressure against our pawn structure, particularly targeting the somewhat loose e5 pawn. We'll need to decide whether to defend the e5 pawn, advance it further, or consider other ways to deal with Black's increasing pressure while maintaining our extra material."
+      "annotation": "Black develops their knight with tempo, attacking our advanced e5 pawn and forcing us to make a decision about how to maintain our material advantage. This active move also prepares to support the central d4 pawn and increases Black's piece activity in the center. Our opponent is following the typical Albin plan of rapid piece development combined with pressure against our pawn structure, particularly targeting the somewhat loose e5 pawn. We'll need to decide whether to defend the e5 pawn, advance it further, or consider other ways to deal with Black's increasing pressure while maintaining our extra material."
     },
     {
       "san": "Nbd2",

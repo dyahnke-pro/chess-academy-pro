@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's d5 pawn once more and increasing the central pressure. This knight perfectly supports our central strategy while also controlling key squares like e5 and g5, potentially limiting Black's piece placement. The knight on f3 also prepares to castle kingside and works harmoniously with our other pieces that will follow. By continuing to attack d5 rather than playing something like e3, we're maintaining maximum tension and keeping Black's options limited."
+      "annotation": "We develop our knight to its ideal square, attacking Black's d5 pawn once more and increasing the central pressure. This knight perfectly supports our central strategy while also controlling key squares like e5 and g5, potentially limiting Black's piece placement. The knight on f3 also prepares to castle kingside and works harmoniously with our other pieces that will follow. By continuing to attack d5 rather than playing something like e3, we're maintaining maximum tension and keeping Black's options limited."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its ideal square, defending the d5 pawn for the third time and creating a solid central foundation. This move also attacks our e4 square, preventing us from immediately advancing our e-pawn to dominate the center. The knight on f6 supports Black's kingside development and prepares to castle, while also maintaining flexibility in Black's pawn structure. This natural developing move shows Black is comfortable entering the main lines of the Slav Defense where piece activity compensates for any slight space disadvantage."
+      "annotation": "Black develops the knight to its ideal square, defending the d5 pawn for the third time and creating a solid central foundation. This move also attacks our e4 square, preventing us from immediately advancing our e-pawn to dominate the center. The knight on f6 supports Black's kingside development and prepares to castle, while also maintaining flexibility in Black's pawn structure. This active move shows Black is comfortable entering the main lines of the Slav Defense where piece activity compensates for any slight space disadvantage."
     },
     {
       "san": "Nc3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops the light-squared bishop to its most active square, taking advantage of the fact that our c4 pawn is no longer controlling this diagonal. This natural developing move puts the bishop on an excellent square where it controls key central squares and supports Black's overall piece coordination. The bishop on f5 also indirectly defends the c4 pawn by controlling potential recapture squares, making our task of regaining the pawn more complex. However, this bishop placement can become a target for our advancing pawns, particularly after e2-e4, so Black needs to be prepared for tactical complications."
+      "annotation": "Black develops the light-squared bishop to its most active square, taking advantage of the fact that our c4 pawn is no longer controlling this diagonal. This active move puts the bishop on an excellent square where it controls key central squares and supports Black's overall piece coordination. The bishop on f5 also indirectly defends the c4 pawn by controlling potential recapture squares, making our task of regaining the pawn more complex. However, this bishop placement can become a target for our advancing pawns, particularly after e2-e4, so Black needs to be prepared for tactical complications."
     },
     {
       "san": "Ne5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid developing move that supports the center and prepares to develop the dark-squared bishop, while also providing an escape route for the attacked light-squared bishop via e4 if needed. This move creates a solid pawn chain with d5-e6 (even though the d5 pawn is gone, e6 still controls central squares) and opens the diagonal for Black's dark-squared bishop. However, e6 does slightly restrict Black's light-squared bishop and commits to a more closed pawn structure. The move also prepares ...Bd6 or ...Be7, continuing Black's methodical development despite the tactical complications."
+      "annotation": "Black plays a constructive move that supports the center and prepares to develop the dark-squared bishop, while also providing an escape route for the attacked light-squared bishop via e4 if needed. This move creates a solid pawn chain with d5-e6 (even though the d5 pawn is gone, e6 still controls central squares) and opens the diagonal for Black's dark-squared bishop. However, e6 does slightly restrict Black's light-squared bishop and commits to a more closed pawn structure. The move also prepares ...Bd6 or ...Be7, continuing Black's methodical development despite the tactical complications."
     },
     {
       "san": "f3",

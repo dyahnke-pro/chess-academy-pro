@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d5 square and preparing to recapture on d4 if needed. This move is almost automatic in the Queen's Pawn openings, as the knight controls key central squares and supports our growing pawn center. However, by placing our knight on c3, we're also giving Black the opportunity to play the famous Nimzo-Indian Defense with Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 also prepares potential advances like e2-e4, turning our position into a powerful pawn center that can overwhelm Black if they're not careful."
+      "annotation": "We're developing our knight to its ideal square, supporting the d5 square and preparing to recapture on d4 if needed. This move is almost automatic in the Queen's Pawn openings, as the knight controls key central squares and supports our growing pawn center. However, by placing our knight on c3, we're also giving Black the opportunity to play the famous Nimzo-Indian Defense with Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 also prepares potential advances like e2-e4, turning our position into a powerful pawn center that can overwhelm Black if they're not careful."
     },
     {
       "san": "Bb4",

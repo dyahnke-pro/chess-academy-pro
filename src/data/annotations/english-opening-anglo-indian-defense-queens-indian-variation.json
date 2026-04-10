@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the c4 pawn and prepares to contest the central d5 and e4 squares. This knight placement is extremely flexible - it can later jump to d5, e4, or even a4 in some lines to pressure Black's queenside. The knight on c3 also supports a potential d4 advance, which would transpose the game into Queen's Gambit-type structures where we'd have excellent piece coordination. Additionally, this development keeps our options open for either kingside or queenside castling, depending on how the position evolves."
+      "annotation": "We're developing our knight to its ideal square, where it supports the c4 pawn and prepares to contest the central d5 and e4 squares. This knight placement is extremely flexible - it can later jump to d5, e4, or even a4 in some lines to pressure Black's queenside. The knight on c3 also supports a potential d4 advance, which would transpose the game into Queen's Gambit-type structures where we'd have excellent piece coordination. Additionally, this development keeps our options open for either kingside or queenside castling, depending on how the position evolves."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, where it eyes the central e4 and d5 squares while preparing kingside castling. This natural developing move also puts immediate pressure on our potential e4 advance, forcing us to consider how we want to handle the center. Our opponent is following classical opening principles by developing pieces toward the center and maintaining flexibility about pawn structure commitments. The knight on f6 is well-placed to support various pawn breaks like d5 or c5, depending on how we continue to shape the position."
+      "annotation": "Black develops the kingside knight to its most active square, where it eyes the central e4 and d5 squares while preparing kingside castling. This active move also puts immediate pressure on our potential e4 advance, forcing us to consider how we want to handle the center. Our opponent is following classical opening principles by developing pieces toward the center and maintaining flexibility about pawn structure commitments. The knight on f6 is well-placed to support various pawn breaks like d5 or c5, depending on how we continue to shape the position."
     },
     {
       "san": "Nf3",

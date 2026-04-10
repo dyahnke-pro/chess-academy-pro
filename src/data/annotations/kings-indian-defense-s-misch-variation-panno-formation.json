@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most principled developing move, attacking the d4 pawn and preparing to contest the center from the very first move. This knight move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined systems. By developing the knight to its most active square, Black follows the opening principle of developing pieces toward the center while keeping maximum flexibility in their pawn structure. We'll need to decide whether to defend the d4 pawn, advance it, or support it with c2-c4, each leading to different types of positions."
+      "annotation": "Black immediately challenges our central pawn with the most principled developing choice, attacking the d4 pawn and preparing to contest the center from the very first move. This knight move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined systems. By developing the knight to its most active square, Black follows the opening principle of developing pieces toward the center while keeping maximum flexibility in their pawn structure. We'll need to decide whether to defend the d4 pawn, advance it, or support it with c2-c4, each leading to different types of positions."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, supporting the d4 pawn while preparing to advance e2-e4 and establish a classical pawn center. This knight placement is crucial in the King's Indian Defense, as it allows us to build the ideal pawn formation with pawns on c4, d4, and soon e4. The knight on c3 also eyes important central squares like e4 and d5, while keeping the option to later reposition to e2 or b5 depending on how the position develops. By developing this piece, we're following the principle of developing knights before bishops and maintaining maximum flexibility in our setup."
+      "annotation": "We're developing our queen's knight to its ideal square, supporting the d4 pawn while preparing to advance e2-e4 and establish a classical pawn center. This knight placement is crucial in the King's Indian Defense, as it allows us to build the ideal pawn formation with pawns on c4, d4, and soon e4. The knight on c3 also eyes important central squares like e4 and d5, while keeping the option to later reposition to e2 or b5 depending on how the position develops. By developing this piece, we're following the principle of developing knights before bishops and maintaining maximum flexibility in our setup."
     },
     {
       "san": "Bg7",

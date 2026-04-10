@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black chooses to support the d5 pawn rather than capture on c4, entering what will become either a Queen's Gambit Declined or Semi-Slav Defense depending on the next moves. This solid move maintains the pawn on d5 while preparing to develop the dark-squared bishop, though it does slightly restrict the light-squared bishop on c8. Our opponent is showing they prefer a solid, classical setup rather than the more dynamic lines that arise after taking on c4 immediately. This move also prepares potential counterplay with moves like c6 and b5, typical of Semi-Slav systems."
+      "annotation": "Black chooses to support the d5 pawn rather than capture on c4, entering what will become either a Queen's Gambit Declined or Semi-Slav Defense depending on the next moves. this stabilizing move maintains the pawn on d5 while preparing to develop the dark-squared bishop, though it does slightly restrict the light-squared bishop on c8. Our opponent is showing they prefer a solid, classical setup rather than the more dynamic lines that arise after taking on c4 immediately. This move also prepares potential counterplay with moves like c6 and b5, typical of Semi-Slav systems."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, adding additional pressure to Black's d5 pawn and preparing to support our own central advance. This knight on c3 eyes important central squares like e4 and d5, while also supporting a potential e2-e4 pawn break in the future. The knight development follows classical principles of bringing pieces toward the center where they'll have maximum influence over the position. From c3, this knight also supports various pawn breaks and can potentially reroute to more active squares like e4 or b5 depending on how the position develops."
+      "annotation": "We're developing our queenside knight to its ideal square, adding additional pressure to Black's d5 pawn and preparing to support our own central advance. This knight on c3 eyes important central squares like e4 and d5, while also supporting a potential e2-e4 pawn break in the future. The knight development follows classical principles of bringing pieces toward the center where they'll have maximum influence over the position. From c3, this knight also supports various pawn breaks and can potentially reroute to more active squares like e4 or b5 depending on how the position develops."
     },
     {
       "san": "c6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, mirroring our development while attacking our c4 pawn and preparing to castle kingside. This move completes Black's basic development priorities and maintains excellent central control by eyeing the e4 and d5 squares. Our opponent is following sound opening principles by developing pieces quickly while maintaining the tension in the center. The knight on f6 also prepares potential tactical operations and supports Black's overall defensive setup, though it does block the f-pawn which might limit some attacking chances later."
+      "annotation": "Black develops their kingside knight to its ideal square, mirroring our development while attacking our c4 pawn and preparing to castle kingside. This move completes Black's basic development priorities and maintains excellent central control by eyeing the e4 and d5 squares. Our opponent is following sound opening principles by developing pieces quickly while maintaining the tension in the center. The knight on f6 also prepares potential tactical operations and supports Black's overall defensive setup, though it does block the f-pawn which might limit some attacking chances later."
     },
     {
       "san": "e3",

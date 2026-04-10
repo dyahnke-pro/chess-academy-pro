@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, immediately seizing control of the central d5 and f5 squares while freeing our king's bishop and queen for development. This move embodies classical opening principles by fighting for the center from the very first turn. The e4 advance also opens the door to the Ruy Lopez, one of the most respected and deeply analyzed openings in chess history. Our pawn now exerts influence over key central territory and sets the stage for rapid piece development."
+      "annotation": "We're opening with the king's pawn, immediately seizing control of the central d5 and f5 squares while freeing our king's bishop and queen for development. This move embodies classical opening principles by contesting central control from the very first turn. The e4 advance also opens the door to the Ruy Lopez, one of the most respected and deeply analyzed openings in chess history. Our pawn now exerts influence over key central territory and sets the stage for rapid piece development."
     },
     {
       "san": "e5",
@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it attacks the black e5 pawn and controls the important central squares d4 and e5. This move puts immediate pressure on Black's center while developing a piece toward the kingside where we'll soon castle. The knight on f3 also supports a potential d2-d4 pawn break in the future, which could open the center in our favor. From f3, our knight is beautifully placed to support our central ambitions and coordinate with our other pieces as they join the game."
+      "annotation": "We develop our knight to its ideal square, where it attacks the black e5 pawn and controls the important central squares d4 and e5. This move puts immediate pressure on Black's center while developing a piece toward the kingside where we'll soon castle. The knight on f3 also supports a potential d2-d4 pawn break in the future, which could open the center in our favor. From f3, our knight is beautifully placed to support our central ambitions and coordinate with our other pieces as they join the game."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queen's knight to defend the attacked e5 pawn, maintaining the central balance while bringing another piece into active play. The knight on c6 also eyes the important d4 and b4 squares, potentially supporting Black's own central expansion later. This natural developing move follows classical principles by protecting the center and preparing further piece development. Our opponent is staying true to sound opening principles rather than trying anything fancy, which means we'll need to prove our advantage through superior piece coordination and strategic planning."
+      "annotation": "Black develops the queen's knight to defend the attacked e5 pawn, maintaining the central balance while bringing another piece into active play. The knight on c6 also eyes the important d4 and b4 squares, potentially supporting Black's own central expansion later. This active move follows classical principles by protecting the center and preparing further piece development. Our opponent is staying true to sound opening principles rather than trying anything fancy, which means we'll need to prove our advantage through superior piece coordination and strategic planning."
     },
     {
       "san": "Bb5",

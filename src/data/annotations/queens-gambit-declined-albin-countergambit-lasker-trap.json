@@ -35,7 +35,7 @@
     },
     {
       "san": "Bd2",
-      "annotation": "We block the check with our bishop, developing a piece while dealing with Black's immediate threat, but this move plays right into one of the most famous traps in chess opening theory. By placing our bishop on d2, we're offering Black the chance to capture our e3 pawn with check, and if we recapture with the f-pawn, we'll face devastating tactics. This natural-looking developing move is actually the critical mistake that allows Black to spring the 'Lasker Trap' - we should have considered alternatives like Nc3 instead, even though it looks clumsy."
+      "annotation": "We block the check with our bishop, developing a piece while dealing with Black's immediate threat, but this move plays right into one of the most famous traps in chess opening theory. By placing our bishop on d2, we're offering Black the chance to capture our e3 pawn with check, and if we recapture with the f-pawn, we'll face devastating tactics. This natural-looking developing choice is actually the critical mistake that allows Black to spring the 'Lasker Trap' - we should have considered alternatives like Nc3 instead, even though it looks clumsy."
     },
     {
       "san": "dxe3",

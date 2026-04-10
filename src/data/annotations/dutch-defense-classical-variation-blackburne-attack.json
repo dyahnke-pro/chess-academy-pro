@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn while supporting their own kingside ambitions in typical Dutch Defense fashion. This knight on f6 is a key piece in Black's setup, as it can later support pawn advances like ...e6 and ...d6, or even jump to aggressive squares like e4 or h5 in some variations. The knight also prepares castling kingside and keeps pressure on our center, forcing us to make a decision about how to defend the d4 pawn. We need to be mindful that this knight, combined with the f5 pawn, gives Black good control over the e4 square, which could become an important outpost for their pieces."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn while supporting their own kingside ambitions in typical Dutch Defense fashion. This knight on f6 is a key piece in Black's setup, as it can later support pawn advances like ...e6 and ...d6, or even jump to aggressive squares like e4 or h5 in some variations. The knight also prepares castling kingside and keeps pressure on our center, forcing us to make a decision about how to defend the d4 pawn. We need to be mindful that this knight, combined with the f5 pawn, gives Black good control over the e4 square, which could become an important outpost for their pieces."
     },
     {
       "san": "g3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black completes their kingside development with the most natural square for the bishop, preparing to castle while maintaining flexibility in their pawn structure. This bishop on e7 supports the knight on f6 and keeps an eye on important central squares, while also preparing to potentially reroute to d6 or f8 depending on how the position develops. The move shows that Black is prioritizing safe development over immediate aggression, which is often wise in Dutch Defense positions where premature attacks can backfire. From e7, the bishop also helps defend against potential tactical shots along the long diagonal from our fianchettoed bishop, providing an important defensive resource."
+      "annotation": "Black completes their kingside development with the ideal square for the bishop, preparing to castle while maintaining flexibility in their pawn structure. This bishop on e7 supports the knight on f6 and keeps an eye on important central squares, while also preparing to potentially reroute to d6 or f8 depending on how the position develops. The move shows that Black is prioritizing safe development over immediate aggression, which is often wise in Dutch Defense positions where premature attacks can backfire. From e7, the bishop also helps defend against potential tactical shots along the long diagonal from our fianchettoed bishop, providing an important defensive resource."
     },
     {
       "san": "Nh3",

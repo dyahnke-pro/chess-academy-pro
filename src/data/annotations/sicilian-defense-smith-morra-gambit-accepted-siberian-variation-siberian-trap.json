@@ -35,11 +35,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our second knight to its most natural square, controlling the important e5 and d4 squares while preparing to castle kingside. The knight on f3 is perfectly placed to support our central control and coordinate with our other pieces for the coming attack. This move also prevents Black from playing ...d5, which would help them consolidate their position and complete their development safely. Our development is proceeding smoothly while Black still hasn't solved their king safety issues or brought their kingside pieces into play."
+      "annotation": "We're developing our second knight to its ideal square, controlling the important e5 and d4 squares while preparing to castle kingside. The knight on f3 is perfectly placed to support our central control and coordinate with our other pieces for the coming attack. This move also prevents Black from playing ...d5, which would help them consolidate their position and complete their development safely. Our development is proceeding smoothly while Black still hasn't solved their king safety issues or brought their kingside pieces into play."
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid developing move that prepares to bring out their light-squared bishop, but this somewhat passive approach allows us to maintain our initiative. Our opponent is prioritizing safe development over more active possibilities, which is understandable given our dangerous piece coordination. The e6 move does control the d5 square and prepares ...d6 or ...Be7, but it also creates potential weaknesses on the dark squares around Black's king. We should continue developing aggressively while Black is still trying to coordinate their pieces safely."
+      "annotation": "Black plays a constructive move that prepares to bring out their light-squared bishop, but this somewhat passive approach allows us to maintain our initiative. Our opponent is prioritizing safe development over more active possibilities, which is understandable given our dangerous piece coordination. The e6 move does control the d5 square and prepares ...d6 or ...Be7, but it also creates potential weaknesses on the dark squares around Black's king. We should continue developing aggressively while Black is still trying to coordinate their pieces safely."
     },
     {
       "san": "Bc4",

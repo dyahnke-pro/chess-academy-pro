@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the important e5 and h4 squares while supporting our central d4 pawn. This move also prepares to castle kingside quickly and keeps pressure on Black's center. From f3, our knight can later jump to e5 for an excellent outpost or support pawn advances like e4. The knight development fits perfectly with our Queen's Gambit strategy of building central pressure while developing harmoniously."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the important e5 and h4 squares while supporting our central d4 pawn. This move also prepares to castle kingside quickly and keeps pressure on Black's center. From f3, our knight can later jump to e5 for an excellent outpost or support pawn advances like e4. The knight development fits perfectly with our Queen's Gambit strategy of building central pressure while developing harmoniously."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development with their own kingside knight, attacking our c4 pawn and adding another defender to their d5 strongpoint. This natural developing move also controls the important e4 and h5 squares while preparing to castle kingside for safety. Our opponent is following classical development principles—knights before bishops—while keeping maximum flexibility in their position. The knight on f6 also supports potential counterplay ideas like ...e5 later in the game."
+      "annotation": "Black mirrors our development with their own kingside knight, attacking our c4 pawn and adding another defender to their d5 strongpoint. This active move also controls the important e4 and h5 squares while preparing to castle kingside for safety. Our opponent is following classical development principles—knights before bishops—while keeping maximum flexibility in their position. The knight on f6 also supports potential counterplay ideas like ...e5 later in the game."
     },
     {
       "san": "Nc3",

@@ -35,11 +35,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "You develop your kingside with a natural move that supports your center (especially the e3 and d4 pawns), prepares to castle kingside, and controls the critical e5 and g5 squares. Nf3 is the classical third move for any player building a center—it improves your piece coordination and prevents Black from easily playing ...e5 without consequences. This knight will eventually support your center or reroute to d4 or e5 as the position demands."
+      "annotation": "You develop your kingside with a logical choice that supports your center (especially the e3 and d4 pawns), prepares to castle kingside, and controls the critical e5 and g5 squares. Nf3 is the classical third move for any player building a center—it improves your piece coordination and prevents Black from easily playing ...e5 without consequences. This knight will eventually support your center or reroute to d4 or e5 as the position demands."
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, tucking the king to safety and connecting the rooks—a natural move that completes Black's setup. Castling also prepares Black to challenge your center with pieces, particularly moving the rooks to the center files and the queen to support counterplay. By castling now, Black is ready to resist your impending d4 push and mount counterattacking chances along the d-file and center."
+      "annotation": "Black castles kingside, tucking the king to safety and connecting the rooks—a logical choice that completes Black's setup. Castling also prepares Black to challenge your center with pieces, particularly moving the rooks to the center files and the queen to support counterplay. By castling now, Black is ready to resist your impending d4 push and mount counterattacking chances along the d-file and center."
     },
     {
       "san": "d4",

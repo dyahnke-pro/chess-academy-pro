@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most active square, controlling the important e5 and h4 squares while supporting a potential e2-e4 advance in the future. This move is a cornerstone of the London System because it prepares our next key move, Bf4, by ensuring the bishop won't be attacked by an early ...Nh6 or other knight moves. The knight on f3 also adds another defender to our d4 pawn and keeps pressure on Black's central setup. From f3, our knight can potentially jump to e5 later in the game, where it would be powerfully centralized and difficult for Black to challenge, making this development both flexible and purposeful."
+      "annotation": "We develop our knight to its most active square, controlling the important e5 and h4 squares while supporting a potential e2-e4 advance in the future. This move is a cornerstone of the London System because it prepares our next critical move, Bf4, by ensuring the bishop won't be attacked by an early ...Nh6 or other knight moves. The knight on f3 also adds another defender to our d4 pawn and keeps pressure on Black's central setup. From f3, our knight can potentially jump to e5 later in the game, where it would be powerfully centralized and difficult for Black to challenge, making this development both flexible and purposeful."
     },
     {
       "san": "e6",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also supports a potential ...e5 central advance and helps control important central squares like e4 and d5. Black is following the opening principle of developing pieces before committing pawns, which gives maximum flexibility in the position."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also supports a potential ...e5 central advance and helps control important central squares like e4 and d5. Black is following the opening principle of developing pieces before committing pawns, which gives maximum flexibility in the position."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, supporting the d4 pawn, controlling the central e5 square, and preparing kingside castling. This natural developing move also prepares various pawn breaks like e4 or maintains flexibility for different pawn structures depending on how the position evolves. The knight on f3 is perfectly placed to support our central pawns and can potentially reroute to squares like e5, d2, or even h4 in some tactical situations. By developing pieces before making further pawn commitments, we're following sound opening principles while keeping our options open for the middlegame."
+      "annotation": "We develop our knight to its optimal square, supporting the d4 pawn, controlling the central e5 square, and preparing kingside castling. This active move also prepares various pawn breaks like e4 or maintains flexibility for different pawn structures depending on how the position evolves. The knight on f3 is perfectly placed to support our central pawns and can potentially reroute to squares like e5, d2, or even h4 in some tactical situations. By developing pieces before making further pawn commitments, we're following sound opening principles while keeping our options open for the middlegame."
     },
     {
       "san": "d5",

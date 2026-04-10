@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing the knight to its ideal square. This flexible response is one of the most popular ways to meet 1.d4, as it doesn't commit Black to any particular pawn structure yet. The knight on f6 also prepares kingside castling and keeps options open for various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. We need to decide how to support our d4 pawn and continue our development, typically with moves like Nf3, c4, or Bg5."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while bringing the knight to its ideal square. This flexible response is one of the most popular ways to meet 1.d4, as it doesn't commit Black to any particular pawn structure yet. The knight on f6 also prepares kingside castling and keeps options open for various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. We need to decide how to support our d4 pawn and continue our development, typically with moves like Nf3, c4, or Bg5."
     },
     {
       "san": "c4",

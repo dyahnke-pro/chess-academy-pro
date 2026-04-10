@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to challenge our central control immediately. This move is the hallmark of hypermodern defense - rather than occupying the center with pawns, Black attacks it with pieces. Our opponent is keeping maximum flexibility, as this knight can support both ...e6 setups (leading to Nimzo-Indian or Queen's Indian structures) or ...g6 systems (King's Indian or Benoni formations). We need to be prepared for Black's dynamic counterplay against our center."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to challenge our central control immediately. This move is the hallmark of hypermodern defense - rather than occupying the center with pawns, Black attacks it with pieces. Our opponent is keeping maximum flexibility, as this knight can support both ...e6 setups (leading to Nimzo-Indian or Queen's Indian structures) or ...g6 systems (King's Indian or Benoni formations). We need to be prepared for Black's dynamic counterplay against our center."
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, supporting our d4 pawn and gaining additional control over the crucial e5 square while expanding on the queenside. This move prepares to meet Black's central challenges with a solid pawn foundation and gives us the option to recapture on d4 with the c-pawn if needed. The c4 advance also opens the door for our queen and light-squared bishop while beginning our queenside space advantage. This is a key move in many Indian Defense systems, as it defines the central pawn structure that will influence the entire game."
+      "annotation": "We're playing the English Opening move order, supporting our d4 pawn and gaining additional control over the crucial e5 square while expanding on the queenside. This move prepares to meet Black's central challenges with a solid pawn foundation and gives us the option to recapture on d4 with the c-pawn if needed. The c4 advance also opens the door for our queen and light-squared bishop while beginning our queenside space advantage. This is a critical move in many Indian Defense systems, as it defines the central pawn structure that will influence the entire game."
     },
     {
       "san": "e6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, where it controls the important e5 and d4 squares while preparing kingside castling. This natural developing move also prevents Black from playing ...Ng4 tactics and maintains maximum flexibility for our setup. Our knight on f3 supports potential pawn advances like e4 and can quickly redeploy to other key squares as the position demands. This move keeps all our options open while maintaining pressure on Black's position and preparing for the complex middlegame structures that typically arise in Indian Defense systems."
+      "annotation": "We're developing our knight to its optimal square, where it controls the important e5 and d4 squares while preparing kingside castling. This active move also prevents Black from playing ...Ng4 tactics and maintains maximum flexibility for our setup. Our knight on f3 supports potential pawn advances like e4 and can quickly redeploy to other key squares as the position demands. This move keeps all our options open while maintaining pressure on Black's position and preparing for the complex middlegame structures that typically arise in Indian Defense systems."
     },
     {
       "san": "c5",

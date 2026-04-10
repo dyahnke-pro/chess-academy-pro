@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our c4 pawn and preparing to contest Black's central e5 pawn. This move is the starting point of the King's English Variation, where we'll typically aim for a more classical piece development rather than the hypermodern approaches seen in other English lines. Our knight on c3 also eyes important central squares like d5 and e4, and we're keeping maximum flexibility for our pawn structure. The knight placement also supports potential future advances like d3-d4, which would challenge Black's pawn chain directly."
+      "annotation": "We're developing our knight to its ideal square, supporting our c4 pawn and preparing to contest Black's central e5 pawn. This move is the starting point of the King's English Variation, where we'll typically aim for a more classical piece development rather than the hypermodern approaches seen in other English lines. Our knight on c3 also eyes important central squares like d5 and e4, and we're keeping maximum flexibility for our pawn structure. The knight placement also supports potential future advances like d3-d4, which would challenge Black's pawn chain directly."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to attack our e4 square and prepare their own kingside development, following sound opening principles. This is the most natural move, putting pressure on our potential central expansion while developing a piece toward the center. Our opponent is also preparing to castle kingside and potentially support their e5 pawn with moves like Re8 or d6. This knight placement is extremely flexible and fits into virtually all of Black's possible setups in this opening structure."
+      "annotation": "Black develops their knight to attack our e4 square and prepare their own kingside development, following sound opening principles. This is the most principled response, putting pressure on our potential central expansion while developing a piece toward the center. Our opponent is also preparing to castle kingside and potentially support their e5 pawn with moves like Re8 or d6. This knight placement is extremely flexible and fits into virtually all of Black's possible setups in this opening structure."
     },
     {
       "san": "Nf3",

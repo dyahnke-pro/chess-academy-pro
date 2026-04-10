@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this hypermodern developing move, attacking the d4 pawn and preparing to contest the center from the flanks rather than occupying it directly with pawns. This move keeps Black's options open for several defensive setups including the King's Indian, Nimzo-Indian, or as we'll see, the Grünfeld Defense. The knight on f6 also supports a future ...e5 advance and prepares kingside castling. Black is following hypermodern principles by developing pieces first and allowing us to build a pawn center that can later be undermined."
+      "annotation": "Black immediately challenges our central pawn with this hypermodern developing choice, attacking the d4 pawn and preparing to contest the center from the flanks rather than occupying it directly with pawns. This move keeps Black's options open for several defensive setups including the King's Indian, Nimzo-Indian, or as we'll see, the Grünfeld Defense. The knight on f6 also supports a future ...e5 advance and prepares kingside castling. Black is following hypermodern principles by developing pieces first and allowing us to build a pawn center that can later be undermined."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing for Black's likely ...d5 challenge to our pawn center. This knight placement is crucial in the Grünfeld Defense as it will soon be challenged by Black's central counterplay. From c3, the knight controls important central squares like e4 and d5, and can potentially jump to more active squares later. We're also preparing to meet ...d5 with cxd5, after which our knight will be well-placed to support our pawn center expansion with e4."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing for Black's likely ...d5 challenge to our pawn center. This knight placement is crucial in the Grünfeld Defense as it will soon be challenged by Black's central counterplay. From c3, the knight controls important central squares like e4 and d5, and can potentially jump to more active squares later. We're also preparing to meet ...d5 with cxd5, after which our knight will be well-placed to support our pawn center expansion with e4."
     },
     {
       "san": "d5",

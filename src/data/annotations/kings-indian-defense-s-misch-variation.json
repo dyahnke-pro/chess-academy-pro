@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, where it supports our d4 pawn and eyes important central squares like e4 and d5. This knight placement is crucial for the Sämisch system, as it will often support our central pawn advances and can later swing to kingside attacking positions via e2-g3 or directly to f5. The knight on c3 also prevents Black from playing ...d5 easily, maintaining our central space advantage. From c3, our knight coordinates beautifully with our coming e4 advance, creating a formidable pawn center."
+      "annotation": "We're developing our queenside knight to its ideal square, where it supports our d4 pawn and eyes important central squares like e4 and d5. This knight placement is crucial for the Sämisch system, as it will often support our central pawn advances and can later swing to kingside attacking positions via e2-g3 or directly to f5. The knight on c3 also prevents Black from playing ...d5 easily, maintaining our central space advantage. From c3, our knight coordinates beautifully with our coming e4 advance, creating a formidable pawn center."
     },
     {
       "san": "Bg7",
@@ -39,7 +39,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black wisely castles kingside to bring the king to safety before we can launch our attack, though this also puts the king directly in the path of our coming pawn storm. This natural developing move connects the rooks and prepares Black's typical King's Indian counterplay with moves like ...Nbd7, ...Re8, and the central ...e5 break. While castling is necessary, Black must be aware that our f3-g4-g5-h4-h5 pawn storm will be targeting exactly where the king has moved. The timing of this castle is good since we haven't yet begun our kingside expansion in earnest."
+      "annotation": "Black wisely castles kingside to bring the king to safety before we can launch our attack, though this also puts the king directly in the path of our coming pawn storm. This active move connects the rooks and prepares Black's typical King's Indian counterplay with moves like ...Nbd7, ...Re8, and the central ...e5 break. While castling is necessary, Black must be aware that our f3-g4-g5-h4-h5 pawn storm will be targeting exactly where the king has moved. The timing of this castle is good since we haven't yet begun our kingside expansion in earnest."
     },
     {
       "san": "Be3",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a solid move that prevents our d4-d5 advance and prepares to support the center with ...b5 or develop the queenside with ...Nbd7-c5. This move also gives Black's king a potential escape route via c7 if our kingside attack becomes too dangerous. The c6 advance is a flexible choice that maintains Black's central options while preventing us from gaining too much space with d5. However, this move does slightly weaken Black's queenside pawn structure and commits to a specific plan, so we should look for ways to exploit these slight concessions while continuing our own development and attack preparation."
+      "annotation": "Black plays a well-grounded move that prevents our d4-d5 advance and prepares to support the center with ...b5 or develop the queenside with ...Nbd7-c5. This move also gives Black's king a potential escape route via c7 if our kingside attack becomes too dangerous. The c6 advance is a flexible choice that maintains Black's central options while preventing us from gaining too much space with d5. However, this move does slightly weaken Black's queenside pawn structure and commits to a specific plan, so we should look for ways to exploit these slight concessions while continuing our own development and attack preparation."
     }
   ]
 }

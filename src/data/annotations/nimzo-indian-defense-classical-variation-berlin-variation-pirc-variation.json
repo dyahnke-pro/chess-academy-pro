@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking the d4 pawn while simultaneously developing toward the center. This knight on f6 is a key piece in many Indian defenses, as it can later support central breaks like ...e5 or ...c5 depending on how we continue. Black is avoiding the immediate ...d5, which would lead to more symmetrical queen's pawn openings, and instead opts for the hypermodern approach of controlling the center from the flanks. We should note that this move prepares various Indian defense setups, and our next move will largely determine which specific system Black will adopt."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking the d4 pawn while simultaneously developing toward the center. This knight on f6 is a key piece in many Indian defenses, as it can later support central breaks like ...e5 or ...c5 depending on how we continue. Black is avoiding the immediate ...d5, which would lead to more symmetrical queen's pawn openings, and instead opts for the hypermodern approach of controlling the center from the flanks. We should note that this move prepares various Indian defense setups, and our next move will largely determine which specific system Black will adopt."
     },
     {
       "san": "c4",
@@ -39,7 +39,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black wisely prioritizes king safety over immediate pawn recapture, getting the king to safety while bringing the rook into the game and preparing to increase pressure on our position. This natural developing move shows good practical understanding - material is less important than piece activity and king safety in these sharp positions. By castling, Black is also preparing to recapture the c5 pawn with either ...Bxc5 or ...Qc7 followed by ...Qxc5, depending on how we continue. Our opponent is following the principle that development and king safety should take priority over grabbing pawns, especially when our pieces aren't fully coordinated yet. We should expect Black to regain the pawn soon while maintaining excellent piece activity and potential attacking chances against our somewhat exposed king position."
+      "annotation": "Black wisely prioritizes king safety over immediate pawn recapture, getting the king to safety while bringing the rook into the game and preparing to increase pressure on our position. This active move shows good practical understanding - material is less important than piece activity and king safety in these sharp positions. By castling, Black is also preparing to recapture the c5 pawn with either ...Bxc5 or ...Qc7 followed by ...Qxc5, depending on how we continue. Our opponent is following the principle that development and king safety should take priority over grabbing pawns, especially when our pieces aren't fully coordinated yet. We should expect Black to regain the pawn soon while maintaining excellent piece activity and potential attacking chances against our somewhat exposed king position."
     }
   ]
 }

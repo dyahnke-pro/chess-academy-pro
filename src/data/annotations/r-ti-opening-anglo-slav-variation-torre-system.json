@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preparing to challenge our central influence with moves like d5 or e6. This is a solid, principled response that doesn't commit Black to any particular pawn structure yet, maintaining maximum flexibility. The knight on f6 also supports potential central breaks and can later redeploy to more active squares like e4 or d7 depending on how the position evolves. From our perspective, we need to be aware that Black is preparing to contest the center directly, so our next moves should focus on harmonious development while maintaining our grip on key central squares."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to challenge our central influence with moves like d5 or e6. This is a solid, principled response that doesn't commit Black to any particular pawn structure yet, maintaining maximum flexibility. The knight on f6 also supports potential central breaks and can later redeploy to more active squares like e4 or d7 depending on how the position evolves. From our perspective, we need to be aware that Black is preparing to contest the center directly, so our next moves should focus on harmonious development while maintaining our grip on key central squares."
     },
     {
       "san": "g3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most active square, where it controls the central e5 and d4 squares while supporting our kingside development and future central pawn breaks. This natural developing move also prepares castling and keeps our options open for various pawn structures - we can still play d3, d4, or even e4 depending on how Black continues. The knight on f3 also provides crucial support for our kingside and can later redeploy to more active squares like e5 or d4 if the position opens up. Combined with our planned Bg2, this creates a harmonious setup where our pieces work together to control key central squares and maintain long-term positional pressure."
+      "annotation": "We develop our knight to its most active square, where it controls the central e5 and d4 squares while supporting our kingside development and future central pawn breaks. This active move also prepares castling and keeps our options open for various pawn structures - we can still play d3, d4, or even e4 depending on how Black continues. The knight on f3 also provides crucial support for our kingside and can later redeploy to more active squares like e5 or d4 if the position opens up. Combined with our planned Bg2, this creates a harmonious setup where our pieces work together to control key central squares and maintain long-term positional pressure."
     },
     {
       "san": "d5",

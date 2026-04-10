@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending the e4 pawn while also developing toward the center and preparing to castle kingside. This is probably Black's most solid response, as it maintains the extra pawn while getting a piece into the game and eyeing important central squares like e4 and d5. However, this knight on f6 can become a target for our light-squared bishop, and Black still needs to be careful about their king safety since they haven't castled yet. The knight on f6 also prepares ...d6 and ...e6 to support the e4 pawn, but we're hoping to create threats faster than Black can complete this consolidation plan."
+      "annotation": "Black develops their knight to its ideal square, defending the e4 pawn while also developing toward the center and preparing to castle kingside. This is probably Black's most solid response, as it maintains the extra pawn while getting a piece into the game and eyeing important central squares like e4 and d5. However, this knight on f6 can become a target for our light-squared bishop, and Black still needs to be careful about their king safety since they haven't castled yet. The knight on f6 also prepares ...d6 and ...e6 to support the e4 pawn, but we're hoping to create threats faster than Black can complete this consolidation plan."
     },
     {
       "san": "Bg5",

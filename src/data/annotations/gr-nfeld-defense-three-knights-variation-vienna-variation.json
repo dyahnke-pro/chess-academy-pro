@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to meet Black's anticipated ...d5 thrust. The knight on c3 also eyes important central squares like e4 and b5, and doesn't block the c-pawn in case we want to advance it later. This move keeps our options open for various setups - we can still go for f3 and e4 for a big center, or choose more restrained approaches. From c3, the knight coordinates beautifully with our other pieces and maintains maximum flexibility in our development."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to meet Black's anticipated ...d5 thrust. The knight on c3 also eyes important central squares like e4 and b5, and doesn't block the c-pawn in case we want to advance it later. This move keeps our options open for various setups - we can still go for f3 and e4 for a big center, or choose more restrained approaches. From c3, the knight coordinates beautifully with our other pieces and maintains maximum flexibility in our development."
     },
     {
       "san": "d5",

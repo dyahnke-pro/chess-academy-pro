@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, controlling the important e5 and h4 squares while preparing to castle kingside. This move follows classical opening principles by developing pieces before making further pawn moves, and it puts additional pressure on Black's central setup. The knight on f3 also serves a crucial defensive role, protecting our kingside and preventing any early tactical shots. Our development is proceeding smoothly, and we're maintaining flexibility in how we'll handle the central tension."
+      "annotation": "We're developing our kingside knight to its ideal square, controlling the important e5 and h4 squares while preparing to castle kingside. This move follows classical opening principles by developing pieces before making further pawn moves, and it puts additional pressure on Black's central setup. The knight on f3 also serves a crucial defensive role, protecting our kingside and preventing any early tactical shots. Our development is proceeding smoothly, and we're maintaining flexibility in how we'll handle the central tension."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops symmetrically, bringing the kingside knight to its most active square where it attacks our c4 pawn and controls important central squares. This natural developing move follows the same sound principles we're employing – getting pieces out efficiently while maintaining central influence. The knight on f6 also prepares kingside castling and keeps Black's options open for various pawn breaks later. Our opponent is playing solid, classical chess that will require us to find more subtle ways to create imbalances."
+      "annotation": "Black develops symmetrically, bringing the kingside knight to its most active square where it attacks our c4 pawn and controls important central squares. This active move follows the same sound principles we're employing – getting pieces out efficiently while maintaining central influence. The knight on f6 also prepares kingside castling and keeps Black's options open for various pawn breaks later. Our opponent is playing solid, classical chess that will require us to find more subtle ways to create imbalances."
     },
     {
       "san": "Nc3",

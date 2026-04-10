@@ -11,7 +11,7 @@
     },
     {
       "san": "e4",
-      "annotation": "This is the key move that defines the Williams Gambit—we offer the e4 pawn as a sacrifice to break Black's center and open lines for rapid piece development. The idea is that after Black captures on e4, we recapture with our knight, achieving a favorable piece placement on c3 with excellent control of the board."
+      "annotation": "This is the defining move of the Williams Gambit—we offer the e4 pawn as a sacrifice to break Black's center and open lines for rapid piece development. The idea is that after Black captures on e4, we recapture with our knight, achieving a favorable piece placement on c3 with excellent control of the board."
     },
     {
       "san": "dxe4",

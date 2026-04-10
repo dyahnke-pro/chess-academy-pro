@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, attacking Black's e5 square and preparing to support our central pawn structure. This move is more flexible than the immediate Nc3 because it doesn't block our c-pawn's potential advance and keeps our options open regarding how to handle the central tension. The knight on f3 also prepares to support a potential e4 advance later, which could give us a strong pawn center. Additionally, this development move brings us closer to castling kingside and puts pressure on Black to make concrete decisions about their pawn structure."
+      "annotation": "We develop our king's knight to its ideal square, attacking Black's e5 square and preparing to support our central pawn structure. This move is more flexible than the immediate Nc3 because it doesn't block our c-pawn's potential advance and keeps our options open regarding how to handle the central tension. The knight on f3 also prepares to support a potential e4 advance later, which could give us a strong pawn center. Additionally, this development move brings us closer to castling kingside and puts pressure on Black to make concrete decisions about their pawn structure."
     },
     {
       "san": "Nf6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops their light-squared bishop to an active square, putting pressure on our e4 square and preparing to contest our central ambitions. This is one of the most natural moves in the Slav Defense because the bishop develops actively before we can play e3 and block it in. The bishop on f5 also supports Black's plan to hold onto the c4 pawn temporarily while completing their development safely. However, this bishop placement does have a drawback - it can become a target for our pieces, and we might be able to exploit this with moves like Nh4 or g3 followed by Bg2."
+      "annotation": "Black develops their light-squared bishop to an active square, putting pressure on our e4 square and preparing to contest our central ambitions. This is one of the most principled responses in the Slav Defense because the bishop develops actively before we can play e3 and block it in. The bishop on f5 also supports Black's plan to hold onto the c4 pawn temporarily while completing their development safely. However, this bishop placement does have a drawback - it can become a target for our pieces, and we might be able to exploit this with moves like Nh4 or g3 followed by Bg2."
     },
     {
       "san": "Na6",

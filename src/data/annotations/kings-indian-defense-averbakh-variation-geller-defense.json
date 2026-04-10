@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e2-e4 to establish our ideal pawn center. The knight on c3 controls important central squares like e4, d5, and b5, and it's perfectly placed to support our central pawn advances. This move also prepares various piece maneuvers, including potential Nd5 breaks or supporting a future d4-d5 push. From c3, our knight coordinates well with our other pieces and maintains flexibility for different pawn structures that might arise in the middlegame."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e2-e4 to establish our ideal pawn center. The knight on c3 controls important central squares like e4, d5, and b5, and it's perfectly placed to support our central pawn advances. This move also prepares various piece maneuvers, including potential Nd5 breaks or supporting a future d4-d5 push. From c3, our knight coordinates well with our other pieces and maintains flexibility for different pawn structures that might arise in the middlegame."
     },
     {
       "san": "Bg7",

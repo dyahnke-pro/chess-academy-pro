@@ -46,7 +46,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop the knight to f3, attacking the e5 pawn immediately. This forces Black to deal with the threat, which shapes the entire opening. Nf3 also controls d4, prepares kingside castling, and is the most natural developing move. Almost every e4 e5 game goes through Nf3 at some point -- it's that fundamental.",
+      "annotation": "We develop the knight to f3, attacking the e5 pawn immediately. This forces Black to deal with the threat, which shapes the entire opening. Nf3 also controls d4, prepares kingside castling, and is the most active move. Almost every e4 e5 game goes through Nf3 at some point -- it's that fundamental.",
       "plans": [
         "Follow with Bc4 for the Italian Game",
         "Castle kingside quickly"

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our c4 pawn and prepares to either advance d3 or even d4 to challenge Black's central stronghold. This knight placement is extremely flexible - it can later jump to d5, b5, or support a kingside attack via Ne4. The knight also eyes the important e4 square, potentially limiting Black's piece development. From c3, our knight works in perfect harmony with the planned fianchetto setup, supporting both central control and kingside attacking chances while maintaining maximum flexibility in our pawn structure."
+      "annotation": "We develop our knight to its ideal square, where it supports our c4 pawn and prepares to either advance d3 or even d4 to challenge Black's central stronghold. This knight placement is extremely flexible - it can later jump to d5, b5, or support a kingside attack via Ne4. The knight also eyes the important e4 square, potentially limiting Black's piece development. From c3, our knight works in perfect harmony with the planned fianchetto setup, supporting both central control and kingside attacking chances while maintaining maximum flexibility in our pawn structure."
     },
     {
       "san": "d6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our knight development with this natural move that controls the central e5 and d4 squares while preparing kingside castling. This knight placement puts immediate pressure on Black's e5 pawn, forcing them to make a decision about how to defend it - they can't simply ignore this pressure. Our development is proceeding harmoniously, and we're ready to continue with g3 and Bg2 to complete our fianchetto setup. The knight on f3 also prepares potential tactical shots like Ng5 if Black castles kingside carelessly, and it supports a future d4 advance to challenge Black's central pawn chain directly."
+      "annotation": "We complete our knight development with this move that controls the central e5 and d4 squares while preparing kingside castling. This knight placement puts immediate pressure on Black's e5 pawn, forcing them to make a decision about how to defend it - they can't simply ignore this pressure. Our development is proceeding harmoniously, and we're ready to continue with g3 and Bg2 to complete our fianchetto setup. The knight on f3 also prepares potential tactical shots like Ng5 if Black castles kingside carelessly, and it supports a future d4 advance to challenge Black's central pawn chain directly."
     },
     {
       "san": "Bg4",

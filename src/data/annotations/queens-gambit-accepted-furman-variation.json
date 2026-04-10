@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central operations while keeping our options flexible. This move is more flexible than the immediate e3, as it doesn't commit our light-squared bishop's diagonal yet and maintains the possibility of playing e4 in some lines. The knight on f3 also prepares to support a future e4 advance and guards against potential Black tactics involving ...e5. We're following classical development principles: pieces before pawns, and developing toward the center where our knight will have maximum influence over the key squares d4, e5, d2, and h4."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to support our central operations while keeping our options flexible. This move is more flexible than the immediate e3, as it doesn't commit our light-squared bishop's diagonal yet and maintains the possibility of playing e4 in some lines. The knight on f3 also prepares to support a future e4 advance and guards against potential Black tactics involving ...e5. We're following classical development principles: pieces before pawns, and developing toward the center where our knight will have maximum influence over the key squares d4, e5, d2, and h4."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, mirroring our development while preparing to complete kingside development and castle. This move fights for central control, particularly the e4 and d5 squares, while preparing ...e6 or ...g6 depending on Black's chosen setup. Our opponent is being sensible by developing pieces rather than trying to defend the extra c4 pawn immediately, recognizing that piece activity is more important than material in the opening. The knight on f6 also supports a potential future ...e5 advance, which could help Black achieve equality by trading pawns and simplifying the center."
+      "annotation": "Black develops the kingside knight to its ideal square, mirroring our development while preparing to complete kingside development and castle. This move fights for central control, particularly the e4 and d5 squares, while preparing ...e6 or ...g6 depending on Black's chosen setup. Our opponent is being sensible by developing pieces rather than trying to defend the extra c4 pawn immediately, recognizing that piece activity is more important than material in the opening. The knight on f6 also supports a potential future ...e5 advance, which could help Black achieve equality by trading pawns and simplifying the center."
     },
     {
       "san": "e3",

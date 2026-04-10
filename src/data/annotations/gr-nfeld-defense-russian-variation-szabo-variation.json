@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to meet Black's central counterplay. The knight on c3 also supports a potential e2-e4 pawn advance, which would give us an ideal two-pawn center. This move keeps maximum flexibility in our setup since we haven't committed to the exact pawn structure yet. From c3, our knight controls important central squares like e4, d5, and b5, while also preparing potential tactical themes involving discovered attacks if we later move the d-pawn."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to meet Black's central counterplay. The knight on c3 also supports a potential e2-e4 pawn advance, which would give us an ideal two-pawn center. This move keeps maximum flexibility in our setup since we haven't committed to the exact pawn structure yet. From c3, our knight controls important central squares like e4, d5, and b5, while also preparing potential tactical themes involving discovered attacks if we later move the d-pawn."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its optimal square, supporting our e4 advance while maintaining flexibility in how we handle the central tension. The knight on f3 controls important central squares like e5 and d4, while also preparing kingside castling and supporting potential pawn storms later in the middlegame. This natural developing move avoids committing to the pawn structure immediately, keeping our options open for various Grünfeld systems. From f3, our knight is well-placed to support both offensive and defensive ideas, including potential tactical motifs involving knight forks or discoveries."
+      "annotation": "We're developing our kingside knight to its optimal square, supporting our e4 advance while maintaining flexibility in how we handle the central tension. The knight on f3 controls important central squares like e5 and d4, while also preparing kingside castling and supporting potential pawn storms later in the middlegame. This active move avoids committing to the pawn structure immediately, keeping our options open for various Grünfeld systems. From f3, our knight is well-placed to support both offensive and defensive ideas, including potential tactical motifs involving knight forks or discoveries."
     },
     {
       "san": "Bg7",

@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our d4 pawn and controlling the important central squares e4 and d5. This is one of the most principled responses to 1.d4, as it immediately challenges our central control while preparing kingside castling. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate pressure on our position. This move also keeps Black's options open for various pawn structures, whether they choose ...e6, ...g6, or ...c5 systems."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our d4 pawn and controlling the important central squares e4 and d5. This is one of the most principled responses to 1.d4, as it immediately challenges our central control while preparing kingside castling. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate pressure on our position. This move also keeps Black's options open for various pawn structures, whether they choose ...e6, ...g6, or ...c5 systems."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its optimal square, defending the d4 pawn while eyeing the important e4 and e2 squares for future piece coordination. This is the key move that defines the Richter-Veresov system - instead of the more common Nf3, we prioritize rapid piece development and maintain flexibility in our pawn structure. The knight on c3 also supports potential advances like e2-e4 or f2-f3, depending on how Black continues. This move order often catches opponents off guard since it's less theoretical than main-line queen's pawn openings, giving us practical chances even against well-prepared opponents."
+      "annotation": "We develop our queenside knight to its optimal square, defending the d4 pawn while eyeing the important e4 and e2 squares for future piece coordination. This is the defining move of the Richter-Veresov system - instead of the more common Nf3, we prioritize rapid piece development and maintain flexibility in our pawn structure. The knight on c3 also supports potential advances like e2-e4 or f2-f3, depending on how Black continues. This move order often catches opponents off guard since it's less theoretical than main-line queen's pawn openings, giving us practical chances even against well-prepared opponents."
     },
     {
       "san": "d5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the queenside knight to d7, breaking the pin on the f6 knight while preparing to contest our central control. This natural developing move also supports the d5 pawn and prepares potential counterplay with moves like ...c6 or ...e6. Our opponent chooses this square over c6 to avoid blocking the c-pawn, maintaining flexibility in the pawn structure. However, the knight on d7 is somewhat less active than it would be on c6, and it doesn't immediately challenge our bishop pair or create counterplay in the center."
+      "annotation": "Black develops the queenside knight to d7, breaking the pin on the f6 knight while preparing to contest our central control. This active move also supports the d5 pawn and prepares potential counterplay with moves like ...c6 or ...e6. Our opponent chooses this square over c6 to avoid blocking the c-pawn, maintaining flexibility in the pawn structure. However, the knight on d7 is somewhat less active than it would be on c6, and it doesn't immediately challenge our bishop pair or create counterplay in the center."
     },
     {
       "san": "Nf3",

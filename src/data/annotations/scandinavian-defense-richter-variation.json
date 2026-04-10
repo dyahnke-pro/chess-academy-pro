@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, immediately claiming the central e4 square and freeing our light-squared bishop and queen for future development. This classical first move controls the important d5 and f5 squares, preventing Black from establishing a pawn there easily. The move follows opening principles by fighting for the center from the very first move, and it leads to sharp, tactical games where we can often launch quick kingside attacks. Most importantly, 1.e4 puts immediate pressure on Black to respond to our central presence."
+      "annotation": "We're opening with the king's pawn, immediately claiming the central e4 square and freeing our light-squared bishop and queen for future development. This classical first move controls the important d5 and f5 squares, preventing Black from establishing a pawn there easily. The move follows opening principles by contesting central control from the very first move, and it leads to sharp, tactical games where we can often launch quick kingside attacks. Most importantly, 1.e4 puts immediate pressure on Black to respond to our central presence."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, attacking the centralized knight on d5 while simultaneously developing toward the center and preparing to castle kingside. This move follows opening principles perfectly by developing with tempo, and it also prepares to recapture on d5 if the knight moves, maintaining material equality. The knight on f3 controls important central squares like e5 and d4, and it supports our overall strategy of rapid development and kingside safety. Additionally, this development move puts pressure on Black to decide what to do with their well-placed but somewhat exposed knight on d5."
+      "annotation": "We develop our kingside knight to its ideal square, attacking the centralized knight on d5 while simultaneously developing toward the center and preparing to castle kingside. This move follows opening principles perfectly by developing with tempo, and it also prepares to recapture on d5 if the knight moves, maintaining material equality. The knight on f3 controls important central squares like e5 and d4, and it supports our overall strategy of rapid development and kingside safety. Additionally, this development move puts pressure on Black to decide what to do with their well-placed but somewhat exposed knight on d5."
     },
     {
       "san": "g6",

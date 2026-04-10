@@ -31,11 +31,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 pawn and preparing kingside castling. This move is essential for Black's development as it brings another piece into play while creating counter-pressure in the center. The knight on f6 also supports Black's e5 pawn from another angle and prepares moves like Be7 and castling kingside. Our opponent is following classical development principles and staying in the main theoretical lines of the Spanish Opening. This knight placement is so natural that virtually every strong player chooses this move, as it addresses both development and central control simultaneously."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our e4 pawn and preparing kingside castling. This move is essential for Black's development as it brings another piece into play while creating counter-pressure in the center. The knight on f6 also supports Black's e5 pawn from another angle and prepares moves like Be7 and castling kingside. Our opponent is following classical development principles and staying in the main theoretical lines of the Spanish Opening. This knight placement is so natural that virtually every strong player chooses this move, as it addresses both development and central control simultaneously."
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside to ensure our king's safety while bringing our rook into the game on f1. This move is almost automatic in the Spanish Opening because king safety is paramount before engaging in complex middlegame battles. Castling also connects our rooks and prepares us to potentially advance in the center with moves like Re1 and d2-d4. The rook on f1 will often relocate to e1 to support our central play and put pressure on Black's e5 pawn. This natural developing move maintains our slight initiative while preparing for the deeper positional struggle that characterizes the Ruy Lopez."
+      "annotation": "We castle kingside to ensure our king's safety while bringing our rook into the game on f1. This move is almost automatic in the Spanish Opening because king safety is paramount before engaging in complex middlegame battles. Castling also connects our rooks and prepares us to potentially advance in the center with moves like Re1 and d2-d4. The rook on f1 will often relocate to e1 to support our central play and put pressure on Black's e5 pawn. This active move maintains our slight initiative while preparing for the deeper positional struggle that characterizes the Ruy Lopez."
     },
     {
       "san": "Be7",

@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports the c4 pawn and eyes the central e4 and d5 squares. This move is the hallmark of the King's English Variation, preparing to meet Black's potential ...d6 and ...f5 setups or to support our own central advances. The knight from c3 also keeps pressure on Black's e5 pawn, making it harder for Black to advance with ...e4 immediately. From this square, our knight maintains maximum flexibility, ready to jump to d5, e4, or even retreat to support our kingside if needed in the middlegame complications ahead."
+      "annotation": "We develop our knight to its ideal square, where it supports the c4 pawn and eyes the central e4 and d5 squares. This move is the hallmark of the King's English Variation, preparing to meet Black's potential ...d6 and ...f5 setups or to support our own central advances. The knight from c3 also keeps pressure on Black's e5 pawn, making it harder for Black to advance with ...e4 immediately. From this square, our knight maintains maximum flexibility, ready to jump to d5, e4, or even retreat to support our kingside if needed in the middlegame complications ahead."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, attacking our c4 pawn while supporting the central e5 pawn and preparing rapid kingside castling. This natural developing move puts immediate pressure on our position, forcing us to consider how we'll defend the c4 pawn - typically with moves like a3, b3, or piece support. The knight on f6 also prepares potential tactics involving ...Ng4 or ...Ne4 if we're not careful with our development. Our opponent is following sound opening principles by developing pieces toward the center while maintaining the tension in the position."
+      "annotation": "Black develops the knight to its most active square, attacking our c4 pawn while supporting the central e5 pawn and preparing rapid kingside castling. This active move puts immediate pressure on our position, forcing us to consider how we'll defend the c4 pawn - typically with moves like a3, b3, or piece support. The knight on f6 also prepares potential tactics involving ...Ng4 or ...Ne4 if we're not careful with our development. Our opponent is following sound opening principles by developing pieces toward the center while maintaining the tension in the position."
     },
     {
       "san": "g3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our second knight to its most natural square, attacking Black's e5 pawn and preparing to castle kingside ourselves. This move also unpins our knight on c3, as our king is no longer on the same diagonal as Black's bishop, giving us much more flexibility in our piece placement. The knight on f3 controls important central squares like e5 and d4, and it can potentially reroute to other squares like h4, g5, or e1 depending on the position's demands. By developing this knight, we're following sound opening principles while maintaining pressure on Black's central pawn and preparing to complete our kingside development."
+      "annotation": "We develop our second knight to its ideal square, attacking Black's e5 pawn and preparing to castle kingside ourselves. This move also unpins our knight on c3, as our king is no longer on the same diagonal as Black's bishop, giving us much more flexibility in our piece placement. The knight on f3 controls important central squares like e5 and d4, and it can potentially reroute to other squares like h4, g5, or e1 depending on the position's demands. By developing this knight, we're following sound opening principles while maintaining pressure on Black's central pawn and preparing to complete our kingside development."
     },
     {
       "san": "Re8",

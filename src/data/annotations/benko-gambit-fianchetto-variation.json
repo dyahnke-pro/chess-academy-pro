@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and contesting control of the central e4 square. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares to support a future ...e5 advance or to jump to other squares like e4 or g4 depending on how the position develops. We need to be ready to defend our center or advance it further."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and contesting control of the central e4 square. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares to support a future ...e5 advance or to jump to other squares like e4 or g4 depending on how the position develops. We need to be ready to defend our center or advance it further."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d5 pawn and preparing to contest Black's growing piece activity with our own development. The knight on c3 also controls important squares like b5 and e4, and it can potentially support future advances like e4 or defensive moves if needed. This is a logical developing move that fits with our plan to consolidate our position and maintain our material advantage. However, we need to be aware that Black's compensation is growing with each move, and we must develop accurately to avoid falling behind in the initiative."
+      "annotation": "We're developing our knight to its ideal square, supporting our d5 pawn and preparing to contest Black's growing piece activity with our own development. The knight on c3 also controls important squares like b5 and e4, and it can potentially support future advances like e4 or defensive moves if needed. This is a purposeful developing choice that fits with our plan to consolidate our position and maintain our material advantage. However, we need to be aware that Black's compensation is growing with each move, and we must develop accurately to avoid falling behind in the initiative."
     },
     {
       "san": "d6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls the important e5 and g5 squares while supporting potential central advances. The knight on f3 also prepares for kingside castling and gives us more flexibility in our piece coordination, as it can support both defensive and offensive operations. This natural developing move keeps our options open while continuing to consolidate our position and maintain our material advantage. We're following the principle of developing pieces before committing to any particular plan, which is especially important in such a complex position."
+      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls the important e5 and g5 squares while supporting potential central advances. The knight on f3 also prepares for kingside castling and gives us more flexibility in our piece coordination, as it can support both defensive and offensive operations. This active move keeps our options open while continuing to consolidate our position and maintain our material advantage. We're following the principle of developing pieces before committing to any particular plan, which is especially important in such a complex position."
     },
     {
       "san": "g6",

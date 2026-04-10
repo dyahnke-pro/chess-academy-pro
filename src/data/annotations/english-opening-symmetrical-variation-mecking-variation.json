@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its most active square while putting immediate pressure on our potential e4 advance. This knight controls the central e4 and d5 squares, and from f6 it can later jump to e4, d5, or support Black's kingside. Our opponent is signaling they want to contest the center actively rather than passively allow us to dictate the game's direction. This move also keeps Black's options open for various pawn structures and piece setups."
+      "annotation": "Black responds with the most active move, bringing the knight to its most active square while putting immediate pressure on our potential e4 advance. This knight controls the central e4 and d5 squares, and from f6 it can later jump to e4, d5, or support Black's kingside. Our opponent is signaling they want to contest the center actively rather than passively allow us to dictate the game's direction. This move also keeps Black's options open for various pawn structures and piece setups."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting a future e4 advance and controlling the central d4 and e5 squares. This move follows classical opening principles by developing toward the center while keeping maximum flexibility in our position. The knight on f3 also prepares kingside castling and can later support various pawn advances or relocate to more active squares like d4 or e5. By developing pieces before committing to a specific pawn structure, we're maintaining the strategic richness that makes the English Opening so appealing."
+      "annotation": "We develop our knight to its ideal square, supporting a future e4 advance and controlling the central d4 and e5 squares. This move follows classical opening principles by developing toward the center while keeping maximum flexibility in our position. The knight on f3 also prepares kingside castling and can later support various pawn advances or relocate to more active squares like d4 or e5. By developing pieces before committing to a specific pawn structure, we're maintaining the strategic richness that makes the English Opening so appealing."
     },
     {
       "san": "c5",

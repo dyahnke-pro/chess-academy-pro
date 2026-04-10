@@ -7,11 +7,11 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center with the d-pawn, directly challenging our control of the e4 square. This is the most natural and principled response, as our opponent is following the fundamental opening principle of fighting for central space. Black's move also opens the diagonal for the dark-squared bishop and prepares to develop pieces harmoniously. However, by playing this solid move, Black is walking directly into our gambit preparation and will soon face some difficult decisions about how to handle our pawn sacrifice."
+      "annotation": "Black responds classically by occupying the center with the d-pawn, directly challenging our control of the e4 square. This is the most natural and principled response, as our opponent is following the fundamental opening principle of fighting for central space. Black's move also opens the diagonal for the dark-squared bishop and prepares to develop pieces harmoniously. However, by playing this stabilizing move, Black is walking directly into our gambit preparation and will soon face some difficult decisions about how to handle our pawn sacrifice."
     },
     {
       "san": "e4",
-      "annotation": "Now we reveal our gambit intentions by advancing the e-pawn, directly attacking Black's d5 pawn and offering it as a sacrifice. This is the key move of the Blackmar-Diemer Gambit - we're willing to give up material in exchange for rapid piece development and attacking chances. The move opens the diagonal for our light-squared bishop and prepares to develop our knight to c3 with tempo. Black now faces a critical decision: accept the gambit and try to hold onto the extra pawn, or decline it and allow us to maintain a strong pawn center."
+      "annotation": "Now we reveal our gambit intentions by advancing the e-pawn, directly attacking Black's d5 pawn and offering it as a sacrifice. This is the central idea of the Blackmar-Diemer Gambit - we're willing to give up material in exchange for rapid piece development and attacking chances. The move opens the diagonal for our light-squared bishop and prepares to develop our knight to c3 with tempo. Black now faces a critical decision: accept the gambit and try to hold onto the extra pawn, or decline it and allow us to maintain a strong pawn center."
     },
     {
       "san": "dxe4",

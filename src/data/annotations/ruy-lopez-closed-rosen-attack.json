@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This move follows the classical opening principle of developing pieces toward the center while creating immediate threats. The knight on f3 also supports a potential d4 pawn break later, which would challenge Black's central pawn chain. Most importantly, this move prepares us to enter the Ruy Lopez with Bb5, putting immediate pressure on Black's knight which defends the e5 pawn."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This move follows the classical opening principle of developing pieces toward the center while creating immediate threats. The knight on f3 also supports a potential d4 pawn break later, which would challenge Black's central pawn chain. Most importantly, this move prepares us to enter the Ruy Lopez with Bb5, putting immediate pressure on Black's knight which defends the e5 pawn."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight, attacking our central e4 pawn and completing their basic piece development. This natural developing move follows the opening principle of bringing pieces into the game while creating counterplay against our center. The knight on f6 also prepares Black to castle kingside and supports potential central breaks like ...d6 and ...d5. Our opponent is setting up a solid position where they can contest our central control while maintaining flexibility in their pawn structure."
+      "annotation": "Black develops their kingside knight, attacking our central e4 pawn and completing their basic piece development. This active move follows the opening principle of bringing pieces into the game while creating counterplay against our center. The knight on f6 also prepares Black to castle kingside and supports potential central breaks like ...d6 and ...d5. Our opponent is setting up a solid position where they can contest our central control while maintaining flexibility in their pawn structure."
     },
     {
       "san": "O-O",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "We place our rook on the open e-file, adding support to our e4 pawn and preparing for potential central tension. This is a key move in many Ruy Lopez systems because it reinforces our center before Black can challenge it effectively. The rook on e1 also supports a future d4 advance, which is a central theme in the Ruy Lopez - we want to establish a strong pawn center. Additionally, this move prepares tactics involving the pin along the e-file if Black's king castles, giving us long-term attacking chances."
+      "annotation": "We place our rook on the open e-file, adding support to our e4 pawn and preparing for potential central tension. This is a critical move in many Ruy Lopez systems because it reinforces our center before Black can challenge it effectively. The rook on e1 also supports a future d4 advance, which is a central theme in the Ruy Lopez - we want to establish a strong pawn center. Additionally, this move prepares tactics involving the pin along the e-file if Black's king castles, giving us long-term attacking chances."
     },
     {
       "san": "b5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays this solid move to support their e5 pawn and prepare further development, particularly bringing the light-squared bishop into play via ...Bb7 or ...Be6. This move creates a solid pawn chain with e5 and prepares Black's position for the middlegame battles ahead. The d6 pawn also controls important central squares like c5 and e5, helping Black maintain their foothold in the center. However, this move does block the diagonal for Black's dark-squared bishop temporarily, so our opponent will need to find good squares for that piece."
+      "annotation": "Black plays this stabilizing move to support their e5 pawn and prepare further development, particularly bringing the light-squared bishop into play via ...Bb7 or ...Be6. This move creates a solid pawn chain with e5 and prepares Black's position for the middlegame battles ahead. The d6 pawn also controls important central squares like c5 and e5, helping Black maintain their foothold in the center. However, this move does block the diagonal for Black's dark-squared bishop temporarily, so our opponent will need to find good squares for that piece."
     },
     {
       "san": "d4",

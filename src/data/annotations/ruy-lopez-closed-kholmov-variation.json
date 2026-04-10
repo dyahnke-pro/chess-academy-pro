@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 pawn and preparing to castle kingside. This move supports our central pawn while developing toward the center, and the knight on f3 will often play a key role in supporting d2-d4 breaks later. From f3, our knight controls important central squares like e5, d4, g5, and h4, giving us flexibility in our middlegame plans. We're also preparing to transpose into either the Italian Game with Bc4 or the Spanish Opening with Bb5, keeping our options open."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 pawn and preparing to castle kingside. This move supports our central pawn while developing toward the center, and the knight on f3 will often play a key role in supporting d2-d4 breaks later. From f3, our knight controls important central squares like e5, d4, g5, and h4, giving us flexibility in our middlegame plans. We're also preparing to transpose into either the Italian Game with Bc4 or the Spanish Opening with Bb5, keeping our options open."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to defend the e5 pawn, which is the most principled response to our attack. This natural developing move also prepares counterplay in the center and supports potential d7-d5 breaks later in the game. The knight on c6 will often be a key piece in Black's counterplay, potentially jumping to d4 or supporting b7-b5 advances. Our opponent is following classical opening principles by developing pieces toward the center while solving immediate tactical problems."
+      "annotation": "Black develops their knight to defend the e5 pawn, which is the most principled response to our attack. This active move also prepares counterplay in the center and supports potential d7-d5 breaks later in the game. The knight on c6 will often be a key piece in Black's counterplay, potentially jumping to d4 or supporting b7-b5 advances. Our opponent is following classical opening principles by developing pieces toward the center while solving immediate tactical problems."
     },
     {
       "san": "Bb5",
@@ -39,11 +39,11 @@
     },
     {
       "san": "Be7",
-      "annotation": "Our opponent completes their kingside development with this solid move, preparing to castle while maintaining flexibility in the position. The bishop on e7 doesn't create immediate threats but supports Black's defensive setup and keeps options open for future piece coordination. This move also clears the d8 square for potential queen maneuvers and maintains the option of playing d6-d5 without blocking the bishop. Black is following a classical development scheme that has been tested in thousands of master games."
+      "annotation": "Our opponent completes their kingside development with this stabilizing move, preparing to castle while maintaining flexibility in the position. The bishop on e7 doesn't create immediate threats but supports Black's defensive setup and keeps options open for future piece coordination. This move also clears the d8 square for potential queen maneuvers and maintains the option of playing d6-d5 without blocking the bishop. Black is following a classical development scheme that has been tested in thousands of master games."
     },
     {
       "san": "Re1",
-      "annotation": "We place our rook on the e-file, pinning the e5 pawn to Black's king and creating immediate tactical pressure. This is one of the key moves of the Spanish Opening, as it supports our eventual d2-d4 break by adding pressure to the e5 pawn. The rook on e1 also coordinates beautifully with our other pieces, particularly if we can arrange Bb3 and d2-d4. This move exemplifies the Spanish strategy of building pressure gradually while maintaining excellent piece coordination."
+      "annotation": "We place our rook on the e-file, pinning the e5 pawn to Black's king and creating immediate tactical pressure. This is one of the critical moves of the Spanish Opening, as it supports our eventual d2-d4 break by adding pressure to the e5 pawn. The rook on e1 also coordinates beautifully with our other pieces, particularly if we can arrange Bb3 and d2-d4. This move exemplifies the Spanish strategy of building pressure gradually while maintaining excellent piece coordination."
     },
     {
       "san": "b5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, getting their king to safety before the position becomes more tactical. This natural move completes Black's basic development and prepares for the middlegame struggle that's about to unfold. With both kings castled, the real battle can begin, and Black is now ready to organize their pieces for either defensive duties or counterplay. Our opponent has reached a solid position, but we still maintain the initiative and better central prospects."
+      "annotation": "Black castles kingside, getting their king to safety before the position becomes more tactical. this move completes Black's basic development and prepares for the middlegame struggle that's about to unfold. With both kings castled, the real battle can begin, and Black is now ready to organize their pieces for either defensive duties or counterplay. Our opponent has reached a solid position, but we still maintain the initiative and better central prospects."
     },
     {
       "san": "h3",

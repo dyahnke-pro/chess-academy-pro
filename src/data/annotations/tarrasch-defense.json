@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square while adding extra pressure to the d5 pawn, creating a pin that makes it more difficult for Black to maintain central control. This natural developing move also prepares potential tactics involving Nxd5, should Black's pawn become insufficiently defended. The knight on c3 supports our central ambitions and can later jump to more aggressive squares like e4 or b5, depending on how the position develops. By increasing the pressure on d5, we're forcing our opponent to make concrete decisions about how to handle the central tension rather than allowing them to develop comfortably."
+      "annotation": "We're developing our knight to its most active square while adding extra pressure to the d5 pawn, creating a pin that makes it more difficult for Black to maintain central control. This active move also prepares potential tactics involving Nxd5, should Black's pawn become insufficiently defended. The knight on c3 supports our central ambitions and can later jump to more aggressive squares like e4 or b5, depending on how the position develops. By increasing the pressure on d5, we're forcing our opponent to make concrete decisions about how to handle the central tension rather than allowing them to develop comfortably."
     },
     {
       "san": "c5",

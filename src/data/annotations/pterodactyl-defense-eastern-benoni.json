@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our central pawn chain and preparing for further development. This move also keeps our options open for how we want to arrange our pieces - we can still play f3 and Be3 for a solid setup, or go for more aggressive plans with f4 and kingside expansion. The knight on c3 also prepares potential advances like d5, which would give us a space advantage and cramp Black's position. Against the Pterodactyl Defense, this natural development maintains our central pressure while keeping maximum flexibility for our subsequent piece placement."
+      "annotation": "We're developing our knight to its ideal square, supporting our central pawn chain and preparing for further development. This move also keeps our options open for how we want to arrange our pieces - we can still play f3 and Be3 for a solid setup, or go for more aggressive plans with f4 and kingside expansion. The knight on c3 also prepares potential advances like d5, which would give us a space advantage and cramp Black's position. Against the Pterodactyl Defense, this natural development maintains our central pressure while keeping maximum flexibility for our subsequent piece placement."
     },
     {
       "san": "c5",

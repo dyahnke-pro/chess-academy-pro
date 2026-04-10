@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it controls the important e5 and d4 central squares while supporting our overall development plan. This move is incredibly flexible - we're not committing to any particular pawn structure yet, and Nf3 fits into virtually every Queen's Gambit setup we might choose. The knight also eyes the h4 square for potential tactics and prepares to support a future e4 advance if the position allows it. By developing pieces before making further pawn moves, we're following sound opening principles while keeping maximum flexibility in our position."
+      "annotation": "We're developing our king's knight to its ideal square, where it controls the important e5 and d4 central squares while supporting our overall development plan. This move is incredibly flexible - we're not committing to any particular pawn structure yet, and Nf3 fits into virtually every Queen's Gambit setup we might choose. The knight also eyes the h4 square for potential tactics and prepares to support a future e4 advance if the position allows it. By developing pieces before making further pawn moves, we're following sound opening principles while keeping maximum flexibility in our position."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent mirrors our knight development, placing their knight on the ideal f6 square where it controls the central e4 and d5 squares while attacking our d4 pawn. This is Black's most natural developing move in the Slav, as the knight belongs on f6 in virtually every variation of this opening. Black is following the same sound principles we are - developing pieces toward the center and maintaining flexibility for their future plans. The f6 knight also prepares kingside castling and can potentially jump to e4 or d5 in favorable circumstances."
+      "annotation": "Our opponent mirrors our knight development, placing their knight on the ideal f6 square where it controls the central e4 and d5 squares while attacking our d4 pawn. This is Black's most active move in the Slav, as the knight belongs on f6 in virtually every variation of this opening. Black is following the same sound principles we are - developing pieces toward the center and maintaining flexibility for their future plans. The f6 knight also prepares kingside castling and can potentially jump to e4 or d5 in favorable circumstances."
     },
     {
       "san": "g3",

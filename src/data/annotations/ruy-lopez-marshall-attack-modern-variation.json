@@ -11,15 +11,15 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and controlling the important d4 and g5 squares. This move pressures the center immediately while preparing to castle kingside, keeping our king safe. The knight on f3 is perfectly placed to support future central advances like d4, and it can also jump to more aggressive squares like g5 or e5 if tactical opportunities arise. This is the starting move of the Ruy Lopez, one of the oldest and most respected openings in chess."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and controlling the important d4 and g5 squares. This move pressures the center immediately while preparing to castle kingside, keeping our king safe. The knight on f3 is perfectly placed to support future central advances like d4, and it can also jump to more aggressive squares like g5 or e5 if tactical opportunities arise. This is the starting move of the Ruy Lopez, one of the oldest and most respected openings in chess."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to an active central square. The knight on c6 controls important squares like d4, e5, and b4, while also preparing potential counterplay with moves like f5 in some variations. Our opponent is following classical opening principles by developing pieces and defending the center. We now have several options, but the most principled continuation is to challenge the knight that defends Black's central stronghold."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to an active central square. The knight on c6 controls important squares like d4, e5, and b4, while also preparing potential counterplay with moves like f5 in some variations. Our opponent is following classical opening principles by developing pieces and defending the center. We now have several options, but the most principled continuation is to challenge the knight that defends Black's central stronghold."
     },
     {
       "san": "Bb5",
-      "annotation": "We develop our bishop with a purpose, pinning the knight on c6 to Black's king and creating immediate pressure. This is the defining move of the Ruy Lopez opening, where we're not necessarily threatening to win the knight immediately, but rather applying long-term pressure on Black's position. The bishop eyes the a6-f1 diagonal and potentially supports future central breaks with d4. Even though Black can break the pin easily with a6, we maintain excellent piece activity and opening momentum with this classical developing move."
+      "annotation": "We develop our bishop with a purpose, pinning the knight on c6 to Black's king and creating immediate pressure. This is the defining move of the Ruy Lopez opening, where we're not necessarily threatening to win the knight immediately, but rather applying long-term pressure on Black's position. The bishop eyes the a6-f1 diagonal and potentially supports future central breaks with d4. Even though Black can break the pin easily with a6, we maintain excellent piece activity and opening momentum with this classical developing choice."
     },
     {
       "san": "a6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and preparing to castle kingside. This move completes Black's basic development while challenging our central control, forcing us to consider how to maintain our space advantage. The knight on f6 also supports potential central breaks with d5 in the future. Our opponent is following sound opening principles by developing pieces toward the center while keeping the king's safety in mind with preparation for castling."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing to castle kingside. This move completes Black's basic development while challenging our central control, forcing us to consider how to maintain our space advantage. The knight on f6 also supports potential central breaks with d5 in the future. Our opponent is following sound opening principles by developing pieces toward the center while keeping the king's safety in mind with preparation for castling."
     },
     {
       "san": "O-O",

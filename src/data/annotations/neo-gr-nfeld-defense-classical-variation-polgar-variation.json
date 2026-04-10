@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center with ...e6 or ...d5 later. This flexible move keeps many options open - Black can still transpose into the King's Indian Defense with ...g6 and ...Bg7, or head for a Queen's Gambit structure with ...e6 and ...d5. The knight on f6 also supports a potential ...e5 advance, giving Black active piece play in the center. We need to decide whether to support our d4 pawn immediately or continue developing while maintaining the tension."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center with ...e6 or ...d5 later. This flexible move keeps many options open - Black can still transpose into the King's Indian Defense with ...g6 and ...Bg7, or head for a Queen's Gambit structure with ...e6 and ...d5. The knight on f6 also supports a potential ...e5 advance, giving Black active piece play in the center. We need to decide whether to support our d4 pawn immediately or continue developing while maintaining the tension."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to f3, supporting the d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This natural developing move controls the important e5 and h4 squares, preventing Black from advancing ...e5 immediately or launching quick kingside attacks. The knight on f3 fits perfectly into virtually any pawn structure we might adopt, whether we play c4 for a Queen's Gambit setup or prepare e3 and Bd3 for a more restrained approach. We're following classical opening principles by developing pieces toward the center while keeping our options open for the pawn structure."
+      "annotation": "We develop our knight to f3, supporting the d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This active move controls the important e5 and h4 squares, preventing Black from advancing ...e5 immediately or launching quick kingside attacks. The knight on f3 fits perfectly into virtually any pawn structure we might adopt, whether we play c4 for a Queen's Gambit setup or prepare e3 and Bd3 for a more restrained approach. We're following classical opening principles by developing pieces toward the center while keeping our options open for the pawn structure."
     },
     {
       "san": "g6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes in the center with the characteristic Grünfeld pawn advance, directly challenging our d4 pawn and opening lines for their pieces. This move transforms the position from a quiet development phase into the sharp tactical and positional complexity that defines the Grünfeld Defense. The d5 advance gives Black's pieces more scope - the Bg7 becomes more active, the Nf6 gains central influence, and Black prepares to recapture on d5 with the knight for active piece play. We now face the critical decision of how to respond to this central challenge - we can capture on d5, advance c4 to support our center, or even ignore it temporarily with other developing moves."
+      "annotation": "Black strikes in the center with the characteristic Grünfeld pawn advance, directly challenging our d4 pawn and opening lines for their pieces. This move transforms the position from a quiet development phase into the sharp tactical and positional complexity that defines the Grünfeld Defense. The d5 advance gives Black's pieces more scope - the Bg7 becomes more active, the Nf6 gains central influence, and Black prepares to recapture on d5 with the knight for active piece play. We now face the critical decision of how to respond to this central challenge - we can capture on d5, advance c4 to support our center, or even ignore it temporarily with other developing choices."
     },
     {
       "san": "c4",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to c6, where it supports the d5 pawn and adds another piece to the central battle, entering the Classical Variation of the Grünfeld Defense. This natural developing move prepares Black's typical plan of maintaining central tension while developing pieces actively, and the knight can later jump to attractive squares like e5 or a5 depending on how the position evolves. The Nc6 also supports potential tactical ideas involving ...dxc4 followed by piece activity, as the knight controls important central squares and can quickly relocate to support Black's counterplay. We now need to decide how to continue our development while maintaining our central advantage - common options include Qd3, Nc3, or even the immediate capture cxd5 to simplify the center."
+      "annotation": "Black develops the knight to c6, where it supports the d5 pawn and adds another piece to the central battle, entering the Classical Variation of the Grünfeld Defense. This active move prepares Black's typical plan of maintaining central tension while developing pieces actively, and the knight can later jump to attractive squares like e5 or a5 depending on how the position evolves. The Nc6 also supports potential tactical ideas involving ...dxc4 followed by piece activity, as the knight controls important central squares and can quickly relocate to support Black's counterplay. We now need to decide how to continue our development while maintaining our central advantage - common options include Qd3, Nc3, or even the immediate capture cxd5 to simplify the center."
     }
   ]
 }

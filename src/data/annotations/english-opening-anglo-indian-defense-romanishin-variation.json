@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while keeping maximum flexibility in our setup. This move supports a potential d4 advance and doesn't commit us to any particular pawn structure yet - we could still play g3 and fianchetto our bishop, or go for a more classical development with d4 and e3. The knight on f3 also provides important kingside safety, making castling kingside a comfortable option later. From f3, our knight eyes several key central outposts and can potentially reroute to e5, d4, or even h4 in some tactical sequences."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while keeping maximum flexibility in our setup. This move supports a potential d4 advance and doesn't commit us to any particular pawn structure yet - we could still play g3 and fianchetto our bishop, or go for a more classical development with d4 and e3. The knight on f3 also provides important kingside safety, making castling kingside a comfortable option later. From f3, our knight eyes several key central outposts and can potentially reroute to e5, d4, or even h4 in some tactical sequences."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development with the most natural knight move, developing toward the center and controlling the important e4 and d5 squares. This is a classical developing move that fits perfectly with Black's e6 setup, preparing to castle kingside and potentially support a central ...d5 break later. Our opponent is following sound opening principles by developing pieces before moving pawns unnecessarily, and the knight on f6 can support various pawn breaks like ...d5 or even ...c5 depending on how the position evolves. We should appreciate that Black is building a solid, flexible position that doesn't give us any immediate targets to attack."
+      "annotation": "Black mirrors our development with the most natural knight move, developing toward the center and controlling the important e4 and d5 squares. This is a classical developing choice that fits perfectly with Black's e6 setup, preparing to castle kingside and potentially support a central ...d5 break later. Our opponent is following sound opening principles by developing pieces before moving pawns unnecessarily, and the knight on f6 can support various pawn breaks like ...d5 or even ...c5 depending on how the position evolves. We should appreciate that Black is building a solid, flexible position that doesn't give us any immediate targets to attack."
     },
     {
       "san": "g3",

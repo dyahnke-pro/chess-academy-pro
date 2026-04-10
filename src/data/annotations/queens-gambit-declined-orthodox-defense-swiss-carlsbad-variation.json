@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its ideal square where it attacks our d4 pawn and controls the central e4 square. This is the signature move of many solid defenses against 1.d4, as the knight is perfectly placed to challenge our central ambitions. Our opponent is following classical development principles by developing pieces before pawns and immediately putting pressure on our center. This move also prepares potential pawn breaks like ...e5 or supports the advance ...d5, giving Black excellent flexibility in choosing their setup."
+      "annotation": "Black responds with the most active move, bringing the knight to its ideal square where it attacks our d4 pawn and controls the central e4 square. This is the signature move of many solid defenses against 1.d4, as the knight is perfectly placed to challenge our central ambitions. Our opponent is following classical development principles by developing pieces before pawns and immediately putting pressure on our center. This move also prepares potential pawn breaks like ...e5 or supports the advance ...d5, giving Black excellent flexibility in choosing their setup."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn and controls the central e5 square while preparing kingside castling. This natural developing move follows the principle of bringing knights before bishops, as knights generally have fewer good squares available to them. The knight on f3 also prevents any future ...e5 pawn breaks by Black for now, maintaining our central stability. Additionally, this move prepares potential tactical ideas involving the e4 square and keeps our options open for various pawn structures depending on how Black continues."
+      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn and controls the central e5 square while preparing kingside castling. This active move follows the principle of bringing knights before bishops, as knights generally have fewer good squares available to them. The knight on f3 also prevents any future ...e5 pawn breaks by Black for now, maintaining our central stability. Additionally, this move prepares potential tactical ideas involving the e4 square and keeps our options open for various pawn structures depending on how Black continues."
     },
     {
       "san": "d5",
@@ -31,11 +31,11 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black chooses the solid Orthodox Defense by developing the bishop to its most natural square, where it supports kingside castling and maintains a solid defensive setup. This is considered more reliable than the alternative ...Bb4, as the bishop on e7 doesn't create any immediate tactical complications and can't be easily attacked. The bishop also prepares ...O-O while keeping the important h4-d8 diagonal clear for potential defense or counterplay. By choosing this development, our opponent is indicating they prefer solid, classical piece coordination over more aggressive alternatives like the Ragozin Defense with ...Bb4."
+      "annotation": "Black chooses the solid Orthodox Defense by developing the bishop to its ideal square, where it supports kingside castling and maintains a solid defensive setup. This is considered more reliable than the alternative ...Bb4, as the bishop on e7 doesn't create any immediate tactical complications and can't be easily attacked. The bishop also prepares ...O-O while keeping the important h4-d8 diagonal clear for potential defense or counterplay. By choosing this development, our opponent is indicating they prefer solid, classical piece coordination over more aggressive alternatives like the Ragozin Defense with ...Bb4."
     },
     {
       "san": "Bg5",
-      "annotation": "We're developing our light-squared bishop to an aggressive square where it pins Black's knight to the queen, creating immediate tactical pressure and restricting Black's options. This pin is a key theme in the Queen's Gambit, as it makes it difficult for Black to play natural moves like ...h6 without weakening their kingside. The bishop on g5 also supports potential tactical ideas involving capturing on f6 to damage Black's pawn structure or force recapture with the bishop. This development fits perfectly with our opening strategy of creating pressure and maintaining the initiative while completing our development."
+      "annotation": "We're developing our light-squared bishop to an aggressive square where it pins Black's knight to the queen, creating immediate tactical pressure and restricting Black's options. This pin is a key theme in the Queen's Gambit, as it makes it difficult for Black to play logical choices like ...h6 without weakening their kingside. The bishop on g5 also supports potential tactical ideas involving capturing on f6 to damage Black's pawn structure or force recapture with the bishop. This development fits perfectly with our opening strategy of creating pressure and maintaining the initiative while completing our development."
     },
     {
       "san": "O-O",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're supporting our d4 pawn with this solid developing move while opening the diagonal for our dark-squared bishop and preparing to complete our kingside development. This move creates a strong pawn chain on d4-e3 that gives us excellent central control and prevents Black from easily advancing ...e5. The e3 pawn also prepares potential tactical ideas involving f2-f4 or supports our pieces if they need to retreat. While this move is slightly passive compared to alternatives like e4, it fits the positional nature of the Queen's Gambit where we prioritize solid development and long-term strategic advantages over immediate tactical fireworks."
+      "annotation": "We're supporting our d4 pawn with this solid developing choice while opening the diagonal for our dark-squared bishop and preparing to complete our kingside development. This move creates a strong pawn chain on d4-e3 that gives us excellent central control and prevents Black from easily advancing ...e5. The e3 pawn also prepares potential tactical ideas involving f2-f4 or supports our pieces if they need to retreat. While this move is slightly passive compared to alternatives like e4, it fits the positional nature of the Queen's Gambit where we prioritize solid development and long-term strategic advantages over immediate tactical fireworks."
     },
     {
       "san": "Nbd7",

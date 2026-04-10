@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our e4 pawn and preparing to meet Black's central challenges. This move keeps our options open - we can still play the Open Sicilian with f3 and d4, or continue with the Closed System that we're heading toward. The knight on c3 also eyes important central squares like d5 and e4, and supports a potential d4 pawn break later in the game. By developing pieces before committing to a specific pawn structure, we maintain maximum flexibility in our setup."
+      "annotation": "We develop our knight to its ideal square, supporting our e4 pawn and preparing to meet Black's central challenges. This move keeps our options open - we can still play the Open Sicilian with f3 and d4, or continue with the Closed System that we're heading toward. The knight on c3 also eyes important central squares like d5 and e4, and supports a potential d4 pawn break later in the game. By developing pieces before committing to a specific pawn structure, we maintain maximum flexibility in our setup."
     },
     {
       "san": "Nc6",
-      "annotation": "Black mirrors our development by bringing out their queenside knight, which is the most natural developing move in most Sicilian variations. This knight supports Black's central pawn on c5 and contests our control of the d4 square, making it harder for us to achieve the d4 break easily. The knight also prepares potential piece activity on the queenside and keeps Black's options open for different setups. From c6, the knight can potentially jump to d4 or support pawn advances like ...d6 and ...f5."
+      "annotation": "Black mirrors our development by bringing out their queenside knight, which is the most active move in most Sicilian variations. This knight supports Black's central pawn on c5 and contests our control of the d4 square, making it harder for us to achieve the d4 break easily. The knight also prepares potential piece activity on the queenside and keeps Black's options open for different setups. From c6, the knight can potentially jump to d4 or support pawn advances like ...d6 and ...f5."
     },
     {
       "san": "Nge2",

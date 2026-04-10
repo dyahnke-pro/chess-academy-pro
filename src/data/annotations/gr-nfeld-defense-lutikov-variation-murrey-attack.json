@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preventing us from immediately advancing e2-e4. This flexible move keeps Black's options open - they can still transpose into various defenses like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined depending on how we continue. The knight on f6 also supports Black's plan to potentially challenge our center with moves like ...d5 or ...c5. From f6, this knight controls important central squares like e4 and d5."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preventing us from immediately advancing e2-e4. This flexible move keeps Black's options open - they can still transpose into various defenses like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined depending on how we continue. The knight on f6 also supports Black's plan to potentially challenge our center with moves like ...d5 or ...c5. From f6, this knight controls important central squares like e4 and d5."
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at our pawn center with the characteristic Grünfeld Defense move, immediately challenging our space advantage and forcing us to make a crucial decision about our pawn structure. This move transforms the position from a King's Indian setup into the sharp Grünfeld Defense, where Black sacrifices early central control for dynamic piece play. Our opponent is offering to trade their d-pawn for our c-pawn, which would give them active piece development and pressure along the long diagonal. The d5 advance is the key move that defines the Grünfeld - Black is willing to allow us a strong pawn center in exchange for counterplay against it."
+      "annotation": "Black strikes at our pawn center with the characteristic Grünfeld Defense move, immediately challenging our space advantage and forcing us to make a crucial decision about our pawn structure. This move transforms the position from a King's Indian setup into the sharp Grünfeld Defense, where Black sacrifices early central control for dynamic piece play. Our opponent is offering to trade their d-pawn for our c-pawn, which would give them active piece development and pressure along the long diagonal. The d5 advance is the defining move of the Grünfeld - Black is willing to allow us a strong pawn center in exchange for counterplay against it."
     },
     {
       "san": "f3",

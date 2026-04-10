@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black declines the gambit and instead supports the d5 pawn with this solid move, creating what's known as the Queen's Gambit Declined. Our opponent is prioritizing central stability over the free pawn, which shows good positional understanding. However, this move also has a significant drawback - it blocks in Black's light-squared bishop on c8, which will become a long-term problem. We're pleased to see this move because it gives us a clear target to pressure and allows us to maintain more space in the center."
+      "annotation": "Black declines the gambit and instead supports the d5 pawn with this stabilizing move, creating what's known as the Queen's Gambit Declined. Our opponent is prioritizing central stability over the free pawn, which shows good positional understanding. However, this move also has a significant drawback - it blocks in Black's light-squared bishop on c8, which will become a long-term problem. We're pleased to see this move because it gives us a clear target to pressure and allows us to maintain more space in the center."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our central pawns and prepares castling. This knight beautifully complements our pawn center by controlling the important e5 and h4 squares, while also keeping an eye on Black's kingside. The move is perfectly in harmony with our Queen's Gambit strategy - we develop pieces quickly while maintaining pressure on Black's somewhat cramped position. From f3, our knight is also ready to jump to more aggressive squares like e5 or g5 if the opportunity arises."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our central pawns and prepares castling. This knight beautifully complements our pawn center by controlling the important e5 and h4 squares, while also keeping an eye on Black's kingside. The move is perfectly in harmony with our Queen's Gambit strategy - we develop pieces quickly while maintaining pressure on Black's somewhat cramped position. From f3, our knight is also ready to jump to more aggressive squares like e5 or g5 if the opportunity arises."
     },
     {
       "san": "Nf6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "e4",
-      "annotation": "This is the key move that justifies our entire opening setup - we're establishing the classical pawn center that gives us a significant space advantage! Our pawn duo on d4 and e4 controls crucial central squares and gives our pieces fantastic outposts. This advance also opens up our light-squared bishop and puts immediate pressure on Black's pawn on f6, which must now decide where to go. The position has transformed from a quiet positional struggle into a more dynamic battle where we have better development, more space, and excellent prospects for a lasting initiative."
+      "annotation": "This is the critical move that justifies our entire opening setup - we're establishing the classical pawn center that gives us a significant space advantage! Our pawn duo on d4 and e4 controls crucial central squares and gives our pieces fantastic outposts. This advance also opens up our light-squared bishop and puts immediate pressure on Black's pawn on f6, which must now decide where to go. The position has transformed from a quiet positional struggle into a more dynamic battle where we have better development, more space, and excellent prospects for a lasting initiative."
     }
   ]
 }

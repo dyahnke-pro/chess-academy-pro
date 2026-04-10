@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside for safety. The knight on f3 also controls the important e5 and g5 squares, preventing Black from advancing pawns or placing pieces on these key central outposts. This move is extremely flexible, keeping our options open for various pawn structures - we could still play e3 for a solid setup or c4 for more dynamic play. From f3, our knight is perfectly placed to support both defensive and attacking operations in the center."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside for safety. The knight on f3 also controls the important e5 and g5 squares, preventing Black from advancing pawns or placing pieces on these key central outposts. This move is extremely flexible, keeping our options open for various pawn structures - we could still play e3 for a solid setup or c4 for more dynamic play. From f3, our knight is perfectly placed to support both defensive and attacking operations in the center."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight, attacking our d4 pawn while preparing to castle short. This natural developing move puts immediate pressure on our center, forcing us to make a decision about how to support the d4 pawn. The knight on f6 also controls important central squares like e4 and g4, limiting our piece placement options. Our opponent is following classical opening principles - develop knights before bishops, castle early, and challenge the center immediately."
+      "annotation": "Black develops the kingside knight, attacking our d4 pawn while preparing to castle short. This active move puts immediate pressure on our center, forcing us to make a decision about how to support the d4 pawn. The knight on f6 also controls important central squares like e4 and g4, limiting our piece placement options. Our opponent is following classical opening principles - develop knights before bishops, castle early, and challenge the center immediately."
     },
     {
       "san": "e3",

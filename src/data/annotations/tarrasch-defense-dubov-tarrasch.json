@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and prepares to recapture if Black takes on c4. This knight will be perfectly placed to support central advances and can later jump to active squares like e4 or b5 depending on the position. The knight on c3 is also preparing potential pawn advances like e4, which would give us an ideal pawn center. This development fits perfectly with our Queen's Gambit strategy of building central pressure while developing pieces to active squares."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and prepares to recapture if Black takes on c4. This knight will be perfectly placed to support central advances and can later jump to active squares like e4 or b5 depending on the position. The knight on c3 is also preparing potential pawn advances like e4, which would give us an ideal pawn center. This development fits perfectly with our Queen's Gambit strategy of building central pressure while developing pieces to active squares."
     },
     {
       "san": "c5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, where it controls important central squares like e5 and d4, and supports our kingside development. This natural move also prepares castling kingside while keeping maximum flexibility in our position. The knight on f3 will help us control key squares around Black's isolated d-pawn and can later support advances like e4 if the opportunity arises. This development maintains our slight advantage while keeping all our options open for the middlegame."
+      "annotation": "We're developing our knight to its ideal square, where it controls important central squares like e5 and d4, and supports our kingside development. this move also prepares castling kingside while keeping maximum flexibility in our position. The knight on f3 will help us control key squares around Black's isolated d-pawn and can later support advances like e4 if the opportunity arises. This development maintains our slight advantage while keeping all our options open for the middlegame."
     },
     {
       "san": "Nc6",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their kingside knight to its most natural square, where it supports the center and prepares kingside castling. This knight on f6 is actively placed and can support central advances with the d5 pawn or jump to aggressive squares like g4 or e4 if the opportunity arises. Black is developing their pieces harmoniously while maintaining the tension in the center, which is exactly the right approach in Tarrasch Defense positions. We should continue our development while looking for opportunities to increase pressure on Black's isolated pawn."
+      "annotation": "Our opponent develops their kingside knight to its ideal square, where it supports the center and prepares kingside castling. This knight on f6 is actively placed and can support central advances with the d5 pawn or jump to aggressive squares like g4 or e4 if the opportunity arises. Black is developing their pieces harmoniously while maintaining the tension in the center, which is exactly the right approach in Tarrasch Defense positions. We should continue our development while looking for opportunities to increase pressure on Black's isolated pawn."
     },
     {
       "san": "Bg2",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Bc5",
-      "annotation": "Black develops their light-squared bishop aggressively, pinning our centralized knight and creating immediate tactical threats in the center. This is the key move that defines the Dubov Tarrasch variation - instead of the more common Be7, Black chooses maximum activity at the cost of some risk. Our opponent is putting pressure on our knight and preparing to castle kingside while maintaining active piece play. We need to be careful here because Black has created some tactical possibilities, but our solid position should allow us to meet these threats while maintaining our structural advantages."
+      "annotation": "Black develops their light-squared bishop aggressively, pinning our centralized knight and creating immediate tactical threats in the center. This is the defining move of the Dubov Tarrasch variation - instead of the more common Be7, Black chooses maximum activity at the cost of some risk. Our opponent is putting pressure on our knight and preparing to castle kingside while maintaining active piece play. We need to be careful here because Black has created some tactical possibilities, but our solid position should allow us to meet these threats while maintaining our structural advantages."
     }
   ]
 }

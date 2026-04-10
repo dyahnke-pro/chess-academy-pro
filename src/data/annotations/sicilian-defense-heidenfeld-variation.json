@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and forcing us to make a decision about how to maintain our central presence. This is a very logical move that puts immediate pressure on our position while developing toward the center. The knight on f6 also prepares to support a future ...e6 or ...g6 setup, depending on what pawn structure Black chooses. Our opponent is essentially asking: 'Are you going to defend the e4 pawn passively, or are you going to push forward and create tension?'"
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and forcing us to make a decision about how to maintain our central presence. This is a very logical move that puts immediate pressure on our position while developing toward the center. The knight on f6 also prepares to support a future ...e6 or ...g6 setup, depending on what pawn structure Black chooses. Our opponent is essentially asking: 'Are you going to defend the e4 pawn passively, or are you going to push forward and create tension?'"
     },
     {
       "san": "e5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its best square, supporting the advanced e5 pawn while preparing to castle kingside for safety. The knight on f3 controls key central squares like e5, d4, and g5, and it's positioned to support our pawn structure while maintaining flexibility for future plans. This natural developing move also prepares potential tactics - if Black ever plays ...f6 to challenge our e5 pawn, we might have tactical shots involving the knight. Additionally, from f3 our knight can potentially reroute to more aggressive squares like g5 or h4 if the position calls for a kingside attack."
+      "annotation": "We're developing our knight to its best square, supporting the advanced e5 pawn while preparing to castle kingside for safety. The knight on f3 controls key central squares like e5, d4, and g5, and it's positioned to support our pawn structure while maintaining flexibility for future plans. This active move also prepares potential tactics - if Black ever plays ...f6 to challenge our e5 pawn, we might have tactical shots involving the knight. Additionally, from f3 our knight can potentially reroute to more aggressive squares like g5 or h4 if the position calls for a kingside attack."
     },
     {
       "san": "Nc6",

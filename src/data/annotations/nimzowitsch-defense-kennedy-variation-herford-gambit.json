@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn advance, claiming central space and immediately controlling the key d5 and f5 squares. This classical move also frees our light-squared bishop for development along the a2-g8 diagonal and opens a path for our queen to potentially enter the game. The e4 advance follows fundamental opening principles by fighting for the center with a pawn, and it leads to sharp, tactical positions that reward active piece play. Most importantly, we're putting immediate pressure on Black to respond to our central presence, setting the tone for an aggressive game."
+      "annotation": "We're opening with the king's pawn advance, claiming central space and immediately controlling the key d5 and f5 squares. This classical move also frees our light-squared bishop for development along the a2-g8 diagonal and opens a path for our queen to potentially enter the game. The e4 advance follows fundamental opening principles by contesting central control with a pawn, and it leads to sharp, tactical positions that reward active piece play. Most importantly, we're putting immediate pressure on Black to respond to our central presence, setting the tone for an aggressive game."
     },
     {
       "san": "Nc6",
@@ -19,11 +19,11 @@
     },
     {
       "san": "dxe5",
-      "annotation": "We're accepting Black's pawn sacrifice by capturing on e5, winning material but also opening the position for Black's pieces. This natural move maintains our extra pawn while keeping our strong pawn on e4, but we must be prepared for Black's aggressive follow-up moves that will target our king position. By taking the pawn, we're also opening the d-file for our queen and potentially for a future rook, which could prove valuable in the middlegame. However, we need to be extremely careful about our king safety, as Black's next moves will likely involve rapid piece development with attacking intentions, making this a critical moment where accurate play is essential."
+      "annotation": "We're accepting Black's pawn sacrifice by capturing on e5, winning material but also opening the position for Black's pieces. this move maintains our extra pawn while keeping our strong pawn on e4, but we must be prepared for Black's aggressive follow-up moves that will target our king position. By taking the pawn, we're also opening the d-file for our queen and potentially for a future rook, which could prove valuable in the middlegame. However, we need to be extremely careful about our king safety, as Black's next moves will likely involve rapid piece development with attacking intentions, making this a critical moment where accurate play is essential."
     },
     {
       "san": "Qh4",
-      "annotation": "Our opponent launches an immediate and dangerous attack on our kingside with this aggressive queen sortie, targeting both our undefended h2 pawn and creating threats against our uncastled king. This is the defining move of the Herford Gambit, where Black sacrifices the e5 pawn for lightning-fast development and attacking chances against our exposed king position. The queen on h4 also eyes the f2 square, our weakest point, and can potentially coordinate with other pieces for a devastating attack. We must respond very carefully here, as moves like g3 or h3 create weaknesses, while developing moves like Nf3 or Be2 may not adequately address the immediate threats - this position demands precise defensive play to consolidate our extra pawn while ensuring our king's safety."
+      "annotation": "Our opponent launches an immediate and dangerous attack on our kingside with this aggressive queen sortie, targeting both our undefended h2 pawn and creating threats against our uncastled king. This is the defining move of the Herford Gambit, where Black sacrifices the e5 pawn for lightning-fast development and attacking chances against our exposed king position. The queen on h4 also eyes the f2 square, our weakest point, and can potentially coordinate with other pieces for a devastating attack. We must respond very carefully here, as moves like g3 or h3 create weaknesses, while developing choices like Nf3 or Be2 may not adequately address the immediate threats - this position demands precise defensive play to consolidate our extra pawn while ensuring our king's safety."
     }
   ]
 }

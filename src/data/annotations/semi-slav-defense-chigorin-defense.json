@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and increasing the pressure in the center. This knight perfectly supports our potential pawn breaks and will be excellently placed for the typical middlegame plans in Queen's Gambit positions. From c3, the knight eyes important central squares like e4 and d5, and it doesn't block our b-pawn, keeping our queenside pawn majority flexible. The knight development also prepares us to potentially recapture on c4 with the knight if Black takes our gambit pawn, maintaining central control."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn and increasing the pressure in the center. This knight perfectly supports our potential pawn breaks and will be excellently placed for the typical middlegame plans in Queen's Gambit positions. From c3, the knight eyes important central squares like e4 and d5, and it doesn't block our b-pawn, keeping our queenside pawn majority flexible. The knight development also prepares us to potentially recapture on c4 with the knight if Black takes our gambit pawn, maintaining central control."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight, attacking our e4 square and preparing to castle kingside for safety. This natural developing move is almost universally played in Slav Defense positions because it puts pressure on our center while improving Black's position. The knight on f6 also supports potential pawn breaks like e6-e5 later in the game, giving Black central counterplay options. By developing this knight, our opponent is following the classical opening principles of controlling the center with pieces and preparing to safeguard their king."
+      "annotation": "Black develops their kingside knight, attacking our e4 square and preparing to castle kingside for safety. This active move is almost universally played in Slav Defense positions because it puts pressure on our center while improving Black's position. The knight on f6 also supports potential pawn breaks like e6-e5 later in the game, giving Black central counterplay options. By developing this knight, our opponent is following the classical opening principles of controlling the center with pieces and preparing to safeguard their king."
     },
     {
       "san": "e3",

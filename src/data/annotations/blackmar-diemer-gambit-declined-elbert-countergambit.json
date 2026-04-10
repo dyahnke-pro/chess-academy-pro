@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight with tempo, attacking Black's advanced e4 pawn and forcing our opponent to make a decision about how to maintain their extra material. This knight development is the key move of the Blackmar-Diemer Gambit, as it immediately puts pressure on the pawn Black just captured while developing toward the center. The knight on c3 also supports a future d5 advance and can potentially jump to more active squares like e4 or b5 depending on how the position develops. We're following the gambit principle of rapid development over material considerations, and this move forces Black to respond to our immediate threats."
+      "annotation": "We're developing our knight with tempo, attacking Black's advanced e4 pawn and forcing our opponent to make a decision about how to maintain their extra material. This knight development is the central idea of the Blackmar-Diemer Gambit, as it immediately puts pressure on the pawn Black just captured while developing toward the center. The knight on c3 also supports a future d5 advance and can potentially jump to more active squares like e4 or b5 depending on how the position develops. We're following the gambit principle of rapid development over material considerations, and this move forces Black to respond to our immediate threats."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending against potential threats while bringing a piece into active play. This is one of the most solid responses to our gambit, as the knight on f6 controls important central squares like e4 and d5, while also preparing to castle kingside. Our opponent is following sound development principles by getting pieces out quickly rather than trying to hold onto the extra pawn with moves like e3, which would be more provocative. The Nf6 development also supports Black's central control and prepares potential counterplay in the center with moves like e5."
+      "annotation": "Black develops their knight to its ideal square, defending against potential threats while bringing a piece into active play. This is one of the most solid responses to our gambit, as the knight on f6 controls important central squares like e4 and d5, while also preparing to castle kingside. Our opponent is following sound development principles by getting pieces out quickly rather than trying to hold onto the extra pawn with moves like e3, which would be more provocative. The Nf6 development also supports Black's central control and prepares potential counterplay in the center with moves like e5."
     },
     {
       "san": "f3",

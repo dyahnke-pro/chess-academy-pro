@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 and d4 squares while supporting our future kingside development. This move is virtually automatic in most d4 openings because the knight is perfectly placed on f3, from where it can jump to excellent squares like e5, d4, or g5 depending on the position's requirements. Our knight also prepares castling kingside and doesn't commit us to any particular pawn structure yet, maintaining maximum flexibility. Against the Slav Defense specifically, this knight will often play a crucial role in controlling the e5 square and preventing Black from achieving easy equality through piece exchanges."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while supporting our future kingside development. This move is virtually automatic in most d4 openings because the knight is perfectly placed on f3, from where it can jump to excellent squares like e5, d4, or g5 depending on the position's requirements. Our knight also prepares castling kingside and doesn't commit us to any particular pawn structure yet, maintaining maximum flexibility. Against the Slav Defense specifically, this knight will often play a crucial role in controlling the e5 square and preventing Black from achieving easy equality through piece exchanges."
     },
     {
       "san": "Nf6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black consolidates the position with this solid move, supporting the isolated d-pawn while preparing to complete kingside development with Be7 and castling. This move creates a more secure pawn structure and eliminates any potential tactics involving our pieces attacking along the a2-g8 diagonal. Our opponent is following sound positional principles by securing the king's position before pursuing more ambitious plans. The e6 move also prepares potential future plans like f6 and e5, giving Black good central control and the possibility of activating the pieces further. This demonstrates the typical Slav Defense strategy: secure the position first, then seek active counterplay."
+      "annotation": "Black consolidates the position with this stabilizing move, supporting the isolated d-pawn while preparing to complete kingside development with Be7 and castling. This move creates a more secure pawn structure and eliminates any potential tactics involving our pieces attacking along the a2-g8 diagonal. Our opponent is following sound positional principles by securing the king's position before pursuing more ambitious plans. The e6 move also prepares potential future plans like f6 and e5, giving Black good central control and the possibility of activating the pieces further. This demonstrates the typical Slav Defense strategy: secure the position first, then seek active counterplay."
     },
     {
       "san": "Bd2",

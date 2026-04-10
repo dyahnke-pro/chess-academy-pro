@@ -15,11 +15,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our e4 pawn and preparing to castle kingside. This is the characteristic move of the Pirc Defense, where Black develops pieces quickly while maintaining pressure on our center. The knight on f6 also supports a future e5 pawn break, which is one of Black's main thematic counterplay ideas. We now need to decide how to defend our e4 pawn while continuing our development."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our e4 pawn and preparing to castle kingside. This is the characteristic move of the Pirc Defense, where Black develops pieces quickly while maintaining pressure on our center. The knight on f6 also supports a future e5 pawn break, which is one of Black's main thematic counterplay ideas. We now need to decide how to defend our e4 pawn while continuing our development."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to defend the e4 pawn while maintaining maximum flexibility in our position. This move supports our central structure and prepares various attacking setups, including the possibility of f2-f4 to build a broader pawn center. Our knight on c3 also eyes important squares like d5 and b5, and keeps our options open for different pawn structures. This natural developing move avoids committing to any specific plan too early while maintaining pressure on Black's position."
+      "annotation": "We develop our knight to defend the e4 pawn while maintaining maximum flexibility in our position. This move supports our central structure and prepares various attacking setups, including the possibility of f2-f4 to build a broader pawn center. Our knight on c3 also eyes important squares like d5 and b5, and keeps our options open for different pawn structures. This active move avoids committing to any specific plan too early while maintaining pressure on Black's position."
     },
     {
       "san": "g6",

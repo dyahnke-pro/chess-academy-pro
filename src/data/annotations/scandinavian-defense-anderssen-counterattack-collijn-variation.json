@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our center and preparing to castle kingside. This move is logical and follows opening principles, but it also allows Black's next move, which creates immediate pressure. The knight on f3 controls important central squares like e5 and d4, and prepares our king's safety. However, we need to be aware that Black can now pin this knight with ...Bg4, which creates some tactical complications and prevents us from capturing the e5 pawn immediately with this knight."
+      "annotation": "We're developing our knight to its ideal square, supporting our center and preparing to castle kingside. This move is logical and follows opening principles, but it also allows Black's next move, which creates immediate pressure. The knight on f3 controls important central squares like e5 and d4, and prepares our king's safety. However, we need to be aware that Black can now pin this knight with ...Bg4, which creates some tactical complications and prevents us from capturing the e5 pawn immediately with this knight."
     },
     {
       "san": "Bg4",

@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate pressure on our central pawn. This knight also prepares potential breaks with ...e6 and ...c5 or ...d5, giving Black multiple paths to equality."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate pressure on our central pawn. This knight also prepares potential breaks with ...e6 and ...c5 or ...d5, giving Black multiple paths to equality."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, defending the d4 pawn while controlling the important central squares e5 and g5. This natural developing move also prepares castling kingside and keeps our options open for various pawn structures. By defending d4 with a piece rather than a pawn (like c3), we maintain maximum flexibility in our pawn formation and avoid committing to any particular setup too early. The knight on f3 also supports a potential e3-e4 advance later, which could give us a strong pawn center if the position allows."
+      "annotation": "We develop our knight to its ideal square, defending the d4 pawn while controlling the important central squares e5 and g5. This active move also prepares castling kingside and keeps our options open for various pawn structures. By defending d4 with a piece rather than a pawn (like c3), we maintain maximum flexibility in our pawn formation and avoid committing to any particular setup too early. The knight on f3 also supports a potential e3-e4 advance later, which could give us a strong pawn center if the position allows."
     },
     {
       "san": "e6",

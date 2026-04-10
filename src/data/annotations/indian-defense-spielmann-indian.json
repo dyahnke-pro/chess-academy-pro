@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, supporting our d4 pawn and preparing for kingside castling. This move maintains the central tension while developing a piece toward the center, and importantly, it keeps our options open regarding our pawn structure - we haven't committed to c4 yet, which means we can still transpose into various systems. The knight on f3 also eyes the important e5 square and can potentially support a future e4 advance if the position allows. By developing pieces before pushing more pawns, we're following classical opening principles while maintaining maximum flexibility."
+      "annotation": "We develop our kingside knight to its ideal square, supporting our d4 pawn and preparing for kingside castling. This move maintains the central tension while developing a piece toward the center, and importantly, it keeps our options open regarding our pawn structure - we haven't committed to c4 yet, which means we can still transpose into various systems. The knight on f3 also eyes the important e5 square and can potentially support a future e4 advance if the position allows. By developing pieces before pushing more pawns, we're following classical opening principles while maintaining maximum flexibility."
     },
     {
       "san": "c5",

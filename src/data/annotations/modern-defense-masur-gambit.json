@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing for further piece coordination. This knight controls important central squares like b5, d5, and e4, while keeping our options open for various setups. Against Black's unusual knight placement, we're sticking to sound developmental principles while staying flexible about how to respond to their coming pawn storm. The knight on c3 also prepares potential advances like f2-f4 if we want to support our center with pawns, and it doesn't block our c-pawn in case we need c2-c3 for additional support."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing for further piece coordination. This knight controls important central squares like b5, d5, and e4, while keeping our options open for various setups. Against Black's unusual knight placement, we're sticking to sound developmental principles while staying flexible about how to respond to their coming pawn storm. The knight on c3 also prepares potential advances like f2-f4 if we want to support our center with pawns, and it doesn't block our c-pawn in case we need c2-c3 for additional support."
     },
     {
       "san": "f5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, getting their king to safety while connecting their rooks and preparing to increase pressure along the f-file. This natural developing move is particularly important given that the center has opened up and tactical complications are likely. With the king safely tucked away, Black can now focus on piece activity and creating counterplay against our position. The f8 rook is now actively placed on the open file, and Black's kingside pieces are coordinated for potential attacking chances. We should complete our own development soon, as the position is becoming sharper and both sides need their pieces working together harmoniously."
+      "annotation": "Black castles kingside, getting their king to safety while connecting their rooks and preparing to increase pressure along the f-file. This active move is particularly important given that the center has opened up and tactical complications are likely. With the king safely tucked away, Black can now focus on piece activity and creating counterplay against our position. The f8 rook is now actively placed on the open file, and Black's kingside pieces are coordinated for potential attacking chances. We should complete our own development soon, as the position is becoming sharper and both sides need their pieces working together harmoniously."
     }
   ]
 }

@@ -11,7 +11,7 @@
     },
     {
       "san": "exd5",
-      "annotation": "We're accepting the pawn sacrifice and opening up the center, which is almost always the correct choice here. This capture removes Black's central pawn and gives us a temporary material advantage, though Black will quickly develop with tempo. By taking on d5, we're also opening the e-file for potential future use and clearing the way for our pieces to enter the game actively. The key point is that Black must now spend time with the queen to recapture, which we can exploit with developing moves that attack the exposed queen."
+      "annotation": "We're accepting the pawn sacrifice and opening up the center, which is almost always the correct choice here. This capture removes Black's central pawn and gives us a temporary material advantage, though Black will quickly develop with tempo. By taking on d5, we're also opening the e-file for potential future use and clearing the way for our pieces to enter the game actively. The key point is that Black must now spend time with the queen to recapture, which we can exploit with developing choices that attack the exposed queen."
     },
     {
       "san": "Qxd5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "d4",
-      "annotation": "We're establishing a strong pawn center and gaining space in the middle of the board, following classical opening principles. This central pawn controls the crucial e5 and c5 squares while opening lines for our light-squared bishop and preparing to support our pieces with a solid foundation. The move also prevents Black from easily playing e5, which would be a natural developing move. By occupying the center with pawns, we're setting up the foundation for a powerful middlegame position where our pieces will have excellent squares to operate from."
+      "annotation": "We're establishing a strong pawn center and gaining space in the middle of the board, following classical opening principles. This central pawn controls the crucial e5 and c5 squares while opening lines for our light-squared bishop and preparing to support our pieces with a solid foundation. The move also prevents Black from easily playing e5, which would be a active move. By occupying the center with pawns, we're setting up the foundation for a powerful middlegame position where our pieces will have excellent squares to operate from."
     },
     {
       "san": "e5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, attacking our advanced e5 pawn and preparing to complete kingside development. This move also supports the queen on a5 and prepares potential tactics involving both the knight and queen working together. Our opponent is finally getting pieces into the game and creating some pressure against our position. The knight on c6 is well-placed to support Black's counterplay and can potentially jump to d4 or b4 to create further complications."
+      "annotation": "Black develops the knight to its ideal square, attacking our advanced e5 pawn and preparing to complete kingside development. This move also supports the queen on a5 and prepares potential tactics involving both the knight and queen working together. Our opponent is finally getting pieces into the game and creating some pressure against our position. The knight on c6 is well-placed to support Black's counterplay and can potentially jump to d4 or b4 to create further complications."
     },
     {
       "san": "Nf3",

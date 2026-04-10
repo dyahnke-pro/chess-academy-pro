@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while preparing to support our central ambitions. This move keeps maximum flexibility in our setup - we can still choose between systems like g3 and Bg2 (the fianchetto approach), d4 (transposing to Queen's Gambit territory), or even Nc3 followed by e4 for a more aggressive central presence. The knight on f3 also provides crucial support if we decide to advance d4 later, as it will help control the e5 square and prevent Black from establishing a strong knight there. Additionally, this move prepares kingside castling and maintains the tension about our future pawn structure."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while preparing to support our central ambitions. This move keeps maximum flexibility in our setup - we can still choose between systems like g3 and Bg2 (the fianchetto approach), d4 (transposing to Queen's Gambit territory), or even Nc3 followed by e4 for a more aggressive central presence. The knight on f3 also provides crucial support if we decide to advance d4 later, as it will help control the e5 square and prevent Black from establishing a strong knight there. Additionally, this move prepares kingside castling and maintains the tension about our future pawn structure."
     },
     {
       "san": "d5",

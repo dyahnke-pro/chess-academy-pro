@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This move also prepares for quick kingside castling while keeping maximum flexibility in our pawn structure. The knight on f3 is perfectly placed to support future central advances like d4 or to help coordinate an eventual kingside attack. By developing a piece and creating an immediate threat, we're following classical opening principles while maintaining the initiative."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This move also prepares for quick kingside castling while keeping maximum flexibility in our pawn structure. The knight on f3 is perfectly placed to support future central advances like d4 or to help coordinate an eventual kingside attack. By developing a piece and creating an immediate threat, we're following classical opening principles while maintaining the initiative."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, placing the knight on an excellent central square. Our opponent is following sound opening principles by developing pieces and maintaining the central tension rather than moving the same piece twice. The knight on c6 controls important squares like d4 and e5, and will often play a key role in Black's counterplay throughout the middlegame. This is by far the most popular and principled response, leading to the rich strategic battles characteristic of the Spanish Opening."
+      "annotation": "Black defends the e5 pawn with the most active move, placing the knight on an excellent central square. Our opponent is following sound opening principles by developing pieces and maintaining the central tension rather than moving the same piece twice. The knight on c6 controls important squares like d4 and e5, and will often play a key role in Black's counterplay throughout the middlegame. This is by far the most popular and principled response, leading to the rich strategic battles characteristic of the Spanish Opening."
     },
     {
       "san": "Bb5",
@@ -59,7 +59,7 @@
     },
     {
       "san": "c3",
-      "annotation": "We prepare the central advance d4 by supporting the pawn with our c-pawn, a key move in the Closed Spanish structure. This move also controls the important b4 and d4 squares, preventing Black from placing pieces on these strong outposts. By playing c3, we're following the typical Spanish plan of building up slowly for the central break d4, which will challenge Black's pawn chain. This patient approach is characteristic of the Closed Ruy Lopez, where positional maneuvering often takes precedence over immediate tactical shots."
+      "annotation": "We prepare the central advance d4 by supporting the pawn with our c-pawn, a critical move in the Closed Spanish structure. This move also controls the important b4 and d4 squares, preventing Black from placing pieces on these strong outposts. By playing c3, we're following the typical Spanish plan of building up slowly for the central break d4, which will challenge Black's pawn chain. This patient approach is characteristic of the Closed Ruy Lopez, where positional maneuvering often takes precedence over immediate tactical shots."
     },
     {
       "san": "O-O",
@@ -67,7 +67,7 @@
     },
     {
       "san": "h3",
-      "annotation": "We make this subtle but important move to prevent Black from placing a piece on g4, particularly the bishop which could pin our f3 knight. This move also prepares for potential kingside expansion with g4 in some variations, giving us extra space around our king. While it might seem slow, h3 is a very common and useful move in Spanish structures, preventing annoying pins and giving our king a flight square on h2. The move also subtly improves our king's safety while maintaining all our other strategic options for the middlegame ahead."
+      "annotation": "We make this subtle but purposeful move to prevent Black from placing a piece on g4, particularly the bishop which could pin our f3 knight. This move also prepares for potential kingside expansion with g4 in some variations, giving us extra space around our king. While it might seem slow, h3 is a very common and useful move in Spanish structures, preventing annoying pins and giving our king a flight square on h2. The move also subtly improves our king's safety while maintaining all our other strategic options for the middlegame ahead."
     },
     {
       "san": "Nd7",

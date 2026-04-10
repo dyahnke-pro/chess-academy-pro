@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our c4 pawn and adds pressure to the central d5 square that we're trying to control. This knight placement is incredibly flexible - it can later jump to d5, e4, or even b5 depending on how the position develops. The knight on c3 also prepares potential pawn breaks like d3-d4, challenging Black's central pawn chain. From c3, our knight works harmoniously with the c4 pawn to create what's known as the 'English Formation' - a setup that gives us long-term influence over the light squares in the center."
+      "annotation": "We develop our knight to its ideal square, where it supports our c4 pawn and adds pressure to the central d5 square that we're trying to control. This knight placement is incredibly flexible - it can later jump to d5, e4, or even b5 depending on how the position develops. The knight on c3 also prepares potential pawn breaks like d3-d4, challenging Black's central pawn chain. From c3, our knight works harmoniously with the c4 pawn to create what's known as the 'English Formation' - a setup that gives us long-term influence over the light squares in the center."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our hypothetical e4 pawn (if we were to play it) and preparing to castle kingside. This natural developing move also supports Black's central e5 pawn while keeping options open for different pawn structures. The knight on f6 is perfectly placed to support a potential ...d5 advance later, which would challenge our c4 pawn and fight for central equality. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the tension created by the early e5 advance."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our hypothetical e4 pawn (if we were to play it) and preparing to castle kingside. This active move also supports Black's central e5 pawn while keeping options open for different pawn structures. The knight on f6 is perfectly placed to support a potential ...d5 advance later, which would challenge our c4 pawn and fight for central equality. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the tension created by the early e5 advance."
     },
     {
       "san": "Nf3",

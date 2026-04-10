@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, supporting our d4 pawn and taking control of the important b5 and d5 squares. This move significantly increases our central influence and prepares to meet Black's ...e5 advance with strong central control. The c4 pawn also opens up possibilities for our queen and supports potential future advances like d4-d5, which could give us a space advantage. This is a key move in the Catalan and King's Indian setups, and we're keeping our options open for both kingside fianchetto development and queenside pressure."
+      "annotation": "We're playing the English Opening move order, supporting our d4 pawn and taking control of the important b5 and d5 squares. This move significantly increases our central influence and prepares to meet Black's ...e5 advance with strong central control. The c4 pawn also opens up possibilities for our queen and supports potential future advances like d4-d5, which could give us a space advantage. This is a critical move in the Catalan and King's Indian setups, and we're keeping our options open for both kingside fianchetto development and queenside pressure."
     },
     {
       "san": "g6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing to contest Black's inevitable central breaks. This knight placement is extremely flexible, as it can later jump to e4, d5, or even b5 depending on how the position develops. The Nc3 also supports our c4 pawn and prepares us to meet Black's ...c5 with strong central control. We're building a classical development pattern that gives us excellent piece coordination and maintains our central advantage while keeping multiple strategic options available."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing to contest Black's inevitable central breaks. This knight placement is extremely flexible, as it can later jump to e4, d5, or even b5 depending on how the position develops. The Nc3 also supports our c4 pawn and prepares us to meet Black's ...c5 with strong central control. We're building a classical development pattern that gives us excellent piece coordination and maintains our central advantage while keeping multiple strategic options available."
     },
     {
       "san": "d6",

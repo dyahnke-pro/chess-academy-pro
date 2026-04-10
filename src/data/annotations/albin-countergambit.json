@@ -234,7 +234,7 @@
     },
     {
       "san": "Bd2",
-      "annotation": "White blocks with the bishop, the most natural move but it falls into the Lasker Trap! After ...dxe3, the pawn on e3 threatens a devastating discovered attack. White should prefer Nd2 here, which avoids the trap entirely.",
+      "annotation": "White blocks with the bishop, the most principled response but it falls into the Lasker Trap! After ...dxe3, the pawn on e3 threatens a devastating discovered attack. White should prefer Nd2 here, which avoids the trap entirely.",
       "plans": [
         "Block the check and try to simplify",
         "Develop and hope to neutralize the d-pawn"
@@ -955,7 +955,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "The Albin Countergambit: Lasker Trap is an important variation of the Albin Countergambit. The legendary Lasker Trap — after Bb4+ Bd2 dxe3 Bxb4 exf2+, the key move is fxg1=N+, underpromoting to a knight with check. The knight forks the king and rook, winning the exchange. Then Bg4+ forces the king further, and Qxd1 wins White's queen. An absolute classic of chess tactics. Let's walk through the key ideas."
+          "annotation": "The Albin Countergambit: Lasker Trap is an important variation of the Albin Countergambit. The legendary Lasker Trap — after Bb4+ Bd2 dxe3 Bxb4 exf2+, the critical move is fxg1=N+, underpromoting to a knight with check. The knight forks the king and rook, winning the exchange. Then Bg4+ forces the king further, and Qxd1 wins White's queen. An absolute classic of chess tactics. Let's walk through the key ideas."
         },
         {
           "san": "d5",

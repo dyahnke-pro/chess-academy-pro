@@ -15,7 +15,7 @@
     },
     {
       "san": "Nd5",
-      "annotation": "Black's knight retreats to the strong central square d5, where it's well-placed but will likely face further harassment from our pieces. This is the most natural square for the knight since it maintains central influence while staying safe from immediate pawn attacks. From d5, the knight controls important squares like b4, c7, e7, f4, f6, b6, and c3, giving Black good piece activity. However, we can continue to pressure this knight with moves like c4 or Bc4, forcing it to move again and gaining more time for our development."
+      "annotation": "Black's knight retreats to the strong central square d5, where it's well-placed but will likely face further harassment from our pieces. This is the ideal square for the knight since it maintains central influence while staying safe from immediate pawn attacks. From d5, the knight controls important squares like b4, c7, e7, f4, f6, b6, and c3, giving Black good piece activity. However, we can continue to pressure this knight with moves like c4 or Bc4, forcing it to move again and gaining more time for our development."
     },
     {
       "san": "d4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and prepares to castle kingside quickly. The knight on f3 also eyes the important e5 square (supporting our pawn there) and can potentially jump to excellent outposts like e4 or g5 later in the game. This development move follows sound opening principles while maintaining flexibility in our position. Additionally, the knight helps protect our king and can support a future f2-f4 advance if we want to build a strong pawn center, though we must be ready to respond to Black's developing moves."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and prepares to castle kingside quickly. The knight on f3 also eyes the important e5 square (supporting our pawn there) and can potentially jump to excellent outposts like e4 or g5 later in the game. This development move follows sound opening principles while maintaining flexibility in our position. Additionally, the knight helps protect our king and can support a future f2-f4 advance if we want to build a strong pawn center, though we must be ready to respond to Black's developing choices."
     },
     {
       "san": "g6",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the d4 pawn and prepares to respond to Black's central challenges. This knight placement is particularly important because it allows us to recapture on d4 with a piece rather than a pawn if Black ever plays ...Nxd4. From c3, our knight also eyes important central squares like e4 and d5, and it doesn't block our c-pawn in case we want to advance it further. This development follows classical principles while keeping maximum flexibility in our pawn structure."
+      "annotation": "We're developing our knight to its ideal square, where it supports the d4 pawn and prepares to respond to Black's central challenges. This knight placement is particularly important because it allows us to recapture on d4 with a piece rather than a pawn if Black ever plays ...Nxd4. From c3, our knight also eyes important central squares like e4 and d5, and it doesn't block our c-pawn in case we want to advance it further. This development follows classical principles while keeping maximum flexibility in our pawn structure."
     },
     {
       "san": "d5",

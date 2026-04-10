@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately attacking our central d4 pawn and preparing to contest our control of the center. This is one of the most principled responses to 1.d4, as the knight on f6 not only puts pressure on our pawn but also prepares kingside castling and potential pawn breaks like ...e6 or ...g6. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate threats. We'll need to decide whether to defend the d4 pawn or advance it, and this knight placement will influence many of Black's future strategic options."
+      "annotation": "Black develops the knight to its ideal square, immediately attacking our central d4 pawn and preparing to contest our control of the center. This is one of the most principled responses to 1.d4, as the knight on f6 not only puts pressure on our pawn but also prepares kingside castling and potential pawn breaks like ...e6 or ...g6. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate threats. We'll need to decide whether to defend the d4 pawn or advance it, and this knight placement will influence many of Black's future strategic options."
     },
     {
       "san": "c4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending against Black's mounting queenside pressure and preparing to consolidate our extra material. This move supports our b5 pawn indirectly and prepares potential moves like a4 to further solidify our queenside pawn chain. The knight on c3 also eyes important central squares like d5 and e4, giving us good piece coordination for the middlegame. However, we need to be aware that this knight can become a target for Black's pieces, and we'll need to handle the continued pressure carefully - Black's next moves will likely involve ...axb5, ...Bxb5, or other ways to increase the pressure on our position."
+      "annotation": "We're developing our knight to its ideal square while defending against Black's mounting queenside pressure and preparing to consolidate our extra material. This move supports our b5 pawn indirectly and prepares potential moves like a4 to further solidify our queenside pawn chain. The knight on c3 also eyes important central squares like d5 and e4, giving us good piece coordination for the middlegame. However, we need to be aware that this knight can become a target for Black's pieces, and we'll need to handle the continued pressure carefully - Black's next moves will likely involve ...axb5, ...Bxb5, or other ways to increase the pressure on our position."
     }
   ]
 }

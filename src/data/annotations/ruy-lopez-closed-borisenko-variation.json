@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This move also prepares to support our e4 pawn and opens up the possibility of castling kingside. The knight on f3 is perfectly placed to support future pawn advances like d3 or d4, and it can later jump to more active squares like g5 or h4 depending on how the position develops. This is the starting move of the Ruy Lopez, one of the oldest and most respected openings in chess history."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This move also prepares to support our e4 pawn and opens up the possibility of castling kingside. The knight on f3 is perfectly placed to support future pawn advances like d3 or d4, and it can later jump to more active squares like g5 or h4 depending on how the position develops. This is the starting move of the Ruy Lopez, one of the oldest and most respected openings in chess history."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to its most active square, defending the e5 pawn and preparing to challenge our control of the center. The knight on c6 also eyes important squares like d4 and b4, where it might later cause us problems. This natural developing move is almost universally played, as it solves Black's immediate problem of the attacked e5 pawn while improving their position. Black is following classical opening principles by developing pieces toward the center and preparing to castle."
+      "annotation": "Black develops their knight to its most active square, defending the e5 pawn and preparing to challenge our control of the center. The knight on c6 also eyes important squares like d4 and b4, where it might later cause us problems. This active move is almost universally played, as it solves Black's immediate problem of the attacked e5 pawn while improving their position. Black is following classical opening principles by developing pieces toward the center and preparing to castle."
     },
     {
       "san": "Bb5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "a6",
-      "annotation": "Black immediately challenges our Spanish bishop, forcing us to declare our intentions and preventing us from maintaining the pin indefinitely. This move also gains space on the queenside and prepares the advance b5, which will chase our bishop and potentially give Black more central control. While this looks like a simple developing move, it's actually quite sophisticated - Black is willing to spend a tempo to improve their pawn structure and clarify the position. The move also prevents future tactics involving our bishop capturing on c6 and doubling Black's pawns."
+      "annotation": "Black immediately challenges our Spanish bishop, forcing us to declare our intentions and preventing us from maintaining the pin indefinitely. This move also gains space on the queenside and prepares the advance b5, which will chase our bishop and potentially give Black more central control. While this looks like a simple developing choice, it's actually quite sophisticated - Black is willing to spend a tempo to improve their pawn structure and clarify the position. The move also prevents future tactics involving our bishop capturing on c6 and doubling Black's pawns."
     },
     {
       "san": "Ba4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, attacking our e4 pawn and preparing to castle kingside for safety. This move also adds another defender to the e5 pawn, making Black's central position more secure and flexible. The knight on f6 controls important central squares like d5 and e4, and it's perfectly placed to support Black's future pawn breaks or piece maneuvers. By developing this knight, Black is following the classical principle of getting pieces out quickly while maintaining the central tension."
+      "annotation": "Black develops their kingside knight to its ideal square, attacking our e4 pawn and preparing to castle kingside for safety. This move also adds another defender to the e5 pawn, making Black's central position more secure and flexible. The knight on f6 controls important central squares like d5 and e4, and it's perfectly placed to support Black's future pawn breaks or piece maneuvers. By developing this knight, Black is following the classical principle of getting pieces out quickly while maintaining the central tension."
     },
     {
       "san": "O-O",
@@ -55,7 +55,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies their center with this pawn advance, supporting the e5 pawn and preparing to complete development with moves like Bb7 or c6. This move also opens up the diagonal for Black's light-squared bishop and creates a solid pawn chain that will be difficult for us to break down immediately. While d6 looks somewhat passive, it's actually a key move in Black's setup - it prevents our pieces from infiltrating via d5 and prepares Black's own counterplay. The move also keeps options open for both ...Be6 and ...Bb7, depending on how we continue."
+      "annotation": "Black solidifies their center with this pawn advance, supporting the e5 pawn and preparing to complete development with moves like Bb7 or c6. This move also opens up the diagonal for Black's light-squared bishop and creates a solid pawn chain that will be difficult for us to break down immediately. While d6 looks somewhat passive, it's actually a critical move in Black's setup - it prevents our pieces from infiltrating via d5 and prepares Black's own counterplay. The move also keeps options open for both ...Be6 and ...Bb7, depending on how we continue."
     },
     {
       "san": "c3",

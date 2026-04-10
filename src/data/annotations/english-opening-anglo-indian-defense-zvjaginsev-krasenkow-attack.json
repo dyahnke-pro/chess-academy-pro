@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and adds additional pressure to the d5 square. This move prepares us for various pawn structure setups - we might support a d4 advance later or maintain the tension in the center depending on Black's response. The knight on c3 also keeps our options open for different piece arrangements, potentially supporting a kingside attack or central expansion. From c3, our knight is perfectly placed to react to whatever central pawn structure emerges."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and adds additional pressure to the d5 square. This move prepares us for various pawn structure setups - we might support a d4 advance later or maintain the tension in the center depending on Black's response. The knight on c3 also keeps our options open for different piece arrangements, potentially supporting a kingside attack or central expansion. From c3, our knight is perfectly placed to react to whatever central pawn structure emerges."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most active square, attacking our potential e4 advance and preparing to castle kingside. This natural developing move also supports Black's central ambitions, particularly a future d5 push that would challenge our pawn structure directly. Black is following sound opening principles by developing pieces toward the center while maintaining flexibility in the pawn structure. The knight on f6 also prepares potential tactical themes involving the e4 and d5 squares."
+      "annotation": "Our opponent develops the knight to its most active square, attacking our potential e4 advance and preparing to castle kingside. This active move also supports Black's central ambitions, particularly a future d5 push that would challenge our pawn structure directly. Black is following sound opening principles by developing pieces toward the center while maintaining flexibility in the pawn structure. The knight on f6 also prepares potential tactical themes involving the e4 and d5 squares."
     },
     {
       "san": "Nf3",

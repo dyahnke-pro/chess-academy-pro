@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its optimal square where it controls the central e4 and d5 squares. This is a principled response that doesn't commit to any particular pawn structure yet, keeping Black's options open for various setups. The knight on f6 also supports a potential ...e5 advance and puts immediate pressure on our position by threatening to jump to active squares like e4 or d5. Black is essentially saying 'I'll develop first and see what you're planning before committing to a specific structure.'"
+      "annotation": "Black responds with the most active move, bringing the knight to its optimal square where it controls the central e4 and d5 squares. This is a principled response that doesn't commit to any particular pawn structure yet, keeping Black's options open for various setups. The knight on f6 also supports a potential ...e5 advance and puts immediate pressure on our position by threatening to jump to active squares like e4 or d5. Black is essentially saying 'I'll develop first and see what you're planning before committing to a specific structure.'"
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, where it supports our control of the d5 square and prepares various central advances like d2-d4 or e2-e4. This move is extremely flexible because it doesn't reveal whether we're heading for a kingside fianchetto, a central pawn storm, or a more positional approach. The knight on c3 also eyes the important e4 square and can later support advances like b2-b4 to challenge Black's queenside. Most importantly, this keeps maximum flexibility while improving our position with a natural developing move."
+      "annotation": "We develop our knight to its most active square, where it supports our control of the d5 square and prepares various central advances like d2-d4 or e2-e4. This move is extremely flexible because it doesn't reveal whether we're heading for a kingside fianchetto, a central pawn storm, or a more positional approach. The knight on c3 also eyes the important e4 square and can later support advances like b2-b4 to challenge Black's queenside. Most importantly, this keeps maximum flexibility while improving our position with a active move."
     },
     {
       "san": "c5",

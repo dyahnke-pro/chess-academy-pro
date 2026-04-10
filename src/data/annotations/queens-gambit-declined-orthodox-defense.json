@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, supporting our d4 pawn while preparing to castle kingside. The knight on f3 also controls the important e5 and g5 squares, and it's perfectly placed to support our central strategy without blocking any of our pawns. This move follows classical opening principles by developing pieces toward the center, and it keeps maximum flexibility for our remaining pieces. From f3, our knight can later jump to more active squares like e5 or d2 if needed, depending on how the position develops."
+      "annotation": "We develop our kingside knight to its ideal square, supporting our d4 pawn while preparing to castle kingside. The knight on f3 also controls the important e5 and g5 squares, and it's perfectly placed to support our central strategy without blocking any of our pawns. This move follows classical opening principles by developing pieces toward the center, and it keeps maximum flexibility for our remaining pieces. From f3, our knight can later jump to more active squares like e5 or d2 if needed, depending on how the position develops."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to support the attacked c4 pawn while adding more pressure to Black's d5 strongpoint. This natural developing move also prepares several strategic ideas, including the possibility of exchanging on d5 or maintaining the central tension. The knight on c3 eyes the important e4 and b5 squares, and it's perfectly coordinated with our other pieces for the typical Queen's Gambit middlegame plans. By protecting c4, we maintain our central pawn structure while keeping Black guessing about when and how we'll resolve the central tension."
+      "annotation": "We develop our queenside knight to support the attacked c4 pawn while adding more pressure to Black's d5 strongpoint. This active move also prepares several strategic ideas, including the possibility of exchanging on d5 or maintaining the central tension. The knight on c3 eyes the important e4 and b5 squares, and it's perfectly coordinated with our other pieces for the typical Queen's Gambit middlegame plans. By protecting c4, we maintain our central pawn structure while keeping Black guessing about when and how we'll resolve the central tension."
     },
     {
       "san": "Be7",

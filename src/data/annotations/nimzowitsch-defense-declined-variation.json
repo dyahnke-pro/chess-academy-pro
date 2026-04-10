@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn two squares forward, staking our claim to the center and freeing both our bishop on f1 and our queen for future development. This classical first move controls the important d5 and f5 squares, preventing Black from easily establishing pieces there. The move follows fundamental opening principles by fighting for central space immediately, and it leads to sharp, tactical games where we'll often launch kingside attacks. From here, we're prepared to meet most of Black's responses with natural developing moves like Nf3, Bc4, or d3, depending on what our opponent chooses."
+      "annotation": "We're opening with the king's pawn two squares forward, staking our claim to the center and freeing both our bishop on f1 and our queen for future development. This classical first move controls the important d5 and f5 squares, preventing Black from easily establishing pieces there. The move follows fundamental opening principles by fighting for central space immediately, and it leads to sharp, tactical games where we'll often launch kingside attacks. From here, we're prepared to meet most of Black's responses with active moves like Nf3, Bc4, or d3, depending on what our opponent chooses."
     },
     {
       "san": "Nc6",
@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, defending the e4 pawn while simultaneously attacking Black's e5 square and controlling the important central squares d4 and g5. This move represents the 'Declined Variation' of the Nimzowitsch Defense because we're choosing steady development over more aggressive alternatives like d4 or f4. Our knight on f3 supports a potential d2-d4 advance later, and it keeps our options open for kingside castling while maintaining solid control of the center. The move also prevents any immediate tactics involving ...Nxe4, and we're following classical opening principles by developing pieces toward the center before committing to a specific pawn structure."
+      "annotation": "We're developing our knight to its ideal square, defending the e4 pawn while simultaneously attacking Black's e5 square and controlling the important central squares d4 and g5. This move represents the 'Declined Variation' of the Nimzowitsch Defense because we're choosing steady development over more aggressive alternatives like d4 or f4. Our knight on f3 supports a potential d2-d4 advance later, and it keeps our options open for kingside castling while maintaining solid control of the center. The move also prevents any immediate tactics involving ...Nxe4, and we're following classical opening principles by developing pieces toward the center before committing to a specific pawn structure."
     }
   ]
 }

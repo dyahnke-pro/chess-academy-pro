@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, putting additional pressure on Black's d5 pawn while supporting our own c4 pawn. This knight placement is flexible and strong, controlling key central squares like e4, d5, and b5 while keeping our options open for different pawn structures. From c3, our knight can later jump to e4 or d5 if those squares become available, or reroute to b5 or a4 for queenside pressure. The knight also clears the path for our b-pawn to advance if needed, supporting our queenside expansion plans."
+      "annotation": "We develop our knight to its ideal square, putting additional pressure on Black's d5 pawn while supporting our own c4 pawn. This knight placement is flexible and strong, controlling key central squares like e4, d5, and b5 while keeping our options open for different pawn structures. From c3, our knight can later jump to e4 or d5 if those squares become available, or reroute to b5 or a4 for queenside pressure. The knight also clears the path for our b-pawn to advance if needed, supporting our queenside expansion plans."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We pin the knight to the queen, creating our first tactical pressure and forcing Black to deal with the threat to the f6 knight. This bishop move is very principled because it develops a piece while creating immediate threats, and it's aimed at the heart of Black's kingside development. The pin makes it difficult for Black to play natural moves like ...h6 (weakening the kingside) or allowing the knight to be captured. Our bishop on g5 also supports potential future attacks on the kingside once Black castles, particularly targeting the f6 and h7 squares."
+      "annotation": "We pin the knight to the queen, creating our first tactical pressure and forcing Black to deal with the threat to the f6 knight. This bishop move is very principled because it develops a piece while creating immediate threats, and it's aimed at the heart of Black's kingside development. The pin makes it difficult for Black to play logical choices like ...h6 (weakening the kingside) or allowing the knight to be captured. Our bishop on g5 also supports potential future attacks on the kingside once Black castles, particularly targeting the f6 and h7 squares."
     },
     {
       "san": "Be7",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a very solid move, supporting the d5 pawn and preparing potential queenside expansion with ...b5 while also controlling the b5 square against our pieces. This move creates a solid pawn chain from c6 to d5 to e6, giving Black excellent central control but at the cost of some piece activity. Our opponent's pawn move also prepares to challenge our c4 pawn directly or support a later ...b5 advance for queenside counterplay. The c6 move is characteristic of the Orthodox Defense, prioritizing solidity and gradual piece improvement over immediate active play."
+      "annotation": "Black plays a well-grounded move, supporting the d5 pawn and preparing potential queenside expansion with ...b5 while also controlling the b5 square against our pieces. This move creates a solid pawn chain from c6 to d5 to e6, giving Black excellent central control but at the cost of some piece activity. Our opponent's pawn move also prepares to challenge our c4 pawn directly or support a later ...b5 advance for queenside counterplay. The c6 move is characteristic of the Orthodox Defense, prioritizing solidity and gradual piece improvement over immediate active play."
     },
     {
       "san": "Bd3",

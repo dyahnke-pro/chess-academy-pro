@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're expanding our control over the center with this key move, grabbing space on the queenside and supporting a potential d5 advance later in the game. The c4 pawn controls the crucial d5 and b5 squares, making it much harder for Black to achieve the liberating ...d5 break that would equalize the center. This move also opens the c-file for potential future use by our rook and creates the foundation for queenside pressure that's characteristic of many Queen's Pawn openings. By playing c4, we're entering the English Opening structure that can transpose into numerous systems, giving us flexibility while maintaining pressure on Black's position."
+      "annotation": "We're expanding our control over the center with this critical move, grabbing space on the queenside and supporting a potential d5 advance later in the game. The c4 pawn controls the crucial d5 and b5 squares, making it much harder for Black to achieve the liberating ...d5 break that would equalize the center. This move also opens the c-file for potential future use by our rook and creates the foundation for queenside pressure that's characteristic of many Queen's Pawn openings. By playing c4, we're entering the English Opening structure that can transpose into numerous systems, giving us flexibility while maintaining pressure on Black's position."
     },
     {
       "san": "e6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn, controls key central squares like e4 and b5, and prepares for further piece development. This knight placement is incredibly flexible, as it can later jump to various squares like e4, a4, or even b5 depending on how the position develops. The knight also adds pressure to Black's potential ...d5 break, since after ...d5 cxd5, our knight would be perfectly placed to recapture and maintain central control. From c3, this knight works harmoniously with our pawn structure and supports our general plan of controlling the center while developing our pieces to active squares."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn, controls key central squares like e4 and b5, and prepares for further piece development. This knight placement is incredibly flexible, as it can later jump to various squares like e4, a4, or even b5 depending on how the position develops. The knight also adds pressure to Black's potential ...d5 break, since after ...d5 cxd5, our knight would be perfectly placed to recapture and maintain central control. From c3, this knight works harmoniously with our pawn structure and supports our general plan of controlling the center while developing our pieces to active squares."
     },
     {
       "san": "Bb4",
@@ -67,7 +67,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls key central squares and supports our overall position. The knight on f3 defends our d4 pawn, controls the important e5 square that Black might want to use for piece outposts, and prepares for potential kingside castling. This development also maintains maximum flexibility - the knight can later jump to various squares like e5, g5, or d2 depending on how the position evolves. By completing our kingside development, we're preparing to castle and then formulate concrete plans based on how Black continues, whether that involves central play, kingside pressure, or queenside expansion."
+      "annotation": "We're developing our knight to its ideal square, where it controls key central squares and supports our overall position. The knight on f3 defends our d4 pawn, controls the important e5 square that Black might want to use for piece outposts, and prepares for potential kingside castling. This development also maintains maximum flexibility - the knight can later jump to various squares like e5, g5, or d2 depending on how the position evolves. By completing our kingside development, we're preparing to castle and then formulate concrete plans based on how Black continues, whether that involves central play, kingside pressure, or queenside expansion."
     },
     {
       "san": "Nc6",

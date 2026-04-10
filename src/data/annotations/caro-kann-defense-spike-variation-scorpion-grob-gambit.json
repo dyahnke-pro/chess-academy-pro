@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square while defending the attacked e4 pawn, keeping the tension in the center alive. This natural developing move also prepares to recapture on e4 with the knight if Black takes, maintaining material balance while keeping our pieces active. The knight on c3 eyes important central squares like d5 and e4, and can later jump to more aggressive posts like e2 or f5 depending on how the position develops. We're following the gambit principle of rapid development over material, ensuring our pieces will be well-coordinated for a kingside attack."
+      "annotation": "We're developing our knight to its most active square while defending the attacked e4 pawn, keeping the tension in the center alive. This active move also prepares to recapture on e4 with the knight if Black takes, maintaining material balance while keeping our pieces active. The knight on c3 eyes important central squares like d5 and e4, and can later jump to more aggressive posts like e2 or f5 depending on how the position develops. We're following the gambit principle of rapid development over material, ensuring our pieces will be well-coordinated for a kingside attack."
     },
     {
       "san": "dxe4",

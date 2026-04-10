@@ -15,11 +15,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and preparing to support the center from the flank. This knight will often be a key defender in Black's setup, and from f6 it can potentially jump to d7, h5, or even g4 in some lines. Our opponent is following typical Pirc principles - developing pieces before committing to pawn structures and maintaining flexibility. We need to be ready to defend e4, and this is exactly why moves like Nc3 or f3 are common continuations in these positions."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing to support the center from the flank. This knight will often be a key defender in Black's setup, and from f6 it can potentially jump to d7, h5, or even g4 in some lines. Our opponent is following typical Pirc principles - developing pieces before committing to pawn structures and maintaining flexibility. We need to be ready to defend e4, and this is exactly why moves like Nc3 or f3 are common continuations in these positions."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its best square, defending the e4 pawn while increasing our control over the central d5 square. This knight placement is incredibly flexible - it can support advances with f4-f5, help in a potential e5 pawn break, or even redeploy to e2-g3 in some attacking formations. The knight also eyes the b5 and d5 outposts, which could become important in the middlegame. This is a principled developing move that maintains all our options while solidifying our central control."
+      "annotation": "We develop our knight to its best square, defending the e4 pawn while increasing our control over the central d5 square. This knight placement is incredibly flexible - it can support advances with f4-f5, help in a potential e5 pawn break, or even redeploy to e2-g3 in some attacking formations. The knight also eyes the b5 and d5 outposts, which could become important in the middlegame. This is a purposeful move that maintains all our options while solidifying our central control."
     },
     {
       "san": "g6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a solid move that supports the center and prepares potential expansion with ...b5 or ...d5. This move also controls the important d5 and b5 squares, limiting some of our piece placements and central advances. Our opponent is showing flexibility - the c6 pawn can support ...d5 at the right moment or help create queenside counterplay with ...b5-b4. However, this move doesn't directly address our growing kingside attacking potential, which means we should continue with our aggressive development and look for ways to intensify the pressure."
+      "annotation": "Black plays a well-grounded move that supports the center and prepares potential expansion with ...b5 or ...d5. This move also controls the important d5 and b5 squares, limiting some of our piece placements and central advances. Our opponent is showing flexibility - the c6 pawn can support ...d5 at the right moment or help create queenside counterplay with ...b5-b4. However, this move doesn't directly address our growing kingside attacking potential, which means we should continue with our aggressive development and look for ways to intensify the pressure."
     },
     {
       "san": "h3",

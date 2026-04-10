@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn two squares, claiming the central e4 square and immediately controlling the important d5 and f5 squares. This classical move frees our light-squared bishop on f1 and opens a potential path for our queen along the e1-h4 diagonal. The move follows fundamental opening principles by fighting for the center with a pawn, and it's the starting move of many of chess's most tactical and sharp openings. Against the Sicilian Defense that's coming, we'll be looking to build a kingside attack while Black typically counters on the queenside."
+      "annotation": "We're opening with the king's pawn two squares, claiming the central e4 square and immediately controlling the important d5 and f5 squares. This classical move frees our light-squared bishop on f1 and opens a potential path for our queen along the e1-h4 diagonal. The move follows fundamental opening principles by contesting central control with a pawn, and it's the starting move of many of chess's most tactical and sharp openings. Against the Sicilian Defense that's coming, we'll be looking to build a kingside attack while Black typically counters on the queenside."
     },
     {
       "san": "c5",

@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn, controls key central squares like e4 and b5, and prepares for flexible development of our remaining pieces. The knight on c3 is perfectly placed for the upcoming middlegame battles, as it can potentially jump to d5 or e4 to create pressure, or reroute to other squares depending on how Black arranges their pieces. This move also keeps our options open for various plans - we might continue with Nf3 and 0-0 for a solid setup, or consider more aggressive approaches like f3 and e4. The knight development follows classical opening principles while maintaining maximum flexibility for our future strategy."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn, controls key central squares like e4 and b5, and prepares for flexible development of our remaining pieces. The knight on c3 is perfectly placed for the upcoming middlegame battles, as it can potentially jump to d5 or e4 to create pressure, or reroute to other squares depending on how Black arranges their pieces. This move also keeps our options open for various plans - we might continue with Nf3 and 0-0 for a solid setup, or consider more aggressive approaches like f3 and e4. The knight development follows classical opening principles while maintaining maximum flexibility for our future strategy."
     },
     {
       "san": "d6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls crucial central squares like e5 and d4, while also supporting our king's castling. The knight on f3 is perfectly placed in this pawn structure, as it restrains Black's ...e5 advance and can potentially reroute to more aggressive squares like g5 or h4 if tactical opportunities arise. This natural developing move also prepares us to castle kingside, completing our basic setup before engaging in more concrete strategic plans. The Nf3 development epitomizes the classical approach to this opening - solid development, central control, and maintaining flexibility for various middlegame strategies."
+      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls crucial central squares like e5 and d4, while also supporting our king's castling. The knight on f3 is perfectly placed in this pawn structure, as it restrains Black's ...e5 advance and can potentially reroute to more aggressive squares like g5 or h4 if tactical opportunities arise. This active move also prepares us to castle kingside, completing our basic setup before engaging in more concrete strategic plans. The Nf3 development epitomizes the classical approach to this opening - solid development, central control, and maintaining flexibility for various middlegame strategies."
     },
     {
       "san": "Nc6",

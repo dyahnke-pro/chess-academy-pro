@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and prepares to contest Black's central control. This knight placement is extremely flexible - from c3, the knight can later jump to e4, d5, or b5 depending on the position's demands. We're also preparing potential pawn advances like e4, which would give us the ideal pawn center if Black allows it. The knight on c3 is a cornerstone piece in most Queen's Gambit systems, providing both pressure on the center and tactical possibilities throughout the middlegame."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and prepares to contest Black's central control. This knight placement is extremely flexible - from c3, the knight can later jump to e4, d5, or b5 depending on the position's demands. We're also preparing potential pawn advances like e4, which would give us the ideal pawn center if Black allows it. The knight on c3 is a cornerstone piece in most Queen's Gambit systems, providing both pressure on the center and tactical possibilities throughout the middlegame."
     },
     {
       "san": "c6",
-      "annotation": "Black plays the key move of the Semi-Slav Defense, supporting the d5 pawn with the c-pawn and preparing to develop the queen's knight to d7. This setup is more flexible than the pure Queen's Gambit Declined because it keeps options open for the light-squared bishop - it can potentially go to f5 or even b7 after b6. However, the c6 pawn also weakens the d6 and b6 squares slightly, and Black must be careful about potential tactics involving our knight jumping to b5. The Semi-Slav is a favorite of many world champions because it combines solidity with dynamic counterplay possibilities."
+      "annotation": "Black plays the central idea of the Semi-Slav Defense, supporting the d5 pawn with the c-pawn and preparing to develop the queen's knight to d7. This setup is more flexible than the pure Queen's Gambit Declined because it keeps options open for the light-squared bishop - it can potentially go to f5 or even b7 after b6. However, the c6 pawn also weakens the d6 and b6 squares slightly, and Black must be careful about potential tactics involving our knight jumping to b5. The Semi-Slav is a favorite of many world champions because it combines solidity with dynamic counterplay possibilities."
     },
     {
       "san": "e4",

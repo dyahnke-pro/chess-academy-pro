@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and preparing to recapture on c4 if Black takes our gambit pawn. This knight controls important central squares like e4 and d5 while supporting our future pawn advances. The knight on c3 is perfectly placed for the middlegame battles that typically arise in Queen's Gambit structures, where it can jump to e4 or support a future e4 pawn break. This move also keeps maximum flexibility in our position, allowing us to respond appropriately to Black's various defensive setups."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn and preparing to recapture on c4 if Black takes our gambit pawn. This knight controls important central squares like e4 and d5 while supporting our future pawn advances. The knight on c3 is perfectly placed for the middlegame battles that typically arise in Queen's Gambit structures, where it can jump to e4 or support a future e4 pawn break. This move also keeps maximum flexibility in our position, allowing us to respond appropriately to Black's various defensive setups."
     },
     {
       "san": "c6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, supporting our center while preparing to castle kingside and maintain pressure on Black's position. This knight controls the important e5 and d4 squares and can potentially support a future e4 pawn advance, which is often a key strategic goal in these structures. The knight on f3 also prevents any ...e5 breaks by Black and keeps our king safe from early tactical threats. This natural developing move maintains all of our options while putting subtle pressure on Black to decide how to continue their development."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our center while preparing to castle kingside and maintain pressure on Black's position. This knight controls the important e5 and d4 squares and can potentially support a future e4 pawn advance, which is often a key strategic goal in these structures. The knight on f3 also prevents any ...e5 breaks by Black and keeps our king safe from early tactical threats. This active move maintains all of our options while putting subtle pressure on Black to decide how to continue their development."
     },
     {
       "san": "dxc4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We're playing the Anti-Noteboom Variation, immediately putting pressure on Black's kingside and making it difficult for them to complete normal development. This bishop attacks the future ...Nf6 and forces Black to make uncomfortable decisions about their piece coordination. The bishop on g5 also supports potential tactical themes involving pins and attacks on the kingside, while preventing Black from easily consolidating their extra pawn with natural moves. This aggressive approach transforms the position from a quiet positional game into a sharp tactical battle where Black must defend very precisely to maintain their material advantage."
+      "annotation": "We're playing the Anti-Noteboom Variation, immediately putting pressure on Black's kingside and making it difficult for them to complete normal development. This bishop attacks the future ...Nf6 and forces Black to make uncomfortable decisions about their piece coordination. The bishop on g5 also supports potential tactical themes involving pins and attacks on the kingside, while preventing Black from easily consolidating their extra pawn with logical choices. This aggressive approach transforms the position from a quiet positional game into a sharp tactical battle where Black must defend very precisely to maintain their material advantage."
     }
   ]
 }

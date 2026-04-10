@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports a future e4 advance and keeps our options open for various pawn structures. This move is particularly well-suited against the Dutch because it prepares the aggressive Kingfisher Gambit that we're about to unleash. The knight on c3 also eyes the important e4 and d5 squares, and it doesn't block our c-pawn like Nf3 would. From c3, our knight is perfectly placed to support the central pawn storm we're planning."
+      "annotation": "We're developing our knight to its ideal square, where it supports a future e4 advance and keeps our options open for various pawn structures. This move is particularly well-suited against the Dutch because it prepares the aggressive Kingfisher Gambit that we're about to unleash. The knight on c3 also eyes the important e4 and d5 squares, and it doesn't block our c-pawn like Nf3 would. From c3, our knight is perfectly placed to support the central pawn storm we're planning."
     },
     {
       "san": "d5",
-      "annotation": "Black sensibly strikes at our center with this natural developing move, trying to prevent our e4 advance and establish their own central presence. This move supports Black's typical Dutch strategy of controlling dark squares and preparing piece development, particularly the light-squared bishop to f5 or g4. However, by advancing the d-pawn two squares, Black has also created some tactical opportunities for us to exploit. Our opponent is playing solidly but may not realize the sharp tactics that are about to unfold in this line."
+      "annotation": "Black sensibly strikes at our center with this active move, trying to prevent our e4 advance and establish their own central presence. This move supports Black's typical Dutch strategy of controlling dark squares and preparing piece development, particularly the light-squared bishop to f5 or g4. However, by advancing the d-pawn two squares, Black has also created some tactical opportunities for us to exploit. Our opponent is playing solidly but may not realize the sharp tactics that are about to unfold in this line."
     },
     {
       "san": "e4",

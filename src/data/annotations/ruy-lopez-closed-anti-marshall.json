@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn while controlling the important central squares d4 and e5. This move also prepares kingside castling and keeps our options open for various setups in the center. The knight on f3 is a cornerstone piece in most 1.e4 openings, supporting our central pawns and preparing coordinated piece play."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn while controlling the important central squares d4 and e5. This move also prepares kingside castling and keeps our options open for various setups in the center. The knight on f3 is a cornerstone piece in most 1.e4 openings, supporting our central pawns and preparing coordinated piece play."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to defend the e5 pawn while controlling important central squares like d4 and b4. This natural developing move follows opening principles and prepares Black's own kingside development. Our opponent is building a solid foundation while keeping options open for counterplay in the center or on the flanks."
+      "annotation": "Black develops their knight to defend the e5 pawn while controlling important central squares like d4 and b4. This active move follows opening principles and prepares Black's own kingside development. Our opponent is building a solid foundation while keeping options open for counterplay in the center or on the flanks."
     },
     {
       "san": "Bb5",
@@ -39,11 +39,11 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops their bishop to e7, preparing to castle kingside while breaking the pin on their knight. This solid developing move also prepares potential central breaks like d6 and allows the knight on c6 to move freely without hanging the e5 pawn. Our opponent is prioritizing piece development and king safety, setting up a solid but flexible position."
+      "annotation": "Black develops their bishop to e7, preparing to castle kingside while breaking the pin on their knight. This solid developing choice also prepares potential central breaks like d6 and allows the knight on c6 to move freely without hanging the e5 pawn. Our opponent is prioritizing piece development and king safety, setting up a solid but flexible position."
     },
     {
       "san": "Re1",
-      "annotation": "We bring our rook to the e-file, reinforcing our e4 pawn and preparing for the typical middlegame plans in the Ruy Lopez. This move also prepares potential tactics along the e-file and supports our central control while eyeing Black's king position. The rook on e1 is perfectly placed to support our eventual d3 and c3 pawn advances, which are key moves in many Ruy Lopez systems."
+      "annotation": "We bring our rook to the e-file, reinforcing our e4 pawn and preparing for the typical middlegame plans in the Ruy Lopez. This move also prepares potential tactics along the e-file and supports our central control while eyeing Black's king position. The rook on e1 is perfectly placed to support our eventual d3 and c3 pawn advances, which are critical moves in many Ruy Lopez systems."
     },
     {
       "san": "b5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, completing their basic development and bringing their king to safety. This natural move connects Black's rooks and prepares for the complex middlegame battles ahead, where both sides will fight for control of key squares and files. Our opponent has now completed the essential opening tasks and is ready to begin active operations in the center and on the flanks."
+      "annotation": "Black castles kingside, completing their basic development and bringing their king to safety. this move connects Black's rooks and prepares for the complex middlegame battles ahead, where both sides will fight for control of key squares and files. Our opponent has now completed the essential opening tasks and is ready to begin active operations in the center and on the flanks."
     },
     {
       "san": "a4",

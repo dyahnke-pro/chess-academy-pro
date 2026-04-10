@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it performs multiple important functions in our opening setup. The knight on f3 supports our d4 pawn, attacks the e5 square, and prepares kingside castling by clearing the path for our king. This flexible piece can later jump to e5, g5, or even h4 depending on how the position develops. Most importantly, Nf3 avoids committing to any particular pawn structure just yet, keeping our options open for various systems like the Queen's Gambit, London System, or other d4 openings."
+      "annotation": "We develop our knight to its ideal square, where it performs multiple important functions in our opening setup. The knight on f3 supports our d4 pawn, attacks the e5 square, and prepares kingside castling by clearing the path for our king. This flexible piece can later jump to e5, g5, or even h4 depending on how the position develops. Most importantly, Nf3 avoids committing to any particular pawn structure just yet, keeping our options open for various systems like the Queen's Gambit, London System, or other d4 openings."
     },
     {
       "san": "Nf6",
@@ -23,7 +23,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black chooses the Slav Defense setup, supporting their d5 pawn while keeping the c8-bishop's diagonal open—a key advantage over the Queen's Gambit Declined. This solid move prevents our knight from jumping to b5 and prepares ...dxc4 followed by ...b5, a typical Slav counterplay pattern. The c6 pawn also supports a potential ...b5 advance that could challenge our queenside structure later. While this looks passive, Black is actually preparing active piece play with moves like ...Bf5 or ...Bg4, putting pressure on our position once the center stabilizes."
+      "annotation": "Black chooses the Slav Defense setup, supporting their d5 pawn while keeping the c8-bishop's diagonal open—a key advantage over the Queen's Gambit Declined. this stabilizing move prevents our knight from jumping to b5 and prepares ...dxc4 followed by ...b5, a typical Slav counterplay pattern. The c6 pawn also supports a potential ...b5 advance that could challenge our queenside structure later. While this looks passive, Black is actually preparing active piece play with moves like ...Bf5 or ...Bg4, putting pressure on our position once the center stabilizes."
     },
     {
       "san": "Nc3",

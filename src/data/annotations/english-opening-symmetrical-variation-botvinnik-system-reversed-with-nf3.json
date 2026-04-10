@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our c4 pawn and preparing to influence the center from a strong outpost. This knight placement is particularly effective in the English Opening because it can later jump to d5 or b5 to create tactical threats, and it doesn't block our d-pawn like in some other openings. The knight also eyes the important e4 square, which could become a crucial central outpost later in the game. From c3, our knight has maximum flexibility and can adapt to whatever pawn structure emerges from the opening."
+      "annotation": "We develop our knight to its ideal square, supporting our c4 pawn and preparing to influence the center from a strong outpost. This knight placement is particularly effective in the English Opening because it can later jump to d5 or b5 to create tactical threats, and it doesn't block our d-pawn like in some other openings. The knight also eyes the important e4 square, which could become a crucial central outpost later in the game. From c3, our knight has maximum flexibility and can adapt to whatever pawn structure emerges from the opening."
     },
     {
       "san": "Nc6",
@@ -35,11 +35,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its ideal square, where it controls the central e5 and d4 squares while preparing to support our kingside castling. This natural developing move also prepares potential central breaks and keeps our options flexible for future pawn advances. The knight on f3 is particularly well-placed in these English Opening structures because it can later support d2-d4 advances or jump to more active squares like e4 or h4 depending on how the position develops. This move completes our basic development and prepares us to castle kingside safely."
+      "annotation": "We develop our kingside knight to its ideal square, where it controls the central e5 and d4 squares while preparing to support our kingside castling. This active move also prepares potential central breaks and keeps our options flexible for future pawn advances. The knight on f3 is particularly well-placed in these English Opening structures because it can later support d2-d4 advances or jump to more active squares like e4 or h4 depending on how the position develops. This move completes our basic development and prepares us to castle kingside safely."
     },
     {
       "san": "e5",
-      "annotation": "Black breaks the symmetry with this central advance, staking a claim in the center and signaling more aggressive intentions than the previous symmetrical approach suggested. This move controls the crucial f4 and d4 squares, preventing some of our natural developing moves while preparing Black's own piece activity. However, this pawn advance also creates potential weaknesses, particularly the d6 and f6 squares, which we might exploit later with our pieces. Black is transitioning from symmetrical play to a more independent strategy, which often gives both sides rich middlegame possibilities but requires more precise calculation and positional understanding."
+      "annotation": "Black breaks the symmetry with this central advance, staking a claim in the center and signaling more aggressive intentions than the previous symmetrical approach suggested. This move controls the crucial f4 and d4 squares, preventing some of our active moves while preparing Black's own piece activity. However, this pawn advance also creates potential weaknesses, particularly the d6 and f6 squares, which we might exploit later with our pieces. Black is transitioning from symmetrical play to a more independent strategy, which often gives both sides rich middlegame possibilities but requires more precise calculation and positional understanding."
     }
   ]
 }

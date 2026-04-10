@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square while adding additional pressure to the d5 pawn, which is now attacked twice and defended only once. This natural developing move also prepares to support a future e2-e4 advance, which would give us a powerful pawn center. The knight on c3 controls important central squares like e4, d5, and b5, while also keeping our options open for different pawn structures depending on how Black responds. From c3, our knight can later jump to more advanced squares like e4 or b5, depending on the tactical and strategic requirements of the position."
+      "annotation": "We're developing our knight to its most active square while adding additional pressure to the d5 pawn, which is now attacked twice and defended only once. This active move also prepares to support a future e2-e4 advance, which would give us a powerful pawn center. The knight on c3 controls important central squares like e4, d5, and b5, while also keeping our options open for different pawn structures depending on how Black responds. From c3, our knight can later jump to more advanced squares like e4 or b5, depending on the tactical and strategic requirements of the position."
     },
     {
       "san": "e5",

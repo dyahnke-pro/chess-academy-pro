@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to castle kingside. This move supports our central strategy while keeping maximum flexibility - the knight on f3 can later jump to e5, d4, or g5 depending on how the position develops. We're following classical development principles by bringing out pieces before making further pawn moves. The knight also prepares potential e2-e4 advances in some lines, adding another layer to our central control."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to castle kingside. This move supports our central strategy while keeping maximum flexibility - the knight on f3 can later jump to e5, d4, or g5 depending on how the position develops. We're following classical development principles by bringing out pieces before making further pawn moves. The knight also prepares potential e2-e4 advances in some lines, adding another layer to our central control."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We bring our second knight into the game, adding more pressure to the d5 pawn and preparing to recapture on c4 if Black takes our gambit pawn. This natural developing move also supports a potential e2-e4 advance, which would give us a powerful pawn center. The knight on c3 is perfectly placed for the middlegame battles ahead, where it can support our central pawns or jump to active squares like e4 or d5. We're building up the pressure on Black's position while maintaining all our strategic options."
+      "annotation": "We bring our second knight into the game, adding more pressure to the d5 pawn and preparing to recapture on c4 if Black takes our gambit pawn. This active move also supports a potential e2-e4 advance, which would give us a powerful pawn center. The knight on c3 is perfectly placed for the middlegame battles ahead, where it can support our central pawns or jump to active squares like e4 or d5. We're building up the pressure on Black's position while maintaining all our strategic options."
     },
     {
       "san": "dxc4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "a4",
-      "annotation": "We're playing a key move in the Czech Variation, immediately challenging Black's ability to hold onto the extra pawn! This advance attacks the b5 square, preventing Black from easily defending their c4 pawn with ...b5. The move also prepares potential expansion on the queenside and creates tactical possibilities involving our pieces. This is a critical theoretical moment - we're prioritizing regaining our pawn and maintaining initiative over slower, more positional development. The a4 advance is what distinguishes this line from quieter Queen's Gambit variations."
+      "annotation": "We're playing a critical move in the Czech Variation, immediately challenging Black's ability to hold onto the extra pawn! This advance attacks the b5 square, preventing Black from easily defending their c4 pawn with ...b5. The move also prepares potential expansion on the queenside and creates tactical possibilities involving our pieces. This is a critical theoretical moment - we're prioritizing regaining our pawn and maintaining initiative over slower, more positional development. The a4 advance is what distinguishes this line from quieter Queen's Gambit variations."
     },
     {
       "san": "Bf5",

@@ -71,7 +71,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square. The knight on f6 reinforces control of e4 — the key square in the Dutch — and prepares kingside development.",
+      "annotation": "Black develops the knight to its ideal square. The knight on f6 reinforces control of e4 — the key square in the Dutch — and prepares kingside development.",
       "pawnStructure": "No change; the knight supports Black's grip on e4.",
       "plans": [
         "Control e4 firmly",
@@ -139,7 +139,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its most natural square. The knight controls e5, which is a very important outpost in the Leningrad Dutch. If White can plant a piece on e5, it dominates the position.",
+      "annotation": "White develops the knight to its ideal square. The knight controls e5, which is a very important outpost in the Leningrad Dutch. If White can plant a piece on e5, it dominates the position.",
       "plans": [
         "Castle quickly and control e5",
         "Play c4 to grab queenside space"
@@ -564,7 +564,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the kingside knight to its most natural square, from where it eyes the central e4 and d5 squares.",
+          "annotation": "Black develops the kingside knight to its ideal square, from where it eyes the central e4 and d5 squares.",
           "plans": [
             "Complete kingside development with ...g6 and ...Bg7",
             "Support potential ...e5 or ...d5 pawn breaks"
@@ -2603,7 +2603,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to f6, reinforcing control over e4 and d5. This natural developing move works in all Dutch setups and prepares the Leningrad formation with ...g6 and ...Bg7."
+          "annotation": "Black develops the knight to f6, reinforcing control over e4 and d5. This active move works in all Dutch setups and prepares the Leningrad formation with ...g6 and ...Bg7."
         },
         {
           "san": "Bg2",
@@ -2676,7 +2676,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black plays ...Nc6, the key move of this Dubov-inspired system. Instead of the traditional ...Qe8 maneuver, the knight goes directly to c6 to pressure d4 and prepare ...e5.",
+          "annotation": "Black plays ...Nc6, the central idea of this Dubov-inspired system. Instead of the traditional ...Qe8 maneuver, the knight goes directly to c6 to pressure d4 and prepare ...e5.",
           "arrows": [
             {
               "from": "b8",

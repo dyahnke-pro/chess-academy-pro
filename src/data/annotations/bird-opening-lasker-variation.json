@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's d5 pawn and controlling key central squares like e5 and g5. Nf3 is a multi-purpose move—it supports a future e3-e4 advance, keeps Black's center slightly unstable, and prepares our fianchetto plan with g3 and Bg2. This solid development move doesn't commit us to a specific pawn structure yet, maintaining flexibility."
+      "annotation": "We develop our knight to its ideal square, attacking Black's d5 pawn and controlling key central squares like e5 and g5. Nf3 is a multi-purpose move—it supports a future e3-e4 advance, keeps Black's center slightly unstable, and prepares our fianchetto plan with g3 and Bg2. This solid development move doesn't commit us to a specific pawn structure yet, maintaining flexibility."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops actively, attacking our e4 square and preparing to support the center with further moves like e6 or Be7. The knight on f6 is well-placed to support Black's control of central squares and to reroute toward the center or queenside. This is a natural developing move that keeps Black's position flexible while maintaining the pressure on our center."
+      "annotation": "Black develops actively, attacking our e4 square and preparing to support the center with further moves like e6 or Be7. The knight on f6 is well-placed to support Black's control of central squares and to reroute toward the center or queenside. This is a active move that keeps Black's position flexible while maintaining the pressure on our center."
     },
     {
       "san": "e3",

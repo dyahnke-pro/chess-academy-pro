@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to challenge our central control. This move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and as we'll see, the Grünfeld Defense. Black is following the principle of developing pieces toward the center while immediately creating tension."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to challenge our central control. This move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and as we'll see, the Grünfeld Defense. Black is following the principle of developing pieces toward the center while immediately creating tension."
     },
     {
       "san": "c4",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, adding more pressure to our d4 pawn and preparing to coordinate with the other pieces in the attack on our center. This knight on c6 is perfectly placed to support tactics involving ...c5-c4 or ...Nd4, and it also eyes important central squares. Black's development is proceeding according to Grünfeld principles: get pieces out quickly and focus everything on attacking our supposedly vulnerable pawn center."
+      "annotation": "Black develops the knight to its ideal square, adding more pressure to our d4 pawn and preparing to coordinate with the other pieces in the attack on our center. This knight on c6 is perfectly placed to support tactics involving ...c5-c4 or ...Nd4, and it also eyes important central squares. Black's development is proceeding according to Grünfeld principles: get pieces out quickly and focus everything on attacking our supposedly vulnerable pawn center."
     },
     {
       "san": "Be3",

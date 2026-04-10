@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking our d4 pawn and preparing to contest the central e4 square. This move is the starting point of the King's Indian Defense, one of the most dynamic and fighting defenses against 1.d4. Our opponent is signaling a hypermodern approach - rather than occupying the center immediately with pawns, Black will challenge it from the flanks with pieces. The knight on f6 also prepares kingside castling and supports a future ...e5 pawn break that's central to Black's counterplay."
+      "annotation": "Black develops the king's knight to its ideal square, attacking our d4 pawn and preparing to contest the central e4 square. This move is the starting point of the King's Indian Defense, one of the most dynamic and fighting defenses against 1.d4. Our opponent is signaling a hypermodern approach - rather than occupying the center immediately with pawns, Black will challenge it from the flanks with pieces. The knight on f6 also prepares kingside castling and supports a future ...e5 pawn break that's central to Black's counterplay."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn and preparing to advance e4 to establish our ideal pawn center. The knight on c3 also controls important central squares like e4, d5, and b5, while keeping options open for different pawn structures depending on how Black responds. This natural developing move fits perfectly with our plan to dominate the center with pawns and pieces. From c3, our knight can potentially relocate to more aggressive posts like e4 or d5 later in the game, and it supports various pawn advances on both sides of the board."
+      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn and preparing to advance e4 to establish our ideal pawn center. The knight on c3 also controls important central squares like e4, d5, and b5, while keeping options open for different pawn structures depending on how Black responds. This active move fits perfectly with our plan to dominate the center with pawns and pieces. From c3, our knight can potentially relocate to more aggressive posts like e4 or d5 later in the game, and it supports various pawn advances on both sides of the board."
     },
     {
       "san": "Bg7",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "We're developing our dark-squared bishop to an excellent central square where it supports our pawn center and controls key squares like d4 and f4. The bishop on e3 also prepares castling (either side) and supports our potential kingside attack by controlling important squares in Black's position. This natural developing move fits perfectly with the Sämisch system, where we prioritize central control and piece coordination. The bishop also defends our f2 square and can potentially support a future f4-f5 pawn advance if we choose to launch a kingside pawn storm."
+      "annotation": "We're developing our dark-squared bishop to an excellent central square where it supports our pawn center and controls key squares like d4 and f4. The bishop on e3 also prepares castling (either side) and supports our potential kingside attack by controlling important squares in Black's position. This active move fits perfectly with the Sämisch system, where we prioritize central control and piece coordination. The bishop also defends our f2 square and can potentially support a future f4-f5 pawn advance if we choose to launch a kingside pawn storm."
     },
     {
       "san": "c5",

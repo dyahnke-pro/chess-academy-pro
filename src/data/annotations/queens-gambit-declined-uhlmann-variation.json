@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding pressure to the d5 pawn and preparing to recapture on c4 if Black takes our gambit pawn. This knight placement is extremely flexible, supporting potential pawn advances like e4 while keeping our options open for kingside development. The knight also eyes important central squares like e4 and d5, and doesn't block any of our pawns' advancement. From c3, the knight can later jump to more active squares like e4 or d5 depending on how the position develops."
+      "annotation": "We're developing our knight to its ideal square, adding pressure to the d5 pawn and preparing to recapture on c4 if Black takes our gambit pawn. This knight placement is extremely flexible, supporting potential pawn advances like e4 while keeping our options open for kingside development. The knight also eyes important central squares like e4 and d5, and doesn't block any of our pawns' advancement. From c3, the knight can later jump to more active squares like e4 or d5 depending on how the position develops."
     },
     {
       "san": "Be7",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their kingside knight to its most natural square, attacking our e4 square and preparing to complete kingside development with castling. This knight placement is perfectly coordinated with Black's other pieces - it supports the d5 pawn, contests central squares, and doesn't interfere with any future pawn advances. The Nf6 move is also preparing to potentially challenge our pieces if we become too aggressive, for example by meeting Bg5 with moves like h6. Black is following classical development principles while maintaining maximum flexibility for the middlegame."
+      "annotation": "Our opponent develops their kingside knight to its ideal square, attacking our e4 square and preparing to complete kingside development with castling. This knight placement is perfectly coordinated with Black's other pieces - it supports the d5 pawn, contests central squares, and doesn't interfere with any future pawn advances. The Nf6 move is also preparing to potentially challenge our pieces if we become too aggressive, for example by meeting Bg5 with moves like h6. Black is following classical development principles while maintaining maximum flexibility for the middlegame."
     },
     {
       "san": "Bg5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Our opponent completes their kingside development by castling, prioritizing king safety while breaking the pin on their f6 knight. This natural developing move shows that Black is ready to enter the middlegame with a solid position and proper piece coordination. Castling also connects Black's rooks and prepares to potentially challenge our central control with moves like c6 or dxc4. The king on g8 is now safe from immediate tactics, which gives Black more freedom to pursue active plans in the center and queenside."
+      "annotation": "Our opponent completes their kingside development by castling, prioritizing king safety while breaking the pin on their f6 knight. This active move shows that Black is ready to enter the middlegame with a solid position and proper piece coordination. Castling also connects Black's rooks and prepares to potentially challenge our central control with moves like c6 or dxc4. The king on g8 is now safe from immediate tactics, which gives Black more freedom to pursue active plans in the center and queenside."
     },
     {
       "san": "Rc1",

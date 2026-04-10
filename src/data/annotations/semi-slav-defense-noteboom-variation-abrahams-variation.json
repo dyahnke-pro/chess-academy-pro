@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent declines the Queen's Gambit and instead supports the d5 pawn with this solid move, leading us into the Queen's Gambit Declined complex. Black is prioritizing central stability over material gain, but this move does block in the light-squared bishop on c8, which will need to find activity later. This setup often leads to slightly cramped but solid positions for Black, with potential for counterplay on the queenside or central pawn breaks like e5."
+      "annotation": "Our opponent declines the Queen's Gambit and instead supports the d5 pawn with this stabilizing move, leading us into the Queen's Gambit Declined complex. Black is prioritizing central stability over material gain, but this move does block in the light-squared bishop on c8, which will need to find activity later. This setup often leads to slightly cramped but solid positions for Black, with potential for counterplay on the queenside or central pawn breaks like e5."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding more pressure to Black's d5 pawn and preparing to support our central ambitions. This move also prepares various pawn advances like e2-e4 if Black's d5 pawn ever moves, and it opens up tactical possibilities involving the knight's influence over key central squares. The knight from c3 will often support a future d4-d5 advance or help control important squares like e4 and b5."
+      "annotation": "We're developing our knight to its ideal square, adding more pressure to Black's d5 pawn and preparing to support our central ambitions. This move also prepares various pawn advances like e2-e4 if Black's d5 pawn ever moves, and it opens up tactical possibilities involving the knight's influence over key central squares. The knight from c3 will often support a future d4-d5 advance or help control important squares like e4 and b5."
     },
     {
       "san": "c6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls the central e5 and d4 squares while supporting our kingside. This natural developing move also prepares castling and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support a future e2-e4 advance or to jump to more active squares like e5 or g5 depending on how the position develops."
+      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls the central e5 and d4 squares while supporting our kingside. This active move also prepares castling and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support a future e2-e4 advance or to jump to more active squares like e5 or g5 depending on how the position develops."
     },
     {
       "san": "dxc4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're breaking the pin by preparing to castle and solidifying our pawn structure, though this move does block in our light-squared bishop temporarily. This calm developing move supports our d4 pawn and prepares Be2 or Bd3 to continue our development, while also opening up the possibility of f2-f3 to kick away Black's knight if it goes to g4. By playing e3, we're choosing a solid approach rather than trying to immediately resolve the central tension."
+      "annotation": "We're breaking the pin by preparing to castle and solidifying our pawn structure, though this move does block in our light-squared bishop temporarily. This calm developing choice supports our d4 pawn and prepares Be2 or Bd3 to continue our development, while also opening up the possibility of f2-f3 to kick away Black's knight if it goes to g4. By playing e3, we're choosing a solid approach rather than trying to immediately resolve the central tension."
     },
     {
       "san": "Bxc3+",

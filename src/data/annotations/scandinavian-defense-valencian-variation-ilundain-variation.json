@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while simultaneously attacking Black's centralized queen. This forcing move puts immediate pressure on the queen, which will need to move again, giving us a tempo advantage in development. The knight on c3 also supports a future d4 advance, helping us establish a strong pawn center. By attacking the queen immediately, we're making it clear that Black's early queen sortie comes with a cost - the queen must retreat and we gain time for development."
+      "annotation": "We're developing our knight to its ideal square while simultaneously attacking Black's centralized queen. This forcing move puts immediate pressure on the queen, which will need to move again, giving us a tempo advantage in development. The knight on c3 also supports a future d4 advance, helping us establish a strong pawn center. By attacking the queen immediately, we're making it clear that Black's early queen sortie comes with a cost - the queen must retreat and we gain time for development."
     },
     {
       "san": "Qd8",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our d4 pawn and preparing to castle kingside. This natural developing move also controls important central squares like e4 and d5, limiting our piece placements. The knight on f6 is well-placed to support Black's counterplay and can potentially jump to e4 or g4 in some variations. Our opponent is following sound opening principles by developing pieces toward the center while creating some pressure on our pawn structure."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our d4 pawn and preparing to castle kingside. This active move also controls important central squares like e4 and d5, limiting our piece placements. The knight on f6 is well-placed to support Black's counterplay and can potentially jump to e4 or g4 in some variations. Our opponent is following sound opening principles by developing pieces toward the center while creating some pressure on our pawn structure."
     },
     {
       "san": "Nf3",

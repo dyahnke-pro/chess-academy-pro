@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to advance e4 and establish a classical pawn center. This knight placement is incredibly flexible - it can later jump to e2, d5, or b5 depending on the position's requirements, and it doesn't block any of our pieces. The knight on c3 also supports potential queenside expansion with moves like a4 and b5, fitting perfectly with our c4 advance. By developing this piece, we're following classical opening principles while keeping maximum options for our pawn structure and piece coordination."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing to advance e4 and establish a classical pawn center. This knight placement is incredibly flexible - it can later jump to e2, d5, or b5 depending on the position's requirements, and it doesn't block any of our pieces. The knight on c3 also supports potential queenside expansion with moves like a4 and b5, fitting perfectly with our c4 advance. By developing this piece, we're following classical opening principles while keeping maximum options for our pawn structure and piece coordination."
     },
     {
       "san": "Bg7",

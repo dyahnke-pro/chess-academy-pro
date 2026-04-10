@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and preparing to contest our control of the center. This move is the starting point of several major defensive systems, including the King's Indian Defense that's likely coming. Our opponent is following the fundamental opening principle of developing pieces toward the center while keeping options open for different pawn structures. The knight on f6 also prepares kingside castling and supports potential central advances like ...e5."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and preparing to contest our control of the center. This move is the starting point of several major defensive systems, including the King's Indian Defense that's likely coming. Our opponent is following the fundamental opening principle of developing pieces toward the center while keeping options open for different pawn structures. The knight on f6 also prepares kingside castling and supports potential central advances like ...e5."
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening setup within our d4 system, gaining space on the queenside and putting additional pressure on the central d5 square. This move prevents Black from easily establishing a pawn on d5 and gives us excellent control over the light squares in the center. The c4 pawn also supports a potential future e4 advance, which would give us the classical pawn center that's so powerful in many openings. This is a key move in systems like the King's Indian Attack, where we'll often follow up with Nc3, e4, and Nf3."
+      "annotation": "We're playing the English Opening setup within our d4 system, gaining space on the queenside and putting additional pressure on the central d5 square. This move prevents Black from easily establishing a pawn on d5 and gives us excellent control over the light squares in the center. The c4 pawn also supports a potential future e4 advance, which would give us the classical pawn center that's so powerful in many openings. This is a critical move in systems like the King's Indian Attack, where we'll often follow up with Nc3, e4, and Nf3."
     },
     {
       "san": "g6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our classical development by bringing the knight to its most natural square, where it supports our e4 pawn and controls important central squares like d4 and e5. This knight also prepares kingside castling and maintains flexibility for various plans depending on how Black continues. The Nf3 development is particularly important because it prevents any back-rank tactics and supports our central pawn structure while keeping our options open for both attacking and positional play. From f3, the knight can potentially jump to powerful outposts like d5 or g5 depending on the position."
+      "annotation": "We're completing our classical development by bringing the knight to its ideal square, where it supports our e4 pawn and controls important central squares like d4 and e5. This knight also prepares kingside castling and maintains flexibility for various plans depending on how Black continues. The Nf3 development is particularly important because it prevents any back-rank tactics and supports our central pawn structure while keeping our options open for both attacking and positional play. From f3, the knight can potentially jump to powerful outposts like d5 or g5 depending on the position."
     },
     {
       "san": "O-O",

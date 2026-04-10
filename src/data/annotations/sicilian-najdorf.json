@@ -182,7 +182,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking the e4 pawn immediately. This is the most common Sicilian move — the knight on f6 is perfectly placed for both defense and counterattack.",
+      "annotation": "Black develops the knight to its ideal square, attacking the e4 pawn immediately. This is the most common Sicilian move — the knight on f6 is perfectly placed for both defense and counterattack.",
       "plans": [
         "Pressure e4 to tie down White's pieces",
         "Prepare ...a6 for the Najdorf setup"
@@ -211,7 +211,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White defends e4 with the most natural developing move. The knight on c3 supports the center and eyes the d5 square.",
+      "annotation": "White defends e4 with the most active move. The knight on c3 supports the center and eyes the d5 square.",
       "pawnStructure": "Nc3 means White commits to not playing c3, so the c2-pawn stays back and the d4 knight may need ot.",
       "plans": [
         "Maintain the e4 center",
@@ -328,7 +328,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "A solid developing move that prepares castling. The bishop on e7 is not flashy, but it serves critical defensive and offensive functions — it protects the d6 pawn, keeps the option of ...Bg5 exchang.",
+      "annotation": "a constructive move that prepares castling. The bishop on e7 is not flashy, but it serves critical defensive and offensive functions — it protects the d6 pawn, keeps the option of ...Bg5 exchang.",
       "plans": [
         "Castle kingside next",
         "Develop Be6 to control d5 and pressure the kingside"
@@ -688,7 +688,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to its most natural square, attacking White's e4 pawn and controlling central squares. This move also prepares to castle kingside and supports the future ...e5 advance.",
+          "annotation": "Black develops the knight to its ideal square, attacking White's e4 pawn and controlling central squares. This move also prepares to castle kingside and supports the future ...e5 advance.",
           "plans": [
             "Castle kingside for safety",
             "Prepare ...e5 to challenge the center"
@@ -2224,7 +2224,7 @@
         },
         {
           "san": "Be6",
-          "annotation": "Black develops the bishop to e6, the most natural square. It prepares ...Nbd7 and can support both ...d5 breaks and queenside play with ...b5.",
+          "annotation": "Black develops the bishop to e6, the ideal square. It prepares ...Nbd7 and can support both ...d5 breaks and queenside play with ...b5.",
           "arrows": [
             {
               "from": "c8",
@@ -2408,7 +2408,7 @@
         },
         {
           "san": "Nbd7",
-          "annotation": "Firouzja's key move order — developing ...Nbd7 before castling. This keeps the king in the center temporarily but prepares ...b5 and ...Nb6 with more flexibility.",
+          "annotation": "Firouzja's critical move order — developing ...Nbd7 before castling. This keeps the king in the center temporarily but prepares ...b5 and ...Nb6 with more flexibility.",
           "arrows": [
             {
               "from": "b8",

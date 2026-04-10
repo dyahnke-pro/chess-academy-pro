@@ -15,7 +15,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black supports a future ...d5 advance while developing the dark-squared bishop's diagonal. This solid move prepares to challenge our pawn center with ...d5, potentially leading to Queen's Gambit Declined or Nimzo-Indian structures. Our opponent is also keeping their options open - they might follow up with ...d5, ...Bb4+, or other developing moves. The slight drawback is that this pawn move blocks the natural development of the dark-squared bishop, but the central control it provides usually outweighs this temporary inconvenience."
+      "annotation": "Black supports a future ...d5 advance while developing the dark-squared bishop's diagonal. this stabilizing move prepares to challenge our pawn center with ...d5, potentially leading to Queen's Gambit Declined or Nimzo-Indian structures. Our opponent is also keeping their options open - they might follow up with ...d5, ...Bb4+, or other developing choices. The slight drawback is that this pawn move blocks the natural development of the dark-squared bishop, but the central control it provides usually outweighs this temporary inconvenience."
     },
     {
       "san": "g3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside. This move also controls important central squares like e5 and h4, while keeping our position flexible for various pawn structures that might emerge. Our knight on f3 works beautifully with our fianchettoed bishop, creating a harmonious piece setup that can adapt to different middlegame plans. The development also follows the crucial opening principle of improving our pieces before committing to specific pawn structures or tactical operations."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside. This move also controls important central squares like e5 and h4, while keeping our position flexible for various pawn structures that might emerge. Our knight on f3 works beautifully with our fianchettoed bishop, creating a harmonious piece setup that can adapt to different middlegame plans. The development also follows the crucial opening principle of improving our pieces before committing to specific pawn structures or tactical operations."
     },
     {
       "san": "O-O",

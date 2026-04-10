@@ -147,7 +147,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending d5 and controlling e4. This is standard developing chess — every piece should go to its best square.",
+      "annotation": "Black develops the knight to its ideal square, defending d5 and controlling e4. This is standard developing chess — every piece should go to its best square.",
       "pawnStructure": "The d5-e6 chain remains solid. Black's minor pieces are developing naturally.",
       "plans": [
         "Continue development with ...Be7 and ...O-O",

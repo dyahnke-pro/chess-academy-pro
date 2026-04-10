@@ -11,7 +11,7 @@
     },
     {
       "san": "Bb5",
-      "annotation": "We're developing our bishop to an active square where it pins the knight to the black king, creating immediate tactical pressure. This move characterizes the Pseudo-Spanish Variation of the Nimzowitsch Defense, as we're employing the Spanish Bishop setup despite Black's irregular knight development. The bishop on b5 controls important central squares like d7 and c6, while also preparing to potentially trade the knight that's attacking our e4 pawn. This natural developing move maintains our opening advantage by forcing Black to deal with the pin, and we're ready to castle kingside quickly while keeping pressure on Black's somewhat awkward piece coordination."
+      "annotation": "We're developing our bishop to an active square where it pins the knight to the black king, creating immediate tactical pressure. This move characterizes the Pseudo-Spanish Variation of the Nimzowitsch Defense, as we're employing the Spanish Bishop setup despite Black's irregular knight development. The bishop on b5 controls important central squares like d7 and c6, while also preparing to potentially trade the knight that's attacking our e4 pawn. This active move maintains our opening advantage by forcing Black to deal with the pin, and we're ready to castle kingside quickly while keeping pressure on Black's somewhat awkward piece coordination."
     }
   ]
 }

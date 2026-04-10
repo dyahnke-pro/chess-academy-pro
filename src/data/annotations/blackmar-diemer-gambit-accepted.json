@@ -23,11 +23,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight naturally to f6, defending against potential back-rank mates and preparing to castle kingside while ignoring our attack on the e4 pawn for now. This is a principled developing move that also attacks our future f3 advance, showing that Black understands the typical patterns of this gambit. Our opponent is essentially saying 'I'll keep the extra pawn for now and develop my pieces normally.' However, this does allow us to continue with our thematic f3 advance, which is exactly what we want in this opening."
+      "annotation": "Black develops the knight naturally to f6, defending against potential back-rank mates and preparing to castle kingside while ignoring our attack on the e4 pawn for now. This is a purposeful move that also attacks our future f3 advance, showing that Black understands the typical patterns of this gambit. Our opponent is essentially saying 'I'll keep the extra pawn for now and develop my pieces normally.' However, this does allow us to continue with our thematic f3 advance, which is exactly what we want in this opening."
     },
     {
       "san": "f3",
-      "annotation": "We're playing the key move of the Blackmar-Diemer Gambit, directly attacking the e4 pawn and threatening to recapture the center with a powerful pawn duo. This advance may look weakening to the kingside, but it's essential for our opening concept – we need to clear the e4 square and open lines for our pieces. The move f3 also prepares to support a future e4 advance (after recapturing) and can help in kingside attacking ideas by potentially supporting g4-g5 advances later. While this does weaken our king position slightly, the attacking chances we gain usually outweigh the defensive concerns in practical play."
+      "annotation": "We're playing the central idea of the Blackmar-Diemer Gambit, directly attacking the e4 pawn and threatening to recapture the center with a powerful pawn duo. This advance may look weakening to the kingside, but it's essential for our opening concept – we need to clear the e4 square and open lines for our pieces. The move f3 also prepares to support a future e4 advance (after recapturing) and can help in kingside attacking ideas by potentially supporting g4-g5 advances later. While this does weaken our king position slightly, the attacking chances we gain usually outweigh the defensive concerns in practical play."
     },
     {
       "san": "exf3",

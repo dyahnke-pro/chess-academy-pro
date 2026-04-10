@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This forces Black to make a decision about defending the e5 pawn, either with a piece or by advancing it. The knight on f3 also prepares kingside castling and supports a future d2-d4 pawn break. This is vastly superior to premature moves like 2.f4 or 2.Bc4, as it develops with a concrete threat while maintaining flexibility."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and controlling the important central squares d4 and e5. This forces Black to make a decision about defending the e5 pawn, either with a piece or by advancing it. The knight on f3 also prepares kingside castling and supports a future d2-d4 pawn break. This is vastly superior to premature moves like 2.f4 or 2.Bc4, as it develops with a concrete threat while maintaining flexibility."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their second knight, attacking our e4 pawn and bringing another piece into active play. This natural developing move follows the principle of knights before bishops and creates immediate central tension. Our opponent is now threatening our e4 pawn while preparing to castle kingside. Notice how Black is developing harmoniously – both knights are actively placed, defending each other and controlling important central squares. We need to address the threat to our e4 pawn while continuing our own development."
+      "annotation": "Black develops their second knight, attacking our e4 pawn and bringing another piece into active play. This active move follows the principle of knights before bishops and creates immediate central tension. Our opponent is now threatening our e4 pawn while preparing to castle kingside. Notice how Black is developing harmoniously – both knights are actively placed, defending each other and controlling important central squares. We need to address the threat to our e4 pawn while continuing our own development."
     },
     {
       "san": "O-O",
@@ -39,15 +39,15 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black sensibly develops their bishop and prepares to castle, declining to win our e4 pawn for now. This solid move shows good judgment – capturing on e4 immediately would lead to sharp complications after 5...Nxe4 6.d4 b5 7.Bb3 d5 8.dxe5, where White gets strong attacking chances. Instead, Black completes their kingside development and prepares to castle into safety. The bishop on e7 also supports the important f6 knight and can potentially be redeployed to f6 or g5 in some variations."
+      "annotation": "Black sensibly develops their bishop and prepares to castle, declining to win our e4 pawn for now. this stabilizing move shows good judgment – capturing on e4 immediately would lead to sharp complications after 5...Nxe4 6.d4 b5 7.Bb3 d5 8.dxe5, where White gets strong attacking chances. Instead, Black completes their kingside development and prepares to castle into safety. The bishop on e7 also supports the important f6 knight and can potentially be redeployed to f6 or g5 in some variations."
     },
     {
       "san": "Re1",
-      "annotation": "We place our rook on the e-file, defending our e4 pawn and increasing the pressure on Black's position. This is the key move of the Ruy Lopez – we're now genuinely threatening to win Black's e5 pawn since it's no longer defended by our rook's position. The rook on e1 also supports potential central advances like d2-d4 and keeps Black's king under observation once they castle. This move forces Black to make concrete decisions about their pawn structure and piece placement, as the threat to e5 is now very real."
+      "annotation": "We place our rook on the e-file, defending our e4 pawn and increasing the pressure on Black's position. This is the central idea of the Ruy Lopez – we're now genuinely threatening to win Black's e5 pawn since it's no longer defended by our rook's position. The rook on e1 also supports potential central advances like d2-d4 and keeps Black's king under observation once they castle. This move forces Black to make concrete decisions about their pawn structure and piece placement, as the threat to e5 is now very real."
     },
     {
       "san": "b5",
-      "annotation": "Black strikes back with this thematic pawn advance, kicking our bishop away and gaining valuable space on the queenside. This is a key move in the Ruy Lopez, as it challenges our bishop's strong position and prevents us from maintaining the pin on the c6 knight indefinitely. Our opponent is also preparing to develop their dark-squared bishop to b7, where it will be very active along the long diagonal. The move ...b5 is somewhat committal as it creates potential weaknesses on a6 and c6, but it's necessary to fight for counterplay in the Ruy Lopez."
+      "annotation": "Black strikes back with this thematic pawn advance, kicking our bishop away and gaining valuable space on the queenside. This is a critical move in the Ruy Lopez, as it challenges our bishop's strong position and prevents us from maintaining the pin on the c6 knight indefinitely. Our opponent is also preparing to develop their dark-squared bishop to b7, where it will be very active along the long diagonal. The move ...b5 is somewhat committal as it creates potential weaknesses on a6 and c6, but it's necessary to fight for counterplay in the Ruy Lopez."
     },
     {
       "san": "Bb3",
@@ -59,7 +59,7 @@
     },
     {
       "san": "c3",
-      "annotation": "We prepare our central pawn break with d2-d4 by providing support for our d-pawn. This quiet but important move is essential for achieving our strategic goals in the Ruy Lopez. The pawn on c3 will support d2-d4, and after Black eventually captures with ...exd4, we can recapture with cxd4, maintaining a strong pawn center. This move also prevents Black's pieces from using the b4 and d4 squares, keeping our position compact and well-coordinated. It's a perfect example of patient positional preparation that characterizes the Ruy Lopez."
+      "annotation": "We prepare our central pawn break with d2-d4 by providing support for our d-pawn. this purposeful move is essential for achieving our strategic goals in the Ruy Lopez. The pawn on c3 will support d2-d4, and after Black eventually captures with ...exd4, we can recapture with cxd4, maintaining a strong pawn center. This move also prevents Black's pieces from using the b4 and d4 squares, keeping our position compact and well-coordinated. It's a perfect example of patient positional preparation that characterizes the Ruy Lopez."
     },
     {
       "san": "O-O",

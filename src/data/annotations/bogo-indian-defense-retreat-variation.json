@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn and preparing to castle kingside safely. This knight on f3 also eyes the important e5 and h4 squares while keeping our options open for various pawn breaks in the center. The knight development follows classical opening principles – we're getting our pieces out quickly while maintaining flexibility in our pawn structure. From f3, our knight can potentially jump to e5, g5, or even h4 in some tactical sequences, making it a very versatile piece placement."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn and preparing to castle kingside safely. This knight on f3 also eyes the important e5 and h4 squares while keeping our options open for various pawn breaks in the center. The knight development follows classical opening principles – we're getting our pieces out quickly while maintaining flexibility in our pawn structure. From f3, our knight can potentially jump to e5, g5, or even h4 in some tactical sequences, making it a very versatile piece placement."
     },
     {
       "san": "d5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a solid move that supports their d5 pawn while preparing potential queenside expansion with b5. This move also opens the possibility of a Nd7-b6 maneuver, where the knight could relocate to more active squares like c4 or a4. The c6 pawn also controls the important b5 and d5 squares, limiting some of our piece placements and pawn advances. While this move is somewhat slow, it gives Black a rock-solid pawn structure and prepares to challenge our queenside space advantage with moves like b6 and Ba6."
+      "annotation": "Black plays a well-grounded move that supports their d5 pawn while preparing potential queenside expansion with b5. This move also opens the possibility of a Nd7-b6 maneuver, where the knight could relocate to more active squares like c4 or a4. The c6 pawn also controls the important b5 and d5 squares, limiting some of our piece placements and pawn advances. While this move is somewhat slow, it gives Black a rock-solid pawn structure and prepares to challenge our queenside space advantage with moves like b6 and Ba6."
     },
     {
       "san": "Qc2",

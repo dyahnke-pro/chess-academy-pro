@@ -191,7 +191,7 @@
     },
     {
       "san": "Bg4",
-      "annotation": "Black pins the f3 knight to the queen — a very logical developing move. The bishop on g4 creates real pressure: if White plays Be2, Black can trade bishops and double White's pawns.",
+      "annotation": "Black pins the f3 knight to the queen — a purposeful developing choice. The bishop on g4 creates real pressure: if White plays Be2, Black can trade bishops and double White's pawns.",
       "pawnStructure": "No structural change, but the pin on f3 limits White's ability to reinforce the center.",
       "plans": [
         "Maintain the pin and develop the rest of the pieces",
@@ -240,7 +240,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays ...e6, a subtle but important move. It reinforces the pawn on d5, prepares ...Be7 for development, and keeps the position solid.",
+      "annotation": "Black plays ...e6, a subtle but purposeful move. It reinforces the pawn on d5, prepares ...Be7 for development, and keeps the position solid.",
       "pawnStructure": "Black creates a solid e6-d6 chain. The light-squared bishop will need to come back inside the chai.",
       "plans": [
         "Develop ...Be7 and castle kingside",

@@ -31,15 +31,15 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to its most natural square, challenging our centralized knight and preparing to coordinate their own pieces. Our opponent is trying to catch up in development while maintaining their material advantage, which is the correct approach in gambit positions. This knight development also prepares potential moves like ...d6 and ...Nf6, aiming to complete kingside development and castle to safety. However, Black is still behind in the race to get their pieces coordinated and their king secure."
+      "annotation": "Black develops their knight to its ideal square, challenging our centralized knight and preparing to coordinate their own pieces. Our opponent is trying to catch up in development while maintaining their material advantage, which is the correct approach in gambit positions. This knight development also prepares potential moves like ...d6 and ...Nf6, aiming to complete kingside development and castle to safety. However, Black is still behind in the race to get their pieces coordinated and their king secure."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our second knight to its ideal square, attacking Black's future e5 advance and preparing to support our central control. This move also prepares quick kingside castling while keeping pressure on Black to solve their developmental problems. The knight on f3 works beautifully with our c3 knight to control the center and prepare potential tactical shots. Our pieces are flowing into the game with natural developing moves while Black still needs several moves to achieve basic coordination."
+      "annotation": "We develop our second knight to its ideal square, attacking Black's future e5 advance and preparing to support our central control. This move also prepares quick kingside castling while keeping pressure on Black to solve their developmental problems. The knight on f3 works beautifully with our c3 knight to control the center and prepare potential tactical shots. Our pieces are flowing into the game with active moves while Black still needs several moves to achieve basic coordination."
     },
     {
       "san": "d6",
-      "annotation": "Black plays a solid developing move that supports their pawn on c6 and prepares to fianchetto their light-squared bishop or develop it to e6. Our opponent is prioritizing piece coordination over trying to hold onto their extra pawns, which shows good practical understanding of gambit positions. This move also prepares ...Nf6 and eventual kingside castling, though Black is still several moves away from complete safety. We need to continue developing actively to maintain our initiative before Black consolidates their extra material."
+      "annotation": "Black plays a constructive move that supports their pawn on c6 and prepares to fianchetto their light-squared bishop or develop it to e6. Our opponent is prioritizing piece coordination over trying to hold onto their extra pawns, which shows good practical understanding of gambit positions. This move also prepares ...Nf6 and eventual kingside castling, though Black is still several moves away from complete safety. We need to continue developing actively to maintain our initiative before Black consolidates their extra material."
     },
     {
       "san": "Bc4",

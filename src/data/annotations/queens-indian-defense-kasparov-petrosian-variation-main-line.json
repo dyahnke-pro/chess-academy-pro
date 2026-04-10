@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing for kingside castling. This knight placement is incredibly flexible, as it doesn't commit us to any specific pawn structure while maintaining pressure on Black's position. The knight on f3 also prevents Black from playing an immediate ...e5, which would give Black excellent central control. From f3, our knight can later jump to e5, d2, or h4 depending on how the position develops, making this one of the most versatile developing moves in chess."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing for kingside castling. This knight placement is incredibly flexible, as it doesn't commit us to any specific pawn structure while maintaining pressure on Black's position. The knight on f3 also prevents Black from playing an immediate ...e5, which would give Black excellent central control. From f3, our knight can later jump to e5, d2, or h4 depending on how the position develops, making this one of the most versatile developing choices in chess."
     },
     {
       "san": "b6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 and c4 pawns while preparing to meet Black's eventual central challenges. This knight placement gives us excellent central control and prepares various plans including e3 followed by Bd3, or even more aggressive setups with f3 and e4 in some variations. The knight on c3 also supports potential queenside expansion and can later reposition to e4, e2, or a4 depending on the position's demands. By completing this development, we're maintaining our central advantage while staying flexible about our pawn structure, waiting to see how Black commits before deciding on our exact middlegame plan."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 and c4 pawns while preparing to meet Black's eventual central challenges. This knight placement gives us excellent central control and prepares various plans including e3 followed by Bd3, or even more aggressive setups with f3 and e4 in some variations. The knight on c3 also supports potential queenside expansion and can later reposition to e4, e2, or a4 depending on the position's demands. By completing this development, we're maintaining our central advantage while staying flexible about our pawn structure, waiting to see how Black commits before deciding on our exact middlegame plan."
     },
     {
       "san": "d5",

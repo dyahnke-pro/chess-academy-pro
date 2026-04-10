@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This move is the hallmark of hypermodern openings where Black doesn't immediately occupy the center with pawns but instead attacks it from the flanks with pieces. The knight on f6 also controls important central squares like e4 and d5, giving Black flexibility in how to continue their development. Black is keeping their options open for various defensive systems including the King's Indian, Nimzo-Indian, or Queen's Indian defenses."
+      "annotation": "Our opponent develops the knight to its ideal square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This move is the hallmark of hypermodern openings where Black doesn't immediately occupy the center with pawns but instead attacks it from the flanks with pieces. The knight on f6 also controls important central squares like e4 and d5, giving Black flexibility in how to continue their development. Black is keeping their options open for various defensive systems including the King's Indian, Nimzo-Indian, or Queen's Indian defenses."
     },
     {
       "san": "c4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black completes their kingside development by castling, securing their king's safety while connecting the rooks and preparing for the middlegame battle. This natural move also puts the rook on f8, where it may support a future ...f5 advance or simply contribute to kingside defense. By castling now, Black maintains the pin on our knight while improving their king position, showing excellent practical opening play. The timing is perfect because Black has addressed their most pressing developmental needs while keeping the tactical pressure on our position with the bishop still actively placed on b4."
+      "annotation": "Black completes their kingside development by castling, securing their king's safety while connecting the rooks and preparing for the middlegame battle. this move also puts the rook on f8, where it may support a future ...f5 advance or simply contribute to kingside defense. By castling now, Black maintains the pin on our knight while improving their king position, showing excellent practical opening play. The timing is perfect because Black has addressed their most pressing developmental needs while keeping the tactical pressure on our position with the bishop still actively placed on b4."
     },
     {
       "san": "Nf3",

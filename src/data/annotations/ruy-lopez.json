@@ -63,7 +63,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "The knight develops to its most natural square, attacking the e5 pawn immediately and preparing to castle kingside.",
+      "annotation": "The knight develops to its ideal square, attacking the e5 pawn immediately and preparing to castle kingside.",
       "plans": [
         "Threaten to win the e5 pawn",
         "Castle kingside quickly"
@@ -4601,7 +4601,7 @@
         },
         {
           "san": "Bc5",
-          "annotation": "Black develops the bishop to an active square, targeting f2 and controlling the a7-g1 diagonal. A logical developing move in the Anti-Berlin.",
+          "annotation": "Black develops the bishop to an active square, targeting f2 and controlling the a7-g1 diagonal. a purposeful developing choice in the Anti-Berlin.",
           "arrows": [
             {
               "from": "c5",

@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center with their own pawn, directly challenging our control of the e4 square. This solid move prevents us from simply advancing e2-e4 and establishing a broad pawn center, forcing us to make concrete decisions about how to proceed. Black is preparing to meet our likely c2-c4 advance, either by capturing on c4 (accepting the Queen's Gambit) or maintaining the tension in the center. This symmetrical pawn structure often leads to rich strategic battles where both sides fight for central control and piece activity."
+      "annotation": "Black responds classically by occupying the center with their own pawn, directly challenging our control of the e4 square. this stabilizing move prevents us from simply advancing e2-e4 and establishing a broad pawn center, forcing us to make concrete decisions about how to proceed. Black is preparing to meet our likely c2-c4 advance, either by capturing on c4 (accepting the Queen's Gambit) or maintaining the tension in the center. This symmetrical pawn structure often leads to rich strategic battles where both sides fight for central control and piece activity."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square while simultaneously attacking Black's advanced d4 pawn, forcing them to make another decision about their pawn structure. This natural developing move also controls the important central squares e5 and g5, while preparing to castle kingside for safety. Our knight on f3 supports our advanced e5 pawn and can later jump to powerful outposts like e4 or g5 depending on how the position develops. We're also keeping our options open regarding how to deal with Black's d4 pawn – we can continue to pressure it or potentially allow it to advance further while focusing on piece development."
+      "annotation": "We're developing our knight to its most active square while simultaneously attacking Black's advanced d4 pawn, forcing them to make another decision about their pawn structure. This active move also controls the important central squares e5 and g5, while preparing to castle kingside for safety. Our knight on f3 supports our advanced e5 pawn and can later jump to powerful outposts like e4 or g5 depending on how the position develops. We're also keeping our options open regarding how to deal with Black's d4 pawn – we can continue to pressure it or potentially allow it to advance further while focusing on piece development."
     },
     {
       "san": "c5",

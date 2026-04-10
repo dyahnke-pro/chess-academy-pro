@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, claiming the center and freeing our light-squared bishop and queen for future development. This is the most popular first move in chess, immediately controlling the important central squares d5 and f5 while preparing rapid piece development. The move follows classical opening principles by fighting for the center from the very first move, and it leads to sharp, tactical games where both sides will battle for central control and quick development."
+      "annotation": "We're opening with the king's pawn, claiming the center and freeing our light-squared bishop and queen for future development. This is the most popular first move in chess, immediately controlling the important central squares d5 and f5 while preparing rapid piece development. The move follows classical opening principles by contesting central control from the very first move, and it leads to sharp, tactical games where both sides will battle for central control and quick development."
     },
     {
       "san": "Nc6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most natural square, attacking Black's advanced d5 pawn while simultaneously developing a piece and preparing to recapture on d5 if needed. This move follows the classical principle of developing knights before bishops, and our knight on c3 will be excellently placed to support our central pawns and control important squares like e4, d5, b5, and a4. By developing the knight instead of immediately capturing on d5, we maintain the central tension and keep our options open - we can still take the pawn later while improving our position first. The knight also prepares potential queen-side castling and supports future advances like d5 if Black's pawn moves."
+      "annotation": "We develop our queen's knight to its ideal square, attacking Black's advanced d5 pawn while simultaneously developing a piece and preparing to recapture on d5 if needed. This move follows the classical principle of developing knights before bishops, and our knight on c3 will be excellently placed to support our central pawns and control important squares like e4, d5, b5, and a4. By developing the knight instead of immediately capturing on d5, we maintain the central tension and keep our options open - we can still take the pawn later while improving our position first. The knight also prepares potential queen-side castling and supports future advances like d5 if Black's pawn moves."
     },
     {
       "san": "a6",

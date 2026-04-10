@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and controlling the central e4 square. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet - they could still play ...e6, ...g6, ...d5, or ...d6 depending on how we continue. By attacking our central pawn immediately, Black is applying the principle of challenging our opponent's central control rather than just developing pieces passively. We need to be ready to defend our d4 pawn or advance our position in the center, and this knight on f6 will influence many of our upcoming decisions about piece development and pawn structure."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and controlling the central e4 square. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet - they could still play ...e6, ...g6, ...d5, or ...d6 depending on how we continue. By attacking our central pawn immediately, Black is applying the principle of challenging our opponent's central control rather than just developing pieces passively. We need to be ready to defend our d4 pawn or advance our position in the center, and this knight on f6 will influence many of our upcoming decisions about piece development and pawn structure."
     },
     {
       "san": "c4",

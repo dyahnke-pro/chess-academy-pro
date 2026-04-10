@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn advance, claiming central space and immediately putting pressure on Black's position. This move controls the important d5 and f5 squares while opening lines for our bishop and queen to develop later. In the context of what's coming, this pawn will soon become a powerful battering ram that we'll push forward to cramp Black's position. The move follows classical opening principles by fighting for the center from the very first move."
+      "annotation": "We're opening with the king's pawn advance, claiming central space and immediately putting pressure on Black's position. This move controls the important d5 and f5 squares while opening lines for our bishop and queen to develop later. In the context of what's coming, this pawn will soon become a powerful battering ram that we'll push forward to cramp Black's position. The move follows classical opening principles by contesting central control from the very first move."
     },
     {
       "san": "Nf6",
@@ -15,7 +15,7 @@
     },
     {
       "san": "Nd5",
-      "annotation": "Black's knight retreats to its most natural square, where it's well-centralized and can't immediately be attacked again. From d5, the knight controls important central squares like c7, e7, f6, f4, c3, and b4, making it an active piece despite being 'kicked around.' This retreat is part of Black's plan to maintain piece activity while our pawns advance - the knight may later jump to b4 or f4 to create threats. Black is also preparing to strike back at our pawn center with moves like d6, challenging our advanced e5 pawn."
+      "annotation": "Black's knight retreats to its ideal square, where it's well-centralized and can't immediately be attacked again. From d5, the knight controls important central squares like c7, e7, f6, f4, c3, and b4, making it an active piece despite being 'kicked around.' This retreat is part of Black's plan to maintain piece activity while our pawns advance - the knight may later jump to b4 or f4 to create threats. Black is also preparing to strike back at our pawn center with moves like d6, challenging our advanced e5 pawn."
     },
     {
       "san": "d4",

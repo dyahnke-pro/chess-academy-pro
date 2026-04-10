@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our pawn center, controls important central squares, and prepares for kingside castling. The knight on f3 adds crucial support to our d4 pawn and also eyes the e5 square, making it harder for Black to simply capture our advanced pawn with ...dxe5. This development also prevents any annoying checks from Black's queen along the h4-d8 diagonal, and prepares us to castle kingside for safety. The knight on f3 is perfectly placed to support our space advantage while maintaining flexibility in our piece coordination."
+      "annotation": "We're developing our knight to its ideal square, where it supports our pawn center, controls important central squares, and prepares for kingside castling. The knight on f3 adds crucial support to our d4 pawn and also eyes the e5 square, making it harder for Black to simply capture our advanced pawn with ...dxe5. This development also prevents any annoying checks from Black's queen along the h4-d8 diagonal, and prepares us to castle kingside for safety. The knight on f3 is perfectly placed to support our space advantage while maintaining flexibility in our piece coordination."
     },
     {
       "san": "Nb6",

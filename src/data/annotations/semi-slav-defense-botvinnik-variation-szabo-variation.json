@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This move is the hallmark of many Indian Defense systems, where Black allows White to occupy the center with pawns but plans to undermine and attack those pawns later. The knight on f6 also prepares kingside castling and keeps Black's options open for various pawn breaks like ...d5 or ...c5, making this one of the most flexible responses to 1.d4."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This move is the hallmark of many Indian Defense systems, where Black allows White to occupy the center with pawns but plans to undermine and attack those pawns later. The knight on f6 also prepares kingside castling and keeps Black's options open for various pawn breaks like ...d5 or ...c5, making this one of the most flexible responses to 1.d4."
     },
     {
       "san": "c4",
@@ -79,7 +79,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Our opponent finally tries to bring a piece toward the defense, developing the knight from b8 to support the center and potentially help with king safety. However, this developing move comes far too late - Black's king is already fatally exposed and one piece cannot hope to coordinate an adequate defense. The knight on d7 does block some potential discoveries and prepares ...Nb6, but with our pieces so actively placed and Black's king so vulnerable, this defensive gesture is insufficient to meet the threats we're creating."
+      "annotation": "Our opponent finally tries to bring a piece toward the defense, developing the knight from b8 to support the center and potentially help with king safety. However, this move comes far too late - Black's king is already fatally exposed and one piece cannot hope to coordinate an adequate defense. The knight on d7 does block some potential discoveries and prepares ...Nb6, but with our pieces so actively placed and Black's king so vulnerable, this defensive gesture is insufficient to meet the threats we're creating."
     },
     {
       "san": "Qf3",

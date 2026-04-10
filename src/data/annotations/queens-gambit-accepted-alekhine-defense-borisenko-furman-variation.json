@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square immediately. This solid move follows the opening principle of fighting for the center with pawns, and it's the most natural response to our queen's pawn opening. Our opponent is essentially saying 'I won't let you dominate the center for free' and is preparing to develop pieces behind this central pawn. This sets up the possibility of the Queen's Gambit on our next move, as Black's d5 pawn becomes a potential target for our c4 advance."
+      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square immediately. this stabilizing move follows the opening principle of contesting central control with pawns, and it's the most natural response to our queen's pawn opening. Our opponent is essentially saying 'I won't let you dominate the center for free' and is preparing to develop pieces behind this central pawn. This sets up the possibility of the Queen's Gambit on our next move, as Black's d5 pawn becomes a potential target for our c4 advance."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our planned e2-e4 advance. This move also develops a piece while maintaining flexibility - we're not committing to any particular pawn recapture method just yet. The knight on f3 will support our central ambitions and can later jump to powerful squares like e5 or g5 depending on how the position develops. We're following the principle of rapid development in gambit positions, where every tempo counts in proving our compensation for the sacrificed pawn."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to support our planned e2-e4 advance. This move also develops a piece while maintaining flexibility - we're not committing to any particular pawn recapture method just yet. The knight on f3 will support our central ambitions and can later jump to powerful squares like e5 or g5 depending on how the position develops. We're following the principle of rapid development in gambit positions, where every tempo counts in proving our compensation for the sacrificed pawn."
     },
     {
       "san": "a6",

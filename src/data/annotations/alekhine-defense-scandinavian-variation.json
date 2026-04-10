@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending the e4 pawn, choosing a more positional approach over the aggressive 2.e5 that would chase the knight immediately. This move supports our central pawn and prepares for further development, while maintaining flexibility in our pawn structure. The knight on c3 also eyes important squares like d5 and e4, and supports potential advances like d4-d5 in some variations. By avoiding the immediate pawn storm, we're keeping our options open and allowing Black to reveal their setup before we commit to a specific plan."
+      "annotation": "We're developing our knight to its ideal square while defending the e4 pawn, choosing a more positional approach over the aggressive 2.e5 that would chase the knight immediately. This move supports our central pawn and prepares for further development, while maintaining flexibility in our pawn structure. The knight on c3 also eyes important squares like d5 and e4, and supports potential advances like d4-d5 in some variations. By avoiding the immediate pawn storm, we're keeping our options open and allowing Black to reveal their setup before we commit to a specific plan."
     },
     {
       "san": "d5",

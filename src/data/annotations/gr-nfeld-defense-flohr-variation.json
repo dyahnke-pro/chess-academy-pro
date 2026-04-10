@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while adding another piece to the center and preparing for various pawn advances like e2-e4. This knight on c3 is perfectly placed to support our central strategy and can later jump to strong outposts like e4 or b5 depending on how the position develops. The knight also opens up tactical possibilities and helps us maintain our grip on the central light squares. In the Grünfeld Defense context, this piece will play a crucial role in supporting our pawn center when Black eventually strikes with ...d5, creating the characteristic tension that defines this opening."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while adding another piece to the center and preparing for various pawn advances like e2-e4. This knight on c3 is perfectly placed to support our central strategy and can later jump to strong outposts like e4 or b5 depending on how the position develops. The knight also opens up tactical possibilities and helps us maintain our grip on the central light squares. In the Grünfeld Defense context, this piece will play a crucial role in supporting our pawn center when Black eventually strikes with ...d5, creating the characteristic tension that defines this opening."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development while adding another defender to our d4 pawn and maintaining maximum flexibility in the position. The knight on f3 controls the important e5 and g5 squares while supporting our central structure and preparing for kingside castling. This natural developing move also keeps our options open regarding how to handle Black's central challenge - we can still consider cxd5, or support our center with moves like Bg5 or e3. By developing this knight, we're following sound opening principles while keeping the position rich in possibilities for both tactical shots and strategic maneuvering."
+      "annotation": "We're completing our kingside development while adding another defender to our d4 pawn and maintaining maximum flexibility in the position. The knight on f3 controls the important e5 and g5 squares while supporting our central structure and preparing for kingside castling. This active move also keeps our options open regarding how to handle Black's central challenge - we can still consider cxd5, or support our center with moves like Bg5 or e3. By developing this knight, we're following sound opening principles while keeping the position rich in possibilities for both tactical shots and strategic maneuvering."
     },
     {
       "san": "Bg7",

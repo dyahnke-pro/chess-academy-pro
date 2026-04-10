@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses the French Defense structure, supporting the d5 pawn while preparing to develop the dark-squared bishop. This solid move maintains the central tension and avoids giving us the center immediately, though it does somewhat restrict Black's light-squared bishop. Black is preparing to potentially advance with c5 to challenge our d4 pawn and create counterplay in the center. This leads us into Tarrasch Defense territory, where Black will often sacrifice some space for active piece play and pawn breaks."
+      "annotation": "Our opponent chooses the French Defense structure, supporting the d5 pawn while preparing to develop the dark-squared bishop. this stabilizing move maintains the central tension and avoids giving us the center immediately, though it does somewhat restrict Black's light-squared bishop. Black is preparing to potentially advance with c5 to challenge our d4 pawn and create counterplay in the center. This leads us into Tarrasch Defense territory, where Black will often sacrifice some space for active piece play and pawn breaks."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding another attacker to the d5 pawn and preparing to increase the central pressure. This knight placement supports our potential e4 advance and keeps maximum flexibility in our position. The knight on c3 also eyes important central squares like e4 and d5, while leaving our b-pawn free to advance later if needed. From c3, the knight can potentially redeploy to e4 or e2 depending on how the position develops, giving us excellent piece coordination."
+      "annotation": "We develop our knight to its ideal square, adding another attacker to the d5 pawn and preparing to increase the central pressure. This knight placement supports our potential e4 advance and keeps maximum flexibility in our position. The knight on c3 also eyes important central squares like e4 and d5, while leaving our b-pawn free to advance later if needed. From c3, the knight can potentially redeploy to e4 or e2 depending on how the position develops, giving us excellent piece coordination."
     },
     {
       "san": "c5",

@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking the e4 square to prevent White from easily achieving e4. This is the most flexible response to 1.d4 because it keeps Black's options open — from here Black can steer into the King's Indian, Nimzo-Indian, Queen's Indian, or Gruenfeld depending on what White does next.",
+      "annotation": "Black develops the knight to its ideal square, attacking the e4 square to prevent White from easily achieving e4. This is the most flexible response to 1.d4 because it keeps Black's options open — from here Black can steer into the King's Indian, Nimzo-Indian, Queen's Indian, or Gruenfeld depending on what White does next.",
       "plans": [
         "Control e4 to limit White's central expansion",
         "Keep pawn structure flexible for multiple setups"
@@ -160,7 +160,7 @@
     },
     {
       "san": "b6",
-      "annotation": "This is the defining move of the Queen's Indian Defense. Black prepares to fianchetto the bishop to b7, where it will exert tremendous pressure along the long diagonal aimed at White's kingside. The whole philosophy is simple: rather than fighting for the center with pawns, Black uses the b7-bishop to snipe at the e4 square and keep White's center under control from a distance.",
+      "annotation": "This is the defining move of the Queen's Indian Defense. Black prepares to fianchetto the bishop to b7, where it will exert tremendous pressure along the long diagonal aimed at White's kingside. The whole philosophy is simple: rather than contesting central control with pawns, Black uses the b7-bishop to snipe at the e4 square and keep White's center under control from a distance.",
       "pawnStructure": "Black keeps a small, flexible pawn structure and relies on piece pressure rather than pawn occupation of the center.",
       "plans": [
         "Place bishop on b7 targeting e4 and the long diagonal",
@@ -287,7 +287,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles, tucking the king into safety behind the fianchetto structure. This is the most natural move — the king is perfectly safe on g1 with the g3-Bg2 setup providing a solid shelter. Now White can focus entirely on the middlegame plan of expanding in the center or on the queenside.",
+      "annotation": "White castles, tucking the king into safety behind the fianchetto structure. This is the most principled response — the king is perfectly safe on g1 with the g3-Bg2 setup providing a solid shelter. Now White can focus entirely on the middlegame plan of expanding in the center or on the queenside.",
       "plans": [
         "Begin central expansion with Nc3 and e4",
         "Start queenside operations with b3 and Bb2 in some lines"
@@ -365,7 +365,7 @@
     },
     {
       "san": "Ne4",
-      "annotation": "This is Black's key move in this line — the knight jumps to the center, challenging White's setup directly. Ne4 is powerful because it occupies a strong central square, attacks the c3 knight, and forces White to make a decision. If White trades on e4, Black's f-pawn recaptures and creates a strong pawn presence in the center. It's the classic Queen's Indian idea: use piece activity to counterbalance White's spatial advantage.",
+      "annotation": "This is Black's critical move in this line — the knight jumps to the center, challenging White's setup directly. Ne4 is powerful because it occupies a strong central square, attacks the c3 knight, and forces White to make a decision. If White trades on e4, Black's f-pawn recaptures and creates a strong pawn presence in the center. It's the classic Queen's Indian idea: use piece activity to counterbalance White's spatial advantage.",
       "plans": [
         "Force a trade that opens the f-file or strengthens the center",
         "After Nxc3, follow up with f5 to lock down e4"
@@ -606,7 +606,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the king's knight to its most natural square, controlling the central e5 and d4 squares while preparing kingside castling. This move also supports White's central pawn structure and keeps options open for various setups including the fianchetto with g3. The knight on f3 is perfectly placed to support both central control and kingside safety.",
+          "annotation": "White develops the king's knight to its ideal square, controlling the central e5 and d4 squares while preparing kingside castling. This move also supports White's central pawn structure and keeps options open for various setups including the fianchetto with g3. The knight on f3 is perfectly placed to support both central control and kingside safety.",
           "arrows": [
             {
               "from": "f3",
@@ -743,7 +743,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White develops the queen's knight to its most natural square, supporting the central d4 and c4 pawns while preparing for active middlegame operations. This knight placement is particularly strong in the fianchetto system, as it supports central control without blocking the bishop's diagonal. The Nc3 also prepares potential advances like e4 or supports tactical operations in the center.",
+          "annotation": "White develops the queen's knight to its ideal square, supporting the central d4 and c4 pawns while preparing for active middlegame operations. This knight placement is particularly strong in the fianchetto system, as it supports central control without blocking the bishop's diagonal. The Nc3 also prepares potential advances like e4 or supports tactical operations in the center.",
           "plans": [
             "Support central pawn advances or exchanges",
             "Prepare piece coordination for middlegame pressure"

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its best square where it attacks our d4 pawn and controls the important e4 and h5 squares. This move is the hallmark of many solid defenses like the Queen's Gambit Declined, Nimzo-Indian, and King's Indian Defense. Our opponent is avoiding early commitments and keeping maximum flexibility in their setup. The knight on f6 also supports a potential ...e5 central break later in the game, making it a highly flexible and principled developing move."
+      "annotation": "Black responds with the most active move, bringing the knight to its best square where it attacks our d4 pawn and controls the important e4 and h5 squares. This move is the hallmark of many solid defenses like the Queen's Gambit Declined, Nimzo-Indian, and King's Indian Defense. Our opponent is avoiding early commitments and keeping maximum flexibility in their setup. The knight on f6 also supports a potential ...e5 central break later in the game, making it a highly flexible and principled developing choice."
     },
     {
       "san": "Nf3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a very solid move, supporting the d5 pawn and preparing to potentially challenge our center with ...dxc4 followed by ...b5. This move is characteristic of the Capablanca Variation and other solid QGD setups, prioritizing security over rapid development. Our opponent is also preparing potential queenside counterplay and making sure their central pawn structure remains stable. The c6 move does slightly restrict Black's knight development options, as the b8 knight will need to find a different route to the center, but it provides excellent structural support."
+      "annotation": "Black plays a well-grounded move, supporting the d5 pawn and preparing to potentially challenge our center with ...dxc4 followed by ...b5. This move is characteristic of the Capablanca Variation and other solid QGD setups, prioritizing security over rapid development. Our opponent is also preparing potential queenside counterplay and making sure their central pawn structure remains stable. The c6 move does slightly restrict Black's knight development options, as the b8 knight will need to find a different route to the center, but it provides excellent structural support."
     },
     {
       "san": "Nbd2",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We solidify our center with this quiet but important move, supporting the d4 pawn and preparing to complete our kingside development with Bd3 and castling. This creates a classical 'pyramid' pawn structure that's incredibly solid and gives us excellent central control. The e3 move also opens a potential retreat square for our bishop on g5 if Black plays ...h6, and it connects our rooks once we castle. While this move looks modest, it's the foundation of many successful Queen's Gambit systems, providing long-term positional advantages even if it doesn't create immediate threats."
+      "annotation": "We solidify our center with this purposeful move, supporting the d4 pawn and preparing to complete our kingside development with Bd3 and castling. This creates a classical 'pyramid' pawn structure that's incredibly solid and gives us excellent central control. The e3 move also opens a potential retreat square for our bishop on g5 if Black plays ...h6, and it connects our rooks once we castle. While this move looks modest, it's the foundation of many successful Queen's Gambit systems, providing long-term positional advantages even if it doesn't create immediate threats."
     }
   ]
 }

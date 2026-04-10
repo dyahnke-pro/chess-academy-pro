@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while attacking the e5 square and preparing kingside castling. This move is completely in line with classical opening principles - piece development, central control, and king safety preparation all in one move. Our knight on f3 also prevents Black from playing ...e5 immediately, maintaining our central space advantage. From f3, the knight can potentially jump to e5 or g5 later in the game, depending on how the position develops, giving us tactical and strategic flexibility."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while attacking the e5 square and preparing kingside castling. This move is completely in line with classical opening principles - piece development, central control, and king safety preparation all in one move. Our knight on f3 also prevents Black from playing ...e5 immediately, maintaining our central space advantage. From f3, the knight can potentially jump to e5 or g5 later in the game, depending on how the position develops, giving us tactical and strategic flexibility."
     },
     {
       "san": "b6",

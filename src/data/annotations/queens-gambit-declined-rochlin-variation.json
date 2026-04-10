@@ -15,15 +15,15 @@
     },
     {
       "san": "e6",
-      "annotation": "Black declines the Queen's Gambit by supporting the d5 pawn with the e-pawn, leading us into the Queen's Gambit Declined complex. This solid move maintains Black's central foothold but does come with the cost of restricting the light-squared bishop on c8, which becomes a long-term strategic concern. By playing e6, our opponent prepares to develop the kingside pieces, particularly the bishop to e7 or d6, and keeps the position closed and maneuvering-based. This is a classical choice that has been trusted by world champions for over a century, prioritizing solidity over immediate counterplay."
+      "annotation": "Black declines the Queen's Gambit by supporting the d5 pawn with the e-pawn, leading us into the Queen's Gambit Declined complex. this stabilizing move maintains Black's central foothold but does come with the cost of restricting the light-squared bishop on c8, which becomes a long-term strategic concern. By playing e6, our opponent prepares to develop the kingside pieces, particularly the bishop to e7 or d6, and keeps the position closed and maneuvering-based. This is a classical choice that has been trusted by world champions for over a century, prioritizing solidity over immediate counterplay."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding more pressure to the d5 pawn and preparing to support our central advance with e2-e4 if the opportunity arises. The knight on c3 also eyes important central and kingside squares like e4, d5, and b5, giving us flexible piece placement options. This move fits perfectly with our Queen's Gambit strategy of building pressure against Black's center while developing our pieces to active squares. From c3, the knight can later jump to e4 or a4 depending on how the position develops, maintaining maximum flexibility in our plans."
+      "annotation": "We develop our knight to its ideal square, adding more pressure to the d5 pawn and preparing to support our central advance with e2-e4 if the opportunity arises. The knight on c3 also eyes important central and kingside squares like e4, d5, and b5, giving us flexible piece placement options. This move fits perfectly with our Queen's Gambit strategy of building pressure against Black's center while developing our pieces to active squares. From c3, the knight can later jump to e4 or a4 depending on how the position develops, maintaining maximum flexibility in our plans."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 square and preparing to castle kingside for safety. This natural developing move also adds another defender to the d5 pawn, making it more difficult for us to undermine Black's central position. The knight on f6 is perfectly placed to support Black's typical Queen's Gambit Declined setup, where pieces are developed harmoniously behind the pawn chain. Our opponent is following classical opening principles by developing knights before bishops and preparing to complete kingside development quickly."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 square and preparing to castle kingside for safety. This active move also adds another defender to the d5 pawn, making it more difficult for us to undermine Black's central position. The knight on f6 is perfectly placed to support Black's typical Queen's Gambit Declined setup, where pieces are developed harmoniously behind the pawn chain. Our opponent is following classical opening principles by developing knights before bishops and preparing to complete kingside development quickly."
     },
     {
       "san": "Bg5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by placing the knight on its most natural square, controlling key central squares like e5 and d4 while preparing to castle kingside. This move maintains our flexible approach to the position, keeping options open for various pawn advances or piece maneuvers. The knight on f3 also supports a potential e2-e4 push by controlling the d4 square and adds another piece to our kingside attacking potential. By developing this knight, we're following the classical principle of getting our pieces out before committing to specific pawn advances, maintaining maximum options for our middlegame plans."
+      "annotation": "We complete our kingside development by placing the knight on its ideal square, controlling key central squares like e5 and d4 while preparing to castle kingside. This move maintains our flexible approach to the position, keeping options open for various pawn advances or piece maneuvers. The knight on f3 also supports a potential e2-e4 push by controlling the d4 square and adds another piece to our kingside attacking potential. By developing this knight, we're following the classical principle of getting our pieces out before committing to specific pawn advances, maintaining maximum options for our middlegame plans."
     },
     {
       "san": "c6",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn while preparing to contest Black's potential d5 advance. This knight on c3 is perfectly placed to support our central ambitions and can later jump to active squares like e4, d5, or b5 depending on the pawn structure that emerges. The development also prepares us for kingside castling and keeps our options open for various pawn advances in the center. However, we must be aware that this knight can become a target for Black's pieces, particularly if Black develops the bishop to b4 with a pin against our king."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn while preparing to contest Black's potential d5 advance. This knight on c3 is perfectly placed to support our central ambitions and can later jump to active squares like e4, d5, or b5 depending on the pawn structure that emerges. The development also prepares us for kingside castling and keeps our options open for various pawn advances in the center. However, we must be aware that this knight can become a target for Black's pieces, particularly if Black develops the bishop to b4 with a pin against our king."
     },
     {
       "san": "Bb4",

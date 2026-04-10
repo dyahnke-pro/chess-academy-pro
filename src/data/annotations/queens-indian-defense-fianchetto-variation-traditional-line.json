@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this natural developing move, attacking d4 while bringing the knight to its most active square. This is one of the most principled responses to d4, as it prevents us from simply advancing with e4 and forces us to make concrete decisions about our pawn center. The knight on f6 also prepares kingside castling and supports potential central advances like ...e5 or ...d5. Black is following sound opening principles by developing pieces toward the center while creating immediate pressure on our position."
+      "annotation": "Black immediately challenges our central pawn with this active move, attacking d4 while bringing the knight to its most active square. This is one of the most principled responses to d4, as it prevents us from simply advancing with e4 and forces us to make concrete decisions about our pawn center. The knight on f6 also prepares kingside castling and supports potential central advances like ...e5 or ...d5. Black is following sound opening principles by developing pieces toward the center while creating immediate pressure on our position."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while attacking the e5 square and preparing kingside development. This move also prevents Black from playing ...e5, which would give them comfortable equality in the center. The knight on f3 works beautifully with our pawn on c4, creating a harmonious setup that supports both central control and quick piece development. We're following classical opening principles while keeping our options open for various pawn center formations, including a potential e4 advance or maintaining the current structure."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while attacking the e5 square and preparing kingside development. This move also prevents Black from playing ...e5, which would give them comfortable equality in the center. The knight on f3 works beautifully with our pawn on c4, creating a harmonious setup that supports both central control and quick piece development. We're following classical opening principles while keeping our options open for various pawn center formations, including a potential e4 advance or maintaining the current structure."
     },
     {
       "san": "b6",

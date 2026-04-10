@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing equal central presence. This solid move prevents us from playing e4 next move and sets up Black's own space in the center, which is the hallmark of classical chess principles. Our opponent is likely preparing to develop pieces harmoniously while maintaining central tension, keeping options open for various defensive systems like the Queen's Gambit Declined, Slav Defense, or Semi-Slav. This move also opens a diagonal for Black's dark-squared bishop, though it won't be developed immediately in most variations."
+      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing equal central presence. this stabilizing move prevents us from playing e4 next move and sets up Black's own space in the center, which is the hallmark of classical chess principles. Our opponent is likely preparing to develop pieces harmoniously while maintaining central tension, keeping options open for various defensive systems like the Queen's Gambit Declined, Slav Defense, or Semi-Slav. This move also opens a diagonal for Black's dark-squared bishop, though it won't be developed immediately in most variations."
     },
     {
       "san": "c4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn and controlling the important e5 and h4 squares. This move follows classical opening principles perfectly: develop knights before bishops, control the center, and prepare for kingside castling. Our knight on f3 also prevents Black from playing an early ...e5, which would give them excellent central counterplay. Additionally, we're preparing to potentially support a future e4 advance or maintain flexibility in our pawn structure depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn and controlling the important e5 and h4 squares. This move follows classical opening principles perfectly: develop knights before bishops, control the center, and prepare for kingside castling. Our knight on f3 also prevents Black from playing an early ...e5, which would give them excellent central counterplay. Additionally, we're preparing to potentially support a future e4 advance or maintain flexibility in our pawn structure depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development, placing the knight on its most active square where it attacks our e4 square and prepares to castle kingside. This natural developing move fits perfectly with the Slav Defense philosophy of solid, harmonious piece development while maintaining central tension. Our opponent's knight also prepares to potentially support a future ...e5 break or jump to active squares like e4 or g4 in some variations. Black is developing with purpose, getting pieces into the game while keeping all strategic options open for the middlegame phase."
+      "annotation": "Black mirrors our development, placing the knight on its most active square where it attacks our e4 square and prepares to castle kingside. This active move fits perfectly with the Slav Defense philosophy of solid, harmonious piece development while maintaining central tension. Our opponent's knight also prepares to potentially support a future ...e5 break or jump to active squares like e4 or g4 in some variations. Black is developing with purpose, getting pieces into the game while keeping all strategic options open for the middlegame phase."
     },
     {
       "san": "Nc3",

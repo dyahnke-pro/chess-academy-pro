@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our c4 pawn and eyes the central d5 and e4 squares. This move is part of our flexible setup in the English Opening, keeping multiple plans available while developing with tempo. From c3, our knight can potentially jump to d5 later in the game, or support a future d2-d4 pawn break to challenge Black's central presence. We're also preparing to potentially transpose into other openings like the Closed Sicilian or even certain Queen's Gambit structures depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, where it supports our c4 pawn and eyes the central d5 and e4 squares. This move is part of our flexible setup in the English Opening, keeping multiple plans available while developing with tempo. From c3, our knight can potentially jump to d5 later in the game, or support a future d2-d4 pawn break to challenge Black's central presence. We're also preparing to potentially transpose into other openings like the Closed Sicilian or even certain Queen's Gambit structures depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most active square, where it attacks our c4 pawn and prepares to support their central e5 pawn. This natural developing move also opens the diagonal for Black's dark-squared bishop and prepares kingside castling. Our opponent is following classical opening principles by developing pieces toward the center while maintaining pressure on our position. The knight on f6 also eyes important central squares like d5 and e4, and Black is keeping options open for various pawn breaks and piece deployments in the middlegame."
+      "annotation": "Black develops their kingside knight to its most active square, where it attacks our c4 pawn and prepares to support their central e5 pawn. This active move also opens the diagonal for Black's dark-squared bishop and prepares kingside castling. Our opponent is following classical opening principles by developing pieces toward the center while maintaining pressure on our position. The knight on f6 also eyes important central squares like d5 and e4, and Black is keeping options open for various pawn breaks and piece deployments in the middlegame."
     },
     {
       "san": "Nf3",

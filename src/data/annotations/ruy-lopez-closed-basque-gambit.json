@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the most classical of chess moves, immediately seizing control of the central d5 and f5 squares while freeing our kingside pieces for development. This move embodies the fundamental opening principle of fighting for the center with pawns, giving us excellent chances for quick piece development and potential kingside attacks. The king's pawn opening leads to sharp, tactical games where both sides must be precise, making it perfect for players who enjoy dynamic positions with concrete winning chances."
+      "annotation": "We're opening with the most classical of chess moves, immediately seizing control of the central d5 and f5 squares while freeing our kingside pieces for development. This move embodies the fundamental opening principle of contesting central control with pawns, giving us excellent chances for quick piece development and potential kingside attacks. The king's pawn opening leads to sharp, tactical games where both sides must be precise, making it perfect for players who enjoy dynamic positions with concrete winning chances."
     },
     {
       "san": "e5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing kingside castling. This natural developing move shows that our opponent understands the importance of rapid piece development, even under the pressure of our bishop pin. The knight on f6 not only defends by attacking our central pawn but also prepares to support Black's own central operations, while keeping the option of breaking the pin with moves like Be7 or Bd6 in the near future."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing kingside castling. This active move shows that our opponent understands the importance of rapid piece development, even under the pressure of our bishop pin. The knight on f6 not only defends by attacking our central pawn but also prepares to support Black's own central operations, while keeping the option of breaking the pin with moves like Be7 or Bd6 in the near future."
     },
     {
       "san": "O-O",

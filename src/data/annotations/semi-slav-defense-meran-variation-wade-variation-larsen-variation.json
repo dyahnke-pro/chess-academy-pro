@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding additional pressure to the d5 pawn and preparing for quick kingside development. The knight on c3 supports our central control and can later jump to e4 or a4 depending on how the position evolves. This move also prepares e2-e3 or e2-e4, depending on the variation we choose. From c3, our knight controls important central squares like e4 and d5, while also supporting potential pawn advances in the center."
+      "annotation": "We develop our knight to its ideal square, adding additional pressure to the d5 pawn and preparing for quick kingside development. The knight on c3 supports our central control and can later jump to e4 or a4 depending on how the position evolves. This move also prepares e2-e3 or e2-e4, depending on the variation we choose. From c3, our knight controls important central squares like e4 and d5, while also supporting potential pawn advances in the center."
     },
     {
       "san": "Nf6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Bxc4",
-      "annotation": "We immediately recapture the pawn, maintaining material equality and developing our bishop to an active square. The bishop on c4 controls the important f7 square and can potentially create threats along the a2-g8 diagonal. This recapture also prepares us to respond flexibly to Black's next moves, whether that's b5 or other developing moves. From c4, our bishop is actively placed and ready to support various strategic plans in the middlegame."
+      "annotation": "We immediately recapture the pawn, maintaining material equality and developing our bishop to an active square. The bishop on c4 controls the important f7 square and can potentially create threats along the a2-g8 diagonal. This recapture also prepares us to respond flexibly to Black's next moves, whether that's b5 or other developing choices. From c4, our bishop is actively placed and ready to support various strategic plans in the middlegame."
     },
     {
       "san": "b5",

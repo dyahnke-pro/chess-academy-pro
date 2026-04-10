@@ -15,11 +15,11 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to c6, defending against pressure on e5 and preparing to support central play. This is a standard move that controls d4 and e7, giving Black reasonable piece coordination. The knight on c6 is well-placed for both offense and defense in the middlegame."
+      "annotation": "Black develops their knight to c6, defending against pressure on e5 and preparing to support central play. This is a typical choice in this structure that controls d4 and e7, giving Black reasonable piece coordination. The knight on c6 is well-placed for both offense and defense in the middlegame."
     },
     {
       "san": "c4",
-      "annotation": "We stake our claim in the center with c4, a key move in the Nimzo-Larsen that controls d5 and prevents Black's center from advancing unopposed. By playing c4, we're essentially transposing toward ideas seen in the English Opening or Réti while maintaining our unique setup with the fianchettoed bishop. This move supports potential d4 breaks and fights for central space."
+      "annotation": "We stake our claim in the center with c4, a critical move in the Nimzo-Larsen that controls d5 and prevents Black's center from advancing unopposed. By playing c4, we're essentially transposing toward ideas seen in the English Opening or Réti while maintaining our unique setup with the fianchettoed bishop. This move supports potential d4 breaks and fights for central space."
     },
     {
       "san": "Nf6",

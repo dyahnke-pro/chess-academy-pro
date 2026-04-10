@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it defends the e4 pawn and prepares to support further central expansion. This knight controls important squares like d5 and e4, and can later jump to aggressive posts like d5 or f5. The move also keeps our options open for various pawn breaks in the center, such as d5 or f4-f5. However, we should be aware that placing the knight on c3 can sometimes allow tactical tricks involving ...Bxc3+, which we'll need to evaluate carefully depending on Black's setup."
+      "annotation": "We're developing our knight to its ideal square, where it defends the e4 pawn and prepares to support further central expansion. This knight controls important squares like d5 and e4, and can later jump to aggressive posts like d5 or f5. The move also keeps our options open for various pawn breaks in the center, such as d5 or f4-f5. However, we should be aware that placing the knight on c3 can sometimes allow tactical tricks involving ...Bxc3+, which we'll need to evaluate carefully depending on Black's setup."
     },
     {
       "san": "c5",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and prepares to control the important e4 and e5 central squares. This knight placement is extremely flexible - it can later jump to e4, d5, or even retreat to e2 if needed to support an f2-f3 and e3-e4 pawn advance. The knight on c3 also supports our c4 pawn and keeps open the possibility of expanding with b2-b4 to gain space on the queenside. From c3, our knight coordinates beautifully with the rest of our pieces and maintains pressure on Black's position while keeping our options open."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and prepares to control the important e4 and e5 central squares. This knight placement is extremely flexible - it can later jump to e4, d5, or even retreat to e2 if needed to support an f2-f3 and e3-e4 pawn advance. The knight on c3 also supports our c4 pawn and keeps open the possibility of expanding with b2-b4 to gain space on the queenside. From c3, our knight coordinates beautifully with the rest of our pieces and maintains pressure on Black's position while keeping our options open."
     },
     {
       "san": "Bg7",
@@ -47,7 +47,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a key move that supports the central advance ...d5 and prepares to challenge our pawn center with typical Benoni-style counterplay. This pawn move also controls the important b5 and d5 squares while opening the possibility of ...Qc7 to increase pressure along the c-file. Our opponent is setting up a flexible pawn structure that can support both ...e5 and ...d5 breaks, giving Black multiple ways to create imbalances in the position. The c6 move is characteristic of the Benoni variation within the King's Indian, where Black aims to create a dynamic pawn structure that leads to sharp tactical battles in the middlegame."
+      "annotation": "Black plays a critical move that supports the central advance ...d5 and prepares to challenge our pawn center with typical Benoni-style counterplay. This pawn move also controls the important b5 and d5 squares while opening the possibility of ...Qc7 to increase pressure along the c-file. Our opponent is setting up a flexible pawn structure that can support both ...e5 and ...d5 breaks, giving Black multiple ways to create imbalances in the position. The c6 move is characteristic of the Benoni variation within the King's Indian, where Black aims to create a dynamic pawn structure that leads to sharp tactical battles in the middlegame."
     }
   ]
 }

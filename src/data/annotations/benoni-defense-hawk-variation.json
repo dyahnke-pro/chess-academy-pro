@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside for safety. This move keeps all our options open - we can still play c4 for a Queen's Gambit setup, or go with moves like Bg5 or e3 depending on Black's response. The knight on f3 also prevents any early ...e4 breaks and adds extra control over the central e5 square. This flexible development move allows us to see what our opponent has in mind before committing to a specific pawn structure."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside for safety. This move keeps all our options open - we can still play c4 for a Queen's Gambit setup, or go with moves like Bg5 or e3 depending on Black's response. The knight on f3 also prevents any early ...e4 breaks and adds extra control over the central e5 square. This flexible development move allows us to see what our opponent has in mind before committing to a specific pawn structure."
     },
     {
       "san": "c5",

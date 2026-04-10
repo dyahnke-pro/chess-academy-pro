@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn and preparing to recapture on d4 if Black plays ...cxd4, while also eyeing the important e4 and b5 outposts. This natural developing move increases our control over the center and prepares several aggressive continuations, including the possibility of e2-e4 to establish a strong pawn center. However, we must be aware that this knight placement allows Black the Nimzo-Indian setup with ...Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 also supports potential queenside expansion with moves like a2-a4 and b2-b4, giving us excellent strategic flexibility."
+      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn and preparing to recapture on d4 if Black plays ...cxd4, while also eyeing the important e4 and b5 outposts. This active move increases our control over the center and prepares several aggressive continuations, including the possibility of e2-e4 to establish a strong pawn center. However, we must be aware that this knight placement allows Black the Nimzo-Indian setup with ...Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 also supports potential queenside expansion with moves like a2-a4 and b2-b4, giving us excellent strategic flexibility."
     },
     {
       "san": "Bb4",

@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, where it performs multiple important functions in our setup. The knight on f3 helps control the crucial e5 square where our pawn currently sits, guards against any potential back-rank tactics, and prepares for castling kingside to get our king to safety. Additionally, the knight from f3 can potentially jump to g5 or h4 in some variations to create attacking chances, or retreat to defend if Black creates threats. This move is part of our solid, classical development plan - we're not trying to hold onto our extra pawn at all costs, but rather developing sensibly while maintaining our material advantage."
+      "annotation": "We develop our king's knight to its ideal square, where it performs multiple important functions in our setup. The knight on f3 helps control the crucial e5 square where our pawn currently sits, guards against any potential back-rank tactics, and prepares for castling kingside to get our king to safety. Additionally, the knight from f3 can potentially jump to g5 or h4 in some variations to create attacking chances, or retreat to defend if Black creates threats. This move is part of our solid, classical development plan - we're not trying to hold onto our extra pawn at all costs, but rather developing sensibly while maintaining our material advantage."
     },
     {
       "san": "Nc6",

@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds with the most natural and solid move, immediately challenging our central pawn and fighting for control of the center. This classical response aims to equalize the position and avoid the sharp complications that arise from more passive moves like ...Nf6 or ...e6. Our opponent is essentially accepting the challenge and saying 'I'm ready to fight for the center immediately.' This move prepares Black's pieces for natural development while keeping the position relatively balanced, but it also walks right into our gambit preparation."
+      "annotation": "Black responds with the most principled response, immediately challenging our central pawn and fighting for control of the center. This classical response aims to equalize the position and avoid the sharp complications that arise from more passive moves like ...Nf6 or ...e6. Our opponent is essentially accepting the challenge and saying 'I'm ready to fight for the center immediately.' This move prepares Black's pieces for natural development while keeping the position relatively balanced, but it also walks right into our gambit preparation."
     },
     {
       "san": "e4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, attacking the captured pawn and beginning to pile up pressure in the center. This knight not only targets the e4 pawn but also controls important central squares like e4, d5, and b5, while supporting a future f3 advance. The knight on c3 is perfectly placed for the typical BDG plans - it can jump to e4 or d5 later in the game, and it supports our aggressive pawn storm. This natural developing move also prepares our next gambit move f3, which will complete the pawn sacrifice and give us fantastic piece coordination."
+      "annotation": "We're developing our knight to its most active square, attacking the captured pawn and beginning to pile up pressure in the center. This knight not only targets the e4 pawn but also controls important central squares like e4, d5, and b5, while supporting a future f3 advance. The knight on c3 is perfectly placed for the typical BDG plans - it can jump to e4 or d5 later in the game, and it supports our aggressive pawn storm. This active move also prepares our next gambit move f3, which will complete the pawn sacrifice and give us fantastic piece coordination."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, defending the e4 pawn while simultaneously developing toward the center and preparing kingside castling. This is the most popular and logical response, as the knight controls key central squares and supports Black's defensive setup. Our opponent is following sound opening principles - develop pieces quickly, control the center, and prepare to castle - while trying to consolidate the extra pawn. However, this seemingly natural move also allows us to continue with our aggressive plan, and the knight on f6 will soon become a target for our attacking pieces."
+      "annotation": "Black develops the kingside knight to its ideal square, defending the e4 pawn while simultaneously developing toward the center and preparing kingside castling. This is the most popular and logical response, as the knight controls key central squares and supports Black's defensive setup. Our opponent is following sound opening principles - develop pieces quickly, control the center, and prepare to castle - while trying to consolidate the extra pawn. However, this seemingly logical choice also allows us to continue with our aggressive plan, and the knight on f6 will soon become a target for our attacking pieces."
     },
     {
       "san": "f3",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto, placing the dark-squared bishop on its ideal diagonal where it controls crucial central squares and provides solid kingside defense. This bishop will be a key defensive piece, protecting the dark squares around Black's king while also having potential counterplay along the long diagonal. Our opponent has now created a relatively solid defensive setup, but the development has taken several moves and our pieces are becoming increasingly coordinated. The bishop on g7 does help defend f7 and other key squares, but our attacking potential is building rapidly with each developing move."
+      "annotation": "Black completes the fianchetto, placing the dark-squared bishop on its ideal diagonal where it controls crucial central squares and provides solid kingside defense. This bishop will be a key defensive piece, protecting the dark squares around Black's king while also having potential counterplay along the long diagonal. Our opponent has now created a relatively solid defensive setup, but the development has taken several moves and our pieces are becoming increasingly coordinated. The bishop on g7 does help defend f7 and other key squares, but our attacking potential is building rapidly with each developing choice."
     },
     {
       "san": "O-O",

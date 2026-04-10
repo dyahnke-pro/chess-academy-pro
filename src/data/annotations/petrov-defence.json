@@ -63,7 +63,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop the knight to its best square, attacking the e5 pawn immediately. This is the most natural move -- the knight goes to f3 in almost every Open Game.",
+      "annotation": "We develop the knight to its best square, attacking the e5 pawn immediately. This is the most principled response -- the knight goes to f3 in almost every Open Game.",
       "plans": [
         "Attack e5 to gain a tempo advantage",
         "Prepare d4 to build a broad pawn center"
@@ -235,7 +235,7 @@
     },
     {
       "san": "d4",
-      "annotation": "This is the key move. We establish a classical pawn center with d4, and we're hitting Black's d6 pawn which was supporting the knight.",
+      "annotation": "This is the critical move. We establish a classical pawn center with d4, and we're hitting Black's d6 pawn which was supporting the knight.",
       "pawnStructure": "White has a broad d4 center. Black needs to equalize by challenging it or completing development.",
       "plans": [
         "Develop Bd3 to pressure the e4 knight",
@@ -319,7 +319,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square. The knight on c6 puts pressure on d4, our center pawn, and supports the knight on e4 indirectly.",
+      "annotation": "Black develops the knight to its ideal square. The knight on c6 puts pressure on d4, our center pawn, and supports the knight on e4 indirectly.",
       "plans": [
         "Pressure the d4 pawn",
         "Prepare Be7 and castle kingside"

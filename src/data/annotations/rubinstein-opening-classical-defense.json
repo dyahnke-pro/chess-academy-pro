@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this classical developing move, attacking the d4 pawn while bringing the knight to its most active square. This is one of the most principled responses to 1.d4, as it develops a piece toward the center and forces us to make a concrete decision about how to support our pawn. Our opponent is following sound opening principles by developing with tempo (attacking our pawn) and preparing to castle kingside. This move also keeps Black's options open for various pawn structures, whether supporting with ...e6 or ...g6, or even considering ...d5 in one move."
+      "annotation": "Black immediately challenges our central pawn with this classical developing choice, attacking the d4 pawn while bringing the knight to its most active square. This is one of the most principled responses to 1.d4, as it develops a piece toward the center and forces us to make a concrete decision about how to support our pawn. Our opponent is following sound opening principles by developing with tempo (attacking our pawn) and preparing to castle kingside. This move also keeps Black's options open for various pawn structures, whether supporting with ...e6 or ...g6, or even considering ...d5 in one move."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, defending the d4 pawn while controlling the important e5 and g5 squares. This move is the hallmark of the Queen's Gambit complex and related systems, as it supports our center without committing to any particular pawn structure yet. By defending d4, we maintain our space advantage in the center and prepare to develop our other pieces harmoniously. The knight on f3 also prepares potential kingside castling and keeps our options open for both c4 (transposing to Queen's Gambit lines) or other setups like the London System or Colle System."
+      "annotation": "We're developing our knight to its ideal square, defending the d4 pawn while controlling the important e5 and g5 squares. This move is the hallmark of the Queen's Gambit complex and related systems, as it supports our center without committing to any particular pawn structure yet. By defending d4, we maintain our space advantage in the center and prepare to develop our other pieces harmoniously. The knight on f3 also prepares potential kingside castling and keeps our options open for both c4 (transposing to Queen's Gambit lines) or other setups like the London System or Colle System."
     },
     {
       "san": "e6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're playing the Colle System setup, supporting our d4 pawn with a second piece while preparing to develop our light-squared bishop to d3. This modest but solid move creates a small pawn triangle (d4-e3-f2) that provides excellent central support and prepares to build pressure along the a1-h8 diagonal. The e3 advance also opens the diagonal for our dark-squared bishop, typically heading to b2 in this system. While less aggressive than c4, this setup allows us to develop all our pieces to active squares before committing to any particular pawn breaks, making it an excellent choice for players who prefer strategic maneuvering over sharp tactical battles."
+      "annotation": "We're playing the Colle System setup, supporting our d4 pawn with a second piece while preparing to develop our light-squared bishop to d3. This modest but well-grounded move creates a small pawn triangle (d4-e3-f2) that provides excellent central support and prepares to build pressure along the a1-h8 diagonal. The e3 advance also opens the diagonal for our dark-squared bishop, typically heading to b2 in this system. While less aggressive than c4, this setup allows us to develop all our pieces to active squares before committing to any particular pawn breaks, making it an excellent choice for players who prefer strategic maneuvering over sharp tactical battles."
     },
     {
       "san": "c5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queen's knight to its most natural square, supporting the d5 pawn while preparing to contest our control of the center. This classical development move also prepares potential tactics involving the bishop on c5 and creates more coordination in Black's position. Our opponent is following sound opening principles by developing pieces toward the center and supporting the pawn structure with multiple pieces. The knight on c6 also keeps options open for various pawn breaks like ...b5 or ...a6 followed by ...b5, and it can potentially reroute to other squares like e7 or a5 depending on our setup."
+      "annotation": "Black develops the queen's knight to its ideal square, supporting the d5 pawn while preparing to contest our control of the center. This classical development move also prepares potential tactics involving the bishop on c5 and creates more coordination in Black's position. Our opponent is following sound opening principles by developing pieces toward the center and supporting the pawn structure with multiple pieces. The knight on c6 also keeps options open for various pawn breaks like ...b5 or ...a6 followed by ...b5, and it can potentially reroute to other squares like e7 or a5 depending on our setup."
     },
     {
       "san": "O-O",

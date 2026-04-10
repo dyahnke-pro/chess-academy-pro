@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their knight to its most natural square, immediately putting pressure on our e4 pawn and preparing to castle kingside. This is the hallmark move of the Pirc Defense - rather than blocking in their pieces with early e5, Black develops actively while maintaining pressure on our center. The knight on f6 also supports a future e5 advance when the timing is right, and it's beautifully placed to jump to various squares like h5, g4, or d7 depending on how the position develops. We need to be aware that this knight will be a constant source of central pressure and tactical possibilities."
+      "annotation": "Our opponent develops their knight to its ideal square, immediately putting pressure on our e4 pawn and preparing to castle kingside. This is the hallmark move of the Pirc Defense - rather than blocking in their pieces with early e5, Black develops actively while maintaining pressure on our center. The knight on f6 also supports a future e5 advance when the timing is right, and it's beautifully placed to jump to various squares like h5, g4, or d7 depending on how the position develops. We need to be aware that this knight will be a constant source of central pressure and tactical possibilities."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Qd2",
-      "annotation": "We're playing the key move that transforms our setup into the feared Austrian Attack, preparing the devastating f2-f3 and Bh6 plan that has demolished countless Pirc Defense players. Our queen from d2 supports rapid queenside castling, connects our rooks, and prepares to swing to h6 via d2-h6 if Black castles kingside prematurely. This move also supports potential advances like h4-h5 and maintains pressure on Black's position while keeping our attacking options wide open. The Austrian Attack is considered one of White's most dangerous weapons against the Pirc because it creates immediate tactical threats while maintaining excellent piece coordination."
+      "annotation": "We're playing the critical move that transforms our setup into the feared Austrian Attack, preparing the devastating f2-f3 and Bh6 plan that has demolished countless Pirc Defense players. Our queen from d2 supports rapid queenside castling, connects our rooks, and prepares to swing to h6 via d2-h6 if Black castles kingside prematurely. This move also supports potential advances like h4-h5 and maintains pressure on Black's position while keeping our attacking options wide open. The Austrian Attack is considered one of White's most dangerous weapons against the Pirc because it creates immediate tactical threats while maintaining excellent piece coordination."
     }
   ]
 }

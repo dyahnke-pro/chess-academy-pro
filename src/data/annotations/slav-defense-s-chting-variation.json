@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our central control with a symmetrical response, establishing an equal foothold in the center and preventing us from simply advancing to d5 later. This solid move is the hallmark of many classical defenses and shows that our opponent wants to engage in the central battle right away rather than allowing us a space advantage. By placing the pawn on d5, Black also opens the diagonal for the light-squared bishop and creates potential for piece development. This sets up the fundamental tension that will define much of the opening phase."
+      "annotation": "Black immediately challenges our central control with a symmetrical response, establishing an equal foothold in the center and preventing us from simply advancing to d5 later. this stabilizing move is the hallmark of many classical defenses and shows that our opponent wants to engage in the central battle right away rather than allowing us a space advantage. By placing the pawn on d5, Black also opens the diagonal for the light-squared bishop and creates potential for piece development. This sets up the fundamental tension that will define much of the opening phase."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central e5 and d4 squares while supporting our center and preparing to castle kingside. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for various setups depending on how Black continues. The knight on f3 also indirectly supports our c4 pawn by controlling key squares, and it's positioned to potentially jump to more active squares like e5 or g5 later in the game. From f3, our knight contributes to overall piece coordination and can support future advances in the center or on the kingside."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central e5 and d4 squares while supporting our center and preparing to castle kingside. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for various setups depending on how Black continues. The knight on f3 also indirectly supports our c4 pawn by controlling key squares, and it's positioned to potentially jump to more active squares like e5 or g5 later in the game. From f3, our knight contributes to overall piece coordination and can support future advances in the center or on the kingside."
     },
     {
       "san": "Nf6",

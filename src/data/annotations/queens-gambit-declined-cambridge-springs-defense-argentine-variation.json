@@ -15,7 +15,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black declines the gambit and instead supports their d5 pawn with this solid move, entering the Queen's Gambit Declined. This move does restrict Black's light-squared bishop to some extent, but it creates a rock-solid pawn chain in the center. Black is signaling they want a strategic battle where they'll gradually develop their pieces and look for counterplay, often on the queenside with moves like c5 or c6."
+      "annotation": "Black declines the gambit and instead supports their d5 pawn with this stabilizing move, entering the Queen's Gambit Declined. This move does restrict Black's light-squared bishop to some extent, but it creates a rock-solid pawn chain in the center. Black is signaling they want a strategic battle where they'll gradually develop their pieces and look for counterplay, often on the queenside with moves like c5 or c6."
     },
     {
       "san": "Nc3",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, attacking our e4 square and preparing to castle kingside. This move is extremely common in the Queen's Gambit Declined because it develops a piece while maintaining central control. The knight on f6 also supports Black's central pawn structure and can later be repositioned to more active squares like e4 or d7 depending on how the position evolves."
+      "annotation": "Black develops their kingside knight to its ideal square, attacking our e4 square and preparing to castle kingside. This move is extremely common in the Queen's Gambit Declined because it develops a piece while maintaining central control. The knight on f6 also supports Black's central pawn structure and can later be repositioned to more active squares like e4 or d7 depending on how the position evolves."
     },
     {
       "san": "Bg5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by bringing the knight to its most active square, where it supports our center and prepares to castle kingside. The knight on f3 also prevents Black from playing e5 and maintains pressure on Black's position. This natural developing move fits perfectly with our Queen's Gambit strategy - we're building up piece activity while maintaining central pressure and preparing to castle for king safety."
+      "annotation": "We complete our kingside development by bringing the knight to its most active square, where it supports our center and prepares to castle kingside. The knight on f3 also prevents Black from playing e5 and maintains pressure on Black's position. This active move fits perfectly with our Queen's Gambit strategy - we're building up piece activity while maintaining central pressure and preparing to castle for king safety."
     },
     {
       "san": "Qa5",

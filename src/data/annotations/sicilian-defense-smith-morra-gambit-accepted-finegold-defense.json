@@ -31,11 +31,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid developing move that prepares to fianchetto the light-squared bishop or develop it to e7, while also supporting the d5 square. This move is part of the Finegold Defense, which aims to develop solidly rather than trying to hold onto the extra pawns at all costs. The e6 pawn also prepares potential central advances like d6 and creates a secure retreat square on d7 for Black's pieces. However, this move does slightly weaken the d6 and f6 squares, which we can potentially exploit with our active piece development."
+      "annotation": "Black plays a constructive move that prepares to fianchetto the light-squared bishop or develop it to e7, while also supporting the d5 square. This move is part of the Finegold Defense, which aims to develop solidly rather than trying to hold onto the extra pawns at all costs. The e6 pawn also prepares potential central advances like d6 and creates a secure retreat square on d7 for Black's pieces. However, this move does slightly weaken the d6 and f6 squares, which we can potentially exploit with our active piece development."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, attacking the e5 square and preparing to castle kingside quickly. This move completes our basic development plan and puts pressure on Black to find accurate moves to deal with our growing initiative. The knight on f3 supports our central control, prepares potential tactics involving e4-e5 advances, and works beautifully with our knight on c3. We're following the fundamental gambit principle of developing all our pieces rapidly before our opponent can consolidate the extra material."
+      "annotation": "We develop our kingside knight to its ideal square, attacking the e5 square and preparing to castle kingside quickly. This move completes our basic development plan and puts pressure on Black to find accurate moves to deal with our growing initiative. The knight on f3 supports our central control, prepares potential tactics involving e4-e5 advances, and works beautifully with our knight on c3. We're following the fundamental gambit principle of developing all our pieces rapidly before our opponent can consolidate the extra material."
     },
     {
       "san": "d6",
@@ -59,11 +59,11 @@
     },
     {
       "san": "Qe2",
-      "annotation": "We bring our queen into the game with a flexible developing move that supports our e4 pawn while keeping multiple options open. The queen on e2 prepares to potentially swing to the kingside via h5 or support central advances, and it also connects our rooks along the back rank. This move maintains the pressure without committing to a specific plan too early, which is important in gambit play where we need to stay flexible and ready to exploit any weaknesses in Black's position. The queen also supports potential tactics involving our bishop on c4 and prepares for more direct threats as the position develops."
+      "annotation": "We bring our queen into the game with a flexible developing choice that supports our e4 pawn while keeping multiple options open. The queen on e2 prepares to potentially swing to the kingside via h5 or support central advances, and it also connects our rooks along the back rank. This move maintains the pressure without committing to a specific plan too early, which is important in gambit play where we need to stay flexible and ready to exploit any weaknesses in Black's position. The queen also supports potential tactics involving our bishop on c4 and prepares for more direct threats as the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 pawn and preparing to complete kingside development with castling. This move is consistent with Black's solid defensive approach and challenges our central control while preparing to trade off some of our active pieces. The knight on f6 also supports Black's kingside defense and creates potential tactical possibilities involving discovered attacks with the bishop on e7. However, by developing this knight, Black is getting closer to being fully developed, which means our window for creating decisive threats is starting to narrow, making it crucial for us to find concrete ways to maintain our initiative."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our e4 pawn and preparing to complete kingside development with castling. This move is consistent with Black's solid defensive approach and challenges our central control while preparing to trade off some of our active pieces. The knight on f6 also supports Black's kingside defense and creates potential tactical possibilities involving discovered attacks with the bishop on e7. However, by developing this knight, Black is getting closer to being fully developed, which means our window for creating decisive threats is starting to narrow, making it crucial for us to find concrete ways to maintain our initiative."
     }
   ]
 }

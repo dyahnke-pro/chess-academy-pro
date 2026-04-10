@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance in the center with e4. This knight placement gives us excellent flexibility - it can later jump to e4, d5, or support pawn advances like f4-f5 in attacking formations. The knight on c3 also controls key central squares and prepares to support our expansion on both sides of the board. This move fits perfectly with our plan to build a strong pawn center while maintaining active piece coordination."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance in the center with e4. This knight placement gives us excellent flexibility - it can later jump to e4, d5, or support pawn advances like f4-f5 in attacking formations. The knight on c3 also controls key central squares and prepares to support our expansion on both sides of the board. This move fits perfectly with our plan to build a strong pawn center while maintaining active piece coordination."
     },
     {
       "san": "Bg7",
@@ -27,7 +27,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We're establishing our ideal pawn center, creating a powerful duo of pawns on d4 and e4 that controls key central squares and gives us a significant space advantage. This move opens lines for our light-squared bishop and allows us to continue developing with natural moves like Nf3 and Be2. Our pawn center now restricts Black's pieces and gives us the foundation for either a slow positional squeeze or aggressive pawn advances later. Black will need to find concrete ways to challenge this center, typically with ...e5 or ...c5, or risk being gradually outplayed in a cramped position."
+      "annotation": "We're establishing our ideal pawn center, creating a powerful duo of pawns on d4 and e4 that controls key central squares and gives us a significant space advantage. This move opens lines for our light-squared bishop and allows us to continue developing with logical choices like Nf3 and Be2. Our pawn center now restricts Black's pieces and gives us the foundation for either a slow positional squeeze or aggressive pawn advances later. Black will need to find concrete ways to challenge this center, typically with ...e5 or ...c5, or risk being gradually outplayed in a cramped position."
     },
     {
       "san": "d6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, bringing their king to safety while connecting their rooks and preparing for the middlegame battle. This natural developing move also clears the e8 square for potential rook activity and allows Black to focus on their central counterplay. Our opponent is now ready to challenge our pawn center with moves like ...e5, which is the thematic King's Indian break. By castling, Black also prepares to potentially advance pawns on the kingside later in the game, creating attacking chances against our king once we castle."
+      "annotation": "Black castles kingside, bringing their king to safety while connecting their rooks and preparing for the middlegame battle. This active move also clears the e8 square for potential rook activity and allows Black to focus on their central counterplay. Our opponent is now ready to challenge our pawn center with moves like ...e5, which is the thematic King's Indian break. By castling, Black also prepares to potentially advance pawns on the kingside later in the game, creating attacking chances against our king once we castle."
     },
     {
       "san": "Be2",

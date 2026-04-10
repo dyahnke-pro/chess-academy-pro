@@ -7,7 +7,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Our opponent mirrors our central pawn advance, creating a symmetrical pawn structure that contests our control of the key central squares. Black's e5 pawn now controls d4 and f4, preventing us from advancing further in the center for the moment while also freeing Black's light-squared bishop and queen. This is the most principled response, as it follows the same opening principles we used - fighting for the center and rapid piece development. Black is essentially saying 'I'll meet your aggression in the center head-on' rather than allowing us to dominate the middle of the board unopposed."
+      "annotation": "Our opponent mirrors our central pawn advance, creating a symmetrical pawn structure that contests our control of the key central squares. Black's e5 pawn now controls d4 and f4, preventing us from advancing further in the center for the moment while also freeing Black's light-squared bishop and queen. This is the most principled response, as it follows the same opening principles we used - contesting central control and rapid piece development. Black is essentially saying 'I'll meet your aggression in the center head-on' rather than allowing us to dominate the middle of the board unopposed."
     },
     {
       "san": "Nf3",
@@ -15,7 +15,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, defending the attacked e5 pawn while simultaneously developing a piece toward the center. The knight on c6 controls important central squares like d4 and e5, and also prepares potential future advances like d6 or f5 depending on how the position unfolds. This is the most popular and principled defense, as it solves the immediate tactical problem (the attack on e5) while improving Black's position. Our opponent is following sound opening principles by developing pieces quickly and maintaining the central tension rather than weakening the position with pawn moves."
+      "annotation": "Black develops the knight to its ideal square, defending the attacked e5 pawn while simultaneously developing a piece toward the center. The knight on c6 controls important central squares like d4 and e5, and also prepares potential future advances like d6 or f5 depending on how the position unfolds. This is the most popular and principled defense, as it solves the immediate tactical problem (the attack on e5) while improving Black's position. Our opponent is following sound opening principles by developing pieces quickly and maintaining the central tension rather than weakening the position with pawn moves."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn and preparing to castle kingside while supporting the central e5 pawn. This natural developing move follows the opening principle of bringing pieces into the game quickly, and the knight on f6 will be excellently placed for Black's middlegame plans. Our opponent is now threatening our central pawn and forcing us to make a decision about how to protect it, while also preparing Be7 and castling to safety. The knight on f6 also controls important central squares like d5 and e4, giving Black good piece activity in the center of the board."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn and preparing to castle kingside while supporting the central e5 pawn. This active move follows the opening principle of bringing pieces into the game quickly, and the knight on f6 will be excellently placed for Black's middlegame plans. Our opponent is now threatening our central pawn and forcing us to make a decision about how to protect it, while also preparing Be7 and castling to safety. The knight on f6 also controls important central squares like d5 and e4, giving Black good piece activity in the center of the board."
     },
     {
       "san": "O-O",

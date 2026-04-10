@@ -280,7 +280,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight, adding pressure to d4. This is a key move -- the knight on c6 forces White's hand regarding the center.",
+      "annotation": "Black develops the knight, adding pressure to d4. This is a critical move -- the knight on c6 forces White's hand regarding the center.",
       "plans": [
         "Force d5, then reroute the knight via e7 to g6 or f5 for the kingside attack"
       ],
@@ -3401,7 +3401,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White develops the knight to c3, reinforcing control of d5 and e4. This is the most natural developing move, preparing to build the full classical center with e4."
+          "annotation": "White develops the knight to c3, reinforcing control of d5 and e4. This is the most active move, preparing to build the full classical center with e4."
         },
         {
           "san": "Bg7",

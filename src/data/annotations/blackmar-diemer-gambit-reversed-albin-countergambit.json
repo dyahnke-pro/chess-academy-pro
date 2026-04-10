@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our central control by placing their pawn on d5, creating symmetrical tension in the center. This is a perfectly sound response that contests the e4 square and prevents us from easily establishing a broad pawn center with e2-e4. Our opponent is following classical opening principles by fighting for central space right away, and this move prepares natural development of the light-squared bishop to f5 or g4. However, by playing this solid move, Black has also walked into the setup we need for the Blackmar-Diemer Gambit, where we'll sacrifice a pawn for rapid development and attacking chances."
+      "annotation": "Black immediately challenges our central control by placing their pawn on d5, creating symmetrical tension in the center. This is a perfectly sound response that contests the e4 square and prevents us from easily establishing a broad pawn center with e2-e4. Our opponent is following classical opening principles by fighting for central space right away, and this move prepares natural development of the light-squared bishop to f5 or g4. However, by playing this stabilizing move, Black has also walked into the setup we need for the Blackmar-Diemer Gambit, where we'll sacrifice a pawn for rapid development and attacking chances."
     },
     {
       "san": "e4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square while simultaneously attacking Black's advanced e4 pawn, forcing our opponent to make a decision about how to defend their extra material. This move is the cornerstone of the Blackmar-Diemer Gambit - the knight not only targets e4 but also prepares to support a future f2-f3 pawn break if Black tries to hold onto their pawn with moves like ...Nf6. From c3, our knight controls important central squares like e4, d5, and b5, giving us excellent central influence despite being a pawn down. The knight development also clears the way for potential queen-side castling in some lines, though we're more likely to castle king-side and launch a quick attack against Black's king."
+      "annotation": "We develop our knight to its ideal square while simultaneously attacking Black's advanced e4 pawn, forcing our opponent to make a decision about how to defend their extra material. This move is the cornerstone of the Blackmar-Diemer Gambit - the knight not only targets e4 but also prepares to support a future f2-f3 pawn break if Black tries to hold onto their pawn with moves like ...Nf6. From c3, our knight controls important central squares like e4, d5, and b5, giving us excellent central influence despite being a pawn down. The knight development also clears the way for potential queen-side castling in some lines, though we're more likely to castle king-side and launch a quick attack against Black's king."
     },
     {
       "san": "c5",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds by developing the knight to its most natural square, immediately putting pressure on our central d4 pawn and controlling the important e4 square. This flexible move is the starting point for several major defenses including the Nimzo-Indian, Queen's Indian, and Bogo-Indian that we're heading toward. The knight on f6 also prepares kingside castling while keeping Black's options open regarding pawn structure. Black is avoiding an immediate commitment to moves like d5 or d6, preferring to see how we'll continue before choosing a specific defensive setup."
+      "annotation": "Black responds by developing the knight to its ideal square, immediately putting pressure on our central d4 pawn and controlling the important e4 square. This flexible move is the starting point for several major defenses including the Nimzo-Indian, Queen's Indian, and Bogo-Indian that we're heading toward. The knight on f6 also prepares kingside castling while keeping Black's options open regarding pawn structure. Black is avoiding an immediate commitment to moves like d5 or d6, preferring to see how we'll continue before choosing a specific defensive setup."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, controlling the central e5 and d4 squares while preparing kingside castling and supporting our central pawn structure. This natural developing move also prevents any potential ...e5 thrust from Black, maintaining our central influence. The knight on f3 is perfectly placed to support future advances like e4 or to redeploy to more active squares like e5 or g5 depending on how the position develops. This move keeps all our options open while following the fundamental opening principle of developing pieces toward the center with tempo."
+      "annotation": "We're developing our knight to its most active square, controlling the central e5 and d4 squares while preparing kingside castling and supporting our central pawn structure. This active move also prevents any potential ...e5 thrust from Black, maintaining our central influence. The knight on f3 is perfectly placed to support future advances like e4 or to redeploy to more active squares like e5 or g5 depending on how the position develops. This move keeps all our options open while following the fundamental opening principle of developing pieces toward the center with tempo."
     },
     {
       "san": "Bb4+",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, supporting our d4 pawn and controlling the crucial e5 and g5 squares. This flexible move keeps all our options open - we can still transpose into various systems like the Catalan (with g3), the Réti Opening, or maintain classical development with Be2. The knight on f3 also prepares potential kingside castling while maintaining pressure on Black's central setup. Given that Black has chosen the Queen's Indian structure, this development makes perfect sense as we're not yet committed to any particular pawn structure, allowing us to respond optimally to Black's chosen fianchetto setup."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our d4 pawn and controlling the crucial e5 and g5 squares. This flexible move keeps all our options open - we can still transpose into various systems like the Catalan (with g3), the Réti Opening, or maintain classical development with Be2. The knight on f3 also prepares potential kingside castling while maintaining pressure on Black's central setup. Given that Black has chosen the Queen's Indian structure, this development makes perfect sense as we're not yet committed to any particular pawn structure, allowing us to respond optimally to Black's chosen fianchetto setup."
     },
     {
       "san": "b6",

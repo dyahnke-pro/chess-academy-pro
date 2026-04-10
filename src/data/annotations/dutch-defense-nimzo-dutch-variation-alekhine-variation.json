@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, supporting the central e4 square and preparing to castle kingside. This move is almost universal in Dutch Defense setups because the knight controls key central squares and can later support kingside attacking ideas like ...Ne4 or ...Nh5. Our opponent is following classical development principles while keeping their options open for various pawn structures - they might play ...e6 for a Stonewall setup, or ...d6 and ...e5 for a more flexible approach. We should note that this knight can become a target later if we can advance our pawns to cramp Black's position."
+      "annotation": "Black develops their knight to its ideal square, supporting the central e4 square and preparing to castle kingside. This move is almost universal in Dutch Defense setups because the knight controls key central squares and can later support kingside attacking ideas like ...Ne4 or ...Nh5. Our opponent is following classical development principles while keeping their options open for various pawn structures - they might play ...e6 for a Stonewall setup, or ...d6 and ...e5 for a more flexible approach. We should note that this knight can become a target later if we can advance our pawns to cramp Black's position."
     },
     {
       "san": "g3",

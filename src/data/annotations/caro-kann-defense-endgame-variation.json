@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the central e5 square and supporting our e4 pawn. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for how we'll handle Black's upcoming ...d5 challenge. The knight on f3 also prepares castling kingside and can later be repositioned to support various pawn advances like d4. This is more flexible than the immediate d4, which would transpose into the Panov-Botvinnik Attack with its sharper, more tactical character."
+      "annotation": "We develop our knight to its ideal square, attacking the central e5 square and supporting our e4 pawn. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for how we'll handle Black's upcoming ...d5 challenge. The knight on f3 also prepares castling kingside and can later be repositioned to support various pawn advances like d4. This is more flexible than the immediate d4, which would transpose into the Panov-Botvinnik Attack with its sharper, more tactical character."
     },
     {
       "san": "d5",

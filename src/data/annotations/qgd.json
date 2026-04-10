@@ -115,7 +115,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to its most natural square, adding a third attacker to d5. The knight on c3 is incredibly well-placed -- it pressures d5 and e4, the two most important central squares.",
+      "annotation": "White develops the knight to its ideal square, adding a third attacker to d5. The knight on c3 is incredibly well-placed -- it pressures d5 and e4, the two most important central squares.",
       "plans": [
         "Increase pressure on d5",
         "Prepare e4 push when the time is right"
@@ -144,7 +144,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its best square, defending d5 a second time while also controlling e4. This is the most natural developing move -- the knight belongs on f6 in almost every QGD line.",
+      "annotation": "Black develops the knight to its best square, defending d5 a second time while also controlling e4. This is the most active move -- the knight belongs on f6 in almost every QGD line.",
       "plans": [
         "Defend d5, prepare O-O",
         "Eventually break with either ...c5 or ...dxc4 followed by ...c5"
@@ -623,7 +623,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White develops the queenside knight to its most natural square, adding pressure to the d5 pawn and preparing to recapture on c4 if Black ever takes the gambit pawn.",
+          "annotation": "White develops the queenside knight to its ideal square, adding pressure to the d5 pawn and preparing to recapture on c4 if Black ever takes the gambit pawn.",
           "plans": [
             "Support the potential e4 pawn advance",
             "Be ready to recapture on c4 with the knight if needed"
@@ -4526,7 +4526,7 @@
         },
         {
           "san": "Rd1",
-          "annotation": "White seizes the open d-file with the rook. This is a natural move — the d-file is the main highway in QGD positions, and controlling it gives White long-term pressure.",
+          "annotation": "White seizes the open d-file with the rook. This is a logical choice — the d-file is the main highway in QGD positions, and controlling it gives White long-term pressure.",
           "arrows": [
             {
               "from": "d1",
@@ -4598,7 +4598,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White develops the knight, adding more pressure to d5. This is the natural developing move that prepares to meet Black's central challenge.",
+          "annotation": "White develops the knight, adding more pressure to d5. This is the active move that prepares to meet Black's central challenge.",
           "arrows": [
             {
               "from": "c3",
@@ -4949,7 +4949,7 @@
         },
         {
           "san": "Nh5",
-          "annotation": "The key move! Black challenges the Bf4 directly. White must decide whether to allow the trade or retreat, and both options have drawbacks.",
+          "annotation": "the critical move! Black challenges the Bf4 directly. White must decide whether to allow the trade or retreat, and both options have drawbacks.",
           "arrows": [
             {
               "from": "f6",

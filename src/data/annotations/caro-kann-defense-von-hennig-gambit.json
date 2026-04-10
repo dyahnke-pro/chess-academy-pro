@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending the attacked e4 pawn, maintaining our central presence for now. This knight placement is extremely flexible - it eyes important central squares like d5 and e4, while keeping options open for future pawn breaks or piece maneuvers. The knight on c3 also prepares potential tactics involving discoveries or forks, and it doesn't block any of our pawns, maintaining maximum flexibility in our pawn structure. Most importantly, we're following the opening principle of developing pieces toward the center while solving the immediate tactical problem of the attacked pawn, though we should be prepared for Black to exchange on e4 soon."
+      "annotation": "We're developing our knight to its ideal square while defending the attacked e4 pawn, maintaining our central presence for now. This knight placement is extremely flexible - it eyes important central squares like d5 and e4, while keeping options open for future pawn breaks or piece maneuvers. The knight on c3 also prepares potential tactics involving discoveries or forks, and it doesn't block any of our pawns, maintaining maximum flexibility in our pawn structure. Most importantly, we're following the opening principle of developing pieces toward the center while solving the immediate tactical problem of the attacked pawn, though we should be prepared for Black to exchange on e4 soon."
     },
     {
       "san": "dxe4",

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important e5 and h4 squares while supporting our central d4 pawn. This move also prepares to castle kingside quickly and keeps maximum flexibility in our pawn structure - we haven't committed to any particular central formation yet. The knight on f3 works beautifully with our d4 pawn to control key central squares, and it's positioned to support various pawn advances like e4 or c4 depending on how the position develops. Against Black's fianchetto setup, having a knight on f3 can be particularly useful for launching kingside attacks later in the game."
+      "annotation": "We develop our knight to its ideal square, controlling the important e5 and h4 squares while supporting our central d4 pawn. This move also prepares to castle kingside quickly and keeps maximum flexibility in our pawn structure - we haven't committed to any particular central formation yet. The knight on f3 works beautifully with our d4 pawn to control key central squares, and it's positioned to support various pawn advances like e4 or c4 depending on how the position develops. Against Black's fianchetto setup, having a knight on f3 can be particularly useful for launching kingside attacks later in the game."
     },
     {
       "san": "Bg7",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We bring our second knight into play, developing with tempo while adding another defender to our d4 pawn and controlling key central squares like e4 and b5. This natural developing move also prepares various central advances - we could play e4 to establish a classical center, or c4 to create a more modern pawn structure. The knight on c3 works in harmony with our Nf3, giving us excellent piece coordination and flexibility in our plans. However, we should be aware that placing the knight on c3 does block the c-pawn, which means we're committing to a slightly different pawn structure than if we had played c4 first."
+      "annotation": "We bring our second knight into play, developing with tempo while adding another defender to our d4 pawn and controlling key central squares like e4 and b5. This active move also prepares various central advances - we could play e4 to establish a classical center, or c4 to create a more modern pawn structure. The knight on c3 works in harmony with our Nf3, giving us excellent piece coordination and flexibility in our plans. However, we should be aware that placing the knight on c3 does block the c-pawn, which means we're committing to a slightly different pawn structure than if we had played c4 first."
     },
     {
       "san": "d5",

@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn and preparing to castle kingside. The knight on f3 also eyes the central e5 square and supports potential tactical ideas in the center. This developing move maintains the balance between our aggressive h-pawn advance and sound piece development. The knight also prepares potential jumps to g5 or e5, keeping tactical options open while completing our kingside development. From f3, the knight provides excellent central control and supports our overall piece coordination."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn and preparing to castle kingside. The knight on f3 also eyes the central e5 square and supports potential tactical ideas in the center. this move maintains the balance between our aggressive h-pawn advance and sound piece development. The knight also prepares potential jumps to g5 or e5, keeping tactical options open while completing our kingside development. From f3, the knight provides excellent central control and supports our overall piece coordination."
     },
     {
       "san": "Nd7",
@@ -67,7 +67,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We develop our light-squared bishop to an active square, eyeing Black's weakened h7 bishop and preparing to increase pressure on the kingside. The bishop on d3 also supports potential tactical ideas and can quickly redeploy to more aggressive squares if needed. This natural developing move completes our kingside piece coordination while maintaining pressure on our opponent. The bishop also controls important central squares and supports our pawn center, combining development with concrete threats. From d3, the bishop is well-placed for both attack and defense, embodying the classical principle of active piece placement."
+      "annotation": "We develop our light-squared bishop to an active square, eyeing Black's weakened h7 bishop and preparing to increase pressure on the kingside. The bishop on d3 also supports potential tactical ideas and can quickly redeploy to more aggressive squares if needed. This active move completes our kingside piece coordination while maintaining pressure on our opponent. The bishop also controls important central squares and supports our pawn center, combining development with concrete threats. From d3, the bishop is well-placed for both attack and defense, embodying the classical principle of active piece placement."
     },
     {
       "san": "Bxd3",
@@ -87,7 +87,7 @@
     },
     {
       "san": "Ngf6",
-      "annotation": "Black develops the knight to its most natural square, completing the kingside development and preparing to castle. The knight on f6 challenges our central control and supports Black's overall defensive coordination. This move also prepares ...Be7, after which Black will have completed basic development and can focus on improving piece activity. The knight placement follows classical principles while maintaining flexibility about where Black's king will eventually castle. The development also supports potential counterplay in the center with moves like ...c5, challenging our pawn structure when the time is right."
+      "annotation": "Black develops the knight to its ideal square, completing the kingside development and preparing to castle. The knight on f6 challenges our central control and supports Black's overall defensive coordination. This move also prepares ...Be7, after which Black will have completed basic development and can focus on improving piece activity. The knight placement follows classical principles while maintaining flexibility about where Black's king will eventually castle. The development also supports potential counterplay in the center with moves like ...c5, challenging our pawn structure when the time is right."
     },
     {
       "san": "O-O-O",
@@ -95,7 +95,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black completes the kingside development and prepares to castle, reaching a solid defensive setup typical of Caro-Kann positions. The bishop on e7 provides excellent defense while maintaining flexibility about Black's king safety. This natural developing move also connects Black's rooks and prepares to meet our attacking attempts with sound defensive resources. The bishop placement allows Black to castle kingside safely while maintaining good piece coordination. With this move, Black has successfully navigated the opening complications and reached a position where accurate defense should provide good practical chances despite White's initiative."
+      "annotation": "Black completes the kingside development and prepares to castle, reaching a solid defensive setup typical of Caro-Kann positions. The bishop on e7 provides excellent defense while maintaining flexibility about Black's king safety. This active move also connects Black's rooks and prepares to meet our attacking attempts with sound defensive resources. The bishop placement allows Black to castle kingside safely while maintaining good piece coordination. With this move, Black has successfully navigated the opening complications and reached a position where accurate defense should provide good practical chances despite White's initiative."
     }
   ]
 }

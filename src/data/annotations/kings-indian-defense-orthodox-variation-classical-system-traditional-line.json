@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preparing to castle kingside. This move is the hallmark of hypermodern openings where Black allows us to build a strong pawn center while planning to undermine it later with pieces and pawn breaks. The knight on f6 also supports a potential ...e5 pawn advance and keeps an eye on important central squares. Black is essentially saying 'go ahead and build your center, I'll challenge it when the time is right' - a very different philosophy from classical openings where Black would immediately contest the center with ...d5."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to castle kingside. This move is the hallmark of hypermodern openings where Black allows us to build a strong pawn center while planning to undermine it later with pieces and pawn breaks. The knight on f6 also supports a potential ...e5 pawn advance and keeps an eye on important central squares. Black is essentially saying 'go ahead and build your center, I'll challenge it when the time is right' - a very different philosophy from classical openings where Black would immediately contest the center with ...d5."
     },
     {
       "san": "c4",
-      "annotation": "We're advancing our c-pawn to control the crucial d5 and b5 squares, while also preparing to support our center with a potential e4 advance. This move defines many English Opening systems and gives us excellent queenside space and influence. The c4 pawn also restricts Black's pieces - for instance, a black knight won't easily jump to d5, and we're making it harder for Black to achieve the freeing ...d5 break. This is a key move in our setup, as it allows us to build what's known as the 'classical pawn center' with pawns on c4, d4, and potentially e4."
+      "annotation": "We're advancing our c-pawn to control the crucial d5 and b5 squares, while also preparing to support our center with a potential e4 advance. This move defines many English Opening systems and gives us excellent queenside space and influence. The c4 pawn also restricts Black's pieces - for instance, a black knight won't easily jump to d5, and we're making it harder for Black to achieve the freeing ...d5 break. This is a critical move in our setup, as it allows us to build what's known as the 'classical pawn center' with pawns on c4, d4, and potentially e4."
     },
     {
       "san": "g6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our e4 pawn and preparing to castle kingside while maintaining flexibility in our position. The knight on f3 is beautifully placed - it controls key central squares like e5 and d4, supports our pawn center, and doesn't interfere with our piece development. This move also prepares us to respond appropriately to Black's coming ...e5 break, as our knight will be well-positioned to support or challenge that advance. From f3, our knight can potentially relocate to more active squares later in the game, such as d2, e1, or h4, depending on how the position develops and what our strategic needs become."
+      "annotation": "We develop our knight to its ideal square, supporting our e4 pawn and preparing to castle kingside while maintaining flexibility in our position. The knight on f3 is beautifully placed - it controls key central squares like e5 and d4, supports our pawn center, and doesn't interfere with our piece development. This move also prepares us to respond appropriately to Black's coming ...e5 break, as our knight will be well-positioned to support or challenge that advance. From f3, our knight can potentially relocate to more active squares later in the game, such as d2, e1, or h4, depending on how the position develops and what our strategic needs become."
     },
     {
       "san": "O-O",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Ne7",
-      "annotation": "Our opponent wisely repositions the knight to e7, where it supports the crucial f5 advance while staying connected to the kingside defense. This is a key move in the King's Indian structure - the knight on e7 not only supports the thematic ...f5 pawn break but can also potentially jump to more active squares like f5, d5, or g6 depending on how the position develops. The Ne7 also maintains Black's piece coordination and doesn't block any important diagonals or files. From e7, this knight becomes a crucial part of Black's kingside counterplay, as it will often support the advance ...f5, which is Black's main source of counterplay against our space advantage and central dominance."
+      "annotation": "Our opponent wisely repositions the knight to e7, where it supports the crucial f5 advance while staying connected to the kingside defense. This is a critical move in the King's Indian structure - the knight on e7 not only supports the thematic ...f5 pawn break but can also potentially jump to more active squares like f5, d5, or g6 depending on how the position develops. The Ne7 also maintains Black's piece coordination and doesn't block any important diagonals or files. From e7, this knight becomes a crucial part of Black's kingside counterplay, as it will often support the advance ...f5, which is Black's main source of counterplay against our space advantage and central dominance."
     },
     {
       "san": "Ne1",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking our d4 pawn and preparing to castle kingside. This is one of the most flexible and popular responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet. Our opponent is following classical development principles by bringing out pieces before moving too many pawns, and the knight on f6 will be well-placed in most middlegame structures. Black is also keeping options open for various defenses like the King's Indian, Nimzo-Indian, or Queen's Gambit setups depending on our next move."
+      "annotation": "Black develops the king's knight to its ideal square, attacking our d4 pawn and preparing to castle kingside. This is one of the most flexible and popular responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet. Our opponent is following classical development principles by bringing out pieces before moving too many pawns, and the knight on f6 will be well-placed in most middlegame structures. Black is also keeping options open for various defenses like the King's Indian, Nimzo-Indian, or Queen's Gambit setups depending on our next move."
     },
     {
       "san": "f3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most active square, adding pressure to Black's d5 pawn and preparing to recapture on d4 if needed. This natural developing move keeps our options open - we can still play e4 to transpose into favorable lines, or we might consider moves like Bg5 to pin the knight or e3 to support our center more solidly. The knight on c3 is perfectly placed for the Veresov system, as it supports our central ambitions while maintaining flexibility in our pawn structure. We're also preparing potential tactics involving Nb5 or Ne4 in some variations, and this knight will be well-coordinated with our planned kingside attack."
+      "annotation": "We develop our queen's knight to its most active square, adding pressure to Black's d5 pawn and preparing to recapture on d4 if needed. This active move keeps our options open - we can still play e4 to transpose into favorable lines, or we might consider moves like Bg5 to pin the knight or e3 to support our center more solidly. The knight on c3 is perfectly placed for the Veresov system, as it supports our central ambitions while maintaining flexibility in our pawn structure. We're also preparing potential tactics involving Nb5 or Ne4 in some variations, and this knight will be well-coordinated with our planned kingside attack."
     }
   ]
 }

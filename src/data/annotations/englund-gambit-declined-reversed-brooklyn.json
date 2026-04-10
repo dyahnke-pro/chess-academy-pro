@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's advanced e5 pawn and preparing to castle kingside. This move follows sound opening principles by developing a piece while simultaneously putting pressure on our opponent's position. The knight on f3 also controls important central squares like e5 and d4, and supports a potential e4 pawn advance later in the game. However, we need to be aware that Black might push the e-pawn further to e4, which would attack our knight and force us to make a decision about where to retreat it."
+      "annotation": "We develop our knight to its ideal square, attacking Black's advanced e5 pawn and preparing to castle kingside. This move follows sound opening principles by developing a piece while simultaneously putting pressure on our opponent's position. The knight on f3 also controls important central squares like e5 and d4, and supports a potential e4 pawn advance later in the game. However, we need to be aware that Black might push the e-pawn further to e4, which would attack our knight and force us to make a decision about where to retreat it."
     },
     {
       "san": "e4",

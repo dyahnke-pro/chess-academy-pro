@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its best central square while attacking our d4 pawn. This is the hallmark of the Indian Defense systems - rather than immediately challenging our center with pawns like ...d5 or ...e6, our opponent develops pieces first and keeps the pawn structure flexible. The knight on f6 also prepares to castle kingside and contests the important e4 square. Black is essentially saying 'I'll develop first and deal with the center later,' which is a perfectly sound approach that leads to rich, complex middlegames."
+      "annotation": "Black responds with the most active move, bringing the knight to its best central square while attacking our d4 pawn. This is the hallmark of the Indian Defense systems - rather than immediately challenging our center with pawns like ...d5 or ...e6, our opponent develops pieces first and keeps the pawn structure flexible. The knight on f6 also prepares to castle kingside and contests the important e4 square. Black is essentially saying 'I'll develop first and deal with the center later,' which is a perfectly sound approach that leads to rich, complex middlegames."
     },
     {
       "san": "g4",
@@ -23,11 +23,11 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent makes a solid developing move, supporting the center and preparing to fianchetto the dark-squared bishop or advance ...e6. This move also opens an escape route for the black king via ...Kd7 if needed, though this would be quite unusual. Black is being practical here - rather than trying to hold onto the extra pawn on g4 at all costs, this move prepares to complete development naturally. The d6 pawn also prevents us from advancing to e5 immediately, which would have been very strong for our attacking chances. However, Black is still facing the challenge of what to do with that awkwardly placed pawn on g4."
+      "annotation": "Our opponent makes a constructive move, supporting the center and preparing to fianchetto the dark-squared bishop or advance ...e6. This move also opens an escape route for the black king via ...Kd7 if needed, though this would be quite unusual. Black is being practical here - rather than trying to hold onto the extra pawn on g4 at all costs, this move prepares to complete development naturally. The d6 pawn also prevents us from advancing to e5 immediately, which would have been very strong for our attacking chances. However, Black is still facing the challenge of what to do with that awkwardly placed pawn on g4."
     },
     {
       "san": "Be2",
-      "annotation": "We're developing our light-squared bishop with a clear tactical purpose - to prepare Bh5, forking Black's knight on g4 and h7 pawn! This quiet-looking developing move is actually quite forcing, as Black will soon have to deal with the threat to the exposed knight. The bishop on e2 also supports our central pawn structure and keeps our king safe for castling. Additionally, this move prepares to castle kingside quickly while maintaining maximum pressure on Black's position. The immediate threat of Bh5 means Black can't delay addressing the knight situation much longer, giving us the initiative despite being material down."
+      "annotation": "We're developing our light-squared bishop with a clear tactical purpose - to prepare Bh5, forking Black's knight on g4 and h7 pawn! This quiet-looking developing choice is actually quite forcing, as Black will soon have to deal with the threat to the exposed knight. The bishop on e2 also supports our central pawn structure and keeps our king safe for castling. Additionally, this move prepares to castle kingside quickly while maintaining maximum pressure on Black's position. The immediate threat of Bh5 means Black can't delay addressing the knight situation much longer, giving us the initiative despite being material down."
     },
     {
       "san": "Nf6",

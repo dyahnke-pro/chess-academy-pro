@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square rather than immediately chasing Black's knight with 2.e5, choosing a more restrained approach to the opening. This move supports our e4 pawn while developing a piece toward the center, and it keeps our options open for various pawn structures depending on how Black continues. The knight on c3 eyes important central squares like d5 and e4, and it can potentially support a future d2-d4 advance. By avoiding the immediate 2.e5, we're allowing Black more freedom but also avoiding some of the sharp theoretical lines where the Alekhine Defense has been deeply analyzed. This leads to a more complex middlegame where understanding typical patterns matters more than memorizing exact move sequences."
+      "annotation": "We're developing our knight to its ideal square rather than immediately chasing Black's knight with 2.e5, choosing a more restrained approach to the opening. This move supports our e4 pawn while developing a piece toward the center, and it keeps our options open for various pawn structures depending on how Black continues. The knight on c3 eyes important central squares like d5 and e4, and it can potentially support a future d2-d4 advance. By avoiding the immediate 2.e5, we're allowing Black more freedom but also avoiding some of the sharp theoretical lines where the Alekhine Defense has been deeply analyzed. This leads to a more complex middlegame where understanding typical patterns matters more than memorizing exact move sequences."
     },
     {
       "san": "d5",

@@ -27,11 +27,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We immediately attack Black's d5 pawn with this key move of the Panov Attack, putting pressure on Black's central structure. This pawn advance also gives us space on the queenside and prepares to develop our pieces with tempo by attacking Black's center. The c4 pawn controls important central squares like d5 and b5, and forces Black to make a decision about how to defend the d-pawn, which can lead to either tactical complications or long-term structural advantages for us."
+      "annotation": "We immediately attack Black's d5 pawn with this critical move of the Panov Attack, putting pressure on Black's central structure. This pawn advance also gives us space on the queenside and prepares to develop our pieces with tempo by attacking Black's center. The c4 pawn controls important central squares like d5 and b5, and forces Black to make a decision about how to defend the d-pawn, which can lead to either tactical complications or long-term structural advantages for us."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to castle kingside. This is the most principled response, as the knight from f6 defends the d5 pawn and contests central squares like e4. Our opponent is following classical development principles while keeping the position flexible - the knight can later jump to e4 or support other pieces, and Black maintains good coordination between pieces."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to castle kingside. This is the most principled response, as the knight from f6 defends the d5 pawn and contests central squares like e4. Our opponent is following classical development principles while keeping the position flexible - the knight can later jump to e4 or support other pieces, and Black maintains good coordination between pieces."
     },
     {
       "san": "Nc3",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our basic development by bringing the knight to its most natural square, where it controls key central squares like e5 and d4. This move also prepares to castle kingside and keeps maximum flexibility in our position. The knight from f3 supports our center beautifully and can later jump to more active squares like e5 or g5, while also eyeing potential tactical opportunities that might arise from our superior piece activity."
+      "annotation": "We complete our basic development by bringing the knight to its ideal square, where it controls key central squares like e5 and d4. This move also prepares to castle kingside and keeps maximum flexibility in our position. The knight from f3 supports our center beautifully and can later jump to more active squares like e5 or g5, while also eyeing potential tactical opportunities that might arise from our superior piece activity."
     },
     {
       "san": "Bg4",

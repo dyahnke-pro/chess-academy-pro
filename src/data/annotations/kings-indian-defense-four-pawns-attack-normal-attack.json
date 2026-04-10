@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square before we can occupy it and preparing to castle kingside. This flexible move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined. Our opponent is following classical opening principles by developing pieces quickly while maintaining central influence, and this knight will likely play a key role in Black's counterattacking plans."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square before we can occupy it and preparing to castle kingside. This flexible move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined. Our opponent is following classical opening principles by developing pieces quickly while maintaining central influence, and this knight will likely play a key role in Black's counterattacking plans."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting the e5 square and preparing to castle kingside ourselves while maintaining maximum flexibility. This knight can potentially support our kingside attack by jumping to g5 or h4 later, and it also helps control key central squares. The knight on f3 is also well-placed to support our pawn center and can be repositioned based on how the tactical battle develops, making this a practical developing move that keeps all our options open."
+      "annotation": "We're developing our knight to its ideal square, supporting the e5 square and preparing to castle kingside ourselves while maintaining maximum flexibility. This knight can potentially support our kingside attack by jumping to g5 or h4 later, and it also helps control key central squares. The knight on f3 is also well-placed to support our pawn center and can be repositioned based on how the tactical battle develops, making this a practical developing choice that keeps all our options open."
     },
     {
       "san": "c5",

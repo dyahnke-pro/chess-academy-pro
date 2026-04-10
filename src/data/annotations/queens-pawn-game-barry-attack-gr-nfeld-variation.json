@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn while preparing to castle kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various setups. Our opponent is following sound opening principles by developing pieces toward the center and creating immediate pressure on our position. The knight on f6 also prepares potential pawn breaks like ...e6 and ...d5, or even ...c5, depending on how we continue."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn while preparing to castle kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various setups. Our opponent is following sound opening principles by developing pieces toward the center and creating immediate pressure on our position. The knight on f6 also prepares potential pawn breaks like ...e6 and ...d5, or even ...c5, depending on how we continue."
     },
     {
       "san": "Nf3",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bf4",
-      "annotation": "Here comes the key move of the Barry Attack! We develop our light-squared bishop to f4, placing it on an active square where it eyes the c7 square and supports our central control. This bishop placement is characteristic of the Barry Attack system, where we aim for quick development and potential kingside attacking chances. The bishop on f4 also prevents Black from easily playing ...c5, as we would have Bxc7 winning material. This setup often leads to positions where we can launch a quick attack against Black's king, especially if they castle kingside carelessly."
+      "annotation": "Here comes the central idea of the Barry Attack! We develop our light-squared bishop to f4, placing it on an active square where it eyes the c7 square and supports our central control. This bishop placement is characteristic of the Barry Attack system, where we aim for quick development and potential kingside attacking chances. The bishop on f4 also prevents Black from easily playing ...c5, as we would have Bxc7 winning material. This setup often leads to positions where we can launch a quick attack against Black's king, especially if they castle kingside carelessly."
     },
     {
       "san": "Bg7",

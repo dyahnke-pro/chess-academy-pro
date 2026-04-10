@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds by developing the knight to its most natural square, immediately putting pressure on our central d4 pawn. This is one of the most popular and sound responses to d4, as the knight controls important central squares like e4 and d5. Our opponent is following classical development principles while keeping their options open for various defensive setups. The knight on f6 also prepares to support a potential ...e6 or ...g6 fianchetto structure depending on how the position develops."
+      "annotation": "Black responds by developing the knight to its ideal square, immediately putting pressure on our central d4 pawn. This is one of the most popular and sound responses to d4, as the knight controls important central squares like e4 and d5. Our opponent is following classical development principles while keeping their options open for various defensive setups. The knight on f6 also prepares to support a potential ...e6 or ...g6 fianchetto structure depending on how the position develops."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, supporting the d4 pawn while preparing to castle kingside for safety. The knight on f3 also controls the important e5 and g5 squares, potentially limiting Black's piece activity in the center. This natural developing move keeps all our options open regarding our light-squared bishop placement and central pawn advances. We're following the principle of developing pieces toward the center while maintaining maximum flexibility in our setup."
+      "annotation": "We develop our knight to its optimal square, supporting the d4 pawn while preparing to castle kingside for safety. The knight on f3 also controls the important e5 and g5 squares, potentially limiting Black's piece activity in the center. This active move keeps all our options open regarding our light-squared bishop placement and central pawn advances. We're following the principle of developing pieces toward the center while maintaining maximum flexibility in our setup."
     },
     {
       "san": "d5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Our opponent wisely castles kingside, bringing their king to safety while connecting the rooks for better coordination. This natural move is almost always correct in the Queen's Gambit Declined, as Black needs to secure their king before the tactical complications intensify. By castling, Black also prepares to potentially challenge our center with moves like ...c6 or ...c5. However, castling into the pin does create some tactical vulnerabilities that we need to be ready to exploit if the opportunity arises."
+      "annotation": "Our opponent wisely castles kingside, bringing their king to safety while connecting the rooks for better coordination. this move is almost always correct in the Queen's Gambit Declined, as Black needs to secure their king before the tactical complications intensify. By castling, Black also prepares to potentially challenge our center with moves like ...c6 or ...c5. However, castling into the pin does create some tactical vulnerabilities that we need to be ready to exploit if the opportunity arises."
     },
     {
       "san": "e3",

@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our e4 pawn and preparing to castle kingside after ...g6 and ...Bg7. This is the hallmark of the Pirc Defense - Black develops pieces toward the kingside while keeping the center flexible. The knight on f6 also supports potential ...e5 or ...c5 breaks later in the game. We need to be aware that this knight can become very active, potentially jumping to squares like e5 or g4, so we should consider how to limit its scope while pursuing our own attacking chances."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our e4 pawn and preparing to castle kingside after ...g6 and ...Bg7. This is the hallmark of the Pirc Defense - Black develops pieces toward the kingside while keeping the center flexible. The knight on f6 also supports potential ...e5 or ...c5 breaks later in the game. We need to be aware that this knight can become very active, potentially jumping to squares like e5 or g4, so we should consider how to limit its scope while pursuing our own attacking chances."
     },
     {
       "san": "Nc3",

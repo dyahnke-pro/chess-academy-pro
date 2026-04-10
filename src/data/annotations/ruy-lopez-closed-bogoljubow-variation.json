@@ -43,7 +43,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "We place our rook on the e-file, adding crucial support to our e4 pawn and preparing for the eventual opening of this central file. This move is particularly strong because it addresses Black's pressure on e4 from the knight on f6 while simultaneously preparing tactical possibilities if the center opens up. The rook on e1 also supports potential pawn advances like d2-d4, as it will be well-placed when central files open. This is a key move in many Ruy Lopez systems, as the e-file often becomes a critical battleground in the resulting middlegame positions."
+      "annotation": "We place our rook on the e-file, adding crucial support to our e4 pawn and preparing for the eventual opening of this central file. This move is particularly strong because it addresses Black's pressure on e4 from the knight on f6 while simultaneously preparing tactical possibilities if the center opens up. The rook on e1 also supports potential pawn advances like d2-d4, as it will be well-placed when central files open. This is a critical move in many Ruy Lopez systems, as the e-file often becomes a critical battleground in the resulting middlegame positions."
     },
     {
       "san": "b5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, finally securing their king safety and completing their basic development. This natural move brings the king to safety while connecting the rooks, allowing Black to focus on more active piece play in the middlegame. Our opponent has now completed the essential opening tasks - development, king safety, and central pawn structure - and can begin considering more active plans. With castling complete, Black is also prepared to potentially advance pawns on either flank without major king safety concerns."
+      "annotation": "Black castles kingside, finally securing their king safety and completing their basic development. this move brings the king to safety while connecting the rooks, allowing Black to focus on more active piece play in the middlegame. Our opponent has now completed the essential opening tasks - development, king safety, and central pawn structure - and can begin considering more active plans. With castling complete, Black is also prepared to potentially advance pawns on either flank without major king safety concerns."
     },
     {
       "san": "d4",

@@ -528,7 +528,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "The knight develops to its most natural square, attacking Black's e5 pawn and controlling key central squares.",
+          "annotation": "The knight develops to its ideal square, attacking Black's e5 pawn and controlling key central squares.",
           "plans": [
             "Prepare d2-d4 to challenge Black's center",
             "Castle kingside for king safety"
@@ -639,7 +639,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to f6, attacking White's e4 pawn and completing the basic piece development. This natural move follows opening principles while creating immediate central pressure.",
+          "annotation": "Black develops the knight to f6, attacking White's e4 pawn and completing the basic piece development. this move follows opening principles while creating immediate central pressure.",
           "plans": [
             "Consider ...d6 followed by ...d5 to challenge the center",
             "Complete kingside development and castle"
@@ -2710,7 +2710,7 @@
         },
         {
           "san": "e5",
-          "annotation": "Black responds symmetrically, fighting for the center. So far, nothing unusual."
+          "annotation": "Black responds symmetrically, contesting central control. So far, nothing unusual."
         },
         {
           "san": "Nf3",
@@ -2779,7 +2779,7 @@
         },
         {
           "san": "d5",
-          "annotation": "White pushes the pawn forward, kicking the c6 knight. This is the key move — White sacrifices the e-pawn to gain a tempo and seize space. The d5 pawn is a monster wedge in Black's position.",
+          "annotation": "White pushes the pawn forward, kicking the c6 knight. This is the critical move — White sacrifices the e-pawn to gain a tempo and seize space. The d5 pawn is a monster wedge in Black's position.",
           "arrows": [
             {
               "from": "d5",
@@ -3123,7 +3123,7 @@
         },
         {
           "san": "Rfe1",
-          "annotation": "Placing the rook on the open e-file. This is the most natural move, seizing the file and potentially creating pressure against the e7-knight. White's position is very comfortable.",
+          "annotation": "Placing the rook on the open e-file. This is the most principled response, seizing the file and potentially creating pressure against the e7-knight. White's position is very comfortable.",
           "arrows": [
             {
               "from": "f1",

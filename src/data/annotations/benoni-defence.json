@@ -272,7 +272,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to f3, a solid and natural developing move. The knight controls e5 and d4, and supports the center. In the Benoni, White's plan is straightforward: complete development, maintain the big center, and try to exploit the space advantage. Nf3 prepares castling and fits into every plan.",
+      "annotation": "White develops the knight to f3, a solid and active move. The knight controls e5 and d4, and supports the center. In the Benoni, White's plan is straightforward: complete development, maintain the big center, and try to exploit the space advantage. Nf3 prepares castling and fits into every plan.",
       "plans": [
         "Castle and develop the remaining pieces",
         "Control e5 to deny Black the outpost"
@@ -438,7 +438,7 @@
     },
     {
       "san": "Re8",
-      "annotation": "Black places the rook on e8, the most natural square. The rook eyes the e4 pawn along the semi-open e-file, creating latent pressure. If Black ever plays f5, the e4 pawn could become a real target. The rook on e8 is also useful for supporting a potential e5 knight outpost.",
+      "annotation": "Black places the rook on e8, the ideal square. The rook eyes the e4 pawn along the semi-open e-file, creating latent pressure. If Black ever plays f5, the e4 pawn could become a real target. The rook on e8 is also useful for supporting a potential e5 knight outpost.",
       "pawnStructure": "No change; the rook adds pressure to the e4 pawn along the open e-file.",
       "plans": [
         "Pressure e4 and support piece play on the e-file",
@@ -544,7 +544,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to its most natural square, immediately pressuring White's central d4 pawn and preparing to contest the center. This hypermodern approach allows Black to challenge White's space advantage from the flanks while keeping options open for both ...e6 and ...g6 setups. The knight on f6 is perfectly placed to support various pawn breaks like ...c5 or ...e5.",
+          "annotation": "Black develops the knight to its ideal square, immediately pressuring White's central d4 pawn and preparing to contest the center. This hypermodern approach allows Black to challenge White's space advantage from the flanks while keeping options open for both ...e6 and ...g6 setups. The knight on f6 is perfectly placed to support various pawn breaks like ...c5 or ...e5.",
           "plans": [
             "Challenge White's center with moves like ...c5 or ...e5",
             "Develop other pieces while maintaining pressure on d4"
@@ -916,7 +916,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks. This natural move is essential for Black's piece coordination, though the position remains somewhat cramped due to White's space advantage. Castling also prepares to bring the rook to e8, potentially supporting central breaks or kingside defense.",
+          "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks. this move is essential for Black's piece coordination, though the position remains somewhat cramped due to White's space advantage. Castling also prepares to bring the rook to e8, potentially supporting central breaks or kingside defense.",
           "plans": [
             "Bring the rook to e8 for central support",
             "Look for piece activity with moves like ...Na6-c7"
@@ -1031,7 +1031,7 @@
         },
         {
           "san": "f3",
-          "annotation": "White strengthens the center with this solid move, providing additional support to the e4 pawn and preparing potential kingside expansion. The f3 move is characteristic of the main line Benoni, giving White a very solid central structure while preparing moves like g4-g5 or simply maintaining the space advantage. This pawn also controls the g4 and e4 squares more securely.",
+          "annotation": "White strengthens the center with this stabilizing move, providing additional support to the e4 pawn and preparing potential kingside expansion. The f3 move is characteristic of the main line Benoni, giving White a very solid central structure while preparing moves like g4-g5 or simply maintaining the space advantage. This pawn also controls the g4 and e4 squares more securely.",
           "pawnStructure": "White's pawn chain from c2-d5-e4-f3 creates a very solid central structure that is difficult for Black to challenge directly.",
           "plans": [
             "Consider kingside expansion with g4-g5",
@@ -2929,7 +2929,7 @@
         },
         {
           "san": "Re8",
-          "annotation": "Black places the rook on e8, a key move in the e4 Benoni system. The rook eyes the e4 pawn and supports a future ...e5 break. It also clears f8 for the knight maneuver ...Na6-c7.",
+          "annotation": "Black places the rook on e8, a critical move in the e4 Benoni system. The rook eyes the e4 pawn and supports a future ...e5 break. It also clears f8 for the knight maneuver ...Na6-c7.",
           "arrows": [
             {
               "from": "f8",

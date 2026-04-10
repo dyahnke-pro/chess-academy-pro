@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing the knight to its most active square. This is the starting move of the King's Indian Defense, one of the most dynamic and counterattacking defenses in chess. By developing the knight before committing pawns, Black maintains maximum flexibility while putting immediate pressure on our center. The knight on f6 also prepares to support a future ...e5 advance, which is often the thematic pawn break that defines King's Indian structures."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while bringing the knight to its most active square. This is the starting move of the King's Indian Defense, one of the most dynamic and counterattacking defenses in chess. By developing the knight before committing pawns, Black maintains maximum flexibility while putting immediate pressure on our center. The knight on f6 also prepares to support a future ...e5 advance, which is often the thematic pawn break that defines King's Indian structures."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to respond to Black's various central breaks. This knight will often jump to d5 or e4 in the middlegame, becoming a powerful central outpost that cramps Black's position. The knight also supports a potential e2-e4 advance, which would give us the ideal pawn center if Black allows it. From c3, our knight eyes important squares like b5 and d5, and it's perfectly placed to support our expanding pawn chain while maintaining flexibility for future piece maneuvers."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing to respond to Black's various central breaks. This knight will often jump to d5 or e4 in the middlegame, becoming a powerful central outpost that cramps Black's position. The knight also supports a potential e2-e4 advance, which would give us the ideal pawn center if Black allows it. From c3, our knight eyes important squares like b5 and d5, and it's perfectly placed to support our expanding pawn chain while maintaining flexibility for future piece maneuvers."
     },
     {
       "san": "Bg7",

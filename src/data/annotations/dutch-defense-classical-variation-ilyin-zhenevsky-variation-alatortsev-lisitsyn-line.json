@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, where it eyes the central e4 and d5 squares while preparing to support the kingside attack that's typical in Dutch Defense structures. This knight also adds an extra defender to the slightly weakened kingside, particularly the h7 square. The knight on f6 is a key piece in the Dutch, as it often participates in both defense and attack, sometimes jumping to e4 or supporting pawn advances like ...g6 and ...h5."
+      "annotation": "Black develops the knight to its ideal square, where it eyes the central e4 and d5 squares while preparing to support the kingside attack that's typical in Dutch Defense structures. This knight also adds an extra defender to the slightly weakened kingside, particularly the h7 square. The knight on f6 is a key piece in the Dutch, as it often participates in both defense and attack, sometimes jumping to e4 or supporting pawn advances like ...g6 and ...h5."
     },
     {
       "san": "g3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops their light-squared bishop to a solid defensive square, maintaining flexibility while preparing to castle kingside. This natural developing move keeps options open for various pawn breaks and piece maneuvers while ensuring the king will have adequate protection after castling. The bishop on e7 also prepares potential central activity with moves like ...d5 or supports kingside play with ...Bf6 if needed."
+      "annotation": "Black develops their light-squared bishop to a solid defensive square, maintaining flexibility while preparing to castle kingside. This active move keeps options open for various pawn breaks and piece maneuvers while ensuring the king will have adequate protection after castling. The bishop on e7 also prepares potential central activity with moves like ...d5 or supports kingside play with ...Bf6 if needed."
     },
     {
       "san": "Nf3",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most natural square, where it supports our central control and prepares various strategic ideas including the advance of our e-pawn to e4. This knight placement is particularly strong against the Dutch because it eyes the weakened d5 and e4 squares while maintaining excellent coordination with our other pieces. From c3, our knight can also support queenside operations or potentially jump to more active squares like e4 or d5 if the opportunity arises."
+      "annotation": "We develop our queen's knight to its ideal square, where it supports our central control and prepares various strategic ideas including the advance of our e-pawn to e4. This knight placement is particularly strong against the Dutch because it eyes the weakened d5 and e4 squares while maintaining excellent coordination with our other pieces. From c3, our knight can also support queenside operations or potentially jump to more active squares like e4 or d5 if the opportunity arises."
     },
     {
       "san": "Qe8",

@@ -27,11 +27,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports potential central advances like e4 and controls important squares like b5 and d5. This development is part of our standard plan in the Exchange Slav - get our pieces out quickly to exploit our slight advantage in piece coordination. The knight on c3 also prepares potential tactics involving Nb5 if Black's king remains in the center too long. From c3, our knight has excellent scope and can later reposition to e4, a5, or support various pawn breaks depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, where it supports potential central advances like e4 and controls important squares like b5 and d5. This development is part of our standard plan in the Exchange Slav - get our pieces out quickly to exploit our slight advantage in piece coordination. The knight on c3 also prepares potential tactics involving Nb5 if Black's king remains in the center too long. From c3, our knight has excellent scope and can later reposition to e4, a5, or support various pawn breaks depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most active square, where it attacks our e4 square and prepares kingside castling. This is a natural developing move that follows sound opening principles while keeping Black's position flexible and solid. The knight on f6 also supports potential central breaks like e6-e5 if Black gets the chance to advance in the center. However, Black needs to be careful about potential pins along the g5-d8 diagonal if we play Bg5, which is a common motif in these positions."
+      "annotation": "Black develops their kingside knight to its most active square, where it attacks our e4 square and prepares kingside castling. This is a active move that follows sound opening principles while keeping Black's position flexible and solid. The knight on f6 also supports potential central breaks like e6-e5 if Black gets the chance to advance in the center. However, Black needs to be careful about potential pins along the g5-d8 diagonal if we play Bg5, which is a common motif in these positions."
     },
     {
       "san": "Nf3",

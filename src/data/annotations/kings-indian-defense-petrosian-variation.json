@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most flexible and popular move, developing the knight to its most natural square while attacking our e4 pawn (when we play it). This knight on f6 is the cornerstone of many Black defenses, including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined. Our opponent is keeping maximum options open while putting immediate pressure on our central ambitions. The knight also prepares to support a future ...e5 pawn break, which is thematic in many Black setups."
+      "annotation": "Black responds with the most flexible and popular move, developing the knight to its ideal square while attacking our e4 pawn (when we play it). This knight on f6 is the cornerstone of many Black defenses, including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined. Our opponent is keeping maximum options open while putting immediate pressure on our central ambitions. The knight also prepares to support a future ...e5 pawn break, which is thematic in many Black setups."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the d4 pawn and prepares to advance to e4 next move. The knight on c3 also controls important central squares like e4, d5, and b5, while keeping pressure on Black's position. This move fits perfectly with our plan to establish a strong pawn center with d4-e4, and the knight will later support various pawn advances or piece maneuvers. From c3, the knight maintains maximum flexibility and can potentially jump to e2, d5, or b5 depending on how the position develops."
+      "annotation": "We're developing our knight to its ideal square, where it supports the d4 pawn and prepares to advance to e4 next move. The knight on c3 also controls important central squares like e4, d5, and b5, while keeping pressure on Black's position. This move fits perfectly with our plan to establish a strong pawn center with d4-e4, and the knight will later support various pawn advances or piece maneuvers. From c3, the knight maintains maximum flexibility and can potentially jump to e2, d5, or b5 depending on how the position develops."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our e4 pawn and prepares to castle kingside quickly. The knight on f3 controls important central squares like e5 and d4, while also keeping an eye on Black's kingside should we later launch an attack there. This move completes our basic development plan and maintains maximum flexibility - the knight can later jump to d2, g5, h4, or even e1 depending on the position's demands. We're also preparing Be2 next, which will complete our kingside development and allow us to castle safely."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our e4 pawn and prepares to castle kingside quickly. The knight on f3 controls important central squares like e5 and d4, while also keeping an eye on Black's kingside should we later launch an attack there. This move completes our basic development plan and maintains maximum flexibility - the knight can later jump to d2, g5, h4, or even e1 depending on the position's demands. We're also preparing Be2 next, which will complete our kingside development and allow us to castle safely."
     },
     {
       "san": "O-O",

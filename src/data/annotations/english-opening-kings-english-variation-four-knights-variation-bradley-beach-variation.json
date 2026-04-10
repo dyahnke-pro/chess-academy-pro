@@ -7,11 +7,11 @@
     },
     {
       "san": "e5",
-      "annotation": "Black responds with the most direct and principled continuation, immediately occupying the center with a pawn and signaling aggressive intentions. This move creates a symmetrical tension in the center and shows that our opponent isn't interested in allowing us to build up slowly and peacefully. Black's pawn on e5 controls the key central squares d4 and f4, while also opening lines for the bishop on f8 and preparing quick piece development. We should expect Black to follow up with natural developing moves like Nf6 and Nc6, leading to sharp tactical play rather than the quieter positional games that can arise from other English setups."
+      "annotation": "Black responds with the most direct and principled continuation, immediately occupying the center with a pawn and signaling aggressive intentions. This move creates a symmetrical tension in the center and shows that our opponent isn't interested in allowing us to build up slowly and peacefully. Black's pawn on e5 controls the key central squares d4 and f4, while also opening lines for the bishop on f8 and preparing quick piece development. We should expect Black to follow up with active moves like Nf6 and Nc6, leading to sharp tactical play rather than the quieter positional games that can arise from other English setups."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawn on c4 and prepares to contest Black's central presence. This knight placement is incredibly flexible - it can later jump to d5, support a d2-d4 advance, or even relocate to e4 or b5 depending on the position's requirements. The knight on c3 also keeps our options open for various pawn breaks, particularly the thematic d2-d4 push that will directly challenge Black's pawn on e5. From c3, our knight coordinates beautifully with our other pieces and maintains the English Opening's characteristic flexibility."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central pawn on c4 and prepares to contest Black's central presence. This knight placement is incredibly flexible - it can later jump to d5, support a d2-d4 advance, or even relocate to e4 or b5 depending on the position's requirements. The knight on c3 also keeps our options open for various pawn breaks, particularly the thematic d2-d4 push that will directly challenge Black's pawn on e5. From c3, our knight coordinates beautifully with our other pieces and maintains the English Opening's characteristic flexibility."
     },
     {
       "san": "Nf6",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black completes the Four Knights setup by developing the second knight to its most natural square, defending the e5 pawn and maintaining the central tension. This knight placement supports Black's central presence while preparing to respond to our likely d2-d4 advance with either ...exd4 or maintaining the pawn on e5. The knight on c6 also opens tactical possibilities, such as supporting a future ...d5 break or jumping to outpost squares like d4 or b4. Our opponent has now developed both knights harmoniously and is ready to complete development while keeping the position sharp and tactical."
+      "annotation": "Black completes the Four Knights setup by developing the second knight to its ideal square, defending the e5 pawn and maintaining the central tension. This knight placement supports Black's central presence while preparing to respond to our likely d2-d4 advance with either ...exd4 or maintaining the pawn on e5. The knight on c6 also opens tactical possibilities, such as supporting a future ...d5 break or jumping to outpost squares like d4 or b4. Our opponent has now developed both knights harmoniously and is ready to complete development while keeping the position sharp and tactical."
     },
     {
       "san": "d4",

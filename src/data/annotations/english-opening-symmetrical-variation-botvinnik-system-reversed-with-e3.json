@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding pressure to the central d5 square and preparing to support our pawn structure. This knight placement is incredibly flexible – it can later jump to d5, e4, or even b5 depending on the position's requirements. The knight from c3 also supports a potential d4 pawn break, which would transform the center and give us more space. By developing this piece early, we're following classical opening principles while keeping maximum options open for our next moves."
+      "annotation": "We develop our knight to its ideal square, adding pressure to the central d5 square and preparing to support our pawn structure. This knight placement is incredibly flexible – it can later jump to d5, e4, or even b5 depending on the position's requirements. The knight from c3 also supports a potential d4 pawn break, which would transform the center and give us more space. By developing this piece early, we're following classical opening principles while keeping maximum options open for our next moves."
     },
     {
       "san": "Nc6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We break the symmetry with a subtle but important move, supporting our d4 square and preparing to potentially advance d4 ourselves in the near future. This move also opens up development possibilities for our dark-squared bishop, which can now go to e2 or d3 depending on the position's needs. The e3 advance is more restrained than e4 would be, keeping the position closed and positional rather than opening it up tactically. This choice reflects the English Opening's philosophy of gradual improvement and strategic maneuvering rather than immediate confrontation in the center."
+      "annotation": "We break the symmetry with a subtle but purposeful move, supporting our d4 square and preparing to potentially advance d4 ourselves in the near future. This move also opens up development possibilities for our dark-squared bishop, which can now go to e2 or d3 depending on the position's needs. The e3 advance is more restrained than e4 would be, keeping the position closed and positional rather than opening it up tactically. This choice reflects the English Opening's philosophy of gradual improvement and strategic maneuvering rather than immediate confrontation in the center."
     },
     {
       "san": "e5",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while preparing for flexible piece play. This move keeps our options open - we can still recapture on e4 with the knight if Black takes, or we might consider other pawn moves like e5 or f3 depending on Black's response. The knight on f3 also eyes the important e5 and g5 squares and supports a potential kingside attack later. This is more flexible than immediately recapturing on d5 or pushing e5, allowing us to see what Black intends before committing to a specific pawn structure."
+      "annotation": "We develop our knight to its ideal square, defending the e4 pawn while preparing for flexible piece play. This move keeps our options open - we can still recapture on e4 with the knight if Black takes, or we might consider other pawn moves like e5 or f3 depending on Black's response. The knight on f3 also eyes the important e5 and g5 squares and supports a potential kingside attack later. This is more flexible than immediately recapturing on d5 or pushing e5, allowing us to see what Black intends before committing to a specific pawn structure."
     },
     {
       "san": "dxe4",

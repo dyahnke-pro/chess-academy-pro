@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our central pawns, controls important squares like e5 and g5, and prepares kingside castling. The knight on f3 also eyes the weak d6 square that Black created with the ...c5 advance, and we might be able to use moves like Nd2-c4-d6 later to exploit this outpost. This piece development is part of our systematic plan to complete development while maintaining central control. We're also keeping our options open for how to recapture on d4 if Black ever trades pawns there, as the knight can potentially recapture and maintain central control."
+      "annotation": "We develop our knight to its ideal square, where it supports our central pawns, controls important squares like e5 and g5, and prepares kingside castling. The knight on f3 also eyes the weak d6 square that Black created with the ...c5 advance, and we might be able to use moves like Nd2-c4-d6 later to exploit this outpost. This piece development is part of our systematic plan to complete development while maintaining central control. We're also keeping our options open for how to recapture on d4 if Black ever trades pawns there, as the knight can potentially recapture and maintain central control."
     },
     {
       "san": "d6",

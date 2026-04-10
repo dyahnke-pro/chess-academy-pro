@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing for quick kingside development. This move also eyes the important e4 and d5 squares, helping to maintain our central control. However, we're walking into Black's main tactical idea - in the Pterodactyl, the c3 knight often becomes a target for the ...Bxc3+ sacrifice. While this development looks perfectly normal, we should be prepared for the pawn structure changes that may result from Black's coming bishop sacrifice."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing for quick kingside development. This move also eyes the important e4 and d5 squares, helping to maintain our central control. However, we're walking into Black's main tactical idea - in the Pterodactyl, the c3 knight often becomes a target for the ...Bxc3+ sacrifice. While this development looks perfectly normal, we should be prepared for the pawn structure changes that may result from Black's coming bishop sacrifice."
     },
     {
       "san": "c5",

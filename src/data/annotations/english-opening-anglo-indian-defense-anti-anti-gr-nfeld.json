@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our potential e4 advance while developing toward the center. This is the start of the Anglo-Indian Defense, where Black mirrors our flexible approach by keeping options open for both ...d6 and ...d5 setups. The knight on f6 also supports a potential ...e5 advance later, and Black is essentially saying 'I'll develop my pieces harmoniously and see what central structure you commit to first.' This move keeps maximum flexibility while challenging our central ambitions."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our potential e4 advance while developing toward the center. This is the start of the Anglo-Indian Defense, where Black mirrors our flexible approach by keeping options open for both ...d6 and ...d5 setups. The knight on f6 also supports a potential ...e5 advance later, and Black is essentially saying 'I'll develop my pieces harmoniously and see what central structure you commit to first.' This move keeps maximum flexibility while challenging our central ambitions."
     },
     {
       "san": "Nc3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our basic development by bringing the knight to its ideal square, where it controls the central e5 and d4 squares while supporting our kingside. This natural developing move also prepares us to castle kingside and maintains maximum flexibility in our central pawn structure. The knight on f3 is particularly well-placed because it can support a later e2-e4 advance, help control the center, and provide defensive coverage for our king. From f3, our knight also has the potential to redeploy to more active squares like e5 or g5 depending on how the position develops."
+      "annotation": "We complete our basic development by bringing the knight to its ideal square, where it controls the central e5 and d4 squares while supporting our kingside. This active move also prepares us to castle kingside and maintains maximum flexibility in our central pawn structure. The knight on f3 is particularly well-placed because it can support a later e2-e4 advance, help control the center, and provide defensive coverage for our king. From f3, our knight also has the potential to redeploy to more active squares like e5 or g5 depending on how the position develops."
     },
     {
       "san": "Bg7",
@@ -27,7 +27,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We seize the initiative by establishing a classical pawn center, taking space and putting immediate pressure on Black's position. This advance is the key move of the Anti-Anti-Grünfeld system, where we're essentially playing a King's Indian Attack setup but with the move c4 already played, giving us extra control over d5. Our pawn center now controls crucial squares like d5 and f5, and we're preparing to follow up with moves like Be2, 0-0, and potentially f4 to create a kingside attack. Black will need to react carefully to this central advance, as we're now threatening to gain a significant space advantage and create attacking chances on the kingside."
+      "annotation": "We seize the initiative by establishing a classical pawn center, taking space and putting immediate pressure on Black's position. This advance is the central idea of the Anti-Anti-Grünfeld system, where we're essentially playing a King's Indian Attack setup but with the move c4 already played, giving us extra control over d5. Our pawn center now controls crucial squares like d5 and f5, and we're preparing to follow up with moves like Be2, 0-0, and potentially f4 to create a kingside attack. Black will need to react carefully to this central advance, as we're now threatening to gain a significant space advantage and create attacking chances on the kingside."
     }
   ]
 }

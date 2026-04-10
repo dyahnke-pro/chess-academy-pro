@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending the attacked e4 pawn, maintaining our central pawn duo for now. This knight placement supports our center while preparing to recapture on e4 with the knight if Black takes, which would give us good central control. The knight on c3 also eyes important squares like d5, e4, b5, and a4, providing tactical possibilities later in the game. We're keeping our options open rather than committing to a specific pawn structure just yet, which is wise given the sharp nature of this opening."
+      "annotation": "We're developing our knight to its ideal square while defending the attacked e4 pawn, maintaining our central pawn duo for now. This knight placement supports our center while preparing to recapture on e4 with the knight if Black takes, which would give us good central control. The knight on c3 also eyes important squares like d5, e4, b5, and a4, providing tactical possibilities later in the game. We're keeping our options open rather than committing to a specific pawn structure just yet, which is wise given the sharp nature of this opening."
     },
     {
       "san": "dxe4",

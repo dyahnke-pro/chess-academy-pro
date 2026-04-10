@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and preparing to increase the central pressure with moves like Nf3 and Bd3. This knight placement is incredibly flexible - it supports both our central control and prepares various pawn breaks like e4 or f4-f5 depending on how the position develops. The knight on c3 also eyes the important e4 and b5 squares while keeping our options open for different pawn structures. By developing with a threat, we're maintaining the initiative and forcing Black to continue making defensive choices rather than pursuing their own active plans."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn and preparing to increase the central pressure with moves like Nf3 and Bd3. This knight placement is incredibly flexible - it supports both our central control and prepares various pawn breaks like e4 or f4-f5 depending on how the position develops. The knight on c3 also eyes the important e4 and b5 squares while keeping our options open for different pawn structures. By developing with a threat, we're maintaining the initiative and forcing Black to continue making defensive choices rather than pursuing their own active plans."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most active square, defending against our potential e4 advance while eyeing the central e4 and d5 squares. This natural developing move follows classical opening principles, but it also allows us to implement one of the Queen's Gambit Declined's most testing ideas. The knight on f6 does provide good central control and prepares kingside castling, but it becomes a potential target for our light-squared bishop. Our opponent is walking into one of the main theoretical battlegrounds of the QGD, where we'll soon have the opportunity to create long-term pressure with our bishop pair."
+      "annotation": "Black develops their knight to its most active square, defending against our potential e4 advance while eyeing the central e4 and d5 squares. This active move follows classical opening principles, but it also allows us to implement one of the Queen's Gambit Declined's most testing ideas. The knight on f6 does provide good central control and prepares kingside castling, but it becomes a potential target for our light-squared bishop. Our opponent is walking into one of the main theoretical battlegrounds of the QGD, where we'll soon have the opportunity to create long-term pressure with our bishop pair."
     },
     {
       "san": "Bg5",

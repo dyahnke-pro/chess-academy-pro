@@ -15,7 +15,7 @@
     },
     {
       "san": "g6",
-      "annotation": "Black is signaling their intention to fianchetto the dark-squared bishop on g7, which is the key move that defines the King's Indian Defense. This setup allows Black to exert long-range pressure along the long diagonal (a1-h8) and creates excellent attacking chances against our kingside once we castle. The King's Indian is one of the most double-edged and tactical defenses in chess, where Black often accepts a somewhat cramped position in exchange for dynamic counterplay and kingside attacking chances. We should be prepared for a complex middlegame where both sides will have chances for active play, but Black will particularly be looking to create threats against our king."
+      "annotation": "Black is signaling their intention to fianchetto the dark-squared bishop on g7, which is the critical advance that defines the King's Indian Defense. This setup allows Black to exert long-range pressure along the long diagonal (a1-h8) and creates excellent attacking chances against our kingside once we castle. The King's Indian is one of the most double-edged and tactical defenses in chess, where Black often accepts a somewhat cramped position in exchange for dynamic counterplay and kingside attacking chances. We should be prepared for a complex middlegame where both sides will have chances for active play, but Black will particularly be looking to create threats against our king."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our e4 pawn and prepares to castle kingside for safety. This knight development is essential because it allows us to maintain our strong pawn center while improving our piece coordination. The knight on f3 also eyes the important e5 and g5 squares, giving us tactical possibilities in the center and on the kingside. In King's Indian structures, this knight often plays a crucial role in both defensive and offensive operations, sometimes rerouting to more active squares like d2, e1, or h4 depending on the specific tactical requirements of the position."
+      "annotation": "We're developing our knight to its ideal square, where it supports our e4 pawn and prepares to castle kingside for safety. This knight development is essential because it allows us to maintain our strong pawn center while improving our piece coordination. The knight on f3 also eyes the important e5 and g5 squares, giving us tactical possibilities in the center and on the kingside. In King's Indian structures, this knight often plays a crucial role in both defensive and offensive operations, sometimes rerouting to more active squares like d2, e1, or h4 depending on the specific tactical requirements of the position."
     },
     {
       "san": "O-O",

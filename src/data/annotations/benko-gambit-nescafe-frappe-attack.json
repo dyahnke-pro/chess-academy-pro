@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately attacking our d4 pawn and preparing to contest the center. This flexible move keeps Black's options open - they could transpose into a King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or several other setups depending on our next moves. The knight on f6 also controls the important e4 and g4 squares, limiting some of our aggressive possibilities in the center."
+      "annotation": "Black develops the knight to its ideal square, immediately attacking our d4 pawn and preparing to contest the center. This flexible move keeps Black's options open - they could transpose into a King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or several other setups depending on our next moves. The knight on f6 also controls the important e4 and g4 squares, limiting some of our aggressive possibilities in the center."
     },
     {
       "san": "c4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting our central pawn structure and preparing to meet Black's threats with solid development. The knight on c3 supports our d5 pawn, contests the important e4 square, and keeps our options open for how to handle Black's queenside pressure. This natural developing move also prepares potential advances like e4, which would give us a strong pawn center and space advantage. However, we need to be mindful that this knight might become a target for Black's pieces, particularly if Black can establish pressure along the queenside files."
+      "annotation": "We develop our knight to its most active square, supporting our central pawn structure and preparing to meet Black's threats with solid development. The knight on c3 supports our d5 pawn, contests the important e4 square, and keeps our options open for how to handle Black's queenside pressure. This active move also prepares potential advances like e4, which would give us a strong pawn center and space advantage. However, we need to be mindful that this knight might become a target for Black's pieces, particularly if Black can establish pressure along the queenside files."
     },
     {
       "san": "axb5",

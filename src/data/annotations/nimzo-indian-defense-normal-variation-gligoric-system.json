@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to meet Black's likely ...d5 with increased pressure on that central point. This knight placement is incredibly flexible - it can later jump to e4, a4, b5, or even retreat to e2 if needed in certain tactical sequences. However, we should be aware that this knight can become a target if Black plays ...Bb4+, pinning it to our king and potentially forcing some uncomfortable decisions about our pawn structure."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to meet Black's likely ...d5 with increased pressure on that central point. This knight placement is incredibly flexible - it can later jump to e4, a4, b5, or even retreat to e2 if needed in certain tactical sequences. However, we should be aware that this knight can become a target if Black plays ...Bb4+, pinning it to our king and potentially forcing some uncomfortable decisions about our pawn structure."
     },
     {
       "san": "Bb4",

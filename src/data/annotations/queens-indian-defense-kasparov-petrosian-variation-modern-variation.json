@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it controls the central e5 and d4 squares while supporting our central pawn structure. This move also prepares kingside castling and keeps our options open regarding our pawn structure - we haven't committed to any particular formation yet. The knight on f3 is incredibly versatile, able to jump to e5, g5, or h4 depending on the position's requirements, and it's one of the most important pieces in our opening setup. From f3, our knight also eyes potential outposts on e5 and can support various pawn advances like e2-e4 in some variations."
+      "annotation": "We're developing our king's knight to its ideal square, where it controls the central e5 and d4 squares while supporting our central pawn structure. This move also prepares kingside castling and keeps our options open regarding our pawn structure - we haven't committed to any particular formation yet. The knight on f3 is incredibly versatile, able to jump to e5, g5, or h4 depending on the position's requirements, and it's one of the most important pieces in our opening setup. From f3, our knight also eyes potential outposts on e5 and can support various pawn advances like e2-e4 in some variations."
     },
     {
       "san": "b6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, supporting our d4 pawn while preparing to meet Black's central challenges. This move also opens up potential tactics involving the c4 pawn - if Black plays ...d5, we might consider cxd5, and the knight supports this advance beautifully. Our knight is now well-placed to support various pawn advances like e2-e4 or to jump to active squares like e4 or b5 depending on the position's needs. The development also brings us closer to completing our opening setup and prepares for kingside castling while maintaining maximum flexibility in our central pawn structure."
+      "annotation": "We're developing our queen's knight to its ideal square, supporting our d4 pawn while preparing to meet Black's central challenges. This move also opens up potential tactics involving the c4 pawn - if Black plays ...d5, we might consider cxd5, and the knight supports this advance beautifully. Our knight is now well-placed to support various pawn advances like e2-e4 or to jump to active squares like e4 or b5 depending on the position's needs. The development also brings us closer to completing our opening setup and prepares for kingside castling while maintaining maximum flexibility in our central pawn structure."
     },
     {
       "san": "d5",

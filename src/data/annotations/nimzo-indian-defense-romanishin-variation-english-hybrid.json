@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this classical developing move, attacking the d4 pawn and preparing to castle kingside. This knight move is incredibly flexible, keeping options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. Our opponent is following sound opening principles by developing pieces toward the center while creating immediate pressure. Black avoids committing to a specific pawn structure just yet, maintaining maximum flexibility in the position."
+      "annotation": "Black immediately challenges our central pawn with this classical developing choice, attacking the d4 pawn and preparing to castle kingside. This knight move is incredibly flexible, keeping options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. Our opponent is following sound opening principles by developing pieces toward the center while creating immediate pressure. Black avoids committing to a specific pawn structure just yet, maintaining maximum flexibility in the position."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to castle kingside. This move gives Black the opportunity to play the famous Nimzo-Indian Defense with Bb4+, which puts immediate pressure on our position. We're prioritizing rapid development and central control, though we must be prepared for Black's potential pin on our knight. The knight on c3 also eyes important central squares like e4 and d5, fitting perfectly into our opening strategy."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to castle kingside. This move gives Black the opportunity to play the famous Nimzo-Indian Defense with Bb4+, which puts immediate pressure on our position. We're prioritizing rapid development and central control, though we must be prepared for Black's potential pin on our knight. The knight on c3 also eyes important central squares like e4 and d5, fitting perfectly into our opening strategy."
     },
     {
       "san": "Bb4",
@@ -47,11 +47,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black wisely prioritizes king safety by castling kingside, bringing the rook into the game while moving the king away from potential central tactics. This natural move completes the most important part of Black's development and prepares to coordinate the pieces for middlegame plans. Our opponent is following sound opening principles by securing the king before launching any aggressive operations. The castling move also connects the rooks, which is crucial for Black's upcoming central operations and potential counterplay."
+      "annotation": "Black wisely prioritizes king safety by castling kingside, bringing the rook into the game while moving the king away from potential central tactics. this move completes the most important part of Black's development and prepares to coordinate the pieces for middlegame plans. Our opponent is following sound opening principles by securing the king before launching any aggressive operations. The castling move also connects the rooks, which is crucial for Black's upcoming central operations and potential counterplay."
     },
     {
       "san": "Bg2",
-      "annotation": "We complete our kingside development by fianchettoing the light-squared bishop, creating immediate pressure along the long diagonal toward Black's king. This bishop placement is the key move in our hybrid system, controlling important central squares and supporting our overall positional strategy. The bishop on g2 works beautifully with our knight on d4, creating a powerful central battery. We're now ready to castle and complete our development while maintaining excellent piece coordination and central control."
+      "annotation": "We complete our kingside development by fianchettoing the light-squared bishop, creating immediate pressure along the long diagonal toward Black's king. This bishop placement is the critical move in our hybrid system, controlling important central squares and supporting our overall positional strategy. The bishop on g2 works beautifully with our knight on d4, creating a powerful central battery. We're now ready to castle and complete our development while maintaining excellent piece coordination and central control."
     },
     {
       "san": "d5",

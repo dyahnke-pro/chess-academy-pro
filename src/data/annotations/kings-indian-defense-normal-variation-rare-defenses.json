@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing to advance e2-e4 to complete our ideal pawn center. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us tactical possibilities in the middlegame. This move is perfectly in line with classical opening principles of rapid development while maintaining central control. We're also keeping the option open to castle queenside in some variations, though kingside castling will be more common in this structure."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing to advance e2-e4 to complete our ideal pawn center. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us tactical possibilities in the middlegame. This move is perfectly in line with classical opening principles of rapid development while maintaining central control. We're also keeping the option open to castle queenside in some variations, though kingside castling will be more common in this structure."
     },
     {
       "san": "Bg7",

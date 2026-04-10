@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 pawn and preparing to castle kingside. This move follows the opening principle of 'knights before bishops' and puts immediate pressure on Black's central presence. From f3, our knight also controls the important central squares e5 and d4, while supporting a potential d4 pawn advance later. The knight development also prepares us to enter the Ruy Lopez with Bb5, one of the most theoretically rich and strategically complex openings in chess."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 pawn and preparing to castle kingside. This move follows the opening principle of 'knights before bishops' and puts immediate pressure on Black's central presence. From f3, our knight also controls the important central squares e5 and d4, while supporting a potential d4 pawn advance later. The knight development also prepares us to enter the Ruy Lopez with Bb5, one of the most theoretically rich and strategically complex openings in chess."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to defend the attacked e5 pawn, maintaining the central tension while bringing a piece into active play. This natural developing move also prepares Black's own kingside castling and contests our control of key central squares like d4. The knight on c6 is flexibly placed, ready to support various pawn breaks like ...d6 and ...f5, or to relocate via different routes depending on how the position unfolds. Our opponent is following sound opening principles by developing pieces and maintaining central equality."
+      "annotation": "Black develops their knight to defend the attacked e5 pawn, maintaining the central tension while bringing a piece into active play. This active move also prepares Black's own kingside castling and contests our control of key central squares like d4. The knight on c6 is flexibly placed, ready to support various pawn breaks like ...d6 and ...f5, or to relocate via different routes depending on how the position unfolds. Our opponent is following sound opening principles by developing pieces and maintaining central equality."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to f6, attacking our e4 pawn and accelerating their development toward castling. This natural move brings another piece into the game while creating counterplay against our central pawn, forcing us to consider how to defend it. The knight on f6 also controls important central squares like e4 and d5, while preparing Black to castle kingside safely. Our opponent is following the classical Morphy Defense setup, developing pieces harmoniously and maintaining central tension."
+      "annotation": "Black develops their kingside knight to f6, attacking our e4 pawn and accelerating their development toward castling. this move brings another piece into the game while creating counterplay against our central pawn, forcing us to consider how to defend it. The knight on f6 also controls important central squares like e4 and d5, while preparing Black to castle kingside safely. Our opponent is following the classical Morphy Defense setup, developing pieces harmoniously and maintaining central tension."
     },
     {
       "san": "O-O",

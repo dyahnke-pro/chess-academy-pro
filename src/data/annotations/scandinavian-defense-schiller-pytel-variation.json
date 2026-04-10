@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square while simultaneously attacking Black's exposed queen, gaining tempo in our development. This move embodies perfect opening play: we develop a piece, control important central squares (d5 and e4), and force our opponent to respond to our threat. The knight on c3 also supports a future d2-d4 advance and prepares for kingside castling. By attacking the queen immediately, we're making Black's early queen sortie look questionable, as the queen will need to move again, giving us further development advantages."
+      "annotation": "We develop our knight to its ideal square while simultaneously attacking Black's exposed queen, gaining tempo in our development. This move embodies perfect opening play: we develop a piece, control important central squares (d5 and e4), and force our opponent to respond to our threat. The knight on c3 also supports a future d2-d4 advance and prepares for kingside castling. By attacking the queen immediately, we're making Black's early queen sortie look questionable, as the queen will need to move again, giving us further development advantages."
     },
     {
       "san": "Qd6",
-      "annotation": "Black retreats the queen to d6, which is considered one of the more solid squares in the Schiller-Pytel Variation of the Scandinavian Defense. From d6, the queen maintains some central influence while staying relatively safe from immediate tactical threats. This square allows the queen to potentially support ...e6 or ...e5 advances later, and it doesn't block Black's own piece development as much as other queen retreats might. However, the queen is still somewhat awkwardly placed and may need to move again, continuing to grant us tempo advantages as we complete our development with natural moves."
+      "annotation": "Black retreats the queen to d6, which is considered one of the more solid squares in the Schiller-Pytel Variation of the Scandinavian Defense. From d6, the queen maintains some central influence while staying relatively safe from immediate tactical threats. This square allows the queen to potentially support ...e6 or ...e5 advances later, and it doesn't block Black's own piece development as much as other queen retreats might. However, the queen is still somewhat awkwardly placed and may need to move again, continuing to grant us tempo advantages as we complete our development with logical choices."
     },
     {
       "san": "d4",

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, defending our e4 pawn while simultaneously controlling the important central squares d4 and e5. This move also prepares potential kingside castling and keeps our options flexible - we can still choose between various pawn structures depending on how Black continues. The knight on f3 is a key defensive piece that will often support our central pawn advances and can potentially jump to more active squares like g5 or e5 later in the game. By defending e4 with a piece rather than a pawn (like d3), we maintain maximum flexibility in our pawn structure while developing harmoniously."
+      "annotation": "We develop our knight to its ideal square, defending our e4 pawn while simultaneously controlling the important central squares d4 and e5. This move also prepares potential kingside castling and keeps our options flexible - we can still choose between various pawn structures depending on how Black continues. The knight on f3 is a key defensive piece that will often support our central pawn advances and can potentially jump to more active squares like g5 or e5 later in the game. By defending e4 with a piece rather than a pawn (like d3), we maintain maximum flexibility in our pawn structure while developing harmoniously."
     },
     {
       "san": "e6",

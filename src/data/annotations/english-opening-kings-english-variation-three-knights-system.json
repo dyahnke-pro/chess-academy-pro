@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while maintaining maximum pressure on Black's central pawn chain. This knight on c3 not only attacks the e4 square (preventing Black from advancing further) but also supports a potential d4 pawn break that could challenge Black's e5 stronghold later. The knight from c3 can also reroute to excellent squares like e4, d5, or even b5 depending on how the position develops. This move keeps all our options open - we could still play d3 and g3 for a King's Indian Attack setup, or we might choose d4 to transpose into other openings entirely."
+      "annotation": "We're developing our knight to its ideal square while maintaining maximum pressure on Black's central pawn chain. This knight on c3 not only attacks the e4 square (preventing Black from advancing further) but also supports a potential d4 pawn break that could challenge Black's e5 stronghold later. The knight from c3 can also reroute to excellent squares like e4, d5, or even b5 depending on how the position develops. This move keeps all our options open - we could still play d3 and g3 for a King's Indian Attack setup, or we might choose d4 to transpose into other openings entirely."
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent mirrors our development by bringing the knight to its most natural square, defending the e5 pawn while preparing to contest central squares. This knight on c6 is perfectly placed to support Black's pawn center and can later jump to active squares like d4 or f4 if the opportunity arises. Black is following sound opening principles by developing pieces toward the center while maintaining the pawn on e5 that gives them a space advantage. The knight also prepares potential pawn advances like d6 and f5, or piece maneuvers like Bc5 and Nge7, depending on how we continue."
+      "annotation": "Our opponent mirrors our development by bringing the knight to its ideal square, defending the e5 pawn while preparing to contest central squares. This knight on c6 is perfectly placed to support Black's pawn center and can later jump to active squares like d4 or f4 if the opportunity arises. Black is following sound opening principles by developing pieces toward the center while maintaining the pawn on e5 that gives them a space advantage. The knight also prepares potential pawn advances like d6 and f5, or piece maneuvers like Bc5 and Nge7, depending on how we continue."
     },
     {
       "san": "Nf3",

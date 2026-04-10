@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending the attacked e4 pawn, maintaining the central tension for now. This move follows the principle of developing pieces before making pawn moves and gives us flexibility - we can still choose later whether to advance e5, retreat with e3, or allow the trade on e4. The knight on c3 also eyes important central squares like d5 and e4, and from here it can potentially jump to more aggressive squares like f4 or e2 depending on how the position develops. By not committing to a specific pawn structure yet, we keep our options open while completing our development."
+      "annotation": "We're developing our knight to its ideal square while defending the attacked e4 pawn, maintaining the central tension for now. This move follows the principle of developing pieces before making pawn moves and gives us flexibility - we can still choose later whether to advance e5, retreat with e3, or allow the trade on e4. The knight on c3 also eyes important central squares like d5 and e4, and from here it can potentially jump to more aggressive squares like f4 or e2 depending on how the position develops. By not committing to a specific pawn structure yet, we keep our options open while completing our development."
     },
     {
       "san": "dxe4",

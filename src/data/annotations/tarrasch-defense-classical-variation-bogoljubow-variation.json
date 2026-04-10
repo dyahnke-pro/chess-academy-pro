@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this active knight development, attacking the e4 square and preventing us from easily advancing our pawn center. This is one of the most principled responses to 1.d4, as it develops a piece while maintaining flexibility in the pawn structure. The knight on f6 also supports Black's potential ...e6 and ...d5 pawn breaks, which are key moves in many Queen's Gambit systems. We need to be prepared for Black to contest the center actively rather than allowing us a free hand in development."
+      "annotation": "Black immediately challenges our central pawn with this active knight development, attacking the e4 square and preventing us from easily advancing our pawn center. This is one of the most principled responses to 1.d4, as it develops a piece while maintaining flexibility in the pawn structure. The knight on f6 also supports Black's potential ...e6 and ...d5 pawn breaks, which are critical moves in many Queen's Gambit systems. We need to be prepared for Black to contest the center actively rather than allowing us a free hand in development."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and adds pressure to Black's anticipated ...d5 advance. This knight placement is crucial in Queen's Gambit systems because it allows us to recapture on d5 with the knight if needed, maintaining central presence. The knight also eyes important central squares like e4 and b5, while keeping our development flexible for various pawn structures. From c3, our knight coordinates beautifully with our other pieces and supports multiple strategic plans depending on how Black continues."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and adds pressure to Black's anticipated ...d5 advance. This knight placement is crucial in Queen's Gambit systems because it allows us to recapture on d5 with the knight if needed, maintaining central presence. The knight also eyes important central squares like e4 and b5, while keeping our development flexible for various pawn structures. From c3, our knight coordinates beautifully with our other pieces and supports multiple strategic plans depending on how Black continues."
     },
     {
       "san": "c5",

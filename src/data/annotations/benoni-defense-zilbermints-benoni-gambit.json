@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while simultaneously preparing to recapture on d4 if Black takes. This knight on f3 also controls the important e5 square, preventing Black from immediately centralizing a piece there. By developing before recapturing the pawn, we're following sound opening principles - piece development often takes priority over material concerns in the opening phase. The knight on f3 also keeps our options open for how we'll handle the central tension, as we can recapture with the knight if needed or potentially ignore the capture and play something else entirely."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while simultaneously preparing to recapture on d4 if Black takes. This knight on f3 also controls the important e5 square, preventing Black from immediately centralizing a piece there. By developing before recapturing the pawn, we're following sound opening principles - piece development often takes priority over material concerns in the opening phase. The knight on f3 also keeps our options open for how we'll handle the central tension, as we can recapture with the knight if needed or potentially ignore the capture and play something else entirely."
     },
     {
       "san": "cxd4",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the c4 pawn and adds additional pressure to Black's d5 strongpoint. From c3, our knight also eyes the important e4 and e2 squares, and can later jump to b5 or a4 in some variations to create queenside pressure. This move is virtually automatic in Queen's Gambit positions because it develops a piece while maintaining all our central tension. The knight placement also keeps open the possibility of playing e4 later if Black's d5 pawn becomes vulnerable or disappears from the board."
+      "annotation": "We're developing our knight to its ideal square, where it supports the c4 pawn and adds additional pressure to Black's d5 strongpoint. From c3, our knight also eyes the important e4 and e2 squares, and can later jump to b5 or a4 in some variations to create queenside pressure. This move is virtually automatic in Queen's Gambit positions because it develops a piece while maintaining all our central tension. The knight placement also keeps open the possibility of playing e4 later if Black's d5 pawn becomes vulnerable or disappears from the board."
     },
     {
       "san": "Be7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We're executing the classic Queen's Gambit pin, targeting Black's knight on f6 and indirectly pressuring the undefended queen on d8. This bishop move serves multiple strategic purposes: it develops a piece actively, creates immediate tactical threats, and often forces Black into slightly awkward defensive measures. The pin makes it difficult for Black to play natural moves like Ne4 or to easily rearrange their kingside pieces. While Black can break this pin in several ways (h6, Be7-f6, or simply ignoring it temporarily), each response comes with its own positional cost, giving us excellent practical chances."
+      "annotation": "We're executing the classic Queen's Gambit pin, targeting Black's knight on f6 and indirectly pressuring the undefended queen on d8. This bishop move serves multiple strategic purposes: it develops a piece actively, creates immediate tactical threats, and often forces Black into slightly awkward defensive measures. The pin makes it difficult for Black to play logical choices like Ne4 or to easily rearrange their kingside pieces. While Black can break this pin in several ways (h6, Be7-f6, or simply ignoring it temporarily), each response comes with its own positional cost, giving us excellent practical chances."
     },
     {
       "san": "h6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "Ne4",
-      "annotation": "Black strikes at the heart of our position by bringing their knight to the powerful e4 outpost, where it attacks both our bishop on h4 and our knight on c3. This is the key move of the Lasker Defense, immediately seizing the initiative and forcing us to make concrete decisions about our piece placement. The Ne4 knight is superbly centralized, controlling important squares like d2, f2, c5, and d6, while also opening up the f6 square for potential piece regrouping. This aggressive knight sortie transforms the position from quiet maneuvering into sharp tactical play, where both sides must calculate precisely to avoid falling into disadvantageous positions."
+      "annotation": "Black strikes at the heart of our position by bringing their knight to the powerful e4 outpost, where it attacks both our bishop on h4 and our knight on c3. This is the central idea of the Lasker Defense, immediately seizing the initiative and forcing us to make concrete decisions about our piece placement. The Ne4 knight is superbly centralized, controlling important squares like d2, f2, c5, and d6, while also opening up the f6 square for potential piece regrouping. This aggressive knight sortie transforms the position from quiet maneuvering into sharp tactical play, where both sides must calculate precisely to avoid falling into disadvantageous positions."
     }
   ]
 }

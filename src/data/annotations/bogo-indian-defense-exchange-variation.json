@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this classical developing move, attacking the d4 pawn and preparing to contest the center with moves like d5 or e5. The knight on f6 is perfectly placed, controlling important central squares like e4 and d5 while maintaining flexibility for Black's setup. This move signals that Black wants to fight for central control rather than allowing us to establish a large pawn center unopposed. From f6, the knight can later jump to different squares depending on how the position develops - perhaps to e4, d5, or even back to d7 if needed."
+      "annotation": "Black immediately challenges our central pawn with this classical developing choice, attacking the d4 pawn and preparing to contest the center with moves like d5 or e5. The knight on f6 is perfectly placed, controlling important central squares like e4 and d5 while maintaining flexibility for Black's setup. This move signals that Black wants to fight for central control rather than allowing us to establish a large pawn center unopposed. From f6, the knight can later jump to different squares depending on how the position develops - perhaps to e4, d5, or even back to d7 if needed."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important e5 and d4 squares while supporting our central pawns. This move also prepares kingside castling and keeps our options open for various pawn structures depending on how Black responds. The knight on f3 is particularly well-placed in Queen's Pawn openings because it can later jump to e5 or d2 if needed, and it doesn't block our e-pawn if we want to play e3 for additional central support. This flexible development move allows us to see what Black's plan is before committing to a specific pawn structure or piece arrangement."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important e5 and d4 squares while supporting our central pawns. This move also prepares kingside castling and keeps our options open for various pawn structures depending on how Black responds. The knight on f3 is particularly well-placed in Queen's Pawn openings because it can later jump to e5 or d2 if needed, and it doesn't block our e-pawn if we want to play e3 for additional central support. This flexible development move allows us to see what Black's plan is before committing to a specific pawn structure or piece arrangement."
     },
     {
       "san": "Bb4+",

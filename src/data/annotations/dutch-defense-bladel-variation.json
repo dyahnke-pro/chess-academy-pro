@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, where it supports our central pawns, prepares potential advances like e4 or d5, and maintains flexibility in our setup. This move is particularly strong because it puts additional pressure on Black's center and prepares us to meet Black's Bg7 with our own piece development, potentially including Bg5 to challenge Black's kingside setup. The knight on c3 also supports our c4 pawn and gives us excellent control over key squares like e4, d5, and b5. From this position, we maintain multiple options - we can continue with solid development via Nf3 and e3, or we might consider more aggressive setups depending on how Black continues, always keeping in mind that we want to challenge Black's kingside ambitions while building our own central and queenside pressure."
+      "annotation": "We're developing our queen's knight to its ideal square, where it supports our central pawns, prepares potential advances like e4 or d5, and maintains flexibility in our setup. This move is particularly strong because it puts additional pressure on Black's center and prepares us to meet Black's Bg7 with our own piece development, potentially including Bg5 to challenge Black's kingside setup. The knight on c3 also supports our c4 pawn and gives us excellent control over key squares like e4, d5, and b5. From this position, we maintain multiple options - we can continue with solid development via Nf3 and e3, or we might consider more aggressive setups depending on how Black continues, always keeping in mind that we want to challenge Black's kingside ambitions while building our own central and queenside pressure."
     },
     {
       "san": "Nh6",

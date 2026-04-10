@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our d4 pawn and preparing kingside castling. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prevents us from playing e4 immediately, which would give us an ideal pawn center. Black is following sound opening principles by developing pieces toward the center while maintaining maximum flexibility for the next few moves."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our d4 pawn and preparing kingside castling. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prevents us from playing e4 immediately, which would give us an ideal pawn center. Black is following sound opening principles by developing pieces toward the center while maintaining maximum flexibility for the next few moves."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're solidifying our pawn structure while preparing to complete our kingside development, supporting the d4 pawn and preparing Be2 followed by castling. This modest but important move also prevents Black from advancing ...d5-d4 at some point, which would give them dangerous central space. The pawn on e3 controls important central squares like d4 and f4, and prepares potential pawn advances like f2-f3 in some variations if we want to support our center further. While not the most aggressive continuation, this move exemplifies the positional nature of the Queen's Gambit - we're building a solid foundation before launching more concrete attacking ideas."
+      "annotation": "We're solidifying our pawn structure while preparing to complete our kingside development, supporting the d4 pawn and preparing Be2 followed by castling. this unassuming but purposeful move also prevents Black from advancing ...d5-d4 at some point, which would give them dangerous central space. The pawn on e3 controls important central squares like d4 and f4, and prepares potential pawn advances like f2-f3 in some variations if we want to support our center further. While not the most aggressive continuation, this move exemplifies the positional nature of the Queen's Gambit - we're building a solid foundation before launching more concrete attacking ideas."
     },
     {
       "san": "Nbd7",

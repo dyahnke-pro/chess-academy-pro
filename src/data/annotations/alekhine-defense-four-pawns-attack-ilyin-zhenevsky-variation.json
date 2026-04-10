@@ -47,11 +47,11 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queenside knight to its most natural square, where it adds pressure to our d4 pawn and prepares to support counterplay in the center. This move follows the principle of rapid development while challenging our pawn center - the knight from c6 eyes important squares like e5, d4, and b4. Our opponent is building up pressure against our extended pawn chain, particularly targeting the d4 pawn which now has to defend itself. The knight also prepares ideas like ...Nb4 or ...Nxd4, directly challenging our central control."
+      "annotation": "Black develops the queenside knight to its ideal square, where it adds pressure to our d4 pawn and prepares to support counterplay in the center. This move follows the principle of rapid development while challenging our pawn center - the knight from c6 eyes important squares like e5, d4, and b4. Our opponent is building up pressure against our extended pawn chain, particularly targeting the d4 pawn which now has to defend itself. The knight also prepares ideas like ...Nb4 or ...Nxd4, directly challenging our central control."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, defending our d4 pawn while preparing to castle kingside for safety. This move is essential development that supports our central pawn structure and prepares to bring our king to safety via castling. The knight from f3 also controls important squares like e5, g5, and h4, supporting both defensive and attacking ideas. Given that our pawns are advanced and potentially vulnerable, getting our king to safety becomes a priority, and Nf3 is the first step in that process."
+      "annotation": "We develop our kingside knight to its ideal square, defending our d4 pawn while preparing to castle kingside for safety. This move is essential development that supports our central pawn structure and prepares to bring our king to safety via castling. The knight from f3 also controls important squares like e5, g5, and h4, supporting both defensive and attacking ideas. Given that our pawns are advanced and potentially vulnerable, getting our king to safety becomes a priority, and Nf3 is the first step in that process."
     },
     {
       "san": "Bg4",

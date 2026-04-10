@@ -85,7 +85,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight and immediately pressures e5. This is the key move — the knight on c6 attacks e5 while preparing to support the queen's entry to e7. Black already has a developed piece while White has none.",
+      "annotation": "Black develops the knight and immediately pressures e5. This is the critical move — the knight on c6 attacks e5 while preparing to support the queen's entry to e7. Black already has a developed piece while White has none.",
       "plans": [
         "Play Qe7 next to add more pressure to e5",
         "Develop pieces rapidly while White figures out defense"

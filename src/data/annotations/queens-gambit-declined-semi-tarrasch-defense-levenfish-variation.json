@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding additional pressure to Black's d5 pawn while preparing to support our central pawn advances. The knight on c3 is beautifully placed, as it can potentially jump to e4, d5, or b5 depending on how the position develops, giving us excellent flexibility in our piece coordination. This move also clears the way for our b1-square and prepares potential queenside expansion with moves like a3 and b4. By developing with tempo (since we're attacking the d5 pawn), we're maintaining the initiative and forcing Black to continue dealing with the central tension rather than focusing purely on their own development."
+      "annotation": "We develop our knight to its ideal square, adding additional pressure to Black's d5 pawn while preparing to support our central pawn advances. The knight on c3 is beautifully placed, as it can potentially jump to e4, d5, or b5 depending on how the position develops, giving us excellent flexibility in our piece coordination. This move also clears the way for our b1-square and prepares potential queenside expansion with moves like a3 and b4. By developing with tempo (since we're attacking the d5 pawn), we're maintaining the initiative and forcing Black to continue dealing with the central tension rather than focusing purely on their own development."
     },
     {
       "san": "Nf6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black follows suit by castling kingside, improving king safety and connecting their rooks while completing their basic kingside development. This natural move brings Black's king's rook into potential play and prepares for the middlegame phase where central pawn breaks and piece maneuvering will become more important. By castling, Black also signals readiness to engage in more complex operations in the center, as their king is now safely positioned away from potential tactical threats. The symmetrical castling also maintains the balanced nature of the position, where both sides have completed their basic development and can now focus on improving their piece positions and fighting for central control."
+      "annotation": "Black follows suit by castling kingside, improving king safety and connecting their rooks while completing their basic kingside development. this move brings Black's king's rook into potential play and prepares for the middlegame phase where central pawn breaks and piece maneuvering will become more important. By castling, Black also signals readiness to engage in more complex operations in the center, as their king is now safely positioned away from potential tactical threats. The symmetrical castling also maintains the balanced nature of the position, where both sides have completed their basic development and can now focus on improving their piece positions and fighting for central control."
     },
     {
       "san": "Qe2",

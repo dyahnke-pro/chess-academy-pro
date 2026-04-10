@@ -19,7 +19,7 @@
     },
     {
       "san": "d4",
-      "annotation": "We establish our central pawn duo with this natural developing move, supporting our advanced pawn and claiming more space in the center. This move controls the crucial c5 and e5 squares, restricting Black's piece placement and preparing to build a classical pawn center. The d4 advance also opens lines for our dark-squared bishop and connects with our plan to play c4, creating the ideal two-pawn center. Now Black must decide how to deal with our space advantage - the pawn on f6 is perfectly placed to recapture our d5 pawn, but we'll have compensation in the form of better central control."
+      "annotation": "We establish our central pawn duo with this active move, supporting our advanced pawn and claiming more space in the center. This move controls the crucial c5 and e5 squares, restricting Black's piece placement and preparing to build a classical pawn center. The d4 advance also opens lines for our dark-squared bishop and connects with our plan to play c4, creating the ideal two-pawn center. Now Black must decide how to deal with our space advantage - the pawn on f6 is perfectly placed to recapture our d5 pawn, but we'll have compensation in the form of better central control."
     },
     {
       "san": "Nxd5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nb4",
-      "annotation": "Black chooses the provocative Kiel Variation, bringing the knight to the rim to attack our a2 pawn and eye the c2 square. This is a sharp, double-edged continuation where our opponent sacrifices the knight's central influence for concrete tactical threats against our position. While the knight looks awkwardly placed on the edge, it's actually quite dangerous here because it can potentially fork our king and rook if we're not careful about our king safety. We need to respond accurately - moves like a3 kick the knight but weaken our queenside, while developing moves like Nf3 or Nc3 allow the knight to remain active, so we must choose our response based on whether we want to enter tactical complications or steer toward quieter play."
+      "annotation": "Black chooses the provocative Kiel Variation, bringing the knight to the rim to attack our a2 pawn and eye the c2 square. This is a sharp, double-edged continuation where our opponent sacrifices the knight's central influence for concrete tactical threats against our position. While the knight looks awkwardly placed on the edge, it's actually quite dangerous here because it can potentially fork our king and rook if we're not careful about our king safety. We need to respond accurately - moves like a3 kick the knight but weaken our queenside, while developing choices like Nf3 or Nc3 allow the knight to remain active, so we must choose our response based on whether we want to enter tactical complications or steer toward quieter play."
     }
   ]
 }

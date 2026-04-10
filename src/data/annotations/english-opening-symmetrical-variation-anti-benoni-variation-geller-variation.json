@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, controlling the important central squares e5 and d4 while preparing kingside castling. This move also keeps maximum flexibility - we're not yet committing to any particular pawn structure in the center, and we can still support a future d4 advance or maintain the more positional English approach. The knight on f3 is perfectly placed to support our pieces and can later redeploy to e5, d4, or even h4 depending on how the position develops. This development also prevents any annoying checks along the a7-g1 diagonal if Black plays an early Bb4+."
+      "annotation": "We develop our kingside knight to its ideal square, controlling the important central squares e5 and d4 while preparing kingside castling. This move also keeps maximum flexibility - we're not yet committing to any particular pawn structure in the center, and we can still support a future d4 advance or maintain the more positional English approach. The knight on f3 is perfectly placed to support our pieces and can later redeploy to e5, d4, or even h4 depending on how the position develops. This development also prevents any annoying checks along the a7-g1 diagonal if Black plays an early Bb4+."
     },
     {
       "san": "Nf6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queenside knight to its most natural square, where it attacks our centralized knight and prepares to challenge our control of the center. This move also opens up possibilities for Black to castle queenside in some lines, though kingside castling remains more common. The knight on c6 puts immediate pressure on our d4 knight, forcing us to make a decision about where to place this important piece. Black is following sound developmental principles while maintaining the pressure - they're not allowing us to simply enjoy our central knight without consequence, and they're preparing their own piece coordination for the coming middlegame."
+      "annotation": "Black develops the queenside knight to its ideal square, where it attacks our centralized knight and prepares to challenge our control of the center. This move also opens up possibilities for Black to castle queenside in some lines, though kingside castling remains more common. The knight on c6 puts immediate pressure on our d4 knight, forcing us to make a decision about where to place this important piece. Black is following sound developmental principles while maintaining the pressure - they're not allowing us to simply enjoy our central knight without consequence, and they're preparing their own piece coordination for the coming middlegame."
     },
     {
       "san": "g3",

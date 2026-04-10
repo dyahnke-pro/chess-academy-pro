@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its most natural square, adding another attacker to the d5 pawn and preparing to recapture on c4 if Black ever takes our gambit pawn. This move follows the classical opening principle of developing knights before bishops, and the knight on c3 eyes important central squares like e4 and d5 while supporting our future e2-e4 pawn break. The knight also prepares potential tactical themes - in some lines, we might even consider Nb5 to attack the a7 and c7 squares. From c3, our knight maintains maximum flexibility and can later redeploy to e2, e4, or a4 depending on how the position develops."
+      "annotation": "We develop our queenside knight to its ideal square, adding another attacker to the d5 pawn and preparing to recapture on c4 if Black ever takes our gambit pawn. This move follows the classical opening principle of developing knights before bishops, and the knight on c3 eyes important central squares like e4 and d5 while supporting our future e2-e4 pawn break. The knight also prepares potential tactical themes - in some lines, we might even consider Nb5 to attack the a7 and c7 squares. From c3, our knight maintains maximum flexibility and can later redeploy to e2, e4, or a4 depending on how the position develops."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We develop our dark-squared bishop to g5, creating an immediate pin on the f6 knight against Black's queen and putting pressure on Black's kingside development. This active bishop placement is characteristic of many Queen's Gambit lines - we're not just developing passively but immediately creating tactical threats that Black must address. The pin makes it difficult for Black to play natural moves like Be7 or h6 without careful consideration, and if Black plays h6, we get the bishop pair after Bxf6. However, we must be prepared for Black's counterplay with moves like c5, which strikes at our center while our bishop is somewhat out of play on the kingside."
+      "annotation": "We develop our dark-squared bishop to g5, creating an immediate pin on the f6 knight against Black's queen and putting pressure on Black's kingside development. This active bishop placement is characteristic of many Queen's Gambit lines - we're not just developing passively but immediately creating tactical threats that Black must address. The pin makes it difficult for Black to play logical choices like Be7 or h6 without careful consideration, and if Black plays h6, we get the bishop pair after Bxf6. However, we must be prepared for Black's counterplay with moves like c5, which strikes at our center while our bishop is somewhat out of play on the kingside."
     },
     {
       "san": "c5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by bringing the knight to f3, defending our d4 pawn while preparing kingside castling and maintaining our central control. This natural developing move follows sound opening principles and keeps our position flexible - the knight on f3 controls important central squares like e5 and d4 while preparing to support our center with moves like e3 if needed. The knight also adds protection to our kingside and prepares potential tactical themes, though we must be aware that Black's pin with Bg5 might become annoying later. From f3, our knight maintains excellent central influence and supports various pawn breaks like e4 when the time is right."
+      "annotation": "We complete our kingside development by bringing the knight to f3, defending our d4 pawn while preparing kingside castling and maintaining our central control. This active move follows sound opening principles and keeps our position flexible - the knight on f3 controls important central squares like e5 and d4 while preparing to support our center with moves like e3 if needed. The knight also adds protection to our kingside and prepares potential tactical themes, though we must be aware that Black's pin with Bg5 might become annoying later. From f3, our knight maintains excellent central influence and supports various pawn breaks like e4 when the time is right."
     },
     {
       "san": "cxd4",

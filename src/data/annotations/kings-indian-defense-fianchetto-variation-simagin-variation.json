@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This move signals that our opponent isn't interested in matching us pawn-for-pawn in the center with moves like d5, but instead wants to pressure our central pawns with pieces. The knight on f6 also supports a future e5 advance and keeps options open for various defensive setups. We need to be prepared for Black to challenge our central control through piece activity rather than pawn advances."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This move signals that our opponent isn't interested in matching us pawn-for-pawn in the center with moves like d5, but instead wants to pressure our central pawns with pieces. The knight on f6 also supports a future e5 advance and keeps options open for various defensive setups. We need to be prepared for Black to challenge our central control through piece activity rather than pawn advances."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our basic development by bringing the knight to f3, where it controls the central e5 square and supports our kingside. This natural move also prepares castling kingside while maintaining pressure on Black's position. The knight on f3 can later support central advances like e4 or help in kingside attacks, giving us excellent flexibility. Most importantly, this move prevents Black from establishing a knight on e4, which could become very annoying if allowed."
+      "annotation": "We complete our basic development by bringing the knight to f3, where it controls the central e5 square and supports our kingside. this move also prepares castling kingside while maintaining pressure on Black's position. The knight on f3 can later support central advances like e4 or help in kingside attacks, giving us excellent flexibility. Most importantly, this move prevents Black from establishing a knight on e4, which could become very annoying if allowed."
     },
     {
       "san": "d6",

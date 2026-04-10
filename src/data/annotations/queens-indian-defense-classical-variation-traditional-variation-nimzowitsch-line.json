@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This move is virtually universal in queen's pawn openings because the knight is so well-placed on f3, eyeing the center and preparing kingside castling. From f3, our knight can later jump to various strong squares like e5, d2, or even h4 in some tactical sequences. The development also keeps maximum flexibility in our setup, as we haven't yet committed to how we'll arrange our bishops or whether we'll fianchetto on the kingside."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This move is virtually universal in queen's pawn openings because the knight is so well-placed on f3, eyeing the center and preparing kingside castling. From f3, our knight can later jump to various strong squares like e5, d2, or even h4 in some tactical sequences. The development also keeps maximum flexibility in our setup, as we haven't yet committed to how we'll arrange our bishops or whether we'll fianchetto on the kingside."
     },
     {
       "san": "b6",

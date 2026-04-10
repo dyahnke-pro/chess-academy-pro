@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its best square where it controls the central e4 and d5 squares. This is a flexible choice that doesn't commit to any particular pawn structure yet - Black could still transpose into various defenses like the Queen's Gambit Declined, King's Indian, Nimzo-Indian, or Queen's Indian depending on our next moves. The knight on f6 also puts immediate pressure on our d4 pawn, forcing us to make a decision about how to support our center. This move exemplifies the modern approach of developing pieces before committing pawns, keeping maximum options open."
+      "annotation": "Black responds with the most active move, bringing the knight to its best square where it controls the central e4 and d5 squares. This is a flexible choice that doesn't commit to any particular pawn structure yet - Black could still transpose into various defenses like the Queen's Gambit Declined, King's Indian, Nimzo-Indian, or Queen's Indian depending on our next moves. The knight on f6 also puts immediate pressure on our d4 pawn, forcing us to make a decision about how to support our center. This move exemplifies the modern approach of developing pieces before committing pawns, keeping maximum options open."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This natural developing move also prepares kingside castling and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support future advances like e4 or to reposition via e5 or g5 depending on how the position develops. Additionally, this move follows the classical principle of developing pieces toward the center while maintaining flexibility in our setup."
+      "annotation": "We're developing our knight to its most active square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This active move also prepares kingside castling and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support future advances like e4 or to reposition via e5 or g5 depending on how the position develops. Additionally, this move follows the classical principle of developing pieces toward the center while maintaining flexibility in our setup."
     },
     {
       "san": "d5",
@@ -47,11 +47,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black completes their basic development by castling kingside, bringing the king to safety and connecting the rooks. This natural move follows the opening principle of getting the king safe before pursuing more complex plans. Castling also activates the rook on f8, which can become important for defending the f6 knight or supporting central operations. By castling, Black is also signaling that they're ready to enter the middlegame phase where more concrete plans will need to be formulated."
+      "annotation": "Black completes their basic development by castling kingside, bringing the king to safety and connecting the rooks. this move follows the opening principle of getting the king safe before pursuing more complex plans. Castling also activates the rook on f8, which can become important for defending the f6 knight or supporting central operations. By castling, Black is also signaling that they're ready to enter the middlegame phase where more concrete plans will need to be formulated."
     },
     {
       "san": "e3",
-      "annotation": "We're solidifying our center with this quiet but important move, supporting our d4 pawn and preparing to complete our development. This move opens a diagonal for our light-squared bishop while creating a solid pawn structure that's hard for Black to undermine. The e3 advance also prepares potential central advances like f4-f5 in some lines, though this is more of a long-term idea. Additionally, this move supports our overall strategy of maintaining central control while gradually improving our piece positions before committing to any concrete plans."
+      "annotation": "We're solidifying our center with this purposeful move, supporting our d4 pawn and preparing to complete our development. This move opens a diagonal for our light-squared bishop while creating a solid pawn structure that's hard for Black to undermine. The e3 advance also prepares potential central advances like f4-f5 in some lines, though this is more of a long-term idea. Additionally, this move supports our overall strategy of maintaining central control while gradually improving our piece positions before committing to any concrete plans."
     },
     {
       "san": "Ne4",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, adding another defender to our d4 pawn while preparing to castle kingside quickly. This knight placement also gives us additional control over the central e5 square and prepares potential advances like e4 if Black's central setup allows it. The knight on f3 is perfectly placed to support our central pawn majority and can later jump to more active squares like e5 or g5 depending on how the position develops. This move maintains maximum flexibility while keeping the pressure on Black's position."
+      "annotation": "We develop our king's knight to its ideal square, adding another defender to our d4 pawn while preparing to castle kingside quickly. This knight placement also gives us additional control over the central e5 square and prepares potential advances like e4 if Black's central setup allows it. The knight on f3 is perfectly placed to support our central pawn majority and can later jump to more active squares like e5 or g5 depending on how the position develops. This move maintains maximum flexibility while keeping the pressure on Black's position."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We bring our queen's knight into the game, adding a third attacker to Black's d5 pawn and increasing the central pressure significantly. This natural developing move also prepares various strategic plans including e4 (if Black ever moves the d5 pawn), Bg5 pinning the knight on f6, or simply continuing with solid development via Be2 and castling. The knight on c3 is perfectly centralized and can later redeploy to more active squares like e4, d5, or even b5 depending on the position's requirements. This move epitomizes the Queen's Gambit approach: steady development while maintaining constant pressure on Black's central structure."
+      "annotation": "We bring our queen's knight into the game, adding a third attacker to Black's d5 pawn and increasing the central pressure significantly. This active move also prepares various strategic plans including e4 (if Black ever moves the d5 pawn), Bg5 pinning the knight on f6, or simply continuing with solid development via Be2 and castling. The knight on c3 is perfectly centralized and can later redeploy to more active squares like e4, d5, or even b5 depending on the position's requirements. This move epitomizes the Queen's Gambit approach: steady development while maintaining constant pressure on Black's central structure."
     },
     {
       "san": "Nbd7",

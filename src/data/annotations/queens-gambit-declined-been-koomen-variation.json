@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, where it supports the c4 pawn, adds pressure to the central d5 point, and prepares to castle kingside after developing our light-squared bishop. The knight on c3 is perfectly placed for Queen's Gambit structures, as it can later jump to e4 or b5 depending on how the position develops, and it doesn't block the c-file for our rook. This move also keeps maximum flexibility in our position - we haven't committed to any specific piece arrangement yet and can adapt our setup based on Black's defensive choice. By developing the knight before the bishops, we're following classical opening principles while maintaining all our strategic options in this rich opening system."
+      "annotation": "We're developing our queen's knight to its ideal square, where it supports the c4 pawn, adds pressure to the central d5 point, and prepares to castle kingside after developing our light-squared bishop. The knight on c3 is perfectly placed for Queen's Gambit structures, as it can later jump to e4 or b5 depending on how the position develops, and it doesn't block the c-file for our rook. This move also keeps maximum flexibility in our position - we haven't committed to any specific piece arrangement yet and can adapt our setup based on Black's defensive choice. By developing the knight before the bishops, we're following classical opening principles while maintaining all our strategic options in this rich opening system."
     },
     {
       "san": "Nf6",

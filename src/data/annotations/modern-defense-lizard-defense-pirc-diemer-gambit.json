@@ -15,11 +15,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to support the center from this active post. This is a logical response that brings a piece into the game while putting pressure on our central pawn structure. The knight on f6 also helps defend the kingside, which becomes important given our aggressive h4-h5 pawn storm. However, Black is still behind in development and hasn't addressed the immediate tactical threats we're creating on the kingside with our pawn advances."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to support the center from this active post. This is a logical response that brings a piece into the game while putting pressure on our central pawn structure. The knight on f6 also helps defend the kingside, which becomes important given our aggressive h4-h5 pawn storm. However, Black is still behind in development and hasn't addressed the immediate tactical threats we're creating on the kingside with our pawn advances."
     },
     {
       "san": "h5",
-      "annotation": "We continue our aggressive pawn storm, advancing the h-pawn to create a wedge on the kingside and restrict Black's pawn structure. This move threatens to advance further to h6, where it would severely weaken Black's kingside dark squares and potentially trap the g7 bishop after it develops. The h5 advance is the key move of the Lizard Defense variation, creating immediate tactical complications that Black must handle carefully. By pushing forward so aggressively, we're forcing Black into defensive mode before completing normal development, which often leads to positions where Black struggles to coordinate pieces effectively while dealing with our concrete threats."
+      "annotation": "We continue our aggressive pawn storm, advancing the h-pawn to create a wedge on the kingside and restrict Black's pawn structure. This move threatens to advance further to h6, where it would severely weaken Black's kingside dark squares and potentially trap the g7 bishop after it develops. The h5 advance is the central idea of the Lizard Defense variation, creating immediate tactical complications that Black must handle carefully. By pushing forward so aggressively, we're forcing Black into defensive mode before completing normal development, which often leads to positions where Black struggles to coordinate pieces effectively while dealing with our concrete threats."
     }
   ]
 }

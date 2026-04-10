@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the king's knight, attacking the d4 square and preparing to contest our control of the center. This is the most natural developing move, bringing a piece toward the center while keeping maximum flexibility for Black's setup. The knight on f6 also prepares potential pawn breaks like ...e5 or ...c5, and it's heading toward an active square where it influences both the center and kingside. This move is the starting point for many of Black's most respected defensive systems, including the Nimzo-Indian we're about to enter."
+      "annotation": "Black immediately challenges our central pawn with the king's knight, attacking the d4 square and preparing to contest our control of the center. This is the most active move, bringing a piece toward the center while keeping maximum flexibility for Black's setup. The knight on f6 also prepares potential pawn breaks like ...e5 or ...c5, and it's heading toward an active square where it influences both the center and kingside. This move is the starting point for many of Black's most respected defensive systems, including the Nimzo-Indian we're about to enter."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, adding additional pressure to the d5 square and preparing to support our central pawn structure. This knight also eyes the important e4 and b5 squares, giving us potential outposts for future piece maneuvering. The knight on c3 is perfectly placed to support our c4 pawn and can later jump to other active squares like e4, d5, or even a4 in some lines. This move also prepares us to meet Black's most challenging response - the Nimzo-Indian Defense with ...Bb4, which is exactly what we're about to face."
+      "annotation": "We're developing our queen's knight to its ideal square, adding additional pressure to the d5 square and preparing to support our central pawn structure. This knight also eyes the important e4 and b5 squares, giving us potential outposts for future piece maneuvering. The knight on c3 is perfectly placed to support our c4 pawn and can later jump to other active squares like e4, d5, or even a4 in some lines. This move also prepares us to meet Black's most challenging response - the Nimzo-Indian Defense with ...Bb4, which is exactly what we're about to face."
     },
     {
       "san": "Bb4",

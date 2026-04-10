@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn while supporting the center and preparing kingside development. This knight on f6 is a key defender of Black's kingside, particularly the h7 square and the dark squares around the king. The knight also eyes the important e4 square, working together with the f5 pawn to prevent our central expansion. From f6, this knight can potentially jump to more active squares like e4 or h5 later in the game, depending on how the position develops."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn while supporting the center and preparing kingside development. This knight on f6 is a key defender of Black's kingside, particularly the h7 square and the dark squares around the king. The knight also eyes the important e4 square, working together with the f5 pawn to prevent our central expansion. From f6, this knight can potentially jump to more active squares like e4 or h5 later in the game, depending on how the position develops."
     },
     {
       "san": "g3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important e5 and h4 squares while supporting our kingside development. This knight placement is particularly effective against the Dutch Defense because it can potentially jump to e5 or h4 to create tactical threats later. The knight on f3 also supports a future e2-e4 central break and prepares castling kingside to complete our development. From f3, our knight maintains maximum flexibility and can redeploy to different squares based on how Black continues - whether to d2 to support e4, or to e5 for more aggressive play."
+      "annotation": "We develop our knight to its ideal square, where it controls the important e5 and h4 squares while supporting our kingside development. This knight placement is particularly effective against the Dutch Defense because it can potentially jump to e5 or h4 to create tactical threats later. The knight on f3 also supports a future e2-e4 central break and prepares castling kingside to complete our development. From f3, our knight maintains maximum flexibility and can redeploy to different squares based on how Black continues - whether to d2 to support e4, or to e5 for more aggressive play."
     }
   ]
 }

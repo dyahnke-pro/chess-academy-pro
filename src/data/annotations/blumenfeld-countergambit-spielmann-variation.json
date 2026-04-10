@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, controlling the central e5 and d4 squares while preparing kingside castling. This move supports our d4 pawn and prevents Black from immediately jumping a knight to e4, which could be annoying. The knight on f3 also prepares potential pawn storms on the kingside with moves like h3 and g4 if the position calls for it. Most importantly, we're following the principle of developing pieces toward the center before committing to any particular pawn structure, keeping maximum flexibility in our setup."
+      "annotation": "We're developing our king's knight to its ideal square, controlling the central e5 and d4 squares while preparing kingside castling. This move supports our d4 pawn and prevents Black from immediately jumping a knight to e4, which could be annoying. The knight on f3 also prepares potential pawn storms on the kingside with moves like h3 and g4 if the position calls for it. Most importantly, we're following the principle of developing pieces toward the center before committing to any particular pawn structure, keeping maximum flexibility in our setup."
     },
     {
       "san": "c5",

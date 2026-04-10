@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 pawn and supporting our own central presence. This move exemplifies perfect opening play - we're developing with tempo by creating an immediate threat that Black must address. The knight from f3 also eyes the important d4 and e5 central squares, and potentially supports a future d2-d4 pawn break. Additionally, this development move prepares kingside castling and keeps all our options open for how we'll continue our piece development."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 pawn and supporting our own central presence. This move exemplifies perfect opening play - we're developing with tempo by creating an immediate threat that Black must address. The knight from f3 also eyes the important d4 and e5 central squares, and potentially supports a future d2-d4 pawn break. Additionally, this development move prepares kingside castling and keeps all our options open for how we'll continue our piece development."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the attacked e5 pawn while simultaneously developing a piece toward the center, showing good opening instincts. This knight development contests our control of the d4 square and supports potential future advances like ...d6 and ...f5. Our opponent is following classical principles by meeting our threat with a developing move rather than a passive pawn defense. The knight on c6 also keeps Black's options flexible - it can later retreat to defend, advance to attack, or support central pawn breaks."
+      "annotation": "Black defends the attacked e5 pawn while simultaneously developing a piece toward the center, showing good opening instincts. This knight development contests our control of the d4 square and supports potential future advances like ...d6 and ...f5. Our opponent is following classical principles by meeting our threat with a developing choice rather than a passive pawn defense. The knight on c6 also keeps Black's options flexible - it can later retreat to defend, advance to attack, or support central pawn breaks."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 pawn and preparing to castle kingside. This move completes Black's basic piece development while creating counter-pressure in the center. Our opponent is also preparing the solid ...Be7 setup, which will allow safe castling while maintaining a strong defensive structure. The knight on f6 supports potential pawn breaks like ...d6 and later ...d5, giving Black active possibilities despite the pin on the c6 knight."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our e4 pawn and preparing to castle kingside. This move completes Black's basic piece development while creating counter-pressure in the center. Our opponent is also preparing the solid ...Be7 setup, which will allow safe castling while maintaining a strong defensive structure. The knight on f6 supports potential pawn breaks like ...d6 and later ...d5, giving Black active possibilities despite the pin on the c6 knight."
     },
     {
       "san": "O-O",
@@ -71,7 +71,7 @@
     },
     {
       "san": "Re8",
-      "annotation": "Black brings the rook to the e-file, adding support to the central e5 pawn and preparing for the coming central battle. This move is the signature of the Zaitsev System - by overprotecting e5, Black prepares to meet our d2-d4 advance with confidence. The rook on e8 also supports potential piece regrouping and maintains flexibility for various defensive setups. This is the key move that defines this variation of the Closed Ruy Lopez, where Black builds a solid but active position ready to meet our central advance."
+      "annotation": "Black brings the rook to the e-file, adding support to the central e5 pawn and preparing for the coming central battle. This move is the signature of the Zaitsev System - by overprotecting e5, Black prepares to meet our d2-d4 advance with confidence. The rook on e8 also supports potential piece regrouping and maintains flexibility for various defensive setups. This is the defining move of this variation of the Closed Ruy Lopez, where Black builds a solid but active position ready to meet our central advance."
     }
   ]
 }

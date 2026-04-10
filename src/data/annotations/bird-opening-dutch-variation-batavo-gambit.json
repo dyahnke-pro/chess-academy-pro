@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our attacked e4 pawn and controls the central squares d4 and e5. This move keeps the tension in the center rather than immediately capturing on d5, which would release the central pressure and give Black comfortable development. From f3, our knight can potentially jump to g5 later to create attacking chances, or retreat to e2 if Black pushes d5-d4. The knight development also prepares castling kingside and maintains flexibility in how we handle the central tension - we can still consider exd5 if the position calls for it, or maintain the pawn on e4 if Black captures."
+      "annotation": "We develop our knight to its ideal square, where it supports our attacked e4 pawn and controls the central squares d4 and e5. This move keeps the tension in the center rather than immediately capturing on d5, which would release the central pressure and give Black comfortable development. From f3, our knight can potentially jump to g5 later to create attacking chances, or retreat to e2 if Black pushes d5-d4. The knight development also prepares castling kingside and maintains flexibility in how we handle the central tension - we can still consider exd5 if the position calls for it, or maintain the pawn on e4 if Black captures."
     },
     {
       "san": "dxe4",

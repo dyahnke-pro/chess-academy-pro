@@ -23,7 +23,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays the most natural developing move, supporting their e5 pawn while preparing to develop the knight to f6 and potentially fianchetto the king's bishop on g7. This solid move shows that our opponent understands they need to consolidate their position before attempting any aggressive counterplay. The d6 pawn also opens a potential retreat square for the light-squared bishop should it develop to c5 or b4, and it prepares the typical Benoni setup where Black's pieces coordinate harmoniously despite the space disadvantage. From here, Black will likely continue with Nf6, g6, Bg7, and castling, creating a solid but somewhat passive position that can become dangerous if we're not careful about overextending our position."
+      "annotation": "Black plays the most active move, supporting their e5 pawn while preparing to develop the knight to f6 and potentially fianchetto the king's bishop on g7. this stabilizing move shows that our opponent understands they need to consolidate their position before attempting any aggressive counterplay. The d6 pawn also opens a potential retreat square for the light-squared bishop should it develop to c5 or b4, and it prepares the typical Benoni setup where Black's pieces coordinate harmoniously despite the space disadvantage. From here, Black will likely continue with Nf6, g6, Bg7, and castling, creating a solid but somewhat passive position that can become dangerous if we're not careful about overextending our position."
     }
   ]
 }

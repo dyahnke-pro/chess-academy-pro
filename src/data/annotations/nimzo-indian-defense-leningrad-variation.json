@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another defender to our d4 pawn while preparing to increase central pressure and support potential pawn advances like e4. This move is almost automatic in the Queen's Gambit system, as the knight controls important central squares and prepares our kingside development. However, we've also given Black the opportunity to play the Nimzo-Indian Defense with ...Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 is perfectly placed for the middlegame, supporting both central control and potential kingside attacking chances."
+      "annotation": "We're developing our knight to its ideal square, adding another defender to our d4 pawn while preparing to increase central pressure and support potential pawn advances like e4. This move is almost automatic in the Queen's Gambit system, as the knight controls important central squares and prepares our kingside development. However, we've also given Black the opportunity to play the Nimzo-Indian Defense with ...Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 is perfectly placed for the middlegame, supporting both central control and potential kingside attacking chances."
     },
     {
       "san": "Bb4",

@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important e5 and h4 squares while supporting our central pawn on d4. This move is flexible and non-committal, keeping our options open for various pawn structures and piece setups that might arise. The knight on f3 also prepares to castle kingside and works well with almost any setup we might choose in the Queen's Gambit complex. By developing pieces before making further pawn moves, we're following classical opening principles while maintaining maximum flexibility in our approach."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important e5 and h4 squares while supporting our central pawn on d4. This move is flexible and non-committal, keeping our options open for various pawn structures and piece setups that might arise. The knight on f3 also prepares to castle kingside and works well with almost any setup we might choose in the Queen's Gambit complex. By developing pieces before making further pawn moves, we're following classical opening principles while maintaining maximum flexibility in our approach."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its ideal square, attacking our e4 square and preparing to castle kingside for safety. This natural developing move fits perfectly with the Slav Defense philosophy of solid, classical development while maintaining central tension. Our opponent's knight also eyes the important d5 and h5 squares, and works harmoniously with the pawn structure Black has chosen. The knight on f6 is also preparing to support Black's potential ...dxc4 capture, as it will help control the center after the pawn trade."
+      "annotation": "Black develops the king's knight to its ideal square, attacking our e4 square and preparing to castle kingside for safety. This active move fits perfectly with the Slav Defense philosophy of solid, classical development while maintaining central tension. Our opponent's knight also eyes the important d5 and h5 squares, and works harmoniously with the pawn structure Black has chosen. The knight on f6 is also preparing to support Black's potential ...dxc4 capture, as it will help control the center after the pawn trade."
     },
     {
       "san": "Nc3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops the light-squared bishop to its ideal square in the Slav Defense, where it's active, safe, and supports Black's central control while preparing to castle. This is the key move of the Czech Variation - the bishop on f5 can't be easily attacked and controls important central squares like e4 and d3. Our opponent is following the main theoretical line, developing pieces quickly while maintaining the extra pawn and creating good piece coordination. The bishop also prepares potential tactics involving ...e6 and supports Black's kingside development, making this one of Black's most reliable setups in the Slav Defense."
+      "annotation": "Black develops the light-squared bishop to its ideal square in the Slav Defense, where it's active, safe, and supports Black's central control while preparing to castle. This is the central idea of the Czech Variation - the bishop on f5 can't be easily attacked and controls important central squares like e4 and d3. Our opponent is following the main theoretical line, developing pieces quickly while maintaining the extra pawn and creating good piece coordination. The bishop also prepares potential tactics involving ...e6 and supports Black's kingside development, making this one of Black's most reliable setups in the Slav Defense."
     }
   ]
 }

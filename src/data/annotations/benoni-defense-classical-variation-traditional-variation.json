@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, immediately attacking our central pawn and preparing to contest our control of the center. This move is incredibly flexible, keeping Black's options open for various defensive setups including the King's Indian, Nimzo-Indian, or as we'll see, the Benoni Defense. The knight on f6 also supports a potential ...e5 advance and prepares kingside castling. Black is following the fundamental opening principle of developing pieces toward the center while maintaining maximum flexibility in pawn structure."
+      "annotation": "Our opponent develops the knight to its ideal square, immediately attacking our central pawn and preparing to contest our control of the center. This move is incredibly flexible, keeping Black's options open for various defensive setups including the King's Indian, Nimzo-Indian, or as we'll see, the Benoni Defense. The knight on f6 also supports a potential ...e5 advance and prepares kingside castling. Black is following the fundamental opening principle of developing pieces toward the center while maintaining maximum flexibility in pawn structure."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, supporting our d4 pawn and preparing to castle kingside while maintaining maximum flexibility in our setup. This natural developing move also prepares for potential tactical themes, as the knight on f3 can support central advances or jump to more active squares like e5 or g5 in certain positions. The knight placement doesn't commit us to any particular pawn structure yet, allowing us to respond flexibly to Black's setup. This move harmonizes perfectly with our broad pawn center and keeps all our strategic options open."
+      "annotation": "We develop our knight to its optimal square, supporting our d4 pawn and preparing to castle kingside while maintaining maximum flexibility in our setup. This active move also prepares for potential tactical themes, as the knight on f3 can support central advances or jump to more active squares like e5 or g5 in certain positions. The knight placement doesn't commit us to any particular pawn structure yet, allowing us to respond flexibly to Black's setup. This move harmonizes perfectly with our broad pawn center and keeps all our strategic options open."
     },
     {
       "san": "c5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting our advanced d5 pawn while preparing to increase pressure on Black's position. The knight on c3 controls important central squares and can later jump to more aggressive posts like e4 or b5, depending on how the position develops. This natural developing move also prepares our kingside development and maintains flexibility in our setup. The knight placement harmonizes well with our space advantage and prepares potential tactical themes in the center."
+      "annotation": "We develop our knight to its most active square, supporting our advanced d5 pawn while preparing to increase pressure on Black's position. The knight on c3 controls important central squares and can later jump to more aggressive posts like e4 or b5, depending on how the position develops. This active move also prepares our kingside development and maintains flexibility in our setup. The knight placement harmonizes well with our space advantage and prepares potential tactical themes in the center."
     },
     {
       "san": "g6",

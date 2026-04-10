@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, supporting our d4 pawn while preparing to castle kingside safely. The knight on f3 also controls the important e5 square, preventing Black from advancing their e-pawn and establishing a strong central presence. This move fits perfectly with our opening strategy - we're developing pieces toward the center while maintaining flexibility in our pawn structure. From f3, our knight can later jump to e5 for active play, or redeploy to d2 and then to more aggressive squares like f1-e3 or even h4 in some lines, depending on how the position develops."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our d4 pawn while preparing to castle kingside safely. The knight on f3 also controls the important e5 square, preventing Black from advancing their e-pawn and establishing a strong central presence. This move fits perfectly with our opening strategy - we're developing pieces toward the center while maintaining flexibility in our pawn structure. From f3, our knight can later jump to e5 for active play, or redeploy to d2 and then to more aggressive squares like f1-e3 or even h4 in some lines, depending on how the position develops."
     },
     {
       "san": "b6",

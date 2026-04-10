@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to complete our kingside development. This knight placement is almost universal in Queen's Pawn openings, as it controls important central squares like e4 and d5 while keeping our options open for various setups. However, we need to be aware that this knight can become a target for Black's light-squared bishop, which can come to b4 with a pin - a key motif in the Nimzo-Indian Defense. The knight also prepares potential e2-e4 advances in some variations, giving us central space and piece activity."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to complete our kingside development. This knight placement is almost universal in Queen's Pawn openings, as it controls important central squares like e4 and d5 while keeping our options open for various setups. However, we need to be aware that this knight can become a target for Black's light-squared bishop, which can come to b4 with a pin - a key motif in the Nimzo-Indian Defense. The knight also prepares potential e2-e4 advances in some variations, giving us central space and piece activity."
     },
     {
       "san": "Bb4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development by bringing the knight to its most active square, where it controls the central e5 and d4 squares while preparing kingside castling. This natural developing move doesn't directly address the pin on c3, but it's part of our systematic approach to piece development in the opening. The knight on f3 also supports a potential e2-e4 advance and gives us tactical possibilities involving knight jumps to e5 or g5 in certain positions. We're prioritizing development over immediately resolving the pin, trusting that our active pieces will give us adequate compensation for any structural concessions."
+      "annotation": "We're completing our kingside development by bringing the knight to its most active square, where it controls the central e5 and d4 squares while preparing kingside castling. This active move doesn't directly address the pin on c3, but it's part of our systematic approach to piece development in the opening. The knight on f3 also supports a potential e2-e4 advance and gives us tactical possibilities involving knight jumps to e5 or g5 in certain positions. We're prioritizing development over immediately resolving the pin, trusting that our active pieces will give us adequate compensation for any structural concessions."
     },
     {
       "san": "b6",

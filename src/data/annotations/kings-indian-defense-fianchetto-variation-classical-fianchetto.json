@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, controlling the central e5 and d4 squares while preparing kingside castling. This move also supports a potential e2-e4 pawn advance later, which would give us a classical pawn center. The knight on f3 works harmoniously with our planned fianchetto on g2, creating a solid foundation for piece coordination and central control throughout the middlegame."
+      "annotation": "We develop our king's knight to its ideal square, controlling the central e5 and d4 squares while preparing kingside castling. This move also supports a potential e2-e4 pawn advance later, which would give us a classical pawn center. The knight on f3 works harmoniously with our planned fianchetto on g2, creating a solid foundation for piece coordination and central control throughout the middlegame."
     },
     {
       "san": "Bg7",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its most natural square, supporting our d4 pawn and preparing to contest Black's upcoming ...e5 pawn break. This move also opens up possibilities for our light-squared bishop to develop to f4 or g5, putting additional pressure on Black's position. The knight on c3 gives us more central control and prepares various strategic ideas, including potential queenside expansion with b2-b4 or central reinforcement if Black plays ...e5."
+      "annotation": "We develop our queenside knight to its ideal square, supporting our d4 pawn and preparing to contest Black's upcoming ...e5 pawn break. This move also opens up possibilities for our light-squared bishop to develop to f4 or g5, putting additional pressure on Black's position. The knight on c3 gives us more central control and prepares various strategic ideas, including potential queenside expansion with b2-b4 or central reinforcement if Black plays ...e5."
     },
     {
       "san": "e5",

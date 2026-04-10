@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most principled response, as our opponent is fighting for their fair share of the center rather than allowing us to dominate it completely. Black's move prepares to develop the light-squared bishop and maintains symmetry in the center for now. However, by playing this natural move, Black is walking directly into our gambit preparation, which is exactly what we want to see."
+      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most principled response, as our opponent is fighting for their fair share of the center rather than allowing us to dominate it completely. Black's move prepares to develop the light-squared bishop and maintains symmetry in the center for now. However, by playing this move, Black is walking directly into our gambit preparation, which is exactly what we want to see."
     },
     {
       "san": "e4",
@@ -23,11 +23,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending the e4 pawn while bringing a piece into active play. This is considered one of the strongest defenses to the BDG because the knight serves multiple purposes: it protects the extra pawn, controls important central squares like d5 and e4, and prepares castling kingside. Our opponent is following sound developmental principles while trying to consolidate their material advantage. However, this knight placement also allows us to continue our aggressive plan with f2-f3, putting even more pressure on Black's position."
+      "annotation": "Black develops their knight to its ideal square, defending the e4 pawn while bringing a piece into active play. This is considered one of the strongest defenses to the BDG because the knight serves multiple purposes: it protects the extra pawn, controls important central squares like d5 and e4, and prepares castling kingside. Our opponent is following sound developmental principles while trying to consolidate their material advantage. However, this knight placement also allows us to continue our aggressive plan with f2-f3, putting even more pressure on Black's position."
     },
     {
       "san": "f3",
-      "annotation": "This is the key move of the Blackmar-Diemer Gambit - we're offering a second pawn to blast open the center and accelerate our development! While f2-f3 looks weakening (and it does create holes around our king), the tactical justification is enormous: if Black captures with exf3, we'll recapture with the knight and have rapid development of all our pieces. We're prioritizing piece activity and attacking chances over pawn structure and king safety, which is the essence of gambit play. This move also prepares to bring our light-squared bishop into the game via c4 or d3, adding to the mounting pressure on Black's position."
+      "annotation": "This is the central idea of the Blackmar-Diemer Gambit - we're offering a second pawn to blast open the center and accelerate our development! While f2-f3 looks weakening (and it does create holes around our king), the tactical justification is enormous: if Black captures with exf3, we'll recapture with the knight and have rapid development of all our pieces. We're prioritizing piece activity and attacking chances over pawn structure and king safety, which is the essence of gambit play. This move also prepares to bring our light-squared bishop into the game via c4 or d3, adding to the mounting pressure on Black's position."
     },
     {
       "san": "exf3",

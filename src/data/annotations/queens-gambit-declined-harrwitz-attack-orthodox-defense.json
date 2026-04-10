@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding extra pressure to Black's d5 pawn and preparing to support our central advance with moves like e4 or f3 later. The knight on c3 is perfectly placed in Queen's Gambit structures, as it can potentially jump to e4 or b5 depending on how the position develops. This move also prepares our next phase of development, likely involving Nf3 and then deciding between various bishop deployments. We're following classical opening principles by developing with tempo (attacking the d5 pawn) while keeping maximum flexibility for our remaining pieces."
+      "annotation": "We develop our knight to its ideal square, adding extra pressure to Black's d5 pawn and preparing to support our central advance with moves like e4 or f3 later. The knight on c3 is perfectly placed in Queen's Gambit structures, as it can potentially jump to e4 or b5 depending on how the position develops. This move also prepares our next phase of development, likely involving Nf3 and then deciding between various bishop deployments. We're following classical opening principles by developing with tempo (attacking the d5 pawn) while keeping maximum flexibility for our remaining pieces."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight with tempo, attacking our e4 square and preventing us from establishing a broad pawn center immediately. This is the most natural developing move, as the knight controls important central squares and prepares to support Black's kingside development. Our opponent is following the standard plan in the Queen's Gambit Declined: develop the kingside pieces quickly, castle early, and then worry about the somewhat problematic light-squared bishop later. We should note that Black's knight is well-placed here, but we can potentially challenge it later with moves like h3 and g4 if we choose a more aggressive setup."
+      "annotation": "Black develops their knight with tempo, attacking our e4 square and preventing us from establishing a broad pawn center immediately. This is the most active move, as the knight controls important central squares and prepares to support Black's kingside development. Our opponent is following the standard plan in the Queen's Gambit Declined: develop the kingside pieces quickly, castle early, and then worry about the somewhat problematic light-squared bishop later. We should note that Black's knight is well-placed here, but we can potentially challenge it later with moves like h3 and g4 if we choose a more aggressive setup."
     },
     {
       "san": "Nf3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops their dark-squared bishop to a solid square, preparing to castle and maintaining flexibility for their pawn structure. The bishop on e7 doesn't create immediate threats, but it's a practical developing move that keeps Black's options open for various defensive setups. Our opponent is clearly prioritizing king safety and solid development over more ambitious piece placements, which tells us they're comfortable playing a slightly passive but sound position. We should recognize this as a signal that Black is hoping to equalize through careful piece coordination rather than sharp tactics, so we might want to consider more forcing continuations to maintain our opening initiative."
+      "annotation": "Black develops their dark-squared bishop to a solid square, preparing to castle and maintaining flexibility for their pawn structure. The bishop on e7 doesn't create immediate threats, but it's a practical developing choice that keeps Black's options open for various defensive setups. Our opponent is clearly prioritizing king safety and solid development over more ambitious piece placements, which tells us they're comfortable playing a slightly passive but sound position. We should recognize this as a signal that Black is hoping to equalize through careful piece coordination rather than sharp tactics, so we might want to consider more forcing continuations to maintain our opening initiative."
     },
     {
       "san": "Bf4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We solidify our center with this quiet but important move, supporting our d4 pawn and preparing to complete our kingside development with Be2 and castling. While e3 might look passive compared to more aggressive alternatives like e4, it's actually a sophisticated choice that maintains our central stability while preparing to reroute our pieces for maximum effectiveness. This move also opens up the possibility of playing f4-f5 later if Black doesn't react energetically, and it ensures our king will be safe after castling. The pawn on e3 also supports potential knight maneuvers to d5 or f5, giving us excellent piece coordination in the coming middlegame."
+      "annotation": "We solidify our center with this purposeful move, supporting our d4 pawn and preparing to complete our kingside development with Be2 and castling. While e3 might look passive compared to more aggressive alternatives like e4, it's actually a sophisticated choice that maintains our central stability while preparing to reroute our pieces for maximum effectiveness. This move also opens up the possibility of playing f4-f5 later if Black doesn't react energetically, and it ensures our king will be safe after castling. The pawn on e3 also supports potential knight maneuvers to d5 or f5, giving us excellent piece coordination in the coming middlegame."
     },
     {
       "san": "c6",

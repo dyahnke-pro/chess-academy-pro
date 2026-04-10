@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn and preparing kingside castling. This move also controls the important e5 and g5 squares, preventing Black from easily advancing in the center or launching quick attacks. The knight on f3 is perfectly placed to support our central pawn structure while maintaining flexibility - it can later jump to e5, g5, or even h4 in some variations. Our development follows classical principles: knights before bishops, and we're preparing to castle kingside for safety."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn and preparing kingside castling. This move also controls the important e5 and g5 squares, preventing Black from easily advancing in the center or launching quick attacks. The knight on f3 is perfectly placed to support our central pawn structure while maintaining flexibility - it can later jump to e5, g5, or even h4 in some variations. Our development follows classical principles: knights before bishops, and we're preparing to castle kingside for safety."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We bring our second knight into the game, adding more support to our d4 pawn and increasing pressure on Black's central d5 pawn. This natural developing move also prepares various central advances and keeps our options open for different pawn structures. The knight on c3 eyes the important e4 and b5 squares, and in some variations, it can jump to e4 or even a4 to create threats. Our pieces are now working together harmoniously to control the center and prepare for the middlegame battle."
+      "annotation": "We bring our second knight into the game, adding more support to our d4 pawn and increasing pressure on Black's central d5 pawn. This active move also prepares various central advances and keeps our options open for different pawn structures. The knight on c3 eyes the important e4 and b5 squares, and in some variations, it can jump to e4 or even a4 to create threats. Our pieces are now working together harmoniously to control the center and prepare for the middlegame battle."
     },
     {
       "san": "e6",

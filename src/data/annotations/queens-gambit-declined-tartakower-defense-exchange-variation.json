@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central presence. This solid move prevents us from simply occupying the center with e4 on the next move, forcing us to be more creative in our approach. Our opponent is signaling they want to fight for central equality rather than allow us free rein in the middle of the board. This sets up the potential for a Queen's Gambit where we can offer the c-pawn to deflect Black's central d5 pawn and gain better central control."
+      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central presence. this stabilizing move prevents us from simply occupying the center with e4 on the next move, forcing us to be more creative in our approach. Our opponent is signaling they want to fight for central equality rather than allow us free rein in the middle of the board. This sets up the potential for a Queen's Gambit where we can offer the c-pawn to deflect Black's central d5 pawn and gain better central control."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and preparing to increase the central pressure. This knight on c3 supports our eventual e4 advance and can later jump to advantageous squares like e4, b5, or even a4 depending on how the position develops. The knight also controls important central squares like e4 and d5, making it harder for Black to achieve comfortable equality in the center. From c3, our knight is perfectly placed to support both our central ambitions and our queenside development, making this one of the most principled developing moves in the Queen's Gambit."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn and preparing to increase the central pressure. This knight on c3 supports our eventual e4 advance and can later jump to advantageous squares like e4, b5, or even a4 depending on how the position develops. The knight also controls important central squares like e4 and d5, making it harder for Black to achieve comfortable equality in the center. From c3, our knight is perfectly placed to support both our central ambitions and our queenside development, making this one of the most principled developing choices in the Queen's Gambit."
     },
     {
       "san": "Be7",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their knight to its most active square, attacking our e4 square and preparing to complete their kingside development. This natural move fits perfectly with Black's solid setup in the Queen's Gambit Declined, developing a piece while maintaining central control. The knight on f6 also supports potential ...c5 breaks in the future and can be a useful defender of the kingside after castling. From f6, Black's knight contests important central squares and prevents us from achieving a completely free hand in the center, maintaining the dynamic balance that characterizes this opening."
+      "annotation": "Our opponent develops their knight to its most active square, attacking our e4 square and preparing to complete their kingside development. this move fits perfectly with Black's solid setup in the Queen's Gambit Declined, developing a piece while maintaining central control. The knight on f6 also supports potential ...c5 breaks in the future and can be a useful defender of the kingside after castling. From f6, Black's knight contests important central squares and prevents us from achieving a completely free hand in the center, maintaining the dynamic balance that characterizes this opening."
     },
     {
       "san": "Bg5",
@@ -47,11 +47,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "Our opponent wisely gets their king to safety with castling, prioritizing king safety over maintaining material balance or piece activity. This natural move completes Black's basic development and removes the king from the center where it might become a target in tactical complications. Castling also connects Black's rooks and prepares them for potential central file activity later in the game. However, with our bishop still pinning the f6 knight and their kingside slightly weakened by the h6 advance, Black's king position isn't completely secure, giving us some attacking prospects."
+      "annotation": "Our opponent wisely gets their king to safety with castling, prioritizing king safety over maintaining material balance or piece activity. this move completes Black's basic development and removes the king from the center where it might become a target in tactical complications. Castling also connects Black's rooks and prepares them for potential central file activity later in the game. However, with our bishop still pinning the f6 knight and their kingside slightly weakened by the h6 advance, Black's king position isn't completely secure, giving us some attacking prospects."
     },
     {
       "san": "e3",
-      "annotation": "We're playing a solid developing move that supports our d4 pawn and prepares to complete our development with Be2 and castling. This move also opens up the possibility of later central advances and gives our light-squared bishop a diagonal to work with. While e3 might seem passive, it's actually a very flexible move that keeps our options open and maintains the central tension. The pawn on e3 also prevents Black from advancing ...d4 and gaining space in the center, maintaining the strategic balance that's crucial in Queen's Gambit positions."
+      "annotation": "We're playing a constructive move that supports our d4 pawn and prepares to complete our development with Be2 and castling. This move also opens up the possibility of later central advances and gives our light-squared bishop a diagonal to work with. While e3 might seem passive, it's actually a very flexible move that keeps our options open and maintains the central tension. The pawn on e3 also prevents Black from advancing ...d4 and gaining space in the center, maintaining the strategic balance that's crucial in Queen's Gambit positions."
     },
     {
       "san": "b6",

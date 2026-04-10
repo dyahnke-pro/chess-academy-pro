@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while preparing to castle kingside. This move is more flexible than the immediate 3.Nc3, which would allow Black to pin our knight with ...Bb4 (though that's not necessarily bad for us). From f3, our knight also supports a potential e2-e4 pawn advance, which would give us an ideal pawn center if we can achieve it. The knight development follows classical opening principles while keeping our options open regarding how we'll continue our development and whether we'll play for an early e4 push or maintain the tension in the center."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while preparing to castle kingside. This move is more flexible than the immediate 3.Nc3, which would allow Black to pin our knight with ...Bb4 (though that's not necessarily bad for us). From f3, our knight also supports a potential e2-e4 pawn advance, which would give us an ideal pawn center if we can achieve it. The knight development follows classical opening principles while keeping our options open regarding how we'll continue our development and whether we'll play for an early e4 push or maintain the tension in the center."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their knight symmetrically, attacking our c4 pawn and preparing their own kingside castling. This natural developing move also controls the central e4 and d5 squares, maintaining the balance in the center. Black is following sound opening principles by developing pieces toward the center while creating immediate pressure on our position. The knight on f6 also supports Black's potential ...e6 advance, which would complete a solid pawn triangle (c6-d5-e6) and prepare the development of the dark-squared bishop, though this would block in the light-squared bishop temporarily."
+      "annotation": "Our opponent develops their knight symmetrically, attacking our c4 pawn and preparing their own kingside castling. This active move also controls the central e4 and d5 squares, maintaining the balance in the center. Black is following sound opening principles by developing pieces toward the center while creating immediate pressure on our position. The knight on f6 also supports Black's potential ...e6 advance, which would complete a solid pawn triangle (c6-d5-e6) and prepare the development of the dark-squared bishop, though this would block in the light-squared bishop temporarily."
     },
     {
       "san": "Nc3",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We solidify our position with this natural developing move that supports our d4 pawn and prepares to develop our light-squared bishop to d3 or c2. This move also opens the f1-a6 diagonal for our bishop while creating a solid pawn structure that gives us excellent piece coordination potential. The e3 advance prepares us to castle kingside safely while maintaining pressure on Black's advanced c4 pawn. Though this move looks quiet, it's actually quite purposeful - we're prioritizing piece development and king safety while keeping all our strategic options open, including the eventual recapture of the c4 pawn when the timing is right."
+      "annotation": "We solidify our position with this active move that supports our d4 pawn and prepares to develop our light-squared bishop to d3 or c2. This move also opens the f1-a6 diagonal for our bishop while creating a solid pawn structure that gives us excellent piece coordination potential. The e3 advance prepares us to castle kingside safely while maintaining pressure on Black's advanced c4 pawn. Though this move looks quiet, it's actually quite purposeful - we're prioritizing piece development and king safety while keeping all our strategic options open, including the eventual recapture of the c4 pawn when the timing is right."
     },
     {
       "san": "e6",
@@ -59,7 +59,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside, prioritizing king safety and bringing our rook into play while maintaining maximum flexibility in our position. This natural developing move gets our king to safety before Black can create any serious tactical threats, and it also activates our f1 rook which can potentially support central operations or swing to the queenside. By castling now, we avoid any potential tactical complications and maintain our slight development advantage while keeping all our strategic options open. The move also prepares us to deal more effectively with Black's pin on our knight, as our king is no longer a factor in potential tactical sequences involving the pinned piece."
+      "annotation": "We castle kingside, prioritizing king safety and bringing our rook into play while maintaining maximum flexibility in our position. This active move gets our king to safety before Black can create any serious tactical threats, and it also activates our f1 rook which can potentially support central operations or swing to the queenside. By castling now, we avoid any potential tactical complications and maintain our slight development advantage while keeping all our strategic options open. The move also prepares us to deal more effectively with Black's pin on our knight, as our king is no longer a factor in potential tactical sequences involving the pinned piece."
     }
   ]
 }

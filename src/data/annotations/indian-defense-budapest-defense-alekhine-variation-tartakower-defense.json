@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the Indian Defense setup, developing the knight to its most natural square while attacking our d4 pawn. This is a hypermodern approach where Black doesn't immediately occupy the center with pawns, but instead develops pieces that can influence and potentially undermine our central pawn structure later. The knight on f6 also prepares potential breaks like ...e5 or ...c5, and keeps Black's options open for various defensive systems. This move is the starting point for many Indian Defense variations including the King's Indian, Nimzo-Indian, and as we'll see, the Budapest Defense."
+      "annotation": "Black responds with the Indian Defense setup, developing the knight to its ideal square while attacking our d4 pawn. This is a hypermodern approach where Black doesn't immediately occupy the center with pawns, but instead develops pieces that can influence and potentially undermine our central pawn structure later. The knight on f6 also prepares potential breaks like ...e5 or ...c5, and keeps Black's options open for various defensive systems. This move is the starting point for many Indian Defense variations including the King's Indian, Nimzo-Indian, and as we'll see, the Budapest Defense."
     },
     {
       "san": "c4",
@@ -15,7 +15,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black launches the Budapest Defense with this surprising and aggressive pawn sacrifice! Instead of playing solid developing moves, our opponent strikes immediately in the center with this gambit, offering the e5 pawn to disrupt our comfortable development. This move challenges our d4 pawn directly and aims to create immediate tactical complications rather than allowing us to build a classical pawn center. The Budapest Defense is considered somewhat dubious at the highest level, but it's extremely dangerous in practical play because it creates sharp, unbalanced positions where Black gets active piece play and attacking chances in return for the sacrificed material."
+      "annotation": "Black launches the Budapest Defense with this surprising and aggressive pawn sacrifice! Instead of playing solid developing choices, our opponent strikes immediately in the center with this gambit, offering the e5 pawn to disrupt our comfortable development. This move challenges our d4 pawn directly and aims to create immediate tactical complications rather than allowing us to build a classical pawn center. The Budapest Defense is considered somewhat dubious at the highest level, but it's extremely dangerous in practical play because it creates sharp, unbalanced positions where Black gets active piece play and attacking chances in return for the sacrificed material."
     },
     {
       "san": "dxe5",

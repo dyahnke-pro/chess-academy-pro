@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central d4 pawn with this natural developing move, putting pressure on our center while bringing the knight to its most active square. The knight on f6 not only attacks d4 but also controls the important e4 and g4 squares, preventing us from easily advancing our kingside. This is one of the most principled responses to 1.d4, as Black combines development with central pressure - a hallmark of sound opening play. Our opponent is also keeping maximum flexibility, as this knight can support various pawn structures depending on how the opening develops."
+      "annotation": "Black immediately challenges our central d4 pawn with this active move, putting pressure on our center while bringing the knight to its most active square. The knight on f6 not only attacks d4 but also controls the important e4 and g4 squares, preventing us from easily advancing our kingside. This is one of the most principled responses to 1.d4, as Black combines development with central pressure - a hallmark of sound opening play. Our opponent is also keeping maximum flexibility, as this knight can support various pawn structures depending on how the opening develops."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while controlling the important e5 and g5 squares. This move also prepares kingside castling and keeps our options open for various pawn structures - we can still push e4 for a big center, or play e3 for a more solid setup. The knight on f3 is perfectly placed to support our central ambitions while maintaining maximum flexibility in our development. Additionally, this move prevents any potential Bg4 pins from Black, as our knight can always retreat to defend our queen."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while controlling the important e5 and g5 squares. This move also prepares kingside castling and keeps our options open for various pawn structures - we can still push e4 for a big center, or play e3 for a more solid setup. The knight on f3 is perfectly placed to support our central ambitions while maintaining maximum flexibility in our development. Additionally, this move prevents any potential Bg4 pins from Black, as our knight can always retreat to defend our queen."
     },
     {
       "san": "d5",

@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawn structure and adds additional pressure to Black's d5 pawn. This move is part of classical development principles - bringing pieces toward the center while maintaining flexibility in our pawn structure. The knight on c3 also prepares several strategic ideas: we might follow up with e3 and Nf3 for a solid positional approach, or consider more aggressive setups depending on how Black continues. From c3, our knight eyes important central squares like e4 and d5, and we maintain the option of playing f2-f3 and e2-e4 to establish a large pawn center if the opportunity arises."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central pawn structure and adds additional pressure to Black's d5 pawn. This move is part of classical development principles - bringing pieces toward the center while maintaining flexibility in our pawn structure. The knight on c3 also prepares several strategic ideas: we might follow up with e3 and Nf3 for a solid positional approach, or consider more aggressive setups depending on how Black continues. From c3, our knight eyes important central squares like e4 and d5, and we maintain the option of playing f2-f3 and e2-e4 to establish a large pawn center if the opportunity arises."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its optimal square, attacking our e4 square and preparing to castle kingside. This natural developing move puts immediate pressure on our position by preventing us from easily advancing e2-e4 to establish a classical pawn center. Our opponent is following sound opening principles by developing pieces toward the center while maintaining flexibility in their pawn structure. The knight on f6 also supports potential central breaks like e6-e5 in the future, and it's perfectly placed to support Black's kingside development with moves like Be7 and 0-0."
+      "annotation": "Black develops their kingside knight to its optimal square, attacking our e4 square and preparing to castle kingside. This active move puts immediate pressure on our position by preventing us from easily advancing e2-e4 to establish a classical pawn center. Our opponent is following sound opening principles by developing pieces toward the center while maintaining flexibility in their pawn structure. The knight on f6 also supports potential central breaks like e6-e5 in the future, and it's perfectly placed to support Black's kingside development with moves like Be7 and 0-0."
     },
     {
       "san": "e3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by bringing the knight to its most natural square, where it controls important central squares and prepares castling. This move supports our e5 square, contests Black's control over important central territory, and maintains our flexible approach to the position. The knight on f3 is perfectly placed to support various pawn advances or piece maneuvers as the position develops. We're now ready to continue with Be2 and 0-0, after which we'll have completed our basic development and can focus on more concrete plans like attacking Black's pawn structure or preparing central breaks."
+      "annotation": "We complete our kingside development by bringing the knight to its ideal square, where it controls important central squares and prepares castling. This move supports our e5 square, contests Black's control over important central territory, and maintains our flexible approach to the position. The knight on f3 is perfectly placed to support various pawn advances or piece maneuvers as the position develops. We're now ready to continue with Be2 and 0-0, after which we'll have completed our basic development and can focus on more concrete plans like attacking Black's pawn structure or preparing central breaks."
     },
     {
       "san": "a6",

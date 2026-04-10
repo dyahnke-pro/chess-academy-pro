@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it attacks the d5 pawn and supports our central ambitions while preparing further piece development. The knight on c3 is perfectly placed to support a future e2-e4 push if the opportunity arises, and it doesn't block any of our pawns or pieces. This move also prepares to recapture on d5 with the knight if Black eventually exchanges pawns, maintaining our central presence. From c3, our knight can also potentially reroute to more active squares like e4 or b5 depending on how the position develops."
+      "annotation": "We're developing our knight to its ideal square, where it attacks the d5 pawn and supports our central ambitions while preparing further piece development. The knight on c3 is perfectly placed to support a future e2-e4 push if the opportunity arises, and it doesn't block any of our pawns or pieces. This move also prepares to recapture on d5 with the knight if Black eventually exchanges pawns, maintaining our central presence. From c3, our knight can also potentially reroute to more active squares like e4 or b5 depending on how the position develops."
     },
     {
       "san": "c5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to c6, where it supports the advanced c5 pawn and prepares to contest central squares like d4 and e5. This natural developing move fits perfectly with the Tarrasch Defense strategy, as the knight supports Black's central pawn advances while preparing further piece development. The nc6 also eyes potential outposts on d4 or b4, and it doesn't block any pawns or restrict Black's other pieces. From c6, the knight is well-placed to support Black's active piece play and central counterplay that characterizes the Tarrasch Defense."
+      "annotation": "Black develops their knight to c6, where it supports the advanced c5 pawn and prepares to contest central squares like d4 and e5. This active move fits perfectly with the Tarrasch Defense strategy, as the knight supports Black's central pawn advances while preparing further piece development. The nc6 also eyes potential outposts on d4 or b4, and it doesn't block any pawns or restrict Black's other pieces. From c6, the knight is well-placed to support Black's active piece play and central counterplay that characterizes the Tarrasch Defense."
     },
     {
       "san": "g3",

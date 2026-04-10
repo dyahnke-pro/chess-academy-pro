@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding additional pressure to Black's d5 pawn, forcing them to make more decisions about their central structure. This knight attacks d5 and controls important central squares like e4 and b5, while preparing various pawn breaks like e4 or b4 depending on how the position develops. The knight on c3 is also perfectly placed to support our queenside expansion or central operations. By increasing the pressure on d5, we're making it increasingly difficult for Black to maintain their central pawn without making concessions."
+      "annotation": "We're developing our knight to its ideal square while adding additional pressure to Black's d5 pawn, forcing them to make more decisions about their central structure. This knight attacks d5 and controls important central squares like e4 and b5, while preparing various pawn breaks like e4 or b4 depending on how the position develops. The knight on c3 is also perfectly placed to support our queenside expansion or central operations. By increasing the pressure on d5, we're making it increasingly difficult for Black to maintain their central pawn without making concessions."
     },
     {
       "san": "c5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, attacking our e4 square and preparing to complete their kingside development with ...Be7 and castling. This knight placement is standard in these structures because it controls important central squares and keeps our pieces under observation. The knight on f6 also supports Black's isolated d-pawn indirectly by controlling squares around it and maintaining central piece activity. Black is prioritizing rapid development to generate counterplay before we can fully consolidate our positional advantages."
+      "annotation": "Black develops their knight to its ideal square, attacking our e4 square and preparing to complete their kingside development with ...Be7 and castling. This knight placement is standard in these structures because it controls important central squares and keeps our pieces under observation. The knight on f6 also supports Black's isolated d-pawn indirectly by controlling squares around it and maintaining central piece activity. Black is prioritizing rapid development to generate counterplay before we can fully consolidate our positional advantages."
     },
     {
       "san": "Bg2",

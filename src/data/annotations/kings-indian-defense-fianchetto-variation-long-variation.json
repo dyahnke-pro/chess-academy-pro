@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most flexible developing move, attacking our d4 pawn while preparing to fianchetto the king's bishop on g7. This is the signature move of the King's Indian Defense, where Black allows us to build a strong pawn center with the plan to undermine and attack it later. The knight on f6 also supports a future ...e5 advance and keeps options open for different defensive setups. Black is essentially saying 'go ahead and build your center - I'll tear it down later with dynamic piece play.'"
+      "annotation": "Black responds with the most flexible developing choice, attacking our d4 pawn while preparing to fianchetto the king's bishop on g7. This is the signature move of the King's Indian Defense, where Black allows us to build a strong pawn center with the plan to undermine and attack it later. The knight on f6 also supports a future ...e5 advance and keeps options open for different defensive setups. Black is essentially saying 'go ahead and build your center - I'll tear it down later with dynamic piece play.'"
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, controlling the important e5 and h4 squares while supporting a future e4 advance. This knight development is crucial in the King's Indian because it prevents ...e5 for now and keeps Black's central breaks under control. The knight on f3 also supports our kingside and can later reroute to d2 or h2 if we need to make room for other pieces. This natural developing move fits perfectly with our plan to complete development before launching our central expansion."
+      "annotation": "We're developing our knight to its ideal square, controlling the important e5 and h4 squares while supporting a future e4 advance. This knight development is crucial in the King's Indian because it prevents ...e5 for now and keeps Black's central breaks under control. The knight on f3 also supports our kingside and can later reroute to d2 or h2 if we need to make room for other pieces. This active move fits perfectly with our plan to complete development before launching our central expansion."
     },
     {
       "san": "d6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We're getting our king to safety on the kingside, completing our basic development before the position opens up. Castling is essential here because we're about to see sharp central play with ...e5, and we need our king secure before engaging in tactical complications. This move also connects our rooks, putting the f1 rook behind our future e4 pawn and the a1 rook ready to support queenside operations. With our king safe, we're now ready to launch our central expansion with e4, which is the key move in our strategic plan."
+      "annotation": "We're getting our king to safety on the kingside, completing our basic development before the position opens up. Castling is essential here because we're about to see sharp central play with ...e5, and we need our king secure before engaging in tactical complications. This move also connects our rooks, putting the f1 rook behind our future e4 pawn and the a1 rook ready to support queenside operations. With our king safe, we're now ready to launch our central expansion with e4, which is the critical advance in our strategic plan."
     },
     {
       "san": "e5",

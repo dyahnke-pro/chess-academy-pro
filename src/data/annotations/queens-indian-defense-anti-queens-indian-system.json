@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and preparing to challenge our control of the center. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares potential central breaks like ...e5 or ...c5, while supporting kingside castling. Black is essentially saying 'I'll develop first and see what you're planning before committing to a specific structure.'"
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and preparing to challenge our control of the center. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares potential central breaks like ...e5 or ...c5, while supporting kingside castling. Black is essentially saying 'I'll develop first and see what you're planning before committing to a specific structure.'"
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our central d4 pawn and prepares potential pawn advances like d4-d5 or e2-e4. This knight placement also increases our control over key central squares and gives us more options for piece coordination in the middlegame. The Nc3 is a key component of our 'Anti-Queen's Indian' system, as it allows us to maintain maximum pressure on Black's position while keeping our pieces actively placed. From c3, our knight can later jump to more aggressive squares like e4 or b5, depending on how the position develops, and it supports our general plan of building pressure on Black's queenside."
+      "annotation": "We develop our knight to its ideal square, where it supports our central d4 pawn and prepares potential pawn advances like d4-d5 or e2-e4. This knight placement also increases our control over key central squares and gives us more options for piece coordination in the middlegame. The Nc3 is a key component of our 'Anti-Queen's Indian' system, as it allows us to maintain maximum pressure on Black's position while keeping our pieces actively placed. From c3, our knight can later jump to more aggressive squares like e4 or b5, depending on how the position develops, and it supports our general plan of building pressure on Black's queenside."
     }
   ]
 }

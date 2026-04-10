@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and eyes important central squares like e4 and d5. This development also prepares for further piece coordination and potentially supports a future advance of our pawns. The knight on c3 is perfectly placed in this pawn structure, controlling key squares and supporting our central pawns. From c3, the knight also has potential tactical motifs and can support various middlegame plans, making it an ideal developing move that improves our position significantly."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and eyes important central squares like e4 and d5. This development also prepares for further piece coordination and potentially supports a future advance of our pawns. The knight on c3 is perfectly placed in this pawn structure, controlling key squares and supporting our central pawns. From c3, the knight also has potential tactical motifs and can support various middlegame plans, making it an effective developing choice that improves our position significantly."
     },
     {
       "san": "g6",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, where it controls important central squares and supports our overall piece coordination. The knight on f3 also prepares for castling while maintaining flexibility in our development. From f3, the knight supports our d4 pawn and can potentially advance to more aggressive squares like e5 or g5 later in the game. This natural developing move completes the classical setup for our minor pieces and prepares us to finish our kingside development quickly."
+      "annotation": "We're developing our knight to its most active square, where it controls important central squares and supports our overall piece coordination. The knight on f3 also prepares for castling while maintaining flexibility in our development. From f3, the knight supports our d4 pawn and can potentially advance to more aggressive squares like e5 or g5 later in the game. This active move completes the classical setup for our minor pieces and prepares us to finish our kingside development quickly."
     },
     {
       "san": "O-O",

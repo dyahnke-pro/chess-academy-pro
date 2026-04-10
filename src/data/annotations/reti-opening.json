@@ -259,7 +259,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight with tempo by attacking the d4 queen. This is the natural move — Nc3 develops a piece to its ideal square and forces the queen to move, gaining a tempo.",
+      "annotation": "White develops the knight with tempo by attacking the d4 queen. This is the logical choice — Nc3 develops a piece to its ideal square and forces the queen to move, gaining a tempo.",
       "plans": [
         "Gain tempo on the queen",
         "Develop Bg2 and castle quickly"
@@ -311,7 +311,7 @@
     },
     {
       "san": "d3",
-      "annotation": "White plays d3, a modest but important move. It opens the diagonal for the c1 bishop, supports the e4 square (preventing Black from pushing e4), and prepares Be2 followed by castling.",
+      "annotation": "White plays d3, a modest but purposeful move. It opens the diagonal for the c1 bishop, supports the e4 square (preventing Black from pushing e4), and prepares Be2 followed by castling.",
       "plans": [
         "Complete development with Be2 and O-O",
         "Use the solid center to prepare a middlegame plan"
@@ -529,7 +529,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to its most natural square, attacking White's e4 square and preparing to castle kingside.",
+          "annotation": "Black develops the knight to its ideal square, attacking White's e4 square and preparing to castle kingside.",
           "plans": [
             "Complete kingside development with Be7 or Bd6",
             "Consider central breaks like e5"

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preparing to challenge our central ambitions. This is a hypermodern approach - rather than immediately occupying the center with pawns, Black is preparing to attack it from the flanks. The knight on f6 also supports the advance ...e5 or ...d5, and keeps flexible options for Black's pawn structure. We should expect Black to continue developing pieces before committing to a specific pawn formation."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to challenge our central ambitions. This is a hypermodern approach - rather than immediately occupying the center with pawns, Black is preparing to attack it from the flanks. The knight on f6 also supports the advance ...e5 or ...d5, and keeps flexible options for Black's pawn structure. We should expect Black to continue developing pieces before committing to a specific pawn formation."
     },
     {
       "san": "c4",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queenside knight to its most natural square, adding pressure to our d4 pawn and preparing to increase the pressure on our pawn center. The knight on c6 also controls important squares like e7, d8, b8, and a7, while supporting the advance ...cxd4 when the time is right. This development fits perfectly with Black's Grünfeld strategy - every piece is aimed at undermining our central pawns. The knight also provides additional defensive support for Black's position and can potentially relocate to more active squares like e7 or a5 depending on our setup."
+      "annotation": "Black develops the queenside knight to its ideal square, adding pressure to our d4 pawn and preparing to increase the pressure on our pawn center. The knight on c6 also controls important squares like e7, d8, b8, and a7, while supporting the advance ...cxd4 when the time is right. This development fits perfectly with Black's Grünfeld strategy - every piece is aimed at undermining our central pawns. The knight also provides additional defensive support for Black's position and can potentially relocate to more active squares like e7 or a5 depending on our setup."
     },
     {
       "san": "Be3",

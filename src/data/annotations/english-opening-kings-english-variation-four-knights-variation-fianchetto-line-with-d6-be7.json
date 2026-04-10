@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, where it supports our central pawn and prepares to contest Black's control of d4. This knight placement is extremely flexible - it can later jump to d5, e4, or b5 depending on how the position develops. By developing pieces before committing to a specific pawn structure, we're following sound opening principles while keeping maximum options available. The knight on c3 also supports a potential d3-d4 pawn break later in the game, which could help us gain space in the center."
+      "annotation": "We're developing our queen's knight to its ideal square, where it supports our central pawn and prepares to contest Black's control of d4. This knight placement is extremely flexible - it can later jump to d5, e4, or b5 depending on how the position develops. By developing pieces before committing to a specific pawn structure, we're following sound opening principles while keeping maximum options available. The knight on c3 also supports a potential d3-d4 pawn break later in the game, which could help us gain space in the center."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to f6, attacking our e4 square and preparing to castle kingside. This is the most natural developing move, bringing a piece toward the center while contributing to king safety. Our opponent is following classical development principles and maintaining the tension in the center without committing to any particular pawn structure yet. Black's knight on f6 also supports a potential ...d6-d5 pawn break in some variations, so we should keep an eye on central pawn advances as the game progresses."
+      "annotation": "Black develops the king's knight to f6, attacking our e4 square and preparing to castle kingside. This is the most active move, bringing a piece toward the center while contributing to king safety. Our opponent is following classical development principles and maintaining the tension in the center without committing to any particular pawn structure yet. Black's knight on f6 also supports a potential ...d6-d5 pawn break in some variations, so we should keep an eye on central pawn advances as the game progresses."
     },
     {
       "san": "g3",
@@ -43,11 +43,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our final minor piece to its most natural square, where it controls key central squares and prepares to castle kingside. The knight on f3 supports our central control, particularly the e5 and d4 squares, while also defending our kingside and maintaining excellent piece coordination. This completes our basic development and gives us a harmonious position where all our pieces work together effectively. With all our minor pieces developed, we're ready to castle and begin implementing our middlegame plans, which typically involve gradual pressure along the long diagonal and potential central pawn breaks."
+      "annotation": "We're developing our final minor piece to its ideal square, where it controls key central squares and prepares to castle kingside. The knight on f3 supports our central control, particularly the e5 and d4 squares, while also defending our kingside and maintaining excellent piece coordination. This completes our basic development and gives us a harmonious position where all our pieces work together effectively. With all our minor pieces developed, we're ready to castle and begin implementing our middlegame plans, which typically involve gradual pressure along the long diagonal and potential central pawn breaks."
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, completing the essential task of king safety while connecting the rooks. This natural move brings the king to safety behind a wall of pawns while activating the kingside rook, which can now potentially support central operations or kingside play. Our opponent has now completed the basic opening requirements - central influence, piece development, and king safety - and is ready to begin more concrete middlegame planning. Black's position is solid and well-coordinated, with good potential for central counterplay or gradual piece improvement depending on how we continue."
+      "annotation": "Black castles kingside, completing the essential task of king safety while connecting the rooks. this move brings the king to safety behind a wall of pawns while activating the kingside rook, which can now potentially support central operations or kingside play. Our opponent has now completed the basic opening requirements - central influence, piece development, and king safety - and is ready to begin more concrete middlegame planning. Black's position is solid and well-coordinated, with good potential for central counterplay or gradual piece improvement depending on how we continue."
     }
   ]
 }

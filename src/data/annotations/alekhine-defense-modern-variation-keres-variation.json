@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our attacked e5 pawn while bringing a piece into active play. The knight on f3 not only defends e5 but also controls important central squares like e5, d4, and h4, while preparing for kingside castling. This flexible piece development keeps our options open - we can later consider moves like Ng5 to attack f7, or support the center with moves like Re1 after castling. By developing rather than immediately recapturing on d6, we maintain the tension and put the burden of decision-making on Black."
+      "annotation": "We're developing our knight to its ideal square, supporting our attacked e5 pawn while bringing a piece into active play. The knight on f3 not only defends e5 but also controls important central squares like e5, d4, and h4, while preparing for kingside castling. This flexible piece development keeps our options open - we can later consider moves like Ng5 to attack f7, or support the center with moves like Re1 after castling. By developing rather than immediately recapturing on d6, we maintain the tension and put the burden of decision-making on Black."
     },
     {
       "san": "g6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "a4",
-      "annotation": "We're beginning the Keres Variation with a4, a prophylactic move that prevents Black's knight from jumping to b4 and also prepares potential queenside expansion. This pawn advance restricts Black's pawn on b6, which now has fewer good squares available, while also preparing moves like a5 to further cramp Black's queenside. The move a4 fits into our overall strategy of maintaining space advantage and controlling key squares, while also keeping Black's pieces somewhat restricted. This is a subtle but important move that shows how modern opening theory often involves prophylactic thinking - preventing the opponent's ideas before they can be executed."
+      "annotation": "We're beginning the Keres Variation with a4, a prophylactic move that prevents Black's knight from jumping to b4 and also prepares potential queenside expansion. This pawn advance restricts Black's pawn on b6, which now has fewer good squares available, while also preparing moves like a5 to further cramp Black's queenside. The move a4 fits into our overall strategy of maintaining space advantage and controlling key squares, while also keeping Black's pieces somewhat restricted. This is a subtle but purposeful move that shows how modern opening theory often involves prophylactic thinking - preventing the opponent's ideas before they can be executed."
     }
   ]
 }

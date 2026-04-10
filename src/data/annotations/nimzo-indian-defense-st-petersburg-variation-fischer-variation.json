@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn a second time and preparing to meet Black's most challenging response. This knight controls important central squares like e4 and d5, while also preparing potential advances like e4 or f4 in the middlegame. The knight on c3 is also well-placed to support our expanding pawn center and can later redeploy to more active squares like e4 or f5. Most importantly, we're now ready to meet Black's main defensive tries, including the sharp Nimzo-Indian Defense that's coming."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn a second time and preparing to meet Black's most challenging response. This knight controls important central squares like e4 and d5, while also preparing potential advances like e4 or f4 in the middlegame. The knight on c3 is also well-placed to support our expanding pawn center and can later redeploy to more active squares like e4 or f5. Most importantly, we're now ready to meet Black's main defensive tries, including the sharp Nimzo-Indian Defense that's coming."
     },
     {
       "san": "Bb4",
-      "annotation": "Black plays the key move of the Nimzo-Indian Defense, pinning our knight to the king and creating immediate tactical pressure in the center. This bishop move is incredibly challenging because it prevents us from simply advancing e4, forces us to deal with the pin, and gives Black excellent piece activity from the very beginning. The bishop on b4 also supports potential ...d5 breaks and can later retreat to maintain pressure or exchange itself for our knight to damage our pawn structure. We now face a fundamental choice: how to deal with this pin while maintaining our central ambitions."
+      "annotation": "Black plays the central idea of the Nimzo-Indian Defense, pinning our knight to the king and creating immediate tactical pressure in the center. This bishop move is incredibly challenging because it prevents us from simply advancing e4, forces us to deal with the pin, and gives Black excellent piece activity from the very beginning. The bishop on b4 also supports potential ...d5 breaks and can later retreat to maintain pressure or exchange itself for our knight to damage our pawn structure. We now face a fundamental choice: how to deal with this pin while maintaining our central ambitions."
     },
     {
       "san": "e3",

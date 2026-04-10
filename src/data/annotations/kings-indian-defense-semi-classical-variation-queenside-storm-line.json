@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing for flexible piece development. This knight controls important central squares like e4 and d5, while also keeping our options open for various pawn structures. From c3, the knight can potentially jump to e4 or d5 in favorable circumstances, putting immediate pressure on Black's position. The knight development also prepares us to meet Black's central ...e5 advance with proper support, as we can recapture on d4 with the knight if needed."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing for flexible piece development. This knight controls important central squares like e4 and d5, while also keeping our options open for various pawn structures. From c3, the knight can potentially jump to e4 or d5 in favorable circumstances, putting immediate pressure on Black's position. The knight development also prepares us to meet Black's central ...e5 advance with proper support, as we can recapture on d4 with the knight if needed."
     },
     {
       "san": "Bg7",
@@ -51,7 +51,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We complete our kingside development by castling, securing our king's safety while bringing our rook into potential play along the f-file or e-file. This natural move also connects our rooks and prepares us for the tactical complications that often arise in King's Indian positions. With our king safely tucked away, we can now focus on more aggressive operations in the center and on the queenside. Castling also allows our h1 rook to potentially support our f3 knight or participate in kingside defense if Black launches an attack."
+      "annotation": "We complete our kingside development by castling, securing our king's safety while bringing our rook into potential play along the f-file or e-file. this move also connects our rooks and prepares us for the tactical complications that often arise in King's Indian positions. With our king safely tucked away, we can now focus on more aggressive operations in the center and on the queenside. Castling also allows our h1 rook to potentially support our f3 knight or participate in kingside defense if Black launches an attack."
     },
     {
       "san": "e5",

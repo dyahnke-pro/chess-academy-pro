@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking the e4 square and preparing kingside castling. This knight development is the hallmark of hypermodern openings like the King's Indian Defense, where Black allows us to build a large pawn center before striking back later. Our opponent is following the principle of developing pieces before pawns while keeping maximum flexibility for the pawn structure. The knight on f6 also prepares ...g6 and ...Bg7, creating the famous King's Indian setup that has been trusted by world champions like Garry Kasparov and Bobby Fischer."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking the e4 square and preparing kingside castling. This knight development is the hallmark of hypermodern openings like the King's Indian Defense, where Black allows us to build a large pawn center before striking back later. Our opponent is following the principle of developing pieces before pawns while keeping maximum flexibility for the pawn structure. The knight on f6 also prepares ...g6 and ...Bg7, creating the famous King's Indian setup that has been trusted by world champions like Garry Kasparov and Bobby Fischer."
     },
     {
       "san": "c4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, controlling the central e5 and d4 squares while preparing kingside castling. This knight development follows the opening principle of developing pieces toward the center and supports our strong pawn duo perfectly. The knight on f3 also prevents Black from playing ...e5 immediately, forcing our opponent to prepare this central break more carefully. From f3, our knight can later jump to more aggressive squares like g5, e5, or d4, depending on how the position evolves, giving us excellent tactical and positional possibilities."
+      "annotation": "We're developing our kingside knight to its ideal square, controlling the central e5 and d4 squares while preparing kingside castling. This knight development follows the opening principle of developing pieces toward the center and supports our strong pawn duo perfectly. The knight on f3 also prevents Black from playing ...e5 immediately, forcing our opponent to prepare this central break more carefully. From f3, our knight can later jump to more aggressive squares like g5, e5, or d4, depending on how the position evolves, giving us excellent tactical and positional possibilities."
     },
     {
       "san": "O-O",

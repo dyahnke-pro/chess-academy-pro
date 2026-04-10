@@ -19,7 +19,7 @@
     },
     {
       "san": "c3",
-      "annotation": "We continue the gambit by offering another pawn, this time targeting Black's newly acquired d4 pawn. This move opens the c-file for our rook and prepares to recapture with our knight, bringing it to an excellent central square. The c3 advance is the key move of the Smith-Morra Gambit, as it allows us to develop with tempo while maintaining pressure on Black's position. If Black takes on c3, our knight will land on c3 with a powerful grip on the center and excellent development prospects."
+      "annotation": "We continue the gambit by offering another pawn, this time targeting Black's newly acquired d4 pawn. This move opens the c-file for our rook and prepares to recapture with our knight, bringing it to an excellent central square. The c3 advance is the central idea of the Smith-Morra Gambit, as it allows us to develop with tempo while maintaining pressure on Black's position. If Black takes on c3, our knight will land on c3 with a powerful grip on the center and excellent development prospects."
     },
     {
       "san": "dxc3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black chooses a solid developing move that supports the d5 square and prepares to develop their light-squared bishop, likely to e7 or d6. This move also opens a path for Black's dark-squared bishop to develop, though it does block the bishop on c8 temporarily. The e6 advance is typical of French Defense-style setups and shows Black is prioritizing solid development over immediate counterplay. However, this slightly passive approach may allow us to build our attack more comfortably than if Black had played more active moves like d6 and Nf6."
+      "annotation": "Black chooses a constructive move that supports the d5 square and prepares to develop their light-squared bishop, likely to e7 or d6. This move also opens a path for Black's dark-squared bishop to develop, though it does block the bishop on c8 temporarily. The e6 advance is typical of French Defense-style setups and shows Black is prioritizing solid development over immediate counterplay. However, this slightly passive approach may allow us to build our attack more comfortably than if Black had played more active moves like d6 and Nf6."
     },
     {
       "san": "Bc4",

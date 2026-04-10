@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and controlling the central e4 and g4 squares. This is one of the most flexible responses to d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. Our opponent is following sound opening principles by developing pieces before pawns and immediately challenging our central presence. The knight on f6 also prepares to support either ...e6 or ...g6 pawn structures depending on how the position develops."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and controlling the central e4 and g4 squares. This is one of the most flexible responses to d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. Our opponent is following sound opening principles by developing pieces before pawns and immediately challenging our central presence. The knight on f6 also prepares to support either ...e6 or ...g6 pawn structures depending on how the position develops."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most active square, controlling the central e5 and g5 squares while supporting our d4 pawn from another angle. This natural developing move also prepares kingside castling and keeps our options open for various pawn structures in the center. The knight on f3 works harmoniously with our c4 and d4 pawns to create a strong positional foundation. By developing pieces before committing to further pawn advances, we're following classical opening principles while maintaining maximum flexibility for our middlegame plans."
+      "annotation": "We develop our king's knight to its most active square, controlling the central e5 and g5 squares while supporting our d4 pawn from another angle. This active move also prepares kingside castling and keeps our options open for various pawn structures in the center. The knight on f3 works harmoniously with our c4 and d4 pawns to create a strong positional foundation. By developing pieces before committing to further pawn advances, we're following classical opening principles while maintaining maximum flexibility for our middlegame plans."
     },
     {
       "san": "b6",

@@ -23,11 +23,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to f6, which is a natural developing move that attacks our potential advance to e5 and prepares to castle kingside. This knight development is logical because it contests central squares and supports Black's kingside development, but it also blocks the f7 pawn which can become a target in tactical sequences. Our opponent is trying to complete development quickly to neutralize our attacking chances, but the knight on f6 can become a target for our advancing pawns or tactical motifs. Black is essentially betting that solid development will help them weather our initial storm and emerge with their extra pawn intact."
+      "annotation": "Black develops their knight to f6, which is a active move that attacks our potential advance to e5 and prepares to castle kingside. This knight development is logical because it contests central squares and supports Black's kingside development, but it also blocks the f7 pawn which can become a target in tactical sequences. Our opponent is trying to complete development quickly to neutralize our attacking chances, but the knight on f6 can become a target for our advancing pawns or tactical motifs. Black is essentially betting that solid development will help them weather our initial storm and emerge with their extra pawn intact."
     },
     {
       "san": "f3",
-      "annotation": "We play the key move of the Blackmar-Diemer Gambit, offering a second pawn to accelerate our development and open lines toward Black's king. This pawn advance attacks the e4 pawn and practically forces Black to capture, since retreating the pawn would leave Black poorly coordinated. By sacrificing this second pawn, we're planning to recapture with the knight (Nxf3) which will give us excellent central control and rapid piece coordination. The f3 advance also prepares to open the f-file for our rook and creates potential tactical motifs along the long diagonal after we develop our dark-squared bishop."
+      "annotation": "We play the central idea of the Blackmar-Diemer Gambit, offering a second pawn to accelerate our development and open lines toward Black's king. This pawn advance attacks the e4 pawn and practically forces Black to capture, since retreating the pawn would leave Black poorly coordinated. By sacrificing this second pawn, we're planning to recapture with the knight (Nxf3) which will give us excellent central control and rapid piece coordination. The f3 advance also prepares to open the f-file for our rook and creates potential tactical motifs along the long diagonal after we develop our dark-squared bishop."
     },
     {
       "san": "exf3",

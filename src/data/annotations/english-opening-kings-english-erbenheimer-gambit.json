@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our central ambitions and prepares multiple strategic ideas. From c3, the knight eyes the important e4 and d5 squares while keeping our options open for different pawn structures. This move also prepares potential pawn advances like d3 or f4, depending on how the position develops. The knight on c3 is a cornerstone piece in most English Opening setups, providing flexibility and supporting our eventual central counterplay."
+      "annotation": "We develop our knight to its ideal square, where it supports our central ambitions and prepares multiple strategic ideas. From c3, the knight eyes the important e4 and d5 squares while keeping our options open for different pawn structures. This move also prepares potential pawn advances like d3 or f4, depending on how the position develops. The knight on c3 is a cornerstone piece in most English Opening setups, providing flexibility and supporting our eventual central counterplay."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, where it attacks our c4 pawn and prepares to castle kingside. This natural developing move also supports Black's central pawn on e5 and keeps pressure on our position. Our opponent is following classical opening principles - develop pieces quickly toward the center and create threats. We need to be aware that Black is building up a strong central presence and may be preparing to advance further with moves like d6 and Be7."
+      "annotation": "Black develops the kingside knight to its most active square, where it attacks our c4 pawn and prepares to castle kingside. This active move also supports Black's central pawn on e5 and keeps pressure on our position. Our opponent is following classical opening principles - develop pieces quickly toward the center and create threats. We need to be aware that Black is building up a strong central presence and may be preparing to advance further with moves like d6 and Be7."
     },
     {
       "san": "Nf3",

@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, controlling the important e5 and h4 squares while supporting our central pawn on d4. This move follows classical development principles by bringing a piece toward the center and preparing to castle kingside for safety. The knight on f3 also eyes Black's advanced c4 pawn, putting indirect pressure on it and preparing potential tactics to win it back. Additionally, this development prevents Black from playing an early ...e5, which would give them excellent central control and free piece development."
+      "annotation": "We develop our kingside knight to its ideal square, controlling the important e5 and h4 squares while supporting our central pawn on d4. This move follows classical development principles by bringing a piece toward the center and preparing to castle kingside for safety. The knight on f3 also eyes Black's advanced c4 pawn, putting indirect pressure on it and preparing potential tactics to win it back. Additionally, this development prevents Black from playing an early ...e5, which would give them excellent central control and free piece development."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to a central square, mirroring our development and preparing to castle kingside as well. This natural move controls the important e4 and h5 squares while adding defense to Black's kingside. The knight on f6 also supports Black's plan to hold onto the extra c4 pawn by preparing ...e6 or ...Bg4 to pin our knight. Our opponent is following sound development principles, though they need to be mindful of our growing central pressure and the potential for us to regain the gambit pawn with interest."
+      "annotation": "Black develops their kingside knight to a central square, mirroring our development and preparing to castle kingside as well. this move controls the important e4 and h5 squares while adding defense to Black's kingside. The knight on f6 also supports Black's plan to hold onto the extra c4 pawn by preparing ...e6 or ...Bg4 to pin our knight. Our opponent is following sound development principles, though they need to be mindful of our growing central pressure and the potential for us to regain the gambit pawn with interest."
     },
     {
       "san": "e3",

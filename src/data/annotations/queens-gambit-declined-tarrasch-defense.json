@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn while improving our piece coordination and preparing for various pawn breaks. This move supports potential advances like e2-e4 (if the d5 pawn moves) or maintains pressure on Black's central structure. The knight on c3 also eyes important central squares like e4 and d5, and can potentially reroute to e2, d5, or b5 depending on how the position develops. From c3, our knight is perfectly placed to support our queenside expansion or central operations."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn while improving our piece coordination and preparing for various pawn breaks. This move supports potential advances like e2-e4 (if the d5 pawn moves) or maintains pressure on Black's central structure. The knight on c3 also eyes important central squares like e4 and d5, and can potentially reroute to e2, d5, or b5 depending on how the position develops. From c3, our knight is perfectly placed to support our queenside expansion or central operations."
     },
     {
       "san": "c5",

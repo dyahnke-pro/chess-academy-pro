@@ -27,15 +27,15 @@
     },
     {
       "san": "c4",
-      "annotation": "We launch the key move of the Panov Attack, immediately challenging Black's central d5 pawn and seizing space on the queenside. This aggressive advance forces Black to make an immediate decision about the d5 pawn while opening lines for our pieces, particularly the queen and light-squared bishop. The move c4 is what transforms this from a quiet positional game into a sharp tactical battle, as we're willing to sacrifice central pawn stability for piece activity and attacking chances. This pawn advance also supports a future d4-d5 push, giving us excellent central control and space advantage."
+      "annotation": "We launch the central idea of the Panov Attack, immediately challenging Black's central d5 pawn and seizing space on the queenside. This aggressive advance forces Black to make an immediate decision about the d5 pawn while opening lines for our pieces, particularly the queen and light-squared bishop. The move c4 is what transforms this from a quiet positional game into a sharp tactical battle, as we're willing to sacrifice central pawn stability for piece activity and attacking chances. This pawn advance also supports a future d4-d5 push, giving us excellent central control and space advantage."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our d4 pawn while preparing kingside castling. This move is more flexible than immediately deciding what to do with the d5 pawn, and it follows good opening principles by developing pieces toward the center. The knight on f6 also eyes important central squares like e4 and d5, giving Black some tactical options. However, Black still needs to resolve the tension around the d5 pawn soon, as our c4 advance is putting increasing pressure on Black's central position."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our d4 pawn while preparing kingside castling. This move is more flexible than immediately deciding what to do with the d5 pawn, and it follows good opening principles by developing pieces toward the center. The knight on f6 also eyes important central squares like e4 and d5, giving Black some tactical options. However, Black still needs to resolve the tension around the d5 pawn soon, as our c4 advance is putting increasing pressure on Black's central position."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its ideal square, defending the d4 pawn while increasing pressure on Black's d5 pawn. This natural developing move also prepares potential tactics involving the knight's control of central squares like e4 and b5. The knight on c3 works harmoniously with our c4 pawn to create maximum pressure on Black's position, particularly the key d5 square. From c3, our knight can potentially jump to b5 or e4 later, giving us tactical opportunities while maintaining solid central control."
+      "annotation": "We develop our knight to its ideal square, defending the d4 pawn while increasing pressure on Black's d5 pawn. This active move also prepares potential tactics involving the knight's control of central squares like e4 and b5. The knight on c3 works harmoniously with our c4 pawn to create maximum pressure on Black's position, particularly the key d5 square. From c3, our knight can potentially jump to b5 or e4 later, giving us tactical opportunities while maintaining solid central control."
     },
     {
       "san": "e6",

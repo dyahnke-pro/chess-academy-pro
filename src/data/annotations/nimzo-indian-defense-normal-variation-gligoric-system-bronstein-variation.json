@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another defender to the d4 pawn while preparing for various central pawn advances. This knight supports potential e4 or d5 pawn breaks and can later jump to active squares like e4, b5, or d5 depending on the position. The knight on c3 is also perfectly placed to support our queenside expansion with moves like a4-a5 or b4-b5. However, we should be aware that this placement can sometimes be a target for Black's pieces, particularly if Black plays ...Bb4 pinning the knight to our king."
+      "annotation": "We're developing our knight to its ideal square, adding another defender to the d4 pawn while preparing for various central pawn advances. This knight supports potential e4 or d5 pawn breaks and can later jump to active squares like e4, b5, or d5 depending on the position. The knight on c3 is also perfectly placed to support our queenside expansion with moves like a4-a5 or b4-b5. However, we should be aware that this placement can sometimes be a target for Black's pieces, particularly if Black plays ...Bb4 pinning the knight to our king."
     },
     {
       "san": "Bb4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our basic development by bringing the knight to its most natural square, where it controls important central squares like e5 and d4. This knight development also prepares castling and supports our center without committing to any particular pawn structure just yet. The knight on f3 works excellently with our bishop on d3, creating potential tactical motifs and supporting kingside operations. We're maintaining flexibility about how to handle the central tension, keeping options like cxd5 or maintaining the tension with moves like Qc2."
+      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls important central squares like e5 and d4. This knight development also prepares castling and supports our center without committing to any particular pawn structure just yet. The knight on f3 works excellently with our bishop on d3, creating potential tactical motifs and supporting kingside operations. We're maintaining flexibility about how to handle the central tension, keeping options like cxd5 or maintaining the tension with moves like Qc2."
     },
     {
       "san": "c5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the queenside knight to a central square, preparing to challenge our bishop on c4 and potentially reroute to more active squares like e5 or b6. This knight development also supports the ...e5 pawn break, which would give Black excellent central control and piece activity. The knight on d7 can later jump to various squares depending on the position's requirements, making it a flexible and useful developing move. Black is also preparing to complete development with moves like ...b6 or ...Bb7, building up pressure against our position systematically."
+      "annotation": "Black develops the queenside knight to a central square, preparing to challenge our bishop on c4 and potentially reroute to more active squares like e5 or b6. This knight development also supports the ...e5 pawn break, which would give Black excellent central control and piece activity. The knight on d7 can later jump to various squares depending on the position's requirements, making it a flexible and useful developing choice. Black is also preparing to complete development with moves like ...b6 or ...Bb7, building up pressure against our position systematically."
     }
   ]
 }

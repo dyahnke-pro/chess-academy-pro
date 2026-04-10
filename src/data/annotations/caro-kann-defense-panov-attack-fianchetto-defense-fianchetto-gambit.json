@@ -27,11 +27,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We're launching the key move of the Panov Attack, immediately challenging Black's central d5 pawn and forcing a critical decision. This advance opens the c-file and the long diagonal for our pieces while potentially creating an isolated d-pawn for Black if they capture on c4 or move the d-pawn. By playing c2-c4, we're following the main strategic idea of the Panov: trading our slight structural disadvantage (the isolated d-pawn we might get) for active piece play and attacking chances. This move also prepares natural development with Nc3 and puts immediate pressure on Black's position."
+      "annotation": "We're launching the central idea of the Panov Attack, immediately challenging Black's central d5 pawn and forcing a critical decision. This advance opens the c-file and the long diagonal for our pieces while potentially creating an isolated d-pawn for Black if they capture on c4 or move the d-pawn. By playing c2-c4, we're following the main strategic idea of the Panov: trading our slight structural disadvantage (the isolated d-pawn we might get) for active piece play and attacking chances. This move also prepares natural development with Nc3 and puts immediate pressure on Black's position."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn while preparing to castle kingside and complete development. This is one of the most flexible moves in the position, as the knight can later jump to e4 or support various pawn breaks depending on how the position develops. Our opponent is following sound development principles rather than immediately deciding what to do about our c4 pawn, keeping options open for both dxc4 and maintaining the tension. The knight on f6 also supports potential central advances and prepares to contest important central squares."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn while preparing to castle kingside and complete development. This is one of the most flexible moves in the position, as the knight can later jump to e4 or support various pawn breaks depending on how the position develops. Our opponent is following sound development principles rather than immediately deciding what to do about our c4 pawn, keeping options open for both dxc4 and maintaining the tension. The knight on f6 also supports potential central advances and prepares to contest important central squares."
     },
     {
       "san": "Nc3",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup with this powerful developing move, placing the bishop on the long diagonal where it exerts tremendous pressure on our center and entire queenside. This bishop on g7 becomes a monster piece, eyeing our d4 pawn, supporting Black's central ambitions, and creating potential tactical motifs along the long diagonal. The Fianchetto Gambit is now in full swing - Black has sacrificed the d5 pawn for rapid development, active pieces, and long-term pressure against our somewhat exposed king and central pawns. We must now be very careful about our king safety while trying to consolidate our material advantage, as Black's pieces are becoming increasingly active and dangerous."
+      "annotation": "Black completes the fianchetto setup with this powerful developing choice, placing the bishop on the long diagonal where it exerts tremendous pressure on our center and entire queenside. This bishop on g7 becomes a monster piece, eyeing our d4 pawn, supporting Black's central ambitions, and creating potential tactical motifs along the long diagonal. The Fianchetto Gambit is now in full swing - Black has sacrificed the d5 pawn for rapid development, active pieces, and long-term pressure against our somewhat exposed king and central pawns. We must now be very careful about our king safety while trying to consolidate our material advantage, as Black's pieces are becoming increasingly active and dangerous."
     }
   ]
 }

@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, where it supports our d4 pawn, pressures Black's d5 pawn, and prepares potential advances in the center. This natural developing move also keeps our options open regarding our pawn structure - we can still play e3 for a solid setup or potentially e4 if Black captures on c4. The knight on c3 is particularly well-placed in Slav structures because it can potentially jump to e4 or support a future d4-d5 advance if the position allows it. We're building our position systematically while maintaining maximum flexibility for our central strategy."
+      "annotation": "We develop our knight to its most active square, where it supports our d4 pawn, pressures Black's d5 pawn, and prepares potential advances in the center. This active move also keeps our options open regarding our pawn structure - we can still play e3 for a solid setup or potentially e4 if Black captures on c4. The knight on c3 is particularly well-placed in Slav structures because it can potentially jump to e4 or support a future d4-d5 advance if the position allows it. We're building our position systematically while maintaining maximum flexibility for our central strategy."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 square and preparing to castle kingside for safety. This move follows the principle of developing knights before bishops and puts additional pressure on our central ambitions by preventing a simple e2-e4 advance. The knight on f6 also supports potential counterplay with moves like Ne4 if we're not careful with our piece coordination. Black is developing sensibly while maintaining the central tension, and we need to continue building our position without allowing Black to equalize too easily."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our e4 square and preparing to castle kingside for safety. This move follows the principle of developing knights before bishops and puts additional pressure on our central ambitions by preventing a simple e2-e4 advance. The knight on f6 also supports potential counterplay with moves like Ne4 if we're not careful with our piece coordination. Black is developing sensibly while maintaining the central tension, and we need to continue building our position without allowing Black to equalize too easily."
     },
     {
       "san": "e3",
@@ -55,7 +55,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black plays the key move of the Meran Variation, gaining space on the queenside and forcing our active bishop to make a decision about where to retreat. This aggressive advance is Black's main point behind capturing on c4 - they're not just winning a pawn temporarily but actively fighting for the initiative on the queenside. The move also prepares potential queenside expansion with ...a5 and ...b4, though it does create some weaknesses around the a5 and c5 squares that we might be able to exploit later. Black is essentially accepting that the game will become sharp and tactical, betting that their queenside activity will compensate for any kingside weaknesses."
+      "annotation": "Black plays the central idea of the Meran Variation, gaining space on the queenside and forcing our active bishop to make a decision about where to retreat. This aggressive advance is Black's main point behind capturing on c4 - they're not just winning a pawn temporarily but actively fighting for the initiative on the queenside. The move also prepares potential queenside expansion with ...a5 and ...b4, though it does create some weaknesses around the a5 and c5 squares that we might be able to exploit later. Black is essentially accepting that the game will become sharp and tactical, betting that their queenside activity will compensate for any kingside weaknesses."
     },
     {
       "san": "Bd3",

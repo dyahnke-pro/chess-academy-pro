@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding crucial support to our d4 pawn and controlling key central squares like e4 and d5. This knight placement is essential for maintaining our central presence and prevents Black from immediately playing ...d5 without consequences. The Nc3 also prepares potential advances like e4, building the classical 'ideal' pawn center that Black's Grünfeld setup is designed to challenge. From c3, our knight is perfectly placed to support our central ambitions while maintaining maximum flexibility for piece coordination."
+      "annotation": "We're developing our knight to its ideal square while adding crucial support to our d4 pawn and controlling key central squares like e4 and d5. This knight placement is essential for maintaining our central presence and prevents Black from immediately playing ...d5 without consequences. The Nc3 also prepares potential advances like e4, building the classical 'ideal' pawn center that Black's Grünfeld setup is designed to challenge. From c3, our knight is perfectly placed to support our central ambitions while maintaining maximum flexibility for piece coordination."
     },
     {
       "san": "d5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside to safety, getting the king away from the center where tactical complications are brewing. This natural developing move also connects the rooks and prepares Black's pieces for coordinated action against our extended center. Castling is particularly important in the Grünfeld as Black's counterplay often involves tactical strikes that require the king to be safely tucked away. With the king castled, Black can now focus entirely on generating counterplay through moves like ...c5, ...Nc6, or ...Bg4, putting maximum pressure on our position."
+      "annotation": "Black castles kingside to safety, getting the king away from the center where tactical complications are brewing. This active move also connects the rooks and prepares Black's pieces for coordinated action against our extended center. Castling is particularly important in the Grünfeld as Black's counterplay often involves tactical strikes that require the king to be safely tucked away. With the king castled, Black can now focus entirely on generating counterplay through moves like ...c5, ...Nc6, or ...Bg4, putting maximum pressure on our position."
     },
     {
       "san": "Ne2",

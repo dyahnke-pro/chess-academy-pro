@@ -31,7 +31,7 @@
     },
     {
       "san": "Nd7",
-      "annotation": "Black develops the knight to its most natural square, preparing to challenge our centralized knight and supporting the kingside development. This move keeps Black's options open, as the knight can later go to f6 to attack our knight on e4 or support other pieces. The knight on d7 also doesn't block any important diagonals and maintains flexibility in Black's pawn structure. This is the key move of the Karpov Variation, as Black prepares to gradually equalize while maintaining a solid position."
+      "annotation": "Black develops the knight to its ideal square, preparing to challenge our centralized knight and supporting the kingside development. This move keeps Black's options open, as the knight can later go to f6 to attack our knight on e4 or support other pieces. The knight on d7 also doesn't block any important diagonals and maintains flexibility in Black's pawn structure. This is the central idea of the Karpov Variation, as Black prepares to gradually equalize while maintaining a solid position."
     },
     {
       "san": "Ng5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Ngf6",
-      "annotation": "Black develops the knight to f6, directly challenging our centralized knight on e4 and preparing to complete kingside development. This natural developing move also attacks our knight, forcing us to make a decision about where to place it next. The knight on f6 controls important central squares like e4, d5, g4, and h5, giving Black good piece activity. By developing this knight, Black is also preparing to castle kingside and complete the basic opening setup."
+      "annotation": "Black develops the knight to f6, directly challenging our centralized knight on e4 and preparing to complete kingside development. This active move also attacks our knight, forcing us to make a decision about where to place it next. The knight on f6 controls important central squares like e4, d5, g4, and h5, giving Black good piece activity. By developing this knight, Black is also preparing to castle kingside and complete the basic opening setup."
     },
     {
       "san": "Bd3",
@@ -47,11 +47,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays this solid move to limit our light-squared bishop's scope and prepare for further development, particularly of the dark-squared bishop. This move blocks the long diagonal and reduces the pressure on f7, making Black's king position more secure. The e6 pawn also supports the potential advance d7-d5 in some variations and gives Black's pieces more coordination. However, this move does make the light squares around Black's king slightly weaker, which we can potentially exploit later."
+      "annotation": "Black plays this stabilizing move to limit our light-squared bishop's scope and prepare for further development, particularly of the dark-squared bishop. This move blocks the long diagonal and reduces the pressure on f7, making Black's king position more secure. The e6 pawn also supports the potential advance d7-d5 in some variations and gives Black's pieces more coordination. However, this move does make the light squares around Black's king slightly weaker, which we can potentially exploit later."
     },
     {
       "san": "N1f3",
-      "annotation": "We're bringing our second knight into play, developing it to its most natural square where it controls the center and prepares for kingside castling. This move also supports our knight on g5 and maintains pressure on Black's position while completing our basic development. The knight on f3 controls important squares like e5, g5, and h4, giving us good piece coordination and flexibility. From f3, this knight can later jump to more advanced squares like e5 or g5, depending on how the position develops."
+      "annotation": "We're bringing our second knight into play, developing it to its ideal square where it controls the center and prepares for kingside castling. This move also supports our knight on g5 and maintains pressure on Black's position while completing our basic development. The knight on f3 controls important squares like e5, g5, and h4, giving us good piece coordination and flexibility. From f3, this knight can later jump to more advanced squares like e5 or g5, depending on how the position develops."
     },
     {
       "san": "Bd6",
@@ -63,7 +63,7 @@
     },
     {
       "san": "h6",
-      "annotation": "Black plays this important move to challenge our pawn on g5, forcing it to make a decision and reducing the pressure on the kingside. This advance weakens the g6 square slightly but eliminates the annoying knight that was eyeing f7 and h7. The h6 advance also gives Black's king more breathing room and prepares for potential queenside play by reducing our attacking chances. Black is following sound strategic principles by challenging our most actively placed piece and reducing immediate tactical threats."
+      "annotation": "Black plays this purposeful move to challenge our pawn on g5, forcing it to make a decision and reducing the pressure on the kingside. This advance weakens the g6 square slightly but eliminates the annoying knight that was eyeing f7 and h7. The h6 advance also gives Black's king more breathing room and prepares for potential queenside play by reducing our attacking chances. Black is following sound strategic principles by challenging our most actively placed piece and reducing immediate tactical threats."
     },
     {
       "san": "Ne4",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing to advance e4 to complete our ideal pawn center. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us excellent piece coordination. This move is part of the classical approach against the King's Indian, where we build a strong center and try to maintain space advantage throughout the game. By developing pieces quickly while maintaining central control, we're following sound opening principles and keeping maximum flexibility for our future plans."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing to advance e4 to complete our ideal pawn center. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us excellent piece coordination. This move is part of the classical approach against the King's Indian, where we build a strong center and try to maintain space advantage throughout the game. By developing pieces quickly while maintaining central control, we're following sound opening principles and keeping maximum flexibility for our future plans."
     },
     {
       "san": "Bg7",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nge2",
-      "annotation": "We're playing the key move of the Pomar System, developing our knight to e2 where it serves multiple strategic purposes while maintaining maximum flexibility. From e2, this knight can jump to d4 (after dxe5), f4 to attack Black's kingside, or even c3 if needed for defense. This setup is more flexible than the traditional Nf3 because we avoid potential pins and keep our options open for both kingside and queenside play. The knight on e2 also supports a potential f2-f4 advance, which can be a powerful weapon in the resulting middlegame positions, and allows us to potentially keep our king in the center longer or castle queenside if the position demands it."
+      "annotation": "We're playing the central idea of the Pomar System, developing our knight to e2 where it serves multiple strategic purposes while maintaining maximum flexibility. From e2, this knight can jump to d4 (after dxe5), f4 to attack Black's kingside, or even c3 if needed for defense. This setup is more flexible than the traditional Nf3 because we avoid potential pins and keep our options open for both kingside and queenside play. The knight on e2 also supports a potential f2-f4 advance, which can be a powerful weapon in the resulting middlegame positions, and allows us to potentially keep our king in the center longer or castle queenside if the position demands it."
     }
   ]
 }

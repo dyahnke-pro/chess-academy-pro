@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing kingside castling. This move also prevents any immediate ...e5 central break from Black, maintaining our central advantage for the time being. The knight on f3 is perfectly placed to support multiple pawn advances like e4 or to redeploy to more active squares like e2-d4 or h4 if needed. Most importantly, this development move keeps all our options open while maintaining pressure on Black's position and preparing to complete our kingside development."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing kingside castling. This move also prevents any immediate ...e5 central break from Black, maintaining our central advantage for the time being. The knight on f3 is perfectly placed to support multiple pawn advances like e4 or to redeploy to more active squares like e2-d4 or h4 if needed. Most importantly, this development move keeps all our options open while maintaining pressure on Black's position and preparing to complete our kingside development."
     },
     {
       "san": "Bg7",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to respond to Black's inevitable ...e5 central challenge. This knight placement also eyes important squares like b5 and d5, potentially supporting future queenside expansion with moves like a4-a5 or supporting central pawn advances. The knight on c3 works harmoniously with our other pieces, particularly our fianchettoed bishop on g2, creating a solid foundation for our middlegame plans. Most importantly, this development keeps all our options open while maintaining pressure on Black's position and preparing us to meet their typical King's Indian counterplay with accurate responses."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to respond to Black's inevitable ...e5 central challenge. This knight placement also eyes important squares like b5 and d5, potentially supporting future queenside expansion with moves like a4-a5 or supporting central pawn advances. The knight on c3 works harmoniously with our other pieces, particularly our fianchettoed bishop on g2, creating a solid foundation for our middlegame plans. Most importantly, this development keeps all our options open while maintaining pressure on Black's position and preparing us to meet their typical King's Indian counterplay with accurate responses."
     },
     {
       "san": "a6",

@@ -15,11 +15,11 @@
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes their planned fianchetto, placing the dark-squared bishop on its most active square where it eyes our central pawns and controls key dark squares along the long diagonal. From g7, this bishop will be Black's primary piece for challenging our central pawn structure, particularly if we advance to e4. The bishop also provides important defensive coverage for Black's kingside, especially around the f6 and h6 squares. This natural developing move is the hallmark of the Modern Defense - Black prioritizes piece activity and long-term strategic pressure over immediate central occupation."
+      "annotation": "Black completes their planned fianchetto, placing the dark-squared bishop on its most active square where it eyes our central pawns and controls key dark squares along the long diagonal. From g7, this bishop will be Black's primary piece for challenging our central pawn structure, particularly if we advance to e4. The bishop also provides important defensive coverage for Black's kingside, especially around the f6 and h6 squares. This active move is the hallmark of the Modern Defense - Black prioritizes piece activity and long-term strategic pressure over immediate central occupation."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawns and prepares for further expansion. This knight controls important central squares like e4, d5, and b5, while also keeping our options open for various pawn advances. The knight on c3 is particularly well-placed in the Averbakh System because it supports both our c4 pawn and a potential e4 advance, which would give us a formidable pawn center. Additionally, this development allows us to castle queenside if desired, though kingside castling remains the more common choice in this opening."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central pawns and prepares for further expansion. This knight controls important central squares like e4, d5, and b5, while also keeping our options open for various pawn advances. The knight on c3 is particularly well-placed in the Averbakh System because it supports both our c4 pawn and a potential e4 advance, which would give us a formidable pawn center. Additionally, this development allows us to castle queenside if desired, though kingside castling remains the more common choice in this opening."
     },
     {
       "san": "d6",

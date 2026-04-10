@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the most popular first move in chess, immediately seizing control of the central d5 and f5 squares while freeing both our bishop and queen for future development. This move embodies classical opening principles by fighting for the center with a pawn and creating immediate threats that our opponent must address. The king's pawn opening leads to sharp, tactical games where both sides will compete for central control and quick piece development. By playing e4, we're inviting our opponent into the most thoroughly analyzed and exciting openings in chess theory."
+      "annotation": "We're opening with the most popular first move in chess, immediately seizing control of the central d5 and f5 squares while freeing both our bishop and queen for future development. This move embodies classical opening principles by contesting central control with a pawn and creating immediate threats that our opponent must address. The king's pawn opening leads to sharp, tactical games where both sides will compete for central control and quick piece development. By playing e4, we're inviting our opponent into the most thoroughly analyzed and exciting openings in chess theory."
     },
     {
       "san": "c6",
@@ -15,7 +15,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at our center immediately, refusing to be intimidated by our aggressive pawn advance and insisting on getting counterplay in the center. This natural move challenges both of our pawns simultaneously and forces us to make a critical decision about the pawn structure. Our opponent is showing they're ready for the tactical complications that will arise, as this move leads to forced sequences where both sides will be trading pawns and fighting for piece activity. Black's strategy here is sound - they're not allowing us to maintain our ideal pawn center without a fight."
+      "annotation": "Black strikes at our center immediately, refusing to be intimidated by our aggressive pawn advance and insisting on getting counterplay in the center. this move challenges both of our pawns simultaneously and forces us to make a critical decision about the pawn structure. Our opponent is showing they're ready for the tactical complications that will arise, as this move leads to forced sequences where both sides will be trading pawns and fighting for piece activity. Black's strategy here is sound - they're not allowing us to maintain our ideal pawn center without a fight."
     },
     {
       "san": "exd5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately attacking our advanced d5 pawn and preparing to castle kingside quickly. This is the most popular and principled response, as it develops a piece while creating immediate pressure on our central pawn structure. Our opponent is following the Modern Variation approach, focusing on rapid development and piece activity rather than trying to blockade our pawn immediately. We now need to decide how to support our d5 pawn - typically with Nc3 and Nf3 - while maintaining our initiative and preparing our own king safety."
+      "annotation": "Black develops the knight to its ideal square, immediately attacking our advanced d5 pawn and preparing to castle kingside quickly. This is the most popular and principled response, as it develops a piece while creating immediate pressure on our central pawn structure. Our opponent is following the Modern Variation approach, focusing on rapid development and piece activity rather than trying to blockade our pawn immediately. We now need to decide how to support our d5 pawn - typically with Nc3 and Nf3 - while maintaining our initiative and preparing our own king safety."
     }
   ]
 }

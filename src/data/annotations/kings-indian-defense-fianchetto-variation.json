@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, immediately pressuring our d4 pawn and preparing to contest the center. This hypermodern approach doesn't occupy the center with pawns right away, but instead attacks it from the flanks - a key principle in many Indian defenses. The knight on f6 also prepares kingside castling and keeps options open for various pawn breaks like ...d6 and ...e5 or ...c5. Black is essentially saying 'I'll let you build your center, but I'm going to put pressure on it immediately and try to undermine it later.'"
+      "annotation": "Our opponent develops the knight to its ideal square, immediately pressuring our d4 pawn and preparing to contest the center. This hypermodern approach doesn't occupy the center with pawns right away, but instead attacks it from the flanks - a key principle in many Indian defenses. The knight on f6 also prepares kingside castling and keeps options open for various pawn breaks like ...d6 and ...e5 or ...c5. Black is essentially saying 'I'll let you build your center, but I'm going to put pressure on it immediately and try to undermine it later.'"
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing kingside castling and maintaining maximum flexibility in our setup. The knight on f3 also prevents any immediate ...e5-e4 advances from Black and keeps the option of playing e2-e4 ourselves to transpose into different pawn structures. This move fits perfectly with our positional approach - we're not rushing to create tension, but instead completing our development and maintaining central control. From f3, our knight can potentially reroute to d2, e5, or h4 depending on how the position develops, giving us excellent piece mobility."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing kingside castling and maintaining maximum flexibility in our setup. The knight on f3 also prevents any immediate ...e5-e4 advances from Black and keeps the option of playing e2-e4 ourselves to transpose into different pawn structures. This move fits perfectly with our positional approach - we're not rushing to create tension, but instead completing our development and maintaining central control. From f3, our knight can potentially reroute to d2, e5, or h4 depending on how the position develops, giving us excellent piece mobility."
     },
     {
       "san": "g3",

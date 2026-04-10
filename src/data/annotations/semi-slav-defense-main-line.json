@@ -15,15 +15,15 @@
     },
     {
       "san": "c6",
-      "annotation": "Black declines the Queen's Gambit and instead supports the d5 pawn with this solid move, entering the Slav Defense family. This approach maintains Black's central pawn and prepares to develop the light-squared bishop to f5 or g4 before playing ...e6. The c6 move also controls the important b5 and d5 squares, preventing our pieces from infiltrating there. Black is choosing a solid, somewhat passive setup that aims for gradual equality rather than immediate counterplay."
+      "annotation": "Black declines the Queen's Gambit and instead supports the d5 pawn with this stabilizing move, entering the Slav Defense family. This approach maintains Black's central pawn and prepares to develop the light-squared bishop to f5 or g4 before playing ...e6. The c6 move also controls the important b5 and d5 squares, preventing our pieces from infiltrating there. Black is choosing a solid, somewhat passive setup that aims for gradual equality rather than immediate counterplay."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding pressure to Black's d5 pawn and supporting our central presence. This piece placement is almost automatic in Queen's Gambit structures, as the knight eyes several important central squares including e4 and b5. The Nc3 also prepares potential tactics involving a future e3-e4 pawn break or supports queenside operations. From c3, our knight maintains flexibility and can later consider jumps to e4, a4, or b5 depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, adding pressure to Black's d5 pawn and supporting our central presence. This piece placement is almost automatic in Queen's Gambit structures, as the knight eyes several important central squares including e4 and b5. The Nc3 also prepares potential tactics involving a future e3-e4 pawn break or supports queenside operations. From c3, our knight maintains flexibility and can later consider jumps to e4, a4, or b5 depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most active square, defending the d5 pawn and preparing kingside castling. This natural developing move also attacks our potential e4 advance and gives Black's position more solidity. The Nf6 knight will often be a key defender in Black's setup, and it can later support central breaks like ...e5 or ...c5. Black is following classical development principles while maintaining their solid pawn structure."
+      "annotation": "Black develops their kingside knight to its most active square, defending the d5 pawn and preparing kingside castling. This active move also attacks our potential e4 advance and gives Black's position more solidity. The Nf6 knight will often be a key defender in Black's setup, and it can later support central breaks like ...e5 or ...c5. Black is following classical development principles while maintaining their solid pawn structure."
     },
     {
       "san": "e3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays the key move that defines the Semi-Slav Defense, supporting the d5 pawn while preparing to develop the dark-squared bishop. However, this move also blocks in the light-squared bishop on c8, which becomes one of Black's main strategic challenges in this opening. The pawn structure c6-d5-e6 gives Black a solid but somewhat passive setup that requires careful piece coordination. Black is accepting a slight space disadvantage in exchange for a very solid position with no weaknesses."
+      "annotation": "Black plays the defining move of the Semi-Slav Defense, supporting the d5 pawn while preparing to develop the dark-squared bishop. However, this move also blocks in the light-squared bishop on c8, which becomes one of Black's main strategic challenges in this opening. The pawn structure c6-d5-e6 gives Black a solid but somewhat passive setup that requires careful piece coordination. Black is accepting a slight space disadvantage in exchange for a very solid position with no weaknesses."
     },
     {
       "san": "Nf3",
@@ -47,7 +47,7 @@
     },
     {
       "san": "b6",
-      "annotation": "Black plays a key move in the Semi-Slav, preparing to fianchetto the problematic light-squared bishop on the long diagonal. This move finally gives Black's c8 bishop a path to activity via a6 or b7, solving one of the main drawbacks of the ...e6 setup. However, b6 does create some weaknesses around the c6 pawn and a6 square that we might exploit later. Black is accepting these minor weaknesses to activate their pieces and create counterplay along the long diagonal."
+      "annotation": "Black plays a critical move in the Semi-Slav, preparing to fianchetto the problematic light-squared bishop on the long diagonal. This move finally gives Black's c8 bishop a path to activity via a6 or b7, solving one of the main drawbacks of the ...e6 setup. However, b6 does create some weaknesses around the c6 pawn and a6 square that we might exploit later. Black is accepting these minor weaknesses to activate their pieces and create counterplay along the long diagonal."
     },
     {
       "san": "b3",

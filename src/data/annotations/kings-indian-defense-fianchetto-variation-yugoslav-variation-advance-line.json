@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, supporting our d4 pawn while preparing kingside castling and maintaining control over the important e5 square. This move fits perfectly with our planned fianchetto setup, as the knight on f3 harmonizes beautifully with a bishop on g2, creating a solid yet flexible piece configuration. The knight also prevents Black from playing an immediate e5 advance, which would give Black excellent central control and space. From f3, our knight can potentially redeploy to d2, e1, h4, or other squares depending on the middlegame requirements."
+      "annotation": "We develop our king's knight to its ideal square, supporting our d4 pawn while preparing kingside castling and maintaining control over the important e5 square. This move fits perfectly with our planned fianchetto setup, as the knight on f3 harmonizes beautifully with a bishop on g2, creating a solid yet flexible piece configuration. The knight also prevents Black from playing an immediate e5 advance, which would give Black excellent central control and space. From f3, our knight can potentially redeploy to d2, e1, h4, or other squares depending on the middlegame requirements."
     },
     {
       "san": "Bg7",
@@ -55,7 +55,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent develops the queen's knight with tempo, attacking our d4 pawn while completing another piece of Black's development and preparing to intensify the central pressure. This natural developing move also supports the c5 pawn and creates additional tactical possibilities while maintaining Black's characteristic King's Indian piece activity. The knight on c6 is excellently placed to support Black's strategic goals, potentially jumping to d4, b4, or supporting various pawn advances depending on how the position develops. Black is now ready to increase the pressure on our center and begin the typical King's Indian middlegame operations with moves like a6, Rb8, or Bd7."
+      "annotation": "Our opponent develops the queen's knight with tempo, attacking our d4 pawn while completing another piece of Black's development and preparing to intensify the central pressure. This active move also supports the c5 pawn and creates additional tactical possibilities while maintaining Black's characteristic King's Indian piece activity. The knight on c6 is excellently placed to support Black's strategic goals, potentially jumping to d4, b4, or supporting various pawn advances depending on how the position develops. Black is now ready to increase the pressure on our center and begin the typical King's Indian middlegame operations with moves like a6, Rb8, or Bd7."
     },
     {
       "san": "d5",

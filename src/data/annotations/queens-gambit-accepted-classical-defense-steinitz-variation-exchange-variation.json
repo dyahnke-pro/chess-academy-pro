@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central ambitions. This move is far more flexible than the immediate e3, since the knight on f3 can later jump to e5 or g5 depending on how the position develops. We're also preparing to potentially recapture on c4 with either our bishop or queen, but there's no rush - development comes first. The knight on f3 also prepares to castle kingside and supports potential pawn advances like e2-e4 or g2-g3 depending on our chosen setup."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to support our central ambitions. This move is far more flexible than the immediate e3, since the knight on f3 can later jump to e5 or g5 depending on how the position develops. We're also preparing to potentially recapture on c4 with either our bishop or queen, but there's no rush - development comes first. The knight on f3 also prepares to castle kingside and supports potential pawn advances like e2-e4 or g2-g3 depending on our chosen setup."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops symmetrically and challenges our control of the e4 square while preparing to support their advanced c4 pawn. This natural developing move also prepares kingside castling and keeps Black's options open regarding the pawn structure. Our opponent is following sound opening principles by developing pieces toward the center rather than trying to hold onto the extra pawn immediately with moves like b5. The knight on f6 also eyes the central e4 and d5 squares, maintaining pressure on our position and preparing to potentially support ...e6 or ...e5 pawn advances."
+      "annotation": "Black develops symmetrically and challenges our control of the e4 square while preparing to support their advanced c4 pawn. This active move also prepares kingside castling and keeps Black's options open regarding the pawn structure. Our opponent is following sound opening principles by developing pieces toward the center rather than trying to hold onto the extra pawn immediately with moves like b5. The knight on f6 also eyes the central e4 and d5 squares, maintaining pressure on our position and preparing to potentially support ...e6 or ...e5 pawn advances."
     },
     {
       "san": "e3",

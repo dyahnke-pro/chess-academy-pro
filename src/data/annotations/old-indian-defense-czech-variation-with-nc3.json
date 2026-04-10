@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds by developing the kingside knight to its most natural square, immediately attacking our d4 pawn and contesting central control. This is a hypermodern approach where Black doesn't rush to occupy the center with pawns but instead attacks it with pieces from the flanks. The knight on f6 also prepares kingside castling and keeps flexible options for Black's pawn structure. By attacking d4 immediately, Black forces us to make a decision about how to support our central pawn, which will largely determine the character of the resulting middlegame."
+      "annotation": "Black responds by developing the kingside knight to its ideal square, immediately attacking our d4 pawn and contesting central control. This is a hypermodern approach where Black doesn't rush to occupy the center with pawns but instead attacks it with pieces from the flanks. The knight on f6 also prepares kingside castling and keeps flexible options for Black's pawn structure. By attacking d4 immediately, Black forces us to make a decision about how to support our central pawn, which will largely determine the character of the resulting middlegame."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its most active square, adding another defender to the d4 pawn while preparing potential future advances like e4 or f4. The knight on c3 supports our central control and keeps multiple strategic options open - we might play e4 for a broad pawn center, or maintain the current structure and focus on queenside expansion. This natural developing move also prepares to meet Black's potential ...e5 pawn break with strong central control. By developing pieces before committing to a specific pawn structure, we maintain maximum flexibility while steadily improving our position."
+      "annotation": "We develop our queenside knight to its most active square, adding another defender to the d4 pawn while preparing potential future advances like e4 or f4. The knight on c3 supports our central control and keeps multiple strategic options open - we might play e4 for a broad pawn center, or maintain the current structure and focus on queenside expansion. This active move also prepares to meet Black's potential ...e5 pawn break with strong central control. By developing pieces before committing to a specific pawn structure, we maintain maximum flexibility while steadily improving our position."
     },
     {
       "san": "c6",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the King's Knight, preparing to potentially support a future ...e6 or ...g6 setup. This flexible developing move keeps Black's options open for various defensive systems like the King's Indian, Nimzo-Indian, or Grünfeld Defense. Our opponent is following sound opening principles by developing pieces toward the center and creating immediate pressure on our d4 pawn. Black is also preparing to castle kingside and maintain a solid position."
+      "annotation": "Black immediately challenges our central pawn with the King's Knight, preparing to potentially support a future ...e6 or ...g6 setup. This flexible developing choice keeps Black's options open for various defensive systems like the King's Indian, Nimzo-Indian, or Grünfeld Defense. Our opponent is following sound opening principles by developing pieces toward the center and creating immediate pressure on our d4 pawn. Black is also preparing to castle kingside and maintain a solid position."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our Queen's Knight to its most natural square, adding another defender to the d5 square and preparing to meet Black's central challenges. This knight placement supports our d4 pawn and maintains pressure on Black's position while keeping our options open for various pawn structures. Our knight from c3 can later jump to e4, d5, or support pawn advances like d4-d5. The Nc3 development is a key component in many Queen's Pawn openings, giving us flexible piece coordination."
+      "annotation": "We're developing our Queen's Knight to its ideal square, adding another defender to the d5 square and preparing to meet Black's central challenges. This knight placement supports our d4 pawn and maintains pressure on Black's position while keeping our options open for various pawn structures. Our knight from c3 can later jump to e4, d5, or support pawn advances like d4-d5. The Nc3 development is a key component in many Queen's Pawn openings, giving us flexible piece coordination."
     },
     {
       "san": "d5",

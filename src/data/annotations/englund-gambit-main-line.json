@@ -15,11 +15,11 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, attacking our advanced e5 pawn and preparing to recapture material. This knight placement also supports potential central advances like ...d6 or prepares for piece development to squares like f6 or e7. Our opponent is following typical gambit principles: develop quickly, create pressure on our position, and try to exploit any slow or passive moves we might make. The knight on c6 also keeps open the possibility of ...f6, directly challenging our pawn center and opening lines for Black's pieces."
+      "annotation": "Black develops the knight to its ideal square, attacking our advanced e5 pawn and preparing to recapture material. This knight placement also supports potential central advances like ...d6 or prepares for piece development to squares like f6 or e7. Our opponent is following typical gambit principles: develop quickly, create pressure on our position, and try to exploit any slow or passive moves we might make. The knight on c6 also keeps open the possibility of ...f6, directly challenging our pawn center and opening lines for Black's pieces."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, defending the e5 pawn while controlling important central squares like e5, d4, and g5. This natural developing move follows sound opening principles and prepares to castle kingside for safety. The knight on f3 also prevents any potential ...Ng4 ideas from Black and supports potential pawn advances like e6 or f4 in the future. By developing harmoniously and maintaining our material advantage, we're staying true to classical principles while being ready to meet Black's aggressive intentions."
+      "annotation": "We develop our knight to its ideal square, defending the e5 pawn while controlling important central squares like e5, d4, and g5. This active move follows sound opening principles and prepares to castle kingside for safety. The knight on f3 also prevents any potential ...Ng4 ideas from Black and supports potential pawn advances like e6 or f4 in the future. By developing harmoniously and maintaining our material advantage, we're staying true to classical principles while being ready to meet Black's aggressive intentions."
     },
     {
       "san": "Qe7",

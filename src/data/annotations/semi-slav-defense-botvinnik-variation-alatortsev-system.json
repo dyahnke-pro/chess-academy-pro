@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and controlling the important e4 square. This is one of the most flexible responses to d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 is well-placed for most of Black's defensive systems, whether it's the King's Indian, Nimzo-Indian, or the Semi-Slav that we're heading toward. Black is following the principle of developing pieces toward the center while creating immediate tactical threats."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and controlling the important e4 square. This is one of the most flexible responses to d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 is well-placed for most of Black's defensive systems, whether it's the King's Indian, Nimzo-Indian, or the Semi-Slav that we're heading toward. Black is following the principle of developing pieces toward the center while creating immediate tactical threats."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal central square, supporting our d4 pawn while controlling the important e5 and g5 squares and preparing to castle kingside. This natural developing move also prevents Black from advancing the e-pawn to e5, maintaining our central advantage. The knight on f3 is perfectly placed for most of our strategic plans - it can support a future e4 advance, help control central squares, or redeploy to other squares like e5 or g5 depending on how the position develops. This move demonstrates the principle of developing with purpose, as our knight serves multiple strategic functions from this central outpost."
+      "annotation": "We develop our knight to its ideal central square, supporting our d4 pawn while controlling the important e5 and g5 squares and preparing to castle kingside. This active move also prevents Black from advancing the e-pawn to e5, maintaining our central advantage. The knight on f3 is perfectly placed for most of our strategic plans - it can support a future e4 advance, help control central squares, or redeploy to other squares like e5 or g5 depending on how the position develops. This move demonstrates the principle of developing with purpose, as our knight serves multiple strategic functions from this central outpost."
     },
     {
       "san": "d5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays the characteristic Semi-Slav move, supporting the d5 pawn while preparing the liberating b7-b5 advance that will challenge our pawn chain. This solid move creates a strong pawn triangle on c6-d5-e6, giving Black a firm central foundation that's difficult to disrupt immediately. The c6 pawn also controls the important b5 and d5 squares, limiting our knight's options and preparing Black's queenside counterplay. However, this move does temporarily block in Black's queen and makes it harder to develop the queenside pieces naturally, which is the price Black pays for this solid but somewhat passive setup."
+      "annotation": "Black plays the characteristic Semi-Slav move, supporting the d5 pawn while preparing the liberating b7-b5 advance that will challenge our pawn chain. this stabilizing move creates a strong pawn triangle on c6-d5-e6, giving Black a firm central foundation that's difficult to disrupt immediately. The c6 pawn also controls the important b5 and d5 squares, limiting our knight's options and preparing Black's queenside counterplay. However, this move does temporarily block in Black's queen and makes it harder to develop the queenside pieces naturally, which is the price Black pays for this solid but somewhat passive setup."
     },
     {
       "san": "Bg5",

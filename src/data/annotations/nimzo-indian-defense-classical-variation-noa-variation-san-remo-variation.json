@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking the d4 pawn while developing the kingside knight to its most active square. This knight on f6 not only pressures d4 but also controls the important central squares e4 and g4, preventing us from advancing too quickly in the center. Black is keeping options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. We'll need to support our d4 pawn soon, and this move forces us to make a concrete decision about our pawn structure."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking the d4 pawn while developing the kingside knight to its most active square. This knight on f6 not only pressures d4 but also controls the important central squares e4 and g4, preventing us from advancing too quickly in the center. Black is keeping options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. We'll need to support our d4 pawn soon, and this move forces us to make a concrete decision about our pawn structure."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding crucial support to our d4 pawn while preparing to meet Black's various defensive setups. This knight on c3 fights for control of the central e4 and d5 squares, and from here it can potentially advance to e4 or support pawn advances like d5 or e4. However, we're also allowing Black the possibility of the Nimzo-Indian Defense with ...Bb4, pinning our knight and creating immediate central tension. The knight development is essential for completing our setup, but we must be prepared for Black's active piece play that often follows in these systems."
+      "annotation": "We're developing our knight to its ideal square, adding crucial support to our d4 pawn while preparing to meet Black's various defensive setups. This knight on c3 fights for control of the central e4 and d5 squares, and from here it can potentially advance to e4 or support pawn advances like d5 or e4. However, we're also allowing Black the possibility of the Nimzo-Indian Defense with ...Bb4, pinning our knight and creating immediate central tension. The knight development is essential for completing our setup, but we must be prepared for Black's active piece play that often follows in these systems."
     },
     {
       "san": "Bb4",

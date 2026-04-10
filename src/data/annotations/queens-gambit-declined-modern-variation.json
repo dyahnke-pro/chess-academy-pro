@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, where it supports the c4 pawn and adds additional pressure to Black's d5 strongpoint. This knight perfectly complements our pawn structure, and from c3 it can later jump to e4, a5, or b5 depending on how the position develops. The knight also prepares potential pawn breaks like e4, since it won't be blocking the e-pawn's advance. This is one of the most natural developing moves in the Queen's Gambit, immediately improving our position while maintaining the central tension."
+      "annotation": "We're developing our knight to its most active square, where it supports the c4 pawn and adds additional pressure to Black's d5 strongpoint. This knight perfectly complements our pawn structure, and from c3 it can later jump to e4, a5, or b5 depending on how the position develops. The knight also prepares potential pawn breaks like e4, since it won't be blocking the e-pawn's advance. This is one of the most active moves in the Queen's Gambit, immediately improving our position while maintaining the central tension."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, attacking our e4 square and preparing to castle kingside. This knight is perfectly placed to support Black's central pawn structure and can later jump to e4, d7, or h5 depending on the position's requirements. The move also completes Black's basic development plan in the Queen's Gambit Declined - they've supported the center with pawns and are now getting pieces into play. Black is following classical opening principles: develop knights before bishops, fight for the center, and prepare to castle safely."
+      "annotation": "Black develops their knight to its ideal square, attacking our e4 square and preparing to castle kingside. This knight is perfectly placed to support Black's central pawn structure and can later jump to e4, d7, or h5 depending on the position's requirements. The move also completes Black's basic development plan in the Queen's Gambit Declined - they've supported the center with pawns and are now getting pieces into play. Black is following classical opening principles: develop knights before bishops, fight for the center, and prepare to castle safely."
     },
     {
       "san": "Bg5",

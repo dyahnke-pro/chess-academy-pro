@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding additional pressure to Black's d5 pawn. This knight controls important central squares like e4, d5, and b5, and can potentially jump to e4 or e2 depending on how the position develops. The knight on c3 also supports a potential d4-d5 pawn advance in some variations, giving us excellent central control. This is the most principled continuation in the Queen's Gambit, as it maintains maximum pressure on Black's position while developing efficiently toward the center."
+      "annotation": "We're developing our knight to its ideal square while adding additional pressure to Black's d5 pawn. This knight controls important central squares like e4, d5, and b5, and can potentially jump to e4 or e2 depending on how the position develops. The knight on c3 also supports a potential d4-d5 pawn advance in some variations, giving us excellent central control. This is the most principled continuation in the Queen's Gambit, as it maintains maximum pressure on Black's position while developing efficiently toward the center."
     },
     {
       "san": "Nf6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black finally plays this important move, supporting the d5 pawn and preparing to potentially challenge our center with ...b5 or create counterplay on the queenside. This move also prevents our pieces from occupying the important b5 and d5 squares, giving Black's position more solidity and reducing our tactical possibilities. However, the move does have drawbacks – it blocks the c8 bishop's development path and makes the b6 square less attractive for the knight. Our opponent is accepting these minor inconveniences in exchange for a more solid pawn structure and better control over the light squares in their position."
+      "annotation": "Black finally plays this purposeful move, supporting the d5 pawn and preparing to potentially challenge our center with ...b5 or create counterplay on the queenside. This move also prevents our pieces from occupying the important b5 and d5 squares, giving Black's position more solidity and reducing our tactical possibilities. However, the move does have drawbacks – it blocks the c8 bishop's development path and makes the b6 square less attractive for the knight. Our opponent is accepting these minor inconveniences in exchange for a more solid pawn structure and better control over the light squares in their position."
     },
     {
       "san": "Bd3",

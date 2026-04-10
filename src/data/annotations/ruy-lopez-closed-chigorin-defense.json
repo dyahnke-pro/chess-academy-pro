@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn while supporting our own central ambitions. This knight controls the important central squares d4 and e5, and prepares for quick kingside castling. The knight on f3 is perfectly placed to support our e4 pawn and can later jump to powerful outposts like d4 or g5. This move is the hallmark of classical play - developing pieces toward the center while maintaining pressure on Black's position."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn while supporting our own central ambitions. This knight controls the important central squares d4 and e5, and prepares for quick kingside castling. The knight on f3 is perfectly placed to support our e4 pawn and can later jump to powerful outposts like d4 or g5. This move is the hallmark of classical play - developing pieces toward the center while maintaining pressure on Black's position."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight toward the center. This knight controls important squares like d4 and b4, and supports Black's central pawn chain. The knight on c6 is well-placed for Black's defensive setup, though it can become a target later in some variations. Black is following sound opening principles by developing pieces and maintaining the central tension rather than making premature pawn moves."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight toward the center. This knight controls important squares like d4 and b4, and supports Black's central pawn chain. The knight on c6 is well-placed for Black's defensive setup, though it can become a target later in some variations. Black is following sound opening principles by developing pieces and maintaining the central tension rather than making premature pawn moves."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight, attacking our e4 pawn while preparing to castle kingside. This natural developing move puts immediate pressure on our center and forces us to make a decision about our e4 pawn. The knight on f6 is excellently placed, controlling key central squares like d5 and e4, while also supporting Black's kingside development. Black is now ready to castle and has successfully challenged both of our central pieces (the e4 pawn and the bishop on a4)."
+      "annotation": "Black develops the kingside knight, attacking our e4 pawn while preparing to castle kingside. This active move puts immediate pressure on our center and forces us to make a decision about our e4 pawn. The knight on f6 is excellently placed, controlling key central squares like d5 and e4, while also supporting Black's kingside development. Black is now ready to castle and has successfully challenged both of our central pieces (the e4 pawn and the bishop on a4)."
     },
     {
       "san": "O-O",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the dark-squared bishop to its most natural square, preparing to castle while maintaining flexibility in the position. This bishop supports Black's kingside and can later participate in central play or kingside defense as needed. The move 5...Be7 is more solid than alternatives like 5...b5, as it completes Black's kingside development without committing to immediate counterplay. Black is following the principle of completing development before launching operations, ensuring their king will be safe."
+      "annotation": "Black develops the dark-squared bishop to its ideal square, preparing to castle while maintaining flexibility in the position. This bishop supports Black's kingside and can later participate in central play or kingside defense as needed. The move 5...Be7 is more solid than alternatives like 5...b5, as it completes Black's kingside development without committing to immediate counterplay. Black is following the principle of completing development before launching operations, ensuring their king will be safe."
     },
     {
       "san": "Re1",
@@ -59,11 +59,11 @@
     },
     {
       "san": "c3",
-      "annotation": "We prepare the central advance d4, which is the key breakthrough in the Ruy Lopez structure. This pawn move supports our coming d4 advance while also controlling the important b4 and d4 squares. The move c3 is part of our systematic buildup - we're preparing to challenge Black's central pawn chain with maximum effect. This quiet but important move exemplifies the strategic nature of the Ruy Lopez, where careful preparation leads to powerful central breaks."
+      "annotation": "We prepare the central advance d4, which is the key breakthrough in the Ruy Lopez structure. This pawn move supports our coming d4 advance while also controlling the important b4 and d4 squares. The move c3 is part of our systematic buildup - we're preparing to challenge Black's central pawn chain with maximum effect. this purposeful move exemplifies the strategic nature of the Ruy Lopez, where careful preparation leads to powerful central breaks."
     },
     {
       "san": "O-O",
-      "annotation": "Black completes kingside development by castling, ensuring king safety before the position becomes more complex. This natural move connects Black's rooks and prepares for the coming central battles with the king safely tucked away. By castling, Black is ready to meet our central advances without worrying about tactical shots against the king. Black has now completed the essential development and can focus on creating counterplay in the center and queenside."
+      "annotation": "Black completes kingside development by castling, ensuring king safety before the position becomes more complex. this move connects Black's rooks and prepares for the coming central battles with the king safely tucked away. By castling, Black is ready to meet our central advances without worrying about tactical shots against the king. Black has now completed the essential development and can focus on creating counterplay in the center and queenside."
     },
     {
       "san": "h3",

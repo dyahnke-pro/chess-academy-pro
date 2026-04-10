@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This natural move fights for central control and prepares to develop the light-squared bishop, following sound opening principles. Our opponent is likely expecting a typical Queen's Gambit or London System continuation, but we have a surprise in store. This central pawn clash sets up perfectly for our next move, which will transform the game's character completely."
+      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. this move fights for central control and prepares to develop the light-squared bishop, following sound opening principles. Our opponent is likely expecting a typical Queen's Gambit or London System continuation, but we have a surprise in store. This central pawn clash sets up perfectly for our next move, which will transform the game's character completely."
     },
     {
       "san": "e4",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black completes the Pietrowsky Defense by developing the queenside knight to its most natural square, adding support to the center and preparing to complete development. This move defends the e5 square and prevents some of our knight jumps while maintaining Black's extra material. Our opponent is following sound developing principles, but still faces the challenge of safely coordinating the pieces under our mounting pressure. The knight on c6 can later support advances like e5 or help defend the kingside, but Black must still solve the crucial problem of king safety while we're building our attack."
+      "annotation": "Black completes the Pietrowsky Defense by developing the queenside knight to its ideal square, adding support to the center and preparing to complete development. This move defends the e5 square and prevents some of our knight jumps while maintaining Black's extra material. Our opponent is following sound developing principles, but still faces the challenge of safely coordinating the pieces under our mounting pressure. The knight on c6 can later support advances like e5 or help defend the kingside, but Black must still solve the crucial problem of king safety while we're building our attack."
     }
   ]
 }

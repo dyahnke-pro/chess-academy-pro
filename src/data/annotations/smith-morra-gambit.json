@@ -198,7 +198,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to c6, the most natural square. The knight controls d4, e5, and helps prepare the kingside development. This is the most common response — Black develops normally while keeping the extra pawn.",
+      "annotation": "Black develops the knight to c6, the ideal square. The knight controls d4, e5, and helps prepare the kingside development. This is the most common response — Black develops normally while keeping the extra pawn.",
       "plans": [
         "Control d4 and e5 with the knight",
         "Develop the kingside with e6, Nf6, Be7",
@@ -362,7 +362,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, a natural and solid move. The knight defends d5, attacks e4, and prepares to castle. Black is catching up in development but is still behind White. The knight on f6 is well-placed but can become a target if White plays e5 at the right moment.",
+      "annotation": "Black develops the knight to f6, a natural and well-grounded move. The knight defends d5, attacks e4, and prepares to castle. Black is catching up in development but is still behind White. The knight on f6 is well-placed but can become a target if White plays e5 at the right moment.",
       "plans": [
         "Develop the knight to its natural square",
         "Prepare to castle kingside",
@@ -1743,7 +1743,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "The Smith-Morra Declined: d3 Push is an important variation of the Smith-Morra Gambit. Black declines by pushing d3 instead of taking on c3. This avoids the gambit but gives White a free developing move with Bxd3. The resulting position is like a Maroczy Bind where White has a comfortable space advantage. The Nc4 and a4-a5 plan creates queenside pressure. Let's walk through the key ideas."
+          "annotation": "The Smith-Morra Declined: d3 Push is an important variation of the Smith-Morra Gambit. Black declines by pushing d3 instead of taking on c3. This avoids the gambit but gives White a free developing choice with Bxd3. The resulting position is like a Maroczy Bind where White has a comfortable space advantage. The Nc4 and a4-a5 plan creates queenside pressure. Let's walk through the key ideas."
         },
         {
           "san": "c5",
@@ -1896,7 +1896,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "The Smith-Morra: Siberian Trap is an important variation of the Smith-Morra Gambit. The Siberian Trap is the Smith-Morra's most famous tactical idea. After Qa5 and e5, the position becomes razor-sharp. The Nd5 jump is the key move — it forks multiple pieces and creates discovered threats along the e-file. Even if Black defends accurately, White emerges with excellent compensation. Let's walk through the key ideas."
+          "annotation": "The Smith-Morra: Siberian Trap is an important variation of the Smith-Morra Gambit. The Siberian Trap is the Smith-Morra's most famous tactical idea. After Qa5 and e5, the position becomes razor-sharp. The Nd5 jump is the critical move — it forks multiple pieces and creates discovered threats along the e-file. Even if Black defends accurately, White emerges with excellent compensation. Let's walk through the key ideas."
         },
         {
           "san": "c5",

@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're attacking Black's central pawn and offering the Queen's Gambit, one of the most classical and respected openings in chess history. This move puts immediate pressure on Black's d5 pawn while simultaneously gaining space on the queenside and opening the c-file for potential future use. If Black captures with dxc4, we can recapture and gain a strong pawn center, while if Black maintains the tension, we've still improved our position by activating our pieces. This move also prepares to support our d4 pawn further and gives us excellent central control, embodying the key principle of fighting for the center with pawns."
+      "annotation": "We're attacking Black's central pawn and offering the Queen's Gambit, one of the most classical and respected openings in chess history. This move puts immediate pressure on Black's d5 pawn while simultaneously gaining space on the queenside and opening the c-file for potential future use. If Black captures with dxc4, we can recapture and gain a strong pawn center, while if Black maintains the tension, we've still improved our position by activating our pieces. This move also prepares to support our d4 pawn further and gives us excellent central control, embodying the key principle of contesting central control with pawns."
     },
     {
       "san": "c6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to Black's d5 pawn and increasing the central pressure. This knight controls important squares like b5, d5, and e4, while also supporting potential future pawn advances like e2-e4. The knight development follows classical opening principles - we're bringing pieces into the game quickly while maintaining the tension in the center. From c3, our knight is optimally placed to support our central pawns and can potentially jump to more active squares like e4 or b5 later in the game, depending on how the position evolves."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to Black's d5 pawn and increasing the central pressure. This knight controls important squares like b5, d5, and e4, while also supporting potential future pawn advances like e2-e4. The knight development follows classical opening principles - we're bringing pieces into the game quickly while maintaining the tension in the center. From c3, our knight is optimally placed to support our central pawns and can potentially jump to more active squares like e4 or b5 later in the game, depending on how the position evolves."
     },
     {
       "san": "Nf6",

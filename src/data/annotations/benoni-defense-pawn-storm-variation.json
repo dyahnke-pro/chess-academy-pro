@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing the knight to its most active square. This move is the hallmark of hypermodern openings - rather than occupying the center with pawns immediately, Black is preparing to attack our center from the flanks. The knight on f6 also prepares kingside castling and keeps options open for various pawn structures. We need to be ready for Black's next moves, which will likely involve moves like c5, d6, or g6, all aimed at undermining our central control."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while bringing the knight to its most active square. This move is the hallmark of hypermodern openings - rather than occupying the center with pawns immediately, Black is preparing to attack our center from the flanks. The knight on f6 also prepares kingside castling and keeps options open for various pawn structures. We need to be ready for Black's next moves, which will likely involve moves like c5, d6, or g6, all aimed at undermining our central control."
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black immediately challenges our advanced d-pawn with this principled central break, following classical opening principles by fighting for the center. This move opens lines for Black's light-squared bishop and queen while preparing to potentially recapture on d5 with the pawn, which would give Black a solid pawn structure. However, this advance also slightly weakens Black's kingside, particularly the f6 and h6 squares, which we might be able to exploit later with our pieces. The tension in the center is now at its peak, and both sides must decide whether to maintain or resolve it - a decision that will fundamentally shape the middlegame structure."
+      "annotation": "Black immediately challenges our advanced d-pawn with this principled central break, following classical opening principles by contesting central control. This move opens lines for Black's light-squared bishop and queen while preparing to potentially recapture on d5 with the pawn, which would give Black a solid pawn structure. However, this advance also slightly weakens Black's kingside, particularly the f6 and h6 squares, which we might be able to exploit later with our pieces. The tension in the center is now at its peak, and both sides must decide whether to maintain or resolve it - a decision that will fundamentally shape the middlegame structure."
     },
     {
       "san": "dxe6",

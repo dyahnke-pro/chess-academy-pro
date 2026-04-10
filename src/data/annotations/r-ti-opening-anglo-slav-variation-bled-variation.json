@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preparing to support the central d5 pawn. This move follows classical development principles and keeps Black's position solid and flexible. Our opponent is essentially saying 'I'll develop naturally and see how you plan to challenge my central pawn.' The knight on f6 also prepares potential kingside castling while maintaining pressure on our potential central advances. This is considered one of the most reliable responses, avoiding any immediate tactical complications."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to support the central d5 pawn. This move follows classical development principles and keeps Black's position solid and flexible. Our opponent is essentially saying 'I'll develop naturally and see how you plan to challenge my central pawn.' The knight on f6 also prepares potential kingside castling while maintaining pressure on our potential central advances. This is considered one of the most reliable responses, avoiding any immediate tactical complications."
     },
     {
       "san": "Bb2",
@@ -31,7 +31,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black chooses to support the d5 pawn with this solid move, creating what's known as the Slav pawn structure. This move maintains the central pawn on d5 while preparing to potentially advance it to d4 if we capture on d5. Our opponent is keeping the position flexible - the c6 pawn supports d5 but doesn't block the light-squared bishop permanently, as it can still potentially come out via b7 or a6 later. This leads us into the Anglo-Slav Variation, where Black has adopted a solid, classical approach to meet our hypermodern opening, setting up rich positional battles ahead."
+      "annotation": "Black chooses to support the d5 pawn with this stabilizing move, creating what's known as the Slav pawn structure. This move maintains the central pawn on d5 while preparing to potentially advance it to d4 if we capture on d5. Our opponent is keeping the position flexible - the c6 pawn supports d5 but doesn't block the light-squared bishop permanently, as it can still potentially come out via b7 or a6 later. This leads us into the Anglo-Slav Variation, where Black has adopted a solid, classical approach to meet our hypermodern opening, setting up rich positional battles ahead."
     }
   ]
 }

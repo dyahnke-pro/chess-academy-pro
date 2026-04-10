@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to Black's d5 pawn and increasing the central pressure. This knight on c3 is perfectly placed to support our central ambitions - it can potentially jump to e4 or b5 in many variations, and it doesn't block our b-pawn like a knight on d2 would. The move also prepares various pawn breaks like e2-e4 if Black's d-pawn ever moves, and maintains maximum flexibility in our pawn structure. By developing pieces before committing to specific pawn breaks, we're following classical opening principles while keeping our options open."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to Black's d5 pawn and increasing the central pressure. This knight on c3 is perfectly placed to support our central ambitions - it can potentially jump to e4 or b5 in many variations, and it doesn't block our b-pawn like a knight on d2 would. The move also prepares various pawn breaks like e2-e4 if Black's d-pawn ever moves, and maintains maximum flexibility in our pawn structure. By developing pieces before committing to specific pawn breaks, we're following classical opening principles while keeping our options open."
     },
     {
       "san": "c6",

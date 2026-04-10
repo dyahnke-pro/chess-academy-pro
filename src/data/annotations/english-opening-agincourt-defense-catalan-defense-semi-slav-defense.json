@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important central squares e5 and d4 while preparing to support our kingside development. This move fits perfectly with our flexible English Opening strategy, as we're not committing to any particular pawn structure yet but simply improving our position. The knight on f3 also prepares potential ideas like d4 (transposing to Queen's Gambit structures) or maintaining the pure English setup with g3 and Bg2. From f3, our knight can later jump to various outposts like e5, d4, or even h4 in some tactical sequences."
+      "annotation": "We develop our knight to its ideal square, controlling the important central squares e5 and d4 while preparing to support our kingside development. This move fits perfectly with our flexible English Opening strategy, as we're not committing to any particular pawn structure yet but simply improving our position. The knight on f3 also prepares potential ideas like d4 (transposing to Queen's Gambit structures) or maintaining the pure English setup with g3 and Bg2. From f3, our knight can later jump to various outposts like e5, d4, or even h4 in some tactical sequences."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to mirror our setup, controlling the central squares d5 and e4 while attacking our c4 pawn. This is a principled developing move that fits well with Black's solid positional approach signaled by 1...e6. Our opponent is preparing to challenge the center with ...d5, and the knight on f6 will support this central break beautifully. We need to be aware that Black might be heading toward a Nimzo-Indian or Queen's Indian type of setup if we play d4, or they might maintain the current structure and focus on piece development."
+      "annotation": "Black develops their knight to mirror our setup, controlling the central squares d5 and e4 while attacking our c4 pawn. This is a purposeful move that fits well with Black's solid positional approach signaled by 1...e6. Our opponent is preparing to challenge the center with ...d5, and the knight on f6 will support this central break beautifully. We need to be aware that Black might be heading toward a Nimzo-Indian or Queen's Indian type of setup if we play d4, or they might maintain the current structure and focus on piece development."
     },
     {
       "san": "g3",

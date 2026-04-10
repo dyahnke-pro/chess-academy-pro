@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn, controls the central e5 square, and prepares kingside castling. The knight on f3 also prevents Black from playing ...e5, which would give Black a strong central presence. This development fits perfectly with our opening strategy - we're building up our position methodically while maintaining central control. From f3, our knight can potentially jump to more active squares like e5 or d2 depending on how the position develops, and it doesn't block any of our pawns or bishops."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn, controls the central e5 square, and prepares kingside castling. The knight on f3 also prevents Black from playing ...e5, which would give Black a strong central presence. This development fits perfectly with our opening strategy - we're building up our position methodically while maintaining central control. From f3, our knight can potentially jump to more active squares like e5 or d2 depending on how the position develops, and it doesn't block any of our pawns or bishops."
     },
     {
       "san": "b6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the dark-squared bishop to a solid, flexible square where it doesn't interfere with the fianchettoed bishop on b7 and prepares kingside castling. The Be7 is a classical developing move that maintains Black's solid structure while keeping options open for various pawn breaks like ...d6 and ...d5, or ...c5. This bishop can later be repositioned to more active squares like d6 or f6 depending on the position's needs, and it provides additional protection to Black's kingside. By playing Be7 rather than a more aggressive development, Black is emphasizing solidity and keeping the position flexible while maintaining the hypermodern pressure on our center."
+      "annotation": "Black develops the dark-squared bishop to a solid, flexible square where it doesn't interfere with the fianchettoed bishop on b7 and prepares kingside castling. The Be7 is a classical developing choice that maintains Black's solid structure while keeping options open for various pawn breaks like ...d6 and ...d5, or ...c5. This bishop can later be repositioned to more active squares like d6 or f6 depending on the position's needs, and it provides additional protection to Black's kingside. By playing Be7 rather than a more aggressive development, Black is emphasizing solidity and keeping the position flexible while maintaining the hypermodern pressure on our center."
     }
   ]
 }

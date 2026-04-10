@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn immediately and controlling the important central squares e4 and d5. This is one of the most principled responses to 1.d4, as it challenges our center right away while bringing a piece into the game. Our opponent is signaling that they don't want to allow us a free hand in building a large pawn center. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn immediately and controlling the important central squares e4 and d5. This is one of the most principled responses to 1.d4, as it challenges our center right away while bringing a piece into the game. Our opponent is signaling that they don't want to allow us a free hand in building a large pawn center. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development by bringing our knight to its most active square, where it controls crucial central squares like e5 and d4 while preparing to castle. The knight on f3 also adds another defender to our d4 pawn, which has been under pressure throughout the opening. This natural developing move prepares us to castle kingside and potentially launch an attack with moves like Ne5 or Ng5, depending on the tactical situation. Most importantly, we're following sound opening principles by developing all our minor pieces before committing to any specific pawn structure changes or strategic plans."
+      "annotation": "We're completing our kingside development by bringing our knight to its most active square, where it controls crucial central squares like e5 and d4 while preparing to castle. The knight on f3 also adds another defender to our d4 pawn, which has been under pressure throughout the opening. This active move prepares us to castle kingside and potentially launch an attack with moves like Ne5 or Ng5, depending on the tactical situation. Most importantly, we're following sound opening principles by developing all our minor pieces before committing to any specific pawn structure changes or strategic plans."
     },
     {
       "san": "Nc6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We're getting our king to safety and connecting our rooks, completing the basic requirements of sound opening play. This move also prepares to bring our rook from f1 into the game, potentially to e1 to support our center or to f3-h3 for attacking purposes against Black's kingside. With our king castled, we can now consider more aggressive plans like h2-h4-h5 for a kingside attack, or central advances that might expose our king if it were still in the center. This natural move puts us in an excellent position to begin our middlegame plans, whether that's attacking Black's king, pressuring in the center, or maneuvering our pieces to more active squares."
+      "annotation": "We're getting our king to safety and connecting our rooks, completing the basic requirements of sound opening play. This move also prepares to bring our rook from f1 into the game, potentially to e1 to support our center or to f3-h3 for attacking purposes against Black's kingside. With our king castled, we can now consider more aggressive plans like h2-h4-h5 for a kingside attack, or central advances that might expose our king if it were still in the center. this move puts us in an excellent position to begin our middlegame plans, whether that's attacking Black's king, pressuring in the center, or maneuvering our pieces to more active squares."
     }
   ]
 }

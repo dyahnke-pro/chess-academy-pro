@@ -19,7 +19,7 @@
     },
     {
       "san": "Nd2",
-      "annotation": "We develop our knight to d2, supporting the attacked e4 pawn while preparing to recapture on e4 with the knight if Black exchanges. This is a key move in the Caro-Kann, as it allows us to maintain a knight in the center after the pawn trade, keeping pressure on Black's position. The knight on d2 also doesn't block our c1-bishop's development, unlike the more common Nc3 which would obstruct the bishop's path. From d2, our knight can later jump to e4, f3, or c4, giving us excellent flexibility in our development scheme."
+      "annotation": "We develop our knight to d2, supporting the attacked e4 pawn while preparing to recapture on e4 with the knight if Black exchanges. This is a critical move in the Caro-Kann, as it allows us to maintain a knight in the center after the pawn trade, keeping pressure on Black's position. The knight on d2 also doesn't block our c1-bishop's development, unlike the more common Nc3 which would obstruct the bishop's path. From d2, our knight can later jump to e4, f3, or c4, giving us excellent flexibility in our development scheme."
     },
     {
       "san": "dxe4",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Ngf6",
-      "annotation": "Black brings out the kingside knight, directly challenging our centralized knight on e4 and preparing to castle kingside for safety. This natural developing move also controls important central squares like e4, d5, and h5, while supporting Black's kingside development. Our opponent is following sound opening principles by developing knights before bishops and challenging our best-placed piece. However, this knight can become a target for our pieces, and we have several ways to maintain pressure, including Ng5 or simply supporting our knight with moves like f3."
+      "annotation": "Black brings out the kingside knight, directly challenging our centralized knight on e4 and preparing to castle kingside for safety. This active move also controls important central squares like e4, d5, and h5, while supporting Black's kingside development. Our opponent is following sound opening principles by developing knights before bishops and challenging our best-placed piece. However, this knight can become a target for our pieces, and we have several ways to maintain pressure, including Ng5 or simply supporting our knight with moves like f3."
     },
     {
       "san": "Ng5",

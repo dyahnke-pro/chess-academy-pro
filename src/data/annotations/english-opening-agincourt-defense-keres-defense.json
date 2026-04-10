@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4 while preparing kingside castling. This move fits perfectly with our English Opening strategy of flexible development, as the knight supports various pawn breaks and doesn't commit us to any particular pawn structure yet. From f3, our knight will be well-placed regardless of whether the position becomes more tactical or positional in nature. We're also preparing to support a potential d2-d4 advance later, which would transpose into Queen's Gambit-like structures."
+      "annotation": "We develop our knight to its ideal square, where it controls the important central squares e5 and d4 while preparing kingside castling. This move fits perfectly with our English Opening strategy of flexible development, as the knight supports various pawn breaks and doesn't commit us to any particular pawn structure yet. From f3, our knight will be well-placed regardless of whether the position becomes more tactical or positional in nature. We're also preparing to support a potential d2-d4 advance later, which would transpose into Queen's Gambit-like structures."
     },
     {
       "san": "d5",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight with tempo, attacking the centralized black knight and forcing our opponent to make a decision about this important piece. This natural developing move also improves our control over central squares like e4 and d5, while preparing various tactical and positional themes. Our knight on c3 works excellently with our fianchettoed bishop on g2, creating potential tactics along the long diagonal and supporting central advances. By attacking the d5 knight, we're essentially testing whether Black wants to maintain this strong central piece or exchange it off, and either choice will give us reasonable chances to equalize the game."
+      "annotation": "We develop our knight with tempo, attacking the centralized black knight and forcing our opponent to make a decision about this important piece. This active move also improves our control over central squares like e4 and d5, while preparing various tactical and positional themes. Our knight on c3 works excellently with our fianchettoed bishop on g2, creating potential tactics along the long diagonal and supporting central advances. By attacking the d5 knight, we're essentially testing whether Black wants to maintain this strong central piece or exchange it off, and either choice will give us reasonable chances to equalize the game."
     },
     {
       "san": "Nc6",

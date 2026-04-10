@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and preparing to contest the center. This move is the hallmark of hypermodern opening philosophy - rather than occupying the center with pawns immediately, Black develops pieces that attack central squares from the flanks. The knight on f6 also prepares potential pawn breaks like ...e6 and ...d5 or ...c5, keeping maximum flexibility in Black's setup. We need to be prepared for Black to challenge our center in various ways, either with immediate pawn moves or through piece pressure."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and preparing to contest the center. This move is the hallmark of hypermodern opening philosophy - rather than occupying the center with pawns immediately, Black develops pieces that attack central squares from the flanks. The knight on f6 also prepares potential pawn breaks like ...e6 and ...d5 or ...c5, keeping maximum flexibility in Black's setup. We need to be prepared for Black to challenge our center in various ways, either with immediate pawn moves or through piece pressure."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, where it controls the central e5 and d4 squares while supporting our pawn structure. This natural developing move also prepares potential kingside castling and keeps our options open for various pawn structures - we can still transpose to Queen's Gambit lines with Nc3 and e3, or continue with more flexible setups. The knight on f3 also prevents any immediate ...e5 pawn advances from Black, maintaining our central space advantage. From f3, our knight can potentially reroute to more active squares like e5 or d4 later in the opening, depending on how the pawn structure develops."
+      "annotation": "We're developing our knight to its most active square, where it controls the central e5 and d4 squares while supporting our pawn structure. This active move also prepares potential kingside castling and keeps our options open for various pawn structures - we can still transpose to Queen's Gambit lines with Nc3 and e3, or continue with more flexible setups. The knight on f3 also prevents any immediate ...e5 pawn advances from Black, maintaining our central space advantage. From f3, our knight can potentially reroute to more active squares like e5 or d4 later in the opening, depending on how the pawn structure develops."
     },
     {
       "san": "b6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Bd2",
-      "annotation": "We're developing our bishop to block the check while keeping our king safe and maintaining flexibility in our position, avoiding any structural damage to our pawn formation. This natural developing move prepares to complete our queenside development and potentially supports our c4 pawn if Black continues to pressure it. The bishop on d2 also keeps the option of castling kingside available and doesn't commit us to any particular pawn structure prematurely. By developing rather than playing a more forcing move like Nbd2, we're following sound opening principles while preparing to complete our development and gradually improve our piece coordination."
+      "annotation": "We're developing our bishop to block the check while keeping our king safe and maintaining flexibility in our position, avoiding any structural damage to our pawn formation. This active move prepares to complete our queenside development and potentially supports our c4 pawn if Black continues to pressure it. The bishop on d2 also keeps the option of castling kingside available and doesn't commit us to any particular pawn structure prematurely. By developing rather than playing a more forcing move like Nbd2, we're following sound opening principles while preparing to complete our development and gradually improve our piece coordination."
     },
     {
       "san": "Be7",

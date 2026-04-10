@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central e4 square (which we haven't occupied yet). This is the starting move of the King's Indian Defense, one of the most fighting and dynamic defenses available to Black. Our opponent is signaling an intention to allow us a big pawn center while preparing to strike back with piece activity and pawn breaks like ...e5 or ...c5. The knight on f6 also prepares to support a future ...g6 and ...Bg7 fianchetto setup."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central e4 square (which we haven't occupied yet). This is the starting move of the King's Indian Defense, one of the most fighting and dynamic defenses available to Black. Our opponent is signaling an intention to allow us a big pawn center while preparing to strike back with piece activity and pawn breaks like ...e5 or ...c5. The knight on f6 also prepares to support a future ...g6 and ...Bg7 fianchetto setup."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, where it supports our central pawns and prepares for the aggressive e2-e4 advance. This knight controls important central squares like e4, d5, and b5 while also supporting our c4 pawn. From c3, the knight can potentially jump to d5 or e4 if the opportunity arises, and it doesn't block our queen's development. This is the most natural developing move that keeps all our options open for building the ideal pawn center formation."
+      "annotation": "We're developing our knight to its most active square, where it supports our central pawns and prepares for the aggressive e2-e4 advance. This knight controls important central squares like e4, d5, and b5 while also supporting our c4 pawn. From c3, the knight can potentially jump to d5 or e4 if the opportunity arises, and it doesn't block our queen's development. This is the most active move that keeps all our options open for building the ideal pawn center formation."
     },
     {
       "san": "Bg7",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn and prepares for kingside castling. The knight on f3 also prevents any potential ...e5 advances from Black and keeps an eye on important central squares like e5 and g5. This move fits perfectly with our Queen's Gambit setup, maintaining pressure in the center while improving our piece coordination. We're also preparing to meet Black's inevitable ...d5 with various options, including potential pawn trades or piece repositioning."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our d4 pawn and prepares for kingside castling. The knight on f3 also prevents any potential ...e5 advances from Black and keeps an eye on important central squares like e5 and g5. This move fits perfectly with our Queen's Gambit setup, maintaining pressure in the center while improving our piece coordination. We're also preparing to meet Black's inevitable ...d5 with various options, including potential pawn trades or piece repositioning."
     },
     {
       "san": "d5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're making a solid developing move that opens the diagonal for our light-squared bishop while supporting our d4 pawn and controlling the important f4 square. This move also prepares potential piece maneuvers and gives our king an escape route on e2 if needed in tactical complications. The e3 advance fits well with our overall strategy of solid development and central control, avoiding sharp tactical lines while maintaining a sound positional foundation. We're also preparing moves like Bd3 and potentially f2-f4 later to increase our central influence and piece activity."
+      "annotation": "We're making a constructive move that opens the diagonal for our light-squared bishop while supporting our d4 pawn and controlling the important f4 square. This move also prepares potential piece maneuvers and gives our king an escape route on e2 if needed in tactical complications. The e3 advance fits well with our overall strategy of solid development and central control, avoiding sharp tactical lines while maintaining a sound positional foundation. We're also preparing moves like Bd3 and potentially f2-f4 later to increase our central influence and piece activity."
     },
     {
       "san": "Nc6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to an excellent diagonal where it eyes Black's kingside and supports potential attacking chances down the road. The bishop on d3 also defends our e3 pawn and can potentially support advances like f2-f4 or participate in kingside attacking ideas with moves like Bxh7+. This natural developing move prepares for castling while maintaining flexibility in our position, keeping various plans available including central play or kingside pressure. The bishop placement also supports our overall strategy of solid development combined with potential tactical opportunities as the position opens up."
+      "annotation": "We're developing our light-squared bishop to an excellent diagonal where it eyes Black's kingside and supports potential attacking chances down the road. The bishop on d3 also defends our e3 pawn and can potentially support advances like f2-f4 or participate in kingside attacking ideas with moves like Bxh7+. This active move prepares for castling while maintaining flexibility in our position, keeping various plans available including central play or kingside pressure. The bishop placement also supports our overall strategy of solid development combined with potential tactical opportunities as the position opens up."
     }
   ]
 }

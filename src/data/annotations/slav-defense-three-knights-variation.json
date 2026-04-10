@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our future kingside development. This move also prepares to castle kingside and keeps maximum flexibility in our position - we haven't committed to any particular pawn structure yet. The knight on f3 is perfectly placed to support various plans: we might play e3 for a solid setup, or even consider g3 and Bg2 for a fianchetto approach. Additionally, Nf3 prevents any annoying ...e5 advance from Black that could challenge our central control."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our future kingside development. This move also prepares to castle kingside and keeps maximum flexibility in our position - we haven't committed to any particular pawn structure yet. The knight on f3 is perfectly placed to support various plans: we might play e3 for a solid setup, or even consider g3 and Bg2 for a fianchetto approach. Additionally, Nf3 prevents any annoying ...e5 advance from Black that could challenge our central control."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We complete the Three Knights Variation by developing our queenside knight to its most active square, where it supports our d4 pawn and adds extra pressure to Black's d5 pawn. This natural developing move also prepares various strategic ideas: we might consider e4 at some point to establish a powerful pawn center, or we could play moves like a4-a5 to gain space on the queenside. The knight on c3 works harmoniously with our other pieces and keeps our position flexible - we can still choose between setups like e3 and Be2, or more aggressive approaches like Bg5 to pin the knight on f6. This move epitomizes the classical approach to the Slav: steady development with an eye toward gradually building pressure."
+      "annotation": "We complete the Three Knights Variation by developing our queenside knight to its most active square, where it supports our d4 pawn and adds extra pressure to Black's d5 pawn. This active move also prepares various strategic ideas: we might consider e4 at some point to establish a powerful pawn center, or we could play moves like a4-a5 to gain space on the queenside. The knight on c3 works harmoniously with our other pieces and keeps our position flexible - we can still choose between setups like e3 and Be2, or more aggressive approaches like Bg5 to pin the knight on f6. This move epitomizes the classical approach to the Slav: steady development with an eye toward gradually building pressure."
     }
   ]
 }

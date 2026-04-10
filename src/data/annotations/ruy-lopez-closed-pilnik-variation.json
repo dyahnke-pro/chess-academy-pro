@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn while simultaneously controlling the vital central squares d4 and e5. This knight placement supports our potential d2-d4 advance and keeps maximum flexibility in our setup - we haven't yet committed to whether we'll play the Italian Game with Bc4 or the Spanish Opening with Bb5. The knight on f3 also contributes to kingside safety, making castling kingside a viable option. From f3, our knight can later jump to excellent outposts like e5, g5, or d4 depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn while simultaneously controlling the vital central squares d4 and e5. This knight placement supports our potential d2-d4 advance and keeps maximum flexibility in our setup - we haven't yet committed to whether we'll play the Italian Game with Bc4 or the Spanish Opening with Bb5. The knight on f3 also contributes to kingside safety, making castling kingside a viable option. From f3, our knight can later jump to excellent outposts like e5, g5, or d4 depending on how the position develops."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, attacking our e4 pawn while completing their kingside development in preparation for castling. This move breaks the symmetry and forces us to make a decision about defending our central pawn - we could retreat the knight, defend with d3, or advance with e5. Our opponent is following classical opening principles by developing pieces toward the center and preparing to castle kingside for safety. The knight on f6 also supports Black's potential ...d6 and ...Nbd7 setup, leading toward the closed variations of the Spanish Opening."
+      "annotation": "Black develops their knight to its ideal square, attacking our e4 pawn while completing their kingside development in preparation for castling. This move breaks the symmetry and forces us to make a decision about defending our central pawn - we could retreat the knight, defend with d3, or advance with e5. Our opponent is following classical opening principles by developing pieces toward the center and preparing to castle kingside for safety. The knight on f6 also supports Black's potential ...d6 and ...Nbd7 setup, leading toward the closed variations of the Spanish Opening."
     },
     {
       "san": "O-O",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops their light-squared bishop to break the pin on their knight, finally allowing the Nc6 to move freely without hanging to our Ba4. This natural developing move also prepares castling kingside and connects Black's rooks along the back rank. Our opponent chooses the solid Be7 over the more aggressive Bc5, showing they prefer a positionally sound setup rather than immediate counterplay. The bishop on e7 supports Black's kingside while maintaining flexibility - it could potentially redeploy to f6 or d6 in some variations depending on how the center develops."
+      "annotation": "Black develops their light-squared bishop to break the pin on their knight, finally allowing the Nc6 to move freely without hanging to our Ba4. This active move also prepares castling kingside and connects Black's rooks along the back rank. Our opponent chooses the solid Be7 over the more aggressive Bc5, showing they prefer a positionally sound setup rather than immediate counterplay. The bishop on e7 supports Black's kingside while maintaining flexibility - it could potentially redeploy to f6 or d6 in some variations depending on how the center develops."
     },
     {
       "san": "Re1",

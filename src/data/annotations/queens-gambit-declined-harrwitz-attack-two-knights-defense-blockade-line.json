@@ -39,7 +39,7 @@
     },
     {
       "san": "Bf4",
-      "annotation": "We're developing our light-squared bishop to an active square outside the pawn chain, where it controls important central squares and puts pressure on Black's position. This is a key move in the Harrwitz Attack variation, where the bishop on f4 eyes the weak c7 square and supports potential advances like e4 or h4-h5 depending on how the position develops. The bishop placement also prepares us to meet ...c6 setups by Black, as we'll have excellent piece coordination with our knights and bishops all actively placed. This development keeps more tension in the position compared to the quieter Be2, signaling our intention to maintain pressure and initiative."
+      "annotation": "We're developing our light-squared bishop to an active square outside the pawn chain, where it controls important central squares and puts pressure on Black's position. This is a critical move in the Harrwitz Attack variation, where the bishop on f4 eyes the weak c7 square and supports potential advances like e4 or h4-h5 depending on how the position develops. The bishop placement also prepares us to meet ...c6 setups by Black, as we'll have excellent piece coordination with our knights and bishops all actively placed. This development keeps more tension in the position compared to the quieter Be2, signaling our intention to maintain pressure and initiative."
     },
     {
       "san": "Nbd7",

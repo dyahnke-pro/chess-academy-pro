@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent has chosen the Alekhine Defense, one of the most provocative and uncompromising responses to 1.e4. Instead of fighting for the center with moves like 1...e5 or 1...c5, Black immediately attacks our central pawn and invites us to advance it further. This hypermodern approach aims to make our center overextended and vulnerable to later counterattacks. The knight on f6 also prevents us from playing the natural 2.d4 followed by 3.Nc3, forcing us to make an immediate decision about our pawn structure."
+      "annotation": "Our opponent has chosen the Alekhine Defense, one of the most provocative and uncompromising responses to 1.e4. Instead of contesting central control with moves like 1...e5 or 1...c5, Black immediately attacks our central pawn and invites us to advance it further. This hypermodern approach aims to make our center overextended and vulnerable to later counterattacks. The knight on f6 also prevents us from playing the natural 2.d4 followed by 3.Nc3, forcing us to make an immediate decision about our pawn structure."
     },
     {
       "san": "e5",
@@ -19,7 +19,7 @@
     },
     {
       "san": "d4",
-      "annotation": "We're building a classical pawn center with this natural developing move, supporting our advanced e5 pawn while opening lines for our pieces. This move controls the crucial c5 and e5 squares, prevents Black from playing ...c5, and prepares to develop our light-squared bishop to an active diagonal. The d4-e5 pawn chain gives us significant space advantage and restricts Black's pieces, particularly making it harder for Black to develop the light-squared bishop. However, we must remain vigilant about Black's potential counterplay against our pawn center, which could come through moves like ...c6 or ...f6."
+      "annotation": "We're building a classical pawn center with this active move, supporting our advanced e5 pawn while opening lines for our pieces. This move controls the crucial c5 and e5 squares, prevents Black from playing ...c5, and prepares to develop our light-squared bishop to an active diagonal. The d4-e5 pawn chain gives us significant space advantage and restricts Black's pieces, particularly making it harder for Black to develop the light-squared bishop. However, we must remain vigilant about Black's potential counterplay against our pawn center, which could come through moves like ...c6 or ...f6."
     },
     {
       "san": "b5",

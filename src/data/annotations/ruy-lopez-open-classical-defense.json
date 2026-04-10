@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn while supporting our own central control. This move is the starting point of the Ruy Lopez, one of the oldest and most respected openings in chess history. The knight on f3 also prepares kingside castling and keeps an eye on important central squares like d4 and e5. From f3, our knight can later jump to d4 or g5, creating various tactical and positional threats as the game develops."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn while supporting our own central control. This move is the starting point of the Ruy Lopez, one of the oldest and most respected openings in chess history. The knight on f3 also prepares kingside castling and keeps an eye on important central squares like d4 and e5. From f3, our knight can later jump to d4 or g5, creating various tactical and positional threats as the game develops."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to defend the e5 pawn, completing the basic setup for many classical openings. This natural developing move also prepares potential counterplay in the center and supports Black's control of the d4 square. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the central tension. However, the knight on c6 can become a target later, which is exactly what we'll exploit with our next move, the famous Ruy Lopez bishop development."
+      "annotation": "Black develops their knight to defend the e5 pawn, completing the basic setup for many classical openings. This active move also prepares potential counterplay in the center and supports Black's control of the d4 square. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the central tension. However, the knight on c6 can become a target later, which is exactly what we'll exploit with our next move, the famous Ruy Lopez bishop development."
     },
     {
       "san": "Bb5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside, prioritizing king safety while bringing our rook into the game via the f1 square. This natural developing move is almost always the right choice in the Ruy Lopez, as it prepares us for the tactical complications that are about to arise when Black captures on e4. By castling first, we ensure our king is safe before entering the sharp tactical sequences that define the Open Ruy Lopez. Our rook on f1 will also support the f2-f4 advance and can swing to the e-file later, making castling both a safety measure and a piece coordination move."
+      "annotation": "We castle kingside, prioritizing king safety while bringing our rook into the game via the f1 square. This active move is almost always the right choice in the Ruy Lopez, as it prepares us for the tactical complications that are about to arise when Black captures on e4. By castling first, we ensure our king is safe before entering the sharp tactical sequences that define the Open Ruy Lopez. Our rook on f1 will also support the f2-f4 advance and can swing to the e-file later, making castling both a safety measure and a piece coordination move."
     },
     {
       "san": "Nxe4",

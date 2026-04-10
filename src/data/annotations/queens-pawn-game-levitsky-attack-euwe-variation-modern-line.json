@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4, while also preparing to support our d4 pawn if needed. This knight development is extremely flexible - it doesn't commit us to any particular pawn structure yet, keeping our options open for moves like c4, e3, or even f3 in some lines. The knight on f3 also prepares kingside castling by clearing the path for our king's safety. This is the starting move of the Levitsky Attack system, where we'll follow up with the characteristic Bg5, putting early pressure on Black's position."
+      "annotation": "We develop our knight to its ideal square, where it controls the important central squares e5 and d4, while also preparing to support our d4 pawn if needed. This knight development is extremely flexible - it doesn't commit us to any particular pawn structure yet, keeping our options open for moves like c4, e3, or even f3 in some lines. The knight on f3 also prepares kingside castling by clearing the path for our king's safety. This is the starting move of the Levitsky Attack system, where we'll follow up with the characteristic Bg5, putting early pressure on Black's position."
     },
     {
       "san": "c6",

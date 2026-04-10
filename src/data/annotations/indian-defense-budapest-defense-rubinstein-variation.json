@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while developing the kingside knight to its most active square. This is the starting move of the Indian Defense systems, where Black allows us to build a pawn center but plans to undermine it later with piece pressure and pawn breaks. Our opponent is avoiding the more direct ...d5 or ...e6 setups, instead adopting a hypermodern approach that fights for the center with pieces rather than pawns. We need to decide how to support our d4 pawn and continue our development while being aware that Black will likely continue to pressure our center."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while developing the kingside knight to its most active square. This is the starting move of the Indian Defense systems, where Black allows us to build a pawn center but plans to undermine it later with piece pressure and pawn breaks. Our opponent is avoiding the more direct ...d5 or ...e6 setups, instead adopting a hypermodern approach that fights for the center with pieces rather than pawns. We need to decide how to support our d4 pawn and continue our development while being aware that Black will likely continue to pressure our center."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bf4",
-      "annotation": "We're developing our bishop to an active square where it defends the e5 pawn while eyeing Black's queenside and supporting our central control - this is the Rubinstein Variation of the Budapest Defense. The bishop on f4 is well-placed because it can't easily be kicked away by Black's pawns, and it maintains flexible options for our pawn structure and piece coordination. This natural developing move allows us to keep our extra pawn while improving our position, and it prepares castling kingside to get our king to safety. However, we must be aware that Black will continue to create tactical complications, possibly with moves like ...Bc5 or ...Qe7, trying to exploit any weaknesses in our position and maintain dynamic compensation for the sacrificed pawn."
+      "annotation": "We're developing our bishop to an active square where it defends the e5 pawn while eyeing Black's queenside and supporting our central control - this is the Rubinstein Variation of the Budapest Defense. The bishop on f4 is well-placed because it can't easily be kicked away by Black's pawns, and it maintains flexible options for our pawn structure and piece coordination. This active move allows us to keep our extra pawn while improving our position, and it prepares castling kingside to get our king to safety. However, we must be aware that Black will continue to create tactical complications, possibly with moves like ...Bc5 or ...Qe7, trying to exploit any weaknesses in our position and maintain dynamic compensation for the sacrificed pawn."
     }
   ]
 }

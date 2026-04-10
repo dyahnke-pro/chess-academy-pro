@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it attacks Black's e5 pawn and controls the important d4 and h4 squares. This move puts immediate pressure on Black's center, forcing them to either defend the e5 pawn or consider counterplay. The knight on f3 also supports a potential d4 pawn advance later, which would challenge Black's central pawn chain. Additionally, this knight move prepares castling kingside by clearing the path between king and rook, prioritizing king safety while maintaining pressure."
+      "annotation": "We develop our knight to its ideal square, where it attacks Black's e5 pawn and controls the important d4 and h4 squares. This move puts immediate pressure on Black's center, forcing them to either defend the e5 pawn or consider counterplay. The knight on f3 also supports a potential d4 pawn advance later, which would challenge Black's central pawn chain. Additionally, this knight move prepares castling kingside by clearing the path between king and rook, prioritizing king safety while maintaining pressure."
     },
     {
       "san": "Nc6",

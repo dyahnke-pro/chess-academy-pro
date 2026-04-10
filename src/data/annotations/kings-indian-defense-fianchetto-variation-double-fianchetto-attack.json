@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn and prepares to castle kingside for safety. The knight on f3 also controls important central squares like e5 and d4, while keeping our options open for various pawn structures. This move fits perfectly with our plan to fianchetto the light-squared bishop, as the knight won't block the bishop's scope from g2. From f3, our knight can later jump to excellent squares like e5 or d5, depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, where it supports our d4 pawn and prepares to castle kingside for safety. The knight on f3 also controls important central squares like e5 and d4, while keeping our options open for various pawn structures. This move fits perfectly with our plan to fianchetto the light-squared bishop, as the knight won't block the bishop's scope from g2. From f3, our knight can later jump to excellent squares like e5 or d5, depending on how the position develops."
     },
     {
       "san": "Bg7",
@@ -55,7 +55,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn and maintains central control against Black's pawn break. The knight on c3 also prepares various strategic ideas, including potential advances like d5 or supporting queenside operations with moves like a4-a5. This development keeps our position solid and flexible, allowing us to respond to Black's plans while maintaining our own strategic options. The knight also eyes important squares like e4 and d5, which could become excellent outposts depending on how the pawn structure evolves."
+      "annotation": "We develop our knight to its ideal square, where it supports our d4 pawn and maintains central control against Black's pawn break. The knight on c3 also prepares various strategic ideas, including potential advances like d5 or supporting queenside operations with moves like a4-a5. This development keeps our position solid and flexible, allowing us to respond to Black's plans while maintaining our own strategic options. The knight also eyes important squares like e4 and d5, which could become excellent outposts depending on how the pawn structure evolves."
     },
     {
       "san": "b3",

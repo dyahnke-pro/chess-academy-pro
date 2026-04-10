@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the most natural move in chess, controlling the central e5 and d5 squares while freeing our light-squared bishop and queen for future development. This move stakes our claim to the center immediately and allows for rapid piece mobilization. The e4 pawn also creates potential tactical themes involving discovered attacks when our pieces move from the e-file. Our plan is to build a strong central presence and develop our pieces harmoniously toward the kingside."
+      "annotation": "We're opening with the most principled response in chess, controlling the central e5 and d5 squares while freeing our light-squared bishop and queen for future development. This move stakes our claim to the center immediately and allows for rapid piece mobilization. The e4 pawn also creates potential tactical themes involving discovered attacks when our pieces move from the e-file. Our plan is to build a strong central presence and develop our pieces harmoniously toward the kingside."
     },
     {
       "san": "d5",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight with a tempo-gaining attack on Black's centralized queen, forcing it to move again. This natural developing move also controls the important e4 and d5 central squares while supporting a future d4 advance. The knight on c3 is perfectly placed in most e4 openings, and here it serves the dual purpose of development and harassment. Now Black must decide where to retreat the queen, and each option has different strategic implications for the resulting middlegame structure."
+      "annotation": "We develop our knight with a tempo-gaining attack on Black's centralized queen, forcing it to move again. This active move also controls the important e4 and d5 central squares while supporting a future d4 advance. The knight on c3 is perfectly placed in most e4 openings, and here it serves the dual purpose of development and harassment. Now Black must decide where to retreat the queen, and each option has different strategic implications for the resulting middlegame structure."
     },
     {
       "san": "Qd6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preparing to castle kingside. This move follows sound opening principles by developing a piece toward the center while creating immediate pressure on our position. The knight on f6 also supports Black's central ambitions and prepares to potentially jump to more active squares like e4 or g4 in the future. Our opponent is now getting their pieces into the game after the early queen adventure."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to castle kingside. This move follows sound opening principles by developing a piece toward the center while creating immediate pressure on our position. The knight on f6 also supports Black's central ambitions and prepares to potentially jump to more active squares like e4 or g4 in the future. Our opponent is now getting their pieces into the game after the early queen adventure."
     },
     {
       "san": "Nf3",

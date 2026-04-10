@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 and preparing to contest the center. This flexible knight move doesn't commit Black to any particular pawn structure yet - they could still play ...e6, ...g6, ...c5, or ...d5 depending on our next move. The knight on f6 also supports a future ...e5 advance and keeps pressure on our center. This is one of the most popular responses to 1.d4 because it develops a piece while maintaining maximum flexibility for Black's setup."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 and preparing to contest the center. This flexible knight move doesn't commit Black to any particular pawn structure yet - they could still play ...e6, ...g6, ...c5, or ...d5 depending on our next move. The knight on f6 also supports a future ...e5 advance and keeps pressure on our center. This is one of the most popular responses to 1.d4 because it develops a piece while maintaining maximum flexibility for Black's setup."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn, controlling the important e5 and g5 squares, and preparing kingside castling. This move also keeps pressure on Black's setup by preventing an early ...e5 break, which would give Black excellent central equality. The knight on f3 is perfectly placed for the Queen's Gambit structures we're heading toward, supporting both central control and potential kingside attacking ideas. We're also maintaining our flexibility to choose between various Queen's Gambit setups depending on how Black continues - we could play Bg5, Be2, or even transpose into a Catalan with g3."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn, controlling the important e5 and g5 squares, and preparing kingside castling. This move also keeps pressure on Black's setup by preventing an early ...e5 break, which would give Black excellent central equality. The knight on f3 is perfectly placed for the Queen's Gambit structures we're heading toward, supporting both central control and potential kingside attacking ideas. We're also maintaining our flexibility to choose between various Queen's Gambit setups depending on how Black continues - we could play Bg5, Be2, or even transpose into a Catalan with g3."
     },
     {
       "san": "d5",

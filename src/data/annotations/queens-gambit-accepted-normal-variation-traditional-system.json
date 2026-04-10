@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 square and preparing to support our central advance with e3. This move is more flexible than immediate attempts to regain the c4 pawn because it allows us to complete our development while keeping pressure on Black's position. The knight on f3 also prepares potential tactics involving the e5 square and supports a future e4 advance if the position allows it. We're following the principle of development before material recovery, which typically leads to better positions in the Queen's Gambit Accepted."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 square and preparing to support our central advance with e3. This move is more flexible than immediate attempts to regain the c4 pawn because it allows us to complete our development while keeping pressure on Black's position. The knight on f3 also prepares potential tactics involving the e5 square and supports a future e4 advance if the position allows it. We're following the principle of development before material recovery, which typically leads to better positions in the Queen's Gambit Accepted."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to mirror our development, controlling the central e4 and d5 squares while preparing to castle kingside. This is Black's most natural developing move, following the same principles we used with Nf3. The knight on f6 also helps defend against any potential e4-e5 pawn advances and prepares Black's kingside development with moves like Be7 and 0-0. Our opponent is showing they understand that quick development is crucial in the Queen's Gambit Accepted, as holding the extra c4 pawn requires efficient piece coordination."
+      "annotation": "Black develops their knight to mirror our development, controlling the central e4 and d5 squares while preparing to castle kingside. This is Black's most active move, following the same principles we used with Nf3. The knight on f6 also helps defend against any potential e4-e5 pawn advances and prepares Black's kingside development with moves like Be7 and 0-0. Our opponent is showing they understand that quick development is crucial in the Queen's Gambit Accepted, as holding the extra c4 pawn requires efficient piece coordination."
     },
     {
       "san": "e3",

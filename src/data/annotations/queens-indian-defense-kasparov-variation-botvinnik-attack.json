@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and preparing to contest the center. This flexible move doesn't commit Black to any particular pawn structure yet, keeping options open for various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Indian Defense. The knight on f6 also supports a potential ...e5 advance and helps control important central squares like e4 and d5. This is considered one of the most principled responses to 1.d4, as it combines development with immediate central pressure."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and preparing to contest the center. This flexible move doesn't commit Black to any particular pawn structure yet, keeping options open for various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Indian Defense. The knight on f6 also supports a potential ...e5 advance and helps control important central squares like e4 and d5. This is considered one of the most principled responses to 1.d4, as it combines development with immediate central pressure."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to support the center and prepare for more aggressive piece placement, while also avoiding the Nimzo-Indian Defense since Black can no longer play ...Bb4+ pinning our knight. This natural developing move supports our d4 pawn and prepares potential pawn advances like e4, giving us excellent central control. The knight on c3 also eyes important outposts like d5 and e4, while supporting our queenside expansion with moves like a3 and b4. We're building up pressure in the center while maintaining excellent piece coordination and keeping Black guessing about our exact setup."
+      "annotation": "We develop our knight to support the center and prepare for more aggressive piece placement, while also avoiding the Nimzo-Indian Defense since Black can no longer play ...Bb4+ pinning our knight. This active move supports our d4 pawn and prepares potential pawn advances like e4, giving us excellent central control. The knight on c3 also eyes important outposts like d5 and e4, while supporting our queenside expansion with moves like a3 and b4. We're building up pressure in the center while maintaining excellent piece coordination and keeping Black guessing about our exact setup."
     },
     {
       "san": "Bb7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We're entering the Kasparov Variation, an aggressive approach that immediately puts pressure on Black's kingside by pinning the knight to the queen and threatening to disrupt Black's piece coordination. This bishop move challenges Black's solid defensive setup by creating immediate tactical threats and potentially forcing Black into weakening pawn moves. The pin on the knight is particularly annoying because it prevents Black from playing natural developing moves and forces some kind of response to deal with the pressure. We're transitioning from purely positional play to a more tactical, double-edged middlegame where precise calculation becomes crucial."
+      "annotation": "We're entering the Kasparov Variation, an aggressive approach that immediately puts pressure on Black's kingside by pinning the knight to the queen and threatening to disrupt Black's piece coordination. This bishop move challenges Black's solid defensive setup by creating immediate tactical threats and potentially forcing Black into weakening pawn moves. The pin on the knight is particularly annoying because it prevents Black from playing active moves and forces some kind of response to deal with the pressure. We're transitioning from purely positional play to a more tactical, double-edged middlegame where precise calculation becomes crucial."
     },
     {
       "san": "h6",

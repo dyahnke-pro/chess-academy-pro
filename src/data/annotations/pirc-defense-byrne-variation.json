@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our e4 pawn and preparing to castle kingside. This move is typical in the Pirc - Black develops pieces toward the center while maintaining flexibility about pawn structure. The knight on f6 also supports a potential ...e5 pawn break in the future, which would challenge our central dominance. We need to be aware that this knight can later jump to tactical squares like g4 or h5, so we should consider how our development affects these possibilities."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our e4 pawn and preparing to castle kingside. This move is typical in the Pirc - Black develops pieces toward the center while maintaining flexibility about pawn structure. The knight on f6 also supports a potential ...e5 pawn break in the future, which would challenge our central dominance. We need to be aware that this knight can later jump to tactical squares like g4 or h5, so we should consider how our development affects these possibilities."
     },
     {
       "san": "Nc3",

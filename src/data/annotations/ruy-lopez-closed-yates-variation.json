@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, immediately attacking Black's e5 pawn and forcing our opponent to make a decision about how to defend it. This move exemplifies classical development principles: we're bringing a piece toward the center, creating threats, and preparing to castle kingside. The knight on f3 also controls the important central squares d4 and e5, while supporting a potential d2-d4 advance later. By attacking the e5 pawn right away, we're putting immediate pressure on Black's position and forcing them to think carefully about their next move."
+      "annotation": "We develop our knight to its ideal square, immediately attacking Black's e5 pawn and forcing our opponent to make a decision about how to defend it. This move exemplifies classical development principles: we're bringing a piece toward the center, creating threats, and preparing to castle kingside. The knight on f3 also controls the important central squares d4 and e5, while supporting a potential d2-d4 advance later. By attacking the e5 pawn right away, we're putting immediate pressure on Black's position and forcing them to think carefully about their next move."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to the most natural defensive square, protecting the attacked e5 pawn while simultaneously developing a piece toward the center. This move follows sound opening principles by defending with a developing move rather than a passive pawn push like d6. The knight on c6 controls important central squares like d4 and e5, and keeps Black's options open for future pawn breaks or piece maneuvers. Our opponent is maintaining the central tension while developing harmoniously, showing they understand the importance of active piece play in the opening."
+      "annotation": "Black develops their knight to the most natural defensive square, protecting the attacked e5 pawn while simultaneously developing a piece toward the center. This move follows sound opening principles by defending with a developing choice rather than a passive pawn push like d6. The knight on c6 controls important central squares like d4 and e5, and keeps Black's options open for future pawn breaks or piece maneuvers. Our opponent is maintaining the central tension while developing harmoniously, showing they understand the importance of active piece play in the opening."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, attacking our e4 pawn and preparing to castle kingside safely. This move follows excellent opening principles by developing toward the center while creating counterplay against our position. The knight on f6 also prepares potential central breaks like d6-d5, giving Black active possibilities in the center. Our opponent is showing they want to develop quickly and create their own threats rather than remain purely passive, which is the hallmark of good Ruy Lopez defense."
+      "annotation": "Black develops their kingside knight to its ideal square, attacking our e4 pawn and preparing to castle kingside safely. This move follows excellent opening principles by developing toward the center while creating counterplay against our position. The knight on f6 also prepares potential central breaks like d6-d5, giving Black active possibilities in the center. Our opponent is showing they want to develop quickly and create their own threats rather than remain purely passive, which is the hallmark of good Ruy Lopez defense."
     },
     {
       "san": "O-O",

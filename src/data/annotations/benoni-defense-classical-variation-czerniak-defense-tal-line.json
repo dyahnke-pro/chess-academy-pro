@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This move is the hallmark of hypermodern openings like the King's Indian and Benoni systems, where Black allows White to occupy the center with pawns while preparing to undermine it later. The knight on f6 also supports a potential ...e5 advance and keeps Black's options open for various defensive setups. We need to be ready for Black's counterplay against our central pawns."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This move is the hallmark of hypermodern openings like the King's Indian and Benoni systems, where Black allows White to occupy the center with pawns while preparing to undermine it later. The knight on f6 also supports a potential ...e5 advance and keeps Black's options open for various defensive setups. We need to be ready for Black's counterplay against our central pawns."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawns and prepares to castle kingside. The knight on f3 is perfectly placed in this structure - it supports the e4 pawn, can potentially jump to e5 or g5 in attacking variations, and doesn't block any of our other pieces. This move also prepares for quick castling, which is important since positions can become tactical quickly in the Benoni. The knight development follows classical principles while maintaining maximum flexibility for our upcoming piece coordination."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central pawns and prepares to castle kingside. The knight on f3 is perfectly placed in this structure - it supports the e4 pawn, can potentially jump to e5 or g5 in attacking variations, and doesn't block any of our other pieces. This move also prepares for quick castling, which is important since positions can become tactical quickly in the Benoni. The knight development follows classical principles while maintaining maximum flexibility for our upcoming piece coordination."
     },
     {
       "san": "Bg7",

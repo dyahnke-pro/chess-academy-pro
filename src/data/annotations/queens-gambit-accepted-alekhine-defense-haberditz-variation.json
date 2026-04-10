@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, controlling the important e5 and d4 central squares while preparing to support our eventual e3 push. This move also keeps pressure on Black's position by eyeing potential tactics and maintaining our development advantage. The knight on f3 is perfectly placed to support a future e4 advance or to help us regain the c4 pawn through moves like Bxc4 or e3 followed by Bxc4. Most importantly, we're not rushing to win back our pawn immediately, instead prioritizing piece development and maintaining the initiative that comes from superior central control."
+      "annotation": "We're developing our knight to its ideal square, controlling the important e5 and d4 central squares while preparing to support our eventual e3 push. This move also keeps pressure on Black's position by eyeing potential tactics and maintaining our development advantage. The knight on f3 is perfectly placed to support a future e4 advance or to help us regain the c4 pawn through moves like Bxc4 or e3 followed by Bxc4. Most importantly, we're not rushing to win back our pawn immediately, instead prioritizing piece development and maintaining the initiative that comes from superior central control."
     },
     {
       "san": "a6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're supporting our center and preparing to recapture on c4 with our dark-squared bishop, while also opening a diagonal for our light-squared bishop on f1. This solid move maintains our central presence and ensures we can regain our sacrificed pawn whenever we choose, typically after Bxc4. The e3 pawn also prevents any Black pieces from occupying the d4 and f4 squares, keeping our position compact and well-coordinated. By playing e3, we're following classical opening principles: complete development, control the center, and maintain the initiative rather than desperately chasing after the extra pawn."
+      "annotation": "We're supporting our center and preparing to recapture on c4 with our dark-squared bishop, while also opening a diagonal for our light-squared bishop on f1. this stabilizing move maintains our central presence and ensures we can regain our sacrificed pawn whenever we choose, typically after Bxc4. The e3 pawn also prevents any Black pieces from occupying the d4 and f4 squares, keeping our position compact and well-coordinated. By playing e3, we're following classical opening principles: complete development, control the center, and maintain the initiative rather than desperately chasing after the extra pawn."
     },
     {
       "san": "b5",

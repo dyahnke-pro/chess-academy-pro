@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight with a natural move that attacks the centralized black queen, forcing it to find a new square. This knight development is perfect because it serves multiple purposes: it attacks the queen, develops toward the center, and prepares to support our d4 pawn advance. The knight on c3 also eyes important squares like e4 and d5, giving us excellent central control. By attacking the queen immediately, we're starting to make Black pay for the early queen development by forcing it to move again and lose time."
+      "annotation": "We develop our knight with a logical choice that attacks the centralized black queen, forcing it to find a new square. This knight development is perfect because it serves multiple purposes: it attacks the queen, develops toward the center, and prepares to support our d4 pawn advance. The knight on c3 also eyes important squares like e4 and d5, giving us excellent central control. By attacking the queen immediately, we're starting to make Black pay for the early queen development by forcing it to move again and lose time."
     },
     {
       "san": "Qa5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and beginning to challenge our central control. This move is essential for Black's development plan, as the knight on f6 controls important central squares like e4 and d5 while preparing kingside castling. The knight also supports potential ...e6 or ...c6 breaks against our pawn center. By developing this knight, Black is finally getting the pieces out after the early queen adventure, though we still maintain a slight initiative due to our better central control and smoother development."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and beginning to challenge our central control. This move is essential for Black's development plan, as the knight on f6 controls important central squares like e4 and d5 while preparing kingside castling. The knight also supports potential ...e6 or ...c6 breaks against our pawn center. By developing this knight, Black is finally getting the pieces out after the early queen adventure, though we still maintain a slight initiative due to our better central control and smoother development."
     }
   ]
 }

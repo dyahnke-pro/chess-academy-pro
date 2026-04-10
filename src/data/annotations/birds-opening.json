@@ -288,7 +288,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its natural c6 square, controlling d4 and e5. The knight supports Black's central strategy and prepares queenside play. From c6 it also has flexibility to go to d4, e7, or b4 depending on the position. This is a sensible developing move that doesn't commit to a specific plan yet.",
+      "annotation": "Black develops the knight to its natural c6 square, controlling d4 and e5. The knight supports Black's central strategy and prepares queenside play. From c6 it also has flexibility to go to d4, e7, or b4 depending on the position. This is a purposeful move that doesn't commit to a specific plan yet.",
       "plans": [
         "Support d4 break",
         "Reroute to d4 or e7 as needed"
@@ -437,7 +437,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the knight to its most natural square, controlling the vital e5 and g5 squares while preparing kingside castling. This move supports the f4 pawn and keeps pressure on Black's center, particularly eyeing the e5 square that could become a powerful outpost. The knight from f3 also supports future tactical operations and maintains flexibility for White's setup.",
+          "annotation": "White develops the knight to its ideal square, controlling the vital e5 and g5 squares while preparing kingside castling. This move supports the f4 pawn and keeps pressure on Black's center, particularly eyeing the e5 square that could become a powerful outpost. The knight from f3 also supports future tactical operations and maintains flexibility for White's setup.",
           "plans": [
             "Castle kingside quickly for safety",
             "Support the f4 pawn and control central squares"
@@ -604,7 +604,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to its most active square, attacking the f4 pawn and preparing to support the central d5 pawn. This natural developing move also prepares kingside castling while putting immediate pressure on White's pawn structure. The knight from f6 controls important central squares and keeps White honest about the f4 pawn's security.",
+          "annotation": "Black develops the knight to its most active square, attacking the f4 pawn and preparing to support the central d5 pawn. This active move also prepares kingside castling while putting immediate pressure on White's pawn structure. The knight from f6 controls important central squares and keeps White honest about the f4 pawn's security.",
           "plans": [
             "Castle kingside for safety",
             "Maintain pressure on the f4 pawn"
@@ -806,7 +806,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black develops the knight to its most natural square, supporting the d5 pawn and preparing to challenge White's central control. This move also opens up possibilities for queenside piece play and maintains pressure on White's position. The knight from c6 controls important squares and prepares potential tactical operations.",
+          "annotation": "Black develops the knight to its ideal square, supporting the d5 pawn and preparing to challenge White's central control. This move also opens up possibilities for queenside piece play and maintains pressure on White's position. The knight from c6 controls important squares and prepares potential tactical operations.",
           "plans": [
             "Develop the remaining pieces",
             "Consider ...Rb8 and ...b5 for queenside play"

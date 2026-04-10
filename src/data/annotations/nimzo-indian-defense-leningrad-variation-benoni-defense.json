@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to castle kingside after Nf3 and Be2 or Bd3. However, we're also walking into Black's main plan—the knight on c3 can now be pinned by ...Bb4, which is the defining move of the Nimzo-Indian Defense. This knight also eyes important central squares like e4 and d5, and supports potential pawn advances like e2-e4 if the center opens up. Despite the potential pin, Nc3 is necessary for our development and gives us good central control."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to castle kingside after Nf3 and Be2 or Bd3. However, we're also walking into Black's main plan—the knight on c3 can now be pinned by ...Bb4, which is the defining move of the Nimzo-Indian Defense. This knight also eyes important central squares like e4 and d5, and supports potential pawn advances like e2-e4 if the center opens up. Despite the potential pin, Nc3 is necessary for our development and gives us good central control."
     },
     {
       "san": "Bb4",

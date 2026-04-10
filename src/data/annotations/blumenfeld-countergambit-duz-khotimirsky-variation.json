@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central e4 square and preventing us from easily advancing e2-e4. This move is the hallmark of Indian Defense systems, where Black allows White to occupy the center with pawns while planning to challenge it later with pieces. The knight on f6 also prepares kingside castling and keeps Black's options open for various setups like the King's Indian, Nimzo-Indian, or Queen's Indian Defense. Black is following hypermodern principles by controlling the center from afar rather than occupying it immediately."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central e4 square and preventing us from easily advancing e2-e4. This move is the hallmark of Indian Defense systems, where Black allows White to occupy the center with pawns while planning to challenge it later with pieces. The knight on f6 also prepares kingside castling and keeps Black's options open for various setups like the King's Indian, Nimzo-Indian, or Queen's Indian Defense. Black is following hypermodern principles by controlling the center from afar rather than occupying it immediately."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while preparing kingside castling. This natural developing move also supports our d4 pawn and keeps our options open for various pawn structures and piece arrangements. The knight on f3 prevents Black from playing an early ...e5 pawn break and maintains our grip on key central squares. Additionally, this move prepares potential tactical themes involving the e5 square and supports our overall development plan without committing to any specific pawn structure yet."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while preparing kingside castling. This active move also supports our d4 pawn and keeps our options open for various pawn structures and piece arrangements. The knight on f3 prevents Black from playing an early ...e5 pawn break and maintains our grip on key central squares. Additionally, this move prepares potential tactical themes involving the e5 square and supports our overall development plan without committing to any specific pawn structure yet."
     },
     {
       "san": "c5",

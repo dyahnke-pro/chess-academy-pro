@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the crucial e4 advance and controls important central squares like d5 and b5. This knight placement is fundamental to our opening strategy because it allows us to build the ideal pawn center with d4-c4-e4 while keeping maximum flexibility for our other pieces. The knight on c3 also prepares potential expansion on the queenside with moves like a4 and b4, which can be important in the middlegame when we want to create play on both flanks. From c3, this knight can potentially reroute to e2-g3 or d5 depending on how the position develops."
+      "annotation": "We're developing our knight to its ideal square, where it supports the crucial e4 advance and controls important central squares like d5 and b5. This knight placement is fundamental to our opening strategy because it allows us to build the ideal pawn center with d4-c4-e4 while keeping maximum flexibility for our other pieces. The knight on c3 also prepares potential expansion on the queenside with moves like a4 and b4, which can be important in the middlegame when we want to create play on both flanks. From c3, this knight can potentially reroute to e2-g3 or d5 depending on how the position develops."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our e4 pawn while maintaining flexibility for our future plans. This move allows us to complete our development efficiently with Be2 and castle kingside, after which we can begin implementing our middlegame strategy. The knight on f3 also prepares potential advances like g3 and h3-h4, which can be important if we want to launch a kingside attack later. By developing this knight rather than playing immediate moves like f4, we're keeping our options open and maintaining solid central control while our opponent must still deal with the pressure from our space advantage."
+      "annotation": "We're developing our knight to its ideal square, supporting our e4 pawn while maintaining flexibility for our future plans. This move allows us to complete our development efficiently with Be2 and castle kingside, after which we can begin implementing our middlegame strategy. The knight on f3 also prepares potential advances like g3 and h3-h4, which can be important if we want to launch a kingside attack later. By developing this knight rather than playing immediate moves like f4, we're keeping our options open and maintaining solid central control while our opponent must still deal with the pressure from our space advantage."
     },
     {
       "san": "O-O",

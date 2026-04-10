@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central advance with e2-e3 or e2-e4 later. This move keeps our options open and develops a piece toward the center while maintaining pressure on Black's position. The knight on f3 also prepares potential tactics involving the d5 pawn and supports future piece coordination with our light-squared bishop. By developing this knight first, we're following sound opening principles while keeping Black guessing about our exact plan."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to support our central advance with e2-e3 or e2-e4 later. This move keeps our options open and develops a piece toward the center while maintaining pressure on Black's position. The knight on f3 also prepares potential tactics involving the d5 pawn and supports future piece coordination with our light-squared bishop. By developing this knight first, we're following sound opening principles while keeping Black guessing about our exact plan."
     },
     {
       "san": "Bg4",
-      "annotation": "Black develops the bishop with a pin on our knight, creating immediate tactical tension and challenging our piece coordination. This aggressive bishop development puts pressure on our position because the pin makes it difficult to play natural moves like e2-e3 or Nc3 without careful consideration. Black is trying to create early complications and disrupt our smooth development, hoping to generate counterplay before we can consolidate our central advantage. The bishop on g4 also eyes potential tactics involving our queen and king, making this a sharp and provocative choice."
+      "annotation": "Black develops the bishop with a pin on our knight, creating immediate tactical tension and challenging our piece coordination. This aggressive bishop development puts pressure on our position because the pin makes it difficult to play logical choices like e2-e3 or Nc3 without careful consideration. Black is trying to create early complications and disrupt our smooth development, hoping to generate counterplay before we can consolidate our central advantage. The bishop on g4 also eyes potential tactics involving our queen and king, making this a sharp and provocative choice."
     },
     {
       "san": "Qa4",

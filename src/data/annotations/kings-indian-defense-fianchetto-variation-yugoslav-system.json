@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while preparing to fianchetto the king's bishop on g7. This signals that our opponent is likely heading for either a King's Indian Defense or Grünfeld Defense setup, both of which involve dynamic counterplay against our center. The knight on f6 also controls important central squares like e4 and d5, preventing us from establishing a broad pawn center too easily. We should be prepared for Black to create imbalances and fight for the initiative through piece activity rather than central pawn control."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while preparing to fianchetto the king's bishop on g7. This signals that our opponent is likely heading for either a King's Indian Defense or Grünfeld Defense setup, both of which involve dynamic counterplay against our center. The knight on f6 also controls important central squares like e4 and d5, preventing us from establishing a broad pawn center too easily. We should be prepared for Black to create imbalances and fight for the initiative through piece activity rather than central pawn control."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn, controls the central e5 square, and prepares to castle kingside for safety. This flexible move also keeps our options open – we can still play systems with Nc3, or even transpose to other openings depending on Black's setup. The knight on f3 is perfectly placed to support various pawn advances like e4 (if the position allows) or to redeploy to e5 or d2 later in the game. Most importantly, this development move doesn't commit us to any specific pawn structure while maintaining pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn, controls the central e5 square, and prepares to castle kingside for safety. This flexible move also keeps our options open – we can still play systems with Nc3, or even transpose to other openings depending on Black's setup. The knight on f3 is perfectly placed to support various pawn advances like e4 (if the position allows) or to redeploy to e5 or d2 later in the game. Most importantly, this development move doesn't commit us to any specific pawn structure while maintaining pressure on Black's position."
     },
     {
       "san": "Bg7",

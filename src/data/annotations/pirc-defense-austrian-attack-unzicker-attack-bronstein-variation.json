@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and preparing to support the eventual ...e5 central break. This is a key piece in the Pirc setup, as the knight can later retreat to d7 when we advance e5, keeping flexible options for Black's counterplay. Our opponent is also preparing to complete the kingside development with ...g6 and ...Bg7, creating the characteristic Pirc fianchetto structure. We need to be ready to deal with the pressure on e4 while continuing our aggressive development."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing to support the eventual ...e5 central break. This is a key piece in the Pirc setup, as the knight can later retreat to d7 when we advance e5, keeping flexible options for Black's counterplay. Our opponent is also preparing to complete the kingside development with ...g6 and ...Bg7, creating the characteristic Pirc fianchetto structure. We need to be ready to deal with the pressure on e4 while continuing our aggressive development."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, from where it supports our center, prepares castling, and can later jump to more aggressive posts like g5 or h4. This knight will play a key role in our attack, potentially supporting pawn advances or even sacrificial ideas later in the game. The move also prepares to castle queenside in some variations, keeping our king safe while we launch our kingside assault. Most importantly, the knight on f3 gives us tactical options and maintains maximum flexibility as we build toward our attacking climax."
+      "annotation": "We're developing our kingside knight to its ideal square, from where it supports our center, prepares castling, and can later jump to more aggressive posts like g5 or h4. This knight will play a key role in our attack, potentially supporting pawn advances or even sacrificial ideas later in the game. The move also prepares to castle queenside in some variations, keeping our king safe while we launch our kingside assault. Most importantly, the knight on f3 gives us tactical options and maintains maximum flexibility as we build toward our attacking climax."
     },
     {
       "san": "O-O",

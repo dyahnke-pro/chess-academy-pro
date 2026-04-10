@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding another attacker to the d5 pawn and preparing to support our central advance with e4 if the opportunity arises. The knight on c3 is perfectly placed in the Queen's Gambit, as it controls important central squares like e4 and e2, while also preparing potential pawn breaks like b4 or f3. This move also keeps our options open regarding our light-squared bishop – we can still play Bf4, Bg5, or even fianchetto with g3 and Bg2 depending on Black's setup. From c3, our knight can later jump to attractive squares like e4, b5, or even a4 in some lines, making it one of our most flexible pieces in this opening."
+      "annotation": "We develop our knight to its ideal square, adding another attacker to the d5 pawn and preparing to support our central advance with e4 if the opportunity arises. The knight on c3 is perfectly placed in the Queen's Gambit, as it controls important central squares like e4 and e2, while also preparing potential pawn breaks like b4 or f3. This move also keeps our options open regarding our light-squared bishop – we can still play Bf4, Bg5, or even fianchetto with g3 and Bg2 depending on Black's setup. From c3, our knight can later jump to attractive squares like e4, b5, or even a4 in some lines, making it one of our most flexible pieces in this opening."
     },
     {
       "san": "Be7",
@@ -83,7 +83,7 @@
     },
     {
       "san": "Rc1",
-      "annotation": "We develop our rook to the semi-open c-file, where it immediately puts pressure on Black's position and prepares to contest the important c-file. This is a natural developing move that improves our piece coordination while taking advantage of the file that opened when we played cxd5 earlier. The rook on c1 also supports potential tactics along the c-file and prepares ideas like Rc7, attacking Black's seventh rank and potentially creating threats against their somewhat exposed pieces. From c1, our rook is actively placed and ready to support either central play or potential infiltration along the c-file, making this one of our most purposeful pieces in the current position."
+      "annotation": "We develop our rook to the semi-open c-file, where it immediately puts pressure on Black's position and prepares to contest the important c-file. This is a active move that improves our piece coordination while taking advantage of the file that opened when we played cxd5 earlier. The rook on c1 also supports potential tactics along the c-file and prepares ideas like Rc7, attacking Black's seventh rank and potentially creating threats against their somewhat exposed pieces. From c1, our rook is actively placed and ready to support either central play or potential infiltration along the c-file, making this one of our most purposeful pieces in the current position."
     },
     {
       "san": "Be6",

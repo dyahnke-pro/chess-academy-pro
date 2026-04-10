@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn while preparing to contest Black's central influence and develop our kingside pieces. This natural developing move brings us closer to castling and puts additional pressure on the center, particularly the e4 and d5 squares. However, this move also allows Black to enter the Nimzo-Indian Defense with Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 is well-placed for most pawn structures that might arise, whether we advance with e4, maintain tension with moves like Nf3, or support a central pawn storm."
+      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn while preparing to contest Black's central influence and develop our kingside pieces. This active move brings us closer to castling and puts additional pressure on the center, particularly the e4 and d5 squares. However, this move also allows Black to enter the Nimzo-Indian Defense with Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 is well-placed for most pawn structures that might arise, whether we advance with e4, maintain tension with moves like Nf3, or support a central pawn storm."
     },
     {
       "san": "Bb4",

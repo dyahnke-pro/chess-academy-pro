@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn and prepares kingside castling. This move also prevents Black from playing ...e5, which would give them central equality and more active piece play. From f3, our knight eyes the important e5 and h4 squares while maintaining flexibility to relocate to e1-d3 or g5 depending on how the position develops. By playing Nf3 instead of Nc3, we avoid the pin that comes with ...Bb4+ in the Nimzo-Indian Defense, steering the game toward the Queen's Indian or other systems where Black's dark-squared bishop will find different squares."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our d4 pawn and prepares kingside castling. This move also prevents Black from playing ...e5, which would give them central equality and more active piece play. From f3, our knight eyes the important e5 and h4 squares while maintaining flexibility to relocate to e1-d3 or g5 depending on how the position develops. By playing Nf3 instead of Nc3, we avoid the pin that comes with ...Bb4+ in the Nimzo-Indian Defense, steering the game toward the Queen's Indian or other systems where Black's dark-squared bishop will find different squares."
     },
     {
       "san": "b6",

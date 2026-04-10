@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, claiming central space and freeing both our bishop and queen for development. This classical first move controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there. The move follows fundamental opening principles by fighting for the center immediately, and it's the starting point for many of the most popular openings in chess. Our pawn on e4 will often become a target that Black tries to challenge, but it also gives us excellent piece coordination and attacking chances."
+      "annotation": "We're opening with the king's pawn, claiming central space and freeing both our bishop and queen for development. This classical first move controls the crucial d5 and f5 squares, preventing Black from easily establishing pieces there. The move follows fundamental opening principles by contesting central control immediately, and it's the starting point for many of the most popular openings in chess. Our pawn on e4 will often become a target that Black tries to challenge, but it also gives us excellent piece coordination and attacking chances."
     },
     {
       "san": "d5",

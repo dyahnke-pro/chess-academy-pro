@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and preparing to castle kingside after ...g6 and ...Bg7. This knight placement is the hallmark of the Pirc Defense, where Black doesn't immediately challenge our central pawns but develops pieces to active squares first. The knight on f6 also supports a future ...e5 pawn break, which is one of Black's main ways to counterattack our pawn center. We need to be ready to defend our e4 pawn or advance it, and this move signals that Black is committed to the Pirc setup rather than transposing to other defenses."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing to castle kingside after ...g6 and ...Bg7. This knight placement is the hallmark of the Pirc Defense, where Black doesn't immediately challenge our central pawns but develops pieces to active squares first. The knight on f6 also supports a future ...e5 pawn break, which is one of Black's main ways to counterattack our pawn center. We need to be ready to defend our e4 pawn or advance it, and this move signals that Black is committed to the Pirc setup rather than transposing to other defenses."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to f3, completing our basic development while maintaining maximum flexibility for our coming attack. This knight supports our central pawns, particularly preparing to recapture on e4 if needed, while also being ready to jump to more aggressive squares like g5 or h4 depending on the tactical situation. The knight on f3 is perfectly placed for the Austrian Attack, as it can support our e5 advance and participate in kingside attacks. This natural developing move also prepares us to castle kingside if we choose a more restrained approach, though in the Austrian Attack we often castle queenside to keep our king safe while launching our h-pawn storm."
+      "annotation": "We develop our knight to f3, completing our basic development while maintaining maximum flexibility for our coming attack. This knight supports our central pawns, particularly preparing to recapture on e4 if needed, while also being ready to jump to more aggressive squares like g5 or h4 depending on the tactical situation. The knight on f3 is perfectly placed for the Austrian Attack, as it can support our e5 advance and participate in kingside attacks. This active move also prepares us to castle kingside if we choose a more restrained approach, though in the Austrian Attack we often castle queenside to keep our king safe while launching our h-pawn storm."
     },
     {
       "san": "O-O",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our d4 pawn and preparing to contest the center with moves like e6 and d5. This is one of the most principled responses to 1.d4, as it immediately puts pressure on our central pawn while developing a piece toward the center. The knight on f6 also supports potential central pawn breaks and prepares kingside castling. By choosing this move, Black signals an intention to fight for central control rather than allowing us to dominate the center unopposed."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our d4 pawn and preparing to contest the center with moves like e6 and d5. This is one of the most principled responses to 1.d4, as it immediately puts pressure on our central pawn while developing a piece toward the center. The knight on f6 also supports potential central pawn breaks and prepares kingside castling. By choosing this move, Black signals an intention to fight for central control rather than allowing us to dominate the center unopposed."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most active square, supporting our d4 pawn while preparing kingside castling and maintaining pressure on the center. This natural developing move also prepares potential tactics involving the e5 square and keeps our options open for various pawn structures. The knight on f3 works beautifully with our planned fianchetto setup, as it won't block our dark-squared bishop's diagonal. This move also prevents Black from advancing e5 immediately, maintaining our central control while preparing for the characteristic Catalan kingside development."
+      "annotation": "We develop our kingside knight to its most active square, supporting our d4 pawn while preparing kingside castling and maintaining pressure on the center. This active move also prepares potential tactics involving the e5 square and keeps our options open for various pawn structures. The knight on f3 works beautifully with our planned fianchetto setup, as it won't block our dark-squared bishop's diagonal. This move also prevents Black from advancing e5 immediately, maintaining our central control while preparing for the characteristic Catalan kingside development."
     },
     {
       "san": "d5",

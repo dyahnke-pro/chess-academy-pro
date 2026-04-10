@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This is one of the most principled responses to 1.d4, as the knight controls important central squares like e4 and d5 from this active post. Our opponent is keeping their options open for various defensive setups - they could transpose into an Indian Defense with moves like g6 or b6, or even play ...d5 for a Queen's Gambit structure. We need to be ready for this central pressure and consider how we want to support our d4 pawn."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This is one of the most principled responses to 1.d4, as the knight controls important central squares like e4 and d5 from this active post. Our opponent is keeping their options open for various defensive setups - they could transpose into an Indian Defense with moves like g6 or b6, or even play ...d5 for a Queen's Gambit structure. We need to be ready for this central pressure and consider how we want to support our d4 pawn."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, where it controls the crucial central e5 and d4 squares while preparing to castle kingside. This natural developing move also supports our d4 pawn and gives us flexibility in how we handle the center - we can meet ...d5 with either cxd5 or maintain tension. The knight on f3 is perfectly placed to jump to e5 at the right moment, or to redeploy via d2 to more active squares if the position calls for it. This move keeps all our options open while maintaining solid piece coordination."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the crucial central e5 and d4 squares while preparing to castle kingside. This active move also supports our d4 pawn and gives us flexibility in how we handle the center - we can meet ...d5 with either cxd5 or maintain tension. The knight on f3 is perfectly placed to jump to e5 at the right moment, or to redeploy via d2 to more active squares if the position calls for it. This move keeps all our options open while maintaining solid piece coordination."
     },
     {
       "san": "b6",

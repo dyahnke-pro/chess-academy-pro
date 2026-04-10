@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central d4 pawn and develops the kingside knight to its most natural square. This move is the starting point of several major defenses including the King's Indian, Nimzo-Indian, and Queen's Indian Defense, keeping Black's options open for now. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate pressure on our pawn structure. The knight on f6 also prepares kingside castling and can potentially support a future ...e5 advance, making this an extremely flexible and sound developing move."
+      "annotation": "Black immediately challenges our central d4 pawn and develops the kingside knight to its ideal square. This move is the starting point of several major defenses including the King's Indian, Nimzo-Indian, and Queen's Indian Defense, keeping Black's options open for now. Our opponent is following classical opening principles by developing pieces toward the center and creating immediate pressure on our pawn structure. The knight on f6 also prepares kingside castling and can potentially support a future ...e5 advance, making this an extremely flexible and sound developing choice."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, supporting our center and preparing to castle kingside for safety. This move avoids the immediate confrontation that moves like Qc2 or Bd2 would create, instead focusing on solid development while keeping our options open. Our knight on f3 controls important central squares like e5 and d4, while also preparing to support a future e4 advance if the opportunity arises. This natural developing move fits perfectly with the positional nature of the Nimzo-Indian, where both sides typically focus on piece development and central control before committing to specific pawn breaks."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our center and preparing to castle kingside for safety. This move avoids the immediate confrontation that moves like Qc2 or Bd2 would create, instead focusing on solid development while keeping our options open. Our knight on f3 controls important central squares like e5 and d4, while also preparing to support a future e4 advance if the opportunity arises. This active move fits perfectly with the positional nature of the Nimzo-Indian, where both sides typically focus on piece development and central control before committing to specific pawn breaks."
     },
     {
       "san": "c5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Our opponent prioritizes king safety by castling kingside, which is absolutely essential before the center opens up with potential pawn trades. This move also connects the rooks and prepares to potentially increase pressure on our d4 pawn with moves like ...Re8 and ...d6. Black is following excellent practical advice - secure the king first, then worry about central battles, especially since the position could become sharp quickly. The castled king also frees up Black's rook to potentially support the c5 pawn or create pressure along the e-file, making this both a safety measure and a subtle developing move."
+      "annotation": "Our opponent prioritizes king safety by castling kingside, which is absolutely essential before the center opens up with potential pawn trades. This move also connects the rooks and prepares to potentially increase pressure on our d4 pawn with moves like ...Re8 and ...d6. Black is following excellent practical advice - secure the king first, then worry about central battles, especially since the position could become sharp quickly. The castled king also frees up Black's rook to potentially support the c5 pawn or create pressure along the e-file, making this both a safety measure and a subtle developing choice."
     },
     {
       "san": "g3",

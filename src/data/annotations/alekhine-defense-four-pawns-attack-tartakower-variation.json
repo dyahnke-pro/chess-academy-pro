@@ -51,7 +51,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "We develop our bishop to e3, supporting the d4 pawn while preparing to castle kingside safely. This quiet but important move consolidates our central pawn structure and prepares for the next phase of development. The bishop on e3 also controls the important f4 and g5 squares, potentially supporting future attacking operations on the kingside. By protecting d4, we maintain our central pawn duo and keep maximum flexibility in our position, allowing us to castle and coordinate our remaining pieces effectively."
+      "annotation": "We develop our bishop to e3, supporting the d4 pawn while preparing to castle kingside safely. this purposeful move consolidates our central pawn structure and prepares for the next phase of development. The bishop on e3 also controls the important f4 and g5 squares, potentially supporting future attacking operations on the kingside. By protecting d4, we maintain our central pawn duo and keep maximum flexibility in our position, allowing us to castle and coordinate our remaining pieces effectively."
     },
     {
       "san": "Bf5",

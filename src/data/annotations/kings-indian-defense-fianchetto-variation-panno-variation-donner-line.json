@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to challenge our central control. This is a hypermodern approach - rather than occupying the center immediately with pawns, Black is developing pieces that can later undermine our pawn center. The knight on f6 also supports a future ...e5 advance and keeps options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Indian defenses."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to challenge our central control. This is a hypermodern approach - rather than occupying the center immediately with pawns, Black is developing pieces that can later undermine our pawn center. The knight on f6 also supports a future ...e5 advance and keeps options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Indian defenses."
     },
     {
       "san": "c4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn and preparing for central operations. This knight controls key squares like e4 and b5, limiting Black's options while keeping our own plans flexible. The knight development also allows us to consider moves like e4 (transposing to different structures) or supports our queenside expansion with moves like a4 or b4, depending on how Black continues the game."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn and preparing for central operations. This knight controls key squares like e4 and b5, limiting Black's options while keeping our own plans flexible. The knight development also allows us to consider moves like e4 (transposing to different structures) or supports our queenside expansion with moves like a4 or b4, depending on how Black continues the game."
     },
     {
       "san": "a6",
@@ -79,7 +79,7 @@
     },
     {
       "san": "Rb8",
-      "annotation": "Black develops the rook to an active square, supporting the coming ...b5 advance and putting immediate pressure on our queenside. This is the key move of the Panno system - the rook will support Black's pawn storm while potentially creating tactical opportunities along the b-file. With the rook actively placed, Black is ready to launch serious queenside counterplay that will test our ability to maintain our positional advantages while dealing with concrete threats."
+      "annotation": "Black develops the rook to an active square, supporting the coming ...b5 advance and putting immediate pressure on our queenside. This is the central idea of the Panno system - the rook will support Black's pawn storm while potentially creating tactical opportunities along the b-file. With the rook actively placed, Black is ready to launch serious queenside counterplay that will test our ability to maintain our positional advantages while dealing with concrete threats."
     },
     {
       "san": "b3",

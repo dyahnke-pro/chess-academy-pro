@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawn structure and prepares kingside castling. From f3, the knight controls the important e5 and h4 squares while maintaining flexibility - it can later jump to e5, d2, or even h4 depending on the position's requirements. This move also prevents any potential ...e5 breaks from Black, maintaining our central space advantage. By developing the knight before committing our other pieces, we're following sound opening principles while keeping our options open for various pawn structures and piece configurations."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central pawn structure and prepares kingside castling. From f3, the knight controls the important e5 and h4 squares while maintaining flexibility - it can later jump to e5, d2, or even h4 depending on the position's requirements. This move also prevents any potential ...e5 breaks from Black, maintaining our central space advantage. By developing the knight before committing our other pieces, we're following sound opening principles while keeping our options open for various pawn structures and piece configurations."
     },
     {
       "san": "b6",

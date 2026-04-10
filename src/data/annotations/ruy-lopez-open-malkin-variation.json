@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and adding another defender to our own e4 pawn. This move also controls the important d4 and g5 squares, giving us flexibility in our future plans. The knight on f3 is perfectly placed to support a kingside attack while also being ready to retreat if Black advances with ...d5. By developing with tempo (attacking the e5 pawn), we're putting immediate pressure on our opponent and forcing them to make concrete decisions about their pawn structure."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and adding another defender to our own e4 pawn. This move also controls the important d4 and g5 squares, giving us flexibility in our future plans. The knight on f3 is perfectly placed to support a kingside attack while also being ready to retreat if Black advances with ...d5. By developing with tempo (attacking the e5 pawn), we're putting immediate pressure on our opponent and forcing them to make concrete decisions about their pawn structure."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to a central square where it influences both sides of the board. This knight controls important squares like d4 and b4, while also preparing potential future advances like ...d5 or ...f5. Our opponent is following sound opening principles by developing pieces and defending the center simultaneously. However, this knight placement also makes it a target for our upcoming Bb5, which is exactly what we want in the Spanish Opening."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to a central square where it influences both sides of the board. This knight controls important squares like d4 and b4, while also preparing potential future advances like ...d5 or ...f5. Our opponent is following sound opening principles by developing pieces and defending the center simultaneously. However, this knight placement also makes it a target for our upcoming Bb5, which is exactly what we want in the Spanish Opening."
     },
     {
       "san": "Bb5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Be6",
-      "annotation": "Black develops the light-squared bishop to e6, defending the d5 pawn and preparing to complete kingside development with Be7 and castling. This natural developing move also contests our bishop's influence on the long diagonal and prepares to trade off some pieces to reduce our attacking potential. Our opponent is following sound principles by developing pieces and consolidating the position, but the bishop on e6 also blocks the e-file slightly. This move shows Black is trying to complete development while maintaining the extra pawn, which is the correct approach in these sharp variations."
+      "annotation": "Black develops the light-squared bishop to e6, defending the d5 pawn and preparing to complete kingside development with Be7 and castling. This active move also contests our bishop's influence on the long diagonal and prepares to trade off some pieces to reduce our attacking potential. Our opponent is following sound principles by developing pieces and consolidating the position, but the bishop on e6 also blocks the e-file slightly. This move shows Black is trying to complete development while maintaining the extra pawn, which is the correct approach in these sharp variations."
     },
     {
       "san": "c3",
@@ -71,7 +71,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black completes the development of the kingside pieces, preparing to castle and bring the king to safety. This natural move also connects the rooks and prepares to challenge our bishop on b3 if needed with moves like Bh4 or Bg4. Our opponent is following the correct plan in sharp positions: complete development first, then worry about improving the position. The bishop on e7 also supports the d6 square and provides additional defense for the kingside, which will be important once we start our attacking operations."
+      "annotation": "Black completes the development of the kingside pieces, preparing to castle and bring the king to safety. this move also connects the rooks and prepares to challenge our bishop on b3 if needed with moves like Bh4 or Bg4. Our opponent is following the correct plan in sharp positions: complete development first, then worry about improving the position. The bishop on e7 also supports the d6 square and provides additional defense for the kingside, which will be important once we start our attacking operations."
     },
     {
       "san": "Nbd2",

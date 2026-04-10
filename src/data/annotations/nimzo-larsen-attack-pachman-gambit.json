@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "b3",
-      "annotation": "We begin with the Nimzo-Larsen Attack, an unusual but solid opening that prepares to fianchetto our light-squared bishop on b2 while controlling the important central squares from the flanks. Rather than fighting for the center with pawns immediately, we're taking a flexible, positional approach—we'll support the center with pieces and control key diagonals. This move is less common than 1.e4 or 1.d4, which gives us the practical advantage of avoiding well-prepared opponents and entering rich, strategically complex positions."
+      "annotation": "We begin with the Nimzo-Larsen Attack, an unusual but solid opening that prepares to fianchetto our light-squared bishop on b2 while controlling the important central squares from the flanks. Rather than contesting central control with pawns immediately, we're taking a flexible, positional approach—we'll support the center with pieces and control key diagonals. This move is less common than 1.e4 or 1.d4, which gives us the practical advantage of avoiding well-prepared opponents and entering rich, strategically complex positions."
     },
     {
       "san": "e5",
@@ -15,7 +15,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops naturally, defending the e5 pawn and preparing to develop the kingside. The knight on c6 is a solid developing move that supports Black's center, but now Black must decide how to handle the tension—we're building pressure that will soon demand a response."
+      "annotation": "Black develops naturally, defending the e5 pawn and preparing to develop the kingside. The knight on c6 is a constructive move that supports Black's center, but now Black must decide how to handle the tension—we're building pressure that will soon demand a response."
     },
     {
       "san": "f4",

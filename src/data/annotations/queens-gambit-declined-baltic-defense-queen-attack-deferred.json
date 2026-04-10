@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Our opponent responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own space. This solid move is the most principled response to 1.d4, as Black mirrors our central control and prepares to develop their pieces to natural squares. By playing d5, Black also opens lines for their light-squared bishop and queen, while maintaining the option to support their center with moves like c6 or e6. This symmetrical approach often leads to rich middlegame positions where both sides have equal chances."
+      "annotation": "Our opponent responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own space. this stabilizing move is the most principled response to 1.d4, as Black mirrors our central control and prepares to develop their pieces to natural squares. By playing d5, Black also opens lines for their light-squared bishop and queen, while maintaining the option to support their center with moves like c6 or e6. This symmetrical approach often leads to rich middlegame positions where both sides have equal chances."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and preparing to increase the pressure on Black's position. This move is extremely logical because it develops a piece toward the center, supports our d4 pawn, and keeps all our options open regarding how to continue the attack on d5. The knight on c3 also prepares potential advances like e4 (if the d5 pawn moves) and supports the idea of playing f3 and e4 in some variations. From c3, our knight controls important central squares like e4 and d5, and can potentially reroute to more aggressive posts like e4 or b5 later in the game."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn and preparing to increase the pressure on Black's position. This move is extremely logical because it develops a piece toward the center, supports our d4 pawn, and keeps all our options open regarding how to continue the attack on d5. The knight on c3 also prepares potential advances like e4 (if the d5 pawn moves) and supports the idea of playing f3 and e4 in some variations. From c3, our knight controls important central squares like e4 and d5, and can potentially reroute to more aggressive posts like e4 or b5 later in the game."
     },
     {
       "san": "e6",

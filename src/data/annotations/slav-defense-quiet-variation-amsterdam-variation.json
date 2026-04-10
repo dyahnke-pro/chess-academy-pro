@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while supporting our potential pawn advance to e4. This move also prepares kingside castling and keeps maximum flexibility in our setup - we haven't committed to any particular pawn structure yet. The knight on f3 is perfectly placed to support various central advances and will often jump to e5 or d4 in the middlegame."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while supporting our potential pawn advance to e4. This move also prepares kingside castling and keeps maximum flexibility in our setup - we haven't committed to any particular pawn structure yet. The knight on f3 is perfectly placed to support various central advances and will often jump to e5 or d4 in the middlegame."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight symmetrically, attacking our e4 square and preparing to castle kingside. This natural developing move puts immediate pressure on our central aspirations and prepares to support Black's own central pawn advances. Our opponent is following classical development principles while maintaining the solid pawn structure that characterizes the Slav Defense."
+      "annotation": "Black develops their knight symmetrically, attacking our e4 square and preparing to castle kingside. This active move puts immediate pressure on our central aspirations and prepares to support Black's own central pawn advances. Our opponent is following classical development principles while maintaining the solid pawn structure that characterizes the Slav Defense."
     },
     {
       "san": "e3",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to c3, adding pressure to Black's d5 pawn and preparing to castle kingside. This natural developing move also eyes the important e4 and b5 squares, giving us good central influence. The knight on c3 works well with our other pieces and prepares various tactical motifs, particularly the potential advance Nb5 in some lines to attack Black's position."
+      "annotation": "We develop our knight to c3, adding pressure to Black's d5 pawn and preparing to castle kingside. This active move also eyes the important e4 and b5 squares, giving us good central influence. The knight on c3 works well with our other pieces and prepares various tactical motifs, particularly the potential advance Nb5 in some lines to attack Black's position."
     },
     {
       "san": "e6",

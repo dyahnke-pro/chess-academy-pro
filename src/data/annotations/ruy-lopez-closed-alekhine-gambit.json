@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, attacking Black's e5 pawn while supporting our own central presence. This move is far superior to premature queen sorties like Qh5 because it follows the opening principle of developing knights before bishops. From f3, our knight eyes the key central squares d4 and e5, and we're preparing to castle kingside while keeping maximum flexibility in our setup."
+      "annotation": "We develop our king's knight to its ideal square, attacking Black's e5 pawn while supporting our own central presence. This move is far superior to premature queen sorties like Qh5 because it follows the opening principle of developing knights before bishops. From f3, our knight eyes the key central squares d4 and e5, and we're preparing to castle kingside while keeping maximum flexibility in our setup."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their king's knight to attack our e4 pawn, forcing us to make a concrete decision about our central structure. This natural developing move also prepares kingside castling and supports Black's central presence. Our opponent is putting maximum pressure on our center while staying true to opening principles, though they're entering the most theoretical lines of the Spanish opening where precise knowledge becomes crucial."
+      "annotation": "Black develops their king's knight to attack our e4 pawn, forcing us to make a concrete decision about our central structure. This active move also prepares kingside castling and supports Black's central presence. Our opponent is putting maximum pressure on our center while staying true to opening principles, though they're entering the most theoretical lines of the Spanish opening where precise knowledge becomes crucial."
     },
     {
       "san": "O-O",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops their light-squared bishop and prepares to castle, breaking the potential pin that could arise after our Re1. This solid developing move supports the f6 knight and maintains Black's central tension while preparing to complete their kingside development. Our opponent is following the main line of the Closed Spanish, accepting a slightly passive but very solid position in exchange for piece coordination."
+      "annotation": "Black develops their light-squared bishop and prepares to castle, breaking the potential pin that could arise after our Re1. This solid developing choice supports the f6 knight and maintains Black's central tension while preparing to complete their kingside development. Our opponent is following the main line of the Closed Spanish, accepting a slightly passive but very solid position in exchange for piece coordination."
     },
     {
       "san": "Re1",
@@ -55,7 +55,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black supports their e5 pawn and prepares to develop their dark-squared bishop, typically to b7 or e6. This solid move creates a pawn chain and gives Black's position more stability, though it does slightly restrict their light-squared bishop. Our opponent is following the main line setup of the Closed Spanish, prioritizing solid development over immediate counterplay."
+      "annotation": "Black supports their e5 pawn and prepares to develop their dark-squared bishop, typically to b7 or e6. this stabilizing move creates a pawn chain and gives Black's position more stability, though it does slightly restrict their light-squared bishop. Our opponent is following the main line setup of the Closed Spanish, prioritizing solid development over immediate counterplay."
     },
     {
       "san": "c3",
@@ -79,7 +79,7 @@
     },
     {
       "san": "Qc7",
-      "annotation": "Our opponent develops their queen to a central square where it supports the c5 pawn while eyeing our e5 square and preparing potential counterplay. This natural developing move also connects Black's rooks and prepares to meet our central tension with maximum piece coordination. Black is maintaining the balance in the center while keeping their position flexible for various pawn recaptures."
+      "annotation": "Our opponent develops their queen to a central square where it supports the c5 pawn while eyeing our e5 square and preparing potential counterplay. This active move also connects Black's rooks and prepares to meet our central tension with maximum piece coordination. Black is maintaining the balance in the center while keeping their position flexible for various pawn recaptures."
     },
     {
       "san": "Nbd2",
@@ -87,7 +87,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black completes their kingside development by castling, prioritizing king safety while the center remains tense. This natural move connects Black's rooks and prepares to meet our central advances with maximum piece coordination. Our opponent is following sound opening principles, though they must still solve the problem of their somewhat passive piece placement."
+      "annotation": "Black completes their kingside development by castling, prioritizing king safety while the center remains tense. this move connects Black's rooks and prepares to meet our central advances with maximum piece coordination. Our opponent is following sound opening principles, though they must still solve the problem of their somewhat passive piece placement."
     },
     {
       "san": "Nf1",

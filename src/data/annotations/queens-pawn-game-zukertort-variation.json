@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This flexible move doesn't commit us to any particular pawn structure yet - we could still play c4 (transposing to various Queen's Gambit lines), e3 (leading to quieter systems), or even c3 preparing e4. The knight on f3 also prepares kingside castling and keeps maximum options open for our setup. This is the hallmark of the Zukertort system - developing pieces first before committing to a specific pawn formation."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This flexible move doesn't commit us to any particular pawn structure yet - we could still play c4 (transposing to various Queen's Gambit lines), e3 (leading to quieter systems), or even c3 preparing e4. The knight on f3 also prepares kingside castling and keeps maximum options open for our setup. This is the hallmark of the Zukertort system - developing pieces first before committing to a specific pawn formation."
     },
     {
       "san": "c5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most active square, mirroring our development while adding pressure to our e4 square and preventing us from advancing there easily. This natural developing move also prepares kingside castling and maintains flexibility in Black's setup. Our opponent is following classical opening principles - develop pieces toward the center, control key squares, and prepare to castle. The knight on f6 works well with Black's eventual plan to develop the bishop to e7 or d6 and complete kingside development."
+      "annotation": "Black develops their knight to its most active square, mirroring our development while adding pressure to our e4 square and preventing us from advancing there easily. This active move also prepares kingside castling and maintains flexibility in Black's setup. Our opponent is following classical opening principles - develop pieces toward the center, control key squares, and prepare to castle. The knight on f6 works well with Black's eventual plan to develop the bishop to e7 or d6 and complete kingside development."
     },
     {
       "san": "Nbd2",

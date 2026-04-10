@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to control the important e4 square. This is one of the most flexible responses to d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also supports a future ...e5 central break and prepares kingside castling. We need to be ready for Black's central counterplay and should continue with our own logical development."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn while preparing to control the important e4 square. This is one of the most flexible responses to d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also supports a future ...e5 central break and prepares kingside castling. We need to be ready for Black's central counterplay and should continue with our own logical development."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, controlling the central e5 and d4 squares while preparing kingside castling. This natural developing move also supports our d4 pawn and keeps pressure on Black's position without committing to any particular pawn structure yet. The knight on f3 is perfectly placed to support central operations and can easily redeploy to e5 or g5 if tactical opportunities arise. We're following classical opening principles by developing pieces before moving pawns unnecessarily, maintaining our central influence while improving our king safety."
+      "annotation": "We develop our knight to its optimal square, controlling the central e5 and d4 squares while preparing kingside castling. This active move also supports our d4 pawn and keeps pressure on Black's position without committing to any particular pawn structure yet. The knight on f3 is perfectly placed to support central operations and can easily redeploy to e5 or g5 if tactical opportunities arise. We're following classical opening principles by developing pieces before moving pawns unnecessarily, maintaining our central influence while improving our king safety."
     },
     {
       "san": "c5",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important e5 and h4 squares while supporting our central pawn on d4. This move follows classical development principles by improving a piece to its optimal square and preparing to castle kingside. The knight on f3 also prevents Black from playing ...Bg4, pinning our knight to the queen, which could become annoying. From f3, our knight maintains flexibility and can potentially jump to e5 or g5 later in the game, depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, where it controls the important e5 and h4 squares while supporting our central pawn on d4. This move follows classical development principles by improving a piece to its optimal square and preparing to castle kingside. The knight on f3 also prevents Black from playing ...Bg4, pinning our knight to the queen, which could become annoying. From f3, our knight maintains flexibility and can potentially jump to e5 or g5 later in the game, depending on how the position develops."
     },
     {
       "san": "Nf6",

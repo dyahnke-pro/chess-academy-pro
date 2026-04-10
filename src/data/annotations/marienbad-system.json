@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet - they could follow up with ...e6 (heading for a Queen's Gambit or Nimzo-Indian), ...g6 (going for a King's Indian setup), or even ...b6 as we'll see. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to expand in the center immediately. This move keeps Black's options open while developing a piece toward the center."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn while preparing to castle kingside. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet - they could follow up with ...e6 (heading for a Queen's Gambit or Nimzo-Indian), ...g6 (going for a King's Indian setup), or even ...b6 as we'll see. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to expand in the center immediately. This move keeps Black's options open while developing a piece toward the center."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and controlling the important e5 and g5 squares. This natural developing move also prepares several opening systems - we could continue with c4 (heading for a Queen's Gambit), Bg5 (going for a Torre Attack), or as we'll see, g3 leading to a King's Indian Attack setup. The knight on f3 is beautifully placed because it can't easily be kicked away by pawns, unlike a knight that might go to c3 where ...d5-d4 could attack it later. From f3, our knight supports central control while keeping our options flexible for the next few moves."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and controlling the important e5 and g5 squares. This active move also prepares several opening systems - we could continue with c4 (heading for a Queen's Gambit), Bg5 (going for a Torre Attack), or as we'll see, g3 leading to a King's Indian Attack setup. The knight on f3 is beautifully placed because it can't easily be kicked away by pawns, unlike a knight that might go to c3 where ...d5-d4 could attack it later. From f3, our knight supports central control while keeping our options flexible for the next few moves."
     },
     {
       "san": "b6",

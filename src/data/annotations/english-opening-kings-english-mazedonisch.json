@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and keeps maximum flexibility in our position. This knight placement is consistent with the English Opening's philosophy of gradual piece development and central control from the wings. From c3, our knight can potentially jump to d5 later in the game, creating strong outpost, or support a future d4 advance if we decide to transpose into a Queen's Gambit structure. The knight also leaves our d-pawn free to advance, giving us multiple strategic options as the game develops."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and keeps maximum flexibility in our position. This knight placement is consistent with the English Opening's philosophy of gradual piece development and central control from the wings. From c3, our knight can potentially jump to d5 later in the game, creating strong outpost, or support a future d4 advance if we decide to transpose into a Queen's Gambit structure. The knight also leaves our d-pawn free to advance, giving us multiple strategic options as the game develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its optimal square, attacking our theoretical e4 square and preparing to castle kingside safely. This natural developing move also supports Black's central e5 pawn and keeps the position balanced, showing that our opponent understands sound opening principles. The knight on f6 is perfectly placed for most pawn structures that might arise, whether Black continues with a classical setup or opts for more dynamic piece play. This move maintains the central tension while improving Black's position, forcing us to make a concrete decision about how to proceed with our opening setup."
+      "annotation": "Black develops the kingside knight to its optimal square, attacking our theoretical e4 square and preparing to castle kingside safely. This active move also supports Black's central e5 pawn and keeps the position balanced, showing that our opponent understands sound opening principles. The knight on f6 is perfectly placed for most pawn structures that might arise, whether Black continues with a classical setup or opts for more dynamic piece play. This move maintains the central tension while improving Black's position, forcing us to make a concrete decision about how to proceed with our opening setup."
     },
     {
       "san": "f4",

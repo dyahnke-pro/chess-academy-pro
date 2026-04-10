@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another defender to our d4 pawn while preparing to advance e4 and claim even more central space. This knight placement is crucial because it supports our plan to build a large pawn center with e4, and later it can jump to excellent outposts like d5 or b5 depending on how the position develops. The knight on c3 also keeps pressure on Black's potential d5 pawn break, making it harder for our opponent to achieve easy equality in the center. From c3, this knight has excellent mobility and can later support both queenside advances with moves like a4-a5 or central operations if we get the chance to place it on e4."
+      "annotation": "We're developing our knight to its ideal square, adding another defender to our d4 pawn while preparing to advance e4 and claim even more central space. This knight placement is crucial because it supports our plan to build a large pawn center with e4, and later it can jump to excellent outposts like d5 or b5 depending on how the position develops. The knight on c3 also keeps pressure on Black's potential d5 pawn break, making it harder for our opponent to achieve easy equality in the center. From c3, this knight has excellent mobility and can later support both queenside advances with moves like a4-a5 or central operations if we get the chance to place it on e4."
     },
     {
       "san": "Bg7",
@@ -27,7 +27,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We're establishing our ideal pawn center, creating a powerful duo on d4 and e4 that controls crucial central squares and gives us a significant space advantage. This advance is the key move in the King's Indian structure because it forces Black to make an important decision about how to handle the central tension. Our pawn on e4 not only controls the vital f5 and d5 squares but also opens lines for our pieces and prepares us to launch various attacking schemes on either flank. The space advantage we gain from this pawn center will be our main asset throughout the middlegame, allowing us to maneuver our pieces more freely while restricting Black's options."
+      "annotation": "We're establishing our ideal pawn center, creating a powerful duo on d4 and e4 that controls crucial central squares and gives us a significant space advantage. This advance is the critical move in the King's Indian structure because it forces Black to make an important decision about how to handle the central tension. Our pawn on e4 not only controls the vital f5 and d5 squares but also opens lines for our pieces and prepares us to launch various attacking schemes on either flank. The space advantage we gain from this pawn center will be our main asset throughout the middlegame, allowing us to maneuver our pieces more freely while restricting Black's options."
     },
     {
       "san": "d6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, adding pressure to our d4 pawn while preparing to support various strategic plans depending on how we resolve the central tension. This knight development is particularly flexible because from c6, the knight can later jump to excellent squares like e7, d4, or even b4, depending on the tactical demands of the position. The knight on c6 also supports potential pawn advances like a6-a5 or b5, giving Black more options for creating counterplay on the queenside. Most importantly, this move increases the pressure on our central pawns and forces us to make a concrete decision about how we want to handle the position."
+      "annotation": "Black develops the knight to its ideal square, adding pressure to our d4 pawn while preparing to support various strategic plans depending on how we resolve the central tension. This knight development is particularly flexible because from c6, the knight can later jump to excellent squares like e7, d4, or even b4, depending on the tactical demands of the position. The knight on c6 also supports potential pawn advances like a6-a5 or b5, giving Black more options for creating counterplay on the queenside. Most importantly, this move increases the pressure on our central pawns and forces us to make a concrete decision about how we want to handle the position."
     },
     {
       "san": "d5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Ne7",
-      "annotation": "Our opponent retreats the knight to e7, where it supports the crucial f5 pawn advance while maintaining flexibility to later jump to excellent squares like f5, g6, or d5. This knight retreat might look passive, but it's actually a key move in the King's Indian setup because the knight on e7 becomes a cornerstone of Black's kingside counterplay. From e7, this knight can support the typical f7-f5 pawn storm that characterizes sharp King's Indian middlegames, and it also provides additional defense for the kingside in case we launch our own attacking schemes. The knight placement on e7 also keeps open the possibility of playing c6 to challenge our advanced d5 pawn, giving Black multiple strategic options."
+      "annotation": "Our opponent retreats the knight to e7, where it supports the crucial f5 pawn advance while maintaining flexibility to later jump to excellent squares like f5, g6, or d5. This knight retreat might look passive, but it's actually a critical move in the King's Indian setup because the knight on e7 becomes a cornerstone of Black's kingside counterplay. From e7, this knight can support the typical f7-f5 pawn storm that characterizes sharp King's Indian middlegames, and it also provides additional defense for the kingside in case we launch our own attacking schemes. The knight placement on e7 also keeps open the possibility of playing c6 to challenge our advanced d5 pawn, giving Black multiple strategic options."
     },
     {
       "san": "b4",

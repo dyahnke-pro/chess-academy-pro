@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn. This is a hypermodern approach - rather than occupying the center with pawns like ...d5 or ...e5, Black is controlling central squares from the rim and keeping options open for different pawn structures. The knight on f6 also prepares kingside castling and keeps the game flexible, as Black can still choose between setups like the King's Indian, Nimzo-Indian, or other defenses depending on our next moves. We need to be ready to support our d4 pawn and continue our development."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn. This is a hypermodern approach - rather than occupying the center with pawns like ...d5 or ...e5, Black is controlling central squares from the rim and keeping options open for different pawn structures. The knight on f6 also prepares kingside castling and keeps the game flexible, as Black can still choose between setups like the King's Indian, Nimzo-Indian, or other defenses depending on our next moves. We need to be ready to support our d4 pawn and continue our development."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most active square, supporting our d4 pawn and preparing kingside castling. This natural developing move also controls the important e5 and h4 squares, preventing Black from advancing in the center or launching early kingside attacks. The knight on f3 works harmoniously with our pawn structure and keeps our options open for different plans - we can still play e3 for a solid setup, or e4 for a more aggressive central advance. This move also prepares us to meet any potential ...e5 push from Black, as we'll be able to recapture on d4 if needed."
+      "annotation": "We develop our knight to its most active square, supporting our d4 pawn and preparing kingside castling. This active move also controls the important e5 and h4 squares, preventing Black from advancing in the center or launching early kingside attacks. The knight on f3 works harmoniously with our pawn structure and keeps our options open for different plans - we can still play e3 for a solid setup, or e4 for a more aggressive central advance. This move also prepares us to meet any potential ...e5 push from Black, as we'll be able to recapture on d4 if needed."
     },
     {
       "san": "Bg4",

@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while maintaining maximum flexibility in our setup. This move supports our potential d4 advance and keeps all our options open - we can still play d4, g3 with a fianchetto, or even transpose into Queen's Gambit structures depending on Black's response. The knight on f3 is perfectly placed for nearly every English Opening setup, whether we're aiming for a Catalan-style fianchetto or a more classical central approach. By developing pieces before committing pawns, we're following sound opening principles while keeping Black guessing about our ultimate plan."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while maintaining maximum flexibility in our setup. This move supports our potential d4 advance and keeps all our options open - we can still play d4, g3 with a fianchetto, or even transpose into Queen's Gambit structures depending on Black's response. The knight on f3 is perfectly placed for nearly every English Opening setup, whether we're aiming for a Catalan-style fianchetto or a more classical central approach. By developing pieces before committing pawns, we're following sound opening principles while keeping Black guessing about our ultimate plan."
     },
     {
       "san": "d5",
-      "annotation": "Black strikes in the center immediately, challenging our c4 pawn and establishing a strong point in the heart of the board. This natural move gives Black good central control and forces us to make a decision about the pawn structure - will we capture, advance, or support our c4 pawn? The d5 advance also opens lines for Black's light-squared bishop and queen, improving piece coordination. Black is essentially accepting the challenge for central control and refusing to let us build up pressure gradually without a fight."
+      "annotation": "Black strikes in the center immediately, challenging our c4 pawn and establishing a strong point in the heart of the board. this move gives Black good central control and forces us to make a decision about the pawn structure - will we capture, advance, or support our c4 pawn? The d5 advance also opens lines for Black's light-squared bishop and queen, improving piece coordination. Black is essentially accepting the challenge for central control and refusing to let us build up pressure gradually without a fight."
     },
     {
       "san": "g3",

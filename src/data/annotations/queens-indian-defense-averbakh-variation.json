@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this natural developing move, putting pressure on d4 while bringing the knight to its most active square. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also controls important central squares like e4 and d5, which will be key battlegrounds in the coming middlegame. By developing the knight first, Black follows sound opening principles while waiting to see our plan before committing to a specific defensive formation."
+      "annotation": "Black immediately challenges our central pawn with this active move, putting pressure on d4 while bringing the knight to its most active square. This is one of the most flexible responses to 1.d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also controls important central squares like e4 and d5, which will be key battlegrounds in the coming middlegame. By developing the knight first, Black follows sound opening principles while waiting to see our plan before committing to a specific defensive formation."
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, controlling the crucial d5 square and beginning to establish what's known as the 'Maróczy bind' formation in the center. This pawn advance supports our d4 pawn and prevents Black from easily achieving the freeing ...d5 break, which would equalize the center. The c4 move also prepares to expand on the queenside with moves like Nc3 and a3-b4, while keeping our options open for different pawn structures. This is a key move in many Queen's Pawn openings, as it helps us maintain a space advantage and dictate the flow of the game."
+      "annotation": "We're playing the English Opening move order, controlling the crucial d5 square and beginning to establish what's known as the 'Maróczy bind' formation in the center. This pawn advance supports our d4 pawn and prevents Black from easily achieving the freeing ...d5 break, which would equalize the center. The c4 move also prepares to expand on the queenside with moves like Nc3 and a3-b4, while keeping our options open for different pawn structures. This is a critical move in many Queen's Pawn openings, as it helps us maintain a space advantage and dictate the flow of the game."
     },
     {
       "san": "e6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the center (especially e5) and supports our d4 pawn while preparing kingside castling. This move is nearly universal in queen's pawn openings because the knight is perfectly placed on f3 for both attack and defense. From f3, our knight can later jump to e5 (a powerful outpost) or support pawn advances like e4, giving us maximum flexibility in our middlegame plans. The knight development also follows the principle of developing pieces before making further pawn moves, and it prepares to castle kingside for safety."
+      "annotation": "We're developing our knight to its ideal square, where it controls the center (especially e5) and supports our d4 pawn while preparing kingside castling. This move is nearly universal in queen's pawn openings because the knight is perfectly placed on f3 for both attack and defense. From f3, our knight can later jump to e5 (a powerful outpost) or support pawn advances like e4, giving us maximum flexibility in our middlegame plans. The knight development also follows the principle of developing pieces before making further pawn moves, and it prepares to castle kingside for safety."
     },
     {
       "san": "b6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black completes development by castling kingside, getting the king to safety while connecting the rooks for potential central or queenside operations. This natural move is almost forced, as leaving the king in the center would be too dangerous given our growing piece activity and potential for tactics. The castling also brings Black's rook into potential play on the f8 square, where it can support an eventual ...f5 pawn break or defend along the back rank. With both sides now castled, the real strategic battle begins, revolving around the central pawn tension and optimal piece coordination."
+      "annotation": "Black completes development by castling kingside, getting the king to safety while connecting the rooks for potential central or queenside operations. this move is almost forced, as leaving the king in the center would be too dangerous given our growing piece activity and potential for tactics. The castling also brings Black's rook into potential play on the f8 square, where it can support an eventual ...f5 pawn break or defend along the back rank. With both sides now castled, the real strategic battle begins, revolving around the central pawn tension and optimal piece coordination."
     },
     {
       "san": "Bb2",

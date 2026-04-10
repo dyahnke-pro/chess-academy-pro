@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding pressure to the d5 pawn and preparing to support our central pawn advances. This knight controls important squares like e4, b5, and d5, while also preparing potential moves like e4 if Black ever captures on c4. The knight on c3 is a cornerstone piece in QGD structures, often supporting advances like e4 or b4 depending on how the position develops. We're also keeping our options open for different pawn breaks and piece configurations, as the knight from c3 can jump to various squares like e4, b5, or even a4 in some lines."
+      "annotation": "We develop our knight to its ideal square, adding pressure to the d5 pawn and preparing to support our central pawn advances. This knight controls important squares like e4, b5, and d5, while also preparing potential moves like e4 if Black ever captures on c4. The knight on c3 is a cornerstone piece in QGD structures, often supporting advances like e4 or b4 depending on how the position develops. We're also keeping our options open for different pawn breaks and piece configurations, as the knight from c3 can jump to various squares like e4, b5, or even a4 in some lines."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its ideal square, where it attacks our e4 square and prepares kingside castling while adding indirect defense to the d5 pawn. This is the most natural developing move in the QGD, as the knight on f6 fits perfectly into Black's defensive setup. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the solid pawn structure. The knight on f6 also prepares tactical possibilities like ...Ne4 if we're not careful with our piece coordination, and it supports potential pawn breaks like ...c5."
+      "annotation": "Black develops their kingside knight to its ideal square, where it attacks our e4 square and prepares kingside castling while adding indirect defense to the d5 pawn. This is the most active move in the QGD, as the knight on f6 fits perfectly into Black's defensive setup. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the solid pawn structure. The knight on f6 also prepares tactical possibilities like ...Ne4 if we're not careful with our piece coordination, and it supports potential pawn breaks like ...c5."
     },
     {
       "san": "Bg5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays the key move of the Modern Variation, supporting their d5 pawn with the c-pawn and preparing potential queenside expansion with ...b5 or central breaks with ...c5. This pawn move creates a solid defensive structure while giving Black more options for active piece play, as the c8 bishop now has the potential b7 square available. Our opponent is also preventing any Nb5 ideas from our side and maintaining maximum flexibility in the position. The c6 move is particularly effective because it doesn't commit Black to any specific pawn structure while keeping all their strategic options open for the middlegame."
+      "annotation": "Black plays the central idea of the Modern Variation, supporting their d5 pawn with the c-pawn and preparing potential queenside expansion with ...b5 or central breaks with ...c5. This pawn move creates a solid defensive structure while giving Black more options for active piece play, as the c8 bishop now has the potential b7 square available. Our opponent is also preventing any Nb5 ideas from our side and maintaining maximum flexibility in the position. The c6 move is particularly effective because it doesn't commit Black to any specific pawn structure while keeping all their strategic options open for the middlegame."
     }
   ]
 }

@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important central squares e5 and d4 while preparing to support our center with moves like e3 or Nc3. This move also prevents any back-rank tactics involving Black's queen and keeps our options open for various pawn structures. The knight on f3 is perfectly placed for most Queen's Gambit systems, supporting a potential e4 advance and keeping pressure on Black's position. Additionally, this development move allows us to castle kingside quickly, which is often a priority in these openings."
+      "annotation": "We develop our knight to its ideal square, controlling the important central squares e5 and d4 while preparing to support our center with moves like e3 or Nc3. This move also prevents any back-rank tactics involving Black's queen and keeps our options open for various pawn structures. The knight on f3 is perfectly placed for most Queen's Gambit systems, supporting a potential e4 advance and keeping pressure on Black's position. Additionally, this development move allows us to castle kingside quickly, which is often a priority in these openings."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development by bringing the knight to f6, where it attacks our e4 square and prepares to support their own central ambitions. This natural developing move is almost universal in these positions because the knight controls key central squares and supports Black's kingside development. Our opponent is also preparing to castle kingside while keeping options open for various pawn breaks like ...e6 or maintaining the tension in the center. The knight on f6 also adds extra protection to the d5 pawn, making it harder for us to simply trade on d5 and dominate the center."
+      "annotation": "Black mirrors our development by bringing the knight to f6, where it attacks our e4 square and prepares to support their own central ambitions. This active move is almost universal in these positions because the knight controls key central squares and supports Black's kingside development. Our opponent is also preparing to castle kingside while keeping options open for various pawn breaks like ...e6 or maintaining the tension in the center. The knight on f6 also adds extra protection to the d5 pawn, making it harder for us to simply trade on d5 and dominate the center."
     },
     {
       "san": "Nc3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays the key move that transforms the Slav Defense into the Semi-Slav, supporting the center while preparing to develop the dark-squared bishop to e7 or d6. This move creates a solid pawn chain from c6 to e6, giving Black excellent central control but at the cost of restricting the light-squared bishop's mobility. Our opponent is preparing to complete development with moves like Be7 and castling, while keeping the option to capture on c4 at an appropriate moment. The Semi-Slav is known for being one of Black's most solid defenses, though it can lead to somewhat cramped positions if not handled precisely."
+      "annotation": "Black plays the critical move that transforms the Slav Defense into the Semi-Slav, supporting the center while preparing to develop the dark-squared bishop to e7 or d6. This move creates a solid pawn chain from c6 to e6, giving Black excellent central control but at the cost of restricting the light-squared bishop's mobility. Our opponent is preparing to complete development with moves like Be7 and castling, while keeping the option to capture on c4 at an appropriate moment. The Semi-Slav is known for being one of Black's most solid defenses, though it can lead to somewhat cramped positions if not handled precisely."
     },
     {
       "san": "Bg5",

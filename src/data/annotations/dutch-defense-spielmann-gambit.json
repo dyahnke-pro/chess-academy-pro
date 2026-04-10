@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports potential central advances like e4 and adds pressure to the d5 and b5 squares. This flexible development move keeps our options open - we can still play various setups including the London System, Torre Attack, or more aggressive approaches. The knight on c3 also prepares potential tactical ideas involving moves like e4, which would challenge Black's central pawn structure directly. From c3, our knight eyes the important e4 and d5 squares, and we maintain maximum flexibility in our pawn structure since we haven't committed to any particular pawn formation yet."
+      "annotation": "We're developing our knight to its ideal square, where it supports potential central advances like e4 and adds pressure to the d5 and b5 squares. This flexible development move keeps our options open - we can still play various setups including the London System, Torre Attack, or more aggressive approaches. The knight on c3 also prepares potential tactical ideas involving moves like e4, which would challenge Black's central pawn structure directly. From c3, our knight eyes the important e4 and d5 squares, and we maintain maximum flexibility in our pawn structure since we haven't committed to any particular pawn formation yet."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, where it controls the important central squares e4 and d5 while preparing kingside castling. This natural developing move follows classical opening principles and puts immediate pressure on our potential e4 advance. The knight on f6 also supports Black's typical Dutch Defense plans of playing ...e6, ...Be7, and castling kingside to create a solid foundation for middlegame operations. However, this knight placement also makes Black's position more vulnerable to our next aggressive move, as the knight becomes a potential target for tactical shots."
+      "annotation": "Black develops the kingside knight to its most active square, where it controls the important central squares e4 and d5 while preparing kingside castling. This active move follows classical opening principles and puts immediate pressure on our potential e4 advance. The knight on f6 also supports Black's typical Dutch Defense plans of playing ...e6, ...Be7, and castling kingside to create a solid foundation for middlegame operations. However, this knight placement also makes Black's position more vulnerable to our next aggressive move, as the knight becomes a potential target for tactical shots."
     },
     {
       "san": "g4",

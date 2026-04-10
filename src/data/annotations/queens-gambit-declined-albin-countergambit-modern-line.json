@@ -27,11 +27,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our e5 pawn, controls important central squares, and prepares to castle kingside. The knight on f3 also helps blockade Black's d4 pawn from advancing further and gives us flexibility in our piece coordination. This move follows sound opening principles of rapid development while addressing the immediate tactical needs of the position. From f3, our knight can potentially reroute to more active squares like e4 or d2 depending on how the position evolves."
+      "annotation": "We develop our knight to its ideal square, where it supports our e5 pawn, controls important central squares, and prepares to castle kingside. The knight on f3 also helps blockade Black's d4 pawn from advancing further and gives us flexibility in our piece coordination. This move follows sound opening principles of rapid development while addressing the immediate tactical needs of the position. From f3, our knight can potentially reroute to more active squares like e4 or d2 depending on how the position evolves."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight with tempo, attacking our advanced e5 pawn and forcing us to make a decision about our pawn structure. This natural developing move also prepares to support Black's central pawn advance and potentially creates threats against our somewhat exposed king position. The knight on c6 eyes important squares like d4, e5, and b4, giving Black good central control and piece activity. By attacking e5, Black maintains the tactical tension and prevents us from simply consolidating our extra material."
+      "annotation": "Black develops the knight with tempo, attacking our advanced e5 pawn and forcing us to make a decision about our pawn structure. This active move also prepares to support Black's central pawn advance and potentially creates threats against our somewhat exposed king position. The knight on c6 eyes important squares like d4, e5, and b4, giving Black good central control and piece activity. By attacking e5, Black maintains the tactical tension and prevents us from simply consolidating our extra material."
     },
     {
       "san": "Nbd2",

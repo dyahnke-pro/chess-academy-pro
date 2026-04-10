@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This is one of the most popular responses to d4, as it develops a piece while immediately putting pressure on our central pawn. Black is keeping options open for various defensive setups including the King's Indian, Nimzo-Indian, or as we'll see, the Grünfeld Defense. We need to decide how to support our d4 pawn and continue our development."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This is one of the most popular responses to d4, as it develops a piece while immediately putting pressure on our central pawn. Black is keeping options open for various defensive setups including the King's Indian, Nimzo-Indian, or as we'll see, the Grünfeld Defense. We need to decide how to support our d4 pawn and continue our development."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to f3, supporting the e4 advance while maintaining flexibility in the center. This natural developing move keeps our options open—we can still recapture on d5 with either the knight or the c4 pawn, depending on how the position develops. The knight on f3 also prevents Black from playing ...e4, controlling this key central square. We're following sound opening principles by developing pieces while keeping the tension in the center, forcing Black to make the next critical decision about the d5 pawn."
+      "annotation": "We develop our knight to f3, supporting the e4 advance while maintaining flexibility in the center. This active move keeps our options open—we can still recapture on d5 with either the knight or the c4 pawn, depending on how the position develops. The knight on f3 also prevents Black from playing ...e4, controlling this key central square. We're following sound opening principles by developing pieces while keeping the tension in the center, forcing Black to make the next critical decision about the d5 pawn."
     },
     {
       "san": "Bg7",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "We develop our light-squared bishop to e3, breaking the pin on our f3 knight and preparing to castle queenside. This natural developing move also supports our central pawn structure and prepares to meet Black's piece activity with solid development. The bishop on e3 controls important squares like d4 and f4, while also preparing potential tactics involving Bh6 to exchange Black's powerful fianchettoed bishop. We're following the principle of not allowing Black to dictate the game with the pin, instead calmly improving our position."
+      "annotation": "We develop our light-squared bishop to e3, breaking the pin on our f3 knight and preparing to castle queenside. This active move also supports our central pawn structure and prepares to meet Black's piece activity with solid development. The bishop on e3 controls important squares like d4 and f4, while also preparing potential tactics involving Bh6 to exchange Black's powerful fianchettoed bishop. We're following the principle of not allowing Black to dictate the game with the pin, instead calmly improving our position."
     },
     {
       "san": "Nfd7",

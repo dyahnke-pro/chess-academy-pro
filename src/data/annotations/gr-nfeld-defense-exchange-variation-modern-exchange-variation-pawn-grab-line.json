@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This is a hypermodern approach - rather than occupying the center with pawns right away, Black is putting pressure on our central pawn and keeping options open for different pawn breaks like ...d5 or ...c5. The knight on f6 also supports potential ...e6 or ...g6 setups, making this one of the most flexible first moves for Black."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This is a hypermodern approach - rather than occupying the center with pawns right away, Black is putting pressure on our central pawn and keeping options open for different pawn breaks like ...d5 or ...c5. The knight on f6 also supports potential ...e6 or ...g6 setups, making this one of the most flexible first moves for Black."
     },
     {
       "san": "c4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, supporting our e4 pawn and preparing kingside castling while maintaining flexibility in our setup. The knight on f3 also prevents any back-rank tactics and prepares to support our central pawns from a solid foundation. This development is part of our plan to consolidate our pawn center while getting our king to safety - we want to complete development quickly so we can start thinking about how to best use our space advantage and central control."
+      "annotation": "We develop our king's knight to its ideal square, supporting our e4 pawn and preparing kingside castling while maintaining flexibility in our setup. The knight on f3 also prevents any back-rank tactics and prepares to support our central pawns from a solid foundation. This development is part of our plan to consolidate our pawn center while getting our king to safety - we want to complete development quickly so we can start thinking about how to best use our space advantage and central control."
     },
     {
       "san": "c5",

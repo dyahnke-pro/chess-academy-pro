@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black declines our gambit and instead reinforces the d5 pawn with this solid move, leading us into Queen's Gambit Declined territory. This move creates a small but important concession - the dark squares around Black's king become slightly weaker, particularly the f6 and h6 squares, and the light-squared bishop on c8 becomes somewhat restricted. However, our opponent gains a very solid pawn structure and prepares natural development with moves like Nf6, Be7, and castling kingside. We should be aware that Black is setting up a classical defensive formation that has withstood the test of time, though it does give us slightly more space and attacking chances."
+      "annotation": "Black declines our gambit and instead reinforces the d5 pawn with this stabilizing move, leading us into Queen's Gambit Declined territory. This move creates a small but important concession - the dark squares around Black's king become slightly weaker, particularly the f6 and h6 squares, and the light-squared bishop on c8 becomes somewhat restricted. However, our opponent gains a very solid pawn structure and prepares natural development with moves like Nf6, Be7, and castling kingside. We should be aware that Black is setting up a classical defensive formation that has withstood the test of time, though it does give us slightly more space and attacking chances."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and preparing to continue our development smoothly. This move supports our central strategy by increasing the pressure on Black's key central pawn, and it also prepares potential pawn advances like e4 if Black ever captures on c4. The knight on c3 is perfectly placed for most Queen's Gambit structures, where it can later support pawn advances or reposition to more active squares like e4 or b5. We're following classical opening principles by developing pieces toward the center while maintaining maximum flexibility for our future plans."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn and preparing to continue our development smoothly. This move supports our central strategy by increasing the pressure on Black's key central pawn, and it also prepares potential pawn advances like e4 if Black ever captures on c4. The knight on c3 is perfectly placed for most Queen's Gambit structures, where it can later support pawn advances or reposition to more active squares like e4 or b5. We're following classical opening principles by developing pieces toward the center while maintaining maximum flexibility for our future plans."
     },
     {
       "san": "c6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development with this natural move, preparing to castle while maintaining pressure on Black's central structure. The knight on f3 supports a potential e4 advance and controls important central squares like e5 and d4, fitting perfectly into our positional framework. This move also prepares us to meet Black's likely ...Nf6 with good piece coordination, as our pieces will be harmoniously placed to contest the center. We're following sound developmental principles while keeping all our strategic options open - we can still consider moves like e3, Bd3, or even more aggressive setups depending on how Black continues."
+      "annotation": "We're completing our kingside development with this move, preparing to castle while maintaining pressure on Black's central structure. The knight on f3 supports a potential e4 advance and controls important central squares like e5 and d4, fitting perfectly into our positional framework. This move also prepares us to meet Black's likely ...Nf6 with good piece coordination, as our pieces will be harmoniously placed to contest the center. We're following sound developmental principles while keeping all our strategic options open - we can still consider moves like e3, Bd3, or even more aggressive setups depending on how Black continues."
     },
     {
       "san": "dxc4",

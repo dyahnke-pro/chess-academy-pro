@@ -3528,7 +3528,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the knight, attacking the e5 pawn. This is the most natural move.",
+          "annotation": "White develops the knight, attacking the e5 pawn. This is the most principled response.",
           "arrows": [
             {
               "from": "f3",
@@ -3573,7 +3573,7 @@
         },
         {
           "san": "d3",
-          "annotation": "GothamChess's recommended refutation begins with this solid move. White avoids d4 which allows more tactical complications, and instead develops modestly but safely. The pawn on d3 supports e4 and prepares Be2.",
+          "annotation": "GothamChess's recommended refutation begins with this stabilizing move. White avoids d4 which allows more tactical complications, and instead develops modestly but safely. The pawn on d3 supports e4 and prepares Be2.",
           "arrows": [
             {
               "from": "d3",
@@ -3648,7 +3648,7 @@
         },
         {
           "san": "Nd2",
-          "annotation": "The key move in GothamChess's refutation! Nd2 blocks the d-file, defends f1, and prepares to reroute the knight to f3 to cover h2. White is up a full piece with a solid position. The Stafford is completely refuted — Black has no real compensation for the sacrificed material.",
+          "annotation": "the critical move in GothamChess's refutation! Nd2 blocks the d-file, defends f1, and prepares to reroute the knight to f3 to cover h2. White is up a full piece with a solid position. The Stafford is completely refuted — Black has no real compensation for the sacrificed material.",
           "arrows": [
             {
               "from": "d2",

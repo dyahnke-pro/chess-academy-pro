@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 square and preparing kingside castling. This move avoids the more forcing 3.Nc3, which would allow Black to play the sharp Nimzo-Indian Defense with ...Bb4+. By choosing Nf3, we're steering the game toward the Queen's Indian Defense complex, which tends to be more positional and strategic in nature. The knight on f3 also supports a potential e4 pawn advance and keeps pressure on Black's central control, while maintaining maximum flexibility in our pawn structure and piece development."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 square and preparing kingside castling. This move avoids the more forcing 3.Nc3, which would allow Black to play the sharp Nimzo-Indian Defense with ...Bb4+. By choosing Nf3, we're steering the game toward the Queen's Indian Defense complex, which tends to be more positional and strategic in nature. The knight on f3 also supports a potential e4 pawn advance and keeps pressure on Black's central control, while maintaining maximum flexibility in our pawn structure and piece development."
     },
     {
       "san": "b6",

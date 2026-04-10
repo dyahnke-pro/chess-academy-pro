@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to support the center from a solid outpost. This knight will often be a key piece in Black's kingside attack, potentially jumping to tactical squares like e4 or g4 in the middlegame. The knight also defends the important e4 square that Black's f5 pawn controls, maintaining the balance in the center. We need to be ready to defend d4 appropriately while continuing our development."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to support the center from a solid outpost. This knight will often be a key piece in Black's kingside attack, potentially jumping to tactical squares like e4 or g4 in the middlegame. The knight also defends the important e4 square that Black's f5 pawn controls, maintaining the balance in the center. We need to be ready to defend d4 appropriately while continuing our development."
     },
     {
       "san": "g3",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We bring the knight to its ideal square, where it supports our central control and prepares for various strategic ideas. From c3, this knight eyes important squares like e4 and d5, while also supporting potential pawn advances and piece maneuvers. The knight development completes our basic setup and gives us maximum flexibility for the coming middlegame - we can consider moves like Qc2, Rb1, or even f4 depending on how Black continues. This natural developing move maintains our advantage while keeping all options open for the critical phase ahead."
+      "annotation": "We bring the knight to its ideal square, where it supports our central control and prepares for various strategic ideas. From c3, this knight eyes important squares like e4 and d5, while also supporting potential pawn advances and piece maneuvers. The knight development completes our basic setup and gives us maximum flexibility for the coming middlegame - we can consider moves like Qc2, Rb1, or even f4 depending on how Black continues. This active move maintains our advantage while keeping all options open for the critical phase ahead."
     },
     {
       "san": "Ne4",

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our e4 pawn and preparing to continue with rapid development. This move allows us to avoid the main line Sicilian theory after 2.Nf3, instead steering the game toward the Closed Sicilian system. The knight on c3 eyes the important d5 and e4 squares while keeping our options open for various pawn structures. This approach often leads to kingside attacks where we can castle quickly and launch an assault with moves like f4, h4, and g4."
+      "annotation": "We're developing our knight to its ideal square, supporting our e4 pawn and preparing to continue with rapid development. This move allows us to avoid the main line Sicilian theory after 2.Nf3, instead steering the game toward the Closed Sicilian system. The knight on c3 eyes the important d5 and e4 squares while keeping our options open for various pawn structures. This approach often leads to kingside attacks where we can castle quickly and launch an assault with moves like f4, h4, and g4."
     },
     {
       "san": "d6",
@@ -31,11 +31,11 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight with a natural move that attacks our centralized queen and forces us to make a decision about where to retreat it. This knight development is logical because it contests the central squares and puts immediate pressure on our most valuable piece. Our opponent is following the principle of developing with tempo by attacking our queen, potentially gaining time in their development. The knight on c6 also prepares to support Black's central play and coordinates well with their other pieces that are yet to be developed."
+      "annotation": "Black develops their knight with a logical choice that attacks our centralized queen and forces us to make a decision about where to retreat it. This knight development is logical because it contests the central squares and puts immediate pressure on our most valuable piece. Our opponent is following the principle of developing with tempo by attacking our queen, potentially gaining time in their development. The knight on c6 also prepares to support Black's central play and coordinates well with their other pieces that are yet to be developed."
     },
     {
       "san": "Qd2",
-      "annotation": "We're retreating our queen to a safe but still active square, maintaining our development advantage while avoiding any tactical complications. The queen on d2 continues to support our pieces and prepares to castle queenside if needed, while also keeping an eye on the kingside. This is the key move of the Carlsen Variation - by placing the queen on d2 rather than the more common Qd1, we maintain flexibility and avoid blocking our own pieces. The position now resembles a favorable version of typical Sicilian structures where we have excellent piece coordination and multiple plans available, including kingside attack or central expansion."
+      "annotation": "We're retreating our queen to a safe but still active square, maintaining our development advantage while avoiding any tactical complications. The queen on d2 continues to support our pieces and prepares to castle queenside if needed, while also keeping an eye on the kingside. This is the central idea of the Carlsen Variation - by placing the queen on d2 rather than the more common Qd1, we maintain flexibility and avoid blocking our own pieces. The position now resembles a favorable version of typical Sicilian structures where we have excellent piece coordination and multiple plans available, including kingside attack or central expansion."
     }
   ]
 }

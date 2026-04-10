@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it attacks Black's e5 pawn and controls the important central squares d4 and e5. This move also prepares to castle kingside by clearing the path between our king and rook. The knight on f3 is perfectly placed to support our central pawn advances and can later jump to more aggressive squares like g5 or e5. This is almost universally considered the best second move for White, as it combines development with immediate pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, where it attacks Black's e5 pawn and controls the important central squares d4 and e5. This move also prepares to castle kingside by clearing the path between our king and rook. The knight on f3 is perfectly placed to support our central pawn advances and can later jump to more aggressive squares like g5 or e5. This is almost universally considered the best second move for White, as it combines development with immediate pressure on Black's position."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight with a dual purpose: attacking our e4 pawn while preparing to castle kingside for safety. This natural developing move follows the principle of bringing knights out before bishops and creates immediate tactical threats that we must address. The knight on f6 is excellently placed, controlling important central squares like d5 and e4, and supporting Black's overall piece coordination. However, this move also allows us some tactical opportunities since the f6 knight is now pinned to the king along the a2-g8 diagonal if we play Bb3."
+      "annotation": "Black develops the kingside knight with a dual purpose: attacking our e4 pawn while preparing to castle kingside for safety. This active move follows the principle of bringing knights out before bishops and creates immediate tactical threats that we must address. The knight on f6 is excellently placed, controlling important central squares like d5 and e4, and supporting Black's overall piece coordination. However, this move also allows us some tactical opportunities since the f6 knight is now pinned to the king along the a2-g8 diagonal if we play Bb3."
     },
     {
       "san": "O-O",

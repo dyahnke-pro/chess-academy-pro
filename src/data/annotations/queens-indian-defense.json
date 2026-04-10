@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing for rapid kingside castling. This move also prevents Black from playing ...e5, which would give them excellent central control and piece activity. From f3, our knight is perfectly placed to support various middlegame plans, whether we choose to advance e4 at some point, reroute via e1-d3, or simply maintain the central tension. The knight development also keeps maximum flexibility in our setup, as we haven't yet committed to any particular pawn structure or piece arrangement."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing for rapid kingside castling. This move also prevents Black from playing ...e5, which would give them excellent central control and piece activity. From f3, our knight is perfectly placed to support various middlegame plans, whether we choose to advance e4 at some point, reroute via e1-d3, or simply maintain the central tension. The knight development also keeps maximum flexibility in our setup, as we haven't yet committed to any particular pawn structure or piece arrangement."
     },
     {
       "san": "b6",

@@ -31,7 +31,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to its most natural square, defending against potential tactics while beginning to coordinate their pieces for defense and counterplay. This knight supports the important d4 and e5 squares, while also preparing potential breaks like ...d6 and ...e6 to solidify Black's position. Our opponent is following sound development principles by getting pieces out quickly rather than trying to hold onto their extra pawns with moves like ...b5 or ...a6. However, this development also allows us to continue building pressure with moves like Nf3 and Bc4, targeting the f7 square."
+      "annotation": "Black develops their knight to its ideal square, defending against potential tactics while beginning to coordinate their pieces for defense and counterplay. This knight supports the important d4 and e5 squares, while also preparing potential breaks like ...d6 and ...e6 to solidify Black's position. Our opponent is following sound development principles by getting pieces out quickly rather than trying to hold onto their extra pawns with moves like ...b5 or ...a6. However, this development also allows us to continue building pressure with moves like Nf3 and Bc4, targeting the f7 square."
     },
     {
       "san": "Nf3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid developing move that supports the d5 square and prepares to develop the light-squared bishop, likely to e7 or d6. This pawn move also provides an escape square for Black's king on e7 if needed, while maintaining flexibility in their pawn structure. However, this somewhat passive approach allows us to continue building our initiative with moves like Bc4, directly targeting the f7 weakness that e6 has left inadequately defended. Black is choosing safety over activity, which often gives the Smith-Morra player exactly the kind of position they're looking for."
+      "annotation": "Black plays a constructive move that supports the d5 square and prepares to develop the light-squared bishop, likely to e7 or d6. This pawn move also provides an escape square for Black's king on e7 if needed, while maintaining flexibility in their pawn structure. However, this somewhat passive approach allows us to continue building our initiative with moves like Bc4, directly targeting the f7 weakness that e6 has left inadequately defended. Black is choosing safety over activity, which often gives the Smith-Morra player exactly the kind of position they're looking for."
     },
     {
       "san": "Bc4",

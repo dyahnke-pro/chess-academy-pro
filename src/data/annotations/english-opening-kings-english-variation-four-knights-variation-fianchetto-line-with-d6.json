@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports a future d4 advance and keeps maximum flexibility in our pawn structure. This knight placement is crucial for the King's English Variation, as it allows us to maintain pressure on the central dark squares while keeping our options open for both e3-d4 and g3-Bg2 setups. The knight on c3 also prepares potential tactics along the a1-h8 diagonal once our bishop reaches g2. By developing pieces before committing to a specific pawn structure, we're following sound opening principles while keeping Black guessing about our exact intentions."
+      "annotation": "We're developing our knight to its ideal square, where it supports a future d4 advance and keeps maximum flexibility in our pawn structure. This knight placement is crucial for the King's English Variation, as it allows us to maintain pressure on the central dark squares while keeping our options open for both e3-d4 and g3-Bg2 setups. The knight on c3 also prepares potential tactics along the a1-h8 diagonal once our bishop reaches g2. By developing pieces before committing to a specific pawn structure, we're following sound opening principles while keeping Black guessing about our exact intentions."
     },
     {
       "san": "Nf6",

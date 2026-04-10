@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, supporting our d4 pawn while controlling the important e5 and g5 squares. This move is virtually automatic in the Queen's Indian setup, as the knight on f3 not only defends our center but also prepares our kingside castling. The knight also eyes the e5 square, which could become an important outpost later in the game. By developing this piece, we're following the opening principle of quick development while maintaining maximum flexibility for our other pieces."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our d4 pawn while controlling the important e5 and g5 squares. This move is virtually automatic in the Queen's Indian setup, as the knight on f3 not only defends our center but also prepares our kingside castling. The knight also eyes the e5 square, which could become an important outpost later in the game. By developing this piece, we're following the opening principle of quick development while maintaining maximum flexibility for our other pieces."
     },
     {
       "san": "b6",

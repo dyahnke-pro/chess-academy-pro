@@ -27,11 +27,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's centralized knight on d5 and preparing to castle kingside. This move follows the opening principle of developing knights before bishops, and the knight on f3 controls important central squares like e5 and d4 while supporting our pawn structure. By attacking the knight on d5, we're forcing Black to make a decision about where to retreat it, and most squares (Nb6, Nc7, Ne7, Nf6) have their own drawbacks. The knight development also prepares us to castle quickly and get our king to safety while maintaining pressure on Black's position."
+      "annotation": "We develop our knight to its ideal square, attacking Black's centralized knight on d5 and preparing to castle kingside. This move follows the opening principle of developing knights before bishops, and the knight on f3 controls important central squares like e5 and d4 while supporting our pawn structure. By attacking the knight on d5, we're forcing Black to make a decision about where to retreat it, and most squares (Nb6, Nc7, Ne7, Nf6) have their own drawbacks. The knight development also prepares us to castle quickly and get our king to safety while maintaining pressure on Black's position."
     },
     {
       "san": "Bg4",
-      "annotation": "Black pins our knight to the queen, creating immediate tactical tension and challenging our development. This is the key move that defines the Gipslis Variation, where Black sacrifices a tempo to create concrete problems for our position rather than simply retreating the attacked knight. The bishop on g4 is actively placed and forces us to deal with the pin immediately - we can't simply ignore it and castle because the pin becomes stronger. Black's idea is to create complications and tactical opportunities rather than allowing us to complete our development smoothly, and this move often leads to sharp middlegame positions where both sides must calculate precisely."
+      "annotation": "Black pins our knight to the queen, creating immediate tactical tension and challenging our development. This is the defining move of the Gipslis Variation, where Black sacrifices a tempo to create concrete problems for our position rather than simply retreating the attacked knight. The bishop on g4 is actively placed and forces us to deal with the pin immediately - we can't simply ignore it and castle because the pin becomes stronger. Black's idea is to create complications and tactical opportunities rather than allowing us to complete our development smoothly, and this move often leads to sharp middlegame positions where both sides must calculate precisely."
     }
   ]
 }

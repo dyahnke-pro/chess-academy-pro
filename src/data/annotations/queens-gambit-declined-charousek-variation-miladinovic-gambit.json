@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds with the most principled central counter, immediately challenging our control of the e4 square and establishing their own presence in the center. This solid move is the hallmark of classical opening play - meeting our central advance with an equally strong central response. Our opponent is signaling they want to fight for central control rather than allow us to establish a dominant pawn center unopposed. This sets up the foundation for the Queen's Gambit family of openings, where we'll soon offer our c-pawn to disrupt Black's central stronghold."
+      "annotation": "Black responds with the most principled central counter, immediately challenging our control of the e4 square and establishing their own presence in the center. this stabilizing move is the hallmark of classical opening play - meeting our central advance with an equally strong central response. Our opponent is signaling they want to fight for central control rather than allow us to establish a dominant pawn center unopposed. This sets up the foundation for the Queen's Gambit family of openings, where we'll soon offer our c-pawn to disrupt Black's central stronghold."
     },
     {
       "san": "c4",
@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent declines the gambit with this solid move, supporting their d5 pawn while preparing to develop the light-squared bishop to d6, e7, or f5. This is one of the most reliable ways to handle the Queen's Gambit, as Black maintains their central pawn and avoids the complications that can arise from accepting on c4. However, the move does have a downside - it blocks in the dark-squared bishop on c8, which will need to find a way to get into the game later. Black is choosing a more positional approach over the sharper lines that come from taking the gambit pawn."
+      "annotation": "Our opponent declines the gambit with this stabilizing move, supporting their d5 pawn while preparing to develop the light-squared bishop to d6, e7, or f5. This is one of the most reliable ways to handle the Queen's Gambit, as Black maintains their central pawn and avoids the complications that can arise from accepting on c4. However, the move does have a downside - it blocks in the dark-squared bishop on c8, which will need to find a way to get into the game later. Black is choosing a more positional approach over the sharper lines that come from taking the gambit pawn."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our potential e4 advance and adds another attacker to the d5 pawn. This move is practically universal in Queen's Gambit positions because it puts immediate pressure on Black's central stronghold. From c3, our knight can later jump to e4, b5, or even a4 depending on how the position develops. We're also preparing various pawn breaks like e4 or f3-f4, and this knight will be perfectly placed to support those central advances."
+      "annotation": "We're developing our knight to its ideal square, where it supports our potential e4 advance and adds another attacker to the d5 pawn. This move is practically universal in Queen's Gambit positions because it puts immediate pressure on Black's central stronghold. From c3, our knight can later jump to e4, b5, or even a4 depending on how the position develops. We're also preparing various pawn breaks like e4 or f3-f4, and this knight will be perfectly placed to support those central advances."
     },
     {
       "san": "Be7",

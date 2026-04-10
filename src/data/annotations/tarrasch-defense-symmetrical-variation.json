@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square while adding another attacker to Black's d5 pawn, increasing the central pressure. This knight placement also supports a potential e4 advance in the future and prepares to recapture on c4 if Black ever takes our gambit pawn. From c3, our knight has excellent central influence and can potentially jump to strong outposts like e4 or d5 later in the game. This is one of the most natural developing moves in the Queen's Gambit, following the principle of developing knights before bishops while maintaining pressure on Black's center."
+      "annotation": "We're developing our knight to its most active square while adding another attacker to Black's d5 pawn, increasing the central pressure. This knight placement also supports a potential e4 advance in the future and prepares to recapture on c4 if Black ever takes our gambit pawn. From c3, our knight has excellent central influence and can potentially jump to strong outposts like e4 or d5 later in the game. This is one of the most active moves in the Queen's Gambit, following the principle of developing knights before bishops while maintaining pressure on Black's center."
     },
     {
       "san": "c5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, attacking our e4 square and preparing to castle kingside for safety. This move also adds additional support to Black's d5 pawn and puts pressure on our position by controlling key central squares. Our opponent is following classical development principles by bringing pieces into the game while maintaining the central pawn tension. The knight on f6 is also well-placed to support Black's counterplay, particularly if they eventually play moves like ...Ne4 or support a ...e5 pawn break."
+      "annotation": "Black develops their kingside knight to its ideal square, attacking our e4 square and preparing to castle kingside for safety. This move also adds additional support to Black's d5 pawn and puts pressure on our position by controlling key central squares. Our opponent is following classical development principles by bringing pieces into the game while maintaining the central pawn tension. The knight on f6 is also well-placed to support Black's counterplay, particularly if they eventually play moves like ...Ne4 or support a ...e5 pawn break."
     },
     {
       "san": "Nf3",

@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and controlling the important e4 square. This move is incredibly flexible since the knight on f6 can support various pawn breaks like ...d5, ...e6, or ...c5 depending on how we continue. Our opponent is keeping their options open, avoiding early commitments like ...d5 or ...e6 that would signal specific opening systems. We need to be prepared for Black to transpose into numerous defenses including the King's Indian, Nimzo-Indian, or Queen's Indian depending on our next moves."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and controlling the important e4 square. This move is incredibly flexible since the knight on f6 can support various pawn breaks like ...d5, ...e6, or ...c5 depending on how we continue. Our opponent is keeping their options open, avoiding early commitments like ...d5 or ...e6 that would signal specific opening systems. We need to be prepared for Black to transpose into numerous defenses including the King's Indian, Nimzo-Indian, or Queen's Indian depending on our next moves."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, supporting our d4 pawn while controlling the central e5 square and preparing for kingside castling. This natural developing move keeps maximum flexibility in our position since we haven't yet committed to a specific pawn structure with c4. The knight on f3 also prevents Black from playing ...e5, which would challenge our center immediately. By choosing Nf3 over alternatives like Nc3 or c4, we're allowing Black to show their intentions first while maintaining all our strategic options for the middlegame."
+      "annotation": "We're developing our knight to its optimal square, supporting our d4 pawn while controlling the central e5 square and preparing for kingside castling. This active move keeps maximum flexibility in our position since we haven't yet committed to a specific pawn structure with c4. The knight on f3 also prevents Black from playing ...e5, which would challenge our center immediately. By choosing Nf3 over alternatives like Nc3 or c4, we're allowing Black to show their intentions first while maintaining all our strategic options for the middlegame."
     },
     {
       "san": "b6",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our c4 pawn and controlling the central e4 and d5 squares. This is a principled response that immediately puts pressure on our pawn structure and forces us to make a decision about how to defend c4. Our opponent is following classical opening principles by developing pieces toward the center while creating immediate threats. This move also prepares potential central pawn breaks like ...d5 or supports ...e5 depending on how the position develops."
+      "annotation": "Black develops the knight to its ideal square, attacking our c4 pawn and controlling the central e4 and d5 squares. This is a principled response that immediately puts pressure on our pawn structure and forces us to make a decision about how to defend c4. Our opponent is following classical opening principles by developing pieces toward the center while creating immediate threats. This move also prepares potential central pawn breaks like ...d5 or supports ...e5 depending on how the position develops."
     },
     {
       "san": "Nc3",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while preparing to castle kingside. This move fits perfectly with our positional setup, as the knight on f3 supports a potential future e4 advance and works well with our planned kingside fianchetto. The knight also provides additional defense to our position and maintains flexibility in our pawn structure. From f3, our knight can potentially reroute to more active squares like e5 or d4, and we're following classical development principles while keeping our options open."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while preparing to castle kingside. This move fits perfectly with our positional setup, as the knight on f3 supports a potential future e4 advance and works well with our planned kingside fianchetto. The knight also provides additional defense to our position and maintains flexibility in our pawn structure. From f3, our knight can potentially reroute to more active squares like e5 or d4, and we're following classical development principles while keeping our options open."
     },
     {
       "san": "g6",
@@ -47,7 +47,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black strikes out in the center with this thematic pawn advance, creating the characteristic Korchnoi Variation structure and gaining space while activating the dark-squared pieces. This move challenges our pawn on f3 and prepares to support the centralized pawn on d5 with a pawn chain. The advance to e5 is the key move that defines this variation, as it creates immediate central tension and gives Black good piece coordination. Our opponent is now ready to castle and has achieved an active, harmonious position with good central control and piece activity, making this a critical moment where we need to decide how to handle the increased central pressure."
+      "annotation": "Black strikes out in the center with this thematic pawn advance, creating the characteristic Korchnoi Variation structure and gaining space while activating the dark-squared pieces. This move challenges our pawn on f3 and prepares to support the centralized pawn on d5 with a pawn chain. The advance to e5 is the defining move of this variation, as it creates immediate central tension and gives Black good piece coordination. Our opponent is now ready to castle and has achieved an active, harmonious position with good central control and piece activity, making this a critical moment where we need to decide how to handle the increased central pressure."
     }
   ]
 }

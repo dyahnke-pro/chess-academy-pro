@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing to meet Black's most challenging response of Bb4 with the Nimzo-Indian Defense. This knight placement controls key central squares like e4 and d5 while allowing us to recapture on c3 with the queen if Black exchanges bishops. The knight on c3 also supports future pawn advances like e4 or f3, giving us flexibility in our central pawn structure. From c3, this knight can potentially reroute to e2, e4, or a4 depending on how Black continues, making it a highly versatile development."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing to meet Black's most challenging response of Bb4 with the Nimzo-Indian Defense. This knight placement controls key central squares like e4 and d5 while allowing us to recapture on c3 with the queen if Black exchanges bishops. The knight on c3 also supports future pawn advances like e4 or f3, giving us flexibility in our central pawn structure. From c3, this knight can potentially reroute to e2, e4, or a4 depending on how Black continues, making it a highly versatile development."
     },
     {
       "san": "Bb4",

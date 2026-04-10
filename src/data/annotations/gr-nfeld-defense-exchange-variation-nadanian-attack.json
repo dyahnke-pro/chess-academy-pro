@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and prepares for central expansion with e4. The knight on c3 also adds extra protection to our c4 pawn, which Black might challenge with moves like ...c5. From c3, our knight can potentially jump to attractive squares like e4 or d5, and it keeps the option open for f3 and e4 to build our ideal pawn center. This development follows classical opening principles while maintaining maximum flexibility in our central pawn structure."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and prepares for central expansion with e4. The knight on c3 also adds extra protection to our c4 pawn, which Black might challenge with moves like ...c5. From c3, our knight can potentially jump to attractive squares like e4 or d5, and it keeps the option open for f3 and e4 to build our ideal pawn center. This development follows classical opening principles while maintaining maximum flexibility in our central pawn structure."
     },
     {
       "san": "d5",

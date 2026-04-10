@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Our opponent develops the dark-squared bishop to its most flexible square, preparing to castle while keeping options open for future piece placement. Black is wisely completing kingside development before committing to any specific pawn breaks or piece maneuvers. The bishop on e7 supports the f6 knight and can later redeploy to d6 or f8 if needed. This solid developing move maintains the balance and prepares Black for the complex middlegame battles ahead."
+      "annotation": "Our opponent develops the dark-squared bishop to its most flexible square, preparing to castle while keeping options open for future piece placement. Black is wisely completing kingside development before committing to any specific pawn breaks or piece maneuvers. The bishop on e7 supports the f6 knight and can later redeploy to d6 or f8 if needed. This solid developing choice maintains the balance and prepares Black for the complex middlegame battles ahead."
     },
     {
       "san": "Re1",
@@ -59,7 +59,7 @@
     },
     {
       "san": "c3",
-      "annotation": "We prepare the critical d4 advance by supporting this central break with our c-pawn. This is one of the key moves in the Ruy Lopez, as d4 will challenge Black's central control and open lines for our pieces. The move also prepares Bc2 if needed and gives our bishop on b3 additional support for central operations. By preparing d4, we're building toward the main strategic goal of the opening: challenging Black's e5 strongpoint and gaining central control."
+      "annotation": "We prepare the critical d4 advance by supporting this central break with our c-pawn. This is one of the critical moves in the Ruy Lopez, as d4 will challenge Black's central control and open lines for our pieces. The move also prepares Bc2 if needed and gives our bishop on b3 additional support for central operations. By preparing d4, we're building toward the main strategic goal of the opening: challenging Black's e5 strongpoint and gaining central control."
     },
     {
       "san": "d5",

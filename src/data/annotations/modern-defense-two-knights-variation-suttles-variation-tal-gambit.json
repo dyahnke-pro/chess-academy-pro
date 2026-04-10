@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the most classical of all chess moves, immediately seizing control of the central light squares d5 and f5 while freeing both our bishop and queen for future development. This move embodies the principle of fighting for the center from the very first move, and it's the starting point for many aggressive setups against the Modern Defense. Our pawn on e4 will often become a target for Black's counterplay, but it also serves as a launching pad for quick development and kingside attacks. Against the Modern Defense specifically, this central pawn will be pressured by Black's fianchettoed bishop on g7, making the central tension a key theme of the opening."
+      "annotation": "We're opening with the most classical of all chess moves, immediately seizing control of the central light squares d5 and f5 while freeing both our bishop and queen for future development. This move embodies the principle of contesting central control from the very first move, and it's the starting point for many aggressive setups against the Modern Defense. Our pawn on e4 will often become a target for Black's counterplay, but it also serves as a launching pad for quick development and kingside attacks. Against the Modern Defense specifically, this central pawn will be pressured by Black's fianchettoed bishop on g7, making the central tension a key theme of the opening."
     },
     {
       "san": "g6",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding crucial support to our d4 pawn while preparing to continue our aggressive development plan. From c3, our knight controls important central squares like e4, d5, and b5, while also keeping our options open for various attacking setups. This move is particularly strong in the Modern Defense context because it prepares us to meet Black's typical ...c5 break with solid central control. The knight on c3 also supports potential pawn advances like d5 or f4-f5, making it a versatile piece that fits perfectly with our space advantage and development plans."
+      "annotation": "We develop our knight to its ideal square, adding crucial support to our d4 pawn while preparing to continue our aggressive development plan. From c3, our knight controls important central squares like e4, d5, and b5, while also keeping our options open for various attacking setups. This move is particularly strong in the Modern Defense context because it prepares us to meet Black's typical ...c5 break with solid central control. The knight on c3 also supports potential pawn advances like d5 or f4-f5, making it a versatile piece that fits perfectly with our space advantage and development plans."
     },
     {
       "san": "c6",

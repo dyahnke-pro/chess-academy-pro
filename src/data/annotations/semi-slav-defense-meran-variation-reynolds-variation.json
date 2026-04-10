@@ -15,15 +15,15 @@
     },
     {
       "san": "c6",
-      "annotation": "Black declines the gambit and instead supports the d5 pawn with this solid move, entering the Slav Defense complex. This move keeps the pawn structure intact while preparing to eventually challenge our center with moves like dxc4 when the timing is right. Our opponent is choosing a more solid, less committal approach that maintains flexibility in the pawn structure. The c6 move also prepares potential counterplay with b5, supporting a future c5 pawn break that could challenge our center."
+      "annotation": "Black declines the gambit and instead supports the d5 pawn with this stabilizing move, entering the Slav Defense complex. This move keeps the pawn structure intact while preparing to eventually challenge our center with moves like dxc4 when the timing is right. Our opponent is choosing a more solid, less committal approach that maintains flexibility in the pawn structure. The c6 move also prepares potential counterplay with b5, supporting a future c5 pawn break that could challenge our center."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important e5 and d4 squares while supporting our central pawn structure. This move prepares kingside castling and keeps our options open for various pawn breaks and piece maneuvers. The knight on f3 is perfectly placed to support our center and can later jump to more active squares like e5 or g5 depending on how the position develops. This natural development move also prevents Black from playing an early e5, which would give them excellent central control."
+      "annotation": "We develop our knight to its ideal square, controlling the important e5 and d4 squares while supporting our central pawn structure. This move prepares kingside castling and keeps our options open for various pawn breaks and piece maneuvers. The knight on f3 is perfectly placed to support our center and can later jump to more active squares like e5 or g5 depending on how the position develops. This natural development move also prevents Black from playing an early e5, which would give them excellent central control."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight symmetrically, attacking our e4 square and preparing to castle kingside. This natural developing move puts pressure on our center while keeping Black's options open for various pawn structures. Our opponent is following sound opening principles by developing pieces toward the center and maintaining flexibility in their position. The knight on f6 also supports potential central advances and can later be repositioned to more active squares as the middlegame unfolds."
+      "annotation": "Black develops their knight symmetrically, attacking our e4 square and preparing to castle kingside. This active move puts pressure on our center while keeping Black's options open for various pawn structures. Our opponent is following sound opening principles by developing pieces toward the center and maintaining flexibility in their position. The knight on f6 also supports potential central advances and can later be repositioned to more active squares as the middlegame unfolds."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We support our d4 pawn and prepare to develop our light-squared bishop, typically to d3 where it will eye the kingside. This solid move maintains the tension in the center while improving our piece coordination and preparing castling. The e3 move also prevents Black from playing disruptive moves like Bb4+ and keeps our position flexible for various pawn breaks. While this looks modest, it's actually preparing powerful central advances like e4, which will give us excellent space and attacking chances."
+      "annotation": "We support our d4 pawn and prepare to develop our light-squared bishop, typically to d3 where it will eye the kingside. this stabilizing move maintains the tension in the center while improving our piece coordination and preparing castling. The e3 move also prevents Black from playing disruptive moves like Bb4+ and keeps our position flexible for various pawn breaks. While this looks modest, it's actually preparing powerful central advances like e4, which will give us excellent space and attacking chances."
     },
     {
       "san": "Nbd7",

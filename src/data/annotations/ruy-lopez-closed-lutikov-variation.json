@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the black e5 pawn while simultaneously controlling the important central squares d4 and e5. This move is far more forcing than alternatives like 2.Bc4 or 2.Nc3 because it immediately puts pressure on Black's center. The knight on f3 also supports a future d2-d4 push, which would challenge Black's pawn structure and fight for central dominance. From f3, our knight is perfectly placed to support both central play and potential kingside attacking chances later in the game."
+      "annotation": "We develop our knight to its ideal square, attacking the black e5 pawn while simultaneously controlling the important central squares d4 and e5. This move is far more forcing than alternatives like 2.Bc4 or 2.Nc3 because it immediately puts pressure on Black's center. The knight on f3 also supports a future d2-d4 push, which would challenge Black's pawn structure and fight for central dominance. From f3, our knight is perfectly placed to support both central play and potential kingside attacking chances later in the game."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the attacked e5 pawn with the most natural developing move, bringing the knight to its ideal square where it controls important central territory. The knight on c6 not only protects e5 but also eyes the d4 and b4 squares, giving Black good central influence. This development follows classical opening principles by improving a piece while solving the immediate tactical problem of the attacked pawn. Our opponent is preparing to continue their development and maintain the central tension rather than making any early commitments."
+      "annotation": "Black defends the attacked e5 pawn with the most active move, bringing the knight to its ideal square where it controls important central territory. The knight on c6 not only protects e5 but also eyes the d4 and b4 squares, giving Black good central influence. This development follows classical opening principles by improving a piece while solving the immediate tactical problem of the attacked pawn. Our opponent is preparing to continue their development and maintain the central tension rather than making any early commitments."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most active square, attacking our e4 pawn and preparing to castle kingside for safety. This natural developing move follows the opening principle of bringing pieces into the game while also creating counterplay against our center. The knight on f6 supports a future ...d6 and ...Be7 setup, which is one of the main defensive systems in the Ruy Lopez. Our opponent is also preparing to complete kingside development quickly, which will allow them to focus on central counterplay once their king is safely castled."
+      "annotation": "Black develops their kingside knight to its most active square, attacking our e4 pawn and preparing to castle kingside for safety. This active move follows the opening principle of bringing pieces into the game while also creating counterplay against our center. The knight on f6 supports a future ...d6 and ...Be7 setup, which is one of the main defensive systems in the Ruy Lopez. Our opponent is also preparing to complete kingside development quickly, which will allow them to focus on central counterplay once their king is safely castled."
     },
     {
       "san": "O-O",
@@ -59,7 +59,7 @@
     },
     {
       "san": "c3",
-      "annotation": "We prepare the central advance d2-d4, which will be the key to our middlegame plans and our main way to challenge Black's central pawn chain. This move supports the d4 square and prevents Black from using it for their pieces, while also preparing to open up the center in our favor. The advance d4 will be particularly strong because our pieces (the rook on e1 and bishop on b3) are already well-placed to support central play. This quiet but important move shows how proper preparation is essential before making central breaks - we're ensuring that when we do play d4, it will be with maximum effect."
+      "annotation": "We prepare the central advance d2-d4, which will be the key to our middlegame plans and our main way to challenge Black's central pawn chain. This move supports the d4 square and prevents Black from using it for their pieces, while also preparing to open up the center in our favor. The advance d4 will be particularly strong because our pieces (the rook on e1 and bishop on b3) are already well-placed to support central play. this purposeful move shows how proper preparation is essential before making central breaks - we're ensuring that when we do play d4, it will be with maximum effect."
     },
     {
       "san": "O-O",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, supporting our central pawn on d4 while preparing to castle kingside. This move also controls the important e5 and h4 squares, preventing Black from easily advancing in the center or launching kingside attacks. The knight on f3 is perfectly placed to support our central ambitions and can later jump to strategic outposts like e5 or g5 depending on the pawn structure. Additionally, this development move brings us closer to castling safety, which is always a priority in the opening phase."
+      "annotation": "We develop our king's knight to its ideal square, supporting our central pawn on d4 while preparing to castle kingside. This move also controls the important e5 and h4 squares, preventing Black from easily advancing in the center or launching kingside attacks. The knight on f3 is perfectly placed to support our central ambitions and can later jump to strategic outposts like e5 or g5 depending on the pawn structure. Additionally, this development move brings us closer to castling safety, which is always a priority in the opening phase."
     },
     {
       "san": "Nf6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent plays the key move that defines the Semi-Slav Defense, supporting the d5 pawn with a second pawn while preparing to develop the dark-squared bishop. This move creates a solid but slightly passive pawn chain, and notably blocks the light-squared bishop on c8 temporarily. Black is choosing a setup that prioritizes solidity and central control over rapid piece development, leading to complex strategic battles where pawn structure understanding is paramount. The Semi-Slav is known for its rich tactical possibilities and sharp theoretical lines, where both sides must navigate carefully to achieve good positions."
+      "annotation": "Our opponent plays the defining move of the Semi-Slav Defense, supporting the d5 pawn with a second pawn while preparing to develop the dark-squared bishop. This move creates a solid but slightly passive pawn chain, and notably blocks the light-squared bishop on c8 temporarily. Black is choosing a setup that prioritizes solidity and central control over rapid piece development, leading to complex strategic battles where pawn structure understanding is paramount. The Semi-Slav is known for its rich tactical possibilities and sharp theoretical lines, where both sides must navigate carefully to achieve good positions."
     }
   ]
 }

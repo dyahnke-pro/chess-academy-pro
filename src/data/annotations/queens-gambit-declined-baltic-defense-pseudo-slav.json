@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This flexible move keeps all our options open - we can still play c4 for a Queen's Gambit, or transpose into other systems like the London or Colle. The knight on f3 also prepares kingside castling and prevents any early ...e5 breaks from Black. From f3, our knight can potentially jump to e5 later for active play, or support various pawn advances in the center."
+      "annotation": "We develop our king's knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This flexible move keeps all our options open - we can still play c4 for a Queen's Gambit, or transpose into other systems like the London or Colle. The knight on f3 also prepares kingside castling and prevents any early ...e5 breaks from Black. From f3, our knight can potentially jump to e5 later for active play, or support various pawn advances in the center."
     },
     {
       "san": "Bf5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most active square, adding more pressure to Black's d5 pawn while preparing potential advances like e4 or f4. The knight on c3 also eyes important central squares like e4 and d5, and supports various tactical ideas in the center. This natural developing move keeps the pressure on Black's position while maintaining our flexibility - we can still consider moves like Qb3 to intensify the attack on Black's queenside, or focus on kingside development. With both knights developed, we're building a solid foundation for the middlegame while keeping maximum pressure on our opponent's somewhat awkward piece coordination."
+      "annotation": "We develop our queen's knight to its most active square, adding more pressure to Black's d5 pawn while preparing potential advances like e4 or f4. The knight on c3 also eyes important central squares like e4 and d5, and supports various tactical ideas in the center. This active move keeps the pressure on Black's position while maintaining our flexibility - we can still consider moves like Qb3 to intensify the attack on Black's queenside, or focus on kingside development. With both knights developed, we're building a solid foundation for the middlegame while keeping maximum pressure on our opponent's somewhat awkward piece coordination."
     },
     {
       "san": "c6",

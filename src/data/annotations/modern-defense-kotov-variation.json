@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawns and prepares further expansion with e4. This knight also eyes important central squares like e4, d5, and b5, giving us flexible options for piece coordination. From c3, the knight can potentially jump to d5 or e4 later, or support a queenside expansion with moves like a4-a5. The knight development also keeps our options open for whether to castle kingside or potentially go for a different setup depending on how Black continues."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central pawns and prepares further expansion with e4. This knight also eyes important central squares like e4, d5, and b5, giving us flexible options for piece coordination. From c3, the knight can potentially jump to d5 or e4 later, or support a queenside expansion with moves like a4-a5. The knight development also keeps our options open for whether to castle kingside or potentially go for a different setup depending on how Black continues."
     },
     {
       "san": "d6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight to a central square, adding pressure to our d4 pawn and preparing potential tactics against our center. This is the key move of the Kotov Variation, where Black chooses active piece development over the more common ...Nf6. The knight on c6 eyes important squares like d4, e5, and b4, and can potentially support a ...e5 pawn break or jump to d4 via e5. However, this knight placement also has drawbacks - it can become a target for our pieces, and it doesn't provide the same kingside support that ...Nf6 would offer. We should continue developing while keeping an eye on potential tactics involving this centralized knight."
+      "annotation": "Black develops their knight to a central square, adding pressure to our d4 pawn and preparing potential tactics against our center. This is the central idea of the Kotov Variation, where Black chooses active piece development over the more common ...Nf6. The knight on c6 eyes important squares like d4, e5, and b4, and can potentially support a ...e5 pawn break or jump to d4 via e5. However, this knight placement also has drawbacks - it can become a target for our pieces, and it doesn't provide the same kingside support that ...Nf6 would offer. We should continue developing while keeping an eye on potential tactics involving this centralized knight."
     }
   ]
 }

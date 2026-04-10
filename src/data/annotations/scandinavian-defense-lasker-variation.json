@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight with tempo, attacking the centralized black queen and forcing it to move again. This natural developing move also controls important central squares like e4 and d5, while preparing to castle kingside. The knight on c3 supports our central control and gives us a tempo advantage since Black must waste time moving their queen. By attacking the queen immediately, we're following the classic principle of gaining time in the opening through threats against enemy pieces."
+      "annotation": "We develop our knight with tempo, attacking the centralized black queen and forcing it to move again. This active move also controls important central squares like e4 and d5, while preparing to castle kingside. The knight on c3 supports our central control and gives us a tempo advantage since Black must waste time moving their queen. By attacking the queen immediately, we're following the classic principle of gaining time in the opening through threats against enemy pieces."
     },
     {
       "san": "Qa5",
@@ -31,11 +31,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and beginning to challenge our central control. This move also prepares kingside castling and puts pressure on our position by creating immediate threats. The knight on f6 is well-placed to support Black's counterplay and can potentially jump to active squares like e4 or g4 later in the game. By developing with tempo against our pawn center, Black is following the Scandinavian strategy of creating active piece play to compensate for the space disadvantage."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and beginning to challenge our central control. This move also prepares kingside castling and puts pressure on our position by creating immediate threats. The knight on f6 is well-placed to support Black's counterplay and can potentially jump to active squares like e4 or g4 later in the game. By developing with tempo against our pawn center, Black is following the Scandinavian strategy of creating active piece play to compensate for the space disadvantage."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to f3, defending the d4 pawn while completing our kingside development and preparing to castle. This natural move also controls the important e5 and g5 squares, limiting Black's piece mobility and maintaining our central advantage. The knight on f3 supports our pawn structure while keeping our development flexible - we can still choose between different bishop developments and castling plans. This move exemplifies classical opening principles: develop pieces toward the center, defend your pawns, and prepare for safety."
+      "annotation": "We develop our knight to f3, defending the d4 pawn while completing our kingside development and preparing to castle. this move also controls the important e5 and g5 squares, limiting Black's piece mobility and maintaining our central advantage. The knight on f3 supports our pawn structure while keeping our development flexible - we can still choose between different bishop developments and castling plans. This move exemplifies classical opening principles: develop pieces toward the center, defend your pawns, and prepare for safety."
     },
     {
       "san": "Bg4",

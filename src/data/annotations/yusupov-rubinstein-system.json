@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight toward the center and immediately challenging our d4 pawn. This knight attacks our central pawn while developing toward an active square, and it prepares to support Black's own central advances like ...d5 or ...c5. The f6 knight is also flexible - it can later jump to e4, g4, or h5 depending on how the position develops. Black is following sound opening principles by developing pieces quickly and contesting central control rather than allowing us to dominate the center unopposed."
+      "annotation": "Black responds with the most active move, bringing the knight toward the center and immediately challenging our d4 pawn. This knight attacks our central pawn while developing toward an active square, and it prepares to support Black's own central advances like ...d5 or ...c5. The f6 knight is also flexible - it can later jump to e4, g4, or h5 depending on how the position develops. Black is following sound opening principles by developing pieces quickly and contesting central control rather than allowing us to dominate the center unopposed."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn and controls the crucial e5 and g5 squares. This move is the starting point of what's called the Yusupov-Rubinstein System, a quiet but solid approach that avoids the main theoretical battles of lines like the Queen's Gambit. By playing Nf3, we're keeping our options open - we can still transpose to various systems depending on Black's response, while maintaining a flexible pawn structure. The knight on f3 also prepares potential kingside castling and keeps an eye on Black's kingside, preventing any early tactical tricks."
+      "annotation": "We develop our knight to its ideal square, where it supports our d4 pawn and controls the crucial e5 and g5 squares. This move is the starting point of what's called the Yusupov-Rubinstein System, a quiet but solid approach that avoids the main theoretical battles of lines like the Queen's Gambit. By playing Nf3, we're keeping our options open - we can still transpose to various systems depending on Black's response, while maintaining a flexible pawn structure. The knight on f3 also prepares potential kingside castling and keeps an eye on Black's kingside, preventing any early tactical tricks."
     },
     {
       "san": "e6",

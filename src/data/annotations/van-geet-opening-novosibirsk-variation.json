@@ -23,11 +23,11 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight naturally to c6, attacking our queen and preparing to defend the center. This is the normal developing move, but it also commits Black's piece to a square where it may become a target for our attack, especially since our queen and Nc3 are already aiming at the kingside."
+      "annotation": "Black develops their knight naturally to c6, attacking our queen and preparing to defend the center. This is the normal developing choice, but it also commits Black's piece to a square where it may become a target for our attack, especially since our queen and Nc3 are already aiming at the kingside."
     },
     {
       "san": "Qh4",
-      "annotation": "This is the key move of the Novosibirsk Variation—we move our queen to h4, abandoning the center temporarily but launching an immediate attack on the kingside. The queen on h4 eyes Black's king directly and prepares threats like Nxe4 or tactics involving the weak light squares around Black's king. We're gambling that our active piece play and kingside threats are worth more than the space Black gets in the center—this is a romantic, aggressive approach where we prioritize piece activity and concrete threats over solid positional footing."
+      "annotation": "This is the central idea of the Novosibirsk Variation—we move our queen to h4, abandoning the center temporarily but launching an immediate attack on the kingside. The queen on h4 eyes Black's king directly and prepares threats like Nxe4 or tactics involving the weak light squares around Black's king. We're gambling that our active piece play and kingside threats are worth more than the space Black gets in the center—this is a romantic, aggressive approach where we prioritize piece activity and concrete threats over solid positional footing."
     }
   ]
 }

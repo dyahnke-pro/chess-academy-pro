@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important e5 and g5 squares while preparing to support our central expansion with e4. This move also indirectly attacks the c4 pawn since our knight can potentially jump to e5 or d4 to increase pressure on Black's queenside. By developing before immediately recapturing the pawn with moves like Qa4+, we maintain flexibility and avoid committing our queen too early. The knight on f3 is perfectly placed to support both our kingside development and our central ambitions."
+      "annotation": "We develop our knight to its ideal square, controlling the important e5 and g5 squares while preparing to support our central expansion with e4. This move also indirectly attacks the c4 pawn since our knight can potentially jump to e5 or d4 to increase pressure on Black's queenside. By developing before immediately recapturing the pawn with moves like Qa4+, we maintain flexibility and avoid committing our queen too early. The knight on f3 is perfectly placed to support both our kingside development and our central ambitions."
     },
     {
       "san": "Nf6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Bg4",
-      "annotation": "Black develops the bishop to an active square, pinning our knight to the queen and creating immediate tactical pressure in the center. This is the key move of the Janowski-Larsen Variation, where Black seeks active piece play to compensate for the lack of central pawns. The bishop on g4 also prepares potential tactics involving the pin and makes it harder for us to play e4 immediately since the knight is somewhat restricted. We need to be careful about how we break this pin - moves like Be2, h3, or Nbd2 all have different positional implications that will shape the middlegame character."
+      "annotation": "Black develops the bishop to an active square, pinning our knight to the queen and creating immediate tactical pressure in the center. This is the central idea of the Janowski-Larsen Variation, where Black seeks active piece play to compensate for the lack of central pawns. The bishop on g4 also prepares potential tactics involving the pin and makes it harder for us to play e4 immediately since the knight is somewhat restricted. We need to be careful about how we break this pin - moves like Be2, h3, or Nbd2 all have different positional implications that will shape the middlegame character."
     }
   ]
 }

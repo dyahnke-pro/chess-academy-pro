@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, where it supports our d4 pawn and controls the important central squares e5 and g5. This is the defining move of the Colle System - instead of immediately challenging Black's d5 pawn with c2-c4 (which would lead to the Queen's Gambit), we're choosing a more restrained approach that focuses on piece development first. Our knight on f3 also prepares kingside castling and keeps our options open for various pawn breaks later in the middlegame. This setup allows us to avoid the heavy theory of main Queen's Gambit lines while still reaching rich, strategic positions."
+      "annotation": "We develop our kingside knight to its ideal square, where it supports our d4 pawn and controls the important central squares e5 and g5. This is the defining move of the Colle System - instead of immediately challenging Black's d5 pawn with c2-c4 (which would lead to the Queen's Gambit), we're choosing a more restrained approach that focuses on piece development first. Our knight on f3 also prepares kingside castling and keeps our options open for various pawn breaks later in the middlegame. This setup allows us to avoid the heavy theory of main Queen's Gambit lines while still reaching rich, strategic positions."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight symmetrically, attacking our e4 square and preventing us from advancing our e-pawn two squares immediately. This natural developing move follows the opening principle of bringing pieces toward the center while maintaining the balance in the position. Our opponent is likely preparing to castle kingside and is keeping their options open regarding how to handle the central tension. The knight on f6 also supports potential future advances like ...e6-e5 or ...c7-c5, giving Black flexibility in their pawn structure choices."
+      "annotation": "Black develops their kingside knight symmetrically, attacking our e4 square and preventing us from advancing our e-pawn two squares immediately. This active move follows the opening principle of bringing pieces toward the center while maintaining the balance in the position. Our opponent is likely preparing to castle kingside and is keeping their options open regarding how to handle the central tension. The knight on f6 also supports potential future advances like ...e6-e5 or ...c7-c5, giving Black flexibility in their pawn structure choices."
     },
     {
       "san": "e3",

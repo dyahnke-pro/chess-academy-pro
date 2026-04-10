@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the important central squares e5 and d4. This move also prepares kingside castling and keeps all our strategic options open regarding the central tension. The knight on f3 is beautifully placed to support future central advances or to reroute to more active squares as the position demands. This natural developing move maintains the pressure on Black's position while improving our piece coordination."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the important central squares e5 and d4. This move also prepares kingside castling and keeps all our strategic options open regarding the central tension. The knight on f3 is beautifully placed to support future central advances or to reroute to more active squares as the position demands. This active move maintains the pressure on Black's position while improving our piece coordination."
     },
     {
       "san": "Nf6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black transitions into the Semi-Slav Defense with this key move, supporting the d5 pawn with a second pawn and preparing to develop the dark-squared bishop. This setup is more solid than the pure Slav but does block in the light-squared bishop temporarily. Our opponent is choosing a reliable defensive system that leads to complex middlegame positions with chances for both sides. The Semi-Slav often leads to sharp tactical battles, especially when Black later plays ...dxc4 and ...b5."
+      "annotation": "Black transitions into the Semi-Slav Defense with this critical move, supporting the d5 pawn with a second pawn and preparing to develop the dark-squared bishop. This setup is more solid than the pure Slav but does block in the light-squared bishop temporarily. Our opponent is choosing a reliable defensive system that leads to complex middlegame positions with chances for both sides. The Semi-Slav often leads to sharp tactical battles, especially when Black later plays ...dxc4 and ...b5."
     },
     {
       "san": "Bg5",

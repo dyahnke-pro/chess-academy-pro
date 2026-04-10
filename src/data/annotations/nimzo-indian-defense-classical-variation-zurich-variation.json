@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately attacking our d4 pawn and controlling the important e4 square. This is one of the most principled responses to 1.d4, as it follows the opening fundamentals of developing pieces while creating central pressure. The knight on f6 also prepares potential pawn breaks like ...d5 or ...e5, giving Black flexibility in how to structure the center. This move signals that Black wants to fight for central control rather than allow us to dominate the center unopposed."
+      "annotation": "Black develops the knight to its ideal square, immediately attacking our d4 pawn and controlling the important e4 square. This is one of the most principled responses to 1.d4, as it follows the opening fundamentals of developing pieces while creating central pressure. The knight on f6 also prepares potential pawn breaks like ...d5 or ...e5, giving Black flexibility in how to structure the center. This move signals that Black wants to fight for central control rather than allow us to dominate the center unopposed."
     },
     {
       "san": "c4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to an active central square, adding more pressure to our d4 pawn while preparing various pawn breaks like ...d5 or ...e5. This is the key move of the Zurich Variation, creating a more dynamic setup compared to other Nimzo-Indian lines where Black might play ...d6 and ...Nbd7. The knight on c6 supports the idea of ...Bxc3+ followed by ...d5, challenging our center immediately. Black is building up maximum pressure on our position before we can complete our development, forcing us to make concrete decisions about how to maintain our central control while avoiding tactical pitfalls."
+      "annotation": "Black develops the knight to an active central square, adding more pressure to our d4 pawn while preparing various pawn breaks like ...d5 or ...e5. This is the central idea of the Zurich Variation, creating a more dynamic setup compared to other Nimzo-Indian lines where Black might play ...d6 and ...Nbd7. The knight on c6 supports the idea of ...Bxc3+ followed by ...d5, challenging our center immediately. Black is building up maximum pressure on our position before we can complete our development, forcing us to make concrete decisions about how to maintain our central control while avoiding tactical pitfalls."
     }
   ]
 }
