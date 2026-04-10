@@ -1604,11 +1604,17 @@ export function CoachGamePage(): JSX.Element {
             />
             <button
               onClick={toggleCoachTips}
-              className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-sm font-medium transition-colors"
+              className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
               style={{
                 background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
-                borderColor: 'var(--color-border)',
                 color: coachTipsOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                borderTop: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                borderRight: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                borderLeft: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+                borderBottom: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+                boxShadow: coachTipsOn
+                  ? '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)'
+                  : '0 0 6px rgba(234, 179, 8, 0.35), 0 0 14px rgba(234, 179, 8, 0.2), 0 0 24px rgba(234, 179, 8, 0.1)',
               }}
               aria-label={coachTipsOn ? 'Disable coach tips' : 'Enable coach tips'}
               aria-pressed={coachTipsOn}
