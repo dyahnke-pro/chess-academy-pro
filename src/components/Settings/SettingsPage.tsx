@@ -294,10 +294,10 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         tooltip="Speed of piece movement animation"
         value={pieceAnimationSpeed}
         options={[
-          { value: 'none', label: 'None' },
-          { value: 'fast', label: 'Fast' },
-          { value: 'medium', label: 'Medium' },
-          { value: 'slow', label: 'Slow' },
+          { value: 'none', label: 'None — Instant moves' },
+          { value: 'fast', label: 'Fast — Quick slide' },
+          { value: 'medium', label: 'Medium — Balanced' },
+          { value: 'slow', label: 'Slow — Easy to follow' },
         ]}
         onChange={(v) => setPieceAnimationSpeed(v as PieceAnimationSpeed)}
         testId="animation-speed-select"
