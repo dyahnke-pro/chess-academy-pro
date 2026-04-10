@@ -1,5 +1,18 @@
-import type { CoachContext, OpeningAnnotationContext } from '../types';
+import type { CoachContext, CoachVerbosity, OpeningAnnotationContext } from '../types';
 import { detectTactics } from './tacticsDetector';
+
+// ─── Verbosity Prompt Modifier ─────────────────────────────────────────────
+
+const VERBOSITY_INSTRUCTIONS: Record<Exclude<CoachVerbosity, 'none'>, string> = {
+  fast: `VERBOSITY: Keep all explanations extremely brief — 1 sentence max for live moves, 1-2 sentences for analysis. No preamble, no encouragement fluff. Just the key tactical or strategic point. Prioritize speed over detail.`,
+  medium: `VERBOSITY: Use a balanced level of detail — 1-2 sentences for live moves, 2-3 sentences for analysis. Include the key idea and one supporting reason.`,
+  slow: `VERBOSITY: Give thorough, detailed explanations. For live moves, use 2-3 sentences covering the idea, alternatives, and why it matters. For analysis, go deep — explain plans, piece placement, pawn structure implications. Take your time to be educational.`,
+};
+
+export function getVerbosityInstruction(verbosity: CoachVerbosity): string {
+  if (verbosity === 'none') return '';
+  return VERBOSITY_INSTRUCTIONS[verbosity];
+}
 
 // ─── Single Analytical Coach System Prompt ──────────────────────────────────
 

@@ -1,7 +1,17 @@
 import { Volume2, VolumeX } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
+import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
+import type { CoachVerbosity } from '../../types';
+
+const VERBOSITY_CYCLE: CoachVerbosity[] = ['none', 'fast', 'medium', 'slow'];
+const VERBOSITY_LABELS: Record<CoachVerbosity, string> = {
+  none: 'Off',
+  fast: 'Brief',
+  medium: 'Balanced',
+  slow: 'Detailed',
+};
 
 export function CoachOverlay(): JSX.Element {
   const bubbleVisible = useAppStore((s) => s.coachBubbleVisible);
@@ -9,12 +19,19 @@ export function CoachOverlay(): JSX.Element {
   const voiceOn = useAppStore((s) => s.coachVoiceOn);
   const toggleBubble = useAppStore((s) => s.toggleCoachBubble);
   const toggleVoice = useAppStore((s) => s.toggleCoachVoice);
+  const { settings, updateSetting } = useSettings();
 
   const handleToggleVoice = (): void => {
     if (voiceOn) {
       voiceService.stop();
     }
     toggleVoice();
+  };
+
+  const handleCycleVerbosity = (): void => {
+    const currentIndex = VERBOSITY_CYCLE.indexOf(settings.coachVerbosity);
+    const nextIndex = (currentIndex + 1) % VERBOSITY_CYCLE.length;
+    void updateSetting('coachVerbosity', VERBOSITY_CYCLE[nextIndex]);
   };
 
   return (
@@ -48,6 +65,21 @@ export function CoachOverlay(): JSX.Element {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Verbosity cycle button */}
+      <button
+        onClick={handleCycleVerbosity}
+        className="flex-shrink-0 px-2 py-1.5 rounded-lg border transition-colors cursor-pointer hover:opacity-90 text-xs font-medium"
+        style={{
+          background: settings.coachVerbosity !== 'none' ? 'var(--color-accent)' : 'var(--color-surface)',
+          borderColor: 'var(--color-border)',
+          color: settings.coachVerbosity !== 'none' ? 'var(--color-bg)' : 'var(--color-text-muted)',
+        }}
+        aria-label={`Coach detail: ${VERBOSITY_LABELS[settings.coachVerbosity]}. Tap to cycle.`}
+        data-testid="coach-verbosity-toggle"
+      >
+        {VERBOSITY_LABELS[settings.coachVerbosity]}
+      </button>
 
       {/* Bubble toggle */}
       <button

@@ -2,9 +2,9 @@
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { db } from '../db/schema';
-import { SYSTEM_PROMPT, buildChessContextMessage } from './coachPrompts';
+import { SYSTEM_PROMPT, buildChessContextMessage, getVerbosityInstruction } from './coachPrompts';
 import { recordApiUsage } from './coachCostService';
-import type { CoachTask, CoachContext, AiProvider } from '../types';
+import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
 const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   move_commentary:         'deepseek-chat',
@@ -298,6 +298,19 @@ async function callChatWithConfig(
   }
 }
 
+async function getCoachVerbosity(): Promise<CoachVerbosity> {
+  const profile = await db.profiles.get('main');
+  return profile?.preferences.coachVerbosity ?? 'medium';
+}
+
+function buildSystemPromptWithVerbosity(base: string, verbosity: CoachVerbosity, addition?: string): string {
+  const parts = [base];
+  const verbosityInstr = getVerbosityInstruction(verbosity);
+  if (verbosityInstr) parts.push(verbosityInstr);
+  if (addition) parts.push(addition);
+  return parts.join('\n\n');
+}
+
 export async function getCoachChatResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPromptAddition: string,
@@ -308,7 +321,8 @@ export async function getCoachChatResponse(
   const config = await getProviderConfig();
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
 
-  const systemPrompt = SYSTEM_PROMPT + '\n\n' + systemPromptAddition;
+  const verbosity = await getCoachVerbosity();
+  const systemPrompt = buildSystemPromptWithVerbosity(SYSTEM_PROMPT, verbosity, systemPromptAddition);
 
   try {
     return await callChatWithConfig(config, messages, systemPrompt, onStream, task, maxTokens);
@@ -333,6 +347,7 @@ async function callCommentaryWithConfig(
   config: ProviderConfig,
   task: CoachTask,
   userMessage: string,
+  systemPrompt: string,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
   const model = getModel(task, config.provider);
@@ -341,12 +356,12 @@ async function callCommentaryWithConfig(
       { role: 'user', content: userMessage },
     ];
     if (onStream) {
-      return await callAnthropicStream(config.apiKey, model, SYSTEM_PROMPT, messages, 512, onStream);
+      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 512, onStream);
     }
-    return await callAnthropic(config.apiKey, model, SYSTEM_PROMPT, messages, 1024, task);
+    return await callAnthropic(config.apiKey, model, systemPrompt, messages, 1024, task);
   } else {
     const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: systemPrompt },
       { role: 'user', content: userMessage },
     ];
     if (onStream) {
@@ -361,19 +376,23 @@ export async function getCoachCommentary(
   context: CoachContext,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
+  const verbosity = await getCoachVerbosity();
+  if (verbosity === 'none') return '';
+
   const config = await getProviderConfig();
   if (!config) return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
 
+  const systemPrompt = buildSystemPromptWithVerbosity(SYSTEM_PROMPT, verbosity);
   const userMessage = buildChessContextMessage(context);
 
   try {
-    return await callCommentaryWithConfig(config, task, userMessage, onStream);
+    return await callCommentaryWithConfig(config, task, userMessage, systemPrompt, onStream);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
     const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
-        return await callCommentaryWithConfig(fallback, task, userMessage, onStream);
+        return await callCommentaryWithConfig(fallback, task, userMessage, systemPrompt, onStream);
       } catch (fallbackError) {
         console.error('[CoachAPI] Fallback also failed:', fallbackError);
         return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;

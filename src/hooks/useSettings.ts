@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useAppStore } from '../stores/appStore';
 import { db } from '../db/schema';
-import type { UserPreferences, PieceAnimationSpeed, MoveMethod } from '../types';
+import type { UserPreferences, PieceAnimationSpeed, CoachVerbosity, MoveMethod } from '../types';
 
 export interface EffectiveSettings {
   theme: string;
@@ -28,6 +28,7 @@ export interface EffectiveSettings {
   coachPositionalTips: boolean;
   coachMissedTacticTakeback: boolean;
   coachReviewVoice: boolean;
+  coachVerbosity: CoachVerbosity;
   // Neon glow
   glowBrightness: number;
   boardGlowColor: string;
@@ -77,6 +78,7 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   coachPositionalTips: true,
   coachMissedTacticTakeback: true,
   coachReviewVoice: true,
+  coachVerbosity: 'medium',
   glowBrightness: 100,
   boardGlowColor: '0, 229, 255',
 };
@@ -115,6 +117,7 @@ export function useSettings(): UseSettingsReturn {
       coachPositionalTips: raw.coachPositionalTips ?? true,
       coachMissedTacticTakeback: raw.coachMissedTacticTakeback ?? true,
       coachReviewVoice: raw.coachReviewVoice ?? true,
+      coachVerbosity: raw.coachVerbosity ?? 'medium',
       glowBrightness: raw.glowBrightness ?? 100,
       boardGlowColor: raw.boardGlowColor ?? '0, 229, 255',
     };
