@@ -23,19 +23,27 @@ export function ProPlayerCard({ player, openingCount, onClick }: ProPlayerCardPr
       }}
       className="w-full text-left bg-theme-surface rounded-xl p-4 transition-all duration-200 cursor-pointer"
       style={{
-        border: `1.5px solid ${neon.border}`,
-        borderBottom: `2px solid ${neon.border}`,
+        borderTop: `1px solid rgba(${neon.rgb}, 0.1)`,
+        borderRight: `1px solid rgba(${neon.rgb}, 0.1)`,
+        borderLeft: `2px solid rgba(${neon.rgb}, 0.6)`,
+        borderBottom: `2px solid rgba(${neon.rgb}, 0.6)`,
         boxShadow: neon.shadow,
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.border = `1.5px solid ${neon.borderHover}`;
-        e.currentTarget.style.borderBottom = `2px solid ${neon.borderHover}`;
-        e.currentTarget.style.boxShadow = neon.shadowHover;
+        const el = e.currentTarget;
+        el.style.borderTop = `1px solid rgba(${neon.rgb}, 0.2)`;
+        el.style.borderRight = `1px solid rgba(${neon.rgb}, 0.2)`;
+        el.style.borderLeft = `2px solid rgba(${neon.rgb}, 0.85)`;
+        el.style.borderBottom = `2px solid rgba(${neon.rgb}, 0.85)`;
+        el.style.boxShadow = neon.shadowHover;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.border = `1.5px solid ${neon.border}`;
-        e.currentTarget.style.borderBottom = `2px solid ${neon.border}`;
-        e.currentTarget.style.boxShadow = neon.shadow;
+        const el = e.currentTarget;
+        el.style.borderTop = `1px solid rgba(${neon.rgb}, 0.1)`;
+        el.style.borderRight = `1px solid rgba(${neon.rgb}, 0.1)`;
+        el.style.borderLeft = `2px solid rgba(${neon.rgb}, 0.6)`;
+        el.style.borderBottom = `2px solid rgba(${neon.rgb}, 0.6)`;
+        el.style.boxShadow = neon.shadow;
       }}
       data-testid={`pro-player-card-${player.id}`}
     >
