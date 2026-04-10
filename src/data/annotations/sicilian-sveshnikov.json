@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White opens with the king's pawn, claiming central space and preparing rapid piece development. The e4 pawn immediately controls d5 and f5, setting the stage for an Open Sicilian battle.",
+      "annotation": "This is the Sicilian Sveshnikov, one of the most dynamic and theoretically rich openings in modern chess. White plays 1.e4, claiming central space. The Sveshnikov leads to complex positions where Black accepts structural weaknesses (the d5 hole and backward d6 pawn) in exchange for active piece play and the bishop pair.",
       "plans": [
         "Follow with d4 to establish central dominance",
         "Develop quickly and castle"
@@ -23,7 +23,7 @@
     },
     {
       "san": "c5",
-      "annotation": "The Sicilian Defense — Black fights for d4 asymmetrically, ensuring an unbalanced game from the start.",
+      "annotation": "Black plays 1...c5, the Sicilian Defense — fighting for d4 asymmetrically and ensuring an unbalanced game from move one. The c5 pawn will be exchanged for White's d4 pawn, giving Black the semi-open c-file and queenside pawn majority.",
       "pawnStructure": "Asymmetric: Black's c-pawn trades for White's d-pawn, creating different strategic goals for each.",
       "plans": [
         "Contest d4 control",
@@ -45,7 +45,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops toward d4, the natural follow-up. The knight controls d4 and e5, preparing to open the center favorably.",
+      "annotation": "White develops the knight to f3, preparing the d4 central break. The Nf3 controls d4 and e5, and is the standard precursor to the Open Sicilian's center-opening strategy.",
       "plans": [
         "Play d4 next",
         "Enter the Open Sicilian"
@@ -65,7 +65,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its ideal square, adding pressure to d4 and preparing the Sveshnikov setup with ...e5.",
+      "annotation": "Black develops the knight to c6, adding pressure to d4 and preparing the Sveshnikov's defining ...e5 advance. The Nc6 is essential — it supports the e5 push and fights for central squares.",
       "plans": [
         "Prepare ...Nf6 and ...e5, the Sveshnikov signature",
         "Control d4 directly"
@@ -88,7 +88,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White strikes in the center, the defining move of the Open Sicilian. After the exchange, White gets a development lead and central control; Black gets the c-file and structural assets for the long g.",
+      "annotation": "White plays d4, the defining move of the Open Sicilian. After the exchange, White gets a development lead, centralized knight on d4, and open lines — while Black gets the c-file and an asymmetric pawn structure.",
       "plans": [
         "Recapture on d4 with the knight",
         "Build a central presence with Nc3 and e4"
@@ -103,7 +103,7 @@
     },
     {
       "san": "cxd4",
-      "annotation": "Black captures, opening the c-file that will become the lifeline for counterplay. This exchange is essentially automatic — allowing d5 or dxc5 would concede the center.",
+      "annotation": "Black captures cxd4, opening the c-file for future queenside counterplay. This exchange is automatic in the Open Sicilian — allowing d5 or dxc5 would surrender too much central ground.",
       "pawnStructure": "Black obtains the queenside pawn majority and the half-open c-file.",
       "arrows": [
         {
@@ -121,7 +121,7 @@
     },
     {
       "san": "Nxd4",
-      "annotation": "The knight recaptures on the commanding d4 square, where it controls b5, c6, e6, and f5.",
+      "annotation": "White recaptures Nxd4, centralizing the knight on d4 where it commands b5, c6, e6, and f5. The Nd4 is the anchor of White's Open Sicilian setup and will be challenged by Black's coming ...e5 thrust.",
       "plans": [
         "Develop Nc3",
         "React to Black's ...e5 thrust"
@@ -147,7 +147,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops with tempo, attacking e4 and preparing the critical ...e5 advance.",
+      "annotation": "Black develops the knight to f6, attacking e4 with tempo and preparing the critical ...e5 advance. The Nf6 pressures the center immediately, forcing White to defend e4 before doing anything else.",
       "plans": [
         "Prepare ...e5 — the Sveshnikov's signature move",
         "Pressure e4"
@@ -173,7 +173,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White defends e4 with the knight, completing the standard Open Sicilian development.",
+      "annotation": "White plays Nc3, defending e4 with the most active piece. The Nc3 controls d5 — which will become the key strategic outpost after Black's ...e5 creates a hole there.",
       "plans": [
         "Maintain central control",
         "Prepare for Black's ...e5 with Nd5 ideas"
@@ -199,7 +199,7 @@
     },
     {
       "san": "e5",
-      "annotation": "The Sveshnikov's defining thrust — Black boldly seizes space in the center and kicks the d4 knight.",
+      "annotation": "Black plays the Sveshnikov's defining move: ...e5! This bold central thrust seizes space, kicks the Nd4, and establishes a strong pawn on e5. The cost is clear — the d5 square becomes a permanent outpost for White's pieces, and the d6 pawn is backward on the open d-file. But Black gets active piece play, the bishop pair, and counterplay that has proven fully viable at the highest levels.",
       "pawnStructure": "The e5+d6 chain gives Black space but creates a permanent weakness on d5 and a backward d6 pawn.",
       "plans": [
         "Generate kingside counterplay with the space advantage",
@@ -224,7 +224,7 @@
     },
     {
       "san": "Ndb5",
-      "annotation": "The knight jumps to b5, targeting the d6 weakness and the c7 square. This is White's most critical response — the knight on b5 is incredibly annoying for Black, threatening Nd6+ forks and maintainin.",
+      "annotation": "White jumps to Ndb5, targeting the d6 weakness and threatening Nc7 forking the king and rook. The Nb5 is incredibly annoying for Black — it must be dealt with immediately, and every response has drawbacks. This is White's most critical move in the Sveshnikov.",
       "plans": [
         "Target d6 with Nd6+ or Nc7",
         "Establish a knight on d5 later"
@@ -253,7 +253,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black defends the d-pawn, accepting the backward pawn structure that defines the Sveshnikov.",
+      "annotation": "Black defends with d6, reinforcing the backward pawn and preventing Nd6+. The d6 pawn is the structural weakness that defines the Sveshnikov — it's backward on the open d-file and can never advance. But Black accepts this in exchange for the dynamic piece play that follows.",
       "pawnStructure": "d6 is backward on the half-open file — White will target it, but Black's pieces defend it actively.",
       "plans": [
         "Defend d6 while generating counterplay",
@@ -275,7 +275,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "White pins and pressures the f6 knight, which is the key defender of d5. The whole point of Bg5 is strategic: by exchanging on f6, White saddles Black with doubled f-pawns (after ...gxf6) or a weake.",
+      "annotation": "White plays Bg5, pinning the Nf6 to the queen and pressuring Black's key central defender. The strategic point is devastating: by exchanging Bxf6, White saddles Black with doubled f-pawns and removes the piece that contests d5. The entire Sveshnikov revolves around this tension.",
       "plans": [
         "Exchange Bxf6 to weaken Black's structure and control d5",
         "Maintain pressure on the knight"
@@ -299,7 +299,7 @@
     },
     {
       "san": "a6",
-      "annotation": "Black challenges the annoying Nb5 — this knight must be dealt with before Black can develop freely. After ...a6, White's knight is pushed back, and Black prepares ...b5 to gain queenside space.",
+      "annotation": "Black plays a6, challenging the Nb5 and forcing it to retreat. The a6 pawn also prepares ...b5 queenside expansion — a critical source of counterplay where Black gains space, develops the Bc8, and creates threats against White's queenside.",
       "pawnStructure": "The a6 pawn supports ...b5 expansion and permanently prevents Nb5.",
       "plans": [
         "Drive the knight back with ...a6",
@@ -320,7 +320,7 @@
     },
     {
       "san": "Na3",
-      "annotation": "The knight retreats to the rim — normally terrible, but in the Sveshnikov this is a well-established theoretical move. From a3, the knight will reroute to c2-e3-d5 or jump to c4 targeting d6 and e5.",
+      "annotation": "The knight retreats to a3 — normally a terrible square, but in the Sveshnikov this is well-established theory. From a3, the knight will reroute via c2 to e3 or d4, reaching active central positions. The detour costs time but is the only way to maintain the piece.",
       "plans": [
         "Reroute the knight via c2-e3 to d5",
         "Or jump to c4 targeting d6/e5"
@@ -343,7 +343,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black grabs queenside space and prepares to develop the dark-squared bishop. The pawn on b5 controls a4 and c4 (restricting the Na3), supports a future ...Bb7 or ...b4 advance, and demonstrates the.",
+      "annotation": "Black pushes b5, seizing queenside space and preparing to develop the light-squared bishop. The b5 pawn controls a4 and c4 (restricting the Na3), supports a future ...Bb7 developing the bishop to the long diagonal, and is Black's main source of counterplay.",
       "pawnStructure": "b5 creates a queenside pawn majority on the march.",
       "plans": [
         "Restrict the Na3 from reaching c4",
@@ -373,7 +373,7 @@
     },
     {
       "san": "Nd5",
-      "annotation": "White occupies the dream outpost on d5 — this is the payoff for allowing ...e5. The knight on d5 is an absolute monster: it's centralized, supported by the e4 pawn, and can never be challenged by a.",
+      "annotation": "White occupies the d5 outpost with Nd5 — this is the strategic payoff for allowing ...e5. The Nd5 is an absolute monster: centralized, supported by e4, and controlling c7, e7, b6, and f6. It's nearly impossible to dislodge and dominates the position.",
       "plans": [
         "Use the d5 knight as a permanent positional asset",
         "Combine Nd5 pressure with Bxf6 to dominate the light squares"
@@ -394,7 +394,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop and offers the critical exchange: White can play Bxf6 Bxf6 or Nxe7.",
+      "annotation": "Black develops the bishop to e7, offering the critical exchange — White can play Bxf6 Bxf6 (keeping Black's structure) or Nxe7 (exchanging the dominant knight). This is one of the most analyzed positions in all of chess theory.",
       "plans": [
         "Accept the Bxf6 exchange and use the bishop on the long diagonal",
         "Complete development and castle"
@@ -417,7 +417,7 @@
     },
     {
       "san": "Bxf6",
-      "annotation": "White executes the thematic exchange, removing the f6 knight to consolidate the d5 grip. After ...Bxf6, Black gets the bishop pair but has doubled pawns on the f-file or a structural concession.",
+      "annotation": "White executes Bxf6, the thematic exchange that removes Black's Nf6 — the key defender of d5. After ...Bxf6, Black gets the powerful bishop pair and a strong dark-squared bishop on f6, but White consolidates the d5 grip with a knight that dominates the board.",
       "pawnStructure": "After ...Bxf6, Black has bishops but no knight to challenge d5.",
       "plans": [
         "Consolidate the d5 outpost permanently",
@@ -439,7 +439,7 @@
     },
     {
       "san": "Bxf6",
-      "annotation": "Black recaptures with the bishop, keeping the pawn structure intact and gaining a strong dark-squared bishop on f6.",
+      "annotation": "Black recaptures Bxf6, gaining the bishop pair and a strong dark-squared bishop. The Bf6 eyes the a1-h8 diagonal, supports ...e4 ideas, and is an active piece. The Sveshnikov middlegame is now a classic battle: White's Nd5 outpost versus Black's bishop pair and dynamic counterplay.",
       "plans": [
         "Use the bishop on the long diagonal",
         "Prepare ...O-O and then ...f5 or ...Bg5 ideas"
@@ -468,7 +468,7 @@
     },
     {
       "san": "c3",
-      "annotation": "White solidifies the center and prepares to bring the Na3 back into the game via c2.",
+      "annotation": "White plays c3, solidifying the center and preparing to bring the Na3 back into the game via c2. The c3 pawn supports a future d4 if the e5 pawn ever advances, and prevents any ...Nb4 ideas from Black.",
       "pawnStructure": "c3 creates a solid pawn triangle e4-c3 that supports the d5 outpost from multiple angles.",
       "plans": [
         "Reroute Na3-c2-e3 to reinforce the center",
@@ -495,7 +495,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, getting the king to safety before the middlegame battle intensifies.",
+      "annotation": "Black castles kingside, getting the king to safety before the tactical middlegame intensifies. With the structural battle defined (Nd5 vs bishop pair, backward d6 vs queenside space), both sides are now ready for the complex fight that makes the Sveshnikov one of chess's richest openings.",
       "plans": [
         "Prepare ...f5 to challenge e4 and activate the position",
         "Play ...Bg5 to trade pieces and reduce White's attacking potential"
