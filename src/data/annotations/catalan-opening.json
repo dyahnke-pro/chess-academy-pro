@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, claiming central space and controlling the e5 and c5 squares.",
+      "annotation": "This is the Catalan Opening, an elite system where White combines the Queen's Gambit's central control with a fianchettoed bishop on g2. White plays 1.d4, claiming the center. The Catalan is a favorite of world champions — the Bg2's long-range pressure on the a8-h1 diagonal creates subtle but lasting positional advantages.",
       "pawnStructure": "A single central pawn on d4 controls dark squares.",
       "plans": [
         "Follow up with c4 to form the Queen's Gambit pawn center",
@@ -25,7 +25,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its ideal square, immediately contesting White's control of the center. The knight attacks d5 and e4, discouraging White from playing e4 easily.",
+      "annotation": "Black develops the knight to f6, controlling e4 and d5. The Nf6 is the most flexible response — it prevents an easy e4 and keeps Black's options open between various Indian and QGD setups.",
       "plans": [
         "Control e4 and d5 from f6",
         "Prepare kingside castling"
@@ -51,7 +51,7 @@
     },
     {
       "san": "c4",
-      "annotation": "White forms the classic Queen's Gambit pawn duo. The c4 pawn strikes at d5, contesting central control alongside d4. Together these two pawns control the four key central squares.",
+      "annotation": "White plays c4, forming the Queen's Gambit pawn duo. Together d4 and c4 control d5, e5, c5, and b5 — maximum central influence. The c4 pawn creates the tension that will define the opening.",
       "pawnStructure": "The c4-d4 duo is the backbone of the Queen's Gambit complex.",
       "plans": [
         "Challenge Black's center if ...d5 comes",
@@ -78,7 +78,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black supports a future ...d5 advance with the e-pawn, choosing a solid setup. This is the hallmark of the Queen's Gambit Declined family — Black builds a sturdy pawn chain but accepts a slightly cr.",
+      "annotation": "Black plays e6, supporting a future ...d5 and choosing a solid setup. This signals the QGD approach — Black will fight for d5 and maintain a stable center. The e6 pawn also opens the f8-a3 diagonal for the bishop.",
       "pawnStructure": "Black's e6 pawn supports d5 solidly but locks in the light-squared bishop on c8.",
       "plans": [
         "Support ...d5 to challenge White's center",
@@ -108,7 +108,7 @@
     },
     {
       "san": "g3",
-      "annotation": "The defining move of the Catalan! White prepares to fianchetto the light-squared bishop to g2, where it will become a monster on the long diagonal.",
+      "annotation": "White plays g3, the defining move of the Catalan. Instead of developing the bishop to d3 or e2, White prepares to fianchetto it to g2 — the most powerful square available. The Bg2 will exert immense pressure along the a8-h1 diagonal, influencing the entire board.",
       "pawnStructure": "White commits to a fianchetto structure. The g3 pawn slightly weakens the dark squares around the.",
       "plans": [
         "Fianchetto with Bg2, aiming at d5 and the long diagonal",
@@ -135,7 +135,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black occupies the center with ...d5, establishing a foothold. This is the principled response — Black refuses to let White dominate d5 unopposed. However, this pawn is now a target.",
+      "annotation": "Black occupies the center with d5, establishing a stronghold. The d5 pawn controls c4 and e4, and combined with e6 creates a solid central formation. The key tension is between White's c4 and Black's d5 — whoever resolves it first shapes the middlegame.",
       "pawnStructure": "A classic QGD tension: White's c4 attacks Black's d5.",
       "plans": [
         "Maintain the d5 pawn as a central anchor",
@@ -165,7 +165,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "The Catalan bishop takes its throne on g2. From here it radiates power along the entire a8-h1 diagonal, pressuring d5 and looking deep into Black's queenside.",
+      "annotation": "The Catalan bishop takes its throne on g2, radiating power along the entire a8-h1 diagonal. From g2, it pressures d5, targets b7 and a8, and will become enormously powerful if Black ever captures ...dxc4, opening the diagonal completely. The Bg2 is the heart of the Catalan.",
       "plans": [
         "Maintain long-diagonal pressure on d5 and b7",
         "Support a future e4 break to open the center"
@@ -191,7 +191,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop modestly to e7, preparing kingside castling. While not the most active square, Be7 is solid — it avoids any tactical tricks and keeps the position flexible.",
+      "annotation": "Black develops the bishop to e7, preparing kingside castling. The Be7 is the classical, solid choice — it avoids the tactical complications of ...Bb4+ or ...Bd6 and keeps Black's position flexible. The bishop supports d6 and can later reroute to f6 or d8.",
       "plans": [
         "Complete kingside development and castle quickly",
         "Keep the position solid while deciding on a plan"
@@ -215,7 +215,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its ideal square, controlling e5 and d4 while preparing to castle. The knight on f3 supports the center harmoniously and avoids blocking the Catalan bishop's diagonal.",
+      "annotation": "White develops the knight to f3, controlling e5 and d4 while preparing to castle. The Nf3 supports the central structure and completes the kingside development. White is now one move from castling.",
       "plans": [
         "Castle kingside and complete development",
         "Prepare for the central battle after Black decides on a pawn structure"
@@ -241,7 +241,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, tucking the king to safety. This is essential before the center opens — the king needs to be sheltered before the pawn tension is resolved.",
+      "annotation": "Black castles kingside, getting the king to safety before the central tension is resolved. In the Catalan, timing is everything — the king must be safe before ...dxc4 opens the position and the Bg2's diagonal becomes deadly.",
       "plans": [
         "Complete development and address the light-squared bishop",
         "Decide on a queenside plan: ...b6 and ...Bb7, or ...dxc4 and ...b5"
@@ -262,7 +262,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles, completing the kingside setup. Both kings are now safe, and the real strategic battle begins.",
+      "annotation": "White castles, completing the kingside setup. Both kings are safe, and the real strategic battle begins — the Catalan middlegame revolves around the tension between c4 and d5, and how the Bg2's diagonal pressure shapes the play.",
       "pawnStructure": "The central tension c4 vs d5 remains unresolved.",
       "plans": [
         "Play Qc2 or Qd3 to connect rooks and add pressure to d5",
@@ -289,7 +289,7 @@
     },
     {
       "san": "dxc4",
-      "annotation": "Black captures the c4 pawn, entering the Open Catalan. This is a critical decision — Black grabs a pawn but opens the long diagonal for White's bishop on g2, which now stares directly at the queenside.",
+      "annotation": "Black captures dxc4, entering the Open Catalan. This is a critical decision — Black grabs a pawn but opens the a8-h1 diagonal for White's Bg2, which now becomes a monster piece. Black must find a way to hold the c4 pawn or return it on favorable terms.",
       "pawnStructure": "The center is now asymmetric: White has a lone d4 pawn against Black's e6.",
       "plans": [
         "Try to hold the c4 pawn with ...a6 and ...b5",
@@ -319,7 +319,7 @@
     },
     {
       "san": "Qc2",
-      "annotation": "White places the queen on c2, immediately targeting the c4 pawn and preparing to recapture it. The queen also eyes the h7 pawn indirectly and connects the rooks.",
+      "annotation": "White plays Qc2, targeting the c4 pawn and preparing to recapture. The Qc2 also eyes h7 through the cleared diagonal, creating a subtle kingside threat. The queen is perfectly placed to coordinate the recovery of the c4 pawn.",
       "plans": [
         "Recapture on c4 at the right moment",
         "Support a future e4 advance to open the center"
@@ -345,7 +345,7 @@
     },
     {
       "san": "a6",
-      "annotation": "Black plays ...a6, preparing to defend the extra c4 pawn with ...b5. This is the classic method in the Open Catalan — Black tries to hold the pawn and develop the light-squared bishop to b7, solving.",
+      "annotation": "Black plays a6, preparing to defend the c4 pawn with ...b5. This is the classic Open Catalan approach — Black tries to hold the extra pawn and use it as leverage for queenside expansion. The a6+b5 plan creates counterplay but weakens the queenside light squares.",
       "pawnStructure": "Black prepares a queenside pawn chain with ...a6 and ...b5 to protect c4.",
       "plans": [
         "Follow up with ...b5 to defend c4",
@@ -375,7 +375,7 @@
     },
     {
       "san": "Qxc4",
-      "annotation": "White recaptures the pawn, restoring material equality. The queen is actively placed on c4, where it pressures a6, eyes the e6 pawn, and keeps the c-file influence.",
+      "annotation": "White recaptures Qxc4, restoring material equality. The queen on c4 is actively placed — it pressures a6, eyes the e6 pawn, and maintains central influence. White has recovered the pawn with a better position thanks to the Bg2's diagonal dominance.",
       "plans": [
         "Maintain pressure on the queenside light squares",
         "Develop Nc3 or Nbd2 and place rooks on c1 and d1"
@@ -401,7 +401,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black pushes ...b5, chasing the queen away and gaining space on the queenside. This is thematic — Black wants to develop the bishop to b7 where it challenges the long diagonal.",
+      "annotation": "Black pushes b5, chasing the queen and gaining queenside space. The b5 advance is thematic — it develops the initiative on the queenside and prepares ...Bb7 to contest the Bg2's diagonal. Black is fighting for counterplay.",
       "pawnStructure": "Black's queenside pawn majority (a6-b5) gains space but creates holes on c5 and a5.",
       "plans": [
         "Develop the bishop to b7 on the long diagonal",
@@ -428,7 +428,7 @@
     },
     {
       "san": "Qc2",
-      "annotation": "White retreats the queen to c2, a familiar and excellent square. The queen stays on the c-file, keeps the h7 threat alive, and clears c4 for a potential knight outpost.",
+      "annotation": "White retreats the queen to c2, returning to its excellent square. The Qc2 stays on the c-file, keeps the h7 pressure alive, and clears c4 for the knight. The queen is a flexible piece that supports multiple plans.",
       "plans": [
         "Develop the knight to c3 or d2 and place rooks on c1 and d1",
         "Prepare e4 to open the center when the time is right"
@@ -454,7 +454,7 @@
     },
     {
       "san": "Bb7",
-      "annotation": "Black finally solves the light-squared bishop problem by developing it to b7. The bishop now contests the long diagonal against White's Catalan bishop on g2 — a critical battle in this opening.",
+      "annotation": "Black develops the bishop to b7, contesting the long diagonal against White's Bg2. The Bb7 is the strategic payoff of the ...a6-b5 plan — it fights for the light squares, pressures e4, and creates a direct duel with White's most important piece. The Catalan middlegame is now a battle of the bishops on the long diagonal.",
       "pawnStructure": "Both sides have completed development. White's d4 pawn and Black's e6 pawn define a relatively sta.",
       "plans": [
         "Contest the a8-h1 diagonal against White's Catalan bishop",

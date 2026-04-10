@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "The English Opening — one of the most flexible first moves in chess. Instead of grabbing the center immediately with 1.e4 or 1.d4, we stake a claim on the d5 square from the flank and keep our options wide open. The beauty of 1.c4 is that we can steer the game into many different structures depending on Black's response, giving us a positional, maneuvering game where understanding matters more than memorization.",
+      "annotation": "This is the English Opening, a flexible flank opening where White plays 1.c4 instead of 1.e4 or 1.d4. The c4 pawn controls d5 from the flank and can transpose into many different structures — Sicilian reversed, QGD, Catalan, or pure English systems.",
       "pawnStructure": "Single flank pawn on c4. White delays central pawn commitments to maintain maximum flexibility.",
       "plans": [
         "Control d5 and prepare a kingside fianchetto with g3 + Bg2",
@@ -30,7 +30,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black responds aggressively by grabbing central space with 1...e5. This is one of the most principled replies — Black occupies the center immediately and opens lines for the dark-squared bishop and queen. From White's perspective, this is excellent: we now have a Reversed Sicilian structure where we essentially play a Sicilian Defense with an extra tempo. That extra tempo makes a huge strategic difference.",
+      "annotation": "Black plays e5, the most aggressive response — seizing the center and creating a Reversed Sicilian structure where White has an extra tempo. The e5 pawn controls d4 and f4.",
       "pawnStructure": "Black has a central e5 pawn vs White's flank c4 pawn. The asymmetry creates an imbalanced, rich middlegame.",
       "plans": [
         "Challenge White's setup by maintaining the e5 stronghold",
@@ -65,7 +65,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop the queen's knight to its ideal square, reinforcing our grip on d5 and preparing to expand. The knight on c3 is a multi-purpose piece: it supports a future d4 push, pressures d5 and e4, and works beautifully with a kingside fianchetto. Notice we develop knights before bishops — a classical principle that lets us see where the bishops belong based on the pawn structure that emerges.",
+      "annotation": "White develops Nc3, supporting the c4 pawn and preparing to contest the center. The Nc3 controls d5 and e4, and is the standard developing move in the English.",
       "pawnStructure": "Still c4 vs e5. White keeps central flexibility, not committing to d3 or d4 yet.",
       "plans": [
         "Follow up with Nf3 and g3 to fianchetto the bishop",
@@ -92,7 +92,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors the logical development plan, placing the knight on its ideal square. The f6-knight controls d5 and e4 — two critical central squares — and prepares kingside castling. Black is saying: 'I'll develop sensibly and fight for the center with pieces before committing my pawns further.' This is sound, classical chess.",
+      "annotation": "Black develops Nf6, contesting d5 and e4 while preparing kingside development. The Nf6 is the most active choice — it pressures the center and prepares ...Nc6 or ...d5.",
       "pawnStructure": "Unchanged. Both sides developing pieces before further pawn commitments.",
       "plans": [
         "Complete kingside development with Bc5 or Bb4 and castle quickly",
@@ -124,7 +124,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our second knight, attacking Black's e5 pawn and completing our knight development before committing to a pawn structure. The knight on f3 is the perfect complement to Nc3: together they control d4, d5, and e5. We're also preparing g3 next, because the Bg2 fianchetto is the signature setup in the English — the bishop will become a long-range sniper on the a8-h1 diagonal.",
+      "annotation": "White develops Nf3, preparing to contest the center and castle kingside. The Nf3 controls d4 and e5, and together with Nc3 creates a flexible piece setup.",
       "pawnStructure": "Still c4 vs e5. White maintains maximum flexibility before choosing between d3 and d4.",
       "plans": [
         "Play g3 and Bg2 for the kingside fianchetto",
@@ -154,7 +154,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends e5 with the most active move. The knight on c6 does triple duty: it protects the e5 pawn, controls d4, and prepares to support a future ...d5 advance. We now have a Four Knights English structure, which is one of the main theoretical battlegrounds of the English Opening. Both sides have developed logically and the real strategic decisions are about to begin.",
+      "annotation": "Black develops Nc6, reinforcing the e5 pawn and adding central pressure. The Nc6 controls d4 and b4, and together with the Nf6 creates natural piece development.",
       "pawnStructure": "c4 vs e5 remains. The pawn tension is latent — neither side is forced to resolve it yet.",
       "plans": [
         "Support the e5 pawn and develop the dark-squared bishop actively",
@@ -185,7 +185,7 @@
     },
     {
       "san": "g3",
-      "annotation": "This is the defining move of our setup — we prepare the kingside fianchetto. The bishop on g2 will be an absolute monster, raking down the long diagonal toward a8. In the English Opening, this fianchettoed bishop is often our most important piece: it pressures the center from a distance, supports a future d4 break, and creates X-ray pressure against Black's queenside. The g3 move also prepares castling and gives our king a cozy shelter.",
+      "annotation": "White plays g3, preparing to fianchetto the bishop to g2. The Bg2 will control the long a8-h1 diagonal and exert pressure on d5 — the key square in the English Opening.",
       "pawnStructure": "c4 + g3 for White. The g3 pawn signals a long-term positional approach with the fianchetto.",
       "plans": [
         "Complete the fianchetto with Bg2 and castle kingside",
@@ -212,7 +212,7 @@
     },
     {
       "san": "Bb4",
-      "annotation": "Black pins our c3-knight against the king, creating immediate tactical tension. This is a Nimzo-style idea: by pinning the knight, Black threatens to double our pawns with ...Bxc3 and disrupts our control of d5. It's an aggressive, committal choice — the bishop leaves the kingside, which means Black will need to find another way to protect the king. The pin is annoying but White has good resources to handle it.",
+      "annotation": "Black plays Bb4, pinning the Nc3 and creating immediate tactical pressure. The Bb4 is the most active bishop placement — it threatens to double White's pawns with Bxc3 and prevents White from easily controlling d5.",
       "pawnStructure": "Unchanged. The pin on Nc3 creates strategic tension around whether Black will capture and double White's pawns.",
       "plans": [
         "Create pressure on the c3-knight with the pin",
@@ -243,7 +243,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "We calmly complete the fianchetto, ignoring Black's pin for now. The bishop on g2 is a powerhouse — it controls the long diagonal from a8 to h1, pressures d5 and the entire center, and will prove its worth throughout the game. We don't need to panic about the pin: once we castle, the pin is less effective, and we'll have a3 available to challenge the bishop whenever we choose.",
+      "annotation": "White fianchettoes Bg2, completing the English's signature setup. The Bg2 on the long diagonal pressures d5 and the entire queenside, working harmoniously with the c4 pawn to control light squares.",
       "pawnStructure": "c4 + g3 fianchetto structure established. The g2 bishop becomes the backbone of White's position.",
       "plans": [
         "Castle immediately to break the pin's power",
@@ -275,7 +275,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, getting the king to safety and connecting the rooks. This is the right moment — the bishop on b4 has done its job of creating tension, and now Black completes development. With the king safe, Black can focus on the middlegame battle: contesting central control with ...d6 or ...d5, and potentially repositioning the b4-bishop.",
+      "annotation": "Black castles, getting the king safe. The Rf8 is now available to support ...f5 or ...d6 followed by ...Be6 and central play.",
       "pawnStructure": "No change. Black's king is now safe and the rooks are connected.",
       "plans": [
         "Consolidate the kingside and prepare central play with ...d6 or ...d5",
@@ -297,7 +297,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle immediately, following Black's lead. Now the pin on our c3-knight is effectively broken — the king is no longer on e1 in the pin line. Our king is snug behind the g3-g2 fianchetto shelter, which is one of the safest king positions in chess. With both sides castled, the opening phase transitions into a strategic middlegame where our fianchettoed bishop and central control will be key advantages.",
+      "annotation": "White castles, completing development. Both kings are safe, and the English middlegame begins — White controls the long diagonal while Black has central space with the e5 pawn.",
       "pawnStructure": "Both kings are castled kingside. The position is stable and strategic, not tactical.",
       "plans": [
         "Play d3 to support the center and complete development with Be3 or Bg5",
@@ -324,7 +324,7 @@
     },
     {
       "san": "e4",
-      "annotation": "Black makes an ambitious central advance, pushing the pawn to e4 to gain space and restrict White's pawn on f3. This is a double-edged decision: the e4 pawn grabs territory but also leaves behind a hole on d4 that White can exploit. The pawn also becomes harder to defend as it advances. White should welcome this — the d5 square and the long diagonal become even more potent for our fianchettoed bishop.",
+      "annotation": "Black pushes e4, an ambitious advance that grabs space but also creates a potential weakness. The e4 pawn restricts White's Nf3 and grabs kingside territory, but it also leaves the d4 square weak.",
       "pawnStructure": "Black's e4 pawn is advanced and potentially overextended. White gains the d4 and d5 outposts.",
       "plans": [
         "Exploit the d4 and d5 squares left weak by ...e4",
@@ -355,7 +355,7 @@
     },
     {
       "san": "d3",
-      "annotation": "We immediately challenge Black's advanced e4 pawn. The d3 push is a critical strategic move: by striking at e4, we force Black to make a decision. If Black takes on d3, we recapture and get an open d-file plus beautiful central control. If Black maintains the tension, we can take on e4 and open up the position for our fianchettoed bishop. This is the thematic break in the English — patient preparation followed by a precise challenge.",
+      "annotation": "White plays d3, immediately challenging the e4 pawn and preparing to open the position. After dxe4 or exd3, the center opens favorably for White's fianchettoed bishop.",
       "pawnStructure": "c4 + d3 vs Black's e4. The d3 pawn directly challenges the overextended e4 pawn. After exchanges, White typically gets an ideal center.",
       "plans": [
         "Exchange on e4 or provoke Black to take on d3, opening the position for our pieces",
@@ -382,7 +382,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black supports the e4 pawn chain by playing ...d6, creating a solid e4-d6 structure. This is the safe, solid choice — Black maintains central space while keeping everything defended. However, it does commit to a somewhat passive setup: the light-squared bishop is now restricted behind the pawn chain, and Black's position, while solid, lacks dynamic potential. White can maneuver freely and probe for weaknesses.",
+      "annotation": "Black plays d6, reinforcing e5 and creating a solid central structure. The d6 pawn supports the e4 advance and opens the c8-h3 diagonal for the bishop.",
       "pawnStructure": "Black has an e4-d6 pawn chain. Solid but space-consuming. White's c4 pawn controls d5, and the d3 pawn challenges the chain base.",
       "plans": [
         "Maintain the solid pawn chain and use the space advantage",
@@ -413,7 +413,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We ask the bishop a critical question: stay or go? The a3 move forces Black's dark-squared bishop on b4 to make a definitive decision. If it retreats to c5 or a5, we've gained time and can proceed with our plan. If it takes on c3, we get the bishop pair in an open position — usually a significant advantage. This is a well-timed move because our position is already well-developed and we can afford to spend a tempo clarifying the situation.",
+      "annotation": "White plays a3, forcing the Bb4 to make a decision. This gains time and prepares b4 queenside expansion — a key English Opening plan.",
       "pawnStructure": "The a3 pawn gains space on the queenside and is a useful prophylactic move, preventing future ...Bb4 ideas.",
       "plans": [
         "Force the bishop to commit and potentially win the bishop pair",
@@ -444,7 +444,7 @@
     },
     {
       "san": "Bc5",
-      "annotation": "Black retreats the bishop to the active c5 square rather than exchanging on c3. This is a reasonable decision — the bishop on c5 aims at the vulnerable f2 square and stays in the game actively. However, Black has lost some time: the bishop moved from f8 to b4 and now to c5 — three tempi for a bishop development that could have been done in one. White has emerged from the opening with a comfortable position: solid fianchetto, flexible center, and the initiative.",
+      "annotation": "Black retreats Bc5, maintaining the bishop on an active diagonal targeting f2. From c5, the bishop stays in the game and avoids the exchange that would benefit White's pawn structure.",
       "pawnStructure": "Final main line structure: White has c4+d3+g3, Black has d6+e4. A rich strategic position with chances for both sides.",
       "plans": [
         "Keep the bishop actively placed on c5 targeting f2",

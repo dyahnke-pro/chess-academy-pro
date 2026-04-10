@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, immediately staking a claim in the center and opening the diagonal for the dark-squared bishop. Unlike 1.e4 which leads to sharp tactical play early, 1.d4 tends to produce more strategic, slower-building positions where understanding plans matters more than memorizing tactics.",
+      "annotation": "This is the Queen's Indian Defense, a sophisticated hypermodern opening where Black fianchettoes the queen's bishop to b7 to control the center from a distance. White plays 1.d4, claiming central space.",
       "pawnStructure": "Single central pawn on d4; White will typically support it with c4 to build the classical pawn center.",
       "plans": [
         "Follow up with c4 to control the center",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its ideal square, attacking the e4 square to prevent White from easily achieving e4. This is the most flexible response to 1.d4 because it keeps Black's options open — from here Black can steer into the King's Indian, Nimzo-Indian, Queen's Indian, or Gruenfeld depending on what White does next.",
+      "annotation": "Black develops the knight to f6, controlling e4 and d5. The Nf6 prevents an easy e4 and is the starting move of all Indian defenses — Black fights for the center with pieces before committing pawns.",
       "plans": [
         "Control e4 to limit White's central expansion",
         "Keep pawn structure flexible for multiple setups"
@@ -72,7 +72,7 @@
     },
     {
       "san": "c4",
-      "annotation": "White plays the Queen's Gambit advance, grabbing more central space and preparing to follow up with Nc3. The c4 pawn controls d5 and helps White fight for the center without committing the e-pawn yet. This is the bread and butter of 1.d4 play — almost every strong player plays c4 at some point.",
+      "annotation": "White plays c4, the Queen's Gambit advance. The c4 pawn grabs queenside space and prepares the e4 advance that Black's entire Indian setup aims to prevent.",
       "pawnStructure": "d4+c4 forms the classic Queen's Gambit pawn duo, exerting maximum pressure on d5 and e5.",
       "plans": [
         "Build a broad pawn center with e4 if allowed",
@@ -106,7 +106,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black signals the intention to enter an Indian Defense setup. By playing e6, Black solidifies control of d5 and prepares to develop the dark-squared bishop. This move is the gateway to the Queen's Indian — Black is saying 'I want to control the center with pieces rather than pawns, and I'm going to fianchetto my queen's bishop to b7.'",
+      "annotation": "Black plays e6, solidifying d5 control and preparing to develop pieces. The e6 pawn supports a future ...d5 and opens the f8-a3 diagonal for the bishop — but in the Queen's Indian, the key bishop goes to b7, not b4.",
       "pawnStructure": "The e6 pawn supports d5 but locks in the light-squared bishop behind the pawn chain, which is why Black will fianchetto it to b7.",
       "plans": [
         "Fianchetto the light-squared bishop to b7",
@@ -136,7 +136,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its best square, controlling e5 and d4 while preparing to castle kingside. By choosing Nf3 instead of Nc3, White avoids the Nimzo-Indian (where Black pins with Bb4) and keeps a flexible setup. This move order is specifically designed to steer the game toward the Queen's Indian territory.",
+      "annotation": "White develops the knight to f3 rather than Nc3. By choosing Nf3 over Nc3, White avoids the Nimzo-Indian pin (...Bb4) and enters Queen's Indian/Bogo-Indian territory. The Nf3 controls e5 and d4.",
       "plans": [
         "Avoid the Nimzo-Indian pin",
         "Prepare kingside fianchetto with g3"
@@ -160,7 +160,7 @@
     },
     {
       "san": "b6",
-      "annotation": "This is the defining move of the Queen's Indian Defense. Black prepares to fianchetto the bishop to b7, where it will exert tremendous pressure along the long diagonal aimed at White's kingside. The whole philosophy is simple: rather than contesting central control with pawns, Black uses the b7-bishop to snipe at the e4 square and keep White's center under control from a distance.",
+      "annotation": "Black plays b6, the defining move of the Queen's Indian Defense. The b6 pawn prepares to fianchetto the bishop to b7, where it will exert tremendous pressure along the a8-h1 diagonal — controlling e4 from a distance and fighting for the light squares.",
       "pawnStructure": "Black keeps a small, flexible pawn structure and relies on piece pressure rather than pawn occupation of the center.",
       "plans": [
         "Place bishop on b7 targeting e4 and the long diagonal",
@@ -190,7 +190,7 @@
     },
     {
       "san": "g3",
-      "annotation": "White mirrors Black's fianchetto strategy! By preparing Bg2, White fights fire with fire — placing a bishop on the same long diagonal to neutralize Black's b7-bishop. This is the mainline response because the Bg2 perfectly contests the a8-h1 diagonal. Think of it as two snipers on the same rooftop — whoever controls that diagonal controls the game.",
+      "annotation": "White mirrors Black's fianchetto with g3, fighting fire with fire. By placing a bishop on g2, White contests the same a8-h1 diagonal, creating a direct bishop duel that defines the Queen's Indian middlegame.",
       "pawnStructure": "The g3 pawn creates a solid kingside shelter for the king after O-O, forming a fianchetto fortress.",
       "plans": [
         "Fianchetto with Bg2 to contest the long diagonal",
@@ -216,7 +216,7 @@
     },
     {
       "san": "Bb7",
-      "annotation": "Black completes the fianchetto, placing the bishop on its dream diagonal. From b7, this bishop is a monster — it looks directly at e4, controls d5, and in many lines threatens all the way to g2 if White isn't careful. This is the heart and soul of the Queen's Indian: the b7-bishop is Black's best piece and drives the entire strategic plan.",
+      "annotation": "Black completes the fianchetto with Bb7, placing the bishop on its dream diagonal. From b7, the bishop is a monster — it pressures e4 directly, eyes d5, and controls the long diagonal from a8 to h1. This is the strategic foundation of Black's entire Queen's Indian setup.",
       "plans": [
         "Maintain long-term pressure on the long diagonal",
         "Support a future d5 or e4 break"
@@ -245,7 +245,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "White completes the fianchetto, and now the two bishops stare each other down on the a8-h1 diagonal. The Bg2 is critical because it not only contests the diagonal but also protects the king after castling. With both fianchettoes complete, the position becomes a strategic battle over central control — whoever can favorably resolve the tension on the long diagonal will have the advantage.",
+      "annotation": "White completes the fianchetto with Bg2, and now the two bishops face each other on the a8-h1 diagonal. The Bg2 defends e4, pressures d5, and fights the Bb7 for control of the critical light squares. This diagonal duel is the central strategic theme.",
       "plans": [
         "Castle kingside immediately",
         "Use the Bg2 to support e4 expansion later"
@@ -267,7 +267,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the dark-squared bishop to a modest but useful square. Be7 is the classical choice — it prepares castling and doesn't commit to an aggressive setup yet. The bishop on e7 supports the f6 knight and keeps the kingside solid. In the Queen's Indian, Black isn't trying to win with flashy piece play; it's about solidity and long-term pressure.",
+      "annotation": "Black develops the bishop to e7, the classical choice that prepares castling without creating any weaknesses. The Be7 is modest but functional — it supports d6, covers c5, and keeps Black's position solid and flexible.",
       "plans": [
         "Castle kingside quickly",
         "Keep the position flexible for a future d5 or c5 break"
@@ -287,7 +287,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles, tucking the king into safety behind the fianchetto structure. This is the most principled response — the king is perfectly safe on g1 with the g3-Bg2 setup providing a solid shelter. Now White can focus entirely on the middlegame plan of expanding in the center or on the queenside.",
+      "annotation": "White castles, getting the king safe behind the fianchetto pawn structure. The Rf1 supports a future f4 or e4 advance, and the king on g1 is well-protected by the g3-Bg2 formation.",
       "plans": [
         "Begin central expansion with Nc3 and e4",
         "Start queenside operations with b3 and Bb2 in some lines"
@@ -309,7 +309,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black mirrors White and castles kingside. Both kings are now safe, and the real strategic battle begins. The position is fully developed on the flanks, and the big question is: who will seize the center first? This symmetrical castling is typical of the Queen's Indian — it's a slow, maneuvering game.",
+      "annotation": "Black castles as well, and both sides are fully developed with kings safe. The position is symmetrical in structure but not in character — White has more central space, while Black has the actively placed Bb7 contesting the diagonal.",
       "plans": [
         "Prepare a central break with d5 or c5",
         "Look for Ne4 to activate the knight"
@@ -335,7 +335,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the last minor piece, reinforcing control of d5 and e4. The knight on c3 is essential for White's plan to push e4 and seize the center. This also adds another defender to the d5 square, making it harder for Black to equalize with a timely d5 break. Now White is ready to fight for the big pawn center.",
+      "annotation": "White develops Nc3, the last minor piece, reinforcing control of d5 and e4. The Nc3 is essential for White's plan to push e4 — the ideal central advance that would establish a dominant center and shut down the Bb7's diagonal.",
       "plans": [
         "Prepare e4 to claim the center",
         "Use the knight to support d5 control"
@@ -365,7 +365,7 @@
     },
     {
       "san": "Ne4",
-      "annotation": "This is Black's critical move in this line — the knight jumps to the center, challenging White's setup directly. Ne4 is powerful because it occupies a strong central square, attacks the c3 knight, and forces White to make a decision. If White trades on e4, Black's f-pawn recaptures and creates a strong pawn presence in the center. It's the classic Queen's Indian idea: use piece activity to counterbalance White's spatial advantage.",
+      "annotation": "Black jumps to Ne4, the critical central counter-strike. The Nf6 boldly occupies the e4 square, challenging White's setup directly. The Ne4 is powerful — it controls d2, c3, f2, and d6, and if White exchanges Nxe4, the Bb7 recaptures with devastating diagonal power.",
       "plans": [
         "Force a trade that opens the f-file or strengthens the center",
         "After Nxc3, follow up with f5 to lock down e4"
@@ -394,7 +394,7 @@
     },
     {
       "san": "Qc2",
-      "annotation": "White moves the queen to c2, preparing to recapture on c3 with the queen after the inevitable exchange. This is a subtle move — by recapturing with the queen instead of the b-pawn, White keeps the pawn structure intact and maintains a flexible center. The queen on c2 also eyes the h7 square long-term and keeps the b2 square available for the bishop.",
+      "annotation": "White plays Qc2, preparing to recapture on c3 with the queen after the inevitable exchange. The Qc2 is subtle — by putting the queen on c2, White ensures that after ...Nxc3 Qxc3, the pawn structure stays healthy.",
       "plans": [
         "Recapture on c3 with the queen to maintain pawn structure",
         "Keep the center flexible for a later e4 push"
@@ -419,7 +419,7 @@
     },
     {
       "san": "Nxc3",
-      "annotation": "Black trades the knight, which is the logical follow-up to Ne4. By exchanging on c3, Black eliminates one of White's central defenders and prepares to play f5, which will clamp down on the e4 square permanently. The trade also opens the c-file slightly, which could become relevant later for Black's rooks.",
+      "annotation": "Black exchanges Nxc3, the logical follow-up. By trading on c3, Black eliminates one of White's central defenders and forces a recapture decision that shapes the pawn structure.",
       "plans": [
         "Follow up with f5 to control e4",
         "Look for counterplay on the queenside or center"
@@ -441,7 +441,7 @@
     },
     {
       "san": "Qxc3",
-      "annotation": "White recaptures with the queen as planned. This keeps the pawn structure pristine — the b2 pawn stays on b2, the d4 pawn remains supported, and White maintains all options in the center. The queen on c3 is well-placed, controlling the diagonal and keeping an eye on both sides of the board. White's position is slightly more spacious, but Black has a very solid setup.",
+      "annotation": "White recaptures Qxc3, keeping the pawn structure pristine. The b2 pawn stays on b2, the d4 pawn remains solid, and the queen is actively placed on c3 controlling the c-file and the d4-a7 diagonal.",
       "pawnStructure": "White maintains the clean d4+c4 center; no doubled pawns or structural weaknesses.",
       "plans": [
         "Look for e4 or b3+Bb2 setups",
@@ -466,7 +466,7 @@
     },
     {
       "san": "f5",
-      "annotation": "The strategic point of Black's entire setup. By playing f5, Black locks down the e4 square forever — no White pawn will ever sit there. This is the dream scenario in the Queen's Indian: the b7-bishop controls the long diagonal, f5 seals e4, and Black has a rock-solid position. The downside is the slightly weakened kingside (the e6 and g6 squares), but the positional gains are worth it. This is a classic case of trading short-term king safety for long-term structural advantage.",
+      "annotation": "Black plays f5, the strategic masterstroke that defines the Queen's Indian endgame. By playing ...f5, Black permanently locks down the e4 square — no White pawn will ever sit there. The Bb7 becomes an absolute monster with e4 blocked, and Black's position is rock solid. This is the Queen's Indian's long-term strategic achievement.",
       "pawnStructure": "Black's e6+f5 chain locks the center and prevents White from achieving e4. The f5 pawn is the anchor of Black's central strategy.",
       "plans": [
         "Use the e4 square for a knight or bishop in the future",

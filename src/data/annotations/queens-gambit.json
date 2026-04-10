@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, immediately claiming central space and opening the diagonal for the dark-squared bishop. Unlike 1.e4, this move creates a solid pawn chain that's harder to undermine.",
+      "annotation": "This is the Queen's Gambit, one of the most fundamental openings in chess. White plays 1.d4, claiming the center and preparing the c4 advance that defines the Gambit.",
       "pawnStructure": "Single d4 pawn controls e5 and c5. White aims to expand with c4 next.",
       "plans": [
         "Follow up with c4 to build an ideal pawn center",
@@ -30,7 +30,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black fights for the center immediately by meeting d4 with d5. This is the most principled response — Black stakes an equal claim in the center and prevents White from getting a two-pawn ideal cente.",
+      "annotation": "Black responds with d5, matching White's central claim. The d5 pawn controls c4 and e4, establishing a direct fight for the center.",
       "pawnStructure": "Symmetrical d4 vs d5. The central tension will define the opening battle.",
       "plans": [
         "Maintain the d5 pawn and develop pieces naturally",
@@ -60,7 +60,7 @@
     },
     {
       "san": "c4",
-      "annotation": "This is the Queen's Gambit — White offers the c4 pawn to lure Black's d5 pawn away from the center. It's not a real gambit because Black can't hold the pawn comfortably.",
+      "annotation": "White plays c4, the Queen's Gambit. The c4 pawn challenges d5, offering a trade that would give White the ideal d4+e4 center. Despite the name, it's not a true gambit — White can always recover the pawn.",
       "pawnStructure": "White has pawns on d4 and c4, pressuring Black's d5 from the side.",
       "plans": [
         "If Black takes on c4, recapture or play e4 for a big center",
@@ -90,7 +90,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black declines the gambit and supports d5 solidly with e6. This is the Queen's Gambit Declined — the most classical and reliable response.",
+      "annotation": "Black plays e6, the Queen's Gambit Declined. The e6 pawn solidly supports d5, but locks in the light-squared bishop behind the pawn chain — a strategic problem Black must solve.",
       "pawnStructure": "Black's pawn chain d5-e6 is solid but passive. The c8 bishop is blocked.",
       "plans": [
         "Develop pieces and maintain the solid d5-e6 structure",
@@ -120,7 +120,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to its best square, adding another attacker to d5. Now the c4 pawn and the c3 knight both pressure d5, and Black has to decide how to handle this tension.",
+      "annotation": "White develops Nc3, adding pressure to d5 and controlling e4. The Nc3 is a key attacking piece aimed at Black's central bastion.",
       "pawnStructure": "White's c4+d4 vs Black's d5+e6. The pressure on d5 is mounting with two pieces and a pawn targetin.",
       "plans": [
         "Increase pressure on d5 and prepare cxd5 at the right moment",
@@ -147,7 +147,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its ideal square, defending d5 and controlling e4. This is standard developing chess — every piece should go to its best square.",
+      "annotation": "Black develops Nf6, defending d5 and controlling e4. The Nf6 is essential — it defends the center and develops toward castling.",
       "pawnStructure": "The d5-e6 chain remains solid. Black's minor pieces are developing naturally.",
       "plans": [
         "Continue development with ...Be7 and ...O-O",
@@ -174,7 +174,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "White captures on d5, entering the Exchange Variation of the QGD. This is a strategic decision — by exchanging pawns, White creates a symmetrical pawn structure but with a key advantage: the minorit.",
+      "annotation": "White captures cxd5, the Exchange Variation of the QGD. This exchange creates a symmetrical pawn structure with d4 vs d5, but White has a small advantage due to the more active piece placement and the ability to create the minority attack (b4-b5) or the central break (e4).",
       "pawnStructure": "After the exchange, White has a d4 pawn vs Black's e6.",
       "plans": [
         "Launch the minority attack with b4-b5 to create queenside weaknesses",
@@ -204,7 +204,7 @@
     },
     {
       "san": "exd5",
-      "annotation": "Black recaptures with the e-pawn, which is virtually forced. Taking with the knight would lose central presence. Now the pawn structure is symmetrical — both sides have a d-pawn supported by pieces.",
+      "annotation": "Black recaptures exd5, maintaining the central pawn and restoring symmetry. The d5 pawn is now a fixed target — White will try to undermine it while Black defends.",
       "pawnStructure": "Symmetrical d4 vs d5 with open e-file. Black's d5 pawn is the long-term target — it can become wea.",
       "plans": [
         "Develop the light bishop actively to f5 or g4 before White restricts it",
@@ -231,7 +231,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "White develops the bishop aggressively before blocking it in with e3. This is the most precise move order — you always want to develop the dark-squared bishop BEFORE playing e3, because e3 locks it.",
+      "annotation": "White plays Bg5, pinning the Nf6 to the queen. The Bg5 creates real strategic pressure — by threatening Bxf6, White can damage Black's pawn structure or force concessions.",
       "pawnStructure": "Symmetrical d4/d5. The bishop on g5 adds pressure to the kingside and the d5 pawn indirectly by ta.",
       "plans": [
         "Maintain the pin on f6 to pressure Black's d5 pawn",
@@ -258,7 +258,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop to e7, which is the most natural and solid response to the Bg5 pin. The bishop unpins the knight and prepares castling.",
+      "annotation": "Black develops Be7, breaking the pin solidly. The Be7 unpins the knight and prepares castling — the most classical and reliable response.",
       "pawnStructure": "Structure unchanged. Black is focused on completing development and getting the king to safety.",
       "plans": [
         "Castle kingside immediately",
@@ -288,7 +288,7 @@
     },
     {
       "san": "e3",
-      "annotation": "Now that the dark-squared bishop is already developed to g5, White plays e3 to solidify the d4 pawn and open the diagonal for the light-squared bishop.",
+      "annotation": "White plays e3, supporting d4 and opening the f1 diagonal. The e3 pawn creates a solid center and prepares Bd3 development.",
       "pawnStructure": "White's e3-d4 chain is very solid. The light-squared bishop will develop to d3, targeting the king.",
       "plans": [
         "Develop the light bishop to d3 aiming at h7",
@@ -315,7 +315,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, getting the king to safety and connecting the rooks. This is the right time to castle — the bishop is developed, the knight is on f6, and there's nothing more urgent.",
+      "annotation": "Black castles, getting the king safe. In the QGD Exchange, both sides castle quickly before the strategic battle over the pawn structure begins.",
       "pawnStructure": "Structure unchanged. The king is safe on g8 with the f7-g7-h7 pawn shield intact.",
       "plans": [
         "Develop the remaining minor pieces with ...Nbd7 and ...Re8",
@@ -342,7 +342,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "White places the bishop on its ideal diagonal, pointing straight at h7. The Bd3 is a monster in the Exchange QGD — it supports a potential kingside attack and eyes the h7 pawn, which is a classic ta.",
+      "annotation": "White develops Bd3, placing the bishop on the powerful b1-h7 diagonal. The Bd3 targets h7 and supports a potential e4 central advance — both key attacking ideas.",
       "pawnStructure": "White's e3-d4 provides a solid base for the bishop.",
       "plans": [
         "Play Qc2 to create the battery on the b1-h7 diagonal",
@@ -369,7 +369,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the last minor piece to d7, where it supports the knight on f6 and keeps options flexible.",
+      "annotation": "Black develops Nbd7, supporting the center with the knight. The Nd7 prepares ...c6 (reinforcing d5), ...Nf8 (regrouping), or ...c5 (challenging d4).",
       "pawnStructure": "Structure unchanged. Black is completing development before committing to a plan.",
       "plans": [
         "Play ...c6 to support d5 and create a solid queenside structure",
@@ -399,7 +399,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the kingside knight to its natural square, controlling e5 and preparing to castle. The knight on f3 is perfectly placed — it supports d4, eyes e5, and helps with kingside castling.",
+      "annotation": "White develops Nf3, completing minor piece development. The Nf3 controls d4 and e5, and White is ready to castle.",
       "pawnStructure": "Structure unchanged. White's setup is nearly complete — just needs to castle and start the minorit.",
       "plans": [
         "Castle kingside next to complete development",
@@ -426,7 +426,7 @@
     },
     {
       "san": "Re8",
-      "annotation": "Black places the rook on the semi-open e-file, which is the most logical square for it. The rook on e8 eyes the e3 pawn and supports a potential ...e5 break in the future.",
+      "annotation": "Black plays Re8, placing the rook on the open e-file. The Re8 supports a potential ...e5 break and contests the only open file in the position.",
       "pawnStructure": "Structure unchanged. The open e-file becomes a point of contention between both sides.",
       "plans": [
         "Prepare ...Nf8-e6 to challenge the bishop on g5",
@@ -453,7 +453,7 @@
     },
     {
       "san": "Qc2",
-      "annotation": "White completes the famous Bd3+Qc2 battery on the b1-h7 diagonal. This is one of the most important setups in the Exchange QGD.",
+      "annotation": "White plays Qc2, connecting the rooks and creating the b1-h7 battery with the Bd3. The Qc2 targets h7, supports e4, and prepares O-O with a complete, harmonious setup.",
       "pawnStructure": "Structure unchanged. The Bd3+Qc2 battery creates latent threats against Black's kingside.",
       "plans": [
         "Castle and then launch the minority attack with Rab1, a3, b4-b5",
@@ -480,7 +480,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays the critical move ...c6, solidifying the d5 pawn once and for all. This is Black's main defensive idea in the Exchange QGD — the c6 pawn makes d5 rock-solid and also prevents any Nb5 ideas.",
+      "annotation": "Black plays c6, reinforcing d5 and preparing to expand. The c6 pawn gives d5 extra support and prepares ...Nf8 or ...dxc4 followed by ...Nd5. The QGD Exchange middlegame is now a battle between White's minority attack (b4-b5) and Black's central solidity.",
       "pawnStructure": "Black has the c6-d5 pawn chain. This is very solid but slightly passive.",
       "plans": [
         "Hold the solid position and look for piece activity",

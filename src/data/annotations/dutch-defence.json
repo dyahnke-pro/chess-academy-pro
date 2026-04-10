@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, claiming central space. This solid first move supports the pawn with the queen immediately and prepares c4 for a broad center.",
+      "annotation": "This is the Dutch Defense, an aggressive response to 1.d4 where Black immediately fights for the e4 square. White plays 1.d4, claiming the center. The Dutch leads to unbalanced positions where Black gets kingside attacking chances but accepts some structural risk with the ...f5 pawn move.",
       "pawnStructure": "Single pawn on d4; White plans to expand with c4 and possibly e4.",
       "plans": [
         "Build a broad center with c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "f5",
-      "annotation": "The Dutch Defense — Black immediately fights for control of e4 with a pawn. This is an aggressive, unbalancing choice. Black says: I want to control e4 and attack on the kingside.",
+      "annotation": "Black plays 1...f5, the Dutch Defense. This bold move seizes control of the e4 square and signals aggressive intentions on the kingside. The cost: the kingside is slightly weakened (particularly the e8-h5 diagonal), and the f5 pawn commits Black to a specific plan early.",
       "pawnStructure": "Black's f5 controls e4 but weakens the king's position, especially the e8-h5 diagonal.",
       "plans": [
         "Control e4 and build a kingside attack",
@@ -52,7 +52,7 @@
     },
     {
       "san": "g3",
-      "annotation": "White chooses the Leningrad variation setup, fianchettoing the bishop to g2. This is the most positional and arguably strongest approach against the Dutch.",
+      "annotation": "White plays g3, entering the Leningrad Dutch system by preparing a fianchetto. The Bg2 will pressure the long diagonal and contest Black's control of e4. This is the most popular and strategically rich response to the Dutch.",
       "pawnStructure": "White prepares a fianchetto structure. The g3 pawn supports the bishop on g2.",
       "plans": [
         "Fianchetto to g2 and pressure the long diagonal",
@@ -71,7 +71,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its ideal square. The knight on f6 reinforces control of e4 — the key square in the Dutch — and prepares kingside development.",
+      "annotation": "Black develops Nf6, reinforcing control of e4 and preparing kingside development. The Nf6 is the cornerstone of Black's setup — it defends d5, attacks e4, and prepares the ...g6 fianchetto.",
       "pawnStructure": "No change; the knight supports Black's grip on e4.",
       "plans": [
         "Control e4 firmly",
@@ -96,7 +96,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "White completes the fianchetto. The bishop on g2 is a long-range sniper aimed at the center and queenside.",
+      "annotation": "Black plays g6, entering the Leningrad Variation of the Dutch. The bishop will fianchetto to g7, creating a setup similar to the King's Indian but with the f-pawn already advanced — giving Black a ready-made kingside pawn storm.",
       "pawnStructure": "Fianchetto complete; the bishop enhances White's control of the long diagonal.",
       "plans": [
         "Use the g2 bishop to pressure Black's light squares",
@@ -120,7 +120,7 @@
     },
     {
       "san": "g6",
-      "annotation": "This is the Leningrad Dutch — Black mirrors White's fianchetto. The idea is to put the bishop on g7, creating a formation that looks like a King's Indian but with the extra f5 pawn providing kingsid.",
+      "annotation": "White develops Nf3, controlling e5 and d4 while preparing to castle. The Nf3 is well-placed in the Leningrad Dutch — it supports the central structure and prepares to contest Black's kingside ambitions.",
       "pawnStructure": "Double fianchetto structure forming. Black's g6+f5 creates a unique pawn formation controlling bot.",
       "plans": [
         "Complete the fianchetto with Bg7",
@@ -139,7 +139,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its ideal square. The knight controls e5, which is a very important outpost in the Leningrad Dutch. If White can plant a piece on e5, it dominates the position.",
+      "annotation": "The bishop fianchettoes to g7, completing the Leningrad Dutch setup. The Bg7 controls the long a1-h8 diagonal, supports the ...e5 central break, and defends the kingside. Combined with ...f5, Black has a natural kingside attacking platform.",
       "plans": [
         "Castle quickly and control e5",
         "Play c4 to grab queenside space"
@@ -163,7 +163,7 @@
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto. The g7 bishop is a powerhouse on the long diagonal, controlling d4 and supporting potential breaks like e5 or c5.",
+      "annotation": "White castles, getting the king safe behind the g3+Bg2 structure. The Rf1 supports a potential f3 or f4 advance, and the king on g1 is well-protected.",
       "pawnStructure": "Both sides have fianchettoed. The position is symmetrical in structure but asymmetric in plans.",
       "plans": [
         "Use the g7 bishop to support central and queenside breaks",
@@ -187,7 +187,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles kingside, getting the king safe and connecting the rooks. This is the natural choice in the fianchetto system — the king is well-sheltered behind the g3-Bg2 fortress.",
+      "annotation": "Black castles, completing the kingside setup. The Rf8 supports the f5 pawn and prepares to join any kingside attack via the f-file.",
       "plans": [
         "Play c4 and d5 to seize space",
         "Develop the queenside and fight for the center"
@@ -204,7 +204,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles too, and now both kings are committed to the kingside. This creates an interesting dynamic — Black wants to attack on the kingside where both kings live, which is risky but thrilling.",
+      "annotation": "White plays c4, establishing the full d4+c4 central presence. The c4 pawn controls d5 and b5, grabbing space and preparing to expand. This is the standard setup against the Leningrad Dutch.",
       "plans": [
         "Launch a kingside attack with moves like Qe8-h5, g5, and f4",
         "Keep the center stable while attacking"
@@ -227,7 +227,7 @@
     },
     {
       "san": "c4",
-      "annotation": "White plays c4, grabbing space on the queenside and preparing to advance with d5. This is the standard plan — White wants to play d5, locking in the center and gaining a space advantage.",
+      "annotation": "Black plays d6, supporting the e5 square and creating a solid central formation. The d6 pawn prevents e5 from White and opens the c8-h3 diagonal for the bishop's development.",
       "pawnStructure": "White's c4+d4 form a strong central duo. White aims for d5 to lock the center.",
       "plans": [
         "Push d5 to gain space and lock the center",
@@ -252,7 +252,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays d6, a crucial supporting move. This pawn controls e5 and prepares the thematic e5 advance, which is the most important pawn break in the Leningrad Dutch.",
+      "annotation": "White develops Nc3, reinforcing the center and preparing to contest e4. The Nc3 controls d5 and e4 — the two squares Black is fighting for.",
       "pawnStructure": "Black's d6+f5 form the Leningrad pawn structure, preparing the central e5 break.",
       "plans": [
         "Prepare and execute e5 to challenge the center",
@@ -277,7 +277,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, supporting the d5 advance and controlling e4. The knight is on its optimal square for this structure — it reinforces the center and can jump to d5 if the center opens.",
+      "annotation": "Black plays Qe8, a typical Leningrad Dutch maneuver. The queen moves off the d-file (avoiding potential discoveries) and heads for the kingside via Qe8-g6 or Qe8-f7, where it supports the ...e5 break and potential kingside attacking ideas.",
       "plans": [
         "Push d5 to gain a spatial advantage",
         "Maneuver pieces to support queenside play"
@@ -300,7 +300,7 @@
     },
     {
       "san": "Qe8",
-      "annotation": "A very typical Leningrad move that looks strange but is incredibly purposeful. The queen moves to e8 to reroute to h5 for a kingside attack.",
+      "annotation": "White pushes d5, closing the center. This commits to a Benoni-type structure where White attacks on the queenside and Black on the kingside. The locked center allows both sides to pursue their flank operations freely.",
       "plans": [
         "Reroute the queen to h5 for kingside pressure",
         "Support a kingside pawn storm with g5 and f4"
@@ -324,7 +324,7 @@
     },
     {
       "san": "d5",
-      "annotation": "White locks the center with d5. This is a committal but strong decision — it gains space and restricts Black's pieces, especially the g7 bishop which is now biting on the d5 pawn.",
+      "annotation": "Black plays Na6, heading for the c5 outpost. In the Leningrad Dutch with a closed center, the knight maneuvers via a6 to c5 where it pressures e4, controls d3, and supports the ...e5 break.",
       "pawnStructure": "Closed center with d5 vs d6. White has queenside space advantage; Black has kingside attacking cha.",
       "plans": [
         "Expand on the queenside with a4, b4",
@@ -349,7 +349,7 @@
     },
     {
       "san": "Na6",
-      "annotation": "The knight goes to a6 — an unusual square, but this is a well-known Leningrad maneuver. The knight is heading to c5 via a6, where it will be a monster outpost attacking e4, d3, and a4.",
+      "annotation": "White plays Rb1, preparing the b4 queenside advance. The rook supports b4-b5, which is White's main plan in the closed Leningrad Dutch — expanding on the queenside while Black attacks on the kingside.",
       "pawnStructure": "No change; the knight maneuver targets the c5 outpost.",
       "plans": [
         "Reroute the knight to c5 — a dominant outpost",
@@ -374,7 +374,7 @@
     },
     {
       "san": "Rb1",
-      "annotation": "White plays Rb1, preparing the thematic b4 advance. This is the standard queenside plan in the Leningrad Dutch — White pushes b4, then b5, trying to create a passed pawn or open lines against Black'.",
+      "annotation": "The knight reaches c5, the ideal outpost in the Dutch. The Nc5 pressures e4 and d3, can't easily be dislodged, and supports Black's central and kingside plans. This is the key positional achievement for Black.",
       "plans": [
         "Push b4-b5 to open the queenside",
         "Create a passed pawn on the b-file"
@@ -397,7 +397,7 @@
     },
     {
       "san": "Nc5",
-      "annotation": "The knight arrives on c5, the dream square. From here it attacks e4, d3, b3, and a4 — it's incredibly well-placed.",
+      "annotation": "White plays b3, supporting c4 and preparing Bb2 or Ba3. The b3 pawn solidifies the queenside structure and prepares the bishop's development.",
       "pawnStructure": "No change; the knight on c5 is a dominant piece pressuring White's queenside and center.",
       "plans": [
         "Use the powerful c5 knight as a permanent outpost",
@@ -427,7 +427,7 @@
     },
     {
       "san": "b3",
-      "annotation": "White plays b3, solidifying the c4 pawn and preparing to develop the dark-squared bishop. The pawn on b3 prevents any Nc5-a4 or Nb3 tricks and keeps the queenside structure solid.",
+      "annotation": "Black plays a5, preventing White's b4 queenside expansion and fixing the pawn structure. The a5 pawn stops b4 dead and gives Black's knight a permanent home on c5.",
       "plans": [
         "Develop the bishop to b2 or a3",
         "Continue queenside expansion with a4 and b4"
@@ -450,7 +450,7 @@
     },
     {
       "san": "a5",
-      "annotation": "Black plays a5, preventing White's b4 advance and securing the c5 knight's position.",
+      "annotation": "White plays b3, completing the queenside setup and maintaining the solid pawn chain. The game is now a strategic battle — White looks for c5 or Nd4 ideas, while Black prepares ...e5 or a direct kingside attack with ...g5-f4.",
       "pawnStructure": "Black's a5 fixes White's queenside pawns and prevents b4, securing the c5 outpost permanently.",
       "plans": [
         "Secure the knight on c5 and shift focus to kingside",

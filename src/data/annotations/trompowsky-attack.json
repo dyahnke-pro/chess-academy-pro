@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, staking a claim in the center and keeping all options open.",
+      "annotation": "This is the Trompowsky Attack, an aggressive system where White develops the bishop to g5 on move 2, avoiding the main lines of the Queen's Gambit. White plays 1.d4, claiming the center.",
       "pawnStructure": "A single central pawn on d4 controls e5 and c5. White keeps the c-pawn and e-pawn flexible for now.",
       "plans": [
         "Follow up with Bg5 to enter the Trompowsky Attack",
@@ -25,7 +25,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its ideal square, attacking the e4 square and preparing kingside development.",
+      "annotation": "Black develops Nf6, the most common response to 1.d4. The Nf6 controls e4 and d5 — but in the Trompowsky, this knight becomes an immediate target.",
       "plans": [
         "Control e4 and prepare ...d5 or ...g6",
         "Develop naturally toward kingside castling"
@@ -51,7 +51,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "The Trompowsky Attack! White develops the bishop to g5 before playing Nf3, immediately putting pressure on the f6 knight.",
+      "annotation": "White plays Bg5, the Trompowsky Attack. The bishop pins the Nf6 to the queen, creating immediate tactical pressure. This is the defining move — White avoids 2.c4 (Queen's Gambit) and creates an early imbalance.",
       "pawnStructure": "The pawn structure is still fluid. White's plan with Bg5 is to provoke structural weaknesses in Bl.",
       "plans": [
         "Pressure the f6 knight — trade it to double Black's pawns, or force it to move",
@@ -81,7 +81,7 @@
     },
     {
       "san": "Ne4",
-      "annotation": "Black counterattacks the bishop immediately by advancing the knight to e4. This is one of the most principled responses — rather than passively defending, Black forces the bishop to make a decision.",
+      "annotation": "Black plays Ne4, the most popular and aggressive response. The knight attacks the Bg5 directly, forcing the bishop to declare its intentions. After Bf4, Black has gained time and the knight is actively placed.",
       "plans": [
         "Challenge the Bg5 directly and force it to retreat or clarify",
         "Gain time and prepare ...d5 with a solid center"
@@ -110,7 +110,7 @@
     },
     {
       "san": "Bf4",
-      "annotation": "White retreats the bishop to f4, maintaining it on a strong diagonal where it eyes the b8-h2 line. From f4 the bishop supports e3 and keeps pressure on the c7 and d6 squares.",
+      "annotation": "White retreats Bf4, maintaining the bishop on an active diagonal. The Bf4 controls e5, eyes the b8-h2 diagonal, and keeps the piece in play rather than exchanging it.",
       "pawnStructure": "No pawn changes yet. White is content to develop pieces before committing the pawn structure.",
       "plans": [
         "Keep the bishop active on the b8-h2 diagonal",
@@ -140,7 +140,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black establishes a strong central pawn on d5, claiming space and providing a solid foundation. The pawn on e4 is now well-supported by the d5 pawn.",
+      "annotation": "Black plays d5, claiming the center. With the knight on e4 and the pawn on d5, Black has a strong central presence. The d5 pawn controls c4 and e4, establishing a solid foundation.",
       "pawnStructure": "Black's d5 pawn forms a solid central anchor.",
       "plans": [
         "Anchor the center with ...d5 and develop naturally",
@@ -167,7 +167,7 @@
     },
     {
       "san": "e3",
-      "annotation": "White plays a solid, restrained move with e3, supporting the d4 pawn and opening the diagonal for the light-squared bishop.",
+      "annotation": "White plays e3, opening the f1-a6 diagonal for the bishop and supporting d4. The e3 pawn creates a flexible structure that can later become e4 if White wants to open the center.",
       "pawnStructure": "White's e3-d4 pawn chain is sturdy but modest.",
       "plans": [
         "Develop Bd3 aiming at the kingside",
@@ -194,7 +194,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black immediately strikes at White's center with ...c5, the most active plan. This challenges the d4 pawn and fights for central space. If White captures, Black recaptures with good piece activity.",
+      "annotation": "Black plays c5, striking at d4 immediately. The c5 pawn challenges White's center and creates counterplay — if dxc5, the position opens; if d5, the center closes.",
       "pawnStructure": "The c5 pawn challenges d4, creating central tension.",
       "plans": [
         "Challenge d4 and open lines for piece development",
@@ -221,7 +221,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "White develops the bishop to its ideal square, targeting the h7 pawn and the kingside in general.",
+      "annotation": "White develops Bd3, targeting the Ne4 and preparing to challenge it. The Bd3 eyes h7 and supports the center. If the Ne4 exchanges, the Bd3 becomes a powerful attacking piece.",
       "pawnStructure": "White maintains the d4-e3 chain and lets Black decide how to resolve the central tension.",
       "plans": [
         "Aim the bishop at h7 for future kingside attacks",
@@ -248,7 +248,7 @@
     },
     {
       "san": "Nd6",
-      "annotation": "Black reroutes the knight from e4 to d6, where it defends the f5 square and prepares to reroute to f5 — an excellent outpost. The knight on d6 is temporarily awkward but has a clear destination.",
+      "annotation": "Black plays Nd6, retreating the knight to a solid square that supports both e4 and c4. The Nd6 also eyes e4 and f5, staying active despite the retreat.",
       "plans": [
         "Reroute the knight to f5, a powerful outpost",
         "Support the center from d6 and prepare ...Be7 and castling"
@@ -274,7 +274,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its best square, controlling e5 and d4 while preparing to castle. The Nf3 also supports the d4 pawn, which is under pressure from Black's c5.",
+      "annotation": "White develops Nf3, completing kingside development and supporting d4. The Nf3 controls e5 and prepares to castle.",
       "pawnStructure": "The central tension between d4 and c5 remains.",
       "plans": [
         "Castle kingside quickly to safeguard the king",
@@ -301,7 +301,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the second knight to c6, adding pressure on the d4 pawn and preparing to complete kingside development.",
+      "annotation": "Black develops Nc6, adding pressure to d4 and developing the last queenside piece. The Nc6 eyes d4 and e5, creating tactical possibilities.",
       "plans": [
         "Increase pressure on d4 alongside the c5 pawn",
         "Prepare ...Be7 and ...O-O to complete development"
@@ -327,7 +327,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles kingside, getting the king to safety and connecting the rooks. This is an important moment — with pieces well-developed (Bd3, Bf4, Nf3), White can now focus on middlegame plans.",
+      "annotation": "White castles, getting the king safe. The Rf1 supports a future f3 or e4 advance.",
       "plans": [
         "Begin middlegame operations with c3 to solidify the center",
         "Place rooks on e1 and/or d1 for central pressure"
@@ -353,7 +353,7 @@
     },
     {
       "san": "Nf5",
-      "annotation": "Black completes the knight maneuver Ne4-d6-f5, landing on a superb outpost. The knight on f5 is beautifully centralized, pressuring d4 and e3, and it cannot easily be driven away by pawns.",
+      "annotation": "Black plays Nf5, rerouting the knight to the active f5 square. The Nf5 attacks d4 and e3, eyes g3 and h4, and is a strong outpost that puts pressure on White's center.",
       "pawnStructure": "The pawn structure remains in tension. The Nf5 puts additional indirect pressure on e3 and d4, mak.",
       "plans": [
         "Use the Nf5 as a permanent outpost to pressure White's center",
@@ -380,7 +380,7 @@
     },
     {
       "san": "c3",
-      "annotation": "White reinforces the d4 pawn with c3, creating a rock-solid center. This is an essential positional move — with Black's pieces bearing down on d4, White needs this extra support.",
+      "annotation": "White plays c3, reinforcing d4 and creating a solid pawn triangle. The c3 pawn ensures d4 is rock-solid and prepares potential Qe2 and e4 advances.",
       "pawnStructure": "White now has a c3-d4-e3 pawn chain, extremely solid and hard to break down.",
       "plans": [
         "Solidify the center completely",
@@ -410,7 +410,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays ...e6, solidifying the d5 pawn and preparing to develop the dark-squared bishop to e7. The pawn on e6 also supports the Nf5 indirectly by controlling d5.",
+      "annotation": "Black plays e6, solidifying the center and completing the pawn structure. The e6 pawn supports d5, opens the Bf8's diagonal, and creates a flexible setup.",
       "pawnStructure": "Black's d5-e6 pawn chain is solid and controls the center well.",
       "plans": [
         "Develop ...Be7 and castle kingside",
@@ -432,7 +432,7 @@
     },
     {
       "san": "Nbd2",
-      "annotation": "White develops the knight to d2, the only route available since c3 blocks Nc3. From d2 the knight supports the center and can reroute to e5 via f3 (if the other knight moves) or push e4 by supportin.",
+      "annotation": "White develops Nbd2, supporting e4 and keeping the c-file clear. The Nd2 can reroute to e4 or c4 depending on the position.",
       "pawnStructure": "The c3-d4-e3 chain is fully supported. White's pieces are harmoniously placed behind the center.",
       "plans": [
         "Prepare e4 to open the center when the time is right",
@@ -459,7 +459,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop to e7, a modest but practical square. The bishop supports kingside castling and keeps the position flexible.",
+      "annotation": "Black develops Be7, preparing to castle and completing the kingside minor pieces. The Be7 is modest but functional.",
       "plans": [
         "Castle kingside immediately",
         "Keep the position solid and look for a favorable moment to strike"
@@ -480,7 +480,7 @@
     },
     {
       "san": "Qc2",
-      "annotation": "White places the queen on c2, a multi-purpose square. The queen supports a future e4 break, adds pressure along the c-file, and connects to the Bd3 to create a battery aimed at h7.",
+      "annotation": "White plays Qc2, connecting the rooks and preparing the e3-e4 advance. The Qc2 also eyes h7, creating the familiar b1-h7 battery with the Bd3.",
       "pawnStructure": "No structural change. White is building up piece pressure before committing to pawn breaks.",
       "plans": [
         "Create the Qc2 + Bd3 battery targeting h7 after Black castles",
@@ -507,7 +507,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, completing development and getting the king to safety. Both sides have now castled and the middlegame battle begins.",
+      "annotation": "Black castles, getting the king safe. The Trompowsky middlegame is now set — White aims for e4 to open the center, while Black has a solid structure with active piece placement.",
       "pawnStructure": "The central tension (c5 vs d4) and the pawn chains (c3-d4-e3 for White, d5-e6 for Black) define th.",
       "plans": [
         "Seek counterplay with ...b5 or ...a5 on the queenside",

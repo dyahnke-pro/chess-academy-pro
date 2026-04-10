@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, immediately staking a claim in the center and opening the diagonal for the dark-squared bishop.",
+      "annotation": "This is the Nimzo-Indian Defense, one of the most respected and strategically rich openings in chess. White plays 1.d4, claiming the center. The Nimzo-Indian's core idea is to pin the Nc3 with ...Bb4, preventing White from achieving the ideal e4 center — a philosophy championed by Aron Nimzowitsch.",
       "pawnStructure": "Single central pawn on d4; White aims to follow up with c4 for the ideal pawn center.",
       "plans": [
         "Follow up with c4 to build a broad pawn center",
@@ -33,7 +33,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its ideal square, controlling e4 and d5. This is the hallmark of the Indian defenses — Black refuses to immediately commit pawns to the center, instead developing.",
+      "annotation": "Black develops the knight to f6, controlling e4 and d5. This is the hallmark of the Indian defenses — Black fights for the center with pieces rather than pawns, keeping the position flexible.",
       "pawnStructure": "No pawn commitments yet for Black; maximum flexibility retained.",
       "plans": [
         "Control e4 to prevent White from playing e4 freely",
@@ -63,7 +63,7 @@
     },
     {
       "san": "c4",
-      "annotation": "White plays c4, the Queen's Gambit move, grabbing more space and aiming for the ideal d4+e4 pawn center. Together d4 and c4 control the critical d5 and e5 squares.",
+      "annotation": "White plays c4, the Queen's Gambit advance, grabbing more space and preparing the e4 center. Together d4 and c4 control d5, e5, c5, and b5.",
       "pawnStructure": "White pawns on c4 and d4 form the classic broad center. The c4 pawn eyes d5.",
       "plans": [
         "Build the full center with e4 if allowed",
@@ -93,7 +93,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays e6, preparing to develop the dark-squared bishop while maintaining control of d5.",
+      "annotation": "Black plays e6, preparing to develop the dark-squared bishop to b4 — the defining move of the Nimzo-Indian. The e6 pawn supports d5 and opens the f8-a3 diagonal for the bishop's pin.",
       "pawnStructure": "Black's e6 pawn supports a future d5 push and creates a solid but slightly cramped structure.",
       "plans": [
         "Develop Bb4 pinning the knight if Nc3 is played",
@@ -123,7 +123,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, the ideal square, defending e4 and pressuring d5.",
+      "annotation": "White develops the knight to c3, which is the trigger for the Nimzo-Indian. The Nc3 supports e4, controls d5, but it also gives Black the target to pin — and this pin is what the Nimzo-Indian is all about.",
       "pawnStructure": "No change; the knight supports a future e4 advance.",
       "plans": [
         "Support e4 to build the ideal center",
@@ -153,7 +153,7 @@
     },
     {
       "san": "Bb4",
-      "annotation": "This is the defining move of the Nimzo-Indian Defense. Black pins the c3 knight to the king, which means White can't easily play e4.",
+      "annotation": "Black plays Bb4, the defining move of the Nimzo-Indian Defense. The bishop pins the Nc3 to the king, which means White CANNOT play e4 without first dealing with the pin. This is the Nimzo's central idea: Black controls e4 not with a pawn but with a pin, maintaining flexibility for any central setup.",
       "pawnStructure": "Still flexible for Black; no central pawn committed yet beyond e6.",
       "plans": [
         "Maintain the pin to prevent e4",
@@ -183,7 +183,7 @@
     },
     {
       "san": "Qc2",
-      "annotation": "The Classical variation — White places the queen on c2 for several reasons. First, it prevents Black from doubling White's pawns with Bxc3. Second, the queen supports a future e4 push.",
+      "annotation": "White plays Qc2, the Classical Variation. The queen on c2 prevents Black from doubling White's pawns with ...Bxc3+ (the queen recaptures), eyes the h7 square for future attacking chances, and keeps the pawn structure clean.",
       "pawnStructure": "White preserves the option of a clean pawn structure by discouraging Bxc3+.",
       "plans": [
         "Push e4 with queen support",
@@ -213,7 +213,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles, getting the king to safety before deciding on the central pawn structure. This is a very principled approach — you don't want to be caught in the center when the position opens up.",
+      "annotation": "Black castles immediately, prioritizing king safety before committing to a central pawn structure. This is the principled approach — get the king safe, then decide whether to play ...d5, ...c5, or ...d6 based on White's setup.",
       "plans": [
         "Prepare central action with d5 or c5",
         "Complete development and connect rooks"
@@ -242,7 +242,7 @@
     },
     {
       "san": "a3",
-      "annotation": "White finally asks the question: what are you going to do with that bishop? The bishop on b4 has to make a decision.",
+      "annotation": "White plays a3, the critical moment where White asks the Bb4: what are you going to do? The bishop must decide between retreating (passive), exchanging on c3 (giving up the bishop pair), or jumping to a5 (keeping tension). This defines the rest of the game.",
       "pawnStructure": "The a3 pawn prepares a potential b4 advance and gains the bishop pair.",
       "plans": [
         "Win the bishop pair after Bxc3",
@@ -272,7 +272,7 @@
     },
     {
       "san": "Bxc3+",
-      "annotation": "Black takes on c3, giving White doubled pawns. This is the fundamental trade-off of the Nimzo-Indian — Black gives up the bishop pair, but in return White's pawn structure is damaged and the doubled.",
+      "annotation": "Black captures Bxc3+, the most common and principled response. Black gives up the dark-squared bishop but saddles White with doubled c-pawns — a permanent structural weakness. The trade-off is fundamental to the Nimzo-Indian: Black's bishop pair for White's damaged pawns.",
       "pawnStructure": "After Qxc3, White will have doubled c-pawns (c3 and c4), which are a structural weakness but also.",
       "plans": [
         "Target the doubled c-pawns in the endgame",
@@ -297,7 +297,7 @@
     },
     {
       "san": "Qxc3",
-      "annotation": "White recaptures with the queen rather than the b-pawn. Taking with the queen keeps the c-file pawn structure cleaner — well, relatively — and places the queen actively on c3 where it eyes the kings.",
+      "annotation": "White recaptures Qxc3, choosing the queen over the b-pawn. Taking with the queen keeps the c-file pawn structure relatively clean and maintains the queen's central influence. The doubled c-pawns after bxc3 would control d4 but create a lasting weakness.",
       "pawnStructure": "White has pawns on a3 and c4 on the queenside; the doubled pawns are avoided but the c3 queen may.",
       "plans": [
         "Develop rapidly and push e4",
@@ -327,7 +327,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Now Black strikes in the center with d5. The timing is perfect — White spent time with Qc2, a3, and Qxc3, so Black has completed development and castled.",
+      "annotation": "Black strikes with d5, the ideal central counter-break timed perfectly. White spent time with Qc2, a3, and Qxc3, giving Black time to complete development and choose the perfect moment to challenge the center. The d5 pawn attacks c4 and establishes Black's central presence.",
       "pawnStructure": "Black establishes a strong pawn on d5 challenging White's c4.",
       "plans": [
         "Exchange on c4 and target the isolated or hanging pawns",
@@ -357,7 +357,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its natural square, preparing to castle and supporting the center. The knight on f3 is solid — it controls e5 and d4, and helps White complete kingside development.",
+      "annotation": "White develops the knight to f3, completing minor piece development and supporting the center. The Nf3 controls d4, e5, and g5, and prepares kingside castling.",
       "plans": [
         "Castle kingside and complete development",
         "Decide on central pawn tension — take on d5 or play e3"
@@ -386,7 +386,7 @@
     },
     {
       "san": "dxc4",
-      "annotation": "Black takes on c4, resolving the central tension in a very concrete way. This isn't about winning a pawn — White will get it back — it's about opening the position and creating targets.",
+      "annotation": "Black captures dxc4, releasing the central tension with precise timing. With the knight developed and the queen on c3, this exchange opens the position at a moment when Black's pieces are ready to exploit the activity.",
       "pawnStructure": "The center is now open. White will recapture on c4, leading to a position where piece activity mat.",
       "plans": [
         "Develop the light-squared bishop actively to a6 or b7",
@@ -416,7 +416,7 @@
     },
     {
       "san": "Qxc4",
-      "annotation": "White recaptures the pawn with the queen. The queen on c4 is active but potentially exposed — Black can gain tempi by attacking it.",
+      "annotation": "White recaptures Qxc4, placing the queen on an active central square. The Qc4 pressures a6, eyes e6, and maintains central influence — but it's also somewhat exposed and can be attacked with tempo.",
       "pawnStructure": "Symmetric center with d4 vs. nothing — White has the central pawn majority potential with e4.",
       "plans": [
         "Push e4 to seize the center",
@@ -441,7 +441,7 @@
     },
     {
       "san": "b6",
-      "annotation": "Black prepares to fianchetto the light-squared bishop or develop it to a6. The move b6 is multipurpose — it supports c5 to hit the d4 pawn, and the long diagonal b7-g2 can be very powerful if the bi.",
+      "annotation": "Black plays b6, preparing to develop the light-squared bishop. The b6 move supports ...c5 (challenging d4), prepares ...Bb7 or ...Ba6 (developing with tempo against the Qc4), and is a multipurpose move typical of the Nimzo-Indian.",
       "pawnStructure": "Black's b6 prepares a queenside fianchetto and supports the c5 break.",
       "plans": [
         "Develop the bishop to a6 attacking the c4 queen",
@@ -466,7 +466,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "White develops the bishop aggressively, pinning the f6 knight against the queen. This is a very active square for the bishop — it creates real pressure on the kingside and makes Black think carefull.",
+      "annotation": "White plays Bg5, developing the bishop to an aggressive square that pins the Nf6 to the queen. The Bg5 creates immediate pressure — the Nf6 is restricted, and White threatens Bxf6 to damage Black's kingside pawn structure.",
       "plans": [
         "Maintain pressure on f6 and the kingside",
         "Use the pin to support e4"
@@ -495,7 +495,7 @@
     },
     {
       "san": "Ba6",
-      "annotation": "Black develops the bishop to a6 with tempo, attacking the queen on c4. This is the whole point of the b6 + Ba6 setup in the Nimzo-Indian — the bishop is very active on a6, hitting c4 and e2, and it'.",
+      "annotation": "Black develops the bishop to a6, attacking the Qc4 with tempo. This is the signature Nimzo-Indian idea with ...b6+Ba6 — the bishop develops to an active square while forcing the queen to move, gaining time for Black's development.",
       "plans": [
         "Harass the White queen and slow down White's development",
         "Prepare c5 to complete the queenside pawn structure"
@@ -524,7 +524,7 @@
     },
     {
       "san": "Qa4",
-      "annotation": "The queen retreats to a4, getting out of the bishop's line while maintaining some activity. From a4, the queen eyes the a-file and keeps some pressure on the queenside.",
+      "annotation": "The queen retreats to a4, getting out of the Ba6's line while maintaining some activity. From a4, the queen eyes the a-file and the d7 square, though it's slightly offside compared to the central c4 square.",
       "plans": [
         "Regroup and push e4 to seize the center",
         "Potentially reroute the queen to a better square later"
@@ -548,7 +548,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at d4, the key break in the Nimzo-Indian. This move challenges White's central pawn and opens the position for Black's pieces.",
+      "annotation": "Black strikes with c5, the key central break in the Nimzo-Indian. The c5 pawn challenges White's d4 and opens the position for Black's active pieces — the Bb7/Ba6, the Nf6, and the rooks on the c-file and d-file.",
       "pawnStructure": "Black's c5 challenges the d4 pawn, creating central tension.",
       "plans": [
         "Increase central pressure after the pawn exchange",

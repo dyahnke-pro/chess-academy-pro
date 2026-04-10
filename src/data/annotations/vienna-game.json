@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White grabs central space and opens diagonals for the queen and bishop. The king's pawn is the most popular first move in chess, leading to open tactical positions.",
+      "annotation": "This is the Vienna Game, a flexible opening where White develops Nc3 before Nf3, keeping options open for an f4 advance. White plays 1.e4, claiming the center. The Vienna can lead to quiet positional play or sharp gambit lines depending on White's mood.",
       "plans": [
         "Control the center",
         "Develop pieces rapidly toward the kingside"
@@ -26,7 +26,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black matches White's central claim, creating a symmetrical pawn center. This commits both sides to an open game where piece activity and tactical awareness are paramount.",
+      "annotation": "Black responds with e5, creating the Open Game. The e5 pawn claims central space and opens diagonals for piece development.",
       "plans": [
         "Maintain central parity",
         "Develop pieces actively"
@@ -49,7 +49,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "The Vienna Game! Instead of the usual Nf3, White develops the queenside knight first.",
+      "annotation": "White plays Nc3, the Vienna Game's defining move. Rather than the standard Nf3, White develops the queen's knight first. The Nc3 supports e4, controls d5, and keeps the f-pawn free for a potential f4 advance (Vienna Gambit) or f3 to reinforce the center.",
       "plans": [
         "Prepare f4 to attack the center with a pawn storm",
         "Keep options open for Bc4, Nf3, or even g3 setups"
@@ -72,7 +72,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, immediately pressuring e4. By attacking the center pawn, Black forces White to decide how to defend it.",
+      "annotation": "Black develops Nf6, attacking e4 and developing naturally. The Nf6 creates immediate central pressure — White must decide between defending e4, pushing e5, or playing f4 (the gambit).",
       "plans": [
         "Pressure e4 to restrict White's options",
         "Develop rapidly with Bc5 or Bb4"
@@ -96,7 +96,7 @@
     },
     {
       "san": "Bc4",
-      "annotation": "White develops the bishop to its most aggressive diagonal, targeting the f7 weakness. Combined with Nc3 supporting e4, this creates a harmonious setup.",
+      "annotation": "White develops Bc4, targeting the f7 square and creating the Vienna-Italian hybrid setup. The Bc4 is the positional choice — aiming at f7 while keeping the f-pawn flexible for later.",
       "plans": [
         "Target the f7 pawn",
         "Build a strong center with d3 and prepare Nf3"
@@ -125,7 +125,7 @@
     },
     {
       "san": "Bc5",
-      "annotation": "Black mirrors the bishop development to a strong diagonal, targeting f2 — White's weakest point before castling.",
+      "annotation": "Black responds Bc5, mirroring the Italian Game setup. The Bc5 targets f2 and creates mutual pressure along the a7-g1/a2-g8 diagonals.",
       "plans": [
         "Pressure f2 to discourage f4",
         "Castle quickly and fight for central control"
@@ -149,7 +149,7 @@
     },
     {
       "san": "d3",
-      "annotation": "White solidifies the e4 pawn and opens the diagonal for the c1 bishop. The modest d3 (rather than d4) is typical of the Vienna — White builds a solid center first and keeps the tension.",
+      "annotation": "White plays d3, supporting e4 and opening the c1-h6 diagonal. The d3 approach is the quiet Vienna — White builds up slowly with Be3, Nf3, and O-O before committing to a specific plan.",
       "pawnStructure": "The e4-d3 pawn duo creates a solid but flexible center.",
       "plans": [
         "Complete kingside development with Nf3 and O-O",
@@ -173,7 +173,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles immediately, tucking the king to safety and activating the rook. Castling early in an open position is almost always correct — the king on e8 would be vulnerable to tactics on the e-fi.",
+      "annotation": "Black castles, getting the king safe immediately. In the Vienna, early castling is practical — the position can become sharp quickly if White decides on the f4 gambit.",
       "plans": [
         "Secure the king and connect the rooks",
         "Prepare d6 and central expansion"
@@ -197,7 +197,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White completes the kingside knight development, controlling d4 and adding support to the center. With both knights developed and the bishop on c4, White is ready to castle.",
+      "annotation": "White develops Nf3, completing the kingside minor pieces and supporting d4. The Nf3 controls e5 and d4, preparing to castle.",
       "plans": [
         "Castle next move",
         "Prepare Be3 to contest the a7-g1 diagonal"
@@ -220,7 +220,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black reinforces the e5 pawn and opens the diagonal for the c8 bishop. This is a necessary structural move — without d6, the e5 pawn could become a target.",
+      "annotation": "Black plays d6, reinforcing e5 and opening the c8-h3 diagonal for the bishop. The d6 pawn creates a solid e5+d6 chain.",
       "pawnStructure": "The e5-d6 chain gives Black a solid center. The c8 bishop can now develop to e6 or g4.",
       "plans": [
         "Develop the light-squared bishop to e6",
@@ -244,7 +244,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles kingside, completing the basic development phase. Both kings are now safe, and the middlegame battle begins.",
+      "annotation": "White castles, connecting the rooks and getting the king safe. The Vienna's first phase of development is complete.",
       "plans": [
         "Begin middlegame planning with Be3 or Bg5",
         "Look for opportunities to play d4 or f4 at the right moment"
@@ -262,7 +262,7 @@
     },
     {
       "san": "Be6",
-      "annotation": "Black develops the last minor piece to an excellent square. The bishop on e6 challenges White's strong c4 bishop and controls the d5 square.",
+      "annotation": "Black develops Be6, an active choice contesting the a2-g8 diagonal. The Be6 challenges the Bc4 and prepares ...Bxc4 dxc4 if that exchange favors Black.",
       "plans": [
         "Trade off White's dangerous c4 bishop",
         "Control d5 to limit White's central ambitions"
@@ -291,7 +291,7 @@
     },
     {
       "san": "Bb3",
-      "annotation": "White retreats the bishop to avoid an immediate trade but stays on the powerful a2-g8 diagonal. From b3, the bishop still eyes f7 and can remain a long-term asset.",
+      "annotation": "White plays Bb3, maintaining the diagonal after the Be6 challenge. The Bb3 keeps f7 in its sights and avoids the exchange.",
       "plans": [
         "Maintain the bishop on the key diagonal",
         "Play Be3 to challenge Black's dark-squared bishop"
@@ -315,7 +315,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the last piece and prepares flexible regrouping. The knight on d7 supports e5, can go to f8 for kingside defense, or to c5 to attack White's b3 bishop.",
+      "annotation": "Black develops Nbd7, supporting e5 and preparing ...Nf8-g6 rerouting. The Nd7 keeps the c-file clear and supports central operations.",
       "plans": [
         "Reroute the knight to c5 to challenge the b3 bishop",
         "Alternatively, Nf8-Ng6 for kingside play"
@@ -344,7 +344,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "White develops the last minor piece to a strong central square, challenging Black's active bishop on c5.",
+      "annotation": "White develops Be3, exchanging the dark-squared bishop pair. The Be3 challenges the Bc5 and simplifies the position.",
       "plans": [
         "Challenge the c5 bishop for dark-square control",
         "Prepare d4 or Nd5 at the right moment"
@@ -367,7 +367,7 @@
     },
     {
       "san": "Bxe3",
-      "annotation": "Black trades the dark-squared bishops. This is a practical decision — the c5 bishop was under direct attack and retreating would lose time.",
+      "annotation": "Black captures Bxe3, trading the dark-squared bishops. After fxe3, White's f-file is half-open and the e3 pawn supports d4, giving White a slightly more active position.",
       "plans": [
         "Simplify the position to reduce White's attacking potential"
       ],
@@ -384,7 +384,7 @@
     },
     {
       "san": "fxe3",
-      "annotation": "White recaptures with the f-pawn, which looks unusual but has concrete benefits. The e3 pawn strengthens control of d4 and the half-open f-file gives the rook immediate activity.",
+      "annotation": "White recaptures fxe3, opening the f-file for the rook. The Rf1 now has a direct line and the e3 pawn, while doubled, supports d4 and controls f4.",
       "pawnStructure": "White now has doubled e-pawns (e3 and e4) but gains the half-open f-file.",
       "plans": [
         "Activate the rook on the f-file",
@@ -409,7 +409,7 @@
     },
     {
       "san": "Bxb3",
-      "annotation": "Black trades the light-squared bishops, eliminating White's dangerous piece on the a2-g8 diagonal.",
+      "annotation": "Black trades Bxb3, exchanging the light-squared bishops. After axb3, the a-file opens for White's rook, creating a slightly asymmetric position.",
       "plans": [
         "Remove the attacking bishop targeting f7",
         "Activate the rook on the a-file after axb3"
@@ -433,7 +433,7 @@
     },
     {
       "san": "axb3",
-      "annotation": "White recaptures toward the a-file, opening it for the rook. The a-file becomes a new avenue of attack, and the b3 pawn supports a potential c4-c5 advance.",
+      "annotation": "White recaptures axb3, opening the a-file. The Ra1 now has an open file and the b3 pawn, while doubled, controls c4 and a4.",
       "pawnStructure": "White has connected pawns on b3-c2 and the doubled e-pawns.",
       "plans": [
         "Use the open a-file for rook penetration",
@@ -457,7 +457,7 @@
     },
     {
       "san": "Re8",
-      "annotation": "Black places the rook on the semi-open e-file, adding support to the e5 pawn and eyeing the e4 pawn as a potential target. The rook is well-placed here for both defensive and offensive purposes.",
+      "annotation": "Black plays Re8, placing the rook on the central e-file. The Re8 supports e5, pressures the e3 pawn, and prepares for the open middlegame where piece activity will determine the outcome.",
       "plans": [
         "Support e5 and target e4 if it becomes weak",
         "Prepare c6 and d5 central break"

@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, immediately staking a claim in the center. Unlike 1.e4, this move keeps things a bit more positional from the start -- the pawn is already defended by the queen, s.",
+      "annotation": "This is the Queen's Gambit Declined, one of the most classical and respected openings in chess. White plays 1.d4, claiming central space and preparing the c4 advance. The QGD leads to rich strategic positions where pawn structure, piece placement, and long-term planning take center stage.",
       "plans": [
         "Build a broad pawn center with c4",
         "Control the d5 and e5 squares"
@@ -32,7 +32,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black immediately plants a pawn in the center to contest White's control of d4 and e5.",
+      "annotation": "Black responds with 1...d5, immediately contesting White's central claim. The d5 pawn controls c4 and e4, preventing White from achieving the ideal e4+d4 center without a fight.",
       "plans": [
         "Maintain the d5 strongpoint",
         "Develop pieces behind a solid pawn chain"
@@ -61,7 +61,7 @@
     },
     {
       "san": "c4",
-      "annotation": "This is the Queen's Gambit -- White offers the c-pawn to lure Black's d-pawn away from the center. It's not a real gambit because if Black takes, White gets it back easily.",
+      "annotation": "White plays 2.c4, the Queen's Gambit — offering the c-pawn to lure Black's d5 pawn away from the center. It's not a true gambit because White can always regain the pawn, but the strategic idea is powerful: if Black takes, White gets the broad d4+e4 center.",
       "pawnStructure": "White has pawns on d4 and c4 vs Black's d5 -- the classic QG tension",
       "plans": [
         "Challenge d5 to eventually play e4",
@@ -91,7 +91,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black declines the gambit and supports d5 with the e-pawn. This is the Queen's Gambit Declined -- super solid but it locks in the c8-bishop behind the pawn chain.",
+      "annotation": "Black declines with 2...e6, the Queen's Gambit Declined. The e6 pawn solidly supports d5, maintaining Black's central presence. The cost is clear: the light-squared bishop on c8 is now locked behind the e6 pawn — solving this \"bad bishop\" problem is Black's central strategic challenge.",
       "pawnStructure": "Black's e6-d5 chain is rock solid but the light-squared bishop is hemmed in",
       "plans": [
         "Maintain d5, develop kingside, solve the c8-bishop problem"
@@ -115,7 +115,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to its ideal square, adding a third attacker to d5. The knight on c3 is incredibly well-placed -- it pressures d5 and e4, the two most important central squares.",
+      "annotation": "White develops the knight to c3, adding a third attacker to the d5 pawn. The Nc3 is ideally placed — it pressures d5, controls e4, and prepares for the central battle. With c4, Nc3, and potential Bg5, White builds enormous pressure on Black's center.",
       "plans": [
         "Increase pressure on d5",
         "Prepare e4 push when the time is right"
@@ -144,7 +144,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its best square, defending d5 a second time while also controlling e4. This is the most active move -- the knight belongs on f6 in almost every QGD line.",
+      "annotation": "Black develops the knight to f6, defending d5 a second time and controlling e4. The Nf6 is the most active defensive move — it develops a piece, pressures the center, and prepares kingside castling.",
       "plans": [
         "Defend d5, prepare O-O",
         "Eventually break with either ...c5 or ...dxc4 followed by ...c5"
@@ -173,7 +173,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "White pins the knight to the queen -- this is the most principled and aggressive setup in the QGD.",
+      "annotation": "White plays Bg5, pinning the Nf6 to the queen — the most principled and aggressive system in the QGD. The pin is strategically significant: the Nf6 is Black's key defender of d5, and by threatening Bxf6 (doubling Black's pawns or winning the d5 pawn), White creates real pressure.",
       "plans": [
         "Pin the Nf6 to increase pressure on d5",
         "Threaten Bxf6 to double Black's pawns or force concessions"
@@ -202,7 +202,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black breaks the pin in the most solid way. The bishop on e7 is modest but functional -- it unpins the knight, prepares castling, and keeps the position stable.",
+      "annotation": "Black breaks the pin with Be7, the most solid and classical response. The Be7 unpins the knight, prepares immediate castling, and covers the d6 square. While modest compared to ...Bb4 or ...Be7-f6, it's the time-tested choice at the highest levels.",
       "plans": [
         "Castle kingside quickly",
         "Keep the position solid, look for ...dxc4 and ...c5 breaks later"
@@ -226,7 +226,7 @@
     },
     {
       "san": "e3",
-      "annotation": "White supports d4 and opens the diagonal for the f1-bishop. This is a very solid choice -- White isn't in a rush.",
+      "annotation": "White plays e3, supporting d4 and opening the f1-a6 diagonal for the bishop. The e3 pawn creates a solid center — White isn't in a rush, preferring to complete development before committing to a specific plan.",
       "pawnStructure": "White's d4-e3 chain is very stable, supporting a slow buildup",
       "plans": [
         "Develop Bd3, complete development, prepare for a kingside or central initiative"
@@ -250,7 +250,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles to safety immediately, which is the priority in the QGD. The king on g8 is tucked away, and the rook comes to f8 where it can support a future ...f5 break or just hold the f-file.",
+      "annotation": "Black castles immediately, making king safety the priority. In the QGD, getting castled before the center opens is essential — the king on g8 is safe behind the pawn shield while Black prepares to solve the structural challenges.",
       "plans": [
         "Complete development with ...Nbd7",
         "Look for the right moment to play ...dxc4 or ...c5"
@@ -271,7 +271,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the last minor piece to its ideal square. The knight on f3 supports d4, controls e5, and completes the kingside development.",
+      "annotation": "White develops the knight to f3, completing the kingside minor piece development. The Nf3 supports d4, controls e5, and prepares to castle. With all minor pieces developed, White is ready for the middlegame battle.",
       "plans": [
         "Castle or play Bd3 next",
         "Build up before choosing a plan based on Black's setup"
@@ -300,7 +300,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the knight to d7 rather than c6 -- this is a key QGD decision. On d7, the knight supports the e5 and c5 breaks and doesn't block the c-pawn.",
+      "annotation": "Black plays Nbd7, developing the knight to d7 rather than c6. The Nd7 is a critical QGD decision — it supports both the ...e5 central break (freeing the position) and the ...c5 break (challenging d4), while keeping the c-file clear for the rook.",
       "plans": [
         "Prepare ...c5 or ...c6 break",
         "Reroute Nd7 to f8, e5, or b6 depending on the position"
@@ -329,7 +329,7 @@
     },
     {
       "san": "Rc1",
-      "annotation": "White puts the rook on the semi-open file it's going to need. After Black eventually plays ...dxc4, the c-file opens and this rook will be perfectly placed.",
+      "annotation": "White plays Rc1, placing the rook on the semi-open c-file that will become fully open after Black's eventual ...dxc4. The Rc1 is forward-thinking — it prepares for the moment the c-file opens and creates latent pressure against c7.",
       "plans": [
         "Anticipate ...dxc4, control the c-file",
         "Support the c4 pawn and Nc3"
@@ -358,7 +358,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays ...c6 to give the d5 pawn extra support and prepare a potential ...dxc4 followed by a queenside expansion with ...b5. This is the Tartakower-Makogonov-Bondarevsky system idea.",
+      "annotation": "Black plays c6, adding extra support to d5 and preparing a potential ...dxc4 followed by ...b5 queenside expansion. The c6 pawn also controls b5, preventing Nb5 ideas, and creates the solid c6+d5+e6 pawn chain.",
       "pawnStructure": "Black's c6-d5-e6 triangle is extremely solid but somewhat passive",
       "plans": [
         "Play ...dxc4 at the right moment, then ...Nd5 targeting the pin",
@@ -388,7 +388,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "White places the bishop on the best diagonal, aiming at the kingside through h7. The bishop on d3 is a monster in many QGD lines -- it creates latent threats against the Black king once the position.",
+      "annotation": "White develops the bishop to d3, placing it on the ideal attacking diagonal targeting h7. The Bd3 is a powerhouse in the QGD — it supports the center, creates the b1-h7 battery threat, and prepares to exploit any kingside weaknesses.",
       "plans": [
         "Eye h7 for potential kingside attacks",
         "Support e4 break when the time is right"
@@ -417,7 +417,7 @@
     },
     {
       "san": "dxc4",
-      "annotation": "Black finally captures on c4, releasing the central tension. This is well-timed because the knight is ready to come to d5 on the next move, where it's incredibly strong.",
+      "annotation": "Black captures dxc4, releasing the central tension at the right moment. The timing is critical — with the knight on d7 ready for ...Nd5, and the c6 pawn supporting queenside expansion, Black can safely open the position.",
       "pawnStructure": "The center opens up -- White gets a d4 isolani or e4 expansion opportunity",
       "plans": [
         "Follow up with ...Nd5, challenging the pin and centralizing powerfully"
@@ -446,7 +446,7 @@
     },
     {
       "san": "Bxc4",
-      "annotation": "White recaptures with the bishop, keeping it on the strong a2-g8 diagonal aimed at e6 and f7.",
+      "annotation": "White recaptures Bxc4, keeping the bishop on the powerful a2-g8 diagonal aimed at e6 and f7. The Bc4 is actively placed and maintains pressure on Black's position.",
       "plans": [
         "Prepare e4 to seize the center",
         "Maintain pressure on the a2-g8 diagonal"
@@ -475,7 +475,7 @@
     },
     {
       "san": "Nd5",
-      "annotation": "Black plants the knight on the best square on the board. The knight on d5 attacks the Bg5, which is pinning Be7, and occupies a dominating central outpost supported by c6 and e6.",
+      "annotation": "Black plays Nd5, occupying the best square on the board. The Nd5 attacks the Bg5, is centralized powerfully, and controls c3, e3, b4, f4, c7, and e7. This is Black's main equalizing maneuver in the QGD — the knight on d5 transforms the position.",
       "plans": [
         "Force a favorable resolution of the Bg5 pin",
         "Use the d5 knight as a long-term outpost"
