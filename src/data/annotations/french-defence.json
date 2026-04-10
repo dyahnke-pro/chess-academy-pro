@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White opens with the king's pawn, seizing central space and opening lines for the bishop and queen. This is the most direct first move, immediately contesting d5 and f5.",
+      "annotation": "This is the French Defense, one of the most strategically rich responses to 1.e4. White plays 1.e4, claiming central space. The French leads to asymmetric positions where White gets a space advantage but Black gets a clear plan to undermine the center — a battle of structure versus activity.",
       "plans": [
         "Control the center",
         "Develop rapidly"
@@ -32,7 +32,7 @@
     },
     {
       "san": "e6",
-      "annotation": "The French Defense — Black prepares to challenge the center with ...d5 on the next move, creating an immediate pawn tension.",
+      "annotation": "Black plays 1...e6, the French Defense. Rather than occupying the center immediately, Black prepares to challenge e4 with ...d5 on the next move. The e6 pawn provides solid support for d5 but comes with a cost — the light-squared bishop on c8 is locked behind the pawn chain.",
       "pawnStructure": "The e6 pawn supports ...d5 but blocks the c8 bishop.",
       "plans": [
         "Play ...d5 next to challenge e4 directly",
@@ -57,7 +57,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White builds the ideal center with e4+d4, claiming maximum central space. This is the most principled response — with both center pawns advanced, White controls d5, e5, c5, and f5.",
+      "annotation": "White builds the ideal e4+d4 pawn center, claiming maximum central space. With pawns on both e4 and d4, White controls d5, e5, c5, and f5 — the strongest possible center. The French Defense's entire strategy revolves around how Black challenges this imposing setup.",
       "pawnStructure": "The e4+d4 pawn duo is the strongest possible center.",
       "plans": [
         "Maintain the center and develop behind it",
@@ -72,7 +72,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the heart of White's center, creating the fundamental tension of the French Defense.",
+      "annotation": "Black strikes with d5, creating the fundamental tension of the French Defense. The d5 pawn attacks e4 directly, and White must choose: push e5 (Advance), exchange exd5 (Exchange), or defend with Nc3/Nd2 (Classical/Tarrasch). This decision shapes the entire middlegame.",
       "pawnStructure": "The d5-e4 tension is the French's central question.",
       "plans": [
         "Challenge White's center directly",
@@ -97,7 +97,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White defends e4 with the most active move, entering the main line of the French.",
+      "annotation": "White plays Nc3, defending e4 with the most active piece and entering the Classical French. The Nc3 supports the center, controls d5, and prepares to meet Black's ...Nf6 with the sharp e5 advance that defines the Classical Advance structure.",
       "plans": [
         "Maintain the e4 pawn and push e5 if possible",
         "Develop and react to Black's system choice"
@@ -120,7 +120,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight and attacks e4 a second time, entering the Classical French.",
+      "annotation": "Black develops the knight to f6, attacking e4 a second time and entering the Classical French. The Nf6 forces White's hand — with two pieces attacking e4 and only one defending (Nc3), White must either push e5, exchange, or add another defender.",
       "plans": [
         "Force White to resolve the e4 tension",
         "Prepare to respond to e5 with piece regrouping"
@@ -144,7 +144,7 @@
     },
     {
       "san": "e5",
-      "annotation": "White pushes forward, gaining kingside space and attacking the Nf6. This is the Advance Variation structure within the Classical French — the e5 pawn cramps Black's kingside, gains space, and create.",
+      "annotation": "White pushes e5, gaining kingside space and attacking the Nf6 — this creates the Advance Variation structure within the Classical French. The e5 pawn cramps Black's kingside and establishes a pawn chain (d4-e5) that Black will immediately target at its base with ...c5.",
       "pawnStructure": "The e5-d4 pawn chain is a fundamental French structure.",
       "plans": [
         "Use the space advantage for a kingside attack",
@@ -169,7 +169,7 @@
     },
     {
       "san": "Nfd7",
-      "annotation": "The knight retreats to d7 — the only reasonable square since d7 supports both ...c5 and ...f6 breaks.",
+      "annotation": "The knight retreats to d7, the only reasonable square since e5 blocks f6. From d7, the knight supports both the ...c5 break (challenging d4) and the ...f6 break (challenging e5). The Nd7 also keeps the c-file clear for Black's rook.",
       "plans": [
         "Support ...c5 to attack the d4 base",
         "Prepare ...f6 to challenge the e5 chain"
@@ -198,7 +198,7 @@
     },
     {
       "san": "f4",
-      "annotation": "White reinforces the e5 pawn with f4, creating the powerful e5-f4 pawn duo that dominates the kingside.",
+      "annotation": "White reinforces the e5 pawn with f4, creating the powerful e5+f4 pawn duo that dominates the kingside. The f4 pawn supports e5 and prepares a potential f5 advance attacking the e6 base of Black's pawn chain. This is an aggressive choice that commits to a kingside-oriented game.",
       "pawnStructure": "The d4-e5-f4 pawn chain is extremely space-grabbing.",
       "plans": [
         "Build a kingside attack with pieces behind the pawn chain",
@@ -228,7 +228,7 @@
     },
     {
       "san": "c5",
-      "annotation": "The thematic French break — Black strikes at the base of White's pawn chain on d4.",
+      "annotation": "Black strikes with c5, the thematic French break targeting the base of White's d4-e5 pawn chain. The c5 pawn attacks d4 directly — if White exchanges cxd4 cxd4, the d4 pawn becomes isolated. This queenside counterplay is Black's primary strategic weapon in the French.",
       "pawnStructure": "Black's c5 attacks d4, the base of the chain. If White plays dxc5, the e5 pawn is isolated.",
       "plans": [
         "Undermine d4 to destabilize the entire pawn chain",
@@ -253,7 +253,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to f3, defending d4 and supporting the e5 pawn. The knight is perfectly placed on f3 in this structure — it guards d4, controls g5 and e5, and prepares to participate in a.",
+      "annotation": "White develops the knight to f3, defending d4 and supporting the e5 pawn. The Nf3 is well-placed in this French structure — it guards the center, controls the g5 and e5 squares, and prepares kingside castling.",
       "plans": [
         "Defend d4 and maintain the pawn chain",
         "Develop the kingside and castle"
@@ -276,7 +276,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to c6, adding a third attacker to the d4 pawn (joining the d5 and c5 pawns).",
+      "annotation": "Black develops the knight to c6, adding a third attacker to the d4 pawn (joining the d5 and c5 pawns). The Nc6 pressures the center aggressively and prepares to challenge White's setup. Black now has three pieces/pawns targeting d4 versus White's three defenders.",
       "plans": [
         "Maximize pressure on d4 with three attackers",
         "Prepare ...Qb6 for additional d4 pressure"
@@ -305,7 +305,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "White defends d4 with the bishop, adding a third defender to match Black's three attackers.",
+      "annotation": "White develops the bishop to e3, adding a third defender to the critical d4 pawn. The Be3 also controls the a7-g1 diagonal and prevents Black from winning the d4 pawn. The defensive trio of Nf3, Be3, and d4 stabilizes White's center.",
       "plans": [
         "Hold d4 firmly",
         "Prepare Qd2 and Be2/Bd3 for full development"
@@ -329,7 +329,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop to e7, preparing to castle and completing kingside development.",
+      "annotation": "Black develops the bishop to e7, preparing to castle kingside and completing the kingside minor piece development. The Be7 is modest but functional — it supports the d6 pawn, prepares castling, and can later reroute to f8-g7 or d8-b6 in some lines.",
       "plans": [
         "Castle kingside for king safety",
         "Prepare ...f6 or ...f5 to challenge the pawn chain"
@@ -353,7 +353,7 @@
     },
     {
       "san": "Qd2",
-      "annotation": "White places the queen on d2, connecting the rooks and creating a battery with the Be3 along the dark-square diagonal.",
+      "annotation": "White plays Qd2, connecting the rooks and creating a battery with the Be3 along the dark-square diagonal. The Qd2 also supports O-O-O (queenside castling) if White wants to launch a kingside pawn storm, and prepares Rd1 to increase central pressure.",
       "plans": [
         "Keep castling options open",
         "Support Be3 and maintain d4 control"
@@ -371,7 +371,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, getting the king to safety. In the French, Black's king is generally safe on g8 because the e5-f4 pawn chain actually shields the king from direct attacks along the e-file.",
+      "annotation": "Black castles kingside, getting the king to safety. In the French, Black's king is generally safe on g8 because White's e5+f4 chain actually shields the kingside from direct pawn attacks. Black can now focus on the queenside counterplay with ...cxd4, ...Qb6, and ...Nc5.",
       "plans": [
         "Begin active counterplay with ...f6 or ...f5",
         "Play ...b6 and ...Ba6 to exchange the bad bishop"
@@ -389,7 +389,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "White develops the bishop to a solid square, preparing to castle. The bishop on e2 is not the most aggressive placement (Bd3 is more attacking), but it's safe — it defends the kingside, supports a f.",
+      "annotation": "White develops the bishop to e2, a solid square that prepares kingside castling. The Be2 is not the most aggressive placement (Bd3 targets h7 more directly), but it's flexible — it supports f4, keeps the d3 square open for other pieces, and allows a safe castle.",
       "plans": [
         "Castle kingside or queenside",
         "Consider Bd3 transfer for attacking potential"
@@ -407,7 +407,7 @@
     },
     {
       "san": "b6",
-      "annotation": "Black prepares to solve the French's biggest strategic problem: the bad light-squared bishop.",
+      "annotation": "Black plays b6, preparing to solve the French Defense's biggest strategic problem: the \"bad\" light-squared bishop trapped behind the e6 pawn. After ...Bb7 or ...Ba6, the bishop finally finds activity, targeting the a8-h1 diagonal or contesting the light squares.",
       "pawnStructure": "The b6 pawn weakens a6 and c6 slightly but enables the critical ...Ba6 bishop exchange.",
       "plans": [
         "Play ...Ba6 to exchange the bad light-squared bishop",

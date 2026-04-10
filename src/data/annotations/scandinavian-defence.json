@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White opens with the king's pawn, claiming central space and opening diagonals for rapid development.",
+      "annotation": "This is the Scandinavian Defense (also called the Center Counter), one of the oldest defenses to 1.e4. White plays 1.e4, claiming central space. The Scandinavian is direct and practical — Black immediately challenges e4 with ...d5, leading to positions where Black trades central presence for rapid piece development.",
       "pawnStructure": "Single e4 pawn in the center, controlling d5 and f5.",
       "plans": [
         "Build a strong center and develop pieces quickly",
@@ -30,7 +30,7 @@
     },
     {
       "san": "d5",
-      "annotation": "The Scandinavian Defense! Black immediately strikes at e4 on move one — no preparation, no fianchetto, just a direct punch.",
+      "annotation": "Black plays 1...d5, the Scandinavian Defense — striking at e4 immediately without any preparation. This is the most direct possible challenge to White's center, forcing an exchange on move two. The downside is that after exd5, Black must recapture with the queen (developing it early) or a pawn.",
       "pawnStructure": "After exd5 Qxd5, Black will have no center pawns while White has a free hand to build one.",
       "plans": [
         "Recapture with the queen and develop quickly despite the early queen sortie",
@@ -55,7 +55,7 @@
     },
     {
       "san": "exd5",
-      "annotation": "White takes the pawn — there's no reason not to. Now Black faces the defining question of the Scandinavian: recapture with the queen (main line) or play ...Nf6 (the Modern Scandinavian).",
+      "annotation": "White captures exd5, which is virtually forced. Declining with e5 or d3 would give Black an equal or superior center. After exd5, Black faces the defining decision of the Scandinavian: recapture with the queen (main line, active but the queen gets harassed) or ...Nf6 (Marshall Gambit, sacrificing a pawn for development).",
       "pawnStructure": "White has a pawn on d5. If Black takes with the queen, White will get a free tempo with Nc3 develo.",
       "plans": [
         "Develop Nc3 with tempo against Black's queen",
@@ -85,7 +85,7 @@
     },
     {
       "san": "Qxd5",
-      "annotation": "Black recaptures with the queen, entering the main line Scandinavian. Yes, the queen is out early and will get kicked around, but Black gets immediate central presence and avoids any complicated paw.",
+      "annotation": "Black recaptures Qxd5, entering the main line Scandinavian. The queen is out early and will be harassed by Nc3, but Black's compensation is clear: the d-file is open, all pieces can develop freely, and Black's pawn structure is completely healthy with no weaknesses.",
       "pawnStructure": "Black has no center pawns yet, but the position is completely open.",
       "plans": [
         "Retreat the queen to a5 after Nc3, maintaining diagonal pressure",
@@ -105,7 +105,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops with tempo — the knight comes to c3 attacking the queen, which must move again.",
+      "annotation": "White develops Nc3 with tempo, attacking the queen and developing a piece simultaneously. The Nc3 is the ideal response — it gains time, controls d5 and e4, and forces the queen to declare its position.",
       "pawnStructure": "No pawn change. White prepares d4 for a strong center.",
       "plans": [
         "Follow up with d4 to build a powerful center",
@@ -127,7 +127,7 @@
     },
     {
       "san": "Qa5",
-      "annotation": "The queen retreats to a5, the most popular square. Why a5? Because it pins the Nc3 along the a5-e1 diagonal (if d4 is played, the knight is pinned to the king after ...Bb4 ideas).",
+      "annotation": "The queen retreats to a5, the most popular and arguably best square. From a5, the queen pins the Nc3 along the a5-e1 diagonal (the knight can't move without exposing the king), keeps an eye on the e1 square for future tactics, and stays active on the a5-d8 diagonal.",
       "pawnStructure": "No structural change. Black will build a center with ...c6 and ...e6.",
       "plans": [
         "Develop ...Nf6, ...Bf5, ...e6 for a solid setup",
@@ -147,7 +147,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White builds the ideal center with d4. Now White has the classical d4-e4 (well, e4 was traded) d4 pawn center and a pawn on c3. The center is strong and White has a clear space advantage.",
+      "annotation": "White builds the center with d4, establishing a strong d4 pawn that controls c5 and e5. Combined with the Nc3 supporting e4, White has a classical pawn center. The Scandinavian's challenge is that White gets this center easily — Black must find counterplay through piece activity.",
       "pawnStructure": "White has a strong d4 pawn supported by the c3 knight.",
       "plans": [
         "Complete development with Nf3, Bc4 or Bd3",
@@ -174,7 +174,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, the ideal square. It controls d5 and e4, pressuring White's center, and prepares kingside castling.",
+      "annotation": "Black develops the knight to f6, the ideal square controlling d5, e4, and preparing kingside castling. The Nf6 pressures White's center and develops the most important minor piece — in the Scandinavian, rapid piece development is Black's primary compensation for the early queen moves.",
       "plans": [
         "Continue with ...Bf5 to develop the light-squared bishop actively",
         "Prepare ...e6 and ...Bb4 or ...Be7 for a solid setup"
@@ -200,7 +200,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White mirrors Black's development with the king's knight on f3. It defends d4, controls e5, and prepares to castle.",
+      "annotation": "White develops the knight to f3, defending d4, controlling e5, and preparing to castle. The Nf3 completes White's kingside minor piece development and adds another defender to the center.",
       "plans": [
         "Develop the bishops and castle quickly",
         "Prepare Bc4 or Bd3 targeting Black's kingside"
@@ -221,7 +221,7 @@
     },
     {
       "san": "Bf5",
-      "annotation": "Just like in the Caro-Kann, Black gets the light-squared bishop out BEFORE playing ...e6. This is critical — once e6 is played, this bishop would be stuck behind its own pawns forever.",
+      "annotation": "Black plays Bf5, developing the light-squared bishop to its most active square — just like in the Caro-Kann. The Bf5 gets the bishop outside the pawn chain BEFORE playing ...e6, which is the strategic key. From f5, the bishop controls the b1-h7 diagonal and pressures c2.",
       "pawnStructure": "Black hasn't committed to a pawn structure yet.",
       "plans": [
         "Play ...e6 next to solidify, knowing the bishop is already active",
@@ -246,7 +246,7 @@
     },
     {
       "san": "Bc4",
-      "annotation": "White puts the bishop on c4, targeting the f7 square — the weakest point in Black's camp. The bishop is aggressive here, supporting tactical ideas and creating real threats.",
+      "annotation": "White develops the bishop to c4, targeting f7 — the weakest square near Black's king. The Bc4 is the most aggressive placement, supporting tactical ideas and creating pressure that Black must address. The a2-g8 diagonal is a constant source of threats.",
       "pawnStructure": "No structural change. The bishop on c4 creates tactical tension around f7 and d5.",
       "plans": [
         "Create threats against f7 and prepare Nd5",
@@ -276,7 +276,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays ...e6, solidifying the center and protecting d5 and f7. This was always the plan — get the bishop out first, THEN play ...e6.",
+      "annotation": "Black plays e6, solidifying the center and protecting both d5 and f7. This was always the plan — develop the Bf5 first, THEN play ...e6. The c6+e6 pawn structure creates a compact fortress that is very difficult for White to crack.",
       "pawnStructure": "The e6 pawn creates a solid chain with c6 (coming next).",
       "plans": [
         "Play ...c6 to complete the solid pawn structure",
@@ -303,7 +303,7 @@
     },
     {
       "san": "Bd2",
-      "annotation": "White develops the bishop to d2, a sensible square that connects the rooks and prepares queenside castling.",
+      "annotation": "White develops the bishop to d2, a flexible square that connects the rooks and prepares queenside castling (O-O-O). The Bd2 also supports Nc3, which was pinned by the Qa5, and keeps options open for both queenside and kingside castling.",
       "plans": [
         "Consider queenside castling for aggressive play",
         "Keep pieces coordinated and prepare to seize the initiative"
@@ -327,7 +327,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black completes the trademark Scandinavian pawn structure: c6 and e6, a compact fortress. The c6 pawn supports a future ...d5 (if needed) and takes away the d5 square from White's pieces.",
+      "annotation": "Black completes the trademark Scandinavian pawn structure with c6 — the c6+e6 compact fortress. The c6 pawn supports a future ...d5 if needed, controls b5 and d5, and creates a solid wall that resists White's central majority. This structure is the backbone of Black's Scandinavian setup.",
       "pawnStructure": "The c6-e6 structure is Black's bread and butter in the Scandinavian.",
       "plans": [
         "Develop ...Bb4 or ...Be7 and castle kingside",
@@ -349,7 +349,7 @@
     },
     {
       "san": "Nd5",
-      "annotation": "A powerful knight leap to d5! The knight occupies the ideal central outpost, attacking the queen on a5 and the pawn on e7 simultaneously. From d5, it also eyes c7, b6, and f6 — it's a dominant piece.",
+      "annotation": "White leaps to Nd5, occupying the ideal central outpost. The Nd5 attacks the Qa5 and the e7 pawn simultaneously, forcing the queen to retreat. From d5, the knight controls c7, e7, b6, f6, and c3 — it's the most powerful piece on the board.",
       "plans": [
         "Force Black to deal with the strong knight",
         "If ...Nxd5, recapture and maintain central dominance"
@@ -375,7 +375,7 @@
     },
     {
       "san": "Qd8",
-      "annotation": "The queen retreats to d8, the only safe square. It looks passive, but Black doesn't have a great alternative — Qd6 blocks development, and other squares lose material to knight forks.",
+      "annotation": "The queen retreats to d8, the only safe square. It looks passive, but Black's position is actually solid — the compact c6+e6 structure holds firm, and the queen can redeploy to c7 or b6 later. The key is that Black's pieces are all well-placed despite the retreat.",
       "pawnStructure": "No structural change. The key battle is still around the d5 knight.",
       "plans": [
         "Prepare to challenge or trade the d5 knight",
@@ -400,7 +400,7 @@
     },
     {
       "san": "Nxf6+",
-      "annotation": "White captures on f6 with check, forcing Black to recapture. This exchange is strategically significant — White trades the dominant knight but damages Black's pawn structure.",
+      "annotation": "White captures Nxf6+ with check, forcing Black to recapture. This exchange removes the Nd5 but also eliminates Black's Nf6 — a key defensive piece. White trades the dominant knight for structural damage to Black's kingside.",
       "pawnStructure": "After ...gxf6, Black's kingside pawns are shattered but the bishop pair and open g-file provide co.",
       "plans": [
         "Exploit Black's structural weaknesses after the recapture",
@@ -427,7 +427,7 @@
     },
     {
       "san": "gxf6",
-      "annotation": "Black recaptures with the g-pawn, which is the more aggressive choice. Yes, the kingside pawns are wrecked — doubled f-pawns and an open g-file.",
+      "annotation": "Black recaptures gxf6, the more aggressive choice that keeps the center solid. Yes, the kingside pawns are damaged (doubled f-pawns and an open g-file), but Black gets the half-open g-file for the rook and retains the bishop pair. The Bf5 and the open g-file provide real attacking chances.",
       "pawnStructure": "Black has doubled f-pawns and an exposed king, but the open g-file and bishop pair offer dynamic c.",
       "plans": [
         "Use the open g-file for rook activity",

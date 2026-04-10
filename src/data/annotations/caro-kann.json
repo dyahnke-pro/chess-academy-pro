@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White opens with the king's pawn, claiming central space and opening lines for the bishop and queen.",
+      "annotation": "This is the Caro-Kann Defense, one of the most solid responses to 1.e4. White plays 1.e4, claiming central space. The Caro-Kann leads to strategically clear positions where Black gets a healthy pawn structure and the light-squared bishop developed outside the chain — unlike the French.",
       "pawnStructure": "Single e4 pawn establishes a classical foothold.",
       "plans": [
         "Develop quickly and build a d4-e4 pawn center",
@@ -33,7 +33,7 @@
     },
     {
       "san": "c6",
-      "annotation": "This is the Caro-Kann — Black prepares ...d5 next move, challenging White's e4 pawn with solid pawn support from c6.",
+      "annotation": "Black plays 1...c6, the Caro-Kann Defense. The c6 pawn prepares ...d5 with solid pawn support, challenging White's center on the next move. The key advantage over the French (1...e6) is that the light-squared bishop isn't blocked — it can develop to f5 or g4 before ...e6 is played.",
       "pawnStructure": "The c6 pawn will support d5, creating a rock-solid base.",
       "plans": [
         "Play ...d5 next to directly challenge White's e4 pawn",
@@ -58,7 +58,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White builds the ideal two-pawn center. The d4 and e4 pawns together control all four central squares — d5, e5, c5, and f5.",
+      "annotation": "White builds the ideal e4+d4 pawn center. The two pawns together control d5, e5, c5, and f5 — maximum central space. Against the Caro-Kann, this imposing center will be tested immediately by Black's ...d5.",
       "pawnStructure": "The d4-e4 duo is the classical pawn center.",
       "plans": [
         "Maintain the strong pawn center and develop pieces behind it",
@@ -88,7 +88,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the center immediately, exactly as planned with ...c6. This is the whole point of the Caro-Kann — Black gets a direct central challenge without locking in the light-squared bishop l.",
+      "annotation": "Black strikes with d5, challenging White's center exactly as the c6 pawn prepared. This is the fundamental idea of the Caro-Kann — Black gets a direct central challenge with solid pawn support. After exd5 cxd5, Black has a symmetrical center with no structural weaknesses.",
       "pawnStructure": "The c6-d5 chain is extremely sturdy. Black's structure is compact and hard to attack, giving a rel.",
       "plans": [
         "After the exchange on e4, develop the light-squared bishop actively to f5 or g4",
@@ -113,7 +113,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to defend e4 and enters the Classical Caro-Kann. This is the most principled approach — White says 'take my pawn, I'll recapture with the knight and get a great piece in th.",
+      "annotation": "White plays Nc3, defending e4 with the most active piece and entering the Classical Caro-Kann. The Nc3 supports the center, controls d5, and allows the sharp 4...dxe4 5.Nxe4 line where the knight becomes a powerful centralized piece.",
       "pawnStructure": "White maintains the e4-d4 center for now, but after ...dxe4 Nxe4, the structure transforms into a.",
       "plans": [
         "Recapture on e4 with the knight to maintain piece activity",
@@ -138,7 +138,7 @@
     },
     {
       "san": "dxe4",
-      "annotation": "Black captures, opening the position. This isn't giving up the center — Black already has c6 supporting a potential ...c5 break later.",
+      "annotation": "Black captures dxe4, opening the position and entering the most popular Caro-Kann main line. After Nxe4, Black will play ...Bf5 — developing the light-squared bishop outside the pawn chain, which is the entire strategic point of the Caro-Kann.",
       "pawnStructure": "Black now has pawns on c6 and e7 with a half-open d-file.",
       "plans": [
         "Develop the bishop to f5 before playing ...e6",
@@ -162,7 +162,7 @@
     },
     {
       "san": "Nxe4",
-      "annotation": "White recaptures with the knight, placing a powerful centralized piece on e4. This knight controls f6, d6, g5, and c5 — all key squares. It's the reason White played Nc3 instead of other options.",
+      "annotation": "White recaptures Nxe4, placing a powerfully centralized knight on e4. The Ne4 controls f6, d6, g5, and c5 — four critical squares. This knight is a temporary giant that will be exchanged or displaced, but it influences Black's development significantly.",
       "plans": [
         "Maintain the strong knight on e4 as long as possible",
         "Develop pieces rapidly and look for attacking chances on the kingside"
@@ -191,7 +191,7 @@
     },
     {
       "san": "Bf5",
-      "annotation": "This is THE move that makes the Caro-Kann special. Black develops the light-squared bishop OUTSIDE the pawn chain before playing ...e6.",
+      "annotation": "Black develops the bishop to f5, THE move that makes the Caro-Kann strategically sound. The Bf5 develops the light-squared bishop OUTSIDE the pawn chain before playing ...e6 — unlike the French Defense where this bishop is permanently locked behind the e6 pawn. This is the Caro-Kann's biggest advantage.",
       "pawnStructure": "Black will soon play ...e6, creating a solid c6-e6 chain.",
       "plans": [
         "Maintain the bishop on f5 as a strong active piece",
@@ -216,7 +216,7 @@
     },
     {
       "san": "Ng3",
-      "annotation": "White attacks the bishop, forcing a critical decision. The knight retreats to g3 where it eyes f5 and h5 — it's not as dominant as e4, but it gains a tempo and the f5 square might become available l.",
+      "annotation": "White plays Ng3, attacking the Bf5 and forcing a critical decision. The knight retreats to g3 where it eyes both f5 and h5 — active squares for future kingside operations. While not as dominant as e4, the Ng3 remains a useful attacking piece.",
       "plans": [
         "Drive the bishop back and seize the f5 square for the knight later",
         "Prepare h4-h5 to further harass the bishop on g6"
@@ -239,7 +239,7 @@
     },
     {
       "san": "Bg6",
-      "annotation": "The bishop drops back to g6, staying on the diagonal and maintaining influence over the light squares. This is the standard retreat — the bishop is still active here, controlling d3 and c2.",
+      "annotation": "The bishop retreats to g6, the standard and best square in the Classical Caro-Kann. On g6, the bishop maintains control of the light squares, pressures the h7-c2 diagonal, and can't easily be challenged. The bishop has done its job — it's developed outside the chain and remains active.",
       "pawnStructure": "No structural change, but the bishop on g6 helps control the light-square complex that Black needs.",
       "plans": [
         "Maintain the bishop as a defensive and active piece",
@@ -263,7 +263,7 @@
     },
     {
       "san": "h4",
-      "annotation": "A pawn march on the wing! White pushes h4 with a very specific purpose: h5 will trap the bishop on g6 and either force it to the horrible h7 square or win the bishop pair via Bd3.",
+      "annotation": "White pushes h4, beginning the aggressive h4-h5 plan that defines the Caro-Kann Classical. The h-pawn advances toward h5 where it will challenge the Bg6 and either trap it (after ...Bh7) or force it to the passive h5 square. This wing advance is White's main aggressive idea.",
       "pawnStructure": "The h-pawn advance slightly weakens White's kingside, but the positional gain of misplacing Black'.",
       "plans": [
         "Play h5 to trap the bishop on g6 or force it to h7",
@@ -288,7 +288,7 @@
     },
     {
       "san": "h6",
-      "annotation": "Black prevents Ng5, which would be annoying after h5. The move h6 also creates a flight square on h7 for the bishop after h5.",
+      "annotation": "Black plays h6, preventing Ng5 which would be annoying after h5. The h6 pawn also creates a flight square on h7 for the bishop after White's h5 advance, and controls the g5 square to keep White's knight out.",
       "pawnStructure": "The h6 pawn slightly weakens Black's kingside dark squares, but this is a necessary concession.",
       "plans": [
         "After h5, retreat the bishop to h7 where it's passive but safe",
@@ -313,7 +313,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to its natural square, controlling e5 and preparing to castle. There's no rush with h5 — White first completes development.",
+      "annotation": "White develops the knight to f3, completing kingside minor piece development. The Nf3 controls e5 and d4, supports the center, and prepares to castle. There's no rush with h5 — White first completes development before launching the wing attack.",
       "plans": [
         "Castle kingside and complete development before pushing h5",
         "Play Bd3 to prepare the bishop exchange on the h-file"
@@ -336,7 +336,7 @@
     },
     {
       "san": "Nd7",
-      "annotation": "Black develops the knight to d7 rather than c6. Why d7? Because from d7, the knight supports ...Ngf6 and doesn't block the c-pawn (which is already on c6).",
+      "annotation": "Black develops the knight to d7 rather than c6. The Nd7 keeps the c-pawn mobile for a future ...c5 break (which would be blocked by Nc6), supports ...Ngf6 development, and can reroute to b6 or f8 depending on White's setup.",
       "pawnStructure": "The knight on d7 keeps Black's pawn structure flexible — c6 remains supported and ...e6 or ...e5 a.",
       "plans": [
         "Play ...Ngf6 to complete knight development",
@@ -360,7 +360,7 @@
     },
     {
       "san": "h5",
-      "annotation": "Now White pushes h5, and the bishop is banished. This is the payoff of the h4-h5 plan — the bishop on g6 has nowhere good to go.",
+      "annotation": "White pushes h5, banishing the Bg6. This is the payoff of the h4-h5 plan — the bishop must retreat to the passive h7 square where it's blocked by its own pawns and effectively out of the game. White gains lasting light-square control.",
       "pawnStructure": "The h5 pawn is an advanced outpost that restricts Black's kingside.",
       "plans": [
         "Play Bd3 to exchange bishops and open the h-file",
@@ -382,7 +382,7 @@
     },
     {
       "san": "Bh7",
-      "annotation": "Forced retreat. The bishop goes to h7 where it's effectively out of the game — it's blocked by its own pawns and has no active prospects.",
+      "annotation": "The bishop retreats to h7, forced. On h7, the bishop is effectively a spectator — blocked by its own e6 and f7 pawns with no active prospects. This is the cost of the Caro-Kann's ...Bf5 development: the bishop gets out early but can be entombed by h5.",
       "pawnStructure": "Black's structure remains sound, but the bishop on h7 is a long-term weakness.",
       "plans": [
         "Accept the passive bishop and focus on solid development",
@@ -397,7 +397,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "White offers the bishop trade. This is a key decision — by playing Bd3, White aims to exchange the light-squared bishops via Bxh7.",
+      "annotation": "White plays Bd3, offering the bishop trade. By developing to d3, White targets the Bh7 directly — after Bxh7 Nxh7, the light-squared bishops are exchanged and Black's structural problem (the passive bishop) is solved, but at the cost of kingside weakening.",
       "pawnStructure": "After Bxd3 Qxd3, White will have a queen on d3 with pressure down the d-file and along the b1-h7 d.",
       "plans": [
         "Exchange bishops to open the h-file",
@@ -422,7 +422,7 @@
     },
     {
       "san": "Bxd3",
-      "annotation": "Black trades bishops. There's no point avoiding it — the bishop on h7 was doing nothing, so trading it actually improves Black's position slightly.",
+      "annotation": "Black trades with Bxd3, the practical choice. The Bh7 was doing nothing, so exchanging it actually improves Black's position slightly — one less passive piece. After Qxd3, White gets a centralized queen but Black has a healthier minor piece composition.",
       "plans": [
         "Complete development with ...Ngf6 and ...e6",
         "Use the freed light squares for piece activity"
@@ -437,7 +437,7 @@
     },
     {
       "san": "Qxd3",
-      "annotation": "White recaptures with the queen, centralizing it beautifully. The queen on d3 is a powerhouse — it controls the d-file, eyes the kingside along the b1-h7 diagonal, and supports potential attacks.",
+      "annotation": "White recaptures Qxd3, centralizing the queen beautifully. The Qd3 controls the d-file, eyes the kingside (supporting h5 and potential Ng5 ideas), and is flexibly placed to support both central and flank operations.",
       "pawnStructure": "White has a clear plan now: O-O-O or O-O followed by using the open lines.",
       "plans": [
         "Castle and connect rooks",
@@ -459,7 +459,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black solidifies the center with ...e6, creating the classic Caro-Kann pawn triangle on c6-d5(captured)-e6. This locks down d5 and prevents any Nd5 tricks.",
+      "annotation": "Black solidifies with e6, creating the classic Caro-Kann pawn triangle on c6-d5-e6. The e6 pawn locks down the center, prevents any e5 or d5 advances from White, and prepares natural development with ...Be7 and ...O-O. The position is solid but slightly passive for Black.",
       "pawnStructure": "The c6-e6 pawn chain is extremely solid but slightly passive.",
       "plans": [
         "Castle kingside and connect rooks",
