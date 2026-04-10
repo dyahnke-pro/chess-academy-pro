@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -9,7 +9,6 @@ import {
   Menu,
   X,
   MessageCircle,
-  ChevronLeft,
   AlertTriangle,
   Target,
 } from 'lucide-react';
@@ -46,37 +45,9 @@ export function AppLayout(): JSX.Element {
   const setSidebarOpen = useAppStore((s) => s.setSidebarOpen);
   const coachDrawerOpen = useAppStore((s) => s.coachDrawerOpen);
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
-  const coachEdgeTabPercent = useAppStore((s) => s.coachEdgeTabPercent);
-  const setCoachEdgeTabPercent = useAppStore((s) => s.setCoachEdgeTabPercent);
   const bgAnalysisRunning = useAppStore((s) => s.backgroundAnalysisRunning);
   const bgAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
   const location = useLocation();
-
-  // Draggable edge tab
-  const edgeDragRef = useRef<{ startY: number; startPercent: number; dragged: boolean } | null>(null);
-
-  const handleEdgePointerDown = useCallback((e: React.PointerEvent) => {
-    edgeDragRef.current = { startY: e.clientY, startPercent: coachEdgeTabPercent, dragged: false };
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-  }, [coachEdgeTabPercent]);
-
-  const handleEdgePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!edgeDragRef.current) return;
-    const dy = e.clientY - edgeDragRef.current.startY;
-    if (Math.abs(dy) > 4) edgeDragRef.current.dragged = true;
-    const viewportH = window.innerHeight;
-    const deltaPercent = (dy / viewportH) * 100;
-    setCoachEdgeTabPercent(edgeDragRef.current.startPercent + deltaPercent);
-  }, [setCoachEdgeTabPercent]);
-
-  const handleEdgePointerUp = useCallback((e: React.PointerEvent) => {
-    const wasDrag = edgeDragRef.current?.dragged ?? false;
-    edgeDragRef.current = null;
-    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-    if (!wasDrag) {
-      setCoachDrawerOpen(true);
-    }
-  }, [setCoachDrawerOpen]);
 
   const closeSidebar = useCallback((): void => {
     setSidebarOpen(false);
@@ -284,25 +255,23 @@ export function AppLayout(): JSX.Element {
       {/* Coach trigger — edge tab on mobile, FAB on desktop */}
       {showCoachFab && (
         <>
-          {/* Mobile: right-edge tab — draggable, thinner profile */}
+          {/* Mobile: bottom-center pill button */}
           <button
-            onPointerDown={handleEdgePointerDown}
-            onPointerMove={handleEdgePointerMove}
-            onPointerUp={handleEdgePointerUp}
-            className="md:hidden fixed z-40 flex items-center justify-center rounded-l-md shadow-md touch-none select-none"
+            onClick={() => setCoachDrawerOpen(true)}
+            className="md:hidden fixed z-40 flex items-center justify-center gap-1.5 px-4 py-2 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
             style={{
               background: 'var(--color-accent)',
               color: 'var(--color-bg)',
-              right: 0,
-              top: `${coachEdgeTabPercent}%`,
-              transform: 'translateY(-50%)',
-              width: 24,
-              height: 48,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
+              boxShadow: '0 0 12px rgba(6, 182, 212, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25)',
             }}
-            aria-label="Open coach chat (drag to reposition)"
+            aria-label="Open coach chat"
             data-testid="coach-edge-tab"
           >
-            <ChevronLeft size={14} />
+            <MessageCircle size={16} />
+            <span className="text-xs font-semibold">Coach</span>
           </button>
 
           {/* Desktop: floating action button */}

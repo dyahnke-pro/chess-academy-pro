@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 
 interface MobileChatDrawerProps {
   isOpen: boolean;
@@ -9,11 +9,13 @@ interface MobileChatDrawerProps {
 }
 
 /**
- * Bottom-sheet drawer for mobile. Covers ~45% of the screen so the board
- * stays visible above. Swipe down to dismiss.
+ * Bottom-sheet drawer for mobile. Covers ~55% of the screen so the board
+ * stays visible above. Drag the handle down to dismiss.
+ * Content scrolls independently — only the handle triggers drag.
  */
 export function MobileChatDrawer({ isOpen, onClose, children }: MobileChatDrawerProps): JSX.Element {
   const sheetRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
 
   return (
     <AnimatePresence>
@@ -40,6 +42,8 @@ export function MobileChatDrawer({ isOpen, onClose, children }: MobileChatDrawer
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 350 }}
             drag="y"
+            dragControls={dragControls}
+            dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.4 }}
             onDragEnd={(_e, info) => {
@@ -57,8 +61,11 @@ export function MobileChatDrawer({ isOpen, onClose, children }: MobileChatDrawer
             }}
             data-testid="mobile-chat-drawer"
           >
-            {/* Drag handle */}
-            <div className="flex justify-center pt-2 pb-1 shrink-0">
+            {/* Drag handle — only this area initiates drag */}
+            <div
+              className="flex justify-center pt-2 pb-1 shrink-0 cursor-grab active:cursor-grabbing touch-none"
+              onPointerDown={(e) => dragControls.start(e)}
+            >
               <div
                 className="w-10 h-1 rounded-full"
                 style={{ background: 'var(--color-border)' }}
