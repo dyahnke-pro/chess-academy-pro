@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White opens with the king's pawn, seizing central space and opening diagonals. This is the move that allows the Alekhine Defense to exist — Black's provocative reply directly targets this pawn.",
+      "annotation": "This is the Alekhine Defense, one of the most provocative openings in chess. White plays 1.e4, claiming central space. The Alekhine invites White to overextend the center with pawn advances, then attacks the overextended pawns — a hypermodern strategy that requires precise timing.",
       "pawnStructure": "Single e4 pawn in the center. White expects to maintain or expand this center.",
       "plans": [
         "Build a strong center and develop pieces behind it",
@@ -30,7 +30,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "The Alekhine Defense — one of the most provocative openings in chess. Black develops a knight to ATTACK e4 on move one, daring White to push e5 and chase it.",
+      "annotation": "Black plays 1...Nf6, the Alekhine Defense — attacking e4 with a piece instead of a pawn. This daring move invites White to push e5, then d4, building a big center that Black will target as a structural weakness. The philosophy is: let White overextend, then punish.",
       "pawnStructure": "No pawn commitment from Black. The idea is to let White advance and then attack the resulting pawn.",
       "plans": [
         "Provoke e5, then maneuver the knight to continue provoking advances",
@@ -55,7 +55,7 @@
     },
     {
       "san": "e5",
-      "annotation": "White accepts the challenge and pushes e5, gaining space and kicking the knight. This is the most natural response — why wouldn't you push a pawn with tempo? White gains central territory, but the e.",
+      "annotation": "White pushes e5, accepting the challenge and gaining space while attacking the Nf6. This is the most natural response — the e5 pawn gains territory, opens the f1-a6 diagonal for the bishop, and forces the knight to move again.",
       "pawnStructure": "The e5 pawn gains space but is advanced and potentially vulnerable.",
       "plans": [
         "Continue advancing to build a massive center with d4, c4",
@@ -85,7 +85,7 @@
     },
     {
       "san": "Nd5",
-      "annotation": "The knight retreats to d5, a powerful central square. From d5, it's stable and well-placed — it controls b4, c3, e3, and f4.",
+      "annotation": "The knight retreats to d5, a powerful central square. On d5, the knight controls b4, c3, e3, f4, and c7 — it's stable and well-placed. White will try to push c4 to kick it again, but for now the Nd5 is the strongest piece on the board.",
       "pawnStructure": "No pawn change yet. Black's strategy depends on attacking White's center with ...d6 soon.",
       "plans": [
         "Play ...d6 to challenge the e5 pawn",
@@ -115,7 +115,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White builds the two-pawn center with d4, supporting e5 and claiming dominant central space. This is the standard approach — d4 and e5 together control all the key squares.",
+      "annotation": "White builds the two-pawn center with d4, supporting e5 and claiming dominant central space. Together, d4 and e5 control c5, d5, e5, and f5. This imposing center is exactly what the Alekhine invites — Black's plan is to prove it's overextended.",
       "pawnStructure": "The d4-e5 pawn duo gives White a significant space advantage.",
       "plans": [
         "Support the center with c4 to kick the knight and maintain space",
@@ -142,7 +142,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black strikes at the base of White's center with ...d6. This is the critical moment in the Alekhine — Black directly challenges the e5 pawn.",
+      "annotation": "Black plays d6, striking at the e5 pawn — the head of White's pawn chain. This is the critical moment in the Alekhine: Black directly challenges the advanced center. After exd6 or dxe5, the pawn structure changes dramatically and Black begins the counterattack.",
       "pawnStructure": "After ...d6, the central tension is at its peak.",
       "plans": [
         "Challenge and undermine White's center",
@@ -167,7 +167,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to f3, supporting both d4 and e5 while preparing to castle. This is the Modern Variation — White prioritizes development over the aggressive c4 chase.",
+      "annotation": "White develops the knight to f3, entering the Modern Variation where White prioritizes piece development over further pawn advances. The Nf3 supports both d4 and e5, controls the g5 and e5 squares, and prepares kingside castling — a solid, positional approach.",
       "pawnStructure": "White maintains the d4-e5 center. The position is less aggressive than the Four Pawns Attack but m.",
       "plans": [
         "Castle kingside quickly and maintain a solid center",
@@ -191,7 +191,7 @@
     },
     {
       "san": "Bg4",
-      "annotation": "Black pins the f3 knight to the queen — a purposeful developing choice. The bishop on g4 creates real pressure: if White plays Be2, Black can trade bishops and double White's pawns.",
+      "annotation": "Black pins the Nf3 with Bg4, a purposeful developing choice that creates immediate tactical pressure. The pin is real: if White plays Be2, Black can exchange Bxf3 and double White's f-pawns. The Bg4 also develops the bishop to an active square before Black plays ...e6.",
       "pawnStructure": "No structural change, but the pin on f3 limits White's ability to reinforce the center.",
       "plans": [
         "Maintain the pin and develop the rest of the pieces",
@@ -215,7 +215,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "White breaks the pin by developing the bishop to e2. This is the calm, positional approach — the bishop on e2 is modest but solid, it unpins the knight and prepares castling.",
+      "annotation": "White breaks the pin with Be2, unpinning the Nf3 and preparing to castle. The Be2 is the calm, positional response — it develops a piece, resolves the pin, and supports a solid kingside structure. After castling, White's position will be well-coordinated.",
       "pawnStructure": "No change. The center remains intact and White is ready to castle.",
       "plans": [
         "Castle kingside and complete development",
@@ -240,7 +240,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays ...e6, a subtle but purposeful move. It reinforces the pawn on d5, prepares ...Be7 for development, and keeps the position solid.",
+      "annotation": "Black plays e6, reinforcing d5 and preparing to develop the dark-squared bishop. The e6 pawn solidifies Black's central presence and creates the d5+e6 pawn formation that provides a stable base. The slight downside is that it locks the light-squared bishop behind the chain.",
       "pawnStructure": "Black creates a solid e6-d6 chain. The light-squared bishop will need to come back inside the chai.",
       "plans": [
         "Develop ...Be7 and castle kingside",
@@ -265,7 +265,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles, getting the king to safety and connecting the rooks. With a strong center and completed kingside development, White has a very comfortable position.",
+      "annotation": "White castles kingside, completing development and connecting the rooks. With a strong center (d4+e5) and all pieces developed, White has a comfortable position with more space. The challenge for Black is to find a way to challenge White's center before it consolidates.",
       "plans": [
         "Play c4 to expand and kick the d5 knight",
         "Use the rook on f1 to support f4 if needed"
@@ -286,7 +286,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop to e7, a modest but necessary square. The bishop prepares castling and covers some important dark squares.",
+      "annotation": "Black develops the bishop to e7, a modest but necessary square that prepares castling. The Be7 covers d6 and f6, supports the kingside, and gets the bishop off c8-f1 diagonal where it wasn't doing much. Castling is now the priority.",
       "pawnStructure": "No change. Black's setup with e6-d6 and Be7 is solid and prepares to castle.",
       "plans": [
         "Castle kingside immediately",
@@ -305,7 +305,7 @@
     },
     {
       "san": "c4",
-      "annotation": "White strikes at the powerful d5 knight, forcing it to retreat. The c4 push also grabs more space on the queenside and supports d5 if White ever pushes there.",
+      "annotation": "White plays c4, attacking the Nd5 and gaining more central space. The c4 pawn forces the knight to retreat, expanding White's control of the center. After the knight moves, White will have a broad c4-d4-e5 pawn chain — maximum space advantage.",
       "pawnStructure": "White now has pawns on c4, d4, and e5 — a massive pawn center.",
       "plans": [
         "Drive the knight away and maintain the space advantage",
@@ -327,7 +327,7 @@
     },
     {
       "san": "Nb6",
-      "annotation": "The knight retreats to b6, the standard square in this line. From b6, the knight eyes c4 and d5, staying relevant despite being pushed back.",
+      "annotation": "The knight retreats to b6, the standard square in this line. From b6, the knight eyes c4 and d5, staying relevant despite being pushed back. The knight can later reroute via c8-d6 or a4-c5 depending on the position's needs.",
       "pawnStructure": "No structural change. The knight on b6 puts pressure on c4 and d5.",
       "plans": [
         "Castle and finish development",
@@ -351,7 +351,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, completing minor piece development. The knight protects e4 (if the pawn were still there) and controls d5 — a vital outpost in this pawn structure.",
+      "annotation": "White develops the knight to c3, completing minor piece development. The Nc3 controls d5 — the key central square that Black's knight just vacated — and supports the c4 and e4 pawns. White's development is now complete with a clear space advantage.",
       "plans": [
         "Build on the space advantage with Be3, Rc1",
         "Play for a d5 or f4 advance in the middlegame"
@@ -372,7 +372,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles, finally getting the king to safety. Both sides are now fully developed, and the real battle begins.",
+      "annotation": "Black castles, getting the king to safety. Both sides are now fully developed, and the Alekhine middlegame begins — White has more space but a potentially overextended center, while Black has a solid structure and will look for ...c5 or ...f6 to challenge White's pawns.",
       "pawnStructure": "The position is stable: White has pawns on c4-d4-e5, Black has e6-d6.",
       "plans": [
         "Play ...Bxf3 to double White's pawns and weaken the center",

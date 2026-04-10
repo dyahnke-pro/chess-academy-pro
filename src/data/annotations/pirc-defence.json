@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White seizes the center with the king's pawn, claiming d5 and f5 and opening lines for the bishop and queen.",
+      "annotation": "This is the Pirc Defense, a hypermodern opening where Black allows White to build a full pawn center and then attacks it from the flanks. White plays 1.e4, claiming central space. The Pirc leads to dynamic positions where White's space advantage clashes with Black's flexible piece play.",
       "pawnStructure": "Single e4 pawn. White plans d4 next for a commanding two-pawn center.",
       "plans": [
         "Build a d4-e4 pawn center",
@@ -33,7 +33,7 @@
     },
     {
       "san": "d6",
-      "annotation": "The Pirc Defense starts here. Black plays ...d6 instead of challenging the center immediately, saying 'go ahead, build your big center — I'll undermine it later.' This is a hypermodern approach: Bla.",
+      "annotation": "Black plays 1...d6, the Pirc Defense. Instead of immediately challenging the center, Black says: \"go ahead, build your big center — I'll undermine it later.\" The d6 pawn prepares ...Nf6 and ...g6, setting up the fianchetto that will target White's d4 pawn from the long diagonal.",
       "pawnStructure": "Black's d6 pawn is modest but flexible. It controls e5 and supports a later ...e5 or ...c5 break d.",
       "plans": [
         "Fianchetto the bishop to g7 to pressure White's center from the flank",
@@ -63,7 +63,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White doesn't hesitate — two pawns in the center, maximum space. The d4-e4 duo controls everything: c5, d5, e5, f5. Against the Pirc, this is practically automatic.",
+      "annotation": "White builds the maximum center with d4, establishing the e4+d4 pawn duo. Together these pawns control c5, d5, e5, and f5 — the strongest possible central formation. Against the Pirc, this imposing center is both a strength (space advantage) and a potential target (overextension).",
       "pawnStructure": "The classical d4-e4 center gives White significant space advantage.",
       "plans": [
         "Develop pieces behind the center and prepare a kingside attack",
@@ -90,7 +90,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, pressuring e4 and continuing the hypermodern strategy. The knight on f6 is flexible — it eyes e4 and d5, and doesn't commit to a particular pawn structure yet.",
+      "annotation": "Black develops the knight to f6, pressuring e4 and continuing the hypermodern strategy. The Nf6 is flexible — it attacks e4, controls d5, and prepares the ...g6 fianchetto. In the Pirc, the knight and the coming Bg7 work together to undermine White's center.",
       "pawnStructure": "No pawn change. Black keeps maximum flexibility for the structure.",
       "plans": [
         "Fianchetto with ...g6 and ...Bg7 next",
@@ -120,7 +120,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to protect e4 and control d5. This is the active move — the knight on c3 is the backbone of White's center, defending e4 and preparing to support f4 if White go.",
+      "annotation": "White develops the knight to c3, defending e4 and controlling the d5 square. The Nc3 is the backbone of White's center — it keeps e4 secure, prevents any ...d5 breaks, and supports the ambitious f4 advance in the Austrian Attack.",
       "pawnStructure": "The center is fully supported. Nc3 makes e4 rock-solid and prepares expansive setups.",
       "plans": [
         "Play f4 for the Austrian Attack — the most aggressive option",
@@ -145,7 +145,7 @@
     },
     {
       "san": "g6",
-      "annotation": "The fianchetto begins. Black will place the bishop on g7 where it becomes a monster — aiming straight at White's d4 pawn along the long diagonal.",
+      "annotation": "Black plays g6, beginning the fianchetto that defines the Pirc. The bishop will go to g7 where it becomes the most important piece — aiming at White's d4 pawn along the a1-h8 diagonal, defending the kingside, and supporting future ...c5 or ...e5 central breaks.",
       "pawnStructure": "The g6 pawn creates a shelter for the king and prepares the fianchetto.",
       "plans": [
         "Complete the fianchetto with ...Bg7",
@@ -172,7 +172,7 @@
     },
     {
       "san": "f4",
-      "annotation": "The Austrian Attack! White plays f4, building the most aggressive pawn center possible: d4-e4-f4. This is a direct attempt to crush Black before the fianchetto becomes effective.",
+      "annotation": "White plays f4, entering the Austrian Attack — the most aggressive system against the Pirc. The f4 pawn creates the d4+e4+f4 triple-pawn center, the most ambitious formation in chess. White aims to overwhelm Black with a direct e5 advance or a kingside pawn storm.",
       "pawnStructure": "The d4-e4-f4 pawn trio is powerful but commits White's f-pawn early.",
       "plans": [
         "Develop quickly and push e5 to kick the f6 knight and gain more space",
@@ -202,7 +202,7 @@
     },
     {
       "san": "Bg7",
-      "annotation": "The bishop takes its throne on g7. This is the most important piece in the Pirc — it pressures d4 along the long diagonal, defends the kingside, and becomes incredibly powerful if Black can ever ope.",
+      "annotation": "The bishop takes its throne on g7, the most powerful piece in the Pirc Defense. From g7, it pressures the d4 pawn along the a1-h8 diagonal, defends the kingside dark squares, and supports both ...c5 and ...e5 central breaks. The Dragon bishop of the Pirc.",
       "pawnStructure": "No pawn change, but the bishop on g7 adds dynamic pressure to White's d4 pawn, which is the base o.",
       "plans": [
         "Castle immediately and get the king safe",
@@ -229,7 +229,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White completes minor piece development. The knight on f3 supports d4, controls e5, and prepares castling.",
+      "annotation": "White develops the knight to f3, completing kingside minor piece development. The Nf3 supports d4, controls e5, and prepares kingside castling. In the Austrian Attack, the Nf3 also supports the e5 advance that White will aim for.",
       "plans": [
         "Castle kingside and prepare e5 or f5 advances",
         "Play Bd3 to develop the bishop actively"
@@ -258,7 +258,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles immediately — getting the king to safety is urgent when White has the Austrian Attack setup.",
+      "annotation": "Black castles immediately, getting the king to safety behind the fianchettoed Bg7. Against the Austrian Attack's aggressive setup, king safety is urgent — delaying castling would leave the king vulnerable to the e5 central break that blows the position open.",
       "pawnStructure": "The king is safe behind the g6-f7-h7 pawns. Black's structure is compact and ready for counterplay.",
       "plans": [
         "Play ...c5 to attack White's d4 pawn",
@@ -285,7 +285,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "White develops the bishop to d3, the ideal square in the Austrian Attack. From d3, the bishop eyes the kingside (particularly h7), supports e4, and can facilitate a later e5 push.",
+      "annotation": "White develops the bishop to d3, the ideal square in the Austrian Attack. The Bd3 targets the kingside (particularly h7), supports the e4 pawn, and prepares an aggressive setup. Combined with f4, the Bd3 creates a dangerous attacking battery aimed at Black's castled king.",
       "pawnStructure": "No structural change. The bishop supports the central pawns and prepares for kingside operations.",
       "plans": [
         "Castle and then launch a kingside attack with e5 or f5",
@@ -315,7 +315,7 @@
     },
     {
       "san": "Na6",
-      "annotation": "An unusual-looking move, but it's actually very smart. The knight goes to a6 to reroute to c7 and then either e6 or help with ...c5.",
+      "annotation": "Black plays Na6, an unusual-looking but strategically important move. The knight heads for c7, from where it supports both ...b5 and the critical ...c5 break. Going to a6 instead of c6 is key — on c6, the knight would block the c-pawn, preventing Black's most important counterattack.",
       "pawnStructure": "Black preserves the ability to play ...c5, which is the most important structural break in the Pirc.",
       "plans": [
         "Reroute the knight via c7 to support ...c5 or reach e6",
@@ -345,7 +345,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles, getting the king safe and connecting the rooks. With both sides castled on the same wing, it's a race: White wants to attack on the kingside with e5 or f5, while Black wants to underm.",
+      "annotation": "White castles kingside, getting the king safe and connecting the rooks. With both sides castled on the same wing, it becomes a complex strategic battle — White wants to use the space advantage for an e5 or g4 attack, while Black targets d4 with ...c5.",
       "pawnStructure": "No change. White's pawn center remains dominant and the king is safe.",
       "plans": [
         "Play e5 to gain more space and kick the f6 knight",
@@ -372,7 +372,7 @@
     },
     {
       "san": "c5",
-      "annotation": "The critical counter-strike! Black hits d4 with ...c5, the whole reason the knight went to a6 instead of c6.",
+      "annotation": "Black strikes with c5, the critical counter-blow that challenges d4 — the base of White's pawn chain. This is the whole reason the knight went to a6 instead of c6. The ...c5 break opens the position and activates the Bg7, which has been waiting for this moment.",
       "pawnStructure": "The c5 pawn challenges d4 directly. If dxc5 dxc5, Black gets an open d-file and a strong bishop on.",
       "plans": [
         "Open the long diagonal for the g7 bishop",
@@ -402,7 +402,7 @@
     },
     {
       "san": "d5",
-      "annotation": "White closes the center with d5. This is a committal decision — White locks the structure, which reduces the power of Black's g7 bishop (the long diagonal is blocked) but gains space and a protected.",
+      "annotation": "White plays d5, closing the center. This is a committal decision — the locked center reduces the Bg7's power on the long diagonal (the d4 pawn no longer hangs), but it also creates a permanent structure where both sides have clear plans: White attacks on the kingside, Black expands on the queenside.",
       "pawnStructure": "Closed center with pawns on d5-e4-f4 vs d6-c5.",
       "plans": [
         "Attack on the kingside with f5 or e5",
@@ -432,7 +432,7 @@
     },
     {
       "san": "Nc7",
-      "annotation": "The knight completes its journey to c7, exactly as planned from a6. From c7, the knight supports ...b5 and can jump to e8-f6 or a6-b4 as needed.",
+      "annotation": "The knight completes its journey to c7, exactly as planned from a6. From c7, the knight supports the ...b5 queenside advance, can jump to e8-f6 for kingside defense, or reroute to a6-b4 targeting the d5 pawn. The Na6-c7 maneuver is the signature of Black's Pirc strategy.",
       "pawnStructure": "Black is preparing ...b5 and queenside counterplay.",
       "plans": [
         "Play ...a6 and ...b5 for queenside expansion",
