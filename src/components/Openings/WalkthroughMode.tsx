@@ -75,13 +75,20 @@ const NARRATE: Record<AutoPlaySpeed, boolean> = {
   drill: false,
 };
 
-/** Trim annotation to first 1-2 sentences for Review speed. */
-function trimAnnotation(text: string): string {
-  // Split on sentence boundaries (period, exclamation, question mark followed by space or end)
+/** Trim annotation to a given max number of sentences. */
+function trimAnnotation(text: string, maxSentences: number = 2): string {
   const sentences = text.match(/[^.!?]+[.!?]+/g);
-  if (!sentences || sentences.length <= 2) return text;
-  return sentences.slice(0, 2).join('').trim();
+  if (!sentences || sentences.length <= maxSentences) return text;
+  return sentences.slice(0, maxSentences).join('').trim();
 }
+
+/** How many sentences to show/speak for each speed. null = full text. */
+const SENTENCE_LIMIT: Record<AutoPlaySpeed, number | null> = {
+  learn: null,     // Full annotation
+  study: 3,        // Slightly trimmed
+  review: 1,       // Just the key point
+  drill: null,     // Hidden entirely
+};
 
 function getAnnotationDelay(text: string | undefined, speed: AutoPlaySpeed): number {
   if (!text) return MIN_DELAY_MS[speed];
@@ -552,9 +559,9 @@ export function WalkthroughMode({
 
     let cancelled = false;
 
-    // Review speed: trim to first 1-2 sentences for brevity
-    const spokenText = autoPlaySpeed === 'review'
-      ? trimAnnotation(ann.annotation)
+    const limit = SENTENCE_LIMIT[autoPlaySpeed];
+    const spokenText = limit !== null
+      ? trimAnnotation(ann.annotation, limit)
       : ann.annotation;
 
     void voiceService.speak(spokenText).then(() => {
