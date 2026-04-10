@@ -56,7 +56,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to f3, attacking Black's e5 pawn. In the Scotch Game, the Nf3 is not just a developing move — it prepares the immediate d4 advance that will blow the center open on the very next move.",
+      "annotation": "White develops the knight to f3, attacking Black's e5 pawn. In the Scotch Game, the Nf3 is not just a developing choice — it prepares the immediate d4 advance that will blow the center open on the very next move.",
       "plans": [
         "Prepare d4 to open the center aggressively",
         "Castle kingside quickly"
@@ -344,7 +344,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "White develops the bishop to e3 with tempo, attacking the Bc5 and forcing a decision. Black must choose whether to exchange bishops (simplifying) or retreat (losing time). This developing move with a threat is the hallmark of efficient Scotch play.",
+      "annotation": "White develops the bishop to e3 with tempo, attacking the Bc5 and forcing a decision. Black must choose whether to exchange bishops (simplifying) or retreat (losing time). this move with a threat is the hallmark of efficient Scotch play.",
       "plans": [
         "Gain tempo by attacking the bishop",
         "Prepare O-O-O for quick rook activation"

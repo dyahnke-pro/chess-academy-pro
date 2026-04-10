@@ -150,7 +150,7 @@
     },
     {
       "san": "Bc5",
-      "annotation": "Black develops the bishop to c5 in the Giuoco Piano setup, targeting f2 and controlling the a7-g1 diagonal. This natural developing move is exactly what White wants to see — the Bc5 will be lured away by the Evans Gambit pawn sacrifice.",
+      "annotation": "Black develops the bishop to c5 in the Giuoco Piano setup, targeting f2 and controlling the a7-g1 diagonal. This active move is exactly what White wants to see — the Bc5 will be lured away by the Evans Gambit pawn sacrifice.",
       "plans": [
         "Counter-pressure on f2 and the dark squares",
         "Prepare d6 and solid development"

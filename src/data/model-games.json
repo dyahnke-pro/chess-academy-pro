@@ -640,7 +640,7 @@
         "moveNumber": 20,
         "color": "black",
         "fen": "2kr3r/2qn3p/p3p1pQ/2b1P3/2p1NP2/8/PPB3PP/R1B2R1K b - - 0 20",
-        "annotation": "Kramnik finds the key move Nxe5, breaking open the center and exploiting White's overextended pieces. This tactical blow transforms Black's defensive position into a winning one.",
+        "annotation": "Kramnik finds the critical move Nxe5, breaking open the center and exploiting White's overextended pieces. This tactical blow transforms Black's defensive position into a winning one.",
         "concept": "Central counterattack"
       }
     ],

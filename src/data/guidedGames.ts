@@ -184,7 +184,7 @@ export const GUIDED_GAMES: GuidedGame[] = [
       {
         moveNumber: 3, san: 'd6', color: 'b', autoPlay: true,
         fen: 'r1bqkbnr/ppp2ppp/2np4/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4',
-        narration: 'Black plays d6 to support e5. A solid move.',
+        narration: 'Black plays d6 to support e5. A stabilizing move.',
       },
       {
         moveNumber: 4, san: 'Nc3', color: 'w', autoPlay: false,

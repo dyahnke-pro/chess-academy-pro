@@ -410,7 +410,7 @@
     },
     {
       "san": "Bd7",
-      "annotation": "Black develops the bishop to d7, the most flexible developing move. The Bd7 connects the rooks, supports a future ...Rc8, and keeps ...b5 ideas alive. It also prepares ...Ne5 hitting the Bc4, a common defensive resource in the Dragon.",
+      "annotation": "Black develops the bishop to d7, the most flexible developing choice. The Bd7 connects the rooks, supports a future ...Rc8, and keeps ...b5 ideas alive. It also prepares ...Ne5 hitting the Bc4, a common defensive resource in the Dragon.",
       "plans": [
         "Play ...Rc8 to seize the open c-file",
         "Reroute bishop to c6 if helpful"
@@ -460,7 +460,7 @@
     },
     {
       "san": "Rc8",
-      "annotation": "Black seizes the open c-file with Rc8 — the single most important move in Black's counterattacking plan. The Rc8 aims at the White king on c1, prepares ...Ne5 attacking the Bc4, and is the starting point for the ...Qa5, ...Nc4, and ...Rxc3 tactical ideas that keep Black alive in the Dragon.",
+      "annotation": "Black seizes the open c-file with Rc8 — the single most purposeful move in Black's counterattacking plan. The Rc8 aims at the White king on c1, prepares ...Ne5 attacking the Bc4, and is the starting point for the ...Qa5, ...Nc4, and ...Rxc3 tactical ideas that keep Black alive in the Dragon.",
       "plans": [
         "Pressure c3 and the queenside",
         "Prepare ...Ne5 hitting Bc4 with tempo"
