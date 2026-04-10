@@ -113,30 +113,18 @@ describe('audit: discovered_attack', () => {
   });
 });
 
-// ── Deflection ─────────────────────────────────────────────────────────────
-describe('audit: deflection', () => {
-  it('detects deflection when capture removes defender of an attacked piece', () => {
-    // Black rook on d5 defends the d8 square (where white could invade).
-    // Black knight on d8 is defended by Rd5. White bishop captures Bxd5, deflecting the rook.
-    // After Bxd5, knight on d8 loses its defender.
-    // Actually: detectDeflection checks if the captured piece's legal moves included
-    // the square of a friendly piece with value >= 3. chess.js won't generate moves
-    // to friendly-occupied squares, so this pattern requires the defended piece to be
-    // capturable by the defender (i.e., the defender can recapture on that square).
-    //
-    // Use a position where the defender guards an empty square with a piece beyond it:
-    // Black rook on e5 can move to e1 (defending against Re1 threats).
-    // White Nxe5 deflects the rook. But this is just hanging_piece if rook is undefended.
-    //
-    // Deflection is hard to trigger in the code because chess.js moves() won't include
-    // friendly-occupied target squares. Accept hanging_piece for this capture.
-    expect(detectTacticType('k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1', 'd1d5')).toBe('hanging_piece');
+// ── Removing the Guard ────────────────────────────────────────────────────
+describe('audit: removing_the_guard', () => {
+  it('detects removing the guard when capture removes defender of a valuable piece', () => {
+    // Black bishop on d5 defends the queen on e6.
+    // White Rxd5 captures the bishop, and the queen on e6 is now undefended.
+    expect(detectTacticType('k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1', 'd1d5')).toBe('removing_the_guard');
   });
 
-  it('does NOT detect deflection when captured piece was not defending anything valuable', () => {
+  it('does NOT detect removing the guard when captured piece was not defending anything valuable', () => {
     // Capture a pawn that isn't defending anything worth >= 3
     const result = detectTacticType('k7/8/8/3p4/8/8/8/3R3K w - - 0 1', 'd1d5');
-    expect(result).not.toBe('deflection');
+    expect(result).not.toBe('removing_the_guard');
   });
 });
 

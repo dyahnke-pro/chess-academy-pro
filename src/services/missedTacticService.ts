@@ -300,10 +300,26 @@ function detectDiscoveredAttack(chess: Chess, from: Square, to: Square, movingCo
 }
 
 /**
- * Detect deflection: forcing a defender away from a key defensive duty.
- * After the best move captures or attacks a piece that was defending something valuable.
+ * Check if a square is defended using chess.js isAttacked (geometry-based,
+ * works for friendly-occupied squares unlike moves()-based checks).
  */
-function detectDeflection(
+function isSquareDefended(chess: Chess, square: Square, byColor: Color): boolean {
+  try {
+    const fenParts = chess.fen().split(' ');
+    fenParts[1] = oppositeColor(byColor);
+    fenParts[3] = '-';
+    const testChess = new Chess(fenParts.join(' '));
+    return testChess.isAttacked(square, byColor);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Detect removing the guard: capturing a piece that was defending another valuable piece.
+ * After the capture, the previously-defended piece is now undefended.
+ */
+function detectRemovingTheGuard(
   chessBeforeMove: Chess,
   chessAfterMove: Chess,
   to: Square,
@@ -313,29 +329,24 @@ function detectDeflection(
   if (!capturedTarget || capturedTarget.color === movingColor) return false;
 
   const enemyColor = oppositeColor(movingColor);
+  const board = chessBeforeMove.board();
 
   try {
-    // Force enemy's turn so we can see what the captured piece was defending
-    const fenParts = chessBeforeMove.fen().split(' ');
-    fenParts[1] = enemyColor;
-    fenParts[3] = '-';
-    const testBefore = new Chess(fenParts.join(' '));
-
-    const defenderMoves = testBefore.moves({ square: to, verbose: true });
-    const board = chessBeforeMove.board();
-
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = board[r][c];
-        if (!piece || piece.color !== enemyColor) continue;
+        if (!piece || piece.color !== enemyColor || piece.type === 'k') continue;
         const sq = coordsToSquare(c, 7 - r);
         if (!sq || sq === to) continue;
+        if (pieceValue(piece.type) < 3) continue;
 
-        const wasDefending = defenderMoves.some((m) => m.to === sq);
-        if (wasDefending && pieceValue(piece.type) >= 3) {
-          if (!isDefended(chessAfterMove, sq, enemyColor)) {
-            return true;
-          }
+        // Was this piece defended before, and is it undefended after the capture?
+        const defendedBefore = isSquareDefended(chessBeforeMove, sq, enemyColor);
+        if (!defendedBefore) continue;
+
+        const defendedAfter = isSquareDefended(chessAfterMove, sq, enemyColor);
+        if (!defendedAfter) {
+          return true;
         }
       }
     }
@@ -731,9 +742,9 @@ export function detectTacticType(fen: string, bestMoveUci: string): TacticType {
       return 'discovered_attack';
     }
 
-    // 7. Deflection
-    if (moveResult.captured && detectDeflection(chessBefore, chessAfter, to, movingColor)) {
-      return 'deflection';
+    // 7. Removing the guard (capturing a piece that was defending something valuable)
+    if (moveResult.captured && detectRemovingTheGuard(chessBefore, chessAfter, to, movingColor)) {
+      return 'removing_the_guard';
     }
 
     // 8. Overloaded piece (must verify the move exploits the overload)
@@ -794,6 +805,7 @@ function generateExplanation(tacticType: TacticType, bestMove: string, evalSwing
     zwischenzug: `You missed a zwischenzug (in-between move) with ${bestMove}! This unexpected intermediate move changes the dynamics (${swingPawns} pawn advantage).`,
     x_ray: `You missed an x-ray attack with ${bestMove}! The attack goes through one piece to target another (${swingPawns} pawn advantage).`,
     double_check: `You missed a double check with ${bestMove}! Two pieces deliver check simultaneously — the king MUST move (${swingPawns} pawn advantage).`,
+    removing_the_guard: `You missed removing the guard with ${bestMove}! Capturing that defender leaves another piece unprotected (${swingPawns} pawn advantage).`,
     tactical_sequence: `You missed the tactical sequence starting with ${bestMove} (${swingPawns} pawn advantage).`,
   };
 

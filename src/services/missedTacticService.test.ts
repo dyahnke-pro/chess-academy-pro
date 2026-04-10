@@ -77,6 +77,14 @@ describe('detectTacticType', () => {
     expect(result).toBe('pin');
   });
 
+  it('detects removing the guard (capturing a defender)', () => {
+    // Black knight on c6 defends bishop on e5.
+    // White rook captures knight: Rxc6 removes the guard.
+    // After Rxc6, bishop on e5 is undefended.
+    const fen = '4k3/8/2n5/4b3/8/8/8/2R1K3 w - - 0 1';
+    expect(detectTacticType(fen, 'c1c6')).toBe('removing_the_guard');
+  });
+
   it('returns tactical_sequence for invalid input', () => {
     expect(detectTacticType('invalid fen', 'e2e4')).toBe('tactical_sequence');
   });

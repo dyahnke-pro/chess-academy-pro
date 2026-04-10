@@ -15,7 +15,8 @@ import type {
 const ALL_TACTIC_TYPES: TacticType[] = [
   'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank',
   'hanging_piece', 'promotion', 'deflection', 'overloaded_piece',
-  'tactical_sequence',
+  'trapped_piece', 'clearance', 'interference', 'zwischenzug',
+  'x_ray', 'double_check', 'removing_the_guard', 'tactical_sequence',
 ];
 
 /** Map puzzle theme names to TacticType for cross-referencing. */
@@ -28,6 +29,7 @@ const THEME_TO_TACTIC: Record<string, TacticType> = {
   sacrifice: 'deflection',
   deflection: 'deflection',
   hangingPiece: 'hanging_piece',
+  capturingDefender: 'removing_the_guard',
 };
 
 const META_KEY = 'tactical_profile';
@@ -251,6 +253,7 @@ export function tacticTypeIcon(type: TacticType): string {
     zwischenzug: '\u26A1',
     x_ray: '\uD83D\uDD2C',
     double_check: '\u2757\u2757',
+    removing_the_guard: '\uD83D\uDEE1\uFE0F',
     tactical_sequence: '\uD83C\uDFAF',
   };
   return icons[type];

@@ -103,6 +103,11 @@ const TACTIC_TEACHING: Record<TacticType, {
     lookFor: 'Can you give check with two pieces simultaneously? The king will have very few escape squares.',
     beginnerHint: 'If you can check the king with two pieces at once, it is incredibly powerful!',
   },
+  removing_the_guard: {
+    concept: 'Removing the guard means capturing a piece that is defending something else — once the guard is gone, the target is left hanging.',
+    lookFor: 'Find which enemy piece is the sole defender of a valuable target. Can you capture that defender?',
+    beginnerHint: 'One of their pieces is protecting something important. If you take it, the thing it was guarding is free!',
+  },
   tactical_sequence: {
     concept: 'Sometimes the best move involves a combination of ideas — a sequence of forcing moves that work together.',
     lookFor: 'Look for checks, captures, and threats that force your opponent\'s responses. Each move should limit their options.',
