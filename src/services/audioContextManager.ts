@@ -20,8 +20,11 @@ function _tryResume(ctx: AudioContext): void {
 function _attachUnlockListeners(ctx: AudioContext): void {
   const handler = (): void => {
     _tryResume(ctx);
-    document.removeEventListener('touchstart', handler, true);
-    document.removeEventListener('mousedown', handler, true);
+    // Only remove listeners once the context is actually running
+    if (ctx.state === 'running') {
+      document.removeEventListener('touchstart', handler, true);
+      document.removeEventListener('mousedown', handler, true);
+    }
   };
   document.addEventListener('touchstart', handler, { passive: true, capture: true });
   document.addEventListener('mousedown', handler, { passive: true, capture: true });

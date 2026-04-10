@@ -70,7 +70,19 @@ export class SoundService {
   private synth(p: SoundParams): void {
     try {
       const c = getSharedAudioContext();
-      if (c.state === 'suspended') void c.resume();
+      if (c.state === 'suspended') {
+        // Resume and retry once the context is running (iOS requires this)
+        void c.resume().then(() => {
+          if (c.state === 'running') this.synthImmediate(c, p);
+        });
+        return;
+      }
+      this.synthImmediate(c, p);
+    } catch { /* swallow – AudioContext unavailable */ }
+  }
+
+  private synthImmediate(c: AudioContext, p: SoundParams): void {
+    try {
       const mv = (p.v ?? 0.7) * this.volume, n = c.currentTime;
 
       // Low-pass filter to soften harsh overtones and reduce graininess
@@ -99,7 +111,7 @@ export class SoundService {
         ng.gain.exponentialRampToValueAtTime(0.001, n + p.dur * 0.3);
         ns.connect(ng); ng.connect(lpf); ns.start(n); ns.stop(n + p.dur);
       }
-    } catch { /* swallow – AudioContext unavailable or suspended */ }
+    } catch { /* swallow – synthesis failed */ }
   }
   preload(): void {}
   static soundTypeFromSan(san: string): SoundType {
