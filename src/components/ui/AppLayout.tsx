@@ -21,20 +21,21 @@ import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
 interface NavItem {
   to: string;
   label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
   glowColor: string;
+  iconColor: string;
   activeText: string;
   activeBg: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(250, 204, 21, 0.6)', activeText: 'text-yellow-400', activeBg: 'bg-yellow-500/10' },
-  { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(6, 182, 212, 0.6)', activeText: 'text-cyan-400', activeBg: 'bg-cyan-500/10' },
-  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(251, 113, 133, 0.6)', activeText: 'text-rose-400', activeBg: 'bg-rose-500/10' },
-  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(52, 211, 153, 0.6)', activeText: 'text-emerald-400', activeBg: 'bg-emerald-500/10' },
-  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(139, 92, 246, 0.6)', activeText: 'text-violet-400', activeBg: 'bg-violet-500/10' },
-  { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)', activeText: 'text-orange-400', activeBg: 'bg-orange-500/10' },
-  { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)', activeText: 'text-slate-400', activeBg: 'bg-slate-500/10' },
+  { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(250, 204, 21, 0.6)', iconColor: 'rgb(250, 204, 21)', activeText: 'text-yellow-400', activeBg: 'bg-yellow-500/10' },
+  { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(6, 182, 212, 0.6)', iconColor: 'rgb(6, 182, 212)', activeText: 'text-cyan-400', activeBg: 'bg-cyan-500/10' },
+  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(251, 113, 133, 0.6)', iconColor: 'rgb(251, 113, 133)', activeText: 'text-rose-400', activeBg: 'bg-rose-500/10' },
+  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(52, 211, 153, 0.6)', iconColor: 'rgb(52, 211, 153)', activeText: 'text-emerald-400', activeBg: 'bg-emerald-500/10' },
+  { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(139, 92, 246, 0.6)', iconColor: 'rgb(139, 92, 246)', activeText: 'text-violet-400', activeBg: 'bg-violet-500/10' },
+  { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)', iconColor: 'rgb(251, 146, 60)', activeText: 'text-orange-400', activeBg: 'bg-orange-500/10' },
+  { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)', iconColor: 'rgb(148, 163, 184)', activeText: 'text-slate-400', activeBg: 'bg-slate-500/10' },
 ];
 
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
@@ -216,7 +217,7 @@ export function AppLayout(): JSX.Element {
               </button>
             </div>
             <div className="flex flex-col gap-0.5 px-2 flex-1 overflow-y-auto">
-              {NAV_ITEMS.map(({ to, label, icon: Icon, glowColor, activeText, activeBg }) => (
+              {NAV_ITEMS.map(({ to, label, icon: Icon, iconColor, glowColor, activeText, activeBg }) => (
                 <NavLink
                   key={to}
                   to={to}
@@ -226,15 +227,18 @@ export function AppLayout(): JSX.Element {
                     `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                       isActive
                         ? `${activeText} ${activeBg}`
-                        : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
+                        : 'hover:text-theme-text hover:bg-theme-surface'
                     }`
                   }
                   style={({ isActive }) => isActive ? {
                     borderLeft: `3px solid ${glowColor}`,
-                    boxShadow: `0 0 10px ${glowColor}, inset 2px 0 8px ${glowColor.replace('0.6)', '0.15)')}`,
-                  } : { borderLeft: '3px solid transparent' }}
+                    boxShadow: `0 4px 8px -2px ${glowColor}, 0 0 10px ${glowColor}, inset 2px 0 8px ${glowColor.replace('0.6)', '0.15)')}`,
+                  } : {
+                    borderLeft: '3px solid transparent',
+                    color: 'var(--color-text-muted)',
+                  }}
                 >
-                  <Icon size={16} />
+                  <Icon size={16} style={{ color: iconColor }} />
                   {label}
                 </NavLink>
               ))}
@@ -267,7 +271,7 @@ export function AppLayout(): JSX.Element {
           </div>
 
           <div className="flex flex-col gap-0.5 px-2 flex-1">
-            {NAV_ITEMS.map(({ to, label, icon: Icon, glowColor, activeText, activeBg }) => (
+            {NAV_ITEMS.map(({ to, label, icon: Icon, iconColor, glowColor, activeText, activeBg }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -276,15 +280,18 @@ export function AppLayout(): JSX.Element {
                   `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${
                     isActive
                       ? `${activeText} ${activeBg}`
-                      : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
+                      : 'hover:text-theme-text hover:bg-theme-surface'
                   }`
                 }
                 style={({ isActive }) => isActive ? {
                   borderLeft: `3px solid ${glowColor}`,
-                  boxShadow: `0 0 10px ${glowColor}, inset 2px 0 8px ${glowColor.replace('0.6)', '0.15)')}`,
-                } : { borderLeft: '3px solid transparent' }}
+                  boxShadow: `0 4px 8px -2px ${glowColor}, 0 0 10px ${glowColor}, inset 2px 0 8px ${glowColor.replace('0.6)', '0.15)')}`,
+                } : {
+                  borderLeft: '3px solid transparent',
+                  color: 'var(--color-text-muted)',
+                }}
               >
-                <Icon size={16} />
+                <Icon size={16} style={{ color: iconColor }} />
                 {label}
               </NavLink>
             ))}
@@ -331,22 +338,26 @@ export function AppLayout(): JSX.Element {
           borderColor: 'var(--color-border)',
         }}
       >
-        {MOBILE_NAV_ITEMS.map(({ to, label, icon: Icon, glowColor, activeText }) => (
+        {MOBILE_NAV_ITEMS.map(({ to, label, icon: Icon, iconColor, glowColor, activeText }) => (
           <NavLink
             key={to}
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
               `flex flex-col items-center gap-0.5 px-2 py-1 text-xs font-medium transition-colors min-w-0 ${
-                isActive ? activeText : 'text-theme-text-muted'
+                isActive ? activeText : ''
               }`
             }
             style={({ isActive }) => isActive ? {
               borderTop: `2px solid ${glowColor}`,
               filter: `drop-shadow(0 0 6px ${glowColor})`,
-            } : { borderTop: '2px solid transparent' }}
+              boxShadow: `0 4px 8px -2px ${glowColor}`,
+            } : {
+              borderTop: '2px solid transparent',
+              color: 'var(--color-text-muted)',
+            }}
           >
-            <Icon size={22} />
+            <Icon size={22} style={{ color: iconColor }} />
             <span className="truncate w-full text-center leading-tight">{label}</span>
           </NavLink>
         ))}
