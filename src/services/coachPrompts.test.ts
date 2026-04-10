@@ -5,9 +5,11 @@ import {
   POSITION_ANALYSIS_ADDITION,
   SESSION_PLAN_ADDITION,
   OPENING_ANNOTATION_ADDITION,
+  openingAnnotationPrompt,
   buildChessContextMessage,
+  buildOpeningAnnotationContext,
 } from './coachPrompts';
-import type { CoachContext, StockfishAnalysis } from '../types';
+import type { CoachContext, OpeningAnnotationContext, StockfishAnalysis } from '../types';
 
 describe('coachPrompts', () => {
   describe('SYSTEM_PROMPT', () => {
@@ -76,6 +78,109 @@ describe('coachPrompts', () => {
 
     it('requires actionable next idea', () => {
       expect(OPENING_ANNOTATION_ADDITION).toContain('ACTIONABLE NEXT IDEA');
+    });
+  });
+
+  describe('openingAnnotationPrompt', () => {
+    it('is a non-empty string with substantial content', () => {
+      expect(openingAnnotationPrompt).toBeTruthy();
+      expect(openingAnnotationPrompt.length).toBeGreaterThan(500);
+    });
+
+    it('enforces the 4-part structure', () => {
+      expect(openingAnnotationPrompt).toContain('NAME the specific opening');
+      expect(openingAnnotationPrompt).toContain('EXPLAIN the concrete purpose');
+      expect(openingAnnotationPrompt).toContain('next-step idea or plan');
+      expect(openingAnnotationPrompt).toContain('trap or critical idea');
+    });
+
+    it('bans generic phrases with specific examples', () => {
+      expect(openingAnnotationPrompt).toContain('BANNED PHRASES');
+      expect(openingAnnotationPrompt).toContain('good developing move');
+      expect(openingAnnotationPrompt).toContain('standard move');
+      expect(openingAnnotationPrompt).toContain('fighting for the center');
+    });
+
+    it('includes BAD vs GOOD style guide examples', () => {
+      expect(openingAnnotationPrompt).toContain('BAD:');
+      expect(openingAnnotationPrompt).toContain('GOOD:');
+      // Verify at least one concrete example pair
+      expect(openingAnnotationPrompt).toContain('White develops the dark-squared bishop to f4');
+      expect(openingAnnotationPrompt).toContain('h2-b8 diagonal');
+    });
+
+    it('limits annotation length to 2-3 sentences', () => {
+      expect(openingAnnotationPrompt).toContain('2-3 sentences');
+    });
+
+    it('requires conversational tone', () => {
+      expect(openingAnnotationPrompt).toContain('conversational');
+    });
+  });
+
+  describe('buildOpeningAnnotationContext', () => {
+    it('includes FEN and move number with turn', () => {
+      const ctx: OpeningAnnotationContext = {
+        fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+        moveNumber: 1,
+        openingName: null,
+        lastMoves: [],
+        currentMoveSan: 'e4',
+      };
+      const msg = buildOpeningAnnotationContext(ctx);
+      expect(msg).toContain('rnbqkbnr');
+      expect(msg).toContain('Move 1, White to play');
+      expect(msg).toContain('Current move being annotated: e4');
+    });
+
+    it('includes opening name when provided', () => {
+      const ctx: OpeningAnnotationContext = {
+        fen: 'test',
+        moveNumber: 3,
+        openingName: 'Sicilian Defense: Najdorf Variation',
+        lastMoves: ['e4', 'c5'],
+        currentMoveSan: 'Nf3',
+      };
+      const msg = buildOpeningAnnotationContext(ctx);
+      expect(msg).toContain('Opening: Sicilian Defense: Najdorf Variation');
+    });
+
+    it('includes last moves in SAN format', () => {
+      const ctx: OpeningAnnotationContext = {
+        fen: 'test',
+        moveNumber: 5,
+        openingName: null,
+        lastMoves: ['e4', 'c5', 'Nf3', 'd6'],
+        currentMoveSan: 'd4',
+      };
+      const msg = buildOpeningAnnotationContext(ctx);
+      expect(msg).toContain('Recent moves: e4 c5 Nf3 d6');
+    });
+
+    it('shows correct turn for Black moves', () => {
+      const ctx: OpeningAnnotationContext = {
+        fen: 'test',
+        moveNumber: 4,
+        openingName: null,
+        lastMoves: ['e4', 'c5', 'Nf3'],
+        currentMoveSan: 'd6',
+      };
+      const msg = buildOpeningAnnotationContext(ctx);
+      expect(msg).toContain('Move 2, Black to play');
+    });
+
+    it('omits empty sections gracefully', () => {
+      const ctx: OpeningAnnotationContext = {
+        fen: 'test',
+        moveNumber: 1,
+        openingName: null,
+        lastMoves: [],
+        currentMoveSan: null,
+      };
+      const msg = buildOpeningAnnotationContext(ctx);
+      expect(msg).not.toContain('Opening:');
+      expect(msg).not.toContain('Recent moves:');
+      expect(msg).not.toContain('Current move');
     });
   });
 

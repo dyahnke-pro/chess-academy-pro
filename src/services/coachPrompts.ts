@@ -1,4 +1,4 @@
-import type { CoachContext } from '../types';
+import type { CoachContext, OpeningAnnotationContext } from '../types';
 import { detectTactics } from './tacticsDetector';
 
 // ─── Single Analytical Coach System Prompt ──────────────────────────────────
@@ -93,7 +93,7 @@ export const SESSION_PLAN_ADDITION = `Generate a personalized training session p
 Format the plan as 3-5 blocks with time allocations. Explain WHY each block matters.
 If the student pushes back or asks for adjustments, be flexible and modify the plan.`;
 
-// ─── Opening Annotation Addition ──────────────────────────────────────────
+// ─── Opening Annotation Addition (legacy, kept for backwards compatibility) ─
 
 export const OPENING_ANNOTATION_ADDITION = `You are annotating moves in a chess opening for a training app. For EVERY move, you MUST follow this exact 3-part structure:
 
@@ -110,6 +110,83 @@ STRICT RULES:
 - Tone: helpful and slightly conversational, like a patient coach sitting next to the student
 - Reference concrete squares, pieces, and plans — not abstract principles
 - When a move has a specific tactical or positional idea (e.g., preparing a pawn break, targeting a weak square, setting up a piece maneuver), name that idea explicitly`;
+
+// ─── Opening Annotation Prompt (dedicated openings mode) ─────────────────
+
+export const openingAnnotationPrompt = `You are an expert chess coach annotating moves in a chess opening training app. Your annotations must be specific, educational, and immediately useful to a ~1400-rated player.
+
+STRUCTURE — every annotation MUST follow this format:
+1. NAME the specific opening and variation (e.g. "This is the Queenside Play variation of the English Opening.")
+2. EXPLAIN the concrete purpose of THIS move — what square it targets, what piece it prepares, what pawn break it enables, what threat it creates or prevents.
+3. Give ONE clear next-step idea or plan for the next 2-3 moves.
+4. (Optional) Mention one key trap or critical idea to watch for in this position.
+
+Keep each annotation to 2-3 sentences maximum. Tone: helpful and slightly conversational, like a patient coach sitting next to you.
+
+BANNED PHRASES — never use any of these:
+- "good developing move", "standard move", "fighting for the center"
+- "natural move", "solid move", "important move", "key move"
+- "gains space on the queenside" (too vague — say WHERE and WHY)
+- "White develops the bishop" (say WHICH bishop, to WHERE, and what it controls)
+- "Black has a solid structure" (describe the SPECIFIC pawn chain and its implications)
+
+STYLE GUIDE — here are examples of the quality we expect:
+
+BAD: "White develops the bishop."
+GOOD: "White develops the dark-squared bishop to f4 in this system. The bishop exerts pressure along the h2-b8 diagonal and helps control the key e5 square, making it difficult for Black to comfortably push ...e5."
+
+BAD: "gains space on the queenside."
+GOOD: "This setup focuses on queenside expansion. White's pawn structure with c4 and d4 combined with the bishop on f4 prepares a minority attack on the queenside, aiming to create a weak pawn on c6 or b7 for Black."
+
+BAD: "White can play for a minority attack"
+GOOD: "White's long-term plan is often a minority attack with b4-b5. This creates a weak pawn on c6 for Black and gives White clear targets to attack on the queenside."
+
+BAD: "The knight on f3 supports the center"
+GOOD: "The knight on f3 is well-placed, supporting the d4 pawn and controlling the e5 square. It also prepares for potential kingside expansion or to jump into e5 if Black allows it."
+
+BAD: "Black has a solid structure"
+GOOD: "Black maintains a solid pawn structure with pawns on d5 and e6. While solid, this structure can become passive if White successfully carries out the queenside minority attack."
+
+BAD: "Development is nearly complete"
+GOOD: "Both sides have developed most of their minor pieces. White's next priority is connecting the rooks and deciding whether to push on the queenside or increase central pressure."
+
+RULES:
+- ALWAYS name the opening and variation — never skip this
+- Reference concrete squares, diagonals, pieces, and plans — never abstract principles
+- When a move has a specific tactical or positional idea, name it explicitly
+- Describe pawn structures by naming the actual pawns (e.g. "pawns on c4 and d4") not just "strong center"
+- For piece placements, name the square AND what it controls (e.g. "bishop on f4 controls e5 and eyes the h2-b8 diagonal")`;
+
+// ─── Opening Annotation Context Builder ──────────────────────────────────
+
+export function buildOpeningAnnotationContext(ctx: OpeningAnnotationContext): string {
+  const lines: string[] = [];
+
+  lines.push(`Position (FEN): ${ctx.fen}`);
+
+  const halfMove = ctx.moveNumber;
+  const fullMove = Math.ceil(halfMove / 2);
+  const turn = halfMove % 2 === 1 ? 'White' : 'Black';
+  lines.push(`Move ${fullMove}, ${turn} to play`);
+
+  if (ctx.openingName) {
+    lines.push(`Opening: ${ctx.openingName}`);
+  }
+
+  if (ctx.lastMoves.length > 0) {
+    lines.push(`Recent moves: ${ctx.lastMoves.join(' ')}`);
+  }
+
+  if (ctx.currentMoveSan) {
+    lines.push(`Current move being annotated: ${ctx.currentMoveSan}`);
+  }
+
+  if (ctx.additionalContext) {
+    lines.push(`\n${ctx.additionalContext}`);
+  }
+
+  return lines.join('\n');
+}
 
 // ─── Context Builder ────────────────────────────────────────────────────────
 
