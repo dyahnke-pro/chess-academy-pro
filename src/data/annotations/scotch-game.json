@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "White seizes central space with the king's pawn, controlling d5 and f5 while opening lines for the queen and bishop. This is the starting point for all Open Games.",
+      "annotation": "This is the Scotch Game, an aggressive opening where White opens the center on move 3. White plays 1.e4, placing a pawn on e4 to control d5 and f5. The Scotch differs from the Italian and Ruy Lopez by not building up slowly — instead, White strikes with d4 immediately.",
       "plans": [
         "Develop pieces rapidly",
         "Follow up with Nf3 and d4 for central dominance"
@@ -32,7 +32,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black stakes an equal claim in the center, leading to classical open game positions where tactical ability is rewarded. The symmetrical center means piece activity will determine who gets an edge.",
+      "annotation": "Black responds with 1...e5, claiming symmetrical central space. In the Scotch Game, this pawn will soon be exchanged after d4, leading to open positions where piece activity and tactical sharpness matter more than pawn structure.",
       "plans": [
         "Develop knights to c6 and f6",
         "Maintain the central balance"
@@ -56,7 +56,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "Attacks e5 immediately while developing the knight to its optimal square. From f3 the knight controls d4, which is the key square for the Scotch Game's central strategy.",
+      "annotation": "White develops the knight to f3, attacking Black's e5 pawn. In the Scotch Game, the Nf3 is not just a developing move — it prepares the immediate d4 advance that will blow the center open on the very next move.",
       "plans": [
         "Prepare d4 to open the center aggressively",
         "Castle kingside quickly"
@@ -85,7 +85,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "The natural defense of e5. The knight develops actively and prepares to fight for central squares. From c6 it also eyes d4 and b4, keeping future options open.",
+      "annotation": "Black defends e5 with the knight on c6, developing to an active square. The Nc6 controls d4, but in the Scotch Game this control is temporary — White's next move will directly challenge it.",
       "plans": [
         "Defend e5 and prepare kingside development"
       ],
@@ -113,7 +113,7 @@
     },
     {
       "san": "d4",
-      "annotation": "The defining move of the Scotch Game! Unlike the Ruy Lopez or Italian where White builds up slowly, the Scotch immediately blows open the center.",
+      "annotation": "This is the defining move of the Scotch Game. White immediately plays d4, opening the center on move 3 rather than building up slowly with Bc4 or Bb5. The d4 advance forces a central exchange that gives White a powerful centralized knight and rapid piece development.",
       "pawnStructure": "The d4 advance creates immediate central tension.",
       "plans": [
         "Open the center for piece activity",
@@ -138,7 +138,7 @@
     },
     {
       "san": "exd4",
-      "annotation": "Black has to capture — allowing d5 would be terrible, pushing the knight away and giving White a dominating center.",
+      "annotation": "Black captures exd4, which is essentially forced. Allowing d5 would push the Nc6 away and give White a dominating central pawn mass. After exd4, the center is open and the real fight begins.",
       "pawnStructure": "The e5 pawn is gone, opening the e-file. The position transforms from a closed center to an open o.",
       "plans": [
         "Develop rapidly to exploit the open position"
@@ -157,7 +157,7 @@
     },
     {
       "san": "Nxd4",
-      "annotation": "White recaptures with the knight, which is now powerfully centralized on d4. The knight attacks c6, threatens Nf5, and can jump to b5 or f5.",
+      "annotation": "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, b5, and c2 — it's the most powerful piece on the board. White can later jump to Nf5 (attacking g7), Nb5 (threatening Nc7), or exchange on c6 to damage Black's pawns.",
       "plans": [
         "Exploit the centralized knight's power",
         "Develop quickly with Bc4, Be3, or Be2"
@@ -186,7 +186,7 @@
     },
     {
       "san": "Bc5",
-      "annotation": "Black develops aggressively, pinning the d4 knight against the queen and targeting the sensitive f2 square.",
+      "annotation": "Black develops the bishop to c5 in the Scotch Classical variation, targeting the Nd4 and the sensitive f2 square. The Bc5 pins the knight against the queen and creates immediate tactical pressure along the a7-g1 diagonal.",
       "plans": [
         "Put pressure on d4 and f2",
         "Prepare Qf6 to add firepower to the attack"
@@ -215,7 +215,7 @@
     },
     {
       "san": "Nxc6",
-      "annotation": "White decides to trade the centralized knight for Black's well-placed knight on c6.",
+      "annotation": "White captures Nxc6, exchanging the centralized knight for Black's Nc6. This damages Black's queenside pawn structure after bxc6 or dxc6, creating a long-term structural advantage that White can exploit in the middlegame and endgame.",
       "pawnStructure": "After dxc6, Black gets doubled c-pawns which are a permanent structural weakness.",
       "plans": [
         "Damage Black's pawn structure",
@@ -234,7 +234,7 @@
     },
     {
       "san": "Qf6",
-      "annotation": "Black brings the queen out early, but with good reason — it defends the knight on c6 square while threatening mate on f2.",
+      "annotation": "Black brings the queen to f6, an early queen deployment that serves multiple purposes — it defends against the Nc6 exchange consequences, targets f2, and prepares to recapture on c6 if needed. The Qf6 also develops with threats.",
       "plans": [
         "Threaten f2 and maintain piece activity",
         "Recapture on f3 with the queen after an exchange to avoid doubled pawns"
@@ -258,7 +258,7 @@
     },
     {
       "san": "Qf3",
-      "annotation": "White offers a queen trade! This is a sophisticated strategic idea — in the resulting endgame, Black's doubled c-pawns and White's bishop pair give White a lasting structural advantage.",
+      "annotation": "White offers a queen trade with Qf3, a sophisticated strategic idea. In the resulting endgame after the exchange, White's bishop pair and Black's damaged pawn structure (doubled c-pawns) give White a lasting positional advantage.",
       "plans": [
         "Steer into a favorable endgame with structural advantage",
         "Exploit the bishop pair in an open position"
@@ -282,7 +282,7 @@
     },
     {
       "san": "Qxf3",
-      "annotation": "Black accepts the queen trade. Declining would leave the queen awkwardly placed with White getting easy development.",
+      "annotation": "Black accepts the queen trade with Qxf3. Declining would leave the queen awkwardly placed while White continues developing with tempo. The endgame after the exchange is slightly worse for Black but playable with precise defense.",
       "plans": [
         "Aim for active piece play to compensate for structural issues"
       ],
@@ -294,7 +294,7 @@
     },
     {
       "san": "gxf3",
-      "annotation": "White recaptures with the g-pawn, opening the g-file for the rook. The doubled f-pawns look ugly but they control key central squares (e4 and e3).",
+      "annotation": "White recaptures gxf3, opening the g-file for the rook. The doubled f-pawns look damaged but actually control important central squares (e4 and e3). The open g-file gives White's rook immediate activity toward Black's king.",
       "pawnStructure": "White has doubled f-pawns but an open g-file and the bishop pair.",
       "plans": [
         "Use the open g-file for rook pressure",
@@ -319,7 +319,7 @@
     },
     {
       "san": "dxc6",
-      "annotation": "Black recaptures toward the center, which is generally the best policy. Taking with the d-pawn opens the d-file for Black's rook and keeps the b-pawn on b7 to potentially support c5.",
+      "annotation": "Black recaptures dxc6, taking toward the center to open the d-file for the rook and maintain central influence. The c6 pawn is doubled but controls the important d5 and b5 squares.",
       "pawnStructure": "Black has doubled c-pawns (c6 and c7) but an open d-file.",
       "plans": [
         "Develop the dark-squared bishop actively",
@@ -344,7 +344,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "White develops the bishop with tempo, attacking the c5 bishop. This forces Black to make a decision about the dark-squared bishop immediately.",
+      "annotation": "White develops the bishop to e3 with tempo, attacking the Bc5 and forcing a decision. Black must choose whether to exchange bishops (simplifying) or retreat (losing time). This developing move with a threat is the hallmark of efficient Scotch play.",
       "plans": [
         "Gain tempo by attacking the bishop",
         "Prepare O-O-O for quick rook activation"
@@ -368,7 +368,7 @@
     },
     {
       "san": "Bxe3",
-      "annotation": "Black trades bishops rather than retreating, which is a practical decision. After the exchange, White's pawn structure gets slightly damaged but the open f-file and active development compensate.",
+      "annotation": "Black exchanges Bxe3, simplifying the position rather than retreating and losing a tempo. The trade removes a pair of bishops but opens the f-file, which actually helps White's kingside rook activity.",
       "plans": [
         "Simplify to reduce White's bishop pair advantage"
       ],
@@ -380,7 +380,7 @@
     },
     {
       "san": "fxe3",
-      "annotation": "White recaptures, creating a doubled e-pawn but opening the f-file for the rook. Now White has rooks that can operate on both the g-file and f-file.",
+      "annotation": "White recaptures fxe3, creating doubled e-pawns but opening the f-file for the rook. Now White has two semi-open files (g and f) for the rooks, providing excellent piece activity to compensate for the slightly damaged pawn structure.",
       "pawnStructure": "White now has doubled e-pawns and doubled f-pawns, but three half-open files (d, f, g) for rook ac.",
       "plans": [
         "Activate rooks on the open files",
@@ -410,7 +410,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the last minor piece to its best square. The knight on f6 controls d5 and e4, challenges White's central pawns, and prepares to castle.",
+      "annotation": "Black develops the knight to f6, placing it on its ideal square where it controls d5 and e4 — the two most important central squares. The Nf6 also prepares kingside castling and completes Black's minor piece development.",
       "plans": [
         "Castle kingside quickly",
         "Use the knight to blockade White's central pawns"
@@ -439,7 +439,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, controlling d5 and e4 — the two most important central squares. From c3, the knight supports the e4 pawn and can later jump to d5 in favorable circumstances.",
+      "annotation": "White develops Nc3, controlling d5 and e4 while supporting the central pawns. The Nc3 prepares O-O-O (queenside castling) which would put the rook on the d-file and allow the king to support the queenside pawns.",
       "plans": [
         "Control the d5 outpost",
         "Prepare O-O-O for rook centralization"
@@ -468,7 +468,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles into safety, completing development. The king is secure on g8 and the rook joins the fight on the f-file.",
+      "annotation": "Black castles kingside, getting the king to safety and connecting the rooks. The first phase of the Scotch opening is complete — both sides are developed, and the structural imbalance (White's bishop pair and open files vs Black's doubled c-pawns) will define the middlegame.",
       "plans": [
         "Activate the rooks on central files",
         "Target White's structural weaknesses with active piece play"
