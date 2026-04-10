@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "The King's Pawn opening. We grab the center immediately and open diagonals for our bishop and queen.",
+      "annotation": "This is the Petrov Defense (also called the Russian Game), one of the most solid and symmetrical responses to 1.e4. White plays 1.e4, claiming the center. The Petrov leads to positions where Black mirrors White's development, aiming for equality through symmetry and solid play.",
       "pawnStructure": "Single e4 pawn controls d5 and f5 squares.",
       "plans": [
         "Develop quickly and fight for central control",
@@ -33,7 +33,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black mirrors us with the most principled reply. By playing e5, Black stakes an equal claim in the center and opens lines for their own dark-squared bishop.",
+      "annotation": "Black responds with e5, creating the symmetrical center. The e5 pawn matches White's central presence and opens lines for piece development.",
       "pawnStructure": "Symmetrical e4 vs e5 pawn center. Both sides control key central squares.",
       "plans": [
         "Maintain central pawn tension",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop the knight to its best square, attacking the e5 pawn immediately. This is the most principled response -- the knight goes to f3 in almost every Open Game.",
+      "annotation": "White develops Nf3, attacking e5 and preparing to develop further. The standard Open Game approach.",
       "plans": [
         "Attack e5 to gain a tempo advantage",
         "Prepare d4 to build a broad pawn center"
@@ -92,7 +92,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "This is the Petrov Defence. Instead of defending the e5 pawn, Black counterattacks our e4 pawn.",
+      "annotation": "Black plays Nf6, the Petrov Defense! Instead of defending e5 with ...Nc6 (which leads to Italian/Ruy Lopez), Black counter-attacks e4. The philosophy is: \"you attack my pawn, I attack yours\" — leading to symmetrical, drawish but solid positions.",
       "pawnStructure": "Still symmetrical. Neither side has committed to a specific pawn structure yet.",
       "plans": [
         "Counterattack rather than defend -- a philosophical choice by Black",
@@ -122,7 +122,7 @@
     },
     {
       "san": "Nxe5",
-      "annotation": "We grab the pawn. This is the critical test of the Petrov -- if we don't take, Black just has a comfortable, equal position.",
+      "annotation": "White captures Nxe5, taking the pawn. This is the critical test — White grabs the e5 pawn, and Black must NOT recapture immediately with ...Nxe4? (which loses to d4 and Qe2). Instead, Black plays ...d6 first.",
       "plans": [
         "Win a pawn temporarily to disrupt Black's coordination",
         "After Black recaptures, build a strong center with d4"
@@ -151,7 +151,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black kicks our knight back. This is the Classical Petrov -- the most respected continuation. Black doesn't fall for the trap of Nxe4 immediately.",
+      "annotation": "Black plays d6, the correct response. The d6 pawn attacks the Ne5 and forces it to retreat. Only AFTER the knight moves does Black recapture on e4. This move order is essential to avoid the trap.",
       "pawnStructure": "Black's d6 pawn creates a small pawn chain pointing toward e5.",
       "plans": [
         "Force the knight back, then recapture on e4",
@@ -176,7 +176,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We retreat to f3, the natural square. The knight was always coming back here -- the whole Nxe5 adventure was about gaining time and disrupting Black's development sequence.",
+      "annotation": "White retreats Nf3, the only reasonable square. The knight returns to f3 where it controls d4 and prepares to rebuild. White has gained a tempo but Black's position is solid.",
       "plans": [
         "Play d4 next to establish a classical pawn center",
         "Develop pieces rapidly toward the center"
@@ -205,7 +205,7 @@
     },
     {
       "san": "Nxe4",
-      "annotation": "Now Black takes on e4. The timing is right because our knight is no longer on e5 threatening things. We've reached the main tabiya of the Classical Petrov.",
+      "annotation": "Black captures Nxe4, recovering the pawn and equalizing material. The Ne4 is centrally placed and active — controlling d2, f2, c3, and g3. The position is now symmetrical with chances for both sides.",
       "pawnStructure": "The e-file is about to become fully open once we play d4 and Black's knight moves.",
       "plans": [
         "Win the pawn back with d4 hitting the d6 pawn",
@@ -235,7 +235,7 @@
     },
     {
       "san": "d4",
-      "annotation": "This is the critical move. We establish a classical pawn center with d4, and we're hitting Black's d6 pawn which was supporting the knight.",
+      "annotation": "White plays d4, seizing the center with the d-pawn. The d4 pawn controls c5 and e5, and opens the c1-h6 diagonal for the bishop. This is the most ambitious approach — White plays for an advantage despite the symmetry.",
       "pawnStructure": "White has a broad d4 center. Black needs to equalize by challenging it or completing development.",
       "plans": [
         "Develop Bd3 to pressure the e4 knight",
@@ -265,7 +265,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black solidifies. The pawn on d5 supports the pawn on e4 and creates a symmetrical pawn structure. This is the hallmark of the Petrov -- both sides have a pawn on d4/d5, and the position is balanced.",
+      "annotation": "Black plays d5, matching White's central presence. The d5 pawn creates perfect symmetry — both sides have a pawn on the fourth rank and a knight on the fourth rank. The Petrov's solid character is fully established.",
       "pawnStructure": "Symmetrical d4 vs d5. The center is locked and neither side has a pawn majority yet.",
       "plans": [
         "Maintain the solid d5 outpost for pieces",
@@ -290,7 +290,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We develop the bishop to its ideal diagonal, directly targeting the knight on e4.",
+      "annotation": "White develops Bd3, targeting the Ne4 and preparing to develop. The Bd3 eyes h7 for potential future attacks and challenges the centralized knight.",
       "plans": [
         "Pressure the e4 knight and the h7 square",
         "Castle kingside quickly"
@@ -319,7 +319,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its ideal square. The knight on c6 puts pressure on d4, our center pawn, and supports the knight on e4 indirectly.",
+      "annotation": "Black develops Nc6, getting the last minor piece into the game and adding pressure to d4. The Nc6 controls d4 and e5, completing Black's piece development.",
       "plans": [
         "Pressure the d4 pawn",
         "Prepare Be7 and castle kingside"
@@ -348,7 +348,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle immediately. King safety first. In the Petrov, the center is semi-open and things can get tactical quickly, so getting the king tucked away is essential.",
+      "annotation": "White castles, getting the king safe and connecting the rooks. The Rf1 supports a potential f3 advance to challenge the Ne4.",
       "plans": [
         "Activate the f1 rook on the e-file",
         "Prepare Re1 to increase central pressure"
@@ -377,7 +377,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the bishop modestly to e7. This is very typical of the Petrov -- Black isn't trying to be flashy.",
+      "annotation": "Black develops Be7, preparing to castle and completing the kingside development. The Be7 is the Petrov's trademark solid bishop — modest but functional.",
       "pawnStructure": "No structural change. Black is completing development before making pawn commitments.",
       "plans": [
         "Castle kingside and reach a safe, solid position",
@@ -402,7 +402,7 @@
     },
     {
       "san": "c4",
-      "annotation": "Now we strike at the center. The c4 push challenges Black's d5 pawn directly and is the main way to create tension in the Petrov.",
+      "annotation": "White plays c4, challenging the d5 pawn and trying to break the symmetry. The c4 advance creates tension in the center and aims to open lines for White's pieces.",
       "pawnStructure": "We're attacking the d5 base. If dxc4, Bxc4 gives us the open d-file and bishop pair ideas.",
       "plans": [
         "Open the position to exploit our lead in development",
@@ -427,7 +427,7 @@
     },
     {
       "san": "Nb4",
-      "annotation": "Black plays actively, jumping to b4 to target our d3 bishop. The idea is to force the bishop to move and potentially win time. The knight on b4 also eyes the c2 and d3 squares.",
+      "annotation": "Black plays Nb4, attacking the Bd3 and threatening ...Nxc2. The Nb4 is an active response that creates immediate tactical threats and forces White to react.",
       "plans": [
         "Harass the Bd3 and gain time",
         "Potentially land the knight on d3 or c2 if White is careless"
@@ -456,7 +456,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "We retreat the bishop to e2 -- a modest but correct square. The bishop on e2 stays on a useful diagonal and doesn't block anything. We could have gone to c2 or e4, but e2 is the most flexible.",
+      "annotation": "White plays Be2, retreating the bishop to maintain coordination. The Be2 is flexible — it defends c4, supports the center, and keeps the position manageable.",
       "plans": [
         "Maintain pressure with the c4 pawn",
         "Prepare a3 to kick the knight from b4 if needed"
@@ -485,7 +485,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles, getting the king to safety. This is the right moment -- the pieces are developed enough and the king needs to be out of the center before the position opens further.",
+      "annotation": "Black castles, completing development and getting the king safe. The Petrov middlegame is set — White has a slight space advantage from d4, while Black has a rock-solid position with no weaknesses.",
       "pawnStructure": "The c4 vs d5 tension remains the key structural question.",
       "plans": [
         "Complete development and prepare for the middlegame",

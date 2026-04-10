@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, claiming central space and preparing to build the ideal pawn center with c4 and eventually e4.",
+      "annotation": "This is the Grünfeld Defense, a hypermodern opening where Black allows White to build a massive center and then systematically destroys it. White plays 1.d4, claiming the center. The Grünfeld leads to sharp, concrete positions where Black's pressure on d4 is relentless.",
       "pawnStructure": "Single central pawn on d4; White plans to expand with c4.",
       "plans": [
         "Build a broad pawn center with c4 and e4",
@@ -33,7 +33,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, controlling e4 and d5. This is the Indian move order — Black keeps maximum flexibility, refusing to commit pawns to the center immediately.",
+      "annotation": "Black plays 1...Nf6, the Indian approach. The Nf6 controls e4 and d5, fighting for the center with a piece rather than a pawn.",
       "plans": [
         "Control e4 to prevent White from achieving the full center easily",
         "Keep options open for the central pawn structure"
@@ -62,7 +62,7 @@
     },
     {
       "san": "c4",
-      "annotation": "White expands on the queenside and reinforces control of d5. Together with d4, the two pawns control a massive chunk of the center.",
+      "annotation": "White plays c4, expanding the central control. The c4+d4 duo grabs maximum space, and White is preparing for the full e4 center.",
       "pawnStructure": "White pawns on c4 and d4 form the broad center, controlling d5 and e5.",
       "plans": [
         "Add e4 to build the dream center",
@@ -80,7 +80,7 @@
     },
     {
       "san": "g6",
-      "annotation": "This is the signal — Black is going for a hypermodern setup with a kingside fianchetto.",
+      "annotation": "Black plays g6, signaling the Grünfeld setup. The bishop will go to g7 where it becomes the centerpiece of Black's strategy — pressuring d4 along the entire a1-h8 diagonal. Unlike the KID (where Black plays ...d6 and ...e5), the Grünfeld's ...d5 immediately challenges the center.",
       "pawnStructure": "Black delays central pawn play, opting for piece pressure against White's center instead.",
       "plans": [
         "Fianchetto the bishop to g7 targeting d4",
@@ -104,7 +104,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, supporting both e4 and d5. This is the most principled move — the knight is on its best square, reinforcing the center.",
+      "annotation": "White plays Nc3, defending c4 and preparing e4. The Nc3 controls d5 and is a key piece in maintaining the central advantage.",
       "plans": [
         "Push e4 to build the full pawn center",
         "Complete development and castle"
@@ -127,7 +127,7 @@
     },
     {
       "san": "d5",
-      "annotation": "The defining move of the Grunfeld Defense. Black strikes immediately at the center with d5 before even completing the fianchetto.",
+      "annotation": "Black strikes with d5, the defining Grünfeld move. Rather than the KID's ...d6, Black immediately challenges the center head-on. After cxd5 Nxd5, Black will exchange the knight and put maximum pressure on d4 with the Bg7 — the Grünfeld's core strategy.",
       "pawnStructure": "Central tension: d5 vs c4/d4. Black invites White to capture and build a big center that becomes a.",
       "plans": [
         "After cxd5 Nxd5, sacrifice the center to attack it with pieces",
@@ -157,7 +157,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "White captures, and this is the Exchange Variation — the most critical and principled test of the Grunfeld. White grabs the pawn and plans to follow up with e4, building a massive pawn center.",
+      "annotation": "White captures cxd5, accepting the central exchange. This is the most principled response — White aims for e4 with a powerful broad center.",
       "pawnStructure": "After Nxd5, White will play e4 gaining a huge center.",
       "plans": [
         "Build the big center with e4",
@@ -176,7 +176,7 @@
     },
     {
       "san": "Nxd5",
-      "annotation": "Black recaptures with the knight, placing it on a central square and inviting White to kick it with e4.",
+      "annotation": "Black recaptures Nxd5, placing the knight centrally. But this is temporary — the plan is to exchange the knight on c3, then pressure d4 with the Bg7, ...c5, and ...Nc6.",
       "plans": [
         "Allow e4, then retreat the knight via Nxc3 to damage White's structure",
         "Complete the fianchetto and target d4"
@@ -200,7 +200,7 @@
     },
     {
       "san": "e4",
-      "annotation": "White pushes e4, establishing the dream pawn center. Pawns on d4 and e4 control everything from c5 to f5.",
+      "annotation": "White pushes e4, establishing the dream center with pawns on d4 and e4. This massive formation controls c5, d5, e5, and f5. The Grünfeld's entire philosophy is that this center is a TARGET, not a strength — Black will spend the game attacking it.",
       "pawnStructure": "White's ideal center: d4+e4. Impressive but potentially vulnerable to piece pressure and pawn brea.",
       "plans": [
         "Maintain the center and use it for a kingside attack",
@@ -218,7 +218,7 @@
     },
     {
       "san": "Nxc3",
-      "annotation": "Black captures the knight, and this is a very important decision. By taking on c3, Black forces White to recapture with the b-pawn, which damages White's queenside pawn structure.",
+      "annotation": "Black exchanges Nxc3, the key Grünfeld idea. By trading the knight for White's Nc3, Black damages the center's support structure — the c3 pawn can no longer support d4, and the b-pawn is doubled. The Bg7 now has a clear target on d4.",
       "pawnStructure": "After bxc3, White has doubled c-pawns. The c3 pawn supports d4 but the c-pawn structure is permane.",
       "plans": [
         "Target the doubled c-pawns in the middlegame and endgame",
@@ -243,7 +243,7 @@
     },
     {
       "san": "bxc3",
-      "annotation": "White recaptures with the b-pawn, maintaining the big center. The c3 pawn actually reinforces d4, so the center is structurally sound for now.",
+      "annotation": "White recaptures bxc3, maintaining the center but accepting doubled c-pawns. The c3 pawn supports d4 directly, and the center remains imposing. But the doubled pawns are a permanent structural weakness that Black will target in the endgame.",
       "pawnStructure": "White: e4, d4, c3 — a powerful central chain.",
       "plans": [
         "Push the center pawns forward for an attack",
@@ -268,7 +268,7 @@
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes the fianchetto, and now the bishop on g7 is a beast. It stares right down the long diagonal at d4 and c3, putting constant pressure on White's center.",
+      "annotation": "The bishop takes its throne on g7, and now the Grünfeld's strategy is fully revealed. The Bg7 stares down the long a1-h8 diagonal directly at the d4 pawn — the center that White spent four moves building is now under heavy fire from Black's most powerful piece.",
       "pawnStructure": "No change; the bishop enhances Black's pressure on the dark squares and the d4 pawn.",
       "plans": [
         "Combine Bg7 pressure with c5 to attack d4",
@@ -298,7 +298,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to f3, supporting d4 and preparing to castle. The knight is solidly placed, but it also blocks the f-pawn, which White sometimes wants to push to f4 or f3 to support the ce.",
+      "annotation": "White develops the knight to f3, supporting d4 and preparing to castle. The Nf3 is well-placed — it defends the center, controls e5, and prepares to complete development.",
       "plans": [
         "Castle kingside and start a central or kingside advance",
         "Use Bc4 or Bd3 to develop the light-squared bishop actively"
@@ -316,7 +316,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black strikes at the base of White's center with the thematic c5 break. This is the most important pawn move in the Grunfeld — it attacks d4, and combined with the g7 bishop's pressure, puts enormou.",
+      "annotation": "Black plays c5, the critical central break that strikes at d4 — the base of White's center. With the Bg7 pressuring d4 from the diagonal and ...c5 attacking it with a pawn, White's center is under enormous strain.",
       "pawnStructure": "Black's c5 creates direct tension against d4. The Grunfeld's central battle is now fully engaged.",
       "plans": [
         "Increase pressure on d4 after dxc5 or if White maintains the center",
@@ -346,7 +346,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "White develops the bishop to e3, adding another defender to d4. This is critical — the d4 pawn was under fire from the g7 bishop and the c5 pawn, so it needed reinforcement.",
+      "annotation": "White develops the bishop to e3, adding a third defender to the d4 pawn (alongside Nf3 and the c3 pawn). The Be3 also controls the a7-g1 diagonal and prepares Qd2 to create a queen+bishop battery.",
       "plans": [
         "Solidify d4 and maintain the center",
         "Prepare Qd2 and potentially castle queenside for aggressive play"
@@ -370,7 +370,7 @@
     },
     {
       "san": "Qa5",
-      "annotation": "Black puts the queen on a5, pinning the c3 pawn to the king and adding pressure to White's queenside. The queen hits c3 and a3, and creates tactical threats.",
+      "annotation": "Black plays Qa5, pinning the c3 pawn and adding another attacker to White's structure. The Qa5 pressures c3 and a2, and in some lines can swing to a4 or c7. The queen is actively placed on the queenside where Black's counterplay is focused.",
       "pawnStructure": "No change, but the queen on a5 makes it harder for White to hold c3 and d4 simultaneously.",
       "plans": [
         "Win the c3 pawn or force White into an awkward defense",
@@ -395,7 +395,7 @@
     },
     {
       "san": "Qd2",
-      "annotation": "White plays Qd2, defending c3 and preparing to castle queenside. This is the aggressive setup — by castling long, White can use the kingside pawns as a battering ram with f3, g4, h4.",
+      "annotation": "White plays Qd2, creating a battery with the Be3 and connecting the rooks. The Qd2 defends c3, supports O-O-O in some lines, and keeps the position together under Black's queenside pressure.",
       "plans": [
         "Castle queenside and launch a kingside pawn storm",
         "Maintain the center and use the bishop pair"
@@ -418,7 +418,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles, getting the king to safety before the real battle begins. With White likely castling queenside, both sides will be attacking on opposite flanks — one of the most exciting pawn structu.",
+      "annotation": "Black castles, getting the king safe before intensifying the central pressure. The Rf8 is now available for ...Rd8 (pressuring d4) or ...f5 (a kingside break in some lines).",
       "plans": [
         "Launch queenside counterplay against White's king",
         "Activate the rooks on c8, d8, or b8"
@@ -441,7 +441,7 @@
     },
     {
       "san": "Rc1",
-      "annotation": "White places the rook on c1, defending the c3 pawn and preparing for action along the c-file. This also frees up the queen from baby-sitting c3 and allows White to think about castling queenside.",
+      "annotation": "White plays Rc1, defending c3 with the rook and preparing to hold the queenside together. The Rc1 supports the c3 pawn, eyes the c-file, and keeps White's structure solid under pressure.",
       "plans": [
         "Castle queenside with a solid defensive setup",
         "Use the c-file for potential counterplay"
@@ -459,7 +459,7 @@
     },
     {
       "san": "cxd4",
-      "annotation": "Black captures on d4, opening the position. This is the critical moment — Black has been building pressure, and now the center breaks open.",
+      "annotation": "Black captures cxd4, the critical exchange that challenges White's center directly. After cxd4 (or exd4), the pawn structure is transformed and the middlegame battle over the center's remnants begins in earnest.",
       "pawnStructure": "After cxd4 cxd4, White has an isolated d4 pawn — dynamically strong but a long-term target.",
       "plans": [
         "Blockade and target the isolated d4 pawn",

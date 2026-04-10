@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "White opens with the queen's pawn, the gateway to all Queen's Gambit systems. The d4 pawn controls c5 and e5, and White is planning to follow up with c4 to build a broad center and challenge whateve.",
+      "annotation": "This is the Semi-Slav Defense, one of the richest and most complex openings in chess. White plays 1.d4, claiming central space. The Semi-Slav combines Slav and QGD ideas — Black supports d5 with both ...c6 and ...e6, creating an incredibly solid center that leads to sharp, deeply theoretical positions.",
       "plans": [
         "Play c4 next to set up the Queen's Gambit"
       ],
@@ -31,7 +31,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black occupies the center symmetrically. The d5 pawn matches White's d4 and controls c4 and e4. This signals Black's intention to play a Queen's Gambit structure rather than an Indian Defense.",
+      "annotation": "Black responds with 1...d5, occupying the center symmetrically. The d5 pawn controls c4 and e4, matching White's central presence and signaling a fight for central control.",
       "plans": [
         "Hold the center, decide between Slav, Semi-Slav, or QGD setups"
       ],
@@ -56,7 +56,7 @@
     },
     {
       "san": "c4",
-      "annotation": "The Queen's Gambit. White challenges d5 with the c-pawn, creating the fundamental tension of the position.",
+      "annotation": "White plays 2.c4, the Queen's Gambit. The c4 pawn challenges d5, creating the fundamental central tension. Black's response to this challenge will determine the entire character of the game.",
       "pawnStructure": "Central tension on the c4-d5 axis defines the entire opening",
       "plans": [
         "Pressure d5 to gain central space"
@@ -77,7 +77,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black supports d5 with the c-pawn -- this is the Slav approach. But unlike the pure Slav, Black is going to follow up with ...e6 as well, creating the Semi-Slav.",
+      "annotation": "Black plays 2...c6, supporting d5 with the c-pawn — the Slav approach. But unlike the pure Slav (where Black plays ...Bf5 early), Black will follow up with ...e6, creating the characteristic Semi-Slav double support of d5. This leads to positions of enormous complexity.",
       "pawnStructure": "c6 supports d5; Black will add e6 to create a fortress",
       "plans": [
         "Support d5, prepare ...e6 for the Semi-Slav structure"
@@ -106,7 +106,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops naturally. Nf3 supports d4 and controls e5. White is keeping options open before committing to Nc3 -- in some lines, White plays Nbd2 instead to avoid certain Semi-Slav complications.",
+      "annotation": "White develops the knight to f3, supporting d4 and controlling e5. The Nf3 keeps options open — White can still enter various systems depending on Black's exact move order.",
       "plans": [
         "Develop flexibly, prepare Nc3 or e3"
       ],
@@ -134,7 +134,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight, defending d5 and controlling e4. The knight on f6 is essential in almost every Semi-Slav setup.",
+      "annotation": "Black develops the knight to f6, defending d5 and controlling e4. The Nf6 is essential in every Semi-Slav setup — it defends the center, develops a piece, and prepares the key ...e6 that will define the structure.",
       "plans": [
         "Defend d5, prepare ...e6 and eventual ...dxc4"
       ],
@@ -159,7 +159,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White adds more pressure to d5 with the second knight. Now three White pieces are aimed at d5 (c4, Nc3, and indirectly Nf3 supporting e4).",
+      "annotation": "White plays Nc3, adding a third attacker to d5. The pressure on d5 is now serious — c4, Nc3, and the potential Bg5 pin all aim at Black's central bastion. Black must decide how to reinforce the center.",
       "plans": [
         "Maximum pressure on d5",
         "Prepare e4 or Bg5"
@@ -188,7 +188,7 @@
     },
     {
       "san": "e6",
-      "annotation": "This defines the Semi-Slav: Black has both ...c6 and ...e6 supporting d5. The center is now a fortress -- d5 is supported three times (c6, e6, Nf6).",
+      "annotation": "Black plays e6, the move that defines the Semi-Slav. Now d5 is supported by BOTH c6 and e6 — a fortress. The d5 pawn is defended three times (c6, e6, Nf6) against White's three attackers (c4, Nc3, Nf3). The cost: the light-squared bishop is locked behind the e6 pawn, just like in the QGD.",
       "pawnStructure": "The c6-d5-e6 triangle is extremely solid but the c8-bishop is temporarily locked in",
       "plans": [
         "Hold d5 with a fortress, look for dynamic breaks like ...dxc4 + ...b5 or ...e5"
@@ -217,7 +217,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "White pins the Nf6, which is a key defender of d5. The bishop on g5 creates real problems -- if the knight moves, d5 falls.",
+      "annotation": "White plays Bg5, pinning the Nf6 to the queen — the most aggressive approach. The pin is dangerous because the Nf6 is a key defender of d5. If the knight moves or is exchanged, the d5 pawn may fall. This creates the tension that makes the Semi-Slav one of the sharpest openings.",
       "plans": [
         "Pin Nf6 to increase pressure on d5",
         "Force Black into sharp theoretical territory"
@@ -246,7 +246,7 @@
     },
     {
       "san": "h6",
-      "annotation": "Black asks the bishop what it wants to do. This is a committal move -- Black is spending a tempo to challenge the pin, but the h6 pawn also weakens the kingside slightly.",
+      "annotation": "Black plays h6, challenging the Bg5 pin and asking the bishop to declare its intentions. The h6 move is committal — it weakens g6 slightly — but it forces White to choose between maintaining the pin (Bh4) or exchanging (Bxf6).",
       "plans": [
         "Challenge the Bg5 to resolve the pin on Black's terms"
       ],
@@ -269,7 +269,7 @@
     },
     {
       "san": "Bh4",
-      "annotation": "White maintains the pin! This is the aggressive choice -- the bishop stays on the h4-d8 diagonal, keeping Nf6 tied down.",
+      "annotation": "White maintains the pin with Bh4, keeping the pressure on the Nf6. The bishop stays on the h4-d8 diagonal, and the pin continues to restrict Black's options. This is the aggressive choice that leads to the sharpest Semi-Slav lines.",
       "plans": [
         "Keep the pin, dare Black to play ...g5"
       ],
@@ -291,7 +291,7 @@
     },
     {
       "san": "dxc4",
-      "annotation": "Black captures on c4, entering the Botvinnik system of the Semi-Slav. This is one of the sharpest openings in chess! Black gives up the center but is planning ...b5 and ...g5 to create a massive que.",
+      "annotation": "Black captures dxc4, entering the Botvinnik System — one of the sharpest openings in all of chess. Black gives up the d5 center to gain a pawn on c4 and prepare ...b5-g5, a double-wing pawn storm that leads to incredibly complex positions.",
       "pawnStructure": "Black surrenders d5 but plans a double-wing pawn storm with ...b5 and ...g5",
       "plans": [
         "Follow with ...g5 and ...b5 for a wild attack",
@@ -321,7 +321,7 @@
     },
     {
       "san": "e4",
-      "annotation": "White seizes the center immediately! With the d5 pawn gone, White plays e4 to build a powerful pawn duo on d4-e4.",
+      "annotation": "White seizes the center with e4, exploiting the absence of the d5 pawn. The e4+d4 pawn duo controls c5, d5, e5, and f5 — a massive central presence. White's plan is to use this center as a launching pad for piece play and attacks.",
       "pawnStructure": "White's d4-e4 center is imposing; the position is now a battle of center vs flanks",
       "plans": [
         "Use the central pawn majority to launch an attack",
@@ -346,7 +346,7 @@
     },
     {
       "san": "g5",
-      "annotation": "Black goes for it! This audacious pawn thrust chases the Bh4 and prepares ...b5 for a full queenside-kingside pawn storm.",
+      "annotation": "Black pushes g5, the audacious move that defines the Botvinnik System. The g5 pawn chases the Bh4 from its pin and prepares ...b5, which will protect the c4 pawn and expand on the queenside. This double-wing advance creates one of chess's most unbalanced positions.",
       "pawnStructure": "Black's ...g5 weakens the kingside permanently but gains the bishop pair and space",
       "plans": [
         "Chase the bishop, play ...b5 for a double-wing attack",
@@ -376,7 +376,7 @@
     },
     {
       "san": "Bg3",
-      "annotation": "The bishop retreats to g3, the only safe square. On g3, the bishop still does useful work -- it eyes e5 and controls the h2-b8 diagonal.",
+      "annotation": "The bishop retreats to g3, the only safe square. On g3, the bishop still controls the h2-b8 diagonal and eyes the e5 square. The retreat allows White to focus on exploiting the central space advantage while Black's kingside becomes permanently weakened.",
       "plans": [
         "Use the d4-e4 center for a central or kingside attack",
         "The bishop on g3 supports e5 advance"
@@ -399,7 +399,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black expands on the queenside, protecting the c4 pawn and preparing ...Bb7. This is the other half of Black's double-wing strategy: pawns on b5 and g5 create threats on both sides of the board.",
+      "annotation": "Black pushes b5, protecting the c4 pawn and expanding on the queenside. The b5 pawn is the second half of Black's Botvinnik strategy — with g5 on the kingside and b5 on the queenside, Black has activity on both flanks while White controls the center.",
       "pawnStructure": "Black's b5+g5 pawn storm creates a complex wing vs center battle",
       "plans": [
         "Defend c4 with b5, develop Bb7 on the long diagonal",
@@ -429,7 +429,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "White develops the bishop to e2, a modest but useful square. The bishop eyes the g4 square and supports a future h3 or f3 to shore up the center.",
+      "annotation": "White develops the bishop to e2, a modest but useful square that keeps options open. The Be2 supports a future h3 or f3 to shore up the center, and eyes the g4 square in some lines. White is building up before launching a central counterattack.",
       "plans": [
         "Prepare f3 to support e4, or Bf3 for central control",
         "Castle and organize the attack"
@@ -452,7 +452,7 @@
     },
     {
       "san": "Bb7",
-      "annotation": "Black develops the bishop to b7, completing the queenside development plan. The bishop on b7 is powerful -- it pressures the e4 pawn through the long diagonal and controls d5.",
+      "annotation": "Black develops the bishop to b7, completing the queenside development plan. The Bb7 is powerful — it pressures e4 along the long a8-h1 diagonal and supports a future ...c3 advance that would undermine White's center.",
       "plans": [
         "Pressure e4 and the long diagonal",
         "Support ...b4 to attack the knight on c3"
@@ -481,7 +481,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles to safety before the position explodes. With pawns flying on both wings, getting the king out of the center is essential.",
+      "annotation": "White castles kingside, getting the king to safety before the position becomes wildly tactical. With pawns flying on both wings in the Botvinnik System, king safety is essential. White is now ready to launch the central or queenside counterattack.",
       "plans": [
         "King safety first, then launch the central attack",
         "f3 to support e4, then prepare d5 or e5 breaks"
@@ -504,7 +504,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the last minor piece, supporting e5 and c5 breaks. The knight on d7 is ready to reroute: it can go to b6 to hit d5, to e5 for a powerful central outpost, or to f8-g6 to support the ki.",
+      "annotation": "Black develops Nbd7, completing minor piece development. The Nd7 supports both the ...e5 and ...c5 central breaks, and can reroute to b6 (hitting d5) or f8-g6 (supporting the kingside). The Semi-Slav Botvinnik middlegame is now fully armed and dangerous for both sides.",
       "plans": [
         "Reroute Nd7 to active squares like b6 or e5",
         "Prepare ...c5 to challenge d4 or ...e5 to attack the center"
