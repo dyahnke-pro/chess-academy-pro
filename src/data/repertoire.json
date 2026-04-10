@@ -3551,7 +3551,7 @@
     "id": "english-opening",
     "eco": "A10",
     "name": "English Opening",
-    "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4 d3 d6 Bg5 Bxc3 bxc3 h6 Bd2 Be6",
+    "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4 d3 d6 Nd5 Bc5 Bg5 h6 Bxf6 Qxf6 Nd2 Be6",
     "color": "white",
     "style": "Flexible, Positional",
     "overview": "The English Opening starts with 1.c4 and is one of the most flexible ways to start a game. You're basically playing a Sicilian with an extra tempo, which gives you a huge range of setups. Whether you want to play positionally with a fianchetto or go for sharp lines with d4, the English lets you adapt to whatever your opponent throws at you.",
