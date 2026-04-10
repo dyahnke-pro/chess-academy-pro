@@ -31,6 +31,8 @@ export interface EffectiveSettings {
   // Neon glow
   glowBrightness: number;
   boardGlowColor: string;
+  whitePieceGlowColor: string;
+  blackPieceGlowColor: string;
 }
 
 export interface UseSettingsReturn {
@@ -79,6 +81,8 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   coachReviewVoice: true,
   glowBrightness: 100,
   boardGlowColor: '0, 229, 255',
+  whitePieceGlowColor: '0, 255, 136',
+  blackPieceGlowColor: '168, 85, 247',
 };
 
 export function useSettings(): UseSettingsReturn {
@@ -117,6 +121,8 @@ export function useSettings(): UseSettingsReturn {
       coachReviewVoice: raw.coachReviewVoice ?? true,
       glowBrightness: raw.glowBrightness ?? 100,
       boardGlowColor: raw.boardGlowColor ?? '0, 229, 255',
+      whitePieceGlowColor: raw.whitePieceGlowColor ?? '0, 255, 136',
+      blackPieceGlowColor: raw.blackPieceGlowColor ?? '168, 85, 247',
     };
 
     if (raw.masterAllOff) {

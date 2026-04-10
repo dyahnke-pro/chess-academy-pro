@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useRef } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -38,6 +38,90 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
+
+const DRAG_THRESHOLD = 8; // px — movement below this is treated as a tap
+
+function DraggableCoachFab({ onOpen }: { onOpen: () => void }): JSX.Element {
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const dragRef = useRef<{
+    startX: number;
+    startY: number;
+    startPosX: number;
+    startPosY: number;
+    moved: boolean;
+  } | null>(null);
+
+  const defaultBottom = 'calc(4.5rem + env(safe-area-inset-bottom, 0px))';
+
+  const handleTouchStart = useCallback((e: React.TouchEvent): void => {
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    dragRef.current = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      startPosX: rect.left + rect.width / 2,
+      startPosY: rect.top + rect.height / 2,
+      moved: false,
+    };
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent): void => {
+    const drag = dragRef.current;
+    if (!drag) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - drag.startX;
+    const dy = touch.clientY - drag.startY;
+
+    if (!drag.moved && Math.abs(dx) + Math.abs(dy) < DRAG_THRESHOLD) return;
+    drag.moved = true;
+
+    const newX = Math.max(40, Math.min(window.innerWidth - 40, drag.startPosX + dx));
+    const newY = Math.max(40, Math.min(window.innerHeight - 40, drag.startPosY + dy));
+    setPos({ x: newX, y: newY });
+  }, []);
+
+  const handleTouchEnd = useCallback((): void => {
+    const drag = dragRef.current;
+    dragRef.current = null;
+    if (!drag?.moved) {
+      onOpen();
+    }
+  }, [onOpen]);
+
+  const positioned = pos !== null;
+
+  return (
+    <button
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onClick={positioned ? undefined : () => onOpen()}
+      className="md:hidden fixed z-40 flex items-center justify-center gap-1.5 px-4 py-2 rounded-full shadow-lg"
+      style={{
+        background: 'var(--color-accent)',
+        color: 'var(--color-bg)',
+        boxShadow: '0 0 12px rgba(6, 182, 212, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25)',
+        touchAction: 'none',
+        ...(positioned
+          ? {
+              left: `${pos.x}px`,
+              top: `${pos.y}px`,
+              transform: 'translate(-50%, -50%)',
+            }
+          : {
+              left: '50%',
+              transform: 'translateX(-50%)',
+              bottom: defaultBottom,
+            }),
+      }}
+      aria-label="Open coach chat"
+      data-testid="coach-edge-tab"
+    >
+      <MessageCircle size={16} />
+      <span className="text-xs font-semibold">Coach</span>
+    </button>
+  );
+}
 
 export function AppLayout(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -105,11 +189,23 @@ export function AppLayout(): JSX.Element {
             data-testid="sidebar-overlay"
           />
           <nav
-            className="md:hidden fixed top-0 right-0 bottom-0 w-64 z-50 flex flex-col py-6 border-l"
-            style={{ background: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
+            className="md:hidden fixed top-0 right-0 bottom-0 w-64 z-50 flex flex-col py-6"
+            style={{
+              background: 'var(--color-bg-secondary)',
+              borderLeft: '2px solid rgba(0, 229, 255, 0.4)',
+              boxShadow: '-4px 0 20px rgba(0, 229, 255, 0.15), -2px 0 8px rgba(168, 85, 247, 0.1)',
+            }}
           >
             <div className="flex items-center justify-between px-4 mb-6">
-              <span className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>Menu</span>
+              <span
+                className="font-bold text-sm"
+                style={{
+                  color: 'var(--color-text)',
+                  textShadow: '0 0 8px rgba(0, 229, 255, 0.4)',
+                }}
+              >
+                Menu
+              </span>
               <button
                 onClick={closeSidebar}
                 className="p-1 rounded"
@@ -120,19 +216,23 @@ export function AppLayout(): JSX.Element {
               </button>
             </div>
             <div className="flex flex-col gap-0.5 px-2 flex-1 overflow-y-auto">
-              {NAV_ITEMS.map(({ to, label, icon: Icon, activeText, activeBg }) => (
+              {NAV_ITEMS.map(({ to, label, icon: Icon, glowColor, activeText, activeBg }) => (
                 <NavLink
                   key={to}
                   to={to}
                   end={to === '/'}
                   onClick={closeSidebar}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                       isActive
                         ? `${activeText} ${activeBg}`
                         : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
                     }`
                   }
+                  style={({ isActive }) => isActive ? {
+                    borderLeft: `3px solid ${glowColor}`,
+                    boxShadow: `0 0 10px ${glowColor}, inset 2px 0 8px ${glowColor.replace('0.6)', '0.15)')}`,
+                  } : { borderLeft: '3px solid transparent' }}
                 >
                   <Icon size={16} />
                   {label}
@@ -252,27 +352,10 @@ export function AppLayout(): JSX.Element {
         ))}
       </nav>
 
-      {/* Coach trigger — edge tab on mobile, FAB on desktop */}
+      {/* Coach trigger — draggable on mobile, FAB on desktop */}
       {showCoachFab && (
         <>
-          {/* Mobile: bottom-center pill button */}
-          <button
-            onClick={() => setCoachDrawerOpen(true)}
-            className="md:hidden fixed z-40 flex items-center justify-center gap-1.5 px-4 py-2 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
-            style={{
-              background: 'var(--color-accent)',
-              color: 'var(--color-bg)',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
-              boxShadow: '0 0 12px rgba(6, 182, 212, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25)',
-            }}
-            aria-label="Open coach chat"
-            data-testid="coach-edge-tab"
-          >
-            <MessageCircle size={16} />
-            <span className="text-xs font-semibold">Coach</span>
-          </button>
+          <DraggableCoachFab onOpen={() => setCoachDrawerOpen(true)} />
 
           {/* Desktop: floating action button */}
           <button

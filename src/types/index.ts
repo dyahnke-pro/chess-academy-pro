@@ -480,6 +480,8 @@ export interface UserPreferences {
   // Neon Glow Settings
   glowBrightness?: number;         // 0–200, default 100 — master dimmer for all glow
   boardGlowColor?: string;         // rgb string e.g. "0, 229, 255" — single color for all squares
+  whitePieceGlowColor?: string;    // rgb string e.g. "0, 255, 136" — glow color for white pieces
+  blackPieceGlowColor?: string;    // rgb string e.g. "168, 85, 247" — glow color for black pieces
   // Import accounts
   chessComUsername?: string;
   lichessUsername?: string;

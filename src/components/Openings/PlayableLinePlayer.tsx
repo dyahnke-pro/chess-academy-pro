@@ -18,6 +18,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { useBoardGlow, buildGlowSquareStyles } from '../../hooks/useBoardGlow';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
+import { buildPieceGlowFilter } from '../../utils/neonColors';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
 import type { PieceDropHandlerArgs, SquareHandlerArgs } from 'react-chessboard';
 
@@ -53,9 +54,9 @@ export function PlayableLinePlayer({
   // Board theming
   const boardColorScheme = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
   const pieceFilters = useMemo(() => ({
-    whitePieceFilter: boardColorScheme.whitePieceFilter,
-    blackPieceFilter: boardColorScheme.blackPieceFilter,
-  }), [boardColorScheme]);
+    whitePieceFilter: buildPieceGlowFilter(settings.whitePieceGlowColor, settings.glowBrightness) || boardColorScheme.whitePieceFilter,
+    blackPieceFilter: buildPieceGlowFilter(settings.blackPieceGlowColor, settings.glowBrightness) || boardColorScheme.blackPieceFilter,
+  }), [settings.whitePieceGlowColor, settings.blackPieceGlowColor, settings.glowBrightness, boardColorScheme]);
   const customPieces = useMemo(
     () => buildPieceRenderer(settings.pieceSet, pieceFilters),
     [settings.pieceSet, pieceFilters],

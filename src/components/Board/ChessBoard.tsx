@@ -8,6 +8,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
+import { buildPieceGlowFilter } from '../../utils/neonColors';
 import { EvalBar } from './EvalBar';
 import { VoiceChatMic } from './VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from './VoiceChatMic';
@@ -121,9 +122,9 @@ export function ChessBoard({
   // ─── Board color + piece set from settings ────────────────────────────────
   const boardColorScheme = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
   const pieceFilters = useMemo(() => ({
-    whitePieceFilter: boardColorScheme.whitePieceFilter,
-    blackPieceFilter: boardColorScheme.blackPieceFilter,
-  }), [boardColorScheme]);
+    whitePieceFilter: buildPieceGlowFilter(settings.whitePieceGlowColor, settings.glowBrightness) || boardColorScheme.whitePieceFilter,
+    blackPieceFilter: buildPieceGlowFilter(settings.blackPieceGlowColor, settings.glowBrightness) || boardColorScheme.blackPieceFilter,
+  }), [settings.whitePieceGlowColor, settings.blackPieceGlowColor, settings.glowBrightness, boardColorScheme]);
   const customPieces = useMemo(
     () => buildPieceRenderer(settings.pieceSet, pieceFilters),
     [settings.pieceSet, pieceFilters],

@@ -36,6 +36,17 @@ export function scaledBorder(rgb: string, brightness: number): string {
   return `rgba(${rgb}, ${Math.min(1, 0.4 * s)})`;
 }
 
+/**
+ * Build a CSS drop-shadow filter for piece glow, scaled by brightness.
+ * Returns empty string when brightness is 0.
+ */
+export function buildPieceGlowFilter(rgb: string, brightness: number): string {
+  if (brightness <= 0) return '';
+  const s = brightness / 100;
+  const r = Math.round;
+  return `drop-shadow(0 0 ${r(3 * s)}px rgba(${rgb}, ${Math.min(1, 0.6 * s)})) drop-shadow(0 0 ${r(1 * s)}px rgba(${rgb}, ${Math.min(1, 0.9 * s)}))`;
+}
+
 const STYLE_COLORS: Record<string, NeonColor> = {
   aggressive:   makeNeon('239, 68, 68',   'bg-red-500/15',    'text-red-400'),
   positional:   makeNeon('59, 130, 246',   'bg-blue-500/15',   'text-blue-400'),

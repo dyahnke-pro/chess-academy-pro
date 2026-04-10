@@ -1,6 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSettings } from '../../hooks/useSettings';
 import { Sparkles, RotateCcw } from 'lucide-react';
+import { getBoardColor } from '../../services/boardColorService';
+import { PIECE_SETS, LICHESS_CDN } from '../../services/pieceSetService';
+import { buildPieceGlowFilter } from '../../utils/neonColors';
 
 // ─── Neon color presets ──────────────────────────────────────────────────────
 
@@ -43,6 +46,19 @@ function rgbToHex(rgb: string): string {
 const BOARD_FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 const BOARD_RANKS = [8, 7, 6, 5, 4, 3, 2, 1] as const;
 
+// Starting position piece layout
+const STARTING_PIECES: Record<string, string> = {
+  a8: 'bR', b8: 'bN', c8: 'bB', d8: 'bQ', e8: 'bK', f8: 'bB', g8: 'bN', h8: 'bR',
+  a7: 'bP', b7: 'bP', c7: 'bP', d7: 'bP', e7: 'bP', f7: 'bP', g7: 'bP', h7: 'bP',
+  a2: 'wP', b2: 'wP', c2: 'wP', d2: 'wP', e2: 'wP', f2: 'wP', g2: 'wP', h2: 'wP',
+  a1: 'wR', b1: 'wN', c1: 'wB', d1: 'wQ', e1: 'wK', f1: 'wB', g1: 'wN', h1: 'wR',
+};
+
+function getLichessSetName(pieceSetId: string): string {
+  const config = PIECE_SETS.find((ps) => ps.id === pieceSetId);
+  return config?.lichessName ?? 'cburnett';
+}
+
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
 interface NeonColorPickerProps {
@@ -77,7 +93,7 @@ function NeonColorPicker({ label, currentRgb, onSelectRgb }: NeonColorPickerProp
               }}
               title={preset.label}
               aria-label={`Select ${preset.label}`}
-              data-testid={`neon-preset-${preset.label.toLowerCase()}`}
+              data-testid={`neon-preset-${label.toLowerCase().replace(/\s+/g, '-')}-${preset.label.toLowerCase()}`}
             />
           );
         })}
@@ -130,16 +146,24 @@ function DimmerSlider({ label, value, onChange, testId }: DimmerSliderProps): JS
   );
 }
 
-// ─── Mock Chess Board with 3D neon glow ──────────────────────────────────────
+// ─── Mock Chess Board with pieces ───────────────────────────────────────────
 
 interface MockBoardProps {
   glowColor: string;
   brightness: number;
+  boardColorId: string;
+  pieceSetId: string;
+  whiteGlowColor: string;
+  blackGlowColor: string;
 }
 
-function MockChessBoard({ glowColor, brightness }: MockBoardProps): JSX.Element {
+function MockChessBoard({ glowColor, brightness, boardColorId, pieceSetId, whiteGlowColor, blackGlowColor }: MockBoardProps): JSX.Element {
   const scale = brightness / 100;
   const r = Math.round;
+  const boardColor = useMemo(() => getBoardColor(boardColorId), [boardColorId]);
+  const setName = useMemo(() => getLichessSetName(pieceSetId), [pieceSetId]);
+  const whiteFilter = useMemo(() => buildPieceGlowFilter(whiteGlowColor, brightness), [whiteGlowColor, brightness]);
+  const blackFilter = useMemo(() => buildPieceGlowFilter(blackGlowColor, brightness), [blackGlowColor, brightness]);
 
   return (
     <div
@@ -164,12 +188,15 @@ function MockChessBoard({ glowColor, brightness }: MockBoardProps): JSX.Element 
           const o2 = Math.min(1, 0.12 * scale);
           const o3 = Math.min(1, 0.08 * scale);
           const o4 = Math.min(1, 0.06 * scale);
+          const sq = `${file}${rank}`;
+          const piece = STARTING_PIECES[sq];
+          const isWhitePiece = piece?.startsWith('w');
 
           return (
             <div
-              key={`${file}${rank}`}
+              key={sq}
               style={{
-                backgroundColor: isLight ? '#3d3d50' : '#272738',
+                backgroundColor: isLight ? boardColor.lightSquare : boardColor.darkSquare,
                 boxShadow: scale > 0
                   ? [
                       `inset 0 0 ${r(6 * scale)}px rgba(${glowColor}, ${o1})`,
@@ -179,8 +206,22 @@ function MockChessBoard({ glowColor, brightness }: MockBoardProps): JSX.Element 
                     ].join(', ')
                   : 'none',
                 aspectRatio: '1',
+                position: 'relative',
               }}
-            />
+            >
+              {piece && (
+                <img
+                  src={`${LICHESS_CDN}/${setName}/${piece}.svg`}
+                  alt={piece}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    filter: isWhitePiece ? whiteFilter : blackFilter,
+                  }}
+                  draggable={false}
+                />
+              )}
+            </div>
           );
         }),
       )}
@@ -195,26 +236,55 @@ export function BoardGlowSettings(): JSX.Element {
 
   const [glowColor, setGlowColor] = useState(settings.boardGlowColor);
   const [brightness, setBrightness] = useState(settings.glowBrightness);
+  const [whiteGlow, setWhiteGlow] = useState(settings.whitePieceGlowColor);
+  const [blackGlow, setBlackGlow] = useState(settings.blackPieceGlowColor);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isDirty = useMemo(() => (
-    glowColor !== settings.boardGlowColor ||
-    brightness !== settings.glowBrightness
-  ), [glowColor, brightness, settings]);
+  // Auto-save with debounce
+  useEffect(() => {
+    const isDirty =
+      glowColor !== settings.boardGlowColor ||
+      brightness !== settings.glowBrightness ||
+      whiteGlow !== settings.whitePieceGlowColor ||
+      blackGlow !== settings.blackPieceGlowColor;
 
-  const handleSave = useCallback(async (): Promise<void> => {
-    await updateSettings({
-      boardGlowColor: glowColor,
-      glowBrightness: brightness,
-    });
-    setSaveStatus('Glow settings saved');
-    setTimeout(() => setSaveStatus(null), 2000);
-  }, [glowColor, brightness, updateSettings]);
+    if (!isDirty) return;
 
-  const handleReset = useCallback((): void => {
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      void updateSettings({
+        boardGlowColor: glowColor,
+        glowBrightness: brightness,
+        whitePieceGlowColor: whiteGlow,
+        blackPieceGlowColor: blackGlow,
+      }).then(() => {
+        setSaveStatus('Saved');
+        if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+        statusTimerRef.current = setTimeout(() => setSaveStatus(null), 1500);
+      });
+    }, 400);
+
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, [glowColor, brightness, whiteGlow, blackGlow, settings, updateSettings]);
+
+  // Cleanup timers
+  useEffect(() => {
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    };
+  }, []);
+
+  const handleReset = (): void => {
     setGlowColor('0, 229, 255');
     setBrightness(100);
-  }, []);
+    setWhiteGlow('0, 255, 136');
+    setBlackGlow('168, 85, 247');
+  };
 
   return (
     <div className="space-y-5" data-testid="board-glow-settings">
@@ -230,11 +300,11 @@ export function BoardGlowSettings(): JSX.Element {
           testId="dimmer-master"
         />
         <p className="text-[10px] mt-1" style={{ color: 'var(--color-text-muted)' }}>
-          Controls all neon glow across the app — board, cards, buttons
+          Controls all neon glow across the app — board, pieces, cards, buttons
         </p>
       </div>
 
-      {/* Live preview */}
+      {/* Live preview with pieces */}
       <div>
         <h4 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--color-text-muted)' }}>
           Board Preview
@@ -242,6 +312,10 @@ export function BoardGlowSettings(): JSX.Element {
         <MockChessBoard
           glowColor={glowColor}
           brightness={brightness}
+          boardColorId={settings.boardColor}
+          pieceSetId={settings.pieceSet}
+          whiteGlowColor={whiteGlow}
+          blackGlowColor={blackGlow}
         />
       </div>
 
@@ -252,30 +326,46 @@ export function BoardGlowSettings(): JSX.Element {
         onSelectRgb={setGlowColor}
       />
 
-      {/* Action buttons */}
+      {/* Piece glow colors */}
+      <div>
+        <h4 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--color-text-muted)' }}>
+          Piece Glow Colors
+        </h4>
+        <div className="space-y-4">
+          <NeonColorPicker
+            label="White Pieces"
+            currentRgb={whiteGlow}
+            onSelectRgb={setWhiteGlow}
+          />
+          <NeonColorPicker
+            label="Black Pieces"
+            currentRgb={blackGlow}
+            onSelectRgb={setBlackGlow}
+          />
+        </div>
+      </div>
+
+      {/* Reset + status */}
       <div className="flex items-center gap-3 pt-2">
         <button
-          onClick={() => void handleSave()}
-          disabled={!isDirty}
-          className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 disabled:opacity-40"
-          style={{
-            background: isDirty ? 'var(--color-accent)' : 'var(--color-bg)',
-            color: isDirty ? 'var(--color-bg)' : 'var(--color-text-muted)',
-            boxShadow: isDirty ? '0 0 12px rgba(201, 168, 76, 0.5), 0 0 24px rgba(201, 168, 76, 0.25)' : 'none',
-          }}
-          data-testid="glow-save-btn"
-        >
-          {saveStatus ?? 'Save Glow Settings'}
-        </button>
-        <button
           onClick={handleReset}
-          className="p-2.5 rounded-lg border transition-colors hover:opacity-80"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors hover:opacity-80"
           style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
           aria-label="Reset to defaults"
           data-testid="glow-reset-btn"
         >
-          <RotateCcw size={16} />
+          <RotateCcw size={14} />
+          Reset
         </button>
+        {saveStatus && (
+          <span
+            className="text-xs font-medium animate-pulse"
+            style={{ color: 'var(--color-accent)' }}
+            data-testid="glow-save-status"
+          >
+            {saveStatus}
+          </span>
+        )}
       </div>
     </div>
   );

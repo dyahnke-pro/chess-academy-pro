@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { BoardGlowSettings, BoardGlowButton } from './BoardGlowSettings';
 import { useAppStore } from '../../stores/appStore';
@@ -39,43 +39,48 @@ describe('BoardGlowSettings', () => {
     expect(screen.getByTestId('dimmer-master')).toBeDefined();
   });
 
-  it('renders the mock chess board preview', () => {
+  it('renders the mock chess board preview with pieces', () => {
     renderWithProviders(<BoardGlowSettings />);
-    expect(screen.getByTestId('mock-chess-board')).toBeDefined();
+    const board = screen.getByTestId('mock-chess-board');
+    expect(board).toBeDefined();
+    // Board should contain piece images
+    const pieces = board.querySelectorAll('img');
+    expect(pieces.length).toBe(32); // full starting position
   });
 
-  it('renders color presets', () => {
+  it('renders board glow color presets', () => {
     renderWithProviders(<BoardGlowSettings />);
-    expect(screen.getByTestId('neon-preset-cyan')).toBeDefined();
-    expect(screen.getByTestId('neon-preset-purple')).toBeDefined();
+    expect(screen.getByTestId('neon-preset-board-glow-color-cyan')).toBeDefined();
+    expect(screen.getByTestId('neon-preset-board-glow-color-purple')).toBeDefined();
   });
 
-  it('renders save and reset buttons', () => {
+  it('renders piece glow color pickers', () => {
     renderWithProviders(<BoardGlowSettings />);
-    expect(screen.getByTestId('glow-save-btn')).toBeDefined();
+    expect(screen.getByTestId('neon-preset-white-pieces-green')).toBeDefined();
+    expect(screen.getByTestId('neon-preset-black-pieces-purple')).toBeDefined();
+  });
+
+  it('renders reset button', () => {
+    renderWithProviders(<BoardGlowSettings />);
     expect(screen.getByTestId('glow-reset-btn')).toBeDefined();
   });
 
-  it('save button is disabled when no changes made', () => {
-    renderWithProviders(<BoardGlowSettings />);
-    const saveBtn = screen.getByTestId('glow-save-btn') as HTMLButtonElement;
-    expect(saveBtn.disabled).toBe(true);
-  });
-
-  it('save button enables after changing brightness', () => {
+  it('auto-saves after changing brightness', async () => {
     renderWithProviders(<BoardGlowSettings />);
     const slider = screen.getByTestId('dimmer-master') as HTMLInputElement;
     fireEvent.change(slider, { target: { value: '150' } });
-    const saveBtn = screen.getByTestId('glow-save-btn') as HTMLButtonElement;
-    expect(saveBtn.disabled).toBe(false);
+    // Auto-save shows status after debounce
+    await waitFor(() => {
+      expect(screen.getByTestId('glow-save-status')).toBeDefined();
+    }, { timeout: 2000 });
   });
 
-  it('clicking a preset color changes the active color', () => {
+  it('clicking a preset color triggers auto-save', async () => {
     renderWithProviders(<BoardGlowSettings />);
-    const purpleBtn = screen.getByTestId('neon-preset-purple');
+    const purpleBtn = screen.getByTestId('neon-preset-board-glow-color-purple');
     fireEvent.click(purpleBtn);
-    // Save button should be enabled if default was cyan
-    const saveBtn = screen.getByTestId('glow-save-btn') as HTMLButtonElement;
-    expect(saveBtn.disabled).toBe(false);
+    await waitFor(() => {
+      expect(screen.getByTestId('glow-save-status')).toBeDefined();
+    }, { timeout: 2000 });
   });
 });
