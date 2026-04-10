@@ -402,6 +402,7 @@ export interface FlashcardRecord {
 // ─── Settings Enums (WO-5) ───────────────────────────────────────────────────
 
 export type PieceAnimationSpeed = 'none' | 'fast' | 'medium' | 'slow';
+export type CoachVerbosity = 'none' | 'fast' | 'medium' | 'slow';
 export type MoveMethod = 'drag' | 'click' | 'both';
 export type AiProvider = 'deepseek' | 'anthropic';
 
@@ -477,6 +478,7 @@ export interface UserPreferences {
   coachPositionalTips?: boolean;
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;
+  coachVerbosity?: CoachVerbosity;
   // Neon Glow Settings
   glowBrightness?: number;         // 0–200, default 100 — master dimmer for all glow
   boardGlowColor?: string;         // rgb string e.g. "0, 229, 255" — single color for all squares

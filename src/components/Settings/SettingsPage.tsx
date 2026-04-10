@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 
 import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
-import type { UserProfile, PieceAnimationSpeed, MoveMethod } from '../../types';
+import type { UserProfile, PieceAnimationSpeed, CoachVerbosity, MoveMethod } from '../../types';
 
 type SettingsTab = 'profile' | 'board' | 'coach' | 'appearance' | 'about';
 
@@ -294,10 +294,10 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         tooltip="Speed of piece movement animation"
         value={pieceAnimationSpeed}
         options={[
-          { value: 'none', label: 'None' },
-          { value: 'fast', label: 'Fast' },
-          { value: 'medium', label: 'Medium' },
-          { value: 'slow', label: 'Slow' },
+          { value: 'none', label: 'None — Instant moves' },
+          { value: 'fast', label: 'Fast — Quick slide' },
+          { value: 'medium', label: 'Medium — Balanced' },
+          { value: 'slow', label: 'Slow — Easy to follow' },
         ]}
         onChange={(v) => setPieceAnimationSpeed(v as PieceAnimationSpeed)}
         testId="animation-speed-select"
@@ -777,9 +777,28 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
     setProfile({ ...profile, preferences: updatedPrefs });
   };
 
+  const handleVerbosityChange = async (value: CoachVerbosity): Promise<void> => {
+    const updatedPrefs = { ...profile.preferences, coachVerbosity: value };
+    await db.profiles.update(profile.id, { preferences: updatedPrefs });
+    setProfile({ ...profile, preferences: updatedPrefs });
+  };
+
   return (
     <div className="pt-4 border-t space-y-1" style={{ borderColor: 'var(--color-border)' }}>
       <SectionHeader title="Gameplay Coaching" />
+      <SelectRow
+        label="Coach Detail"
+        tooltip="How detailed the coach's explanations are"
+        value={profile.preferences.coachVerbosity ?? 'medium'}
+        options={[
+          { value: 'none', label: 'None — Silent, no commentary' },
+          { value: 'fast', label: 'Fast — Brief, just the key point' },
+          { value: 'medium', label: 'Medium — Balanced detail' },
+          { value: 'slow', label: 'Slow — Thorough explanations' },
+        ]}
+        onChange={(v) => void handleVerbosityChange(v as CoachVerbosity)}
+        testId="coach-verbosity-select"
+      />
       <ToggleRow
         label="Blunder Alerts"
         tooltip="Coach alerts you when your opponent makes a big mistake"
