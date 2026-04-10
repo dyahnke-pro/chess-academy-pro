@@ -8,9 +8,9 @@
     "style": "Aggressive, Romantic",
     "overview": "The King's Gambit is the most famous attacking opening in chess history — you throw a pawn at Black on move two and say 'come and get it.' The idea is simple: sacrifice the f-pawn to rip open the f-file, blast open the center, and launch a ferocious kingside attack before Black can consolidate. Fischer called it 'a bust,' but club players keep getting destroyed by it because the resulting positions are incredibly sharp and demand precise knowledge from the defender.",
     "keyIdeas": [
-      "Sacrifice the f-pawn to open the f-file for your rook after castling",
+      "Sacrifice the f-pawn to rip open the f-file — after castling, the Rf1 has a direct highway toward Black's castled king, and the open file combined with Bc4 targeting f7 creates devastating pressure",
       "Play d4 quickly to dominate the center with two pawns and free the dark-squared bishop",
-      "Develop rapidly with Bc4, Nf3, and O-O to attack the weakened f7 square",
+      "Develop rapidly with Bc4 targeting f7, Nf3 controlling e5, and O-O connecting rooks — every piece naturally aims at Black's weakened kingside, and the lead in development creates concrete tactical threats",
       "If Black holds the pawn with g5, play h4 to undermine the pawn chain and open the h-file"
     ],
     "traps": [
@@ -200,9 +200,9 @@
     "style": "Aggressive, Tactical",
     "overview": "The Scotch Gambit is a sneaky way to avoid heavy theory while getting a razor-sharp position. Instead of recapturing on d4, you play Bc4 and e5, kicking Black's knight and seizing space. It's like the Italian Game on steroids — you get rapid development, open lines, and attacking chances while Black struggles to find safe squares for the knights. The positions demand tactical alertness from both sides.",
     "keyIdeas": [
-      "Push e5 to kick the f6 knight and gain a space advantage in the center",
-      "Develop with O-O, Re1, and Bg5 to maximize pressure on pinned pieces",
-      "The bishop on c4 targets f7 — the eternal weak spot in Black's camp",
+      "Push e5 to kick Black's Nf6 from its defensive post and seize a commanding space advantage — the displaced knight leaves f7 and the kingside vulnerable to the Bc4's diagonal pressure",
+      "Complete development with O-O, Re1 bolstering the e-file, and Bg5 pinning pieces — this coordinated setup maximizes pressure while Black struggles to untangle from the tactical complications",
+      "The Bc4 targets f7 — the eternal weak spot in Black's position, defended only by the king. Combined with e5 cramping Black's pieces, this diagonal pressure creates constant tactical danger",
       "After e5, the d5 square becomes a contested outpost while Black's knight has no good squares"
     ],
     "traps": [
@@ -292,7 +292,7 @@
     "overview": "The Vienna Gambit is the King's Gambit's sneaky cousin — you delay f4 by one move, first developing the knight to c3 to control d5. When f4 comes, it's with more structural support and the e5 push gains time against Black's knight. This is a fantastic surprise weapon because most players prepare against the King's Gambit but have no clue what to do against the Vienna, and the resulting positions are incredibly sharp with attacking chances on both flanks.",
     "keyIdeas": [
       "Delay f4 until Nc3 supports the center — the e5 push comes with tempo against the f6 knight",
-      "After e5, the knight on f6 is kicked and d5 is under White's control",
+      "After e5, the Nf6 is forced to retreat (usually to d5 or g8), and White seizes control of the d5 square — the displaced knight and White's space advantage create a dominating central position",
       "Develop with d4, Bc4 or Bd3, and O-O for a strong attacking setup with open lines",
       "The f-file opens naturally for the rook after castling — the attack practically plays itself"
     ],
@@ -761,7 +761,7 @@
     "style": "Trappy, Unorthodox",
     "overview": "The Englund Gambit is the black sheep of the gambit family — objectively terrible, but loaded with traps that club players fall into like clockwork. After 1...e5 against d4, Black gives up a pawn to create immediate chaos and trick White into losing material. It's the perfect weapon for blitz games where your opponent expects a Queen's Gambit and instead gets blindsided by tactical mayhem that they've never seen before.",
     "keyIdeas": [
-      "Sacrifice the e5 pawn to disrupt White's normal d4 development plans completely",
+      "Sacrifice the e5 pawn to shatter White's normal d4 development routine — opponents expecting a Queen's Gambit or Indian Defense are thrown into unfamiliar tactical territory from move one",
       "Qe7 pins the e5 pawn to White's king — if White isn't careful, the pawn drops back for free",
       "Rapid development with Nf6, Ng4, and Bc5 creates tactical threats against the f2 square",
       "The surprise factor alone wins many games — opponents waste time and clock trying to figure out what's happening"
