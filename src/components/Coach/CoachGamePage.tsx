@@ -1239,12 +1239,11 @@ export function CoachGamePage(): JSX.Element {
     }));
   }, [requestHint]);
 
-  // Takeback — undo the last player move (and coach's reply if present)
+  // Takeback — always undo two half-moves (opponent's reply + player's move)
   const handleTakeback = useCallback(() => {
     const moves = gameState.moves;
-    const lastMove = moves.length > 0 ? moves[moves.length - 1] : undefined;
-    // If the last move was the coach's reply, undo both; otherwise just the player's move
-    const undoCount = lastMove?.isCoachMove ? 2 : 1;
+    if (moves.length < 2) return;
+    const undoCount = 2;
 
     for (let i = 0; i < undoCount; i++) {
       game.undoMove();
@@ -1973,7 +1972,7 @@ export function CoachGamePage(): JSX.Element {
               />
               <button
                 onClick={handleTakeback}
-                disabled={gameState.moves.length < 1}
+                disabled={gameState.moves.length < 2}
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
                 style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(245, 158, 11, 0.45), 0 0 6px rgba(245, 158, 11, 0.25)'; }}
