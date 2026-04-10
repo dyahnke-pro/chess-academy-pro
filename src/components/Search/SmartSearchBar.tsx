@@ -133,11 +133,29 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           onFocus={() => { if (results.length > 0 || showAskCoach) setShowDropdown(true); }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder ?? defaultPlaceholder}
-          className="w-full pl-9 pr-16 py-2.5 rounded-xl text-sm transition-colors focus:outline-none"
+          className="w-full pl-9 pr-16 py-2.5 rounded-xl text-sm transition-all duration-200 focus:outline-none"
           style={{
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            border: '1px solid var(--color-border)',
+            borderTop: '1px solid rgba(201, 168, 76, 0.15)',
+            borderRight: '1px solid rgba(201, 168, 76, 0.15)',
+            borderLeft: '2px solid rgba(201, 168, 76, 0.5)',
+            borderBottom: '2px solid rgba(201, 168, 76, 0.5)',
+            boxShadow: '0 0 6px rgba(201, 168, 76, 0.35), 0 0 14px rgba(201, 168, 76, 0.2), 0 0 24px rgba(201, 168, 76, 0.1)',
+          }}
+          onFocusCapture={(e) => {
+            e.currentTarget.style.borderLeft = '2px solid rgba(201, 168, 76, 0.8)';
+            e.currentTarget.style.borderBottom = '2px solid rgba(201, 168, 76, 0.8)';
+            e.currentTarget.style.borderTop = '1px solid rgba(201, 168, 76, 0.3)';
+            e.currentTarget.style.borderRight = '1px solid rgba(201, 168, 76, 0.3)';
+            e.currentTarget.style.boxShadow = '0 0 8px rgba(201, 168, 76, 0.5), 0 0 18px rgba(201, 168, 76, 0.3), 0 0 30px rgba(201, 168, 76, 0.15)';
+          }}
+          onBlurCapture={(e) => {
+            e.currentTarget.style.borderLeft = '2px solid rgba(201, 168, 76, 0.5)';
+            e.currentTarget.style.borderBottom = '2px solid rgba(201, 168, 76, 0.5)';
+            e.currentTarget.style.borderTop = '1px solid rgba(201, 168, 76, 0.15)';
+            e.currentTarget.style.borderRight = '1px solid rgba(201, 168, 76, 0.15)';
+            e.currentTarget.style.boxShadow = '0 0 6px rgba(201, 168, 76, 0.35), 0 0 14px rgba(201, 168, 76, 0.2), 0 0 24px rgba(201, 168, 76, 0.1)';
           }}
           data-testid="smart-search-input"
         />
