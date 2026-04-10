@@ -1,7 +1,8 @@
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2 } from 'lucide-react';
+import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
+import { useAppStore } from '../../stores/appStore';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
 
 interface SmartSearchBarProps {
@@ -24,6 +25,8 @@ const CATEGORY_LABELS: Record<SmartSearchCategory, string> = {
   puzzle: 'Puzzle',
 };
 
+const ASK_COACH_MIN_LENGTH = 3;
+
 export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSearchBarProps): JSX.Element {
   const navigate = useNavigate();
   const { query, setQuery, results, loading, clear } = useSmartSearch({ scope });
@@ -32,19 +35,26 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
+  const setCoachDrawerInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
+
+  const showAskCoach = query.trim().length >= ASK_COACH_MIN_LENGTH;
+  const totalItems = results.length + (showAskCoach ? 1 : 0);
+  const askCoachIndex = showAskCoach ? results.length : -1;
+
   // Notify parent of result changes (for Openings page integration)
   useEffect(() => {
     onResultsChange?.(results);
   }, [results, onResultsChange]);
 
-  // Show dropdown when there are results or loading
+  // Show dropdown when there are results, loading, or query is long enough for "Ask Coach"
   useEffect(() => {
-    if (query.trim() && (results.length > 0 || loading)) {
+    if (query.trim() && (results.length > 0 || loading || showAskCoach)) {
       setShowDropdown(true);
     } else if (!query.trim()) {
       setShowDropdown(false);
     }
-  }, [query, results, loading]);
+  }, [query, results, loading, showAskCoach]);
 
   // Reset selection when results change
   useEffect(() => {
@@ -67,32 +77,44 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  const askCoach = useCallback((text: string): void => {
+    setCoachDrawerInitialMessage(text);
+    setCoachDrawerOpen(true);
+    clear();
+    setShowDropdown(false);
+    inputRef.current?.blur();
+  }, [setCoachDrawerInitialMessage, setCoachDrawerOpen, clear]);
+
   const handleSelect = useCallback((result: SmartSearchResult): void => {
     setShowDropdown(false);
     void navigate(result.route);
   }, [navigate]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
-    if (!showDropdown || results.length === 0) return;
+    if (!showDropdown || totalItems === 0) return;
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : 0));
+      setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : 0));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : results.length - 1));
-    } else if (e.key === 'Enter' && selectedIndex >= 0) {
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
+    } else if (e.key === 'Enter') {
       e.preventDefault();
-      handleSelect(results[selectedIndex]);
+      if (selectedIndex >= 0 && selectedIndex < results.length) {
+        handleSelect(results[selectedIndex]);
+      } else if (selectedIndex === askCoachIndex || (selectedIndex === -1 && showAskCoach)) {
+        askCoach(query.trim());
+      }
     } else if (e.key === 'Escape') {
       setShowDropdown(false);
       inputRef.current?.blur();
     }
-  }, [showDropdown, results, selectedIndex, handleSelect]);
+  }, [showDropdown, totalItems, results, selectedIndex, handleSelect, askCoachIndex, showAskCoach, askCoach, query]);
 
   const defaultPlaceholder = scope === 'opening'
     ? 'Search openings — try "Sicilian as black" or "B01"...'
-    : 'Search your games, openings, puzzles...';
+    : 'Ask a question or search games, openings, puzzles...';
 
   return (
     <div className="relative" data-testid="smart-search">
@@ -108,7 +130,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => { if (results.length > 0) setShowDropdown(true); }}
+          onFocus={() => { if (results.length > 0 || showAskCoach) setShowDropdown(true); }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder ?? defaultPlaceholder}
           className="w-full pl-9 pr-16 py-2.5 rounded-xl text-sm transition-colors focus:outline-none"
@@ -145,7 +167,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       <div className="flex items-center gap-1 mt-1.5 ml-1">
         <Sparkles size={10} style={{ color: 'var(--color-accent)' }} />
         <span className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
-          AI-powered — try &quot;my worst opening as black&quot; or &quot;blunders in the Sicilian&quot;
+          AI-powered — try &quot;my worst opening as black&quot; or ask your coach a question
         </span>
       </div>
 
@@ -168,7 +190,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
               </div>
             </div>
           )}
-          {!loading && results.length === 0 && query.trim() && (
+          {!loading && results.length === 0 && !showAskCoach && query.trim() && (
             <div className="p-4 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
               No results found
             </div>
@@ -209,6 +231,45 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
               </button>
             );
           })}
+
+          {/* Ask Coach option */}
+          {showAskCoach && (
+            <>
+              {results.length > 0 && (
+                <div className="mx-3 border-t" style={{ borderColor: 'var(--color-border)' }} />
+              )}
+              <button
+                onClick={() => askCoach(query.trim())}
+                className="w-full px-3 py-3 flex items-center gap-3 text-left transition-colors"
+                style={{
+                  background: selectedIndex === askCoachIndex ? 'var(--color-border)' : 'transparent',
+                }}
+                onMouseEnter={() => setSelectedIndex(askCoachIndex)}
+                data-testid="ask-coach-option"
+              >
+                <div
+                  className="p-1.5 rounded-lg shrink-0"
+                  style={{ background: 'var(--color-accent)', color: 'white' }}
+                >
+                  <MessageCircle size={14} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
+                    Ask Coach
+                  </div>
+                  <div className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
+                    &ldquo;{query.trim()}&rdquo;
+                  </div>
+                </div>
+                <span
+                  className="text-[10px] px-1.5 py-0.5 rounded-full shrink-0"
+                  style={{ background: 'var(--color-accent)', color: 'white' }}
+                >
+                  Enter
+                </span>
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

@@ -7,7 +7,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { MobileChatDrawer } from './MobileChatDrawer';
 import { GameChatPanel } from './GameChatPanel';
 import { ChessBoard } from '../Board/ChessBoard';
-import type { BoardAnnotationCommand, BoardArrow } from '../../types';
+import type { BoardAnnotationCommand, BoardArrow, ChatMessage } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -23,10 +23,15 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   const setOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const boardCtx = useAppStore((s) => s.globalBoardContext);
   const setGlobalPractice = useAppStore((s) => s.setGlobalPracticePosition);
+  const initialMessage = useAppStore((s) => s.coachDrawerInitialMessage);
+  const setInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
 
   const [annotationArrows, setAnnotationArrows] = useState<BoardArrow[]>([]);
   const [temporaryFen, setTemporaryFen] = useState<string | null>(null);
   const [minimized, setMinimized] = useState(false);
+
+  // Persist chat messages across drawer open/close (this component stays mounted)
+  const savedMessagesRef = useRef<ChatMessage[]>([]);
 
   const {
     practicePosition,
@@ -98,6 +103,14 @@ export function GlobalCoachDrawer(): JSX.Element | null {
     }
   }, [evaluatePracticeMove, coachSay, setGlobalPractice]);
 
+  const handleInitialPromptSent = useCallback(() => {
+    setInitialMessage(null);
+  }, [setInitialMessage]);
+
+  const handleMessagesUpdate = useCallback((msgs: ChatMessage[]) => {
+    savedMessagesRef.current = msgs;
+  }, []);
+
   // Context for GameChatPanel — use global board context or defaults
   const fen = practicePosition?.fen ?? temporaryFen ?? boardCtx?.fen ?? START_FEN;
   const pgn = boardCtx?.pgn ?? '';
@@ -124,9 +137,14 @@ export function GlobalCoachDrawer(): JSX.Element | null {
           >
             C
           </div>
-          <span className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-            Coach
-          </span>
+          <div>
+            <span className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
+              Coach
+            </span>
+            <span className="text-xs ml-2" style={{ color: 'var(--color-text-muted)' }}>
+              Online
+            </span>
+          </div>
           {boardCtx && (
             <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'var(--color-bg)', color: 'var(--color-text-muted)' }}>
               Watching board
@@ -191,7 +209,7 @@ export function GlobalCoachDrawer(): JSX.Element | null {
         </div>
       )}
 
-      {/* Chat panel */}
+      {/* Chat panel — hideHeader since the drawer provides its own */}
       {!minimized && (
         <div className="flex-1 min-h-0 overflow-hidden">
           <GameChatPanel
@@ -207,6 +225,11 @@ export function GlobalCoachDrawer(): JSX.Element | null {
             history={ctxHistory}
             onBoardAnnotation={handleBoardAnnotation}
             className="h-full"
+            hideHeader
+            initialPrompt={initialMessage}
+            onInitialPromptSent={handleInitialPromptSent}
+            initialMessages={savedMessagesRef.current}
+            onMessagesUpdate={handleMessagesUpdate}
           />
         </div>
       )}

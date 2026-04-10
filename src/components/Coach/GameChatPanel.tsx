@@ -31,6 +31,14 @@ interface GameChatPanelProps {
   onBoardAnnotation?: (commands: BoardAnnotationCommand[]) => void;
   /** If set, auto-sends this message on mount (e.g., from post-game practice bridge) */
   initialPrompt?: string | null;
+  /** Called after the initial prompt has been sent */
+  onInitialPromptSent?: () => void;
+  /** Hide the built-in header (when embedded inside a container that provides its own) */
+  hideHeader?: boolean;
+  /** Restore messages from a previous session (used on mount only) */
+  initialMessages?: ChatMessageType[];
+  /** Called whenever the messages array changes, so the parent can persist them */
+  onMessagesUpdate?: (messages: ChatMessageType[]) => void;
 }
 
 export interface GameChatPanelHandle {
@@ -53,17 +61,41 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       className,
       onBoardAnnotation,
       initialPrompt,
+      onInitialPromptSent,
+      hideHeader,
+      initialMessages,
+      onMessagesUpdate,
     },
     ref,
   ) {
     const activeProfile = useAppStore((s) => s.activeProfile);
 
-    const [messages, setMessages] = useState<ChatMessageType[]>([]);
+    const [messages, setMessagesInternal] = useState<ChatMessageType[]>(initialMessages ?? []);
     const [isStreaming, setIsStreaming] = useState(false);
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');
     const speechBufferRef = useRef('');
     const prevEvalRef = useRef<number>(0);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesRef = useRef<ChatMessageType[]>(messages);
+
+    // Keep messagesRef in sync
+    messagesRef.current = messages;
+
+    // Wrapper that also notifies parent
+    const setMessages = useCallback((updater: ChatMessageType[] | ((prev: ChatMessageType[]) => ChatMessageType[])): void => {
+      setMessagesInternal((prev) => {
+        const next = typeof updater === 'function' ? updater(prev) : updater;
+        // Notify parent asynchronously so we don't setState during render
+        queueMicrotask(() => onMessagesUpdate?.(next));
+        return next;
+      });
+    }, [onMessagesUpdate]);
+
+    // Auto-scroll to bottom when messages change
+    useEffect(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages, streamingContent]);
 
     // Expose method for parent to inject assistant messages (hints, takeback msgs)
     useImperativeHandle(ref, () => ({
@@ -81,7 +113,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           void voiceService.speak(text);
         }
       },
-    }), []);
+    }), [setMessages]);
 
     // Buffer speech to sentence boundaries
     const flushSpeechBuffer = useCallback(() => {
@@ -103,7 +135,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         content: text,
         timestamp: Date.now(),
       };
-      const updatedMessages = [...messages, userMsg];
+      const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
 
       // Run Stockfish analysis so the coach has engine-backed suggestions
@@ -266,66 +298,41 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
       setIsStreaming(false);
       setStreamingContent('');
-    }, [activeProfile, messages, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation]);
+    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, setMessages]);
 
-    // Auto-send initial prompt (from post-game practice bridge)
+    // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {
       if (initialPrompt && !initialPromptSentRef.current && activeProfile && !isStreaming) {
         initialPromptSentRef.current = true;
         void handleSend(initialPrompt);
+        onInitialPromptSent?.();
       }
-    }, [initialPrompt, activeProfile, isStreaming, handleSend]);
+    }, [initialPrompt, activeProfile, isStreaming, handleSend, onInitialPromptSent]);
 
     return (
       <div
         className={`flex flex-col h-full ${className ?? ''}`}
         data-testid="game-chat-panel"
       >
-        {/* Header */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-theme-border">
-          <div
-            className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold bg-theme-accent"
-          >
-            C
+        {/* Header (hidden when embedded in a container with its own header) */}
+        {!hideHeader && (
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-theme-border">
+            <div
+              className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold bg-theme-accent"
+            >
+              C
+            </div>
+            <div>
+              <span className="text-sm font-semibold text-theme-text">Game Chat</span>
+              <span className="text-xs text-theme-text-muted ml-2">
+                {isStreaming ? 'Typing...' : 'Online'}
+              </span>
+            </div>
           </div>
-          <div>
-            <span className="text-sm font-semibold text-theme-text">Game Chat</span>
-            <span className="text-xs text-theme-text-muted ml-2">
-              {isStreaming ? 'Typing...' : 'Online'}
-            </span>
-          </div>
-        </div>
+        )}
 
-        {/* Messages — flex-col-reverse so newest appear at top without scroll manipulation */}
-        <div className="flex-1 overflow-y-auto p-4 min-h-0 flex flex-col-reverse gap-4">
-          {isStreaming && !streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming-empty',
-                role: 'assistant',
-                content: '',
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          {isStreaming && streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming',
-                role: 'assistant',
-                content: streamingContent,
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          {[...messages].reverse().map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4 min-h-0 flex flex-col gap-4">
           {messages.length === 0 && !isStreaming && (
             <motion.div
               className="flex flex-col items-center gap-3 py-8"
@@ -342,6 +349,36 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               </div>
             </motion.div>
           )}
+
+          {messages.map((msg) => (
+            <ChatMessage key={msg.id} message={msg} />
+          ))}
+
+          {isStreaming && streamingContent && (
+            <ChatMessage
+              message={{
+                id: 'game-streaming',
+                role: 'assistant',
+                content: streamingContent,
+                timestamp: Date.now(),
+              }}
+              isStreaming
+            />
+          )}
+
+          {isStreaming && !streamingContent && (
+            <ChatMessage
+              message={{
+                id: 'game-streaming-empty',
+                role: 'assistant',
+                content: '',
+                timestamp: Date.now(),
+              }}
+              isStreaming
+            />
+          )}
+
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}

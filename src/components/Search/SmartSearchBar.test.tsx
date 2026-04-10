@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { SmartSearchBar } from './SmartSearchBar';
+import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { buildOpeningRecord, resetFactoryCounter } from '../../test/factories';
 
@@ -27,6 +28,7 @@ describe('SmartSearchBar', () => {
     resetFactoryCounter();
     await db.delete();
     await db.open();
+    useAppStore.getState().reset();
   });
 
   it('renders the search input', () => {
@@ -98,5 +100,50 @@ describe('SmartSearchBar', () => {
     await waitFor(() => {
       expect(onResultsChange).toHaveBeenCalled();
     }, { timeout: 3000 });
+  });
+
+  it('shows Ask Coach option when query is 3+ characters', async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<SmartSearchBar />);
+
+    const input = screen.getByTestId('smart-search-input');
+    await user.type(input, 'How do I play the Sicilian?');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('ask-coach-option')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Ask Coach')).toBeInTheDocument();
+  });
+
+  it('opens coach drawer with query when Ask Coach is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<SmartSearchBar />);
+
+    const input = screen.getByTestId('smart-search-input');
+    await user.type(input, 'What are my weaknesses?');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('ask-coach-option')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('ask-coach-option'));
+
+    const state = useAppStore.getState();
+    expect(state.coachDrawerOpen).toBe(true);
+    expect(state.coachDrawerInitialMessage).toBe('What are my weaknesses?');
+  });
+
+  it('opens coach drawer on Enter when no result is selected', async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<SmartSearchBar />);
+
+    const input = screen.getByTestId('smart-search-input');
+    await user.type(input, 'Help me improve');
+    await user.keyboard('{Enter}');
+
+    const state = useAppStore.getState();
+    expect(state.coachDrawerOpen).toBe(true);
+    expect(state.coachDrawerInitialMessage).toBe('Help me improve');
   });
 });
