@@ -18,7 +18,7 @@ export function useBoardGlow(): BoardGlowResult {
   const glowScale = settings.glowBrightness / 100;
 
   const baseGlow = useMemo((): string => {
-    if (glowScale <= 0) return '';
+    if (glowScale <= 0 || boardGlowRgb === 'none') return '';
     const o1 = Math.min(1, 0.2 * glowScale);
     const o2 = Math.min(1, 0.12 * glowScale);
     const o3 = Math.min(1, 0.08 * glowScale);
