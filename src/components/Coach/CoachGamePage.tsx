@@ -1516,6 +1516,65 @@ export function CoachGamePage(): JSX.Element {
           )}
         </AnimatePresence>
 
+        {/* ─── Coach Tip Bubble (above board, not covering it) ───────── */}
+        <AnimatePresence>
+          {tipBubbleText && gameState.status !== 'blunder_pause' && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+              className="mx-2 mb-1 rounded-xl backdrop-blur-md border border-blue-500/30 px-3 py-2.5 flex-shrink-0"
+              style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))' }}
+              data-testid="coach-tip-bubble"
+            >
+              <div className="flex items-start gap-2">
+                <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
+                    {tipBubbleText}
+                  </p>
+                  {showingTacticLine && tipTacticLine && (
+                    <p className="text-xs font-mono mt-1.5 font-semibold text-emerald-400" data-testid="tactic-line-moves">
+                      {uciLinesToSan(tipTacticLine.uciMoves, tipTacticLine.fen, 6)}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                {tipTacticLine && !showingTacticLine && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowingTacticLine(true); }}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all duration-200"
+                    style={{
+                      background: 'rgba(52, 211, 153, 0.15)',
+                      color: 'rgb(52, 211, 153)',
+                      border: '1px solid rgba(52, 211, 153, 0.3)',
+                      boxShadow: '0 0 6px rgba(52, 211, 153, 0.2)',
+                    }}
+                    data-testid="show-tactic-line-btn"
+                  >
+                    <Eye size={12} />
+                    Show
+                  </button>
+                )}
+                <button
+                  onClick={() => { setTipBubbleText(null); setTipTacticLine(null); setShowingTacticLine(false); }}
+                  className="px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-colors"
+                  style={{
+                    background: 'rgba(148, 163, 184, 0.1)',
+                    color: 'var(--color-text-muted)',
+                    border: '1px solid rgba(148, 163, 184, 0.2)',
+                  }}
+                  data-testid="dismiss-tip-btn"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Board */}
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
           <div className="w-full md:max-w-[420px] relative">
@@ -1595,64 +1654,6 @@ export function CoachGamePage(): JSX.Element {
               )}
             </AnimatePresence>
 
-            {/* ─── Coach Tip Bubble (floating on board) ───────────────────── */}
-            <AnimatePresence>
-              {tipBubbleText && gameState.status !== 'blunder_pause' && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.25 }}
-                  className="absolute top-2 left-2 right-2 z-10 rounded-xl backdrop-blur-md border border-blue-500/30 px-3 py-2.5"
-                  style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))' }}
-                  data-testid="coach-tip-bubble"
-                >
-                  <div className="flex items-start gap-2">
-                    <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
-                        {tipBubbleText}
-                      </p>
-                      {showingTacticLine && tipTacticLine && (
-                        <p className="text-xs font-mono mt-1.5 font-semibold text-emerald-400" data-testid="tactic-line-moves">
-                          {uciLinesToSan(tipTacticLine.uciMoves, tipTacticLine.fen, 6)}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    {tipTacticLine && !showingTacticLine && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setShowingTacticLine(true); }}
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all duration-200"
-                        style={{
-                          background: 'rgba(52, 211, 153, 0.15)',
-                          color: 'rgb(52, 211, 153)',
-                          border: '1px solid rgba(52, 211, 153, 0.3)',
-                          boxShadow: '0 0 6px rgba(52, 211, 153, 0.2)',
-                        }}
-                        data-testid="show-tactic-line-btn"
-                      >
-                        <Eye size={12} />
-                        Show
-                      </button>
-                    )}
-                    <button
-                      onClick={() => { setTipBubbleText(null); setTipTacticLine(null); setShowingTacticLine(false); }}
-                      className="px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-colors"
-                      style={{
-                        background: 'rgba(148, 163, 184, 0.1)',
-                        color: 'var(--color-text-muted)',
-                        border: '1px solid rgba(148, 163, 184, 0.2)',
-                      }}
-                      data-testid="dismiss-tip-btn"
-                    >
-                      Dismiss
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
           {showEngineLinesEffective && latestTopLines.length > 0 && (
             <EngineLines lines={latestTopLines} fen={game.fen} className="mt-1" />
