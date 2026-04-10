@@ -12,8 +12,7 @@ interface SectionItem {
   route: string;
   color: string;
   bgColor: string;
-  borderColor: string;
-  glowColor: string;
+  rgb: string;
 }
 
 const SECTIONS: SectionItem[] = [
@@ -23,8 +22,7 @@ const SECTIONS: SectionItem[] = [
     route: '/openings',
     color: 'text-cyan-400',
     bgColor: 'bg-cyan-500/10',
-    borderColor: 'border-cyan-500/30',
-    glowColor: 'rgba(6, 182, 212, 0.4)',
+    rgb: '6, 182, 212',
   },
   {
     label: 'Play with Coach',
@@ -32,8 +30,7 @@ const SECTIONS: SectionItem[] = [
     route: '/coach/play',
     color: 'text-rose-400',
     bgColor: 'bg-rose-500/10',
-    borderColor: 'border-rose-500/30',
-    glowColor: 'rgba(251, 113, 133, 0.4)',
+    rgb: '251, 113, 133',
   },
   {
     label: 'Tactics',
@@ -41,8 +38,7 @@ const SECTIONS: SectionItem[] = [
     route: '/tactics',
     color: 'text-emerald-400',
     bgColor: 'bg-emerald-500/10',
-    borderColor: 'border-emerald-500/30',
-    glowColor: 'rgba(52, 211, 153, 0.4)',
+    rgb: '52, 211, 153',
   },
   {
     label: 'Weaknesses',
@@ -50,8 +46,7 @@ const SECTIONS: SectionItem[] = [
     route: '/weaknesses',
     color: 'text-violet-400',
     bgColor: 'bg-violet-500/10',
-    borderColor: 'border-violet-500/30',
-    glowColor: 'rgba(139, 92, 246, 0.4)',
+    rgb: '139, 92, 246',
   },
 ];
 
@@ -88,8 +83,14 @@ export function DashboardPage(): JSX.Element {
       <div className="max-w-lg mx-auto w-full">
         <button
           onClick={() => void navigate('/games/import')}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-amber-500/30 bg-amber-500/10 hover:opacity-80 transition-opacity"
-          style={{ boxShadow: '0 0 12px rgba(245, 158, 11, 0.35), 0 0 4px rgba(245, 158, 11, 0.2)' }}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-amber-500/10 hover:opacity-80 transition-all duration-200"
+          style={{
+            borderTop: '1px solid rgba(245, 158, 11, 0.1)',
+            borderRight: '1px solid rgba(245, 158, 11, 0.1)',
+            borderLeft: '2px solid rgba(245, 158, 11, 0.6)',
+            borderBottom: '2px solid rgba(245, 158, 11, 0.6)',
+            boxShadow: '0 0 6px rgba(245, 158, 11, 0.5), 0 0 14px rgba(245, 158, 11, 0.3), 0 0 24px rgba(245, 158, 11, 0.15)',
+          }}
           data-testid="import-games-btn"
         >
           <Upload size={18} className="text-amber-400" />
@@ -106,14 +107,36 @@ export function DashboardPage(): JSX.Element {
       <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">
         {SECTIONS.map((section) => {
           const Icon = section.icon;
+          const shadow = `0 0 6px rgba(${section.rgb}, 0.5), 0 0 14px rgba(${section.rgb}, 0.3), 0 0 24px rgba(${section.rgb}, 0.15)`;
+          const shadowHover = `0 0 8px rgba(${section.rgb}, 0.7), 0 0 18px rgba(${section.rgb}, 0.45), 0 0 30px rgba(${section.rgb}, 0.25)`;
           return (
             <button
               key={section.route}
               onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} ${section.borderColor} border-2 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200 aspect-square`}
-              style={{ boxShadow: `0 0 12px ${section.glowColor}, 0 0 4px ${section.glowColor}` }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 24px ${section.glowColor}, 0 0 8px ${section.glowColor}`; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 12px ${section.glowColor}, 0 0 4px ${section.glowColor}`; }}
+              className={`${section.bgColor} rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200 aspect-square`}
+              style={{
+                borderTop: `1px solid rgba(${section.rgb}, 0.1)`,
+                borderRight: `1px solid rgba(${section.rgb}, 0.1)`,
+                borderLeft: `2px solid rgba(${section.rgb}, 0.6)`,
+                borderBottom: `2px solid rgba(${section.rgb}, 0.6)`,
+                boxShadow: shadow,
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.borderLeft = `2px solid rgba(${section.rgb}, 0.85)`;
+                el.style.borderBottom = `2px solid rgba(${section.rgb}, 0.85)`;
+                el.style.borderTop = `1px solid rgba(${section.rgb}, 0.2)`;
+                el.style.borderRight = `1px solid rgba(${section.rgb}, 0.2)`;
+                el.style.boxShadow = shadowHover;
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.borderLeft = `2px solid rgba(${section.rgb}, 0.6)`;
+                el.style.borderBottom = `2px solid rgba(${section.rgb}, 0.6)`;
+                el.style.borderTop = `1px solid rgba(${section.rgb}, 0.1)`;
+                el.style.borderRight = `1px solid rgba(${section.rgb}, 0.1)`;
+                el.style.boxShadow = shadow;
+              }}
               data-testid={`section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
               <Icon size={40} className={section.color} />
