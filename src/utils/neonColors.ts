@@ -41,6 +41,7 @@ export function scaledBorder(rgb: string, brightness: number): string {
  * Returns empty string when brightness is 0.
  */
 export function buildPieceGlowFilter(rgb: string, brightness: number): string {
+  if (rgb === 'none') return 'none';
   if (brightness <= 0) return '';
   const s = brightness / 100;
   const r = Math.round;

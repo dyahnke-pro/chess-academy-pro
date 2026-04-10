@@ -68,7 +68,8 @@ interface NeonColorPickerProps {
 }
 
 function NeonColorPicker({ label, currentRgb, onSelectRgb }: NeonColorPickerProps): JSX.Element {
-  const currentHex = rgbToHex(currentRgb);
+  const isNone = currentRgb === 'none';
+  const currentHex = isNone ? '#000000' : rgbToHex(currentRgb);
 
   return (
     <div>
@@ -76,8 +77,29 @@ function NeonColorPicker({ label, currentRgb, onSelectRgb }: NeonColorPickerProp
         {label}
       </label>
       <div className="flex flex-wrap gap-1.5 mb-2">
+        {/* None option */}
+        <button
+          onClick={() => onSelectRgb('none')}
+          className="w-7 h-7 rounded-full transition-all duration-150 relative overflow-hidden"
+          style={{
+            backgroundColor: '#1a1a2e',
+            border: isNone ? '2px solid white' : '2px solid rgba(100, 100, 100, 0.4)',
+            transform: isNone ? 'scale(1.15)' : 'scale(1)',
+          }}
+          title="None"
+          aria-label="Select None (disable glow)"
+          data-testid={`neon-preset-${label.toLowerCase().replace(/\s+/g, '-')}-none`}
+        >
+          <span
+            className="absolute left-1/2 top-1/2 block h-[2px] w-[110%] rounded-full"
+            style={{
+              backgroundColor: 'rgba(239, 68, 68, 0.8)',
+              transform: 'translate(-50%, -50%) rotate(-45deg)',
+            }}
+          />
+        </button>
         {NEON_PRESETS.map((preset) => {
-          const isActive = preset.rgb === currentRgb;
+          const isActive = !isNone && preset.rgb === currentRgb;
           return (
             <button
               key={preset.hex}
@@ -108,7 +130,7 @@ function NeonColorPicker({ label, currentRgb, onSelectRgb }: NeonColorPickerProp
           data-testid={`color-wheel-${label.toLowerCase().replace(/\s+/g, '-')}`}
         />
         <span className="text-[10px] font-mono" style={{ color: 'var(--color-text-muted)' }}>
-          {currentHex.toUpperCase()}
+          {isNone ? 'NONE' : currentHex.toUpperCase()}
         </span>
       </div>
     </div>
@@ -160,6 +182,7 @@ interface MockBoardProps {
 function MockChessBoard({ glowColor, brightness, boardColorId, pieceSetId, whiteGlowColor, blackGlowColor }: MockBoardProps): JSX.Element {
   const scale = brightness / 100;
   const r = Math.round;
+  const boardGlowEnabled = glowColor !== 'none' && brightness > 0;
   const boardColor = useMemo(() => getBoardColor(boardColorId), [boardColorId]);
   const setName = useMemo(() => getLichessSetName(pieceSetId), [pieceSetId]);
   const whiteFilter = useMemo(() => buildPieceGlowFilter(whiteGlowColor, brightness), [whiteGlowColor, brightness]);
@@ -174,7 +197,7 @@ function MockChessBoard({ glowColor, brightness, boardColorId, pieceSetId, white
         width: '100%',
         maxWidth: '280px',
         aspectRatio: '1',
-        boxShadow: brightness > 0
+        boxShadow: boardGlowEnabled
           ? `0 0 ${r(12 * scale)}px rgba(${glowColor}, ${Math.min(1, 0.4 * scale)}), 0 0 ${r(24 * scale)}px rgba(${glowColor}, ${Math.min(1, 0.2 * scale)})`
           : 'none',
       }}
@@ -197,7 +220,7 @@ function MockChessBoard({ glowColor, brightness, boardColorId, pieceSetId, white
               key={sq}
               style={{
                 backgroundColor: isLight ? boardColor.lightSquare : boardColor.darkSquare,
-                boxShadow: scale > 0
+                boxShadow: boardGlowEnabled
                   ? [
                       `inset 0 0 ${r(6 * scale)}px rgba(${glowColor}, ${o1})`,
                       `inset 0 0 ${r(2 * scale)}px rgba(${glowColor}, ${o2})`,
